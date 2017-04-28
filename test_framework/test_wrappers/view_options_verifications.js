@@ -25,6 +25,26 @@ class ViewOptionsVerifications {
         );
 
     };
+
+    designerViewOption_IsVisible(viewOption) {
+
+        server.call('verifyUserViewOptions.optionIsVisible', viewOption, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+    };
+
+    designerViewOption_IsHidden(viewOption) {
+
+        server.call('verifyUserViewOptions.optionIsHidden', viewOption, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+    };
 }
 
 export default new ViewOptionsVerifications();

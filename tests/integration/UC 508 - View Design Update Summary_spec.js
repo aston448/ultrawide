@@ -16,9 +16,10 @@ import WorkPackageVerifications         from '../../test_framework/test_wrappers
 import WpComponentActions               from '../../test_framework/test_wrappers/work_package_component_actions.js';
 import WpComponentVerifications         from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications     from '../../test_framework/test_wrappers/design_update_component_verifications.js';
-import ViewOptionsActions           from '../../test_framework/test_wrappers/view_options_actions.js';
+import ViewOptionsActions               from '../../test_framework/test_wrappers/view_options_actions.js';
+import ViewOptionsVerifications         from '../../test_framework/test_wrappers/view_options_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {ViewOptionType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -51,9 +52,8 @@ describe('UC 508 - View Design Update Summary', function(){
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
-        // Make sure Update Summary is showing so the data refreshes
+        // Make sure Update Summary is showing so the data refreshes.  Have to do this in each test.  Redux local to tests???
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        ViewOptionsActions.designerTogglesDesignUpdateSummary()
     });
 
     afterEach(function(){
@@ -95,6 +95,8 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
         // New Scenario in Update Summary
+        ViewOptionsActions.designerTogglesDesignUpdateSummary();
+        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
         DesignUpdateActions.refreshUpdateSummary();
         DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner(DefaultComponentNames.NEW_SCENARIO_NAME);
     });
@@ -106,6 +108,8 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
 
         // Seen in REMOVE list
+        ViewOptionsActions.designerTogglesDesignUpdateSummary();
+        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
         DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario1'));
     });
@@ -118,6 +122,8 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario');
 
         // Scenario1 added to Modifications
+        ViewOptionsActions.designerTogglesDesignUpdateSummary();
+        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
         DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'New Scenario'));
     });
@@ -128,6 +134,8 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Scenario1 in the Queries
+        ViewOptionsActions.designerTogglesDesignUpdateSummary();
+        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
         DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryQueriesForDesigner('Scenario1'));
     });
@@ -137,6 +145,8 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Check Scenario1 in the Queries
+        ViewOptionsActions.designerTogglesDesignUpdateSummary();
+        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
         DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryQueriesForDesigner('Scenario1'));
 
@@ -157,6 +167,8 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario8');
 
         // New Scenario in Update Summary
+        ViewOptionsActions.designerTogglesDesignUpdateSummary();
+        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
         DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
 
@@ -178,6 +190,8 @@ describe('UC 508 - View Design Update Summary', function(){
 
 
         // New Scenario in Update Summary
+        ViewOptionsActions.designerTogglesDesignUpdateSummary();
+        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
         DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner(DefaultComponentNames.NEW_SCENARIO_NAME));
 
