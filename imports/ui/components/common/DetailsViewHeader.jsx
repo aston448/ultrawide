@@ -51,7 +51,7 @@ export class DetailsViewHeader extends Component {
         // Only close if really open
         if(currentOption.value) {
             console.log("Really Closing " + currentOption.option);
-            ClientAppHeaderServices.toggleViewOption(currentOption.option, userViewOptions, currentViewDataValue)
+            ClientAppHeaderServices.toggleViewOption(currentOption.option, userViewOptions, userContext.userId)
         }
     }
 

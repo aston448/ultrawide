@@ -48,13 +48,13 @@ export class DesignEditorHeader extends Component {
         // Only close if really open
         if(currentOption.value) {
             console.log("Really Closing " + currentOption.option);
-            ClientAppHeaderServices.toggleViewOption(currentOption.option, userViewOptions, currentViewDataValue)
+            ClientAppHeaderServices.toggleViewOption(currentOption.option, userViewOptions, userContext.userId)
         }
     }
 
-    onSetEditViewMode(newMode, view, viewOptions){
+    onSetEditViewMode(newMode, view, viewOptions, userId){
         // Set editor as edit or view mode
-        ClientAppHeaderServices.setEditorMode(newMode, view, viewOptions);
+        ClientAppHeaderServices.setEditorMode(newMode, view, viewOptions, userId);
     }
 
     onZoomToFeatures(userContext, displayContext){
@@ -81,12 +81,12 @@ export class DesignEditorHeader extends Component {
 
         const viewModeViewOption =
             <div id="optionView" className={viewView}>
-                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="VIEW" actionFunction={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW, view, userViewOptions)}/>
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="VIEW" actionFunction={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW, view, userViewOptions, userContext.userId)}/>
             </div>;
 
         const viewModeEditOption =
             <div id="optionEdit" className={viewEdit}>
-                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="EDIT" actionFunction={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT, view, userViewOptions)}/>
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="EDIT" actionFunction={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT, view, userViewOptions, userContext.userId)}/>
             </div>;
 
         const zoomFeaturesOption =

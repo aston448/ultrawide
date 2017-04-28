@@ -175,7 +175,7 @@ export function toggleDomainDictionary(isVisible) {
     };
 }
 
-export function setCurrentUserViewOptions(viewOptions, saveToDb){
+export function setCurrentUserViewOptions(viewOptions, userId, saveToDb){
 
      return function (dispatch) {
 
@@ -183,7 +183,7 @@ export function setCurrentUserViewOptions(viewOptions, saveToDb){
 
         // And persist the settings - only want to do this if we are changing them...
         if(saveToDb) {
-            Meteor.call('userContext.setCurrentUserViewOptions', viewOptions);
+            Meteor.call('userContext.setCurrentUserViewOptions', viewOptions, userId);
         }
     };
 }

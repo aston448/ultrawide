@@ -43,9 +43,10 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userContext.userId);
 
-        const outcome = ClientAppHeaderServices.toggleViewOption(optionType, viewOptions, false);
+        const outcome = ClientAppHeaderServices.toggleViewOption(optionType, viewOptions, userContext.userId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Toggle View Option');
 

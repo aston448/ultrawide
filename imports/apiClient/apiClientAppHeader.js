@@ -32,7 +32,7 @@ import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurren
 
 class ClientAppHeaderServices{
 
-    setEditorMode(newMode, view, viewOptions){
+    setEditorMode(newMode, view, viewOptions, userId){
 
         // Sets the design editor to Edit or View mode
 
@@ -40,26 +40,26 @@ class ClientAppHeaderServices{
         if(view === ViewType.DESIGN_UPDATE_EDIT && newMode === ViewMode.MODE_EDIT){
             viewOptions.testSummaryVisible = false;
 
-            store.dispatch(setCurrentUserViewOptions(viewOptions, true));
+            store.dispatch(setCurrentUserViewOptions(viewOptions, userId, true));
         }
 
         store.dispatch(setCurrentViewMode(newMode));
         return true;
     };
 
-    toggleViewOption(optionType, currentOptions, currentDataValue){
+    toggleViewOption(optionType, currentOptions, userId){
         // Toggles a particular view option
         let newOptions = currentOptions;
 
         newOptions[optionType] = !currentOptions[optionType];
 
-        store.dispatch(setCurrentUserViewOptions(newOptions, true));
+        store.dispatch(setCurrentUserViewOptions(newOptions, userId, true));
         store.dispatch(updateViewOptionsData());
 
         return {success: true, message: ''};
     }
 
-    toggleTabsViewOption(optionType, currentOptions, currentDataValue){
+    toggleTabsViewOption(optionType, currentOptions, userId){
 
         let newOptions = currentOptions;
         let isVisible = false;
@@ -105,7 +105,7 @@ class ClientAppHeaderServices{
                 newOptions[optionType] = !currentOptions[optionType];
         }
 
-        store.dispatch(setCurrentUserViewOptions(newOptions, true));
+        store.dispatch(setCurrentUserViewOptions(newOptions, userId, true));
         store.dispatch(updateViewOptionsData());
     }
 

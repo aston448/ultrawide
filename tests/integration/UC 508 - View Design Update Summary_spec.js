@@ -54,6 +54,8 @@ describe('UC 508 - View Design Update Summary', function(){
 
         // Make sure Update Summary is showing so the data refreshes.  Have to do this in each test.  Redux local to tests???
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        ViewOptionsActions.designerTogglesDesignUpdateSummary();
+        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
     });
 
     afterEach(function(){
@@ -95,8 +97,6 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
         // New Scenario in Update Summary
-        ViewOptionsActions.designerTogglesDesignUpdateSummary();
-        expect(ViewOptionsVerifications.designerViewOption_IsVisible(ViewOptionType.UPDATE_SUMMARY));
         DesignUpdateActions.refreshUpdateSummary();
         DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner(DefaultComponentNames.NEW_SCENARIO_NAME);
     });

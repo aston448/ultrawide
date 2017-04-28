@@ -40,29 +40,52 @@ class UserContextServices{
         //console.log("User Context Saved.  DV: " + context.designVersionId + " DU: " + context.designUpdateId + " WP: " + context.workPackageId);
     };
 
-    saveUserViewOptions(userViewOptions){
+    saveUserViewOptions(userViewOptions, userId){
 
         if(Meteor.isServer) {
 
-            // Remove current options
-            UserCurrentViewOptions.remove({userId: userViewOptions.userId});
+            const currentViewOptions = UserCurrentViewOptions.findOne({userId: userId});
 
-            // And add new
-            UserCurrentViewOptions.insert({
-                userId:                     userViewOptions.userId,
-                designDetailsVisible:       userViewOptions.designDetailsVisible,
-                designDomainDictVisible:    userViewOptions.designDomainDictVisible,
-                testSummaryVisible:         userViewOptions.testSummaryVisible,
-                updateProgressVisible:      userViewOptions.updateProgressVisible,
-                updateSummaryVisible:       userViewOptions.updateSummaryVisible,
-                devAccTestsVisible:         userViewOptions.devAccTestsVisible,
-                devIntTestsVisible:         userViewOptions.devIntTestsVisible,
-                devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
-                devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
-                designShowAllAsTabs:        userViewOptions.designShowAllAsTabs,
-                updateShowAllAsTabs:        userViewOptions.updateShowAllAsTabs,
-                workShowAllAsTabs:          userViewOptions.workShowAllAsTabs,
-            });
+            if(currentViewOptions){
+
+                UserCurrentViewOptions.update(
+                    {userId: userId},
+                    {
+                        $set:{
+                            designDetailsVisible:       userViewOptions.designDetailsVisible,
+                            designDomainDictVisible:    userViewOptions.designDomainDictVisible,
+                            testSummaryVisible:         userViewOptions.testSummaryVisible,
+                            updateProgressVisible:      userViewOptions.updateProgressVisible,
+                            updateSummaryVisible:       userViewOptions.updateSummaryVisible,
+                            devAccTestsVisible:         userViewOptions.devAccTestsVisible,
+                            devIntTestsVisible:         userViewOptions.devIntTestsVisible,
+                            devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
+                            devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
+                            designShowAllAsTabs:        userViewOptions.designShowAllAsTabs,
+                            updateShowAllAsTabs:        userViewOptions.updateShowAllAsTabs,
+                            workShowAllAsTabs:          userViewOptions.workShowAllAsTabs
+                        }
+                    }
+                );
+
+            } else {
+
+                UserCurrentViewOptions.insert({
+                    userId:                     userId,
+                    designDetailsVisible:       userViewOptions.designDetailsVisible,
+                    designDomainDictVisible:    userViewOptions.designDomainDictVisible,
+                    testSummaryVisible:         userViewOptions.testSummaryVisible,
+                    updateProgressVisible:      userViewOptions.updateProgressVisible,
+                    updateSummaryVisible:       userViewOptions.updateSummaryVisible,
+                    devAccTestsVisible:         userViewOptions.devAccTestsVisible,
+                    devIntTestsVisible:         userViewOptions.devIntTestsVisible,
+                    devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
+                    devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
+                    designShowAllAsTabs:        userViewOptions.designShowAllAsTabs,
+                    updateShowAllAsTabs:        userViewOptions.updateShowAllAsTabs,
+                    workShowAllAsTabs:          userViewOptions.workShowAllAsTabs
+                });
+            }
         }
     };
 

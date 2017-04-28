@@ -109,16 +109,13 @@ class TestDataHelpers {
         }
     }
 
-    getViewOptions(userName){
+    getViewOptions(userId){
 
-        const user = UserRoles.findOne({userName: userName});
-        if(!user){
-            throw new Meteor.Error("FAIL", "User " + userName + " not found.");
-        }
 
-        const viewOptions = UserCurrentViewOptions.findOne({userId: user.userId});
+        const viewOptions = UserCurrentViewOptions.findOne({userId: userId});
+
         if(!viewOptions){
-            throw new Meteor.Error("FAIL", "View Options not found for " + userName);
+            throw new Meteor.Error("FAIL", "View Options not found for user id " + userId);
         }
 
         return viewOptions;

@@ -101,7 +101,6 @@ class ClientUserContextServices {
         if(userViewOptions){
 
             const viewOptions = {
-                userId:                     userId,
                 designDetailsVisible:       userViewOptions.designDetailsVisible,
                 designDomainDictVisible:    userViewOptions.designDomainDictVisible,
                 testSummaryVisible:         userViewOptions.testSummaryVisible,
@@ -116,12 +115,11 @@ class ClientUserContextServices {
                 workShowAllAsTabs:          userViewOptions.workShowAllAsTabs,
             };
 
-            store.dispatch(setCurrentUserViewOptions(viewOptions, false)); // Don't save - we are reading from DB here!
+            store.dispatch(setCurrentUserViewOptions(viewOptions, userId, false)); // Don't save - we are reading from DB here!
 
         } else {
 
             const defaultOptions = {
-                userId:                     userId,
                 designDetailsVisible:       true,
                 designDomainDictVisible:    false,
                 testSummaryVisible:         false,
@@ -136,7 +134,7 @@ class ClientUserContextServices {
                 workShowAllAsTabs:          false,
             };
 
-            store.dispatch(setCurrentUserViewOptions(defaultOptions, true));
+            store.dispatch(setCurrentUserViewOptions(defaultOptions, userId, true));
         }
 
         return userViewOptions;
