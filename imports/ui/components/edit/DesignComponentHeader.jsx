@@ -633,7 +633,7 @@ export class DesignComponentHeader extends Component{
 
 
     // Render the header of the design component - has tools in it depending on context
-    render(){
+    render() {
         const {currentItem, updateItem, wpItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
         // TODO - add all the tooltips required
@@ -652,7 +652,7 @@ export class DesignComponentHeader extends Component{
 
 
         // For Work Packages only stuff added in WP is removable
-        if(view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP){
+        if (view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP) {
             deleteStyle = currentItem.isRemovable && (currentItem.isDevAdded || currentItem.isDevUpdated) ? 'red' : 'lgrey';
         }
 
@@ -666,13 +666,13 @@ export class DesignComponentHeader extends Component{
 
         // Deleted Items for DU Edit ----------------------------------
 
-        if(view === ViewType.DESIGN_UPDATE_EDIT){
+        if (view === ViewType.DESIGN_UPDATE_EDIT) {
 
-            switch(displayContext){
+            switch (displayContext) {
                 case DisplayContext.UPDATE_SCOPE:
 
                     // Show as deleted if possible due to updates of the current version
-                    if(updateItem){
+                    if (updateItem) {
                         isDeleted = updateItem.isRemoved;
                     } else {
                         isDeleted = currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED;
@@ -681,12 +681,12 @@ export class DesignComponentHeader extends Component{
 
                 case DisplayContext.UPDATE_EDIT:
 
-                    if(updateItem) {
+                    if (updateItem) {
                         isDeleted = updateItem.isRemoved;
                     }
 
                     // For logically deleted items in the same update, show the undo icon...
-                    if(isDeleted){
+                    if (isDeleted) {
                         deleteGlyph = 'arrow-left';
                     } else {
                         deleteStyle = (currentItem.isRemovable && !currentItem.isRemovedElsewhere) ? 'red' : 'lgrey';
@@ -696,14 +696,14 @@ export class DesignComponentHeader extends Component{
 
         // Scope status ------------------------------------------
 
-        switch(displayContext){
+        switch (displayContext) {
             case DisplayContext.UPDATE_SCOPE:
-                if(updateItem){
+                if (updateItem) {
                     inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
                     inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
                 } else {
                     // If not in this update indicate if another update is known to have modified it
-                    if(!(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE || currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT)){
+                    if (!(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE || currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT)) {
                         inScopeElsewhere = true;
                     }
                 }
@@ -714,19 +714,19 @@ export class DesignComponentHeader extends Component{
 
             case DisplayContext.UPDATE_EDIT:
             case DisplayContext.UPDATE_VIEW:
-                if(updateItem) {
+                if (updateItem) {
                     inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
                     inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
                 }
                 break;
 
             case DisplayContext.WP_SCOPE:
-                if(wpItem) {
+                if (wpItem) {
                     inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
                     inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
                 }
 
-                if((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)){
+                if ((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)) {
                     // Scenario is in scope in another WP
                     inScopeElsewhere = true;
                 }
@@ -742,7 +742,7 @@ export class DesignComponentHeader extends Component{
                 break;
 
             case DisplayContext.WP_VIEW:
-                if(wpItem) {
+                if (wpItem) {
                     inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
                     inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
                 }
@@ -750,13 +750,13 @@ export class DesignComponentHeader extends Component{
 
             case DisplayContext.DEV_DESIGN:
                 // Work package implementation
-                if(updateItem){
+                if (updateItem) {
                     // Must be an update WP
                     inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
                     inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
                 } else {
                     // Go with the WP scoping
-                    if(wpItem) {
+                    if (wpItem) {
                         inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
                         inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
                     }
@@ -766,13 +766,13 @@ export class DesignComponentHeader extends Component{
         // Determine how the check box is shown
         let scopeStatus = 'out-scope';
 
-        if(inScope){
+        if (inScope) {
             scopeStatus = 'in-scope';
         }
-        if(inParentScope){
+        if (inParentScope) {
             scopeStatus = 'in-parent-scope';
         }
-        if(inScopeElsewhere || updateParentOnly){
+        if (inScopeElsewhere || updateParentOnly) {
             scopeStatus = 'not-scopable';
         }
 
@@ -781,25 +781,25 @@ export class DesignComponentHeader extends Component{
 
 
         // Grey out original item when it is being dragged ----------
-        if(isDragging){
+        if (isDragging) {
             itemStyle = itemStyle + ' dragging-item';
         }
 
         // Open / Closed --------------------------------------------
-        let openGlyph = isOpen ? 'minus' :'plus';
+        let openGlyph = isOpen ? 'minus' : 'plus';
 
         let openStatus = isOpen ? 'open-status-open' : 'open-status-closed';
-        if(currentItem.componentType === ComponentType.SCENARIO){
+        if (currentItem.componentType === ComponentType.SCENARIO) {
             openStatus = 'invisible';
         }
-        if(updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE && displayContext === DisplayContext.UPDATE_EDIT){
+        if (updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE && displayContext === DisplayContext.UPDATE_EDIT) {
             openStatus = 'invisible';
         }
 
         // Indent ---------------------------------------------------
         let itemIndent = 'item-indent-none';
 
-        switch(currentItem.componentType){
+        switch (currentItem.componentType) {
             case ComponentType.DESIGN_SECTION:
                 itemIndent = 'item-indent-section';
                 break;
@@ -821,13 +821,13 @@ export class DesignComponentHeader extends Component{
         let wpStatusClass = 'update-merge-status invisible';
         let wpStatusGlyph = 'tasks';
 
-        if(currentItem.updateMergeStatus) {
+        if (currentItem.updateMergeStatus) {
             updateStatusClass = 'update-merge-status ' + currentItem.updateMergeStatus;
             updateStatusText = TextLookups.updateMergeStatus(currentItem.updateMergeStatus);
         }
         updateStatusGlyph = 'th-large';
 
-        switch(displayContext){
+        switch (displayContext) {
             case DisplayContext.WORKING_VIEW:
                 // Get status for working views - display as a tooltip over the status icon
 
@@ -850,12 +850,12 @@ export class DesignComponentHeader extends Component{
                         break;
                 }
 
-                if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
+                if (currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED) {
                     updateTextClass = ' removed-item';
                 }
 
                 // Mark Scenarios that are in a Work Package
-                if(currentItem.workPackageId !== 'NONE'){
+                if (currentItem.workPackageId !== 'NONE') {
                     wpStatusClass = 'update-merge-status item-in-wp';
                 }
 
@@ -869,31 +869,31 @@ export class DesignComponentHeader extends Component{
                 // Set status tags in Design Update itself
                 updateStatusClass = 'update-merge-status component-hidden';
 
-                if(updateItem){
+                if (updateItem) {
 
                     // Mark Scenarios that are in a Work Package - show on an update view
-                    if(updateItem.workPackageId !== 'NONE'){
+                    if (updateItem.workPackageId !== 'NONE') {
                         wpStatusClass = 'update-merge-status item-in-wp';
                     }
 
-                    if(updateItem.componentType === ComponentType.SCENARIO && updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+                    if (updateItem.componentType === ComponentType.SCENARIO && updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
                         // Just in scope its a query
                         updateStatusGlyph = 'question-sign';
                         updateStatusClass = 'update-merge-status component-scenario-queried';
                         updateStatusText = "Check Tests";
                     }
                     // Override for other statuses
-                    if(updateItem.isChanged){
+                    if (updateItem.isChanged) {
                         updateStatusGlyph = 'adjust';
                         updateStatusClass = 'update-merge-status component-modified';
                         updateStatusText = "Modified Item";
                     }
-                    if(updateItem.isNew){
+                    if (updateItem.isNew) {
                         updateStatusGlyph = 'plus-sign';
                         updateStatusClass = 'update-merge-status component-added';
                         updateStatusText = "New Item";
                     }
-                    if(updateItem.isRemoved){
+                    if (updateItem.isRemoved) {
                         updateStatusGlyph = 'trash';
                         updateStatusClass = 'update-merge-status component-removed';
                         updateStatusText = "Removed Item";
@@ -902,7 +902,6 @@ export class DesignComponentHeader extends Component{
                 break;
 
         }
-
 
 
         const tooltipUpdateStatus = (
@@ -951,7 +950,8 @@ export class DesignComponentHeader extends Component{
             <InputGroup.Addon className={itemIndent}></InputGroup.Addon>;
 
         let scopeToggle =
-            <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem, updateItem, !inScope)}>
+            <InputGroup.Addon id="scope"
+                              onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem, updateItem, !inScope)}>
                 <div id="scopeCheckBox" className={scopeStatus}><Glyphicon glyph="ok"/></div>
             </InputGroup.Addon>;
 
@@ -969,7 +969,8 @@ export class DesignComponentHeader extends Component{
             </div>;
 
         let readOnlyEditor =
-            <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
+            <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}
+                 onClick={ () => this.setCurrentComponent()}>
                 <Editor
                     editorState={this.state.editorState}
                     spellCheck={true}
@@ -981,13 +982,15 @@ export class DesignComponentHeader extends Component{
         let wpStatus =
             <InputGroup.Addon>
                 <OverlayTrigger placement="right" overlay={tooltipGotoWp}>
-                    <div id="wpStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
+                    <div id="wpStatusIcon" className={wpStatusClass}
+                         onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon
+                        glyph={wpStatusGlyph}/></div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
 
         let updateStatus = '';
 
-        if(updateStatusClass === 'update-merge-status component-hidden'){
+        if (updateStatusClass === 'update-merge-status component-hidden') {
 
             updateStatus = <div></div>;
 
@@ -1020,7 +1023,8 @@ export class DesignComponentHeader extends Component{
             </InputGroup.Addon>;
 
         let deleteAction =
-            <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
+            <InputGroup.Addon id="actionDelete"
+                              onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
                 <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
             </InputGroup.Addon>;
 
@@ -1031,14 +1035,17 @@ export class DesignComponentHeader extends Component{
                 </div>
             </InputGroup.Addon>;
 
-        let draggableMoveAction =
-            <InputGroup.Addon>
-                {connectDragSource(
-                    <div id="actionMove" className="lgrey">
-                        <Glyphicon glyph="move"/>
-                    </div>)
-                }
-            </InputGroup.Addon>
+        let draggableMoveAction = '';
+        if (!(Meteor.isTest)) {
+            draggableMoveAction =
+                <InputGroup.Addon>
+                    {connectDragSource(
+                        <div id="actionMove" className="lgrey">
+                            <Glyphicon glyph="move"/>
+                        </div>)
+                    }
+                </InputGroup.Addon>
+        }
 
         let saveAction =
             <InputGroup.Addon id="actionSave" onClick={ () => this.saveComponentName(view, mode)}>

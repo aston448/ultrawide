@@ -136,5 +136,88 @@ describe('VAL: Design Component', () => {
             chai.assert.equal(result, expectation);
         });
     });
+
+    describe('Design Components may not be removed in View Only mode', () => {
+
+        it('an application cannot be removed in view only mode', () => {
+
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const mode = ViewMode.MODE_VIEW;
+            const component = {
+                componentType:  ComponentType.APPLICATION,
+                isRemovable:    true,
+                isDevAdded:     false
+            };
+            const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_REMOVE;
+
+            const result = DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, component);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('a design section cannot be removed in view only mode', () => {
+
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const mode = ViewMode.MODE_VIEW;
+            const component = {
+                componentType:  ComponentType.DESIGN_SECTION,
+                isRemovable:    true,
+                isDevAdded:     false
+            };
+            const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_REMOVE;
+
+            const result = DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, component);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('a feature cannot be removed in view only mode', () => {
+
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const mode = ViewMode.MODE_VIEW;
+            const component = {
+                componentType:  ComponentType.FEATURE,
+                isRemovable:    true,
+                isDevAdded:     false
+            };
+            const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_REMOVE;
+
+            const result = DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, component);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('a feature aspect cannot be removed in view only mode', () => {
+
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const mode = ViewMode.MODE_VIEW;
+            const component = {
+                componentType:  ComponentType.FEATURE_ASPECT,
+                isRemovable:    true,
+                isDevAdded:     false
+            };
+            const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_REMOVE;
+
+            const result = DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, component);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('a scenario cannot be removed in view only mode', () => {
+
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const mode = ViewMode.MODE_VIEW;
+            const component = {
+                componentType:  ComponentType.SCENARIO,
+                isRemovable:    true,
+                isDevAdded:     false
+            };
+            const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_REMOVE;
+
+            const result = DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, component);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
 });
 
