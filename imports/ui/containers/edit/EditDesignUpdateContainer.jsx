@@ -299,9 +299,15 @@ export class UpdateApplicationsList extends Component {
 
             if(viewOptions.updateShowAllAsTabs){
 
-                col1width = 4;
-                col2width = 4;
-                col3width = 4;
+                if(viewOptions.testSummaryVisible){
+                    col1width = 6;
+                    col2width = 3;
+                    col3width = 3;
+                } else {
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                }
 
                 let col1 =
                     <Col id="scopeCol" md={col1width} className="close-col">
@@ -316,7 +322,7 @@ export class UpdateApplicationsList extends Component {
 
 
                 let col3 =
-                    <Col id="tabsCol" md={col2width} className="close-col">
+                    <Col id="tabsCol" md={col3width} className="close-col">
                         <Tabs defaultActiveKey={1} id="updatable-view_tabs">
                             <Tab eventKey={1} title="DETAILS">{updateTextComponent}</Tab>
                             <Tab eventKey={2} title="WORKING VIEW">{workingVersionComponent}</Tab>

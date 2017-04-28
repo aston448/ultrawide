@@ -261,7 +261,7 @@ class ClientDesignVersionServices{
 
         let newContext = userContext;
 
-        log((msg) => console.log(msg), Loglevel.INFO, "SET DESIGN VERSION.  Current DV {}  New DV {} Force Context reset: ", userContext.designVersionId, newDesignVersionId, forceReset);
+        log((msg) => console.log(msg), LogLevel.INFO, "SET DESIGN VERSION.  Current DV {}  New DV {} Force Context reset: ", userContext.designVersionId, newDesignVersionId, forceReset);
 
         // On change clears current DU / WP if any
 
@@ -297,7 +297,7 @@ class ClientDesignVersionServices{
                 store.dispatch(setDesignVersionDataLoadedTo(false));
                 // store.dispatch(setMashDataStaleTo(true));
                 // store.dispatch(setTestDataStaleTo(true));
-                log((msg) => console.log(msg), Loglevel.INFO, "Loading new DV data...");
+                log((msg) => console.log(msg), LogLevel.INFO, "Loading new DV data...");
                 ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
 

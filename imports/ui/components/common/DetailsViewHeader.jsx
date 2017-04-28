@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {DisplayContext} from '../../../constants/constants.js';
+import {DisplayContext, ViewType} from '../../../constants/constants.js';
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
@@ -66,7 +66,30 @@ export class DetailsViewHeader extends Component {
 
         // Items -------------------------------------------------------------------------------------------------------
 
-        if(isClosable){
+        // Items are not closable if in a tab strip
+        let tabs = false;
+
+        switch(view){
+            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+                tabs = userViewOptions.designShowAllAsTabs;
+                break;
+            case ViewType.DESIGN_UPDATE_VIEW:
+            case ViewType.DESIGN_UPDATE_EDIT:
+                tabs = userViewOptions.updateShowAllAsTabs;
+                break;
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+                tabs = userViewOptions.workShowAllAsTabs;
+                break;
+        }
+
+        if(isClosable && !tabs){
             return(
                 <div className="design-editor-header">
                     <Grid>
