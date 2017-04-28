@@ -76,6 +76,8 @@ class ClientTestIntegrationServices {
     // Test Summary data needs refreshing - flag says if we need to recalculate all results or not
     updateTestSummaryData(userContext, updateTestData){
 
+        log((msg) => console.log(msg), LogLevel.INFO, "REFRESH TEST SUMMARY DATA...");
+
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
             messageText: 'Updating test summary data'
@@ -88,7 +90,7 @@ class ClientTestIntegrationServices {
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
 
-                store.dispatch(updateTestDataFlag());
+                //store.dispatch(updateTestDataFlag());
 
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
@@ -101,6 +103,8 @@ class ClientTestIntegrationServices {
 
     // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(userContext){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "REFRESH TEST DATA...");
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
@@ -116,7 +120,7 @@ class ClientTestIntegrationServices {
 
                 // Mash is populated to carry on with test data if needed
 
-                store.dispatch(updateTestDataFlag());
+                //store.dispatch(updateTestDataFlag());
 
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,

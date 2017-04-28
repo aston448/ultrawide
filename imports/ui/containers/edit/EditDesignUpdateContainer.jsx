@@ -18,7 +18,8 @@ import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx'
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
+import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
+import { log }        from '../../../common/utils.js';
 
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
@@ -130,9 +131,9 @@ export class UpdateApplicationsList extends Component {
 
     render() {
 
-        const {baseApplications, updateApplications, workingApplications, userContext, view, mode, viewOptions, testDataFlag} = this.props;
+        const {baseApplications, updateApplications, workingApplications, userContext, view, mode, viewOptions} = this.props;
 
-        //console.log("RENDER DESIGN UPDATE CONTAINER " + view);
+        log((msg) => console.log(msg), LogLevel.INFO, "RENDER DESIGN UPDATE CONTAINER {}", view);
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -519,7 +520,6 @@ export class UpdateApplicationsList extends Component {
 
                 let col4 = '';
                 if (viewOptions.updateProgressVisible) {
-                    console.log("RENDER PROGRESS " + view);
                     col4 =
                         <Col id="workingCol" md={col4width} className="close-col">
                             {workingVersionComponent}

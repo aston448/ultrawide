@@ -5,13 +5,15 @@ import {DesignUpdateComponents}             from '../collections/design_update/d
 import {DesignVersionComponents}            from '../collections/design/design_version_components.js';
 
 // Ultrawide Services
-import { ComponentType, MessageType, UpdateScopeType}        from '../constants/constants.js';
+import { ComponentType, MessageType, UpdateScopeType, LogLevel}        from '../constants/constants.js';
 import { DesignUpdateComponentMessages }    from '../constants/message_texts.js';
 import { Validation }                       from '../constants/validation_errors.js';
 
 import ServerDesignUpdateComponentApi       from '../apiServer/apiDesignUpdateComponent.js';
 import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpdateComponentValidation.js';
 import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdateSummary.js';
+
+import { log }        from '../common/utils.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -125,7 +127,6 @@ class ClientDesignUpdateComponentServices{
                 alert('Unexpected error 3: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Add Application Actions:
-                store.dispatch(updateTestDataFlag());
 
                 this.refreshDesignUpdateSummary(true);
 
@@ -134,7 +135,6 @@ class ClientDesignUpdateComponentServices{
                     messageType: MessageType.INFO,
                     messageText: DesignUpdateComponentMessages.MSG_NEW_APPLICATION_ADDED
                 }));
-                //ClientAuditServices.updateUserAction(auditKey, 'SUCCESS', DesignUpdateComponentMessages.MSG_NEW_APPLICATION_ADDED);
             }
         });
 
@@ -169,7 +169,6 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 4: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
-                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -218,7 +217,6 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 5: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
-                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -227,7 +225,6 @@ class ClientDesignUpdateComponentServices{
                         messageType: MessageType.INFO,
                         messageText: DesignUpdateComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED
                     }));
-                    //ClientAuditServices.updateUserAction(auditKey, 'SUCCESS', DesignUpdateComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED);
                 }
             }
         );
@@ -263,7 +260,6 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 6: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Actions:
-                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -307,7 +303,6 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Aspect Actions:
-                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -327,7 +322,10 @@ class ClientDesignUpdateComponentServices{
     // User clicked Add Scenario in either a Feature or Feature Aspect -------------------------------------------------
     addScenario(view, mode, parentComponent){
 
+        log((msg) => console.log(msg), LogLevel.DEBUG, 'CLIENT: Add Scenaro...');
+
         // Client validation
+        log((msg) => console.log(msg), LogLevel.DEBUG, '  Client Validation...');
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.SCENARIO);
 
         if(result !== Validation.VALID){
@@ -337,6 +335,7 @@ class ClientDesignUpdateComponentServices{
         }
 
         // Real action call
+        log((msg) => console.log(msg), LogLevel.DEBUG, '  Server Call...');
         ServerDesignUpdateComponentApi.addScenario(
             view,
             mode,
@@ -350,8 +349,8 @@ class ClientDesignUpdateComponentServices{
                     // Can't update screen here because of error
                     alert('Unexpected error 8: ' + err.reason + '.  Contact support if persists!');
                 } else {
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Server Response...');
                     // Add Scenario Actions:
-                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -365,6 +364,8 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
+        log((msg) => console.log(msg), LogLevel.DEBUG, 'CLIENT Done add Scenario');
+
         return {success: true, message: ''};
     };
 
@@ -395,8 +396,6 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 9: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
-
-                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -442,7 +441,6 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 10: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
-                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -580,8 +578,6 @@ class ClientDesignUpdateComponentServices{
                 } else {
                     // Move Component Actions:
 
-                    store.dispatch(updateTestDataFlag());
-
                     this.refreshDesignUpdateSummary(false);
 
                     // Show action success on screen
@@ -625,7 +621,6 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 13: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Reorder Component Actions:
-                    store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({

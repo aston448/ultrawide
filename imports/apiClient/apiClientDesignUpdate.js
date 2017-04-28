@@ -304,6 +304,8 @@ class ClientDesignUpdateServices {
     // Called when Design Update list is displayed ---------------------------------------------------------------------
     updateDesignUpdateStatuses(userContext){
 
+        log((msg) => console.log(msg), LogLevel.INFO, "UPDATE DU STATUSES...");
+
         ServerDesignUpdateApi.updateDesignUpdateStatuses(userContext, (err, result) => {
 
             if (err) {

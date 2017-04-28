@@ -29,6 +29,9 @@ class DesignUpdateComponentServices{
     addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false){
 
         if(Meteor.isServer) {
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, 'Adding Update {} Component', componentType);
+
             // Get the parent reference id (if there is a parent)
             let parentRefId = 'NONE';
             let featureRefId = 'NONE';
@@ -47,6 +50,8 @@ class DesignUpdateComponentServices{
 
             // If adding from a Work Package set as dev added
             let devAdded = (view === ViewType.DEVELOP_UPDATE_WP);
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, '  Inserting Component...', componentType);
 
             let newUpdateComponentId = DesignUpdateComponents.insert(
                 {
@@ -91,11 +96,13 @@ class DesignUpdateComponentServices{
                 // Update the component reference to be the _id.  Note that this is not silly because the CR ID will
                 // always be the _id of the component that was created first.  So for components added in a design new edit
                 // it will be the design component _id...
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating reference...', componentType);
                 DesignUpdateComponents.update(
                     {_id: newUpdateComponentId},
                     {$set: {componentReferenceId: newUpdateComponentId}}
                 );
 
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting Index...', componentType);
                 // Set the starting index for a new component (at end of list).  This checks against the working design, not just this update
                 DesignUpdateComponentModules.setIndex(newUpdateComponentId, componentType, parentId);
 
@@ -104,6 +111,8 @@ class DesignUpdateComponentServices{
 
                 // If a Feature also update the Feature Ref Id to the new ID + add the default narrative
                 if (componentType === ComponentType.FEATURE) {
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Configuring Feature...', componentType);
                     DesignUpdateComponents.update(
                         {_id: newUpdateComponentId},
                         {
@@ -118,26 +127,33 @@ class DesignUpdateComponentServices{
                         }
                     );
 
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting removable on Design...', componentType);
                     // Make sure Design is no longer removable now that a feature added
                     DesignServices.setRemovable(designId);
 
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating WPs...', componentType);
                     // Update any WPs before adding the feature aspects
                     DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
 
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...', componentType);
                     // And update the Working Design Version if update is for Merging
                     DesignUpdateComponentModules.updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId);
 
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding Default Aspects...', componentType);
                     DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '', view);
                 } else {
                     // Just update any WPs
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating WPs...', componentType);
                     DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
 
                     // And update the Working Design Version if update is for Merging
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...', componentType);
                     DesignUpdateComponentModules.updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId);
                 }
 
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting parent removability...', componentType);
                 // When inserting a new design component its parent becomes non-removable
                 if (parentId) {
                     DesignUpdateComponents.update(
@@ -148,11 +164,15 @@ class DesignUpdateComponentServices{
                     );
                 }
 
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding peers...', componentType);
                 // Peer components are also added in peer scope if not already added so that new component can be placed by user
                 DesignUpdateComponentModules.addComponentPeers(designVersionId, designUpdateId, parentRefId, componentType, newUpdateComponentId);
 
                 // And the Design Update Summary is now stale
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Set summary stale...', componentType);
                 DesignUpdates.update({_id: designUpdateId}, {$set:{summaryDataStale: true}});
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, 'DONE Add Update Component', componentType);
             }
         }
     };
