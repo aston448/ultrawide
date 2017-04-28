@@ -534,9 +534,14 @@ class DesignUpdateComponentModules{
             DesignUpdateComponents.remove({_id: designUpdateComponentId});
         }
 
-        // If a Scenario, update the Design Version scenario as no longer queried
+        // If a Scenario...
         if(duComponent.componentType === ComponentType.SCENARIO){
+
+            // Update the Design Version scenario as no longer queried
             this.updateCurrentDesignVersionWithUnscopedScenario(duComponent);
+
+            // And remove from any WP where in scope
+            this.removeWorkPackageItems(designUpdateComponentId, duComponent.designVersionId, duComponent.designUpdateId);
         }
     }
 
@@ -977,7 +982,7 @@ class DesignUpdateComponentModules{
                     this.logicallyDeleteComponent(newDesignUpdateComponentId);
 
                     // And add a WP component if original component was in WP
-                    this.updateWorkPackagesWithNewUpdateItem(designUpdateComponent.designVersionId, designUpdateComponent.designUpdateId, newDesignUpdateComponentId);
+                    //this.updateWorkPackagesWithNewUpdateItem(designUpdateComponent.designVersionId, designUpdateComponent.designUpdateId, newDesignUpdateComponentId);
 
                     childDuComponent = DesignUpdateComponents.findOne({_id: newDesignUpdateComponentId});
                 } else {

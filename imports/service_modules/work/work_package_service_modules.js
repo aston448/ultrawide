@@ -22,8 +22,8 @@ class WorkPackageModules {
 
         // Check that this component is not already there...
         const wpComponent = WorkPackageComponents.findOne({
-            workPackageId:  userContext.workPackageId,
-            componentId:    component._id,
+            workPackageId:          userContext.workPackageId,
+            componentReferenceId:   component.componentReferenceId,
         });
 
         if(!wpComponent) {
@@ -34,8 +34,8 @@ class WorkPackageModules {
             if (component.componentType === ComponentType.SCENARIO) {
 
                 otherWp = WorkPackageComponents.findOne({
-                    componentId:    component._id,
-                    workPackageId:  {$ne: userContext.workPackageId}
+                    componentReferenceId:   component.componentReferenceId,
+                    workPackageId:          {$ne: userContext.workPackageId}
                 });
 
 
@@ -94,18 +94,20 @@ class WorkPackageModules {
         } else {
 
             // Component was already there.  If we are trying to activate it update the scope
-            if(scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
-
-                // No need to add anything, just update it
-                WorkPackageComponents.update(
-                    {_id: wpComponent._id},
-                    {
-                        $set:{
-                            scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                        }
+            // Could be that this item was previously added to an update, removed and then added again  So update other details to be sure all is correct
+            WorkPackageComponents.update(
+                {_id: wpComponent._id},
+                {
+                    $set:{
+                        componentId:                    component._id,
+                        componentParentReferenceId:     component.componentParentReferenceIdNew,
+                        componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                        componentIndex:                 component.componentIndexNew,
+                        scopeType:                      scopeType
                     }
-                );
-            }
+                }
+            );
+
         }
     };
 
@@ -304,20 +306,49 @@ class WorkPackageModules {
 
         if (wpActiveParentComponent){
 
-            let wpComponentId = WorkPackageComponents.insert(
-                {
-                    designVersionId:                designVersionId,
-                    workPackageId:                  workPackage._id,
-                    workPackageType:                workPackage.workPackageType,
-                    componentId:                    component._id,
-                    componentReferenceId:           component.componentReferenceId,
-                    componentType:                  component.componentType,
-                    componentParentReferenceId:     component.componentParentReferenceIdNew,
-                    componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
-                    componentIndex:                 component.componentIndexNew,
-                    scopeType:                      WorkPackageScopeType.SCOPE_ACTIVE
-                }
-            );
+            const wpComponent = WorkPackageComponents.findOne({
+                designVersionId:                designVersionId,
+                workPackageId:                  workPackage._id,
+                workPackageType:                workPackage.workPackageType,
+                componentId:                    component._id,
+                componentReferenceId:           component.componentReferenceId,
+                componentType:                  component.componentType,
+            });
+
+            if(wpComponent){
+
+                WorkPackageComponents.update(
+                    {
+                        _id: wpComponent._id
+                    },
+                    {
+                        $set:{
+                            componentParentReferenceId:     component.componentParentReferenceIdNew,
+                            componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                            componentIndex:                 component.componentIndexNew,
+                            scopeType:                      WorkPackageScopeType.SCOPE_ACTIVE
+                        }
+                    }
+                );
+            } else {
+
+                WorkPackageComponents.insert(
+                    {
+                        designVersionId:                designVersionId,
+                        workPackageId:                  workPackage._id,
+                        workPackageType:                workPackage.workPackageType,
+                        componentId:                    component._id,
+                        componentReferenceId:           component.componentReferenceId,
+                        componentType:                  component.componentType,
+                        componentParentReferenceId:     component.componentParentReferenceIdNew,
+                        componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                        componentIndex:                 component.componentIndexNew,
+                        scopeType:                      WorkPackageScopeType.SCOPE_ACTIVE
+                    }
+                );
+            }
+
+
 
             // And make sure if a Scenario we update the DU WP ID
             if(component.componentType === ComponentType.SCENARIO){

@@ -131,9 +131,9 @@ class DesignUpdateComponentServices{
                     // Make sure Design is no longer removable now that a feature added
                     DesignServices.setRemovable(designId);
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating WPs...', componentType);
+                    //log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating WPs...', componentType);
                     // Update any WPs before adding the feature aspects
-                    DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
+                    //DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...', componentType);
                     // And update the Working Design Version if update is for Merging
@@ -145,8 +145,8 @@ class DesignUpdateComponentServices{
                     DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '', view);
                 } else {
                     // Just update any WPs
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating WPs...', componentType);
-                    DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
+                    //log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating WPs...', componentType);
+                    //DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
 
                     // And update the Working Design Version if update is for Merging
                     log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...', componentType);
@@ -488,6 +488,8 @@ class DesignUpdateComponentServices{
                             // Component already exists so put in real scope
                             DesignUpdateComponentModules.updateToActualScope(currentUpdateComponent._id);
                         }
+
+                        // Add to WP if WP exists for update with
 
                 } else {
 

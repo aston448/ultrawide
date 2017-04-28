@@ -50,6 +50,7 @@ class WorkProgressItem extends Component {
         switch(item.workSummaryType){
             case WorkSummaryType.WORK_SUMMARY_BASE_DV:
             case WorkSummaryType.WORK_SUMMARY_UPDATE_DV:
+            case WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL:
                 itemClass = 'progress-1';
                 rowClass = 'row-progress-1';
                 roleGlyph = 'book';
@@ -260,6 +261,7 @@ class WorkProgressItem extends Component {
                         </Row>
                     </Grid>;
                 break;
+            case WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL:
             case WorkSummaryType.WORK_SUMMARY_BASE_WP:
             case WorkSummaryType.WORK_SUMMARY_UPDATE_WP:
                 // WP summary

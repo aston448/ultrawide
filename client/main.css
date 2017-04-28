@@ -653,7 +653,7 @@ input {
 }
 
 .scroll-col{
-    max-height: 850px;
+    max-height: 1100px;
     overflow-y: auto;
 }
 
@@ -1399,7 +1399,7 @@ input {
 .int-tests-editor{
     margin: 0;
     padding: 3px;
-    max-height: 900px;
+    max-height: 1100px;
     overflow-y: auto;
 }
 

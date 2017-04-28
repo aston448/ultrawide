@@ -73,7 +73,7 @@ class ClientWorkPackageComponentServices {
                         });
                     }
                     if(designItem) {
-                        currentItems.push(designItem._id);
+                        currentItems.push(designItem.componentReferenceId);
                     }
                 });
 
@@ -230,10 +230,10 @@ class ClientWorkPackageComponentServices {
             false
         ));
 
-        let childComponents = DesignUpdateComponents.find(
+        let childComponents = WorkPackageComponents.find(
             {
                 workPackageId: wpComponent.workPackageId,
-                componentParentReferenceIdNew: wpComponent.componentReferenceId
+                componentParentReferenceId: wpComponent.componentReferenceId
             }
         );
 

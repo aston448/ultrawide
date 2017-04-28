@@ -206,12 +206,6 @@ class DesignVersionServices{
                 designVersionId:    userContext.designVersionId
             });
 
-            // const dvScenarios = DesignVersionComponents.find({
-            //     designVersionId:    userContext.designVersionId,
-            //     componentType:      ComponentType.SCENARIO,
-            //     updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-            // }).fetch();
-
 
             let dvTotalScenarios = 0;
             let dvPassingScenarios = 0;
@@ -238,29 +232,6 @@ class DesignVersionServices{
                 dvTotalScenarios = totalScenarios;
                 dvNoTestScenarios = totalScenarios;
             }
-
-            // dvScenarios.forEach((dvScenario) =>{
-            //
-            //     let testResult = UserDevTestSummaryData.findOne({
-            //         userId:                     userContext.userId,
-            //         designVersionId:            userContext.designVersionId,
-            //         scenarioReferenceId:        dvScenario.componentReferenceId
-            //     });
-            //
-            //     if(testResult) {
-            //         if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
-            //             dvFailingScenarios++;
-            //         } else {
-            //             if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
-            //                 dvPassingScenarios++;
-            //             } else {
-            //                 dvNoTestScenarios++;
-            //             }
-            //         }
-            //     } else {
-            //         dvNoTestScenarios++;
-            //     }
-            // });
 
             log((msg) => {console.log(msg)}, LogLevel.DEBUG, "DV: Total: {} Passing: {} Failing: {} NoTest {}", dvTotalScenarios, dvPassingScenarios, dvFailingScenarios, dvNoTestScenarios);
 
@@ -353,6 +324,22 @@ class DesignVersionServices{
 
                 case DesignVersionStatus.VERSION_UPDATABLE:
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
+
+                    let dvName = dv.designVersionName + ' (ALL)';
+
+                    // Insert a record that indicates the total for the DV, not just for updates in it
+                    UserWorkProgressSummary.insert({
+                        userId:                     userContext.userId,
+                        designVersionId:            userContext.designVersionId,
+                        designUpdateId:             'NONE',
+                        workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL,
+                        name:                       dvName,
+                        totalScenarios:             dvTotalScenarios,
+                        scenariosInWp:              0,
+                        scenariosPassing:           dvPassingScenarios,
+                        scenariosFailing:           dvFailingScenarios,
+                        scenariosNoTests:           dvNoTestScenarios
+                    });
 
                     let dvUpdateScenarioCount = 0;
                     let dvUpdateScenariosInWpCount = 0;
@@ -517,11 +504,14 @@ class DesignVersionServices{
 
                     // Insert the Updatable DV entry now we know the total scenario count
                     // Insert the DV summary details
+
+                    dvName = dv.designVersionName + ' (UPDATES)';
+
                     UserWorkProgressSummary.insert({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_DV,
-                        name:                       dv.designVersionName,
+                        name:                       dvName,
                         totalScenarios:             dvUpdateScenarioCount,
                         scenariosInWp:              dvUpdateScenariosInWpCount,
                         scenariosPassing:           dvUpdatePassingCount,

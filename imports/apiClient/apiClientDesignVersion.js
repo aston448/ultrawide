@@ -326,10 +326,6 @@ class ClientDesignVersionServices{
 
         // Recalculate the test data
         ClientTestIntegrationServices.refreshTestData(userContext);
-
-        // Recalculate the progress data
-        ClientDesignVersionServices.updateWorkProgress(userContext);
-
     }
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------

@@ -52,17 +52,22 @@ class TestIntegrationServices{
             this.updateTestSummaryData(userContext, true);
 
             // Update DU Summary if a DU selected
-            if(userContext.designUpdateId !== 'NONE') {
+            if(userContext.designVersionId !== 'NONE') {
 
-                // Mark design update summary data as stale so that results are updated
+                // Mark ALL design update summary data as stale so that results are updated when update is accessed
                 DesignUpdates.update(
-                    {_id: userContext.designUpdateId},
+                    {designVersionId: userContext.designVersionId},
                     {
                         $set: {summaryDataStale: true}
-                    }
+                    },
+                    {multi: true}
+
                 );
 
-                DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
+                // And update the current update now in needed
+                if(userContext.designUpdateId !== 'NONE') {
+                    DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
+                }
             }
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH MASH DATA - DONE");

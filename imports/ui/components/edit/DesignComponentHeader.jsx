@@ -104,7 +104,7 @@ export class DesignComponentHeader extends Component{
                 // An update has been triggered.  Render if this item is in the update
 
                 // If its one of the descoped items
-                if (nextProps.updateScopeItems.removed.includes(this.props.currentItem._id)) {
+                if (nextProps.updateScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
                     return true;
                 }
 
@@ -122,7 +122,7 @@ export class DesignComponentHeader extends Component{
                 // An update has been triggered.  Render if this item is in the WP
 
                 // If its one of the descoped items
-                if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem._id)) {
+                if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
                     return true;
                 }
 
@@ -997,14 +997,14 @@ export class DesignComponentHeader extends Component{
         } else {
             if (updateStatusText === '') {
                 updateStatus =
-                    <InputGroup.Addon id="updateStatusIcon">
-                        <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
+                    <InputGroup.Addon>
+                        <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                     </InputGroup.Addon>;
             } else {
                 updateStatus =
-                    <InputGroup.Addon id="updateStatusIcon">
+                    <InputGroup.Addon>
                         <OverlayTrigger placement="right" overlay={tooltipUpdateStatus}>
-                            <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
+                            <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>;
             }

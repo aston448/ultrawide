@@ -66,10 +66,19 @@ export class WorkProgressSummaryList extends Component {
 
     render() {
 
-        const {dvItem, dvWorkPackages, dvDesignUpdates, userRoles, userContext} = this.props;
+        const {dvAllItem, dvItem, dvWorkPackages, dvDesignUpdates, userRoles, userContext} = this.props;
 
         // Get correct window height
         const editorClass = this.getEditorClass();
+
+        let dvAllItemSummary = <div></div>;
+        if(dvAllItem){
+            dvAllItemSummary =
+                <WorkProgressItem
+                    item={dvAllItem}
+                    userRoles={userRoles}
+                />
+        }
 
         let dvItemSummary = <div></div>;
         if(dvItem){
@@ -105,6 +114,7 @@ export class WorkProgressSummaryList extends Component {
                         displayContext={DisplayContext.PROGRESS_SUMMARY}
                     />
                     <div className={editorClass}>
+                        {dvAllItemSummary}
                         {dvItemSummary}
                         {progressItems}
                     </div>
@@ -137,6 +147,7 @@ export class WorkProgressSummaryList extends Component {
 }
 
 WorkProgressSummaryList.propTypes = {
+    dvAllItem:          PropTypes.object,
     dvItem:             PropTypes.object,
     dvWorkPackages:     PropTypes.array.isRequired,
     dvDesignUpdates:    PropTypes.array.isRequired,

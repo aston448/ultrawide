@@ -789,7 +789,10 @@ class ClientContainerServices{
                     case ViewType.DEVELOP_BASE_WP:
 
                         // The app data is the Design Version data
-                        let appDvComponent = DesignVersionComponents.findOne({_id: wpApp.componentId});
+                        let appDvComponent = DesignVersionComponents.findOne({
+                            designVersionId:        wpApp.designVersionId,
+                            componentReferenceId:   wpApp.componentReferenceId
+                        });
                         if(appDvComponent) {
                             wpApplicationsArr.push(appDvComponent);
                         }
@@ -800,7 +803,10 @@ class ClientContainerServices{
                     case ViewType.DEVELOP_UPDATE_WP:
 
                         // The app data is the Design Update data
-                        let appDuComponent = DesignUpdateComponents.findOne({_id: wpApp.componentId});
+                        let appDuComponent = DesignUpdateComponents.findOne({
+                            designUpdateId:         userContext.designUpdateId,
+                            componentReferenceId:   wpApp.componentReferenceId
+                        });
                         if(appDuComponent) {
                             wpApplicationsArr.push(appDuComponent);
                         }
@@ -1047,7 +1053,7 @@ class ClientContainerServices{
 
                             wpComponents.forEach((wpComponent) => {
 
-                                let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
+                                let dvComponent = DesignVersionComponents.findOne({componentReferenceId: wpComponent.componentReferenceId});
 
                                 if(dvComponent) {
                                     currentComponents.push(dvComponent);
@@ -1094,6 +1100,7 @@ class ClientContainerServices{
 
                         // Get only the Update Components that are in the WP
 
+                        // TODO - parent id may be out of date when DU items are recreated...
                         // Get the parent component
                         const parent = DesignUpdateComponents.findOne({_id: parentId});
 
@@ -1110,7 +1117,7 @@ class ClientContainerServices{
 
                             wpComponents.forEach((wpComponent) => {
 
-                                let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
+                                let duComponent = DesignUpdateComponents.findOne({componentReferenceId: wpComponent.componentReferenceId});
 
                                 if(duComponent) {
                                     currentComponents.push(duComponent);
@@ -2496,6 +2503,7 @@ class ClientContainerServices{
 
         let dvWorkPackages = [];
         let dvDesignUpdates = [];
+        let dvAllItem = null;
         let dvItem = null;
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Progress Data for DV {}", userContext.designVersionId);
@@ -2506,6 +2514,7 @@ class ClientContainerServices{
 
         if(userContext.designVersionId === 'NONE'){
             return{
+                dvAllItem:          dvAllItem,
                 dvItem:             dvItem,
                 dvWorkPackages:     dvWorkPackages,
                 dvDesignUpdates:    dvDesignUpdates,
@@ -2542,7 +2551,16 @@ class ClientContainerServices{
 
             default:
 
-                // Get item
+                // Get All scenarios item
+                dvAllItem = UserWorkProgressSummary.findOne(
+                    {
+                        userId:                 userContext.userId,
+                        designVersionId:        userContext.designVersionId,
+                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL
+                    }
+                );
+
+                // Get update scenarios item
                 dvItem = UserWorkProgressSummary.findOne(
                     {
                         userId:                 userContext.userId,
@@ -2564,6 +2582,7 @@ class ClientContainerServices{
         log((msg) => console.log(msg), LogLevel.DEBUG, "Returning WPs {}  DUs: {}", dvWorkPackages.length, dvDesignUpdates.length);
 
         return{
+            dvAllItem:          dvAllItem,
             dvItem:             dvItem,
             dvWorkPackages:     dvWorkPackages,
             dvDesignUpdates:    dvDesignUpdates,

@@ -396,6 +396,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 9: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
+                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -441,6 +442,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 10: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
+                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 
@@ -501,7 +503,7 @@ class ClientDesignUpdateComponentServices{
 
                     // The design item won't exist if a new item in a non-merged update
                     if(designItem) {
-                        currentItems.push(designItem._id);
+                        currentItems.push(designItem.componentReferenceId);
                     }
                 });
 

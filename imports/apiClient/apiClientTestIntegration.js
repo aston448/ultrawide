@@ -11,8 +11,10 @@ import { TestIntegrationMessages } from '../constants/message_texts.js'
 
 import { log } from '../common/utils.js';
 
-import ServerTestIntegrationApi      from '../apiServer/apiTestIntegration.js';
-import TestIntegrationValidationApi  from '../apiValidation/apiTestIntegrationValidation.js';
+import ServerTestIntegrationApi         from '../apiServer/apiTestIntegration.js';
+import TestIntegrationValidationApi     from '../apiValidation/apiTestIntegrationValidation.js';
+import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
+import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -127,7 +129,11 @@ class ClientTestIntegrationServices {
                     messageText: 'Test data and results loaded'
                 }));
 
+                // After tests are updated work progress should be too
+                ClientDesignVersionServices.updateWorkProgress(userContext);
 
+                // Get latest status on DUs
+                ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
             }
         });
 

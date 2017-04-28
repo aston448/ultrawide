@@ -81,7 +81,7 @@ export class DesignComponent extends Component{
             if (nextProps.updateScopeFlag !== this.props.updateScopeFlag) {
 
                 // If its one of the descoped items
-                if (nextProps.updateScopeItems.removed.includes(nextProps.currentItem._id)) {
+                if (nextProps.updateScopeItems.removed.includes(nextProps.currentItem.componentReferenceId)) {
                     return true;
                 }
 
@@ -99,7 +99,7 @@ export class DesignComponent extends Component{
                 // An update has been triggered.  Render if this item is in the WP
 
                 // If its one of the descoped items
-                if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem._id)) {
+                if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
                     return true;
                 }
 

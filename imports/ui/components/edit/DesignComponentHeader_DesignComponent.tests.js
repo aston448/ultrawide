@@ -1210,7 +1210,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-added', 'Update status not added');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-added', 'Update status not added');
         });
 
         it('added design section is marked as added', () => {
@@ -1222,7 +1222,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-added', 'Update status not added');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-added', 'Update status not added');
         });
 
         it('added feature is marked as added', () => {
@@ -1234,7 +1234,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-added', 'Update status not added');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-added', 'Update status not added');
         });
 
         it('added feature aspect is marked as added', () => {
@@ -1246,7 +1246,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-added', 'Update status not added');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-added', 'Update status not added');
         });
 
         it('added scenario is marked as added', () => {
@@ -1258,7 +1258,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-added', 'Update status not added');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-added', 'Update status not added');
         });
     });
 
@@ -1273,7 +1273,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-modified', 'Update status not modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-modified', 'Update status not modified');
         });
 
         it('modified design section is marked as modified', () => {
@@ -1285,7 +1285,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-modified', 'Update status not modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-modified', 'Update status not modified');
         });
 
         it('modified feature is marked as modified', () => {
@@ -1297,7 +1297,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-modified', 'Update status not modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-modified', 'Update status not modified');
         });
 
         it('modified feature aspect is marked as modified', () => {
@@ -1309,7 +1309,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-modified', 'Update status not modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-modified', 'Update status not modified');
         });
 
         it('modified scenario is marked as modified', () => {
@@ -1321,7 +1321,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-modified', 'Update status not modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-modified', 'Update status not modified');
         });
     });
 
@@ -1336,7 +1336,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-details-modified', 'Update status not details-modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className,  'update-merge-status component-details-modified', 'Update status not details-modified');
         });
 
         it('text modified design section is marked as text modified', () => {
@@ -1348,7 +1348,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-details-modified', 'Update status not details-modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className,  'update-merge-status component-details-modified', 'Update status not details-modified');
         });
 
         it('text modified feature is marked as text modified', () => {
@@ -1360,7 +1360,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-details-modified', 'Update status not details-modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className,  'update-merge-status component-details-modified', 'Update status not details-modified');
         });
 
 
@@ -1373,7 +1373,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-details-modified', 'Update status not details-modified');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className,  'update-merge-status component-details-modified', 'Update status not details-modified');
         });
     });
 
@@ -1388,7 +1388,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-removed', 'Update status not removed');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-removed', 'Update status not removed');
         });
 
         it('removed design section is marked as removed', () => {
@@ -1400,7 +1400,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-removed', 'Update status not removed');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-removed', 'Update status not removed');
         });
 
         it('removed feature is marked as removed', () => {
@@ -1412,7 +1412,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-removed', 'Update status not removed');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-removed', 'Update status not removed');
         });
 
         it('removed feature aspect is marked as removed', () => {
@@ -1424,7 +1424,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-removed', 'Update status not removed');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-removed', 'Update status not removed');
         });
 
         it('removed scenario is marked as removed', () => {
@@ -1436,7 +1436,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-removed', 'Update status not removed');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-removed', 'Update status not removed');
         });
     });
 
@@ -1451,7 +1451,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-moved', 'Update status not moved');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-moved', 'Update status not moved');
         });
 
         it('moved design section is marked as moved', () => {
@@ -1463,7 +1463,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-moved', 'Update status not moved');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-moved', 'Update status not moved');
         });
 
         it('moved feature is marked as moved', () => {
@@ -1475,7 +1475,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-moved', 'Update status not moved');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-moved', 'Update status not moved');
         });
 
         it('moved feature aspect is marked as moved', () => {
@@ -1487,7 +1487,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-moved', 'Update status not moved');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-moved', 'Update status not moved');
         });
 
         it('moved scenario is marked as moved', () => {
@@ -1499,7 +1499,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has a status icon
             chai.assert(item.find('#updateStatusIcon').length === 1, 'Update status icon not found!');
-            chai.assert(item.find('#updateStatusIcon').props().className === 'update-merge-status component-moved', 'Update status not moved');
+            chai.assert.equal(item.find('#updateStatusIcon').props().className, 'update-merge-status component-moved', 'Update status not moved');
         });
     });
 
