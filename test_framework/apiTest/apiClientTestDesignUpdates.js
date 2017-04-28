@@ -59,7 +59,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userContext.userId);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
         const outcome = ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
@@ -72,7 +72,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userContext.userId);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
         const testIntegrationDataContext = {

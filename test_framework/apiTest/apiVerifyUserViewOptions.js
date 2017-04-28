@@ -14,8 +14,8 @@ Meteor.methods({
 
     'verifyUserViewOptions.optionIsVisible'(optionType, userName){
 
-        //const userContext = TestDataHelpers.getUserContext(userName);
-        const userOptions = TestDataHelpers.getViewOptions(userName);
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const userOptions = TestDataHelpers.getViewOptions(userContext.userId);
 
         if (!userOptions) {
             throw new Meteor.Error("FAIL", "No user options for user " + userName);
@@ -103,8 +103,8 @@ Meteor.methods({
 
     'verifyUserViewOptions.optionIsHidden'(optionType, userName){
 
-        //const userContext = TestDataHelpers.getUserContext(userName);
-        const userOptions = TestDataHelpers.getViewOptions(userName);
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const userOptions = TestDataHelpers.getViewOptions(userContext.userId);
 
         if (!userOptions) {
             throw new Meteor.Error("FAIL", "No user options for user " + userName);

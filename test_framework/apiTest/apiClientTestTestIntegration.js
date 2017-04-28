@@ -13,7 +13,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userContext.userId);
 
         const outcome = ClientTestIntegrationServices.refreshTestData(userContext, viewOptions);
 

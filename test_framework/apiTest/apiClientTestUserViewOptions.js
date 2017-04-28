@@ -13,13 +13,11 @@ Meteor.methods({
 
         // Sets a dummy user context for test purposes
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
 
         UserCurrentViewOptions.update(
-            {_id: viewOptions._id},
+            {userId: userContext.userId},
             {
                 $set:{
-                    userId:                     userContext.userId,
                     designDetailsVisible:       false,
                     designDomainDictVisible:    false,
                     testSummaryVisible:         false,
@@ -56,7 +54,7 @@ Meteor.methods({
     'testViewOptions.setViewOption'(optionType, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userContext.userId);
 
         switch(optionType){
             case ViewOptionType.DESIGN_DETAILS:
