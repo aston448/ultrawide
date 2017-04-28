@@ -980,7 +980,7 @@ export class DesignComponentHeader extends Component{
 
         let wpStatus =
             <InputGroup.Addon>
-                <OverlayTrigger placement="bottom" overlay={tooltipGotoWp}>
+                <OverlayTrigger placement="right" overlay={tooltipGotoWp}>
                     <div id="wpStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
@@ -1000,7 +1000,7 @@ export class DesignComponentHeader extends Component{
             } else {
                 updateStatus =
                     <InputGroup.Addon id="updateStatusIcon">
-                        <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
+                        <OverlayTrigger placement="right" overlay={tooltipUpdateStatus}>
                             <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>;
@@ -1079,6 +1079,8 @@ export class DesignComponentHeader extends Component{
                     {readOnlyEditor}
                     {hiddenIcon}
                     {hiddenIcon}
+                    {hiddenIcon}
+                    {hiddenIcon}
                     {wpStatus}
                     {updateStatus}
                 </InputGroup>
@@ -1090,6 +1092,10 @@ export class DesignComponentHeader extends Component{
                     {openClose}
                     {indent}
                     {readOnlyEditor}
+                    {hiddenIcon}
+                    {hiddenIcon}
+                    {hiddenIcon}
+                    {hiddenIcon}
                     {updateStatus}
                 </InputGroup>
             </div>;
@@ -1202,6 +1208,7 @@ export class DesignComponentHeader extends Component{
                     {readOnlyEditor}
                     {editAction}
                     {deleteAction}
+                    {hiddenIcon}
                     {hiddenIcon}
                     {updateStatus}
                 </InputGroup>
