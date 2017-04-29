@@ -100,7 +100,13 @@ class RoleAction extends Component {
                     // If the data is there, open the WP items that need it
                     if (store.getState().designVersionDataLoaded) {
 
-                        newContext = ClientUserContextServices.setOpenWorkPackageItems(userContext);
+                        // If update WP then open the scope items too...db
+                        if(newContext.designUpdateId !== 'NONE'){
+
+                            newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
+                        }
+
+                        newContext = ClientUserContextServices.setOpenWorkPackageItems(newContext);
                     }
                 }
 

@@ -57,7 +57,7 @@ class FeatureAspectsList extends Component {
     };
 
     getWpItem(featureAspect, workPackageId){
-        return ClientWorkPackageComponentServices.getWorkPackageComponent(featureAspect._id, workPackageId);
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(featureAspect.componentReferenceId, workPackageId);
     }
 
     // A list of Feature Aspects in a Feature

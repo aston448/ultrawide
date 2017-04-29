@@ -2313,11 +2313,25 @@ class ClientContainerServices{
                 break;
 
             case ViewType.TEST_OUTPUTS:
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [gotoConfig, gotoDesigns];
+                        break;
+
+
+                }
+                break;
+
             case ViewType.SELECT:
 
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
                         return [gotoConfig, gotoDesigns];
+                        break;
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+                        return [
+                            refreshTestData
+                        ];
 
                 }
                 break;

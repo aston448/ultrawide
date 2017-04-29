@@ -52,7 +52,7 @@ class DevApplicationsList extends Component {
 
     getWpItem(application, workPackageId){
 
-        return ClientWorkPackageComponentServices.getWorkPackageComponent(application._id, workPackageId);
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(application.componentReferenceId, workPackageId);
     }
 
     getEditorClass(){

@@ -137,47 +137,38 @@ class ClientWorkPackageComponentServices {
         }
     }
 
-    getWorkPackageComponent(componentId, workPackageId){
+    getWorkPackageComponent(componentReferenceId, workPackageId){
 
         //console.log("looking for wp component for WP " + workPackageId + " and component " + componentId);
 
-        return WorkPackageComponents.findOne({workPackageId: workPackageId, componentId: componentId});
+        return WorkPackageComponents.findOne({workPackageId: workPackageId, componentReferenceId: componentReferenceId});
     }
 
     // User opened or closed a WP component
-    setOpenClosed(wpType, wpComponent, currentList, setOpen){
+    setOpenClosed(wpComponent, currentList, setOpen){
+
+        //console.log("WP toggle: open = " + setOpen);
+
+        // Note - the component passed in here is either a Design Version Component - for base WP or Design Update Component - for Update WP
+        const userContext = store.getState().currentUserItemContext;
 
         if(wpComponent.componentType === ComponentType.FEATURE){
 
             // Open or close the whole feature
             if(setOpen) {
 
-                let featureComponents = [];
+                // Open the Feature
+                store.dispatch(setCurrentUserOpenWorkPackageItems(
+                    currentList,
+                    wpComponent._id,
+                    setOpen
+                ));
 
-                switch(wpType){
-                    case WorkPackageType.WP_BASE:
-
-                        featureComponents = DesignVersionComponents.find(
-                            {
-                                designVersionId: wpComponent.designVersionId,
-                                componentFeatureReferenceIdNew: wpComponent.componentReferenceId,
-                                componentType: {$ne:(ComponentType.SCENARIO)}
-                            }
-                        ).fetch();
-                        break;
-
-                    case WorkPackageType.WP_UPDATE:
-
-                        featureComponents = DesignUpdateComponents.find(
-                            {
-                                designVersionId: wpComponent.designVersionId,
-                                designUpdateId: wpComponent.designUpdateId,
-                                componentFeatureReferenceIdNew: wpComponent.componentReferenceId,
-                                componentType: {$ne:(ComponentType.SCENARIO)}
-                            }
-                        ).fetch();
-                        break;
-                }
+                // And its child Aspects
+                let featureComponents = WorkPackageComponents.find({
+                    workPackageId:              wpComponent.workPackageId,
+                    componentParentReferenceId: wpComponent.componentReferenceId
+                });
 
                 featureComponents.forEach((component) => {
 
@@ -186,14 +177,13 @@ class ClientWorkPackageComponentServices {
                         component._id,
                         true
                     ));
-
                 });
 
                 store.dispatch((updateOpenItemsFlag(wpComponent._id)));
 
             } else {
 
-                this.closeChildren(wpComponent, currentList);
+                this.closeChildren(userContext, wpComponent, currentList);
                 store.dispatch((updateOpenItemsFlag(wpComponent._id)));
             }
 
@@ -213,7 +203,7 @@ class ClientWorkPackageComponentServices {
             } else {
 
                 // Close all items below
-                this.closeChildren(wpComponent, currentList);
+                this.closeChildren(userContext, wpComponent, currentList);
                 store.dispatch((updateOpenItemsFlag(wpComponent._id)));
             }
         }
@@ -222,7 +212,7 @@ class ClientWorkPackageComponentServices {
     };
 
     // Recursive function to close all children down to the bottom of the tree
-    closeChildren(wpComponent, currentList){
+    closeChildren(userContext, wpComponent, currentList){
 
         store.dispatch(setCurrentUserOpenWorkPackageItems(
             currentList,
@@ -230,18 +220,20 @@ class ClientWorkPackageComponentServices {
             false
         ));
 
-        let childComponents = WorkPackageComponents.find(
-            {
-                workPackageId: wpComponent.workPackageId,
-                componentParentReferenceId: wpComponent.componentReferenceId
-            }
-        );
+        // Get children in WP - no need to close scenarios
+        let childComponents = WorkPackageComponents.find({
+            workPackageId:                  userContext.workPackageId,
+            componentParentReferenceId:     wpComponent.componentReferenceId,
+            componentType:                  {$ne:(ComponentType.SCENARIO)}
+        }).fetch();
 
-        if(childComponents.count() > 0){
+
+        if(childComponents.length > 0){
+
             childComponents.forEach((child) => {
 
-                // Recursively call for these children
-                this.closeChildren(child, currentList)
+                // Recursively call for this child
+                this.closeChildren(userContext, child, currentList)
 
             });
 

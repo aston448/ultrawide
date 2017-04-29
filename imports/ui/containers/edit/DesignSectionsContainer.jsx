@@ -57,7 +57,7 @@ class DesignSectionsList extends Component {
     }
 
     getWpItem(designSection, workPackageId){
-        return ClientWorkPackageComponentServices.getWorkPackageComponent(designSection._id, workPackageId);
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(designSection.componentReferenceId, workPackageId);
     }
 
     // A list of top level headings in the design

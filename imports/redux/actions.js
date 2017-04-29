@@ -285,8 +285,9 @@ export function setCurrentUserOpenDesignUpdateItems(openItems, componentId, newS
             }
         }
 
+        // console.log("DU Open Items");
         // newItems.forEach((item) => {
-        //     console.log("Open DU Item: " + item);
+        //     console.log("    " + item)
         // });
 
         dispatch({type: SET_CURRENT_USER_OPEN_DESIGN_UPDATE_ITEMS, newUserOpenDesignUpdateItems: newItems});
@@ -317,6 +318,11 @@ export function setCurrentUserOpenWorkPackageItems(openItems, componentId, newSt
                 }
             }
         }
+
+        // console.log("WP Open Items");
+        // newItems.forEach((item) => {
+        //     console.log("    " + item)
+        // });
 
         dispatch({type: SET_CURRENT_USER_OPEN_WORK_PACKAGE_ITEMS, newUserOpenWorkPackageItems: newItems});
     };

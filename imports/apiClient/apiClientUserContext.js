@@ -182,7 +182,13 @@ class ClientUserContextServices {
         const userContext = store.getState().currentUserItemContext;
 
         // Refresh the test mash for the design version.  Also loads test results
-        ClientTestIntegrationServices.refreshTestData(userContext);
+        //ClientTestIntegrationServices.refreshTestData(userContext);
+
+        // Display correct work progress
+        ClientDesignVersionServices.updateWorkProgress(userContext);
+
+        // Get latest status on DUs
+        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));
@@ -357,84 +363,77 @@ class ClientUserContextServices {
 
         try {
 
-            // Set all Applications and Design Sections to be open for all Design Versions, Design Updates and Work Packages
-
-
-            // Work Packages - open in scope items down to Feature Level
-            if(userContext.designUpdateId === 'NONE'){
-                wpArr = ClientAppHeaderServices.getDesignVersionFeatures(userContext);
-            } else {
-                wpArr = ClientAppHeaderServices.getDesignUpdateFeatures(userContext);
-            }
+            // Work Packages - open items down to Feature Level
+            wpArr = ClientAppHeaderServices.getWorkPackageFeatures(userContext);
 
             // Plus for the actual open item context, open all the way down to that item
             log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
                 userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
 
-            if (userContext.designComponentId !== 'NONE') {
-                // There is a current component...
-                if (userContext.workPackageId !== 'NONE') {
-                    // User is in a WP so drill down to that item...
-
-                    let wpComponent = null;
-                    let wpType = '';
-
-                    if(userContext.designUpdateId === 'NONE'){
-                        wpComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
-                        wpType = WorkPackageType.WP_BASE;
-                    } else {
-                        wpComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
-                        wpType = WorkPackageType.WP_UPDATE;
-                    }
-
-                    if(wpComponent) {
-
-                        switch(wpComponent.componentType){
-
-                            case ComponentType.APPLICATION:
-                            case ComponentType.DESIGN_SECTION:
-                                // Already open
-                                break;
-                            case ComponentType.FEATURE:
-                                // Open it and all stuff below
-                                wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpType, wpComponent, wpArr, true);
-                                break;
-                            default:
-                                // Anything else is below a Feature so open the Feature and select that
-                                let wpFeatureComponent = null;
-
-                                if(userContext.designUpdateId === 'NONE'){
-                                    wpFeatureComponent = DesignVersionComponents.findOne({
-                                        designVersionId: userContext.designVersionId,
-                                        componentType: ComponentType.FEATURE,
-                                        componentReferenceId: wpComponent.componentFeatureReferenceIdNew
-                                    });
-                                } else {
-                                    wpFeatureComponent = DesignUpdateComponents.findOne({
-                                        designVersionId: userContext.designVersionId,
-                                        componentType: ComponentType.FEATURE,
-                                        componentReferenceId: wpComponent.componentFeatureReferenceIdNew
-                                    });
-                                }
-
-                                if(wpFeatureComponent){
-                                    // Reset user context.  Feature id is the DESIGN component ID, not the WP component ID
-                                    userContext.designComponentId = wpFeatureComponent.componentId;
-                                    userContext.designComponentType = ComponentType.FEATURE;
-                                    userContext.featureReferenceId = wpFeatureComponent.componentReferenceId;
-                                    userContext.featureAspectReferenceId = 'NONE';
-                                    userContext.scenarioReferenceId = 'NONE';
-                                    userContext.scenarioStepId = 'NONE';
-
-                                    store.dispatch(setCurrentUserItemContext(userContext, true));
-
-                                    // Open the feature
-                                    wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpType, wpFeatureComponent, wpArr, true);
-                                }
-                        }
-                    }
-                }
-            }
+            // if (userContext.designComponentId !== 'NONE') {
+            //     // There is a current component...
+            //     if (userContext.workPackageId !== 'NONE') {
+            //         // User is in a WP so drill down to that item...
+            //
+            //         let wpComponent = null;
+            //         let wpType = '';
+            //
+            //         if(userContext.designUpdateId === 'NONE'){
+            //             wpComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+            //             wpType = WorkPackageType.WP_BASE;
+            //         } else {
+            //             wpComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+            //             wpType = WorkPackageType.WP_UPDATE;
+            //         }
+            //
+            //         if(wpComponent) {
+            //
+            //             switch(wpComponent.componentType){
+            //
+            //                 case ComponentType.APPLICATION:
+            //                 case ComponentType.DESIGN_SECTION:
+            //                     // Already open
+            //                     break;
+            //                 case ComponentType.FEATURE:
+            //                     // Open it and all stuff below
+            //                     wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpType, wpComponent, wpArr, true);
+            //                     break;
+            //                 default:
+            //                     // Anything else is below a Feature so open the Feature and select that
+            //                     let wpFeatureComponent = null;
+            //
+            //                     if(userContext.designUpdateId === 'NONE'){
+            //                         wpFeatureComponent = DesignVersionComponents.findOne({
+            //                             designVersionId: userContext.designVersionId,
+            //                             componentType: ComponentType.FEATURE,
+            //                             componentReferenceId: wpComponent.componentFeatureReferenceIdNew
+            //                         });
+            //                     } else {
+            //                         wpFeatureComponent = DesignUpdateComponents.findOne({
+            //                             designVersionId: userContext.designVersionId,
+            //                             componentType: ComponentType.FEATURE,
+            //                             componentReferenceId: wpComponent.componentFeatureReferenceIdNew
+            //                         });
+            //                     }
+            //
+            //                     if(wpFeatureComponent){
+            //                         // Reset user context.  Feature id is the DESIGN component ID, not the WP component ID
+            //                         userContext.designComponentId = wpFeatureComponent.componentId;
+            //                         userContext.designComponentType = ComponentType.FEATURE;
+            //                         userContext.featureReferenceId = wpFeatureComponent.componentReferenceId;
+            //                         userContext.featureAspectReferenceId = 'NONE';
+            //                         userContext.scenarioReferenceId = 'NONE';
+            //                         userContext.scenarioStepId = 'NONE';
+            //
+            //                         store.dispatch(setCurrentUserItemContext(userContext, true));
+            //
+            //                         // Open the feature
+            //                         wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpType, wpFeatureComponent, wpArr, true);
+            //                     }
+            //             }
+            //         }
+            //     }
+            // }
         }
         catch(e){
             log((msg) => console.log(msg), LogLevel.ERROR, "ERROR Loading open item settings: {}", e);

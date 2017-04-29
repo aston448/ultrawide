@@ -60,6 +60,11 @@ export class DesignComponent extends Component{
 
         // Do refresh if this specific component is gaining or losing focus
         let currentItemId = this.props.currentItem._id;
+        let openItemId = this.props.currentItem._id;
+
+        if(this.props.displayContext === DisplayContext.WP_VIEW || this.props.displayContext === DisplayContext.DEV_DESIGN){
+            openItemId = this.props.wpItem._id;
+        }
 
         if((nextProps.userContext.designComponentId === currentItemId) && (this.props.userContext.designComponentId !== currentItemId)){
             return true;
@@ -69,8 +74,8 @@ export class DesignComponent extends Component{
             return true;
         }
 
-        // If this item has been opened or closed...
-        if(nextProps.openItemsFlag.item === currentItemId){
+        // If this specific item has been opened or closed...
+        if(nextProps.openItemsFlag.item === openItemId){
             return true;
         }
 
@@ -202,62 +207,91 @@ export class DesignComponent extends Component{
                 case ViewType.DESIGN_PUBLISHED_VIEW:
                 case ViewType.DESIGN_UPDATABLE_VIEW:
 
-                    if (
-                        (newProps.openDesignItems.includes(this.props.currentItem._id) && !(this.props.openDesignItems.includes(this.props.currentItem._id))) ||
-                        (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.props.openDesignItems.includes(this.props.currentItem._id)) ||
-                        (newProps.openDesignItems.includes(this.props.currentItem._id) && !this.state.open) ||
-                        (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.state.open)
-                    ) {
-                        this.setOpenState(newProps);
-                    }
+                    this.setOpenStateIfDesignItemChanging(newProps);
                     break;
+
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.DESIGN_UPDATE_VIEW:
                     if(newProps.displayContext === DisplayContext.UPDATE_SCOPE || newProps.displayContext === DisplayContext.WORKING_VIEW){
-                        if (
-                            (newProps.openDesignItems.includes(this.props.currentItem._id) && !(this.props.openDesignItems.includes(this.props.currentItem._id))) ||
-                            (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.props.openDesignItems.includes(this.props.currentItem._id)) ||
-                            (newProps.openDesignItems.includes(this.props.currentItem._id) && !this.state.open) ||
-                            (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.state.open)
-                        ) {
-                            this.setOpenState(newProps);
-                        }
+
+                        this.setOpenStateIfDesignItemChanging(newProps)
 
                     } else {
                         if(newProps.updateItem) {
-                            //console.log("NEW PROPS: " + this.props.updateItem.componentNameNew);
-                            if (
-                                (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.updateItem._id))) ||
-                                (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.props.openDesignUpdateItems.includes(this.props.updateItem._id)) ||
-                                (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !this.state.open) ||
-                                (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.state.open)
-                            ) {
-                                this.setOpenState(newProps);
-                            }
+
+                            this.setOpenStateIfUpdateItemChanging(newProps)
                         }
                     }
                     break;
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
-                case ViewType.WORK_PACKAGE_BASE_VIEW:
+                    switch(this.props.displayContext) {
+                        case DisplayContext.WP_SCOPE:
+                            // Scope is Design Items
+                            this.setOpenStateIfDesignItemChanging(newProps);
+                            break;
+
+                        case DisplayContext.WP_VIEW:
+
+                            this.setOpenStateIfWorkPackageItemChanging(newProps);
+                    }
+                    break;
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                    switch(this.props.displayContext){
+                        case DisplayContext.WP_SCOPE:
+                            // Scope is Update Items
+                            this.setOpenStateIfUpdateItemChanging(newProps);
+                            break;
+                        case DisplayContext.WP_VIEW:
+
+                            this.setOpenStateIfWorkPackageItemChanging(newProps);
+                    }
+                    break;
+
+                case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
                 case ViewType.DEVELOP_UPDATE_WP:
-                    if (
-                        (newProps.openWorkPackageItems.includes(this.props.currentItem._id) && !(this.props.openWorkPackageItems.includes(this.props.currentItem._id))) ||
-                        (!(newProps.openWorkPackageItems.includes(this.props.currentItem._id)) && this.props.openWorkPackageItems.includes(this.props.currentItem._id)) ||
-                        (newProps.openWorkPackageItems.includes(this.props.currentItem._id) && !this.state.open) ||
-                        (!(newProps.openWorkPackageItems.includes(this.props.currentItem._id)) && this.state.open)
-                    ) {
-                        this.setOpenState(newProps);
-                    }
+
+                    this.setOpenStateIfWorkPackageItemChanging(newProps);
                     break;
             }
         }
     }
 
+    setOpenStateIfDesignItemChanging(newProps){
+        if (
+            (newProps.openDesignItems.includes(this.props.currentItem._id) && !(this.props.openDesignItems.includes(this.props.currentItem._id))) ||
+            (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.props.openDesignItems.includes(this.props.currentItem._id)) ||
+            (newProps.openDesignItems.includes(this.props.currentItem._id) && !this.state.open) ||
+            (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.state.open)
+        ) {
+            this.setOpenState(newProps);
+        }
+    }
+
+    setOpenStateIfUpdateItemChanging(newProps){
+        if (
+            (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.updateItem._id))) ||
+            (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.props.openDesignUpdateItems.includes(this.props.updateItem._id)) ||
+            (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !this.state.open) ||
+            (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.state.open)
+        ) {
+            this.setOpenState(newProps);
+        }
+    }
+
+    setOpenStateIfWorkPackageItemChanging(newProps){
+        if (
+            (newProps.openWorkPackageItems.includes(this.props.wpItem._id) && !(this.props.openWorkPackageItems.includes(this.props.wpItem._id))) ||
+            (!(newProps.openWorkPackageItems.includes(this.props.wpItem._id)) && this.props.openWorkPackageItems.includes(this.props.wpItem._id)) ||
+            (newProps.openWorkPackageItems.includes(this.props.wpItem._id) && !this.state.open) ||
+            (!(newProps.openWorkPackageItems.includes(this.props.wpItem._id)) && this.state.open)
+        ) {
+            this.setOpenState(newProps);
+        }
+    }
+
     setOpenState(props){
-        const openUpdateItems = this.props.openDesignUpdateItems;
 
         // console.log("Open design update items length is " + openUpdateItems.length);
         // openUpdateItems.forEach((item) => {
@@ -277,17 +311,35 @@ export class DesignComponent extends Component{
                 } else {
                     if(props.updateItem) {
                         //console.log("Setting open state for " + props.updateItem.componentNameNew + " to " + openUpdateItems.includes(props.updateItem._id));
-                        this.setState({open: openUpdateItems.includes(props.updateItem._id)});
+                        this.setState({open: this.props.openDesignUpdateItems.includes(props.updateItem._id)});
                     }
                 }
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
+                switch(this.props.displayContext){
+                    case DisplayContext.WP_SCOPE:
+                        this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
+                        break;
+                    case DisplayContext.WP_VIEW:
+
+                        this.setState({open: props.openWorkPackageItems.includes(props.wpItem._id)});
+                }
+                break;
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                switch(this.props.displayContext){
+                    case DisplayContext.WP_SCOPE:
+                        this.setState({open: props.openDesignUpdateItems.includes(props.currentItem._id)});
+                        break;
+                    case DisplayContext.WP_VIEW:
+
+                        this.setState({open: props.openWorkPackageItems.includes(props.wpItem._id)});
+                }
+                break;
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                this.setState({open: props.openWorkPackageItems.includes(props.currentItem._id)});
+                this.setState({open: props.openWorkPackageItems.includes(props.wpItem._id)});
                 break;
         }
     }
@@ -299,7 +351,6 @@ export class DesignComponent extends Component{
     // Design component open or closed (i.e. is body of it visible)
     toggleOpen(){
 
-        // Store for persistence
         switch(this.props.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
@@ -310,27 +361,50 @@ export class DesignComponent extends Component{
 
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                if(this.props.displayContext === DisplayContext.UPDATE_SCOPE || this.props.displayContext === DisplayContext.WORKING_VIEW) {
-                    ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, !this.state.open);
-                } else {
-                    if(this.props.updateItem.scopeType !== UpdateScopeType.SCOPE_PEER_SCOPE) {
-                        ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, !this.state.open);
-                    }
+                switch(this.props.displayContext){
+                    case DisplayContext.UPDATE_SCOPE:
+                    case DisplayContext.WORKING_VIEW:
+                        ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, !this.state.open);
+                        break;
+                    default:
+                        if(this.props.updateItem.scopeType !== UpdateScopeType.SCOPE_PEER_SCOPE) {
+                            ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, !this.state.open);
+                        }
                 }
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.DEVELOP_BASE_WP:
+                switch(this.props.displayContext){
+                    case DisplayContext.WP_SCOPE:
+                        // Scope is Design Items
+                        ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, !this.state.open);
+                        break;
+                    case DisplayContext.WP_VIEW:
+                        ClientWorkPackageComponentServices.setOpenClosed(this.props.wpItem, this.props.openWorkPackageItems, !this.state.open);
 
-                ClientWorkPackageComponentServices.setOpenClosed(WorkPackageType.WP_BASE, this.props.currentItem, this.props.openWorkPackageItems, !this.state.open);
+                }
                 break;
 
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                switch(this.props.displayContext){
+                    case DisplayContext.WP_SCOPE:
+                        // Scope is Design Update Items
+                        if(this.props.updateItem.scopeType !== UpdateScopeType.SCOPE_PEER_SCOPE) {
+                            ClientDesignUpdateComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignUpdateItems, !this.state.open);
+                        }
+                        break;
+                    case DisplayContext.WP_VIEW:
+                        ClientWorkPackageComponentServices.setOpenClosed(this.props.wpItem, this.props.openWorkPackageItems, !this.state.open);
+
+                }
+                break;
+
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.DEVELOP_BASE_WP:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DEVELOP_UPDATE_WP:
 
-                ClientWorkPackageComponentServices.setOpenClosed(WorkPackageType.WP_UPDATE, this.props.currentItem, this.props.openWorkPackageItems, !this.state.open);
+                ClientWorkPackageComponentServices.setOpenClosed(this.props.wpItem, this.props.openWorkPackageItems, !this.state.open);
                 break;
         }
 

@@ -57,7 +57,7 @@ class ScenariosList extends Component {
     };
 
     getWpItem(scenario, workPackageId){
-        return ClientWorkPackageComponentServices.getWorkPackageComponent(scenario._id, workPackageId);
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(scenario.componentReferenceId, workPackageId);
     }
 
     // A list of Scenarios in a Feature or Feature Aspect

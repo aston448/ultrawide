@@ -643,6 +643,8 @@ class ClientDesignUpdateComponentServices{
     // User opened or closed a design component
     setOpenClosed(designComponent, currentList, setOpen){
 
+        //console.log("DU toggle: open = " + setOpen);
+
         if(designComponent.componentType === ComponentType.FEATURE){
 
             // Open or close the whole feature

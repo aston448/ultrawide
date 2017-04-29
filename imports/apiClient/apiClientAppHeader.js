@@ -118,21 +118,48 @@ class ClientAppHeaderServices{
 
         if(userContext.workPackageId !== 'NONE'){
 
-            // WP situation - is it a Base Design or Design Update WP?
+            // WP situation - is it a Base Design or Design Update WP?  And are we looking at the scope or the view?
             if(userContext.designUpdateId === 'NONE'){
 
-                componentArray = this.getDesignVersionFeatures(userContext);
+                if(displayContext === DisplayContext.WP_SCOPE){
+                    componentArray = this.getDesignVersionFeatures(userContext);
+
+                    store.dispatch(setCurrentUserOpenDesignItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+
+                } else {
+                    componentArray = this.getWorkPackageFeatures(userContext);
+
+                    store.dispatch(setCurrentUserOpenWorkPackageItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+                }
 
             } else {
+                if(displayContext === DisplayContext.WP_SCOPE) {
+                    componentArray = this.getDesignUpdateFeatures(userContext);
 
-                componentArray = this.getDesignUpdateFeatures(userContext);
+                    store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+
+                } else {
+                    componentArray = this.getWorkPackageFeatures(userContext);
+
+                    store.dispatch(setCurrentUserOpenWorkPackageItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+                }
             }
-
-            store.dispatch(setCurrentUserOpenWorkPackageItems(
-                componentArray,
-                null,
-                null
-            ));
 
             store.dispatch((updateOpenItemsFlag('NONE')));
 
@@ -179,18 +206,45 @@ class ClientAppHeaderServices{
             // WP situation - is it a Base Design or Design Update WP?
             if(userContext.designUpdateId === 'NONE'){
 
-                componentArray = this.getDesignVersionSections(userContext);
+                if(displayContext === DisplayContext.WP_SCOPE){
+                    componentArray = this.getDesignVersionSections(userContext);
+
+                    store.dispatch(setCurrentUserOpenDesignItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+
+                } else {
+                    componentArray = this.getWorkPackageSections(userContext);
+
+                    store.dispatch(setCurrentUserOpenWorkPackageItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+                }
 
             } else {
+                if(displayContext === DisplayContext.WP_SCOPE) {
+                    componentArray = this.getDesignUpdateSections(userContext);
 
-                componentArray = this.getDesignUpdateSections(userContext);
+                    store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+
+                } else {
+                    componentArray = this.getWorkPackageSections(userContext);
+
+                    store.dispatch(setCurrentUserOpenWorkPackageItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+                }
             }
-
-            store.dispatch(setCurrentUserOpenWorkPackageItems(
-                componentArray,
-                null,
-                null
-            ));
 
             store.dispatch((updateOpenItemsFlag('NONE')));
 
@@ -265,6 +319,26 @@ class ClientAppHeaderServices{
         return componentArray;
     }
 
+    getWorkPackageFeatures(userContext){
+
+        const componentArray = [];
+
+        // Only open scoped items
+        const workPackageOpenComponents = WorkPackageComponents.find(
+            {
+                workPackageId: userContext.workPackageId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+            },
+            {fields: {_id: 1}}
+        );
+
+        workPackageOpenComponents.forEach((component) => {
+            componentArray.push(component._id);
+        });
+
+        return componentArray;
+    }
+
     getDesignVersionSections(userContext){
 
         const componentArray = [];
@@ -312,6 +386,30 @@ class ClientAppHeaderServices{
         return componentArray;
     }
 
+    getWorkPackageSections(userContext){
+
+        const componentArray = [];
+
+        // Only open scoped items
+        const workPackageOpenComponents = WorkPackageComponents.find(
+            {
+                workPackageId: userContext.workPackageId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+            },
+            {fields: {_id: 1, componentReferenceId: 1}}
+        );
+
+        // Add only sections that have no Features in Design Update
+        workPackageOpenComponents.forEach((component) => {
+            if(this.hasNoFeaturesWp(userContext, component)) {
+
+                componentArray.push(component._id);
+            }
+        });
+
+        return componentArray;
+    }
+
     hasNoFeaturesDc(userContext, component){
 
         // Returns true if there are no features that are children of the component
@@ -330,6 +428,16 @@ class ClientAppHeaderServices{
                 designUpdateId:                 userContext.designUpdateId,
                 componentParentReferenceIdNew:  component.componentReferenceId,
                 componentType:                  ComponentType.FEATURE
+            }).count() === 0;
+    }
+
+    hasNoFeaturesWp(userContext, component){
+
+        // Returns true if there are no features that are children of the component
+        return WorkPackageComponents.find({
+                workPackageId:                userContext.workPackageId,
+                componentParentReferenceId:   component.componentReferenceId,
+                componentType:                ComponentType.FEATURE
             }).count() === 0;
     }
 

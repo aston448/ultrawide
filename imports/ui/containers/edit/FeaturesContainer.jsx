@@ -58,7 +58,7 @@ class FeaturesList extends Component {
     };
 
     getWpItem(feature, workPackageId){
-        return ClientWorkPackageComponentServices.getWorkPackageComponent(feature._id, workPackageId);
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(feature.componentReferenceId, workPackageId);
     }
 
     // A list of Features in a Design Section

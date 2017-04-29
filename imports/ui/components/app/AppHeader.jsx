@@ -165,6 +165,7 @@ export class AppHeader extends Component {
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
                         {rolesItem}
+                        <UltrawideMenuDropdown itemName="Refresh" menuType={MenuDropdown.MENU_DROPDOWN_REFRESH}/>
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;

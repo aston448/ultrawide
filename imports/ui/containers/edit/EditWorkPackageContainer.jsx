@@ -49,7 +49,7 @@ class WorkPackageApplicationsList extends Component {
     // }
 
     getWpItem(currentItem, workPackageId){
-        return ClientWorkPackageComponentServices.getWorkPackageComponent(currentItem._id, workPackageId);
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(currentItem.componentReferenceId, workPackageId);
     }
 
     getUpdateItem(application, designUpdateId){
