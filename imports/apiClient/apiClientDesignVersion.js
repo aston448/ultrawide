@@ -324,8 +324,11 @@ class ClientDesignVersionServices{
             store.dispatch((updateOpenItemsFlag(app._id)));
         });
 
-        // Recalculate the test data
-        ClientTestIntegrationServices.refreshTestData(userContext);
+        // Recalculate the work summary
+        ClientDesignVersionServices.updateWorkProgress(userContext);
+
+        // Get latest status on DUs
+        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
     }
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------

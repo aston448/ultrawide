@@ -36,7 +36,7 @@ describe('JSX: DesignUpdateSummaryList', () => {
         );
     }
 
-    describe('A list of Features and Scenarios added in the selected Design Update', () => {
+    describe('A list of Design Components added in the selected Design Update grouped by the item they are added to', () => {
 
         it('has additions if there are additions', () => {
 
@@ -64,7 +64,7 @@ describe('JSX: DesignUpdateSummaryList', () => {
         });
     });
 
-    describe('A list of Features and Scenarios removed in the selected Design Update', () => {
+    describe('A list of Design Components removed in the selected Design Update grouped by the item they are removed from', () => {
 
         it('has removals if there are removals', () => {
 
@@ -92,7 +92,7 @@ describe('JSX: DesignUpdateSummaryList', () => {
         });
     });
 
-    describe('A list of Features and Scenarios modified in the selected Design Update', () => {
+    describe('A list of Design Components modified in the selected Design Update grouped by their parent item', () => {
 
         it('has changes if there are changes', () => {
 
@@ -120,7 +120,9 @@ describe('JSX: DesignUpdateSummaryList', () => {
         });
     });
 
-    describe('The additions list is not visible if there are no Features or Scenarios added', () => {
+    //describe('A list of Scenarios to confirm tests for in the selected Design Update grouped by their parent item');
+
+    describe('The additions list is not visible if there are no Design Components added', () => {
 
         it('has no additions if there are no additions', () => {
             const additions = [];
@@ -134,7 +136,7 @@ describe('JSX: DesignUpdateSummaryList', () => {
         });
     });
 
-    describe('The removals list is not visible if there are no Features or Scenarios removed', () => {
+    describe('The removals list is not visible if there are no Design Components removed', () => {
 
         it('has no removals if there are no removals', () => {
             const additions = [];
@@ -148,7 +150,7 @@ describe('JSX: DesignUpdateSummaryList', () => {
         });
     });
 
-    describe('The changes list is not visible if there are no changes to existing Features or Scenarios', () => {
+    describe('The changes list is not visible if there are no changes to existing Design Components', () => {
 
         it('has no changes if there are no changes', () => {
             const additions = [];

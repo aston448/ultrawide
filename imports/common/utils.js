@@ -77,6 +77,12 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 break;
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+                // If a removal has been updated in to the main version show it here
+                if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
+                    deleted = ' removed-item';
+                }
+                break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
                 switch(context){

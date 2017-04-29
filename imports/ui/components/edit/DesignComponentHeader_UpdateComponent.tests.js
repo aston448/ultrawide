@@ -134,7 +134,7 @@ describe('JSX: DesignComponentHeader', () => {
     });
 
     // Put in scope
-    describe('A Feature in the Design Update Scope pane has a toggle that allows it to be put in scope', () => {
+    describe('A component in the Design Update Scope pane has a toggle that allows it to be put in scope', () => {
 
         it('non scoped feature has an unchecked toggle', () => {
 
@@ -153,9 +153,6 @@ describe('JSX: DesignComponentHeader', () => {
             chai.assert.equal(item.find('#scopeCheckBox').props().className, 'out-scope', 'Scoping box is checked');
 
         });
-    });
-
-    describe('A Feature Aspect in the Design Update Scope pane has a toggle that allows it to be put in scope', () => {
 
         it('non scoped feature aspect has an unchecked toggle', () => {
 
@@ -174,9 +171,6 @@ describe('JSX: DesignComponentHeader', () => {
             chai.assert.equal(item.find('#scopeCheckBox').props().className, 'out-scope', 'Scoping box is checked');
 
         });
-    });
-
-    describe('A Scenario in the Design Update Scope pane has a toggle that allows it to be put in scope', () => {
 
         it('non scoped scenario has an unchecked toggle', () => {
 
@@ -196,9 +190,10 @@ describe('JSX: DesignComponentHeader', () => {
 
         });
     });
+
 
     // Put out of scope
-    describe('A Feature in the Design Update Scope pane has a toggle that allows it to be put out of scope', () => {
+    describe('A component in the Design Update Scope pane has a toggle that allows it to be put out of scope', () => {
 
         it('non scoped feature has an unchecked toggle', () => {
 
@@ -217,9 +212,6 @@ describe('JSX: DesignComponentHeader', () => {
             chai.assert.equal(item.find('#scopeCheckBox').props().className, 'in-scope', 'Scoping box is not checked');
 
         });
-    });
-
-    describe('A Feature Aspect in the Design Update Scope pane has a toggle that allows it to be put out of scope', () => {
 
         it('non scoped feature aspect has an unchecked toggle', () => {
 
@@ -238,9 +230,6 @@ describe('JSX: DesignComponentHeader', () => {
             chai.assert.equal(item.find('#scopeCheckBox').props().className, 'in-scope', 'Scoping box is not checked');
 
         });
-    });
-
-    describe('A Scenario in the Design Update Scope pane has a toggle that allows it to be put out of scope', () => {
 
         it('non scoped scenario has an unchecked toggle', () => {
 
@@ -260,6 +249,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         });
     });
+
 
     // Editor Components -----------------------------------------------------------------------------------------------
 

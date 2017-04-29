@@ -446,7 +446,7 @@ describe('JSX: DesignComponent', () => {
 
     // Work Package Components -----------------------------------------------------------------------------------------
 
-    describe('A selected Work Package Component is highlighted', () => {
+    describe('A selected Work Package component is highlighted', () => {
 
         it('is highlighted if selected', () => {
 
