@@ -30,20 +30,19 @@ class WorkPackageModules {
 
             let otherWp = null;
 
-            // If component is Scenario and already exists in other WP, don't add it
+            // If component is Scenario and already exists in other WP for this DV, don't add it
             if (component.componentType === ComponentType.SCENARIO) {
 
                 otherWp = WorkPackageComponents.findOne({
+                    designVersionId:        userContext.designVersionId,
                     componentReferenceId:   component.componentReferenceId,
                     workPackageId:          {$ne: userContext.workPackageId}
                 });
-
-
             }
 
             if (!otherWp) {
 
-                //console.log("Adding component " + component.componentNameNew + " to scope");
+                console.log("Adding component " + component.componentNameNew + " to scope");
 
                 WorkPackageComponents.insert(
                     {
@@ -61,37 +60,14 @@ class WorkPackageModules {
                 );
 
                 // And, if Scenario mark the design item as in the WP
-                if (component.componentType === ComponentType.SCENARIO) {
-                    if(wpType === WorkPackageType.WP_BASE){
-                        DesignVersionComponents.update(
-                            {_id: component._id},
-                            {
-                                $set: {workPackageId: userContext.workPackageId}
-                            }
-                        );
-                    } else {
-                        DesignUpdateComponents.update(
-                            {_id: component._id},
-                            {
-                                $set: {workPackageId: userContext.workPackageId}
-                            }
-                        );
-
-                        // Also set the WP in the base design version
-                        DesignVersionComponents.update(
-                            {
-                                designVersionId: userContext.designVersionId,
-                                componentReferenceId: component.componentReferenceId
-                            },
-                            {
-                                $set: {workPackageId: userContext.workPackageId}
-                            }
-                        );
-                    }
+                if (component.componentType === ComponentType.SCENARIO && scopeType === WorkPackageScopeType.SCOPE_ACTIVE) {
+                    this.markScenario(wpType, component, userContext);
                 }
             }
 
         } else {
+
+            console.log("Updating component " + component.componentNameNew + " to scope " + scopeType);
 
             // Component was already there.  If we are trying to activate it update the scope
             // Could be that this item was previously added to an update, removed and then added again  So update other details to be sure all is correct
@@ -108,8 +84,43 @@ class WorkPackageModules {
                 }
             );
 
+            // And, if Scenario mark the design item as in the WP
+            if (component.componentType === ComponentType.SCENARIO && scopeType === WorkPackageScopeType.SCOPE_ACTIVE) {
+                this.markScenario(wpType, component, userContext);
+            }
+
         }
     };
+
+    markScenario(wpType, component, userContext){
+
+        if(wpType === WorkPackageType.WP_BASE){
+            DesignVersionComponents.update(
+                {_id: component._id},
+                {
+                    $set: {workPackageId: userContext.workPackageId}
+                }
+            );
+        } else {
+            DesignUpdateComponents.update(
+                {_id: component._id},
+                {
+                    $set: {workPackageId: userContext.workPackageId}
+                }
+            );
+
+            // Also set the WP in the base design version
+            DesignVersionComponents.update(
+                {
+                    designVersionId: userContext.designVersionId,
+                    componentReferenceId: component.componentReferenceId
+                },
+                {
+                    $set: {workPackageId: userContext.workPackageId}
+                }
+            );
+        }
+    }
 
     removeWorkPackageComponent(userContext, designComponentId){
 

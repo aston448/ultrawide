@@ -185,19 +185,19 @@ describe('API: ClientContainer', () => {
             chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ACC_FILES), 'Acc Files option was found');
         });
 
-        it('test results not available when viewing a design', () => {
-
-            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
-            const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
-
-            const menu = testGetDropdownMenuItems(menuType, view, mode);
-
-            chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ACC_TESTS), 'Acc Tests option was found');
-            chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_INT_TESTS), 'Int Tests option was found');
-            chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_UNIT_TESTS), 'Unit Tests option was found');
-            chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ACC_FILES), 'Acc Files option was found');
-        });
+        // it('test results not available when viewing a design', () => {
+        //
+        //     const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+        //     const mode = ViewMode.MODE_VIEW;
+        //     const view = ViewType.DESIGN_PUBLISHED_VIEW;
+        //
+        //     const menu = testGetDropdownMenuItems(menuType, view, mode);
+        //
+        //     chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ACC_TESTS), 'Acc Tests option was found');
+        //     chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_INT_TESTS), 'Int Tests option was found');
+        //     chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_UNIT_TESTS), 'Unit Tests option was found');
+        //     chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ACC_FILES), 'Acc Files option was found');
+        // });
     });
 
     // Design Update editor --------------------------------------------------------------------------------------------
