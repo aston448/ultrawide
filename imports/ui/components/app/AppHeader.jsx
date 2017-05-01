@@ -178,34 +178,10 @@ export class AppHeader extends Component {
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-
-                appHeaderMenuContent =
-                    <div className="top-menu-bar">
-                        {rolesItem}
-                        {selectItem}
-                        <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
-                        <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>
-                        <UltrawideMenuDropdown itemName="Refresh" menuType={MenuDropdown.MENU_DROPDOWN_REFRESH}/>
-                        {logoutItem}
-                    </div>;
-                break;
-
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-
-                appHeaderMenuContent =
-                    <div className="top-menu-bar">
-                        {rolesItem}
-                        {selectItem}
-                        <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
-                        <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>
-                        {logoutItem}
-                    </div>;
-                break;
-
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
                         {rolesItem}

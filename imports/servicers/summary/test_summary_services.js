@@ -283,7 +283,7 @@ class TestSummaryServices {
                         scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                     });
 
-                    if (duComponent && userContext.workPackageId === 'NONE') {
+                    if (duComponent) {
 
                         log((msg) => console.log(msg), LogLevel.TRACE, "Adding DU scenario {}", duComponent.componentNameNew);
 

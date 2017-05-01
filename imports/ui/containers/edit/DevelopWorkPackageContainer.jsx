@@ -136,7 +136,7 @@ class DevApplicationsList extends Component {
                 />
             </div>;
 
-        // Deatails Pane
+        // Details Pane
         designDetails =
             <DesignComponentTextContainer params={{
                 currentContext: userContext,
@@ -625,7 +625,7 @@ class DevApplicationsList extends Component {
                     </Col>;
 
                 let col2 = '';
-                if (viewOptions.devDetailsVisible) {
+                if (viewOptions.designDetailsVisible) {
                     col2 =
                         <Col md={col2width} className="close-col">
                             {designDetails}
@@ -728,7 +728,7 @@ function mapStateToProps(state) {
 DevApplicationsList = connect(mapStateToProps)(DevApplicationsList);
 
 
-export default EditDesignImplementationContainer = createContainer(({params}) => {
+export default DevelopWorkPackageContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the relevant work package
     return ClientContainerServices.getEditorApplicationData(

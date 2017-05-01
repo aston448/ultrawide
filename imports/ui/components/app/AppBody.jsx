@@ -18,7 +18,7 @@ import DesignVersionsContainer              from  '../../containers/select/Desig
 import EditDesignContainer                  from  '../../containers/edit/EditDesignContainer.jsx';
 import EditDesignUpdateContainer            from  '../../containers/edit/EditDesignUpdateContainer.jsx';
 import EditWorkPackageContainer             from  '../../containers/edit/EditWorkPackageContainer.jsx';
-import EditDesignImplementationContainer    from  '../../containers/edit/EditDesignImplementationContainer.jsx';
+import DevelopWorkPackageContainer          from  '../../containers/edit/DevelopWorkPackageContainer.jsx';
 import WaitMessage                          from  './Wait.jsx';
 
 // Ultrawide Services
@@ -136,7 +136,7 @@ class AppBody extends Component {
             case ViewType.DEVELOP_UPDATE_WP:
                 // When a Developer decides to work on a Work Package
                 bodyHtml =
-                    <EditDesignImplementationContainer params={{
+                    <DevelopWorkPackageContainer params={{
                         userContext: userContext,
                         mode: mode,
                         view: view,

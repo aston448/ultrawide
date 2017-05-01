@@ -2474,6 +2474,11 @@ class ClientContainerServices{
                             viewAllAsTabs
                         ];
 
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+
+                        return [
+                            refreshTestData
+                        ];
                 }
                 break;
 

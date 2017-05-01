@@ -65,7 +65,7 @@ class WorkPackageApplicationsList extends Component {
     }
 
     // A list of top level applications in the work package potential scope
-    renderScopeApplications(wpScopeApplications, displayContext, view, mode, userContext) {
+    renderScopeApplications(wpScopeApplications, displayContext, view, mode, userContext, testSummary) {
 
         return wpScopeApplications.map((application) => {
             return (
@@ -77,7 +77,7 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={displayContext}
                     view={view}
                     mode={mode}
-                    testSummary={false}
+                    testSummary={testSummary}
                     testSummaryData={null}
                 />
             );
@@ -117,6 +117,12 @@ class WorkPackageApplicationsList extends Component {
         // Get correct window height
         const editorClass = this.getEditorClass();
 
+        let testSummaryAvailableForView = false;
+
+        if(view === ViewType.WORK_PACKAGE_BASE_VIEW || view === ViewType.WORK_PACKAGE_UPDATE_VIEW){
+            testSummaryAvailableForView = true;
+        }
+
         // Scope for Work Package
         let wpScopeComponent =
             <div className="design-editor-container">
@@ -124,7 +130,7 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={DisplayContext.WP_SCOPE}
                 />
                 <div className={editorClass}>
-                    {this.renderScopeApplications(scopeApplications, DisplayContext.WP_SCOPE, view, mode, userContext)}
+                    {this.renderScopeApplications(scopeApplications, DisplayContext.WP_SCOPE, view, mode, userContext, viewOptions.testSummaryVisible)}
                 </div>
                 <DesignEditorFooter
                     displayContext={DisplayContext.WP_SCOPE}
@@ -139,7 +145,7 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={DisplayContext.WP_VIEW}
                 />
                 <div className={editorClass}>
-                    {this.renderViewApplications(wpApplications, DisplayContext.WP_VIEW, view, mode, userContext, viewOptions.testSummaryVisible)}
+                    {this.renderViewApplications(wpApplications, DisplayContext.WP_VIEW, view, mode, userContext, (viewOptions.testSummaryVisible && testSummaryAvailableForView))}
                 </div>
                 <DesignEditorFooter
                     displayContext={DisplayContext.WP_VIEW}

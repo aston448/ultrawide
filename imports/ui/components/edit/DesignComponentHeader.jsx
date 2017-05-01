@@ -643,7 +643,7 @@ export class DesignComponentHeader extends Component{
             </Tooltip>
         );
 
-        //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with WP item " + wpItem);
+        //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with test summary " + testSummary + " and test summary data " + testSummaryData);
 
         // Determine the look of the item ------------------------------------------------------------------------------
 
@@ -1389,7 +1389,8 @@ export class DesignComponentHeader extends Component{
                         switch(view){
                             case ViewType.DESIGN_PUBLISHED_VIEW:
                             case ViewType.DESIGN_UPDATABLE_VIEW:
-                            case ViewType.DESIGN_UPDATE_EDIT:
+                            case ViewType.DESIGN_UPDATE_EDIT:           // Scope pane
+                            case ViewType.WORK_PACKAGE_BASE_EDIT:       // Scope pane
                                 // Whole DV
                                 // Any failures at all it's a fail
                                 if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
@@ -1402,6 +1403,7 @@ export class DesignComponentHeader extends Component{
                                 }
                                 break;
                             case ViewType.DESIGN_UPDATE_VIEW:
+                            case ViewType.WORK_PACKAGE_UPDATE_EDIT:     // Scope pane
                                 // DU Only
                                 // Any failures at all it's a fail
                                 if (testSummaryData.duFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {

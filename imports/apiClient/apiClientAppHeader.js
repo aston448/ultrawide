@@ -48,7 +48,10 @@ class ClientAppHeaderServices{
     };
 
     toggleViewOption(optionType, currentOptions, userId){
-        // Toggles a particular view option
+
+        // Toggles a particular view option.  The View All As Tabs option does not change the current choice of options.
+        // It just switches from viewing all options as tabs or back to viewing just the current choice
+
         let newOptions = currentOptions;
 
         newOptions[optionType] = !currentOptions[optionType];
@@ -59,55 +62,6 @@ class ClientAppHeaderServices{
         return {success: true, message: ''};
     }
 
-    toggleTabsViewOption(optionType, currentOptions, userId){
-
-        let newOptions = currentOptions;
-        let isVisible = false;
-
-        console.log("Toggling option " + optionType);
-
-        if(currentOptions[optionType]){
-
-            // Hiding stuff
-            isVisible = false;
-
-        } else {
-
-            // Displaying stuff
-            isVisible = true
-        }
-
-        // Set all options on or off depending on the change
-        switch(optionType){
-            case ViewOptionType.DESIGN_ALL_AS_TABS:
-                newOptions[ViewOptionType.DEV_UNIT_TESTS] = isVisible;
-                newOptions[ViewOptionType.DEV_INT_TESTS] = isVisible;
-                newOptions[ViewOptionType.DEV_ACC_TESTS] = isVisible;
-                newOptions[ViewOptionType.DEV_FILES] = isVisible;
-                newOptions[ViewOptionType.DESIGN_DETAILS] = isVisible;
-                newOptions[ViewOptionType.DESIGN_DICT] = isVisible;
-                newOptions[optionType] = !currentOptions[optionType];
-                break;
-            case ViewOptionType.UPDATE_ALL_AS_TABS:
-                newOptions[ViewOptionType.UPDATE_PROGRESS] = isVisible;
-                newOptions[ViewOptionType.UPDATE_SUMMARY] = isVisible;
-                newOptions[ViewOptionType.UPDATE_DETAILS] = isVisible;
-                newOptions[ViewOptionType.UPDATE_DICT] = isVisible;
-                newOptions[optionType] = !currentOptions[optionType];
-                break;
-            case ViewOptionType.WORK_ALL_AS_TABS:
-                newOptions[ViewOptionType.DEV_UNIT_TESTS] = isVisible;
-                newOptions[ViewOptionType.DEV_INT_TESTS] = isVisible;
-                newOptions[ViewOptionType.DEV_ACC_TESTS] = isVisible;
-                newOptions[ViewOptionType.DEV_FILES] = isVisible;
-                newOptions[ViewOptionType.WP_DETAILS] = isVisible;
-                newOptions[ViewOptionType.WP_DICT] = isVisible;
-                newOptions[optionType] = !currentOptions[optionType];
-        }
-
-        store.dispatch(setCurrentUserViewOptions(newOptions, userId, true));
-        store.dispatch(updateViewOptionsData());
-    }
 
     setViewLevelFeatures(userContext, displayContext){
 

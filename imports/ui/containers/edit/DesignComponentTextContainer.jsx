@@ -13,7 +13,7 @@ import DetailsViewHeader    from '../../components/common/DetailsViewHeader.jsx'
 import DetailsViewFooter    from '../../components/common/DetailsViewFooter.jsx';
 
 // Ultrawide Services
-import { ViewType, ComponentType, DetailsViewType, DisplayContext, StepContext, LogLevel } from '../../../constants/constants.js';
+import { ViewType, ComponentType, DetailsViewType, DisplayContext, UpdateMergeStatus, LogLevel } from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
 import { log } from '../../../common/utils.js'
 
@@ -210,7 +210,8 @@ class DesignComponentText extends Component {
             // }
 
             // Define panel 3 for updates - base item text - only shown if a current component exists
-            if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW || view === ViewType.DESIGN_UPDATABLE_VIEW) && baseComponent){
+            if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW || view === ViewType.DESIGN_UPDATABLE_VIEW || view === ViewType.DEVELOP_UPDATE_WP)
+                && baseComponent && (baseComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED || baseComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_DETAILS_MODIFIED) ){
                 let baseTextTitle = 'OLD: ' + TextLookups.componentTypeName(baseComponent.componentType) + ' - ' + titleNameOld;
                 panel3 =
                     <div className="design-editor-container">
