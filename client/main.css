@@ -1392,7 +1392,7 @@ input {
 .details-editor{
     margin: 0;
     padding: 3px;
-    max-height: 400px;
+    max-height: 1100px;
     overflow-y: auto;
 }
 
@@ -1618,6 +1618,30 @@ input {
 
 .component-scenario-queried{
     color: lightseagreen;
+}
+
+.details-item{
+    margin: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 4px
+}
+
+.details-name{
+    padding: 5px 5px 5px 15px;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+}
+
+.details-item-new{
+    color: darkgreen;
+    background-color: #DDEEEE;
+    width: 50px;
+}
+
+.details-item-old{
+    color: darkred;
+    background-color: #EEDDEE;
+    width: 50px;
 }
 
 .step-type-col{
@@ -1867,7 +1891,7 @@ input {
     margin: 0;
     color: black;
     background-color: white;
-    min-height: 300px;
+    min-height: 400px;
 }
 
 .editor-panel-small{
@@ -1877,7 +1901,6 @@ input {
     margin: 0;
     color: black;
     background-color: white;
-    min-height: 200px;
 }
 
 .editor-panel-edit{
@@ -1892,9 +1915,12 @@ input {
 }
 
 .editor-toolbar{
-    margin: 3px 0 0 0;
+    margin: 5px 0 5px 0;
 }
 
+.toolbar-right{
+    text-align: right;
+}
 
 
 .move-target{

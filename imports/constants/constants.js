@@ -183,6 +183,15 @@ export const ComponentType = {
     DRAGGABLE_ITEM:     'DRAGGABLE'
 };
 
+export const DetailsType = {
+    DETAILS_NAME:       'DETAILS_NAME',
+    DETAILS_NAME_NEW:   'DETAILS_NAME_NEW',
+    DETAILS_NAME_OLD:   'DETAILS_NAME_OLD',
+    DETAILS_TEXT:       'DETAILS_TEXT',
+    DETAILS_TEXT_NEW:   'DETAILS_TEXT_NEW',
+    DETAILS_TEXT_OLD:   'DETAILS_TEXT_OLD',
+};
+
 export const DesignStatus = {
     DESIGN_LIVE:                'Live',
     DESIGN_ARCHIVED:            'Archived'

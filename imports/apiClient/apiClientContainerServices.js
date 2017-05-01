@@ -1351,8 +1351,10 @@ class ClientContainerServices{
 
     getTextDataForDesignComponent(userContext, view, displayContext){
 
-        let currentDesignComponent = null;
-        let currentUpdateComponent = null;
+        let newDisplayContext = displayContext;
+
+        let selectedDesignComponent = null;
+        //let relatedUpdateComponent = null;
 
         if(userContext && userContext.designComponentId !== 'NONE') {
 
@@ -1362,8 +1364,9 @@ class ClientContainerServices{
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
+                case ViewType.DESIGN_UPDATABLE_VIEW:
 
-                    currentDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+                    selectedDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
 
                     break;
 
@@ -1373,39 +1376,13 @@ class ClientContainerServices{
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.DEVELOP_UPDATE_WP:
 
-                    currentUpdateComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
-
-                    // For an update the current item is the update item but we can also get its equivalent in the original design
-                    if(currentUpdateComponent) {
-
-                        currentDesignComponent = DesignVersionComponents.findOne({
-                            designVersionId:        currentUpdateComponent.designVersionId,
-                            componentReferenceId:   currentUpdateComponent.componentReferenceId
-                        });
+                    selectedDesignComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+                    if(!selectedDesignComponent){
+                        // Must be selecting from the DU scope...
+                        selectedDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+                        newDisplayContext = DisplayContext.UPDATE_SCOPE;
                     }
-                    break;
 
-                case ViewType.DESIGN_UPDATABLE_VIEW:
-
-                    // Want the current version plus the related DU component to give old text if text has changed
-                    currentDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
-
-                    if(currentDesignComponent) {
-
-                        const currentUpdateComponents = DesignUpdateComponents.find({
-                            designVersionId: currentDesignComponent.designVersionId,
-                            componentReferenceId: currentDesignComponent.componentReferenceId,
-                            isTextChanged: true,
-                            isNew: false,
-                        }).fetch();
-
-                        // Could be more than one but all should have the same OLD values so just pick first
-                        if (currentUpdateComponents.length > 0) {
-                            currentUpdateComponent = currentUpdateComponents[0];
-                        } else {
-                            currentUpdateComponent = null;
-                        }
-                    }
                     break;
 
                 default:
@@ -1413,14 +1390,14 @@ class ClientContainerServices{
             }
 
             return {
-                currentDesignComponent: currentDesignComponent,
-                currentUpdateComponent: currentUpdateComponent,
-                displayContext: displayContext
+                currentDesignComponent: selectedDesignComponent,
+                //currentUpdateComponent: relatedUpdateComponent,
+                displayContext: newDisplayContext
             }
         } else {
             return {
                 currentDesignComponent: null,
-                currentUpdateComponent: null,
+                //currentUpdateComponent: null,
                 displayContext: displayContext,
             }
         }

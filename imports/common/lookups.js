@@ -205,7 +205,7 @@ class TextLookups {
             case MenuAction.MENU_ACTION_VIEW_DETAILS:
                 return 'Details';
             case MenuAction.MENU_ACTION_VIEW_PROGRESS:
-                return 'Version Merge';
+                return 'Working View';
             case MenuAction.MENU_ACTION_VIEW_UPD_SUMM:
                 return 'Update Summary';
             case MenuAction.MENU_ACTION_VIEW_TEST_SUMM:

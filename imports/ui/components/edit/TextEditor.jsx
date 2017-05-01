@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewMode, ViewType, DisplayContext, ComponentType, LogLevel} from '../../../constants/constants.js';
+import {ViewMode, ViewType, UpdateScopeType, DetailsType, LogLevel} from '../../../constants/constants.js';
 
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTextEditorServices         from '../../../apiClient/apiClientTextEditor.js';
@@ -99,32 +99,24 @@ export class TextEditor extends Component {
         // console.log("Context is: " + props.context);
 
         let rawText = null;
-        switch(props.view){
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.DEVELOP_BASE_WP:
-                rawText = props.designComponent.componentTextRawNew;
-                break;
-            case ViewType.DESIGN_UPDATABLE_VIEW:
-                rawText = props.designComponent.componentTextRawNew;
-                break;
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.DEVELOP_UPDATE_WP:
-                if(props.context === DisplayContext.BASE_VIEW){
-                    rawText = props.designComponent.componentTextRawNew;
-                } else {
-                    // For update text always look at the new value
-                    rawText = props.designComponent.componentTextRawNew;
-                }
-                break;
 
+        switch(props.detailsType){
+            case DetailsType.DETAILS_NAME:
+            case DetailsType.DETAILS_NAME_NEW:
+                rawText = props.designComponent.componentNameRawNew;
+                break;
+            case DetailsType.DETAILS_NAME_OLD:
+                rawText = props.designComponent.componentNameRawOld;
+                break;
+            case DetailsType.DETAILS_TEXT:
+            case DetailsType.DETAILS_TEXT_NEW:
+                rawText = props.designComponent.componentTextRawNew;
+                break;
+            case DetailsType.DETAILS_TEXT_OLD:
+                rawText = props.designComponent.componentTextRawOld;
+                break;
             default:
-                log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", props.view);
+                log((msg) => console.log(msg), LogLevel.ERROR, "Invalid details type: {}", props.detailsType);
         }
 
         if (rawText) {
@@ -151,7 +143,7 @@ export class TextEditor extends Component {
     // When the design component related to the text editor changes we need to update the editor state to the new text
     componentWillReceiveProps(newProps){
         // Only if the design component changes...
-        if (this.props.designComponent._id != newProps.designComponent._id){
+        if (this.props.designComponent._id !== newProps.designComponent._id){
             this.updateComponentText(newProps);
         }
     }
@@ -247,30 +239,58 @@ export class TextEditor extends Component {
     render() {
         //console.log("Rendering...");
 
-        const { designComponent, displayContext, mode, view, userContext, userRole } = this.props;
+        const {designComponent, detailsType, mode, view, userContext, userRole} = this.props;
 
         let editorHtml = '';
         let editorClass = 'editor-panel-large';
+        let nameItem = false;
 
-        // Smaller text editor for Scenarios because of Scenario Steps
-        if(designComponent.componentType === ComponentType.SCENARIO){
-            editorClass = 'editor-panel-small';
+        // Show small editor window for item names
+        switch (detailsType) {
+            case DetailsType.DETAILS_NAME:
+            case DetailsType.DETAILS_NAME_OLD:
+            case DetailsType.DETAILS_NAME_NEW:
+                editorClass = 'editor-panel-small';
+                nameItem = true;
+                break;
         }
 
-        if (mode === ViewMode.MODE_VIEW || displayContext === DisplayContext.BASE_VIEW){
+        // See if editing of the details is allowed
+        let detailsEditable = false;
+
+        // Cases where it is editable - never names...
+        if (!nameItem) {
+            switch (view) {
+                case ViewType.DESIGN_UPDATE_EDIT:
+                    // Editable if in scope
+                    if (designComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+                        detailsEditable = true;
+                    }
+                    break;
+                case ViewType.DESIGN_NEW_EDIT:
+                    detailsEditable = true;
+                    break;
+            }
+        }
+
+        // Additionally, Can't edit old-text items ever or if in View mode
+        if (!detailsEditable || mode === ViewMode.MODE_VIEW || detailsType === DetailsType.DETAILS_TEXT_OLD){
             // VIEW MODE
 
             editorHtml =
-                <div className={editorClass}>
-                    <Editor
-                        editorState={this.state.editorState}
-                        customStyleMap={ClientTextEditorServices.getColourMap()}
-                        spellCheck={false}
-                        ref="editor-readonly"
-                        readOnly={true}
-                    />
-                </div>
-
+                <Grid>
+                    <Row>
+                        <Col md={12} className={editorClass}>
+                            <Editor
+                                editorState={this.state.editorState}
+                                customStyleMap={ClientTextEditorServices.getColourMap()}
+                                spellCheck={true}
+                                ref="editor-readonly"
+                                readOnly={true}
+                            />
+                        </Col>
+                    </Row>
+                </Grid>
         } else {
             // EDIT MODE
 
@@ -279,101 +299,107 @@ export class TextEditor extends Component {
                 editorClass = editorClass + ' editor-panel-edit';
 
                 editorHtml =
-                    <div>
-                        <div className={editorClass}  >
-                            <Editor
-                                editorState={this.state.editorState}
-                                customStyleMap={ClientTextEditorServices.getColourMap()}
-                                handleKeyCommand={this.handleKeyCommand}
-                                onChange={this.onChange}
-                                spellCheck={true}
-                                blockStyleFn={getBlockStyle}
-                                ref="editor"
-                                readOnly={false}
-                            />
-                        </div>
-                        <div className="editor-toolbar">
-                            <Grid className="close-grid">
-                                <Row>
-                                    <Col md={10}>
-                                        <ButtonGroup>
-                                            <Button bsSize="xs" onClick={ () => this.onBoldClick()}>
-                                                <div className="blue"><Glyphicon glyph="bold"/></div>
-                                            </Button>
-                                            <Button bsSize="xs" onClick={ () => this.onItalicClick()}>
-                                                <div className="blue"><Glyphicon glyph="italic"/></div>
-                                            </Button>
-                                            <Button bsSize="xs" onClick={ () => this.onUnderlineClick()}>
-                                                <div className="blue">U</div>
-                                            </Button>
-                                            <Button bsSize="xs" onClick={ () => this.onCodeClick()}>
-                                                <div className="blue"><Glyphicon glyph="th"/></div>
-                                            </Button>
-                                            <Button bsSize="xs" onClick={ () => this.toggleList()}>
-                                                <div className="blue"><Glyphicon glyph="list"/></div>
-                                            </Button>
-                                        </ButtonGroup>
-                                        <ButtonGroup>
-                                            <Button bsSize="xs" onClick={ () => this.toggleRed()}>
-                                                <div className="red"><Glyphicon glyph="tint"/></div>
-                                            </Button>
-                                            <Button bsSize="xs" onClick={ () => this.toggleGreen()}>
-                                                <div className="green"><Glyphicon glyph="tint"/></div>
-                                            </Button>
-                                        </ButtonGroup>
-                                        <ButtonGroup>
-                                            <Button bsSize="xs" onClick={ () => this.onSave(view, userRole, designComponent, false)}>
-                                                <div className="green">Save</div>
-                                            </Button>
-                                        </ButtonGroup>
-                                    </Col>
-                                    <Col md={2}>
-                                        <ButtonGroup>
-                                            <Button bsSize="xs" onClick={ () => this.onSave(view, userRole, designComponent, true)}>
-                                                <div className="green"><Glyphicon glyph="ok"/></div>
-                                            </Button>
-                                            <Button bsSize="xs" onClick={ () => this.onUndo()}>
-                                                <div className="red"><Glyphicon glyph="remove"/></div>
-                                            </Button>
-                                        </ButtonGroup>
-                                    </Col>
-                                </Row>
-                            </Grid>
-                        </div>
-                    </div>
+
+                    <Grid className="close-grid">
+                        <Row>
+                            <Col md={12} className={editorClass}>
+                                <Editor
+                                    editorState={this.state.editorState}
+                                    customStyleMap={ClientTextEditorServices.getColourMap()}
+                                    handleKeyCommand={this.handleKeyCommand}
+                                    onChange={this.onChange}
+                                    spellCheck={true}
+                                    blockStyleFn={getBlockStyle}
+                                    ref="editor"
+                                    readOnly={false}
+                                />
+                            </Col>
+                        </Row>
+                        <Row className="editor-toolbar">
+                            <Col md={10}>
+                                <ButtonGroup>
+                                    <Button bsSize="xs" onClick={ () => this.onBoldClick()}>
+                                        <div className="blue"><Glyphicon glyph="bold"/></div>
+                                    </Button>
+                                    <Button bsSize="xs" onClick={ () => this.onItalicClick()}>
+                                        <div className="blue"><Glyphicon glyph="italic"/></div>
+                                    </Button>
+                                    <Button bsSize="xs" onClick={ () => this.onUnderlineClick()}>
+                                        <div className="blue">U</div>
+                                    </Button>
+                                    <Button bsSize="xs" onClick={ () => this.onCodeClick()}>
+                                        <div className="blue"><Glyphicon glyph="th"/></div>
+                                    </Button>
+                                    <Button bsSize="xs" onClick={ () => this.toggleList()}>
+                                        <div className="blue"><Glyphicon glyph="list"/></div>
+                                    </Button>
+                                </ButtonGroup>
+                                <ButtonGroup>
+                                    <Button bsSize="xs" onClick={ () => this.toggleRed()}>
+                                        <div className="red"><Glyphicon glyph="tint"/></div>
+                                    </Button>
+                                    <Button bsSize="xs" onClick={ () => this.toggleGreen()}>
+                                        <div className="green"><Glyphicon glyph="tint"/></div>
+                                    </Button>
+                                </ButtonGroup>
+                                <ButtonGroup>
+                                    <Button bsSize="xs" onClick={ () => this.onSave(view, userRole, designComponent, false)}>
+                                        <div className="green">Save</div>
+                                    </Button>
+                                </ButtonGroup>
+                            </Col>
+                            <Col md={2}  className="toolbar-right">
+                                <ButtonGroup>
+                                    <Button bsSize="xs" onClick={ () => this.onSave(view, userRole, designComponent, true)}>
+                                        <div className="green"><Glyphicon glyph="ok"/></div>
+                                    </Button>
+                                    <Button bsSize="xs" onClick={ () => this.onUndo()}>
+                                        <div className="red"><Glyphicon glyph="remove"/></div>
+                                    </Button>
+                                </ButtonGroup>
+                            </Col>
+                        </Row>
+                    </Grid>
+
 
             } else {
                 // The text is not being edited
                 editorHtml =
-                    <div>
-                        <div className={editorClass}>
-                            <Editor
-                                editorState={this.state.editorState}
-                                customStyleMap={ClientTextEditorServices.getColourMap()}
-                                spellCheck={true}
-                                ref="editor-readonly"
-                                readOnly={true}
-                            />
-                        </div>
-                        <div className="editor-toolbar">
-                            <ButtonGroup>
-                                <Button bsSize="xs" onClick={ () => this.onEdit()}>
-                                    <div className="blue"><Glyphicon glyph="edit"/></div>
-                                </Button>
-                            </ButtonGroup>
-                        </div>
-                    </div>
+                    <Grid>
+                        <Row>
+                            <Col md={12} className={editorClass}>
+                                <Editor
+                                    editorState={this.state.editorState}
+                                    customStyleMap={ClientTextEditorServices.getColourMap()}
+                                    spellCheck={true}
+                                    ref="editor-readonly"
+                                    readOnly={true}
+                                />
+                            </Col>
+                        </Row>
+                        <Row className="editor-toolbar">
+                            <Col md={10}>
+                            </Col>
+                            <Col md={2} className="toolbar-right">
+                                <ButtonGroup>
+                                    <Button bsSize="xs" onClick={ () => this.onEdit()}>
+                                        <div className="blue"><Glyphicon glyph="edit"/></div>
+                                    </Button>
+                                </ButtonGroup>
+                            </Col>
+                        </Row>
+                    </Grid>
             }
         }
 
-        return (<div>{editorHtml}</div>);
+        return (editorHtml);
     }
 }
 
 //  This is a redux updated property that changes when we change the focus on design components
 TextEditor.propTypes = {
     designComponent: PropTypes.object.isRequired,
-    displayContext: PropTypes.string.isRequired
+    detailsType: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
