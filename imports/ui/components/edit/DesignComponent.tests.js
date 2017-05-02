@@ -11,9 +11,8 @@ import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 describe('JSX: DesignComponent', () => {
 
-    function testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext){
-
-        const updateItem = {};
+    function testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext){
+        
         const isDragDropHovering = false;
         const testSummary = false;
         const testSummaryData = {};
@@ -25,8 +24,8 @@ describe('JSX: DesignComponent', () => {
         return shallow(
             <DesignComponent
                 currentItem={currentItem}
-                designItem={designItem}
                 updateItem={updateItem}
+                wpItem={wpItem}
                 isDragDropHovering={isDragDropHovering}
                 displayContext={displayContext}
                 testSummary={testSummary}
@@ -50,13 +49,14 @@ describe('JSX: DesignComponent', () => {
         it('is highlighted if selected', () => {
 
             const currentItem = {_id: 'componentId'};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};  // Context has current item id
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
@@ -66,13 +66,14 @@ describe('JSX: DesignComponent', () => {
         it('another component is not highlighted', () => {
 
             const currentItem = {_id: 'componentId'};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'anotherComponentId'};  // Context has different item id
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
@@ -86,14 +87,15 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem1 = {_id: 'component1Id'};
             const currentItem2 = {_id: 'component2Id'};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'component1Id'}; // Item 1 is in user context
 
-            let item1 = testDesignComponent(currentItem1, designItem, mode, view, displayContext, userContext);
-            let item2 = testDesignComponent(currentItem2, designItem, mode, view, displayContext, userContext);
+            let item1 = testDesignComponent(currentItem1, updateItem, wpItem, mode, view, displayContext, userContext);
+            let item2 = testDesignComponent(currentItem2, updateItem, wpItem, mode, view, displayContext, userContext);
 
             chai.assert.equal(item1.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
             chai.assert.equal(item2.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
@@ -105,13 +107,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -126,13 +129,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -146,13 +150,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -166,13 +171,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -186,13 +192,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -206,13 +213,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add design section to application', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -223,13 +231,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add design section to design section', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -240,13 +249,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add feature aspect to feature', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -260,13 +270,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add feature to design section', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -277,13 +288,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add scenario to feature aspect', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -297,13 +309,14 @@ describe('JSX: DesignComponent', () => {
         it('is highlighted when mouse over add control', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Simulate mouse over
             item.setState({highlighted: true});
@@ -315,13 +328,14 @@ describe('JSX: DesignComponent', () => {
         it('is not highlighted when mouse not over add control', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Simulate mouse not over
             item.setState({highlighted: false});
@@ -336,13 +350,14 @@ describe('JSX: DesignComponent', () => {
         it('is highlighted when mouse over add control', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Simulate mouse over
             item.setState({highlighted: true});
@@ -354,13 +369,14 @@ describe('JSX: DesignComponent', () => {
         it('is not highlighted when mouse not over add control', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
             // Simulate mouse not over
             item.setState({highlighted: false});
 
@@ -374,13 +390,14 @@ describe('JSX: DesignComponent', () => {
         it('is highlighted when target is application', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Simulate mouse over
             item.setState({highlighted: true});
@@ -392,13 +409,14 @@ describe('JSX: DesignComponent', () => {
         it('is highlighted when target is design section', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Simulate mouse not over
             item.setState({highlighted: true});
@@ -410,13 +428,14 @@ describe('JSX: DesignComponent', () => {
         it('is highlighted when target is feature', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Simulate mouse not over
             item.setState({highlighted: true});
@@ -428,13 +447,14 @@ describe('JSX: DesignComponent', () => {
         it('is highlighted when target is feature aspect', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Simulate mouse not over
             item.setState({highlighted: true});
@@ -450,14 +470,15 @@ describe('JSX: DesignComponent', () => {
 
         it('is highlighted if selected', () => {
 
-            const currentItem = {_id: 'componentId'};
-            const designItem = {_id: 'designComponentId'};
+            const currentItem = {_id: 'designComponentId'};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'designComponentId'};  // Context has current item id
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
@@ -466,14 +487,15 @@ describe('JSX: DesignComponent', () => {
 
         it('another component is not highlighted', () => {
 
-            const currentItem = {_id: 'componentId'};
-            const designItem = {_id: 'designComponentId'};
+            const currentItem = {_id: 'designComponentId'};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'anotherComponentId'};  // Context has different item id
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
@@ -488,13 +510,14 @@ describe('JSX: DesignComponent', () => {
         it('is highlighted if selected', () => {
 
             const currentItem = {_id: 'updateComponentId'};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'updateComponentId'};  // Context has current item id
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
@@ -504,13 +527,14 @@ describe('JSX: DesignComponent', () => {
         it('another component is not highlighted', () => {
 
             const currentItem = {_id: 'updateComponentId'};
-            const designItem = {_id: 'designComponentId'};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'anotherComponentId'};  // Context has different item id
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
@@ -522,13 +546,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -543,13 +568,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -563,13 +589,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -580,13 +607,14 @@ describe('JSX: DesignComponent', () => {
         it('no option if not in scope', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -602,13 +630,14 @@ describe('JSX: DesignComponent', () => {
         it('no option for add section to application in view mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -619,13 +648,14 @@ describe('JSX: DesignComponent', () => {
         it('no option for add section to application when viewing', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -636,13 +666,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add section to section in view mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -653,13 +684,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add section to section when viewing', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -670,13 +702,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add aspect to in scope feature in view mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -687,13 +720,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add aspect to in scope feature when viewing', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -707,13 +741,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -727,13 +762,14 @@ describe('JSX: DesignComponent', () => {
         it('has the option in edit mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -744,13 +780,14 @@ describe('JSX: DesignComponent', () => {
         it('no option if not in scope', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -764,13 +801,14 @@ describe('JSX: DesignComponent', () => {
         it('no option for add feature to section in view mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -781,13 +819,14 @@ describe('JSX: DesignComponent', () => {
         it('no option for add feature to section when viewing', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -798,13 +837,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add scenario to feature aspect in view mode', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -815,13 +855,14 @@ describe('JSX: DesignComponent', () => {
         it('no option to add scenario to feature aspect when viewing', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
-            const designItem = {};
+            const updateItem = {};
+            const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
             const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
 
-            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+            let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
