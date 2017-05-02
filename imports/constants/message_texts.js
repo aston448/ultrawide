@@ -7,6 +7,10 @@ export const BackupMessages = {
     MSG_DESIGN_BACKUP:              'Design backup saved'
 };
 
+export const UserSettingMessages = {
+    MSG_USER_SETTING_SAVED:         'Setting saved'
+};
+
 export const UserManagementMessages = {
     MSG_USER_ADDED:                 'New User added',
     MSG_USER_UPDATED:               'User details saved',

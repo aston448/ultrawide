@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
 
 // Ultrawide Services
+import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 
@@ -29,6 +30,10 @@ export default class ItemContainer extends Component {
 
     }
 
+    getWindowSizeClass(){
+        return ClientUserSettingsServices.getWindowSizeClassForDesignItemList();
+    }
+
     footerAction(){
         this.props.footerActionFunction()
     }
@@ -41,12 +46,14 @@ export default class ItemContainer extends Component {
 
         const {headerText, hasFooterAction, footerAction} = this.props;
 
+        const bodyClass = this.getWindowSizeClass();
+
         if(hasFooterAction) {
             return (
 
                 <div className="item-container">
                     <div className="item-container-header">{headerText}</div>
-                    <div className="scroll-col">
+                    <div className={bodyClass}>
                         {this.bodyData()}
                     </div>
                     <div className="item-container-footer">

@@ -115,10 +115,6 @@ export const ViewOptionType = {
     NONE:               ''
 };
 
-export const WindowSize = {
-    WINDOW_LARGE:       'WINDOW_LARGE',
-    WINDOW_SMALL:       'WINDOW_SMALL'
-};
 
 // Context specifies how and what information is displayed in common components
 export const DisplayContext = {
@@ -318,9 +314,18 @@ export const ScenarioStepStatus = {
     STEP_STATUS_FAIL:       'Fail'
 };
 
+export const UserSetting = {
+    SETTING_SCREEN_SIZE:    'SETTING_SCREEN_SIZE'
+};
+
+export const UserSettingValue = {
+    SCREEN_SIZE_SMALL:      'SCREEN_SIZE_SMALL',
+    SCREEN_SIZE_LARGE:      'SCREEN_SIZE_LARGE'
+}
 
 export const ExportFileName = {
     USERS:                      'USERS.EXP',
+    USER_SETTINGS:              'USER_SETTINGS.EXP',
     USER_CONTEXT:               'USER_CONTEXT.EXP',
     TEST_OUTPUT_LOCATIONS:      'TEST_OUTPUT_LOCATIONS.EXP',
     TEST_OUTPUT_LOCATION_FILES: 'TEST_OUTPUT_LOCATION_FILES.EXP',

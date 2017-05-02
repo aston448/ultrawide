@@ -15,7 +15,6 @@ import DesignComponentAdd           from '../../components/common/DesignComponen
 import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer    from './DomainDictionaryContainer.jsx';
 import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx';
-import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
@@ -24,6 +23,7 @@ import { log }        from '../../../common/utils.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
@@ -54,7 +54,7 @@ export class UpdateApplicationsList extends Component {
     }
 
     getEditorClass(){
-        return ClientUserContextServices.getWindowSizeClass();
+        return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }
 
     getDesignUpdateItem(application, displayContext, designUpdateId){

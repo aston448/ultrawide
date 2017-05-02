@@ -3,6 +3,7 @@ import fs from 'fs';
 
 // Ultrawide Collections
 import { UserRoles }                    from '../../collections/users/user_roles.js';
+import { UserSettings }                 from '../../collections/configure/user_settings.js';
 import { UserCurrentEditContext }       from '../../collections/context/user_current_edit_context.js';
 import { UserTestTypeLocations }        from '../../collections/configure/user_test_type_locations.js';
 import { TestOutputLocations }          from '../../collections/configure/test_output_locations.js';
@@ -35,6 +36,7 @@ import DomainDictionaryServices         from '../design/domain_dictionary_servic
 import DesignComponentServices          from '../design/design_component_services.js';
 import DesignUpdateComponentServices    from '../design_update/design_update_component_services.js';
 import ScenarioServices                 from '../design/scenario_services.js';
+import UserSettingServices              from '../configure/user_setting_services.js';
 
 //======================================================================================================================
 //
@@ -398,6 +400,22 @@ class ImpExServices{
         return newUserTestTypeLocationData;
     };
 
+    migrateUserSettingsData(userSettingsData, backupVersion, currentVersion){
+        // Add to this function for each release
+        let newUserSettingsData = userSettingsData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 2:
+                        // No changes
+                        newUserSettingsData = userSettingsData;
+                }
+        }
+
+        return newUserSettingsData;
+    }
+
     migrateDesignData(designData, backupVersion, currentVersion){
         // Add to this function for each release
         let newDesignData = designData;
@@ -682,6 +700,22 @@ class ImpExServices{
             let userTestTypeLocationId = TestOutputLocationServices.importUserConfiguration(userLocation, locationId, userId);
 
         });
+    }
+
+    restoreUserSettingsData(newUserSettingsData, userMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring User Settings...");
+
+        newUserSettingsData.forEach((userSetting) => {
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Setting: {}", userSetting.settingName);
+
+            const userId = getIdFromMap(userMapping, userSetting.userId);
+
+            let userSettingId = UserSettingServices.importUserSetting(userSetting, userId);
+
+        });
+
     }
 
     restoreDesignData(newDesignData){
@@ -1112,6 +1146,8 @@ class ImpExServices{
             // User Data
             this.produceExportFile(UserRoles, path, doubleBackupPath, ExportFileName.USERS);
 
+            this.produceExportFile(UserSettings, path, doubleBackupPath, ExportFileName.USER_SETTINGS);
+
             // User Context
             this.produceExportFile(UserCurrentEditContext, path, doubleBackupPath, ExportFileName.USER_CONTEXT);
 
@@ -1326,13 +1362,31 @@ class ImpExServices{
         let locationData = '';
         let locationFileData = '';
         let userLocationData = '';
+        let userSettingsData = '';
         let outputLocations = [];
         let outputLocationFiles = [];
         let userOutputLocations = [];
+        let userSettings = [];
 
         let backupDataVersion = 1;
         let currentDataVersion = 2;
 
+        // User Settings -----------------------------------------------------------------------------------------------
+
+        try {
+            userSettingsData = fs.readFileSync(path + ExportFileName.USER_SETTINGS);
+            userSettings = JSON.parse(userSettingsData);
+        }
+
+        catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Test Location files: {}", e);
+        }
+
+        if(userSettings.length > 0){
+
+            let migratedUserSettings = this.migrateUserSettingsData(userSettings, backupDataVersion, currentDataVersion);
+            this.restoreUserSettingsData(migratedUserSettings, usersMapping);
+        }
 
         // Test Output Locations ---------------------------------------------------------------------------------------
         try {

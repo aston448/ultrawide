@@ -14,7 +14,7 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, WindowSize, DisplayContext, UpdateScopeType } from '../constants/constants.js';
+import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, UserSetting, UserSettingValue, DisplayContext, UpdateScopeType } from '../constants/constants.js';
 import { log } from '../common/utils.js';
 import TextLookups from '../common/lookups.js'
 
@@ -27,6 +27,7 @@ import ClientWorkPackageServices            from '../apiClient/apiClientWorkPack
 import ClientWorkPackageComponentServices   from '../apiClient/apiClientWorkPackageComponent.js';
 import ClientAppHeaderServices              from '../apiClient/apiClientAppHeader.js';
 import ClientTestIntegrationServices        from '../apiClient/apiClientTestIntegration.js';
+import ClientUserSettingsServices           from '../apiClient/apiClientUserSettings.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -189,6 +190,10 @@ class ClientUserContextServices {
 
         // Get latest status on DUs
         ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+
+        // Restore User Settings
+        const screenSize = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_SCREEN_SIZE);
+        store.dispatch(setCurrentWindowSize(screenSize));
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));
@@ -894,23 +899,6 @@ class ClientUserContextServices {
             );
         })
     };
-
-    getWindowSizeClass(){
-
-        const windowSize = store.getState().currentWindowSize;
-
-        switch(windowSize){
-            case WindowSize.WINDOW_SMALL:
-                return 'design-editor-small';
-            case WindowSize.WINDOW_LARGE:
-                return 'design-editor-large';
-
-        }
-    }
-
-    setWindowSize(newSize){
-        store.dispatch(setCurrentWindowSize(newSize));
-    }
 }
 
 export default new ClientUserContextServices();

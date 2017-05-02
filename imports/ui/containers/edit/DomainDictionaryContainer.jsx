@@ -16,8 +16,7 @@ import DetailsViewFooter        from '../../components/common/DetailsViewFooter.
 import { DetailsViewType } from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
-import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
-
+import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 // Bootstrap
 
 // REDUX services
@@ -39,7 +38,7 @@ class DomainDictionary extends Component {
     }
 
     getEditorClass(){
-        return ClientUserContextServices.getWindowSizeClass();
+        return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }
 
     // A list of Scenarios in a Feature or Feature Aspect

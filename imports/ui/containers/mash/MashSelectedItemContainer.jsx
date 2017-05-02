@@ -20,8 +20,7 @@ import TextLookups from '../../../common/lookups.js';
 import ClientContainerServices          from '../../../apiClient/apiClientContainerServices.js';
 import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
 import ClientMashDataServices           from '../../../apiClient/apiClientMashData.js';
-import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
-
+import ClientUserSettingsServices       from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 
@@ -50,7 +49,7 @@ class MashSelectedItemList extends Component {
 
 
     getEditorClass(){
-        return ClientUserContextServices.getWindowSizeClass();
+        return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }
 
     renderDesignItems(designItems, displayContext){

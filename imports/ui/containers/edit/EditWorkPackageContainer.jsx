@@ -20,8 +20,8 @@ import { log } from '../../../common/utils.js'
 
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientUserContextServices            from '../../../apiClient/apiClientUserContext.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
+import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
@@ -61,7 +61,7 @@ class WorkPackageApplicationsList extends Component {
     }
 
     getEditorClass(){
-        return ClientUserContextServices.getWindowSizeClass();
+        return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }
 
     // A list of top level applications in the work package potential scope

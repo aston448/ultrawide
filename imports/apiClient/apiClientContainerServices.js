@@ -67,6 +67,7 @@ class ClientContainerServices{
 
             // Subscribing to these here makes them available to the whole app...
             const urHandle = Meteor.subscribe('userRoles');
+            const usHandle = Meteor.subscribe('userSettings');
             const ucHandle = Meteor.subscribe('userCurrentEditContext');
             const uvHandle = Meteor.subscribe('userCurrentViewOptions');
             const tlHandle = Meteor.subscribe('testOutputLocations');
@@ -78,7 +79,7 @@ class ClientContainerServices{
             const wpHandle = Meteor.subscribe('workPackages');
 
             const loading = (
-                !urHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
+                !urHandle.ready() || !usHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
             );
 
             return {isLoading: loading};

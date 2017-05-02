@@ -8,8 +8,9 @@ import React, { Component } from 'react';
 
 // Ultrawide Services
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
+import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
-import {WindowSize} from '../../../constants/constants.js';
+import {UserSettingValue, UserSetting} from '../../../constants/constants.js';
 
 // Bootstrap
 import {FormGroup, Radio, Grid, Row, Col} from 'react-bootstrap';
@@ -39,7 +40,10 @@ export class ConfigurationSettings extends Component {
 
         this.setState({currentWindowSize: newSize});
 
-        ClientUserContextServices.setWindowSize(newSize);
+        ClientUserSettingsServices.setWindowSize(newSize);
+
+        // And save to DB
+        ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_SCREEN_SIZE, newSize);
     }
 
     onSaveSettings(role){
@@ -57,12 +61,12 @@ export class ConfigurationSettings extends Component {
         const screenSizeSettings =
             <div>
                 <FormGroup id="sizeOptions">
-                    <Radio id="optionLarge" checked={this.state.currentWindowSize === WindowSize.WINDOW_LARGE}
-                           onChange={() => this.onWindowSizeChange(WindowSize.WINDOW_LARGE)}>
-                        View Height Large (1200px)
+                    <Radio id="optionLarge" checked={this.state.currentWindowSize === UserSettingValue.SCREEN_SIZE_LARGE}
+                           onChange={() => this.onWindowSizeChange(UserSettingValue.SCREEN_SIZE_LARGE)}>
+                        View Height Large (1100px)
                     </Radio>
-                    <Radio id="optionSmall" checked={this.state.currentWindowSize === WindowSize.WINDOW_SMALL}
-                           onChange={() => this.onWindowSizeChange(WindowSize.WINDOW_SMALL)}>
+                    <Radio id="optionSmall" checked={this.state.currentWindowSize === UserSettingValue.SCREEN_SIZE_SMALL}
+                           onChange={() => this.onWindowSizeChange(UserSettingValue.SCREEN_SIZE_SMALL)}>
                         View Height Small (900px)
                     </Radio>
                 </FormGroup>

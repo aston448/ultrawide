@@ -15,9 +15,8 @@ import DesignEditorFooter           from '../../components/common/DesignEditorFo
 // Ultrawide Services
 import {DisplayContext} from '../../../constants/constants.js';
 
-import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
-import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 
@@ -42,7 +41,7 @@ export class WorkProgressSummaryList extends Component {
     }
 
     getEditorClass(){
-        return ClientUserContextServices.getWindowSizeClass();
+        return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }
 
     // A list of Feature Aspects in a Feature

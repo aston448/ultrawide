@@ -23,7 +23,7 @@ import ClientDesignComponentServices        from '../../../apiClient/apiClientDe
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
-import ClientUserContextServices            from '../../../apiClient/apiClientUserContext.js';
+import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
@@ -76,7 +76,7 @@ export class DesignApplicationsList extends Component {
     }
 
     getEditorClass(){
-        return ClientUserContextServices.getWindowSizeClass();
+        return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }
 
     // A list of top level applications in the design / design update

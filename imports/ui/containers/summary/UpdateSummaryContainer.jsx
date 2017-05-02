@@ -16,7 +16,7 @@ import DesignEditorFooter           from '../../components/common/DesignEditorFo
 import {DisplayContext} from '../../../constants/constants.js';
 
 import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
-import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
+import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 
@@ -41,7 +41,7 @@ export class DesignUpdateSummaryList extends Component {
     }
 
     getEditorClass(){
-        return ClientUserContextServices.getWindowSizeClass();
+        return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }
 
     // A list of Feature Aspects in a Feature
@@ -74,7 +74,7 @@ export class DesignUpdateSummaryList extends Component {
         let orgAdditions = <div></div>;
         if(addOrgHeaders.length > 0){
             orgAdditions =
-                <div id="summaryAdditions" className="update-summary-change-container">
+                <div id="orgSummaryAdditions" className="update-summary-change-container">
                     <div className="update-summary-change-header change-add">Organisational Additions</div>
                     <div className="scroll-col">
                         {this.renderChanges(addOrgHeaders)}
@@ -85,7 +85,7 @@ export class DesignUpdateSummaryList extends Component {
         let fncAdditions = <div></div>;
         if(addFncHeaders.length > 0){
             fncAdditions =
-                <div id="summaryAdditions" className="update-summary-change-container">
+                <div id="fncSummaryAdditions" className="update-summary-change-container">
                     <div className="update-summary-change-header change-add">Functional Additions</div>
                     <div className="scroll-col">
                         {this.renderChanges(addFncHeaders)}
@@ -118,7 +118,7 @@ export class DesignUpdateSummaryList extends Component {
         let moves = <div></div>;
         if(moveHeaders.length > 0){
             moves =
-                <div id="summaryChanges" className="update-summary-change-container">
+                <div id="summaryMoves" className="update-summary-change-container">
                     <div className="update-summary-change-header change-modify">Moves</div>
                     <div className="scroll-col">
                         {this.renderChanges(moveHeaders)}
@@ -129,7 +129,7 @@ export class DesignUpdateSummaryList extends Component {
         let queries = <div></div>;
         if(queryHeaders.length > 0){
             queries =
-                <div id="summaryChanges" className="update-summary-change-container">
+                <div id="summaryQueries" className="update-summary-change-container">
                     <div className="update-summary-change-header change-modify">Test Checks</div>
                     <div className="scroll-col">
                         {this.renderChanges(queryHeaders)}
