@@ -8,7 +8,7 @@
 import ServerBackupApi      from '../apiServer/apiBackup.js';
 import BackupValidationApi  from '../apiValidation/apiBackupValidation.js';
 
-import ImpexServices        from '../servicers/backup/import_export.js';
+import ImpexServices        from '../servicers/administration/impex_services.js';
 
 import { ViewType, MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';

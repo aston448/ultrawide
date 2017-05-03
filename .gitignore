@@ -8,7 +8,7 @@ mocha-unit-output.json
 
 
 !/imports/collections/backup/
-!/imports/servicers/backup/
+!/imports/servicers/administration/
 imports/service_modules/context/
 imports/servicers/audit/
 npm-debug.log

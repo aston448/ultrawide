@@ -1088,8 +1088,8 @@ export class DesignComponentHeader extends Component{
                     {hiddenIcon}
                     {hiddenIcon}
                     {hiddenIcon}
-                    {wpStatus}
                     {updateStatus}
+                    {wpStatus}
                 </InputGroup>
             </div>;
 
@@ -1175,6 +1175,7 @@ export class DesignComponentHeader extends Component{
                         {moveAction}
                         {hiddenIcon}
                         {updateStatus}
+                        {wpStatus}
                     </InputGroup>
                 </div>
         } else {
@@ -1190,6 +1191,7 @@ export class DesignComponentHeader extends Component{
                             {draggableMoveAction}
                             {hiddenIcon}
                             {updateStatus}
+                            {wpStatus}
                         </InputGroup>
                     </div>
                 );
@@ -1218,6 +1220,7 @@ export class DesignComponentHeader extends Component{
                     {hiddenIcon}
                     {hiddenIcon}
                     {updateStatus}
+                    {wpStatus}
                 </InputGroup>
             </div>;
 

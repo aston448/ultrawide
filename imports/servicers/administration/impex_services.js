@@ -48,6 +48,76 @@ import UserSettingServices              from '../configure/user_setting_services
 
 class ImpExServices{
 
+    // Functions called directly from APIs =============================================================================
+
+    createAdminUser(){
+
+        if(Meteor.isServer){
+
+            let userId = '';
+
+            // Create a new Meteor account
+            const adminUser = Accounts.findUserByUsername('admin');
+
+            if(!adminUser) {
+                userId = Accounts.createUser(
+                    {
+                        username: 'admin',
+                        password: 'admin123'
+                    }
+                );
+            } else {
+                userId = adminUser._id;
+            }
+
+            UserRoles.insert({
+                userId:         userId,
+                userName:       'admin',
+                password:       'admin',
+                displayName:    'Admin User',
+                isDesigner:     false,
+                isDeveloper:    false,
+                isManager:      false,
+                isAdmin:        true
+            });
+        }
+
+    }
+
+
+    checkAndPopulateBackupFileData(backupLocation){
+
+        if(Meteor.isServer) {
+
+            // Mark any current known backups as stale
+
+
+            // Get a list of files from the backup location
+
+            try {
+                const candidateFiles = fs.readdirSync(backupLocation);
+
+                candidateFiles.forEach((file) => {
+
+                    // Only interested in UBK files
+                    if(file.endsWith('.UBK')){
+
+                        // Add or confirm this file as existing in the data
+
+                    }
+                })
+
+            } catch (e){
+                log((msg) => console.log(msg), LogLevel.ERROR, "Can't read backup directory: {}", e);
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    // Internal
+
     forceRemoveDesign(designId){
 
         const designVersionData = DesignVersions.find({designId: designId}).fetch();
@@ -1207,29 +1277,7 @@ class ImpExServices{
 
     }
 
-    createAdminUser(){
 
-        // Create a new Meteor account
-        let userId = Accounts.createUser(
-            {
-                username: 'admin',
-                password: 'admin'
-            }
-        );
-
-        UserRoles.insert({
-            userId:         userId,
-            userName:       'admin',
-            password:       'admin',
-            displayName:    'Admin User',
-            isDesigner:     false,
-            isDeveloper:    false,
-            isManager:      false,
-            isAdmin:        true
-        });
-
-
-    }
 
     importUltrawideData(){
         // Recreate the data using the latest code so that it is compatible...
@@ -1274,7 +1322,7 @@ class ImpExServices{
         if(users.length > 0){
 
             // Recreate admin
-            //this.createAdminUser();
+            this.createAdminUser();
 
             users.forEach((user) => {
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Processing User : {}", user.displayName);

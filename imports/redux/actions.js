@@ -252,6 +252,11 @@ export function setCurrentUserOpenDesignItems(existingItems, componentId, newSta
             }
         }
 
+        console.log('Open DV Items');
+        newItems.forEach((item) => {
+            console.log("    " + item)
+        });
+
         dispatch({type: SET_CURRENT_USER_OPEN_DESIGN_ITEMS, newUserOpenDesignItems: newItems});
     };
 

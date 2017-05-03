@@ -4,7 +4,7 @@
 import { Meteor } from 'meteor/meteor';
 
 
-import  ImpExServices     from '../servicers/backup/import_export.js';
+import  ImpExServices     from '../servicers/administration/impex_services.js';
 
 // Meteor methods
 Meteor.methods({

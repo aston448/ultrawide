@@ -2,7 +2,7 @@
   "name": "ultrawide",
   "private": true,
   "scripts": {
-    "start": "meteor run",
+    "start": "ULTRAWIDE_BACKUP_PATH=\"/Users/aston/UltrawideBackups/backup/\" meteor run",
     "test:unit": "SERVER_TEST_REPORTER=\"JSON\" meteor test --once --driver-package dispatch:mocha",
     "test:ui": "meteor test --once --driver-package practicalmeteor:mocha",
     "test:unit:watch": "SERVER_TEST_REPORTER=\"JSON\" meteor test --driver-package dispatch:mocha",

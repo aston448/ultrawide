@@ -1,6 +1,6 @@
 
 import BackupValidationApi      from '../apiValidation/apiBackupValidation.js';
-import ImpExServices            from '../servicers/backup/import_export.js';
+import ImpExServices            from '../servicers/administration/impex_services.js';
 
 import { Validation } from '../constants/validation_errors.js'
 
