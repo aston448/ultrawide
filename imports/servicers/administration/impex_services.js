@@ -37,6 +37,7 @@ import DesignComponentServices          from '../design/design_component_service
 import DesignUpdateComponentServices    from '../design_update/design_update_component_services.js';
 import ScenarioServices                 from '../design/scenario_services.js';
 import UserSettingServices              from '../configure/user_setting_services.js';
+import ImpexModules                     from '../../service_modules/administration/impex_service_modules.js';
 
 //======================================================================================================================
 //
@@ -90,10 +91,9 @@ class ImpExServices{
         if(Meteor.isServer) {
 
             // Mark any current known backups as stale
-
+            ImpexModules.markAllBackupsAsUnconfirmed();
 
             // Get a list of files from the backup location
-
             try {
                 const candidateFiles = fs.readdirSync(backupLocation);
 
@@ -103,9 +103,13 @@ class ImpExServices{
                     if(file.endsWith('.UBK')){
 
                         // Add or confirm this file as existing in the data
+                        ImpexModules.addConfirmBackupFile(file, backupLocation);
 
                     }
-                })
+                });
+
+                // Remove non-existant files from list
+                ImpexModules.removeNonExistingBackups();
 
             } catch (e){
                 log((msg) => console.log(msg), LogLevel.ERROR, "Can't read backup directory: {}", e);
@@ -114,6 +118,255 @@ class ImpExServices{
 
             return true;
         }
+    }
+
+    // User has chosen to back up a selected Design --------------------------------------------------------------------
+    backupDesign(designId){
+
+        if(Meteor.isServer){
+
+            let backupLocation = ImpexModules.getBackupLocation();
+
+            const designData = Designs.find({_id: designId}).fetch();   // Will be only 1 but want as an array
+            const design = designData[0];
+
+            const dateTime = new Date();
+
+            const dateString = dateTime.getFullYear() + '-' +
+                padDigits((dateTime.getMonth() + 1), 2) + '-' +
+                padDigits(dateTime.getDate(), 2) + ' ' +
+                padDigits(dateTime.getHours(), 2)  + ':' +
+                padDigits(dateTime.getMinutes(), 2) + ':' +
+                padDigits(dateTime.getSeconds(), 2);
+
+            const fileDate = dateTime.getFullYear() + '_' +
+                padDigits((dateTime.getMonth()+1), 2) + '_' +
+                padDigits(dateTime.getDate(), 2) + '_' +
+                padDigits(dateTime.getHours(), 2) + '_' +
+                padDigits(dateTime.getMinutes(), 2);
+
+            const ultrawide = AppGlobalData.findOne({versionKey: 'CURRENT_VERSION'});
+
+            let metadata = {
+                backupName: design.designName + ': ' + dateString,
+                designName: design.designName,
+                backupDate: dateTime,
+                backupDataVersion: ultrawide.dataVersion
+            };
+
+            let designVersions = [];
+            let designUpdates = [];
+            let workPackages = [];
+            let designComponents = [];
+            let designUpdateComponents = [];
+            let workPackageComponents = [];
+            let domainDictionary = [];
+
+            // Data stored across Designs ------------------------------------------------------------------------------
+
+            // Store all User Data
+            const userRoles = UserRoles.find({}).fetch();
+
+            // Store all test output locations
+            const testOutputLocations = TestOutputLocations.find({});
+
+            // Store all test output location files
+            const testOutputLocationFiles = TestOutputLocationFiles.find({});
+
+            // Store all user test locations
+            const userTestTypeLocations = UserTestTypeLocations.find({});
+
+            // Store all user settings
+            const userSettings = UserSettings.find({});
+
+
+            // Data stored for this Design -----------------------------------------------------------------------------
+
+            const designVersionData = DesignVersions.find({designId: designId}).fetch();
+
+            designVersionData.forEach((designVersion) => {
+                designVersions.push(designVersion);
+
+                // All updates in this Version
+                let designUpdateData = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+                designUpdateData.forEach((designUpdate) => {
+                    designUpdates.push(designUpdate);
+                });
+
+                // All Work packages in this version
+                let workPackageData = WorkPackages.find({designVersionId: designVersion._id}).fetch();
+                workPackageData.forEach((workPackage) => {
+                    workPackages.push(workPackage);
+
+                    // All work package components in this Work Package
+                    let workPackageComponentData = WorkPackageComponents.find({workPackageId: workPackage._id}).fetch();
+                    workPackageComponentData.forEach((workPackageComponent) => {
+                        workPackageComponents.push(workPackageComponent)
+                    })
+                });
+
+                // All design components in this version
+                let designComponentData = DesignVersionComponents.find({designVersionId: designVersion._id}).fetch();
+                designComponentData.forEach((designComponent) => {
+                    designComponents.push(designComponent);
+                });
+
+                // All Design Update components in this version
+                let designUpdateComponentData = DesignUpdateComponents.find({designVersionId: designVersion._id}).fetch();
+                designUpdateComponentData.forEach((designUpdateComponent) => {
+                    designUpdateComponents.push(designUpdateComponent);
+                });
+
+                // All Domain Dictionary entries for this version
+                let dictionaryData = DomainDictionary.find({designVersionId: designVersion._id}).fetch();
+                dictionaryData.forEach((domainItem) => {
+                    domainDictionary.push(domainItem);
+                });
+
+            });
+
+            const designBackup = {
+                metadata: metadata,
+                userRoles: userRoles,
+                testOutputLocations: testOutputLocations,
+                testOutputLocationFiles: testOutputLocationFiles,
+                userTestTypeLocations: userTestTypeLocations,
+                userSettings: userSettings,
+                designs: designData,
+                designVersions: designVersions,
+                designUpdates: designUpdates,
+                workPackages: workPackages,
+                designComponents: designComponents,
+                designUpdateComponents: designUpdateComponents,
+                workPackageComponents: workPackageComponents,
+                domainDictionary: domainDictionary
+            };
+
+            const jsonData = JSON.stringify(designBackup);
+
+            const fileName = 'ULTRAWIDE_' + design.designName.trim() + '_' + fileDate + '.UBK';
+
+            try {
+
+                fs.writeFile(backupLocation + fileName, jsonData);
+
+                log((msg) => console.log(msg), LogLevel.INFO, "Design backed up as: {}", backupLocation + fileName);
+
+                // If that has not errored, add the backup to the list
+                DesignBackups.insert({
+                    backupName:             metadata.backupName,
+                    backupFileName:         fileName,
+                    backupDesignName:       metadata.designName,
+                    backupDate:             dateTime,
+                    backupDataVersion:      metadata.backupDataVersion,
+                    fileExists:             true
+                });
+
+            } catch (e){
+                log((msg) => console.log(msg), LogLevel.ERROR, "Can't save Design backup: {}", e);
+            }
+
+        }
+    };
+
+    // User has chosen to restore a Design from a backup ---------------------------------------------------------------
+    restoreDesign(backupData){
+
+        const backupDataVersion = backupData.metadata.backupDataVersion;
+        const currentDataVersion = ImpexModules.getCurrentDataVersion();
+
+        let usersMapping = [];
+        let locationsMapping = [];
+        let designsMapping = [];
+        let designVersionsMapping = [];
+        let designUpdatesMapping = [];
+        let workPackagesMapping = [];
+        let designVersionComponentsMapping = [];
+        let designUpdateComponentsMapping = [];
+
+        if(currentDataVersion > 0) {
+
+            // Read the required backup file
+            const backupData = ImpexModules.readBackupFile(backupData.backupFileName);
+
+            if (backupData) {
+
+                // Data to MERGE ---------------------------------------------------------------------------------------
+
+                // Merge user data.  Make sure all the users associated with this design exist and create a map of any new users created
+                usersMapping = ImpexModules.restoreDesignUsers(backupData.userRoles, backupDataVersion, currentDataVersion);
+
+                // Merge test output location data
+                locationsMapping = ImpexModules.restoreTestOutputLocationData(backupData.testOutputLocations, backupDataVersion, currentDataVersion, usersMapping);
+
+                // Merge test output location files data
+                ImpexModules.restoreTestOutputLocationFileData(backupData.testOutputLocationFiles, backupDataVersion, currentDataVersion, locationsMapping);
+
+                // Merge user test type locations data
+                ImpexModules.restoreUserTestTypeLocationsData(backupData.userTestTypeLocations, backupDataVersion, currentDataVersion, usersMapping, locationsMapping);
+
+                // Merge user settings
+
+                // Data to REPLACE -------------------------------------------------------------------------------------
+
+                const oldDesign = Designs.findOne({designName: backupData.metadata.designName});
+                let oldDesignVersions = [];
+
+                if(oldDesign){
+                    // We are replacing data
+                    oldDesignVersions = DesignVersions.find({designId: oldDesign._id}).fetch();
+                }
+
+                // Restore Data - this creates new data with new IDs in parallel to any existing data ++++++++++++++++++
+
+                // Restore Designs
+
+                // Restore Design Versions
+
+                // Restore Design Updates
+
+                // Restore Work Packages
+
+                // Restore Design Version Components
+
+                // Restore Design Update Components
+
+                // Restore Work Package Components
+
+                // Restore Domain Dictionary
+
+                // Replacement / restore has succeeded so remove the old data if it existed ++++++++++++++++++++++++++++
+                if (oldDesign){
+
+                    Designs.remove({_id: oldDesign._id});
+
+                    DesignVersions.remove({designId: oldDesign._id});
+
+                    oldDesignVersions.forEach((oldDesignVersion) => {
+                        DesignUpdates.remove({designVersionId: oldDesignVersion._id});
+                        WorkPackages.remove({designVersionId: oldDesignVersion._id});
+                        DesignVersionComponents.remove({designVersionId: oldDesignVersion._id});
+                        DesignUpdateComponents.remove({designVersionId: oldDesignVersion._id});
+                        WorkPackageComponents.remove({designVersionId: oldDesignVersion._id});
+                        DomainDictionary.remove({designVersionId: oldDesignVersion._id});
+                    });
+
+                }
+
+
+
+
+
+
+            }
+
+        } else {
+
+            log((msg) => console.log(msg), LogLevel.ERROR, "Current application data version is not found.");
+        }
+
+
+
     }
 
     // Internal
@@ -163,126 +416,7 @@ class ImpExServices{
 
     }
 
-    backupDesign(designId){
-        if(Meteor.isServer){
-            let designBackup = {};
 
-            const designData = Designs.find({_id: designId}).fetch();   // Will be only 1 but want as an array
-            const designVersionData = DesignVersions.find({designId: designId}).fetch();
-
-            let designVersions = [];
-            let designUpdates = [];
-            let designUpdateSummaries = [];
-            let workPackages = [];
-            let designComponents = [];
-            let designUpdateComponents = [];
-            let workPackageComponents = [];
-            let featureBackgroundSteps = [];
-            let scenarioSteps = [];
-            let domainDictionary = [];
-
-            designVersionData.forEach((designVersion) => {
-                designVersions.push(designVersion);
-
-                // All updates in this Version
-                let designUpdateData = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
-                designUpdateData.forEach((designUpdate) => {
-                    designUpdates.push(designUpdate);
-                });
-
-                // // All update summaries in this Version
-                // let designUpdateSummaryData = UserDesignUpdateSummary.find({designVersionId: designVersion._id}).fetch();
-                // designUpdateSummaryData.forEach((designUpdateSummary) => {
-                //     designUpdateSummaries.push(designUpdateSummary);
-                // });
-
-                // All Work packages in this version
-                let workPackageData = WorkPackages.find({designVersionId: designVersion._id}).fetch();
-                workPackageData.forEach((workPackage) => {
-                    workPackages.push(workPackage);
-
-                    // All work package components in this Work Package
-                    let workPackageComponentData = WorkPackageComponents.find({workPackageId: workPackage._id}).fetch();
-                    workPackageComponentData.forEach((workPackageComponent) => {
-                        workPackageComponents.push(workPackageComponent)
-                    })
-                });
-
-                // All design components in this version
-                let designComponentData = DesignVersionComponents.find({designVersionId: designVersion._id}).fetch();
-                designComponentData.forEach((designComponent) => {
-                    designComponents.push(designComponent);
-                });
-
-                // All Design Update components in this version
-                let designUpdateComponentData = DesignUpdateComponents.find({designVersionId: designVersion._id}).fetch();
-                designUpdateComponentData.forEach((designUpdateComponent) => {
-                    designUpdateComponents.push(designUpdateComponent);
-                });
-
-                // All Feature background steps in this Version
-                let featureBackgroundStepsData = FeatureBackgroundSteps.find({designVersionId: designVersion._id}).fetch();
-                featureBackgroundStepsData.forEach((backgroundStep) => {
-                    featureBackgroundSteps.push(backgroundStep);
-                });
-
-                // All Scenario Steps in this version
-                let scenarioStepsData = ScenarioSteps.find({designVersionId: designVersion._id}).fetch();
-                scenarioStepsData.forEach((scenarioStep) => {
-                    scenarioSteps.push(scenarioStep);
-                });
-
-                // All Domain Dictionary entries for this version
-                let dictionaryData = DomainDictionary.find({designVersionId: designVersion._id}).fetch();
-                dictionaryData.forEach((domainItem) => {
-                    domainDictionary.push(domainItem);
-                });
-
-            });
-
-            designBackup = {
-                designs: designData,
-                designVersions: designVersions,
-                designUpdates: designUpdates,
-                //designUpdateSummaries: designUpdateSummaries,
-                workPackages: workPackages,
-                designComponents: designComponents,
-                designUpdateComponents: designUpdateComponents,
-                workPackageComponents: workPackageComponents,
-                featureBackgroundSteps: featureBackgroundSteps,
-                scenarioSteps: scenarioSteps,
-                domainDictionary: domainDictionary
-            };
-
-            const jsonData = JSON.stringify(designBackup);
-
-            const filePath = process.env["PWD"] + '/backup/';
-            const dateNow = new Date();
-            const fileDate = dateNow.getFullYear() + '_' + (dateNow.getMonth()+1) + '_' + dateNow.getDate() + '_' + dateNow.getHours() + '_' + dateNow.getMinutes() + '_' + dateNow.getSeconds();
-            const displayDate = dateNow.getDate() + '-' + (dateNow.getMonth()+1) + '-' + dateNow.getFullYear() + ' ' + dateNow.getHours() + ':' + dateNow.getMinutes() + ':' + dateNow.getSeconds();
-            const fileName = designData[0].designName.trim() + '_' + fileDate;
-            const dataVersions = AppGlobalData.find({}, {$sort: {versionDate: -1}}).fetch();
-            const latestDataVersion = dataVersions[0].dataVersion;
-
-            try {
-                fs.writeFile(filePath + fileName + '.BAK', jsonData);
-
-                log((msg) => console.log(msg), LogLevel.INFO, "Design backed up as: {}", filePath + fileName + '.BAK');
-
-                // If that has not errored, add the backup to the list
-                DesignBackups.insert({
-                    designId:               designId,
-                    backupName:             'Backup ' + displayDate,
-                    backupFileName:         filePath + fileName,
-                    backupDataVersion:      latestDataVersion
-                });
-
-            } catch (e){
-                log((msg) => console.log(msg), LogLevel.ERROR, "Can't save Design backup: {}", e);
-            }
-
-        }
-    };
 
     restoreDesignBackup(backupId, currentDesignId){
 
@@ -422,692 +556,11 @@ class ImpExServices{
         }
     };
 
-    migrateTestOutputLocationData(testOutputLocationData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newTestOutputLocationData = testOutputLocationData;
 
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newTestOutputLocationData = testOutputLocationData;
-                }
-        }
 
-        return newTestOutputLocationData;
-    };
 
-    migrateTestOutputLocationFileData(testOutputLocationFileData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newTestOutputLocationFileData = testOutputLocationFileData;
 
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newTestOutputLocationFileData = testOutputLocationFileData;
-                }
-        }
 
-        return newTestOutputLocationFileData;
-    };
-
-    migrateUserTestTypeLocationData(userTestTypeLocationData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newUserTestTypeLocationData = userTestTypeLocationData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newUserTestTypeLocationData = userTestTypeLocationData;
-                }
-        }
-
-        return newUserTestTypeLocationData;
-    };
-
-    migrateUserSettingsData(userSettingsData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newUserSettingsData = userSettingsData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newUserSettingsData = userSettingsData;
-                }
-        }
-
-        return newUserSettingsData;
-    }
-
-    migrateDesignData(designData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newDesignData = designData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        newDesignData = [];
-
-                        designData.forEach((design) => {
-                            let newDesign = {
-                                _id:            design._id,
-                                designName:     design.designName,
-                                designRawText:  design.designRawText,
-                                isRemovable:    design.isRemovable,
-                                designStatus:   DesignStatus.DESIGN_LIVE    // New field added
-                            };
-
-                            newDesignData.push(newDesign);
-                        });
-                }
-        }
-
-        return newDesignData;
-    };
-
-    migrateDesignVersionData(designVersionData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newDesignVersionData = designVersionData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newDesignVersionData = designVersionData
-                }
-        }
-
-        return newDesignVersionData;
-    };
-
-    migrateDesignUpdateData(designUpdateData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newDesignUpdateData = designUpdateData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newDesignUpdateData = designUpdateData
-                }
-        }
-
-        return newDesignUpdateData;
-    };
-
-    // migrateDesignUpdateSummaryData(designUpdateSummaryData, backupVersion, currentVersion){
-    //     // Add to this function for each release
-    //     let newDesignUpdateSummaryData = designUpdateSummaryData;
-    //
-    //     switch(backupVersion){
-    //         case 1:
-    //             switch(currentVersion){
-    //                 case 2:
-    //                     // No changes
-    //                     newDesignUpdateSummaryData = designUpdateSummaryData
-    //             }
-    //     }
-    //
-    //     return newDesignUpdateSummaryData;
-    // };
-
-    migrateWorkPackageData(workPackageData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newWorkPackageData = workPackageData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newWorkPackageData = workPackageData
-                }
-        }
-
-        return newWorkPackageData;
-    };
-
-    migrateDesignComponentData(designComponentData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newDesignVersionComponentData = designComponentData;
-
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // Migrate to Design Version Component data
-                        // designComponentData.forEach((component) => {
-                        //
-                        //     let newDesignVersionComponent = {};
-                        //
-                        //     newDesignVersionComponent._id = component._id;
-                        //     newDesignVersionComponent.componentReferenceId = component.componentReferenceId;
-                        //     newDesignVersionComponent.designId = component.designId;
-                        //     newDesignVersionComponent.designVersionId = component.designVersionId;
-                        //     newDesignVersionComponent.componentType = component.componentType;
-                        //     newDesignVersionComponent.componentLevel = component.componentLevel;
-                        //
-                        //     // Location
-                        //     newDesignVersionComponent.componentParentIdOld = component.componentParentId;
-                        //     newDesignVersionComponent.componentParentIdNew = component.componentParentId;
-                        //     newDesignVersionComponent.componentParentReferenceIdOld = component.componentParentReferenceId;
-                        //     newDesignVersionComponent.componentParentReferenceIdNew = component.componentParentReferenceId;
-                        //     newDesignVersionComponent.componentFeatureReferenceIdOld = component.componentFeatureReferenceId;
-                        //     newDesignVersionComponent.componentFeatureReferenceIdNew = component.componentFeatureReferenceId;
-                        //     newDesignVersionComponent.componentIndexOld = component.componentIndex;
-                        //     newDesignVersionComponent.componentIndexNew = component.componentIndex;
-                        //
-                        //     // Data
-                        //     newDesignVersionComponent.componentNameOld = component.componentName;
-                        //     newDesignVersionComponent.componentNameNew = component.componentName;
-                        //     newDesignVersionComponent.componentNameRawOld = component.componentNameRaw;
-                        //     newDesignVersionComponent.componentNameRawNew = component.componentNameRaw;
-                        //     newDesignVersionComponent.componentNarrativeOld = component.componentNarrative;
-                        //     newDesignVersionComponent.componentNarrativeNew = component.componentNarrative;
-                        //     newDesignVersionComponent.componentNarrativeRawOld = component.componentNarrativeRaw;
-                        //     newDesignVersionComponent.componentNarrativeRawNew = component.componentNarrativeRaw;
-                        //     newDesignVersionComponent.componentTextRawOld = component.componentTextRaw;
-                        //     newDesignVersionComponent.componentTextRawNew = component.componentTextRaw;
-                        //
-                        //     // Component State
-                        //     newDesignVersionComponent.isNew = component.isNew;
-                        //     newDesignVersionComponent.workPackageId = 'NONE';
-                        //     newDesignVersionComponent.updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
-                        //     newDesignVersionComponent.isDevUpdated = false;
-                        //     newDesignVersionComponent.isDevAdded = false;
-                        //
-                        //     // Editing state (shared and persistent)
-                        //     newDesignVersionComponent.isRemovable = component.isRemovable;
-                        //
-                        //     newDesignVersionComponentData.push(newDesignVersionComponent);
-                        // });
-                }
-        }
-
-        return newDesignVersionComponentData;
-    };
-
-    migrateDesignUpdateComponentData(designUpdateComponentData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newDesignUpdateComponentData = designUpdateComponentData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newDesignUpdateComponentData = designUpdateComponentData
-                }
-        }
-
-        return newDesignUpdateComponentData;
-    };
-
-    migrateWorkPackageComponentData(workPackageComponentData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newWorkPackageComponentData = workPackageComponentData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newWorkPackageComponentData = workPackageComponentData
-                }
-        }
-
-        return newWorkPackageComponentData;
-    };
-
-    migrateFeatureBackgroundStepData(featureBackgroundStepsData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newFeatureBackgroundStepsData = featureBackgroundStepsData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newFeatureBackgroundStepsData = featureBackgroundStepsData
-                }
-        }
-
-        return newFeatureBackgroundStepsData;
-    };
-
-    migrateScenarioStepData(scenarioStepsData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newScenarioStepsData = scenarioStepsData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newScenarioStepsData = scenarioStepsData
-                }
-        }
-
-        return newScenarioStepsData;
-    };
-
-    migrateDomainDictionaryData(domainDictionaryData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newDomainDictionaryData = domainDictionaryData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newDomainDictionaryData = domainDictionaryData
-                }
-        }
-
-        return newDomainDictionaryData;
-    };
-
-    restoreTestOutputLocationData(newTestOutputLocationData, userMapping){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Test Output Locations...");
-
-        let locationsMapping = [];
-
-        newTestOutputLocationData.forEach((location) => {
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Test Output Location: {}", location.locationName);
-
-            const userId = getIdFromMap(userMapping, location.userId);
-
-            let locationId = TestOutputLocationServices.importLocation(location, userId);
-            if (locationId) {
-                // Store the new Design ID
-                locationsMapping.push({oldId: location._id, newId: locationId});
-            }
-        });
-
-        return locationsMapping;
-    };
-
-    restoreTestOutputLocationFileData(newTestOutputLocationFileData, locationsMapping){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Test Output Location Files...");
-
-        newTestOutputLocationFileData.forEach((locationFile) => {
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Test Output Location File: {}", locationFile.fileAlias);
-
-            const locationId = getIdFromMap(locationsMapping, locationFile.locationId);
-
-            let locationFileId = TestOutputLocationServices.importLocationFile(locationFile, locationId);
-
-        });
-
-    };
-
-    restoreUserTestTypeLocationsData(newTestOutputLocationData, userMapping, locationsMapping){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring User Test Output Location Settings...");
-
-        newTestOutputLocationData.forEach((userLocation) => {
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Test Location: {}", userLocation.locationName);
-
-            const locationId = getIdFromMap(locationsMapping, userLocation.locationId);
-            const userId = getIdFromMap(userMapping, userLocation.userId);
-
-            let userTestTypeLocationId = TestOutputLocationServices.importUserConfiguration(userLocation, locationId, userId);
-
-        });
-    }
-
-    restoreUserSettingsData(newUserSettingsData, userMapping){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring User Settings...");
-
-        newUserSettingsData.forEach((userSetting) => {
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Setting: {}", userSetting.settingName);
-
-            const userId = getIdFromMap(userMapping, userSetting.userId);
-
-            let userSettingId = UserSettingServices.importUserSetting(userSetting, userId);
-
-        });
-
-    }
-
-    restoreDesignData(newDesignData){
-
-        let designsMapping = [];
-
-        newDesignData.forEach((design) => {
-
-            log((msg) => console.log(msg), LogLevel.INFO, "Adding Design: {}", design.designName);
-
-            let designId = DesignServices.importDesign(design);
-            if (designId) {
-                // Store the new Design ID
-                designsMapping.push({oldId: design._id, newId: designId});
-            }
-        });
-
-        return designsMapping;
-
-    };
-
-    restoreDesignVersionData(newDesignVersionData, designsMapping){
-
-        let designVersionsMapping = [];
-
-        newDesignVersionData.forEach((designVersion) => {
-            let designId = getIdFromMap(designsMapping, designVersion.designId);
-            if (designId) {
-
-                log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Version: {} to Design {}", designVersion.designVersionName, designId);
-
-                let designVersionId = DesignVersionServices.importDesignVersion(
-                    designId,
-                    designVersion
-                );
-
-                if (designVersionId) {
-                    // Store the new Design Version ID
-                    designVersionsMapping.push({oldId: designVersion._id, newId: designVersionId});
-                }
-            }
-        });
-
-        return designVersionsMapping;
-    };
-
-    restoreDesignUpdateData(newDesignUpdateData, designVersionsMapping){
-
-        let designUpdatesMapping = [];
-
-        newDesignUpdateData.forEach((designUpdate) => {
-            let designVersionId = getIdFromMap(designVersionsMapping, designUpdate.designVersionId);
-            if (designVersionId) {
-
-                log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Update: {} to Design Version {}", designUpdate.updateName, designVersionId);
-
-                let designUpdateId = DesignUpdateServices.importDesignUpdate(
-                    designVersionId,
-                    designUpdate
-                );
-
-                if (designUpdateId) {
-                    // Store the new Design Update ID
-                    designUpdatesMapping.push({oldId: designUpdate._id, newId: designUpdateId});
-                }
-            }
-        });
-
-        return designUpdatesMapping;
-    };
-
-    // restoreDesignUpdateSummaryData(newDesignUpdateSummaryData, designVersionsMapping, designUpdatesMapping){
-    //
-    //     log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Update Summaries...");
-    //
-    //     newDesignUpdateSummaryData.forEach((designUpdateSummary) => {
-    //         let designVersionId = getIdFromMap(designVersionsMapping, designUpdateSummary.designVersionId);
-    //         let designUpdateId = getIdFromMap(designUpdatesMapping, designUpdateSummary.designUpdateId);
-    //
-    //         if (designVersionId && designUpdateId) {
-    //
-    //             log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update Summary to Design Version {}", designVersionId);
-    //
-    //             let designUpdateSummaryId = DesignUpdateSummaryServices.importDesignUpdateSummary(
-    //                 designVersionId,
-    //                 designUpdateId,
-    //                 designUpdateSummary
-    //             );
-    //
-    //         }
-    //     });
-    // };
-
-    restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, userMapping, hasDesignUpdates){
-
-        let workPackagesMapping = [];
-
-        newWorkPackageData.forEach((workPackage) => {
-
-            let designVersionId = getIdFromMap(designVersionsMapping, workPackage.designVersionId);
-            let adoptingUserId = getIdFromMap(userMapping, workPackage.adoptingUserId);
-
-            if (designVersionId) {
-
-                log((msg) => console.log(msg), LogLevel.INFO, "Adding Work Package: {} of type {} to Design Version {}",
-                    workPackage.workPackageName, workPackage.workPackageType, designVersionId);
-
-                if((workPackage.workPackageType === WorkPackageType.WP_UPDATE) && !hasDesignUpdates){
-                    log((msg) => console.log(msg), LogLevel.WARNING, "INVALID DATA: Update WP found when no Updates!  Skipping");
-                } else {
-
-                    let designUpdateId = 'NONE';
-                    if (workPackage.workPackageType === WorkPackageType.WP_UPDATE) {
-                        designUpdateId = getIdFromMap(designUpdatesMapping, workPackage.designUpdateId);
-                    }
-
-                    let workPackageId = WorkPackageServices.importWorkPackage(
-                        designVersionId,
-                        designUpdateId,
-                        adoptingUserId,
-                        workPackage
-                    );
-
-                    if (workPackageId) {
-                        // Store the new Work Package ID
-                        workPackagesMapping.push({oldId: workPackage._id, newId: workPackageId});
-                    }
-                }
-            }
-        });
-
-        return workPackagesMapping;
-    };
-
-    restoreDomainDictionaryData(newDictionaryData, designsMapping, designVersionsMapping){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Domain Dictionary...");
-
-        let componentCount = 0;
-
-        newDictionaryData.forEach((term) => {
-            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Dictionary Term {}", term.domainTermNew);
-
-            let designId = getIdFromMap(designsMapping, term.designId);
-            let designVersionId = getIdFromMap(designVersionsMapping, term.designVersionId);
-
-            let domainTermId = DomainDictionaryServices.addNewTerm(designId, designVersionId);
-
-            if (domainTermId) {
-                // Set the actual term and definition
-                DomainDictionaryServices.updateTermName(domainTermId, term.domainTermNew, term.domainTermOld);
-                DomainDictionaryServices.updateTermDefinition(domainTermId, term.domainTextRaw)
-            }
-
-            componentCount++;
-        });
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Dictionary Terms", componentCount);
-    };
-
-    restoreDesignVersionComponentData(newDesignComponentData, designsMapping, designVersionsMapping, workPackagesMapping){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Version Components...");
-
-        let designComponentsMapping = [];
-        let componentCount = 0;
-
-        newDesignComponentData.forEach((component) => {
-            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Component {} - {}", component.componentType, component.componentNameNew);
-
-            let designId = getIdFromMap(designsMapping, component.designId);
-            let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
-            let workPackageId = getIdFromMap(workPackagesMapping, component.workPackageId);
-
-            let designComponentId = DesignComponentServices.importComponent(
-                designId,
-                designVersionId,
-                workPackageId,
-                component
-            );
-
-            if (designComponentId) {
-                // Map old component ids to new
-                designComponentsMapping.push({oldId: component._id, newId: designComponentId});
-            }
-
-            componentCount++;
-
-        });
-
-        // Update Design Component parents for the new design components
-        designComponentsMapping.forEach((component) => {
-            DesignComponentServices.importRestoreParent(component.newId, designComponentsMapping)
-        });
-
-        // Make sure any Designs affected are no longer removable
-        designsMapping.forEach((designMap) => {
-            DesignServices.setRemovable(designMap.newId);
-        });
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Design Version Components", componentCount);
-
-        return designComponentsMapping;
-    };
-
-    restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Update Components...");
-
-        let designUpdateComponentsMapping = [];
-        let componentCount = 0;
-
-        if(designsMapping && designVersionsMapping && designUpdatesMapping) {
-
-            newDesignUpdateComponentData.forEach((updateComponent) => {
-                log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Update Component {} - {}", updateComponent.componentType, updateComponent.componentNameNew);
-
-                let designId = getIdFromMap(designsMapping, updateComponent.designId);
-                let designVersionId = getIdFromMap(designVersionsMapping, updateComponent.designVersionId);
-                let designUpdateId = getIdFromMap(designUpdatesMapping, updateComponent.designUpdateId);
-                let workPackageId = getIdFromMap(workPackagesMapping, updateComponent.workPackageId);
-
-                let designUpdateComponentId = DesignUpdateComponentServices.importComponent(
-                    designId,
-                    designVersionId,
-                    designUpdateId,
-                    workPackageId,
-                    updateComponent
-                );
-
-                if (designUpdateComponentId) {
-                    // Map old component ids to new
-                    designUpdateComponentsMapping.push({
-                        oldId: updateComponent._id,
-                        newId: designUpdateComponentId
-                    });
-                }
-
-                componentCount++;
-
-            });
-
-            // Update Design Update Component parents for the new design update components
-            designUpdateComponentsMapping.forEach((updateComponent) => {
-                DesignUpdateComponentServices.importRestoreParent(updateComponent.newId, designUpdateComponentsMapping)
-            });
-
-            // Make sure Design is no longer removable
-            designsMapping.forEach((designMap) => {
-                DesignServices.setRemovable(designMap.newId);
-            });
-
-        } else {
-            log((msg) => console.log(msg), LogLevel.ERROR, "Mapping not available to restore Design Update Components: DE: {} DV: {} DU: {}", designsMapping, designVersionsMapping, designUpdatesMapping);
-        }
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Design Update Components", componentCount);
-
-        return designUpdateComponentsMapping;
-    };
-
-    restoreWorkPackageComponentData(newWorkPackageComponentData, workPackagesMapping, designComponentsMapping, designUpdateComponentsMapping, hasDesignComponents, hasDesignUpdateComponents){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Work Package Components...");
-
-        let workPackageComponentsMapping = [];
-        let wpDesignComponentId = null;
-        let workPackage = null;
-        let componentCount = 0;
-
-        newWorkPackageComponentData.forEach((wpComponent) => {
-            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Work Package Component {} - {}", wpComponent.componentType, wpComponent._id);
-            let skip = false;
-
-            let workPackageId = getIdFromMap(workPackagesMapping, wpComponent.workPackageId);
-
-            // WP Component could be a Design Component or a Design Update Component
-            workPackage = WorkPackages.findOne({_id: workPackageId});
-
-            let designVersionId = workPackage.designVersionId;
-
-            switch (workPackage.workPackageType) {
-                case WorkPackageType.WP_BASE:
-                    if(hasDesignComponents) {
-                        wpDesignComponentId = getIdFromMap(designComponentsMapping, wpComponent.componentId);
-                    } else {
-                        log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design components...");
-                        skip = true;
-                    }
-                    break;
-                case WorkPackageType.WP_UPDATE:
-                    if(hasDesignUpdateComponents) {
-                        wpDesignComponentId = getIdFromMap(designUpdateComponentsMapping, wpComponent.componentId);
-                    } else {
-                        log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design update components...");
-                        skip = true;
-                    }
-                    break;
-            }
-
-            if(!skip) {
-                let workPackageComponentId = WorkPackageServices.importComponent(
-                    designVersionId,
-                    workPackageId,
-                    wpDesignComponentId,
-                    wpComponent
-                );
-
-                if (workPackageComponentId) {
-                    // Map old component ids to new
-                    workPackageComponentsMapping.push({oldId: wpComponent._id, newId: workPackageComponentId});
-                }
-
-                componentCount++;
-            }
-
-        });
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Work Package Components", componentCount);
-
-        return workPackageComponentsMapping;
-    };
 
     restoreFeatureBackgroundStepData(newFeatureBackgroundStepsData, designsMapping, designVersionsMapping, designUpdatesMapping){
 

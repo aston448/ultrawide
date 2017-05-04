@@ -4,9 +4,10 @@ import { Mongo } from 'meteor/mongo';
 export const AppGlobalData = new Mongo.Collection('appGlobalData');
 
 let Schema = new SimpleSchema({
-    appVersion:         {type: String},     // Version of Ultrawide
-    dataVersion:        {type: String},     // DB Version of Ultrawide
-    versionDate:        {type: Number},     // Date this version introduced: YYYYMMDD
+    versionKey:         {type: String},
+    appVersion:         {type: Number},     // Version of Ultrawide
+    dataVersion:        {type: Number},     // DB Version of Ultrawide
+    versionDate:        {type: String},     // Date this version introduced
 });
 
 AppGlobalData.attachSchema(Schema);
