@@ -13,7 +13,7 @@ import DesignItemHeader         from './DesignItemHeader.jsx';
 import { ItemType, RoleType, DesignStatus } from '../../../constants/constants.js';
 
 import ClientDesignServices     from '../../../apiClient/apiClientDesign.js';
-import ClientBackupServices     from '../../../apiClient/apiClientBackup.js';
+import ClientBackupServices     from '../../../apiClient/apiClientImpEx.js';
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
@@ -123,19 +123,19 @@ export class Design extends Component {
                             {removeButton}
                         </ButtonGroup>
                 } else {
-                    if(design.designName !== 'Ultrawide Project'){
-                        buttons =
-                            <ButtonGroup className="button-group-left">
-                                {workButton}
-                                {forceRemoveButton}
-                            </ButtonGroup>
-                    } else {
+                    // if(design.designName !== 'Ultrawide Project'){
+                    //     buttons =
+                    //         <ButtonGroup className="button-group-left">
+                    //             {workButton}
+                    //             {forceRemoveButton}
+                    //         </ButtonGroup>
+                    // } else {
                         buttons =
                             <ButtonGroup className="button-group-left">
                                 {workButton}
                                 {backupButton}
                             </ButtonGroup>
-                    }
+                    //}
                 }
             } else {
                 // Other users can just work on a Design

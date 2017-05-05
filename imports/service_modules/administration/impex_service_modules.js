@@ -50,7 +50,9 @@ class ImpexModules{
     markAllBackupsAsUnconfirmed(){
 
         // Set all to no existing - we are about to confirm if files do actually exist
-        DesignBackups.update({}, {$set: {fileExists: false}}, {multi: true});
+        const updated = DesignBackups.update({}, {$set: {fileExists: false}}, {multi: true});
+
+        console.log(updated + " backup file records set to non-existent");
     }
 
     addConfirmBackupFile(fileName, filePath){
@@ -59,6 +61,7 @@ class ImpexModules{
 
         if(existingFile){
 
+            console.log("Found existing backup file: " + fileName);
             // Confirm as existing
             DesignBackups.update(
                 {_id: existingFile._id},
@@ -74,12 +77,14 @@ class ImpexModules{
             // A new file we don't know about
             const metadata = this.getFileMetadata(filePath, fileName);
 
+            console.log("Adding new backup file: " + fileName);
+
             DesignBackups.insert({
                 backupName:             metadata.backupName,
                 backupFileName:         fileName,
                 backupDesignName:       metadata.designName,
                 backupDate:             metadata.backupDate,
-                backupDataVersion:      metadata.ultrawideDataVersion,
+                backupDataVersion:      metadata.backupDataVersion,
                 fileExists:             true
             })
         }
@@ -182,6 +187,26 @@ class ImpexModules{
 
                     // Don't need to create but map backup userId to actual so backup user-data can be corrected
                     usersMapping.push({oldId: user.userId, newId: existingUser.userId});
+
+                    // But do need to reset the user context as ids may be out of date
+                    UserCurrentEditContext.update(
+                        {userId: existingUser.userId},
+                        {
+                            $set:{
+                                designId: 'NONE',
+                                designVersionId: 'NONE',
+                                designUpdateId: 'NONE',
+                                workPackageId: 'NONE',
+                                designComponentId: 'NONE',
+                                designComponentType: 'NONE',
+
+                                featureReferenceId: 'NONE',
+                                featureAspectReferenceId: 'NONE',
+                                scenarioReferenceId: 'NONE',
+                                scenarioStepId: 'NONE'
+                            }
+                        }
+                    );
 
                 } else {
 
@@ -334,36 +359,47 @@ class ImpexModules{
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Test Location: {}", userLocation.locationName);
 
-                let userTestTypeLocationId = TestOutputLocationServices.importUserConfiguration(userLocation, locationId, userId);
+                TestOutputLocationServices.importUserConfiguration(userLocation, locationId, userId);
             }
         });
     }
 
-    restoreUserSettingsData(newUserSettingsData, userMapping){
+    restoreUserSettingsData(userSettingsData, backupDataVersion, currentDataVersion, userMapping){
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring User Settings...");
 
-        newUserSettingsData.forEach((userSetting) => {
+        const newUserSettingsData = this.migrateUserSettingsData(userSettingsData, backupDataVersion, currentDataVersion);
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Setting: {}", userSetting.settingName);
+        newUserSettingsData.forEach((userSetting) => {
 
             const userId = getIdFromMap(userMapping, userSetting.userId);
 
-            let userSettingId = UserSettingServices.importUserSetting(userSetting, userId);
+            const existingUserSetting = UserSettings.findOne({
+                userId: userId,
+                settingName: userSetting.settingName
+            });
 
+            if(!existingUserSetting) {
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Setting: {}", userSetting.settingName);
+
+                UserSettingServices.importUserSetting(userSetting, userId);
+            }
         });
-
     }
 
-    restoreDesignData(newDesignData){
+    restoreDesignData(designData, backupDataVersion, currentDataVersion){
 
         let designsMapping = [];
+
+        const newDesignData = this.migrateDesignData(designData, backupDataVersion, currentDataVersion);
 
         newDesignData.forEach((design) => {
 
             log((msg) => console.log(msg), LogLevel.INFO, "Adding Design: {}", design.designName);
 
             let designId = DesignServices.importDesign(design);
+
             if (designId) {
                 // Store the new Design ID
                 designsMapping.push({oldId: design._id, newId: designId});
@@ -374,12 +410,16 @@ class ImpexModules{
 
     };
 
-    restoreDesignVersionData(newDesignVersionData, designsMapping){
+    restoreDesignVersionData(designVersionData, backupDataVersion, currentDataVersion, designsMapping){
 
         let designVersionsMapping = [];
 
+        const newDesignVersionData = this.migrateDesignVersionData(designVersionData, backupDataVersion, currentDataVersion);
+
         newDesignVersionData.forEach((designVersion) => {
+
             let designId = getIdFromMap(designsMapping, designVersion.designId);
+
             if (designId) {
 
                 log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Version: {} to Design {}", designVersion.designVersionName, designId);
@@ -399,12 +439,16 @@ class ImpexModules{
         return designVersionsMapping;
     };
 
-    restoreDesignUpdateData(newDesignUpdateData, designVersionsMapping){
+    restoreDesignUpdateData(designUpdateData, backupDataVersion, currentDataVersion, designVersionsMapping){
 
         let designUpdatesMapping = [];
 
+        const newDesignUpdateData = this.migrateDesignUpdateData(designUpdateData, backupDataVersion, currentDataVersion);
+
         newDesignUpdateData.forEach((designUpdate) => {
+
             let designVersionId = getIdFromMap(designVersionsMapping, designUpdate.designVersionId);
+
             if (designVersionId) {
 
                 log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Update: {} to Design Version {}", designUpdate.updateName, designVersionId);
@@ -425,9 +469,11 @@ class ImpexModules{
     };
 
 
-    restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, userMapping, hasDesignUpdates){
+    restoreWorkPackageData(workPackageData, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, userMapping, hasDesignUpdates){
 
         let workPackagesMapping = [];
+
+        const newWorkPackageData = this.migrateWorkPackageData(workPackageData, backupDataVersion, currentDataVersion);
 
         newWorkPackageData.forEach((workPackage) => {
 
@@ -466,9 +512,11 @@ class ImpexModules{
         return workPackagesMapping;
     };
 
-    restoreDomainDictionaryData(newDictionaryData, designsMapping, designVersionsMapping){
+    restoreDomainDictionaryData(dictionaryData, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping){
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring Domain Dictionary...");
+
+        const newDictionaryData = this.migrateDomainDictionaryData(dictionaryData, backupDataVersion, currentDataVersion);
 
         let componentCount = 0;
 
@@ -492,12 +540,14 @@ class ImpexModules{
         log((msg) => console.log(msg), LogLevel.INFO, "Added {} Dictionary Terms", componentCount);
     };
 
-    restoreDesignVersionComponentData(newDesignComponentData, designsMapping, designVersionsMapping, workPackagesMapping){
+    restoreDesignVersionComponentData(designComponentData, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, workPackagesMapping){
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Version Components...");
 
         let designComponentsMapping = [];
         let componentCount = 0;
+
+        const newDesignComponentData = this.migrateDesignComponentData(designComponentData, backupDataVersion, currentDataVersion);
 
         newDesignComponentData.forEach((component) => {
             log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Component {} - {}", component.componentType, component.componentNameNew);
@@ -519,7 +569,6 @@ class ImpexModules{
             }
 
             componentCount++;
-
         });
 
         // Update Design Component parents for the new design components
@@ -537,14 +586,16 @@ class ImpexModules{
         return designComponentsMapping;
     };
 
-    restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping){
+    restoreDesignUpdateComponentData(designUpdateComponentData, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping){
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Update Components...");
 
         let designUpdateComponentsMapping = [];
         let componentCount = 0;
 
-        if(designsMapping && designVersionsMapping && designUpdatesMapping) {
+        const newDesignUpdateComponentData = this.migrateDesignUpdateComponentData(designUpdateComponentData, backupDataVersion, currentDataVersion);
+
+        if(designsMapping && designVersionsMapping && designUpdatesMapping && workPackagesMapping) {
 
             newDesignUpdateComponentData.forEach((updateComponent) => {
                 log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Update Component {} - {}", updateComponent.componentType, updateComponent.componentNameNew);
@@ -585,7 +636,7 @@ class ImpexModules{
             });
 
         } else {
-            log((msg) => console.log(msg), LogLevel.ERROR, "Mapping not available to restore Design Update Components: DE: {} DV: {} DU: {}", designsMapping, designVersionsMapping, designUpdatesMapping);
+            log((msg) => console.log(msg), LogLevel.ERROR, "Mapping not available to restore Design Update Components: DE: {} DV: {} DU: {} WP: {}", designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
         }
 
         log((msg) => console.log(msg), LogLevel.INFO, "Added {} Design Update Components", componentCount);
@@ -593,7 +644,7 @@ class ImpexModules{
         return designUpdateComponentsMapping;
     };
 
-    restoreWorkPackageComponentData(newWorkPackageComponentData, workPackagesMapping, designComponentsMapping, designUpdateComponentsMapping, hasDesignComponents, hasDesignUpdateComponents){
+    restoreWorkPackageComponentData(workPackageComponentData, backupDataVersion, currentDataVersion, workPackagesMapping, designVersionComponentsMapping, designUpdateComponentsMapping, hasDesignVersionComponents, hasDesignUpdateComponents){
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring Work Package Components...");
 
@@ -601,6 +652,8 @@ class ImpexModules{
         let wpDesignComponentId = null;
         let workPackage = null;
         let componentCount = 0;
+
+        const newWorkPackageComponentData = this.migrateWorkPackageComponentData(workPackageComponentData, backupDataVersion, currentDataVersion);
 
         newWorkPackageComponentData.forEach((wpComponent) => {
             log((msg) => console.log(msg), LogLevel.TRACE, "Adding Work Package Component {} - {}", wpComponent.componentType, wpComponent._id);
@@ -615,8 +668,8 @@ class ImpexModules{
 
             switch (workPackage.workPackageType) {
                 case WorkPackageType.WP_BASE:
-                    if(hasDesignComponents) {
-                        wpDesignComponentId = getIdFromMap(designComponentsMapping, wpComponent.componentId);
+                    if(hasDesignVersionComponents) {
+                        wpDesignComponentId = getIdFromMap(designVersionComponentsMapping, wpComponent.componentId);
                     } else {
                         log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design components...");
                         skip = true;

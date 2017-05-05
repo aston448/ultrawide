@@ -1,7 +1,7 @@
 
 // Ultrawide Services
 import { RoleType } from '../../constants/constants.js';
-import { Validation, BackupValidationErrors } from '../../constants/validation_errors.js';
+import { Validation, ImpExValidationErrors } from '../../constants/validation_errors.js';
 
 //======================================================================================================================
 //
@@ -11,15 +11,25 @@ import { Validation, BackupValidationErrors } from '../../constants/validation_e
 //
 //======================================================================================================================
 
-class BackupValidationServices{
+class ImpExValidationServices{
 
     validateBackupDesign(userRole){
 
-        // To backup a Design, user must be a Designer or Manager
-        if(!(userRole === RoleType.DESIGNER || userRole === RoleType.MANAGER)){ return BackupValidationErrors.BACKUP_DESIGN_INVALID_ROLE }
+        return Validation.VALID;
+    };
+
+    validateRestoreDesign(user){
+
+        if(!user){
+            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_ROLE_RESTORE;
+        }
+
+        if(!(user.isAdmin)){
+            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_ROLE_RESTORE;
+        }
 
         return Validation.VALID;
     };
 }
 
-export default new BackupValidationServices();
+export default new ImpExValidationServices();

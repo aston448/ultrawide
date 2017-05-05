@@ -2,9 +2,10 @@
  * Created by aston on 17/11/2016.
  */
 
-export const BackupMessages = {
+export const ImpexMessages = {
 
-    MSG_DESIGN_BACKUP:              'Design backup saved'
+    MSG_DESIGN_BACKUP:              'Design backup saved',
+    MSG_DESIGN_RESTORE:             'Design restored from backup'
 };
 
 export const UserSettingMessages = {

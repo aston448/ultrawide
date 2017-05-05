@@ -74,7 +74,7 @@ class ImpExServices{
             UserRoles.insert({
                 userId:         userId,
                 userName:       'admin',
-                password:       'admin',
+                password:       'admin123',
                 displayName:    'Admin User',
                 isDesigner:     false,
                 isDeveloper:    false,
@@ -82,7 +82,6 @@ class ImpExServices{
                 isAdmin:        true
             });
         }
-
     }
 
 
@@ -130,6 +129,7 @@ class ImpExServices{
             const designData = Designs.find({_id: designId}).fetch();   // Will be only 1 but want as an array
             const design = designData[0];
 
+
             const dateTime = new Date();
 
             const dateString = dateTime.getFullYear() + '-' +
@@ -145,11 +145,14 @@ class ImpExServices{
                 padDigits(dateTime.getHours(), 2) + '_' +
                 padDigits(dateTime.getMinutes(), 2);
 
+            const backupName = design.designName + ': ' + dateString;
+            const designName = design.designName;
+
             const ultrawide = AppGlobalData.findOne({versionKey: 'CURRENT_VERSION'});
 
             let metadata = {
-                backupName: design.designName + ': ' + dateString,
-                designName: design.designName,
+                backupName: backupName,
+                designName: designName,
                 backupDate: dateTime,
                 backupDataVersion: ultrawide.dataVersion
             };
@@ -157,7 +160,7 @@ class ImpExServices{
             let designVersions = [];
             let designUpdates = [];
             let workPackages = [];
-            let designComponents = [];
+            let designVersionComponents = [];
             let designUpdateComponents = [];
             let workPackageComponents = [];
             let domainDictionary = [];
@@ -168,16 +171,16 @@ class ImpExServices{
             const userRoles = UserRoles.find({}).fetch();
 
             // Store all test output locations
-            const testOutputLocations = TestOutputLocations.find({});
+            const testOutputLocations = TestOutputLocations.find({}).fetch();
 
             // Store all test output location files
-            const testOutputLocationFiles = TestOutputLocationFiles.find({});
+            const testOutputLocationFiles = TestOutputLocationFiles.find({}).fetch();
 
             // Store all user test locations
-            const userTestTypeLocations = UserTestTypeLocations.find({});
+            const userTestTypeLocations = UserTestTypeLocations.find({}).fetch();
 
             // Store all user settings
-            const userSettings = UserSettings.find({});
+            const userSettings = UserSettings.find({}).fetch();
 
 
             // Data stored for this Design -----------------------------------------------------------------------------
@@ -206,9 +209,9 @@ class ImpExServices{
                 });
 
                 // All design components in this version
-                let designComponentData = DesignVersionComponents.find({designVersionId: designVersion._id}).fetch();
-                designComponentData.forEach((designComponent) => {
-                    designComponents.push(designComponent);
+                let designVersionComponentData = DesignVersionComponents.find({designVersionId: designVersion._id}).fetch();
+                designVersionComponentData.forEach((designVersionComponent) => {
+                    designVersionComponents.push(designVersionComponent);
                 });
 
                 // All Design Update components in this version
@@ -222,27 +225,28 @@ class ImpExServices{
                 dictionaryData.forEach((domainItem) => {
                     domainDictionary.push(domainItem);
                 });
-
             });
 
-            const designBackup = {
-                metadata: metadata,
-                userRoles: userRoles,
-                testOutputLocations: testOutputLocations,
-                testOutputLocationFiles: testOutputLocationFiles,
-                userTestTypeLocations: userTestTypeLocations,
-                userSettings: userSettings,
-                designs: designData,
-                designVersions: designVersions,
-                designUpdates: designUpdates,
-                workPackages: workPackages,
-                designComponents: designComponents,
-                designUpdateComponents: designUpdateComponents,
-                workPackageComponents: workPackageComponents,
-                domainDictionary: domainDictionary
-            };
+            const designBackup =
+                {
+                    metadata: metadata,
+                    userRoles: userRoles,
+                    testOutputLocations: testOutputLocations,
+                    testOutputLocationFiles: testOutputLocationFiles,
+                    userTestTypeLocations: userTestTypeLocations,
+                    userSettings: userSettings,
+                    designs: designData,
+                    designVersions: designVersions,
+                    designUpdates: designUpdates,
+                    workPackages: workPackages,
+                    domainDictionary: domainDictionary,
+                    designVersionComponents: designVersionComponents,
+                    designUpdateComponents: designUpdateComponents,
+                    workPackageComponents: workPackageComponents
+                };
 
-            const jsonData = JSON.stringify(designBackup);
+
+            const jsonData = JSON.stringify(designBackup, null, 2);
 
             const fileName = 'ULTRAWIDE_' + design.designName.trim() + '_' + fileDate + '.UBK';
 
@@ -270,9 +274,9 @@ class ImpExServices{
     };
 
     // User has chosen to restore a Design from a backup ---------------------------------------------------------------
-    restoreDesign(backupData){
+    restoreDesign(backupFileName){
 
-        const backupDataVersion = backupData.metadata.backupDataVersion;
+        let backupDataVersion = 0;
         const currentDataVersion = ImpexModules.getCurrentDataVersion();
 
         let usersMapping = [];
@@ -287,9 +291,11 @@ class ImpExServices{
         if(currentDataVersion > 0) {
 
             // Read the required backup file
-            const backupData = ImpexModules.readBackupFile(backupData.backupFileName);
+            const backupData = ImpexModules.readBackupFile(backupFileName);
 
             if (backupData) {
+
+                backupDataVersion = backupData.metadata.backupDataVersion;
 
                 // Data to MERGE ---------------------------------------------------------------------------------------
 
@@ -306,37 +312,54 @@ class ImpExServices{
                 ImpexModules.restoreUserTestTypeLocationsData(backupData.userTestTypeLocations, backupDataVersion, currentDataVersion, usersMapping, locationsMapping);
 
                 // Merge user settings
+                ImpexModules.restoreUserSettingsData(backupData.userSettings, backupDataVersion, currentDataVersion, usersMapping);
 
                 // Data to REPLACE -------------------------------------------------------------------------------------
 
+                // Get this BEFORE we create the replacement Design
                 const oldDesign = Designs.findOne({designName: backupData.metadata.designName});
-                let oldDesignVersions = [];
-
-                if(oldDesign){
-                    // We are replacing data
-                    oldDesignVersions = DesignVersions.find({designId: oldDesign._id}).fetch();
-                }
 
                 // Restore Data - this creates new data with new IDs in parallel to any existing data ++++++++++++++++++
 
                 // Restore Designs
+                designsMapping = ImpexModules.restoreDesignData(backupData.designs, backupDataVersion, currentDataVersion);
 
                 // Restore Design Versions
+                designVersionsMapping = ImpexModules.restoreDesignVersionData(backupData.designVersions, backupDataVersion, currentDataVersion, designsMapping);
 
                 // Restore Design Updates
+                designUpdatesMapping = ImpexModules.restoreDesignUpdateData(backupData.designUpdates, backupDataVersion, currentDataVersion, designVersionsMapping);
 
                 // Restore Work Packages
+                const hasDesignUpdates = (backupData.designUpdates.length > 0);
 
-                // Restore Design Version Components
-
-                // Restore Design Update Components
-
-                // Restore Work Package Components
+                workPackagesMapping = ImpexModules.restoreWorkPackageData(backupData.workPackages, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, usersMapping, hasDesignUpdates);
 
                 // Restore Domain Dictionary
+                ImpexModules.restoreDomainDictionaryData(backupData.domainDictionary, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping);
+
+                // Restore Design Version Components
+                designVersionComponentsMapping = ImpexModules.restoreDesignVersionComponentData(backupData.designVersionComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, workPackagesMapping);
+
+                // Restore Design Update Components
+                designUpdateComponentsMapping = ImpexModules.restoreDesignUpdateComponentData(backupData.designUpdateComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
+
+                // Restore Work Package Components
+                const hasDesignVersionComponents = (backupData.designVersionComponents.length > 0);
+                const hasDesignUpdateComponents = (backupData.designUpdateComponents.length > 0);
+
+                ImpexModules.restoreWorkPackageComponentData(backupData.workPackageComponents, backupDataVersion, currentDataVersion, workPackagesMapping, designVersionComponentsMapping, designUpdateComponentsMapping, hasDesignVersionComponents, hasDesignUpdateComponents);
+
 
                 // Replacement / restore has succeeded so remove the old data if it existed ++++++++++++++++++++++++++++
+
                 if (oldDesign){
+
+                    log((msg) => console.log(msg), LogLevel.INFO, "Removing old version of Design {}", oldDesign.designName);
+
+                    let oldDesignVersions = [];
+
+                    oldDesignVersions = DesignVersions.find({designId: oldDesign._id}).fetch();
 
                     Designs.remove({_id: oldDesign._id});
 
@@ -352,11 +375,6 @@ class ImpExServices{
                     });
 
                 }
-
-
-
-
-
 
             }
 

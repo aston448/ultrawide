@@ -1,19 +1,39 @@
-/**
- * Created by aston on 12/10/2016.
- */
-import { Meteor } from 'meteor/meteor';
+
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+
+import {
+    backupDesign,
+    restoreDesign
+} from '../apiValidatedMethods/impex_methods.js'
 
 
-import  ImpExServices     from '../servicers/administration/impex_services.js';
+class ServerBackupApi {
 
-// Meteor methods
-Meteor.methods({
+    backupDesign(designId, userRole, callback){
 
-    'impex.exportData'(){
-        ImpExServices.exportUltrawideData();
-    },
+        backupDesign.call(
+            {
+                designId: designId,
+                userRole: userRole
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
-    'impex.importData'(){
-        ImpExServices.importUltrawideData();
-    },
-});
+    restoreDesign(backupFileName, userId, callback){
+
+        restoreDesign.call(
+            {
+                backupFileName: backupFileName,
+                userId:         userId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+}
+
+export default new ServerBackupApi();

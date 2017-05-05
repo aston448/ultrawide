@@ -1,0 +1,63 @@
+
+import BackupValidationApi      from '../apiValidation/apiImpExValidation.js';
+import ImpExServices            from '../servicers/administration/impex_services.js';
+
+import { Validation } from '../constants/validation_errors.js'
+
+//======================================================================================================================
+//
+// Meteor Validated Methods for Import-Export
+//
+//======================================================================================================================
+
+export const backupDesign = new ValidatedMethod({
+
+    name: 'impex.backupDesign',
+
+    validate: new SimpleSchema({
+        designId: {type: String},
+        userRole: {type: String}
+    }).validator(),
+
+    run({designId, userRole}){
+
+        const result = BackupValidationApi.validateBackupDesign(userRole);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('impex.backupDesign.failValidation', result)
+        }
+
+        try {
+            ImpExServices.backupDesign(designId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+});
+
+export const restoreDesign = new ValidatedMethod({
+
+    name: 'impex.restoreDesign',
+
+    validate: new SimpleSchema({
+        backupFileName: {type: String},
+        userId:         {type: String}
+    }).validator(),
+
+    run({backupFileName, userId}){
+
+        const result = BackupValidationApi.validateRestoreDesign(userId);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('impex.restoreDesign.failValidation', result)
+        }
+
+        try {
+            ImpExServices.restoreDesign(backupFileName);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+});

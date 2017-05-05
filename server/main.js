@@ -40,7 +40,7 @@ import '../imports/collections/dev/user_unit_test_results.js';
 import '../imports/collections/mash/user_dv_mash_scenarios.js';
 
 // Modules
-import '../imports/startup/server/fixtures.js';
+import '../imports/startup/server/startup.js';
 
 // Server API
 import '../imports/apiServer/apiDesign.js';

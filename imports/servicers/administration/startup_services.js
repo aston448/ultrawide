@@ -1,10 +1,10 @@
 
 // Ultrawide Collections
-import { AppGlobalData }                from '../../collections/app/app_global_data.js';
 import { UserRoles }                    from '../../collections/users/user_roles.js';
 
 // Ultrawide Services
 import ImpexServices                    from '../../servicers/administration/impex_services.js';
+import StartupModules                   from '../../service_modules/administration/startup_service_modules.js';
 
 //======================================================================================================================
 //
@@ -28,13 +28,16 @@ class StartupServices{
             });
 
             if(!adminUser){
+                console.log("NEW ULTRAWIDE INSTANCE");
 
                 // Create the Admin user so that work can be started
+                console.log("Creating admin user...");
+
                 ImpexServices.createAdminUser();
             }
 
             // Also make sure the global App data exists and is up to date for the current release
-            this.setUltrawideVersionData();
+            StartupModules.setUltrawideVersionData();
 
             // Now check that all the backup files for this instance are represented
             const backupLocation = process.env.ULTRAWIDE_BACKUP_PATH;
@@ -45,43 +48,8 @@ class StartupServices{
                 ImpexServices.checkAndPopulateBackupFileData(backupLocation);
 
             } else {
-                console.log("CANNOT START ULTRAWIDE: Environment variable ULTRAWIDE_BACKUP_PATH must be set to a locatcion accessible by this instance");
+                console.log("CANNOT START ULTRAWIDE: Environment variable ULTRAWIDE_BACKUP_PATH must be set to a location accessible by this instance");
             }
-        }
-    }
-
-    setUltrawideVersionData(){
-
-        const appData = AppGlobalData.findOne({
-            versionKey: 'CURRENT_VERSION'
-        });
-
-        // MODIFY THIS CODE FOR EACH NEW RELEASE
-        const appVersion = 1;                   // Version of Ultrawide
-        const dataVersion = 1;                  // DB Version of Ultrawide
-        const versionDate = '2017-05-04';       // Date this version introduced
-
-        if(!appData){
-
-            AppGlobalData.insert({
-                versionKey:         'CURRENT_VERSION',
-                appVersion:         appVersion,
-                dataVersion:        dataVersion,
-                versionDate:        versionDate
-            });
-
-        } else {
-
-            AppGlobalData.update(
-                {versionKey: 'CURRENT_VERSION'},
-                {
-                    $set:{
-                        appVersion:         appVersion,
-                        dataVersion:        dataVersion,
-                        versionDate:        versionDate
-                    }
-                }
-            )
         }
     }
 }

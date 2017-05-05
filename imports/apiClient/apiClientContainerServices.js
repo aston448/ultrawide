@@ -6,6 +6,7 @@ import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
 import { UserRoles }                        from '../collections/users/user_roles.js';
+import { DesignBackups }                    from '../collections/backup/design_backups.js';
 import { UserCurrentEditContext }           from '../collections/context/user_current_edit_context.js';
 import { Designs }                          from '../collections/design/designs.js';
 import { DesignVersions }                   from '../collections/design/design_versions.js';
@@ -67,6 +68,7 @@ class ClientContainerServices{
 
             // Subscribing to these here makes them available to the whole app...
             const urHandle = Meteor.subscribe('userRoles');
+            const dbHandle = Meteor.subscribe('designBackups');
             const usHandle = Meteor.subscribe('userSettings');
             const ucHandle = Meteor.subscribe('userCurrentEditContext');
             const uvHandle = Meteor.subscribe('userCurrentViewOptions');
@@ -79,7 +81,7 @@ class ClientContainerServices{
             const wpHandle = Meteor.subscribe('workPackages');
 
             const loading = (
-                !urHandle.ready() || !usHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
+                !urHandle.ready() || !dbHandle.ready() || !usHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
             );
 
             return {isLoading: loading};
@@ -312,6 +314,12 @@ class ClientContainerServices{
         return UserRoles.find({
             isAdmin: false
         }).fetch();
+    }
+
+    // Design Backups
+    getDesignBackups(){
+
+        return DesignBackups.find({}).fetch();
     }
 
     // Test Output Locations

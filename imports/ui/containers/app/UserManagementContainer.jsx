@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignComponentAdd       from '../../components/common/DesignComponentAdd.jsx';
 import UserDetails              from '../../components/app/UserDetails.jsx';
-
+import DesignBackup             from '../../components/app/DesignBackup.jsx';
 
 // Ultrawide Services
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
@@ -57,9 +57,26 @@ class UserManagementScreen extends Component {
         });
     };
 
+    renderBackupList(backups){
+        if(backups.length > 0) {
+            return backups.map((backup) => {
+                return (
+                    <DesignBackup
+                        key={backup._id}
+                        backup={backup}
+                    />
+                );
+            });
+        } else {
+            return (
+                <div className="design-item-note">No backups found</div>
+            );
+        }
+    };
+
     render() {
 
-        const {userData} = this.props;
+        const {userData, backupData} = this.props;
 
         const addUser =
             <div className="design-item-add">
@@ -80,6 +97,11 @@ class UserManagementScreen extends Component {
                                 {addUser}
                             </Panel>
                         </Col>
+                        <Col md={6} className="col">
+                            <Panel header="Design Backups">
+                                {this.renderBackupList(backupData)}
+                            </Panel>
+                        </Col>
                     </Row>
                 </Grid>
             );
@@ -91,6 +113,11 @@ class UserManagementScreen extends Component {
                             <Panel header="Ultrawide Users">
                                 {addUser}
                             </Panel>
+                            <Col md={6} className="col">
+                                <Panel header="Design Backups">
+                                    {this.renderBackupList(backupData)}
+                                </Panel>
+                            </Col>
                         </Col>
                     </Row>
                 </Grid>
@@ -101,7 +128,8 @@ class UserManagementScreen extends Component {
 }
 
 UserManagementScreen.propTypes = {
-    userData:       PropTypes.array.isRequired
+    userData:       PropTypes.array.isRequired,
+    backupData:     PropTypes.array.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -119,6 +147,8 @@ UserManagementScreen = connect(mapStateToProps)(UserManagementScreen);
 export default UserManagementContainer = createContainer(({params}) => {
 
     const userData =  ClientContainerServices.getUltrawideUsers();
-    return {userData: userData};
+    const backupData = ClientContainerServices.getDesignBackups();
+
+    return {userData: userData, backupData: backupData};
 
 }, UserManagementScreen);

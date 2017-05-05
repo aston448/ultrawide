@@ -7,8 +7,8 @@ export const Validation = {
     INVALID:                'INVALID'
 };
 
-export const BackupValidationErrors = {
-    BACKUP_DESIGN_INVALID_ROLE:     'Only a Manager or Designer can backup a Design'
+export const ImpExValidationErrors = {
+    BACKUP_DESIGN_INVALID_ROLE_RESTORE:     'Only the admin user can restore a Design'
 };
 
 export const UserManagementValidationErrors = {

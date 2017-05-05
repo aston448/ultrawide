@@ -3,14 +3,16 @@
 // Meteor / React Services
 
 // Ultrawide Collections
-import { DesignVersionComponents } from '../collections/design/design_version_components.js';
-import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
-import { WorkPackageComponents } from '../collections/work/work_package_components.js';
+import { Designs }                  from '../collections/design/designs.js';
+import { DesignVersionComponents }  from '../collections/design/design_version_components.js';
+import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
+import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, ViewOptionType, ComponentType, RoleType, DisplayContext, UpdateScopeType } from '../constants/constants.js';
-import ClientDesignUpdateServices from '../apiClient/apiClientDesignUpdate.js';
-import ClientDesignVersionServices from '../apiClient/apiClientDesignVersion.js';
+import ClientDesignUpdateServices   from '../apiClient/apiClientDesignUpdate.js';
+import ClientDesignVersionServices  from '../apiClient/apiClientDesignVersion.js';
+import ClientImpExServices          from '../apiClient/apiClientImpEx.js';
 
 
 // REDUX services
@@ -437,7 +439,15 @@ class ClientAppHeaderServices{
         // Will be no context for Admin user
         if(userContext) {
 
-            Meteor.call('impex.exportData');
+            // // TEMP - Backup All Designs
+            // const designs = Designs.find({});
+            //
+            // designs.forEach((design) => {
+            //
+            //     ClientImpExServices.backupDesign(design._id, RoleType.DESIGNER);
+            // });
+
+            //Meteor.call('impex.exportData');
 
             // Clear User Context
             const emptyContext = {

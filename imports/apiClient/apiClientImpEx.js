@@ -5,14 +5,14 @@
 // Ultrawide Collections
 
 // Ultrawide Services
-import ServerBackupApi      from '../apiServer/apiBackup.js';
-import BackupValidationApi  from '../apiValidation/apiBackupValidation.js';
+import ServerImpExApi      from '../apiServer/apiImpEx.js';
+import BackupValidationApi  from '../apiValidation/apiImpExValidation.js';
 
 import ImpexServices        from '../servicers/administration/impex_services.js';
 
 import { ViewType, MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
-import { BackupMessages } from '../constants/message_texts.js'
+import { ImpexMessages } from '../constants/message_texts.js'
 
 // REDUX services
 import store from '../redux/store'
@@ -31,7 +31,7 @@ import {setCurrentUserItemContext, setCurrentView, updateUserMessage} from '../r
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientBackupServices{
+class ClientImpExServices{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -41,14 +41,14 @@ class ClientBackupServices{
         // Client validation
         let result = BackupValidationApi.validateBackupDesign(userRole);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
 
         // Real action call - server actions
-        ServerBackupApi.backupDesign(designId, userRole, (err, result) => {
+        ServerImpExApi.backupDesign(designId, userRole, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -60,7 +60,41 @@ class ClientBackupServices{
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
-                    messageText: BackupMessages.MSG_DESIGN_BACKUP
+                    messageText: ImpexMessages.MSG_DESIGN_BACKUP
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User chooses to restore a Design from a backup ------------------------------------------------------------------
+    restoreDesign(backupFileName, userId){
+
+        // Client validation
+        let result = BackupValidationApi.validateRestoreDesign(userId);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerImpExApi.restoreDesign(backupFileName, userId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Restore Design client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: ImpexMessages.MSG_DESIGN_RESTORE
                 }));
             }
         });
@@ -77,5 +111,5 @@ class ClientBackupServices{
 
 }
 
-export default new ClientBackupServices();
+export default new ClientImpExServices();
 
