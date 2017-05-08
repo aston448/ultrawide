@@ -235,6 +235,8 @@ class DesignVersionServices{
 
             log((msg) => {console.log(msg)}, LogLevel.DEBUG, "DV: Total: {} Passing: {} Failing: {} NoTest {}", dvTotalScenarios, dvPassingScenarios, dvFailingScenarios, dvNoTestScenarios);
 
+            let batchData = [];
+
             switch(dv.designVersionStatus){
                 case DesignVersionStatus.VERSION_NEW:
                 case DesignVersionStatus.VERSION_DRAFT:
@@ -295,7 +297,7 @@ class DesignVersionServices{
                         });
 
                         // Insert the WP summary details
-                        UserWorkProgressSummary.insert({
+                        batchData.push({
                             userId:                     userContext.userId,
                             designVersionId:            userContext.designVersionId,
                             workPackageId:              wp._id,
@@ -309,7 +311,7 @@ class DesignVersionServices{
                     });
 
                     // Insert the DV summary details
-                    UserWorkProgressSummary.insert({
+                    batchData.push({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         workSummaryType:            WorkSummaryType.WORK_SUMMARY_BASE_DV,
@@ -328,7 +330,7 @@ class DesignVersionServices{
                     let dvName = dv.designVersionName + ' (ALL)';
 
                     // Insert a record that indicates the total for the DV, not just for updates in it
-                    UserWorkProgressSummary.insert({
+                    batchData.push({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         designUpdateId:             'NONE',
@@ -416,7 +418,7 @@ class DesignVersionServices{
                         dvUpdateUntestedCount += duUntestedScenarios;
 
                         // Insert this update to the summary
-                        UserWorkProgressSummary.insert({
+                        batchData.push({
                             userId:                     userContext.userId,
                             designVersionId:            userContext.designVersionId,
                             designUpdateId:             du._id,
@@ -487,7 +489,7 @@ class DesignVersionServices{
                             });
 
                             // Insert this WP to the summary
-                            UserWorkProgressSummary.insert({
+                            batchData.push({
                                 userId:                     userContext.userId,
                                 designVersionId:            userContext.designVersionId,
                                 designUpdateId:             du._id,
@@ -507,7 +509,7 @@ class DesignVersionServices{
 
                     dvName = dv.designVersionName + ' (UPDATES)';
 
-                    UserWorkProgressSummary.insert({
+                    batchData.push({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_DV,
@@ -521,6 +523,8 @@ class DesignVersionServices{
 
                     break;
             }
+
+            UserWorkProgressSummary.batchInsert(batchData);
         }
 
         log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Done Refreshing Work Progress Data...");

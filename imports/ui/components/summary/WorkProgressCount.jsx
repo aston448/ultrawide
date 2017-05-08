@@ -39,21 +39,37 @@ class WorkProgressCount extends Component {
             </Tooltip>
         );
 
-        return(
-            <OverlayTrigger placement="left" overlay={iconTooltip}>
-                <InputGroup>
-                    <InputGroup.Addon>
-                        <div className={iconClass}><Glyphicon glyph={glyphicon}/></div>
-                    </InputGroup.Addon>
-                    <div className={valueClass}>{countValue}</div>
-                </InputGroup>
-            </OverlayTrigger>
-        )
+        if(countValue) {
+
+            return (
+                <OverlayTrigger placement="left" overlay={iconTooltip}>
+                    <InputGroup>
+                        <InputGroup.Addon>
+                            <div className={iconClass}><Glyphicon glyph={glyphicon}/></div>
+                        </InputGroup.Addon>
+                        <div className={valueClass}>{countValue}</div>
+                    </InputGroup>
+                </OverlayTrigger>
+            );
+
+        } else {
+
+            return (
+                <OverlayTrigger placement="left" overlay={iconTooltip}>
+                    <InputGroup>
+                        <InputGroup.Addon>
+                            <div className={iconClass}><Glyphicon glyph={glyphicon}/></div>
+                        </InputGroup.Addon>
+                        <div className={valueClass}>0</div>
+                    </InputGroup>
+                </OverlayTrigger>
+            );
+        }
     }
 }
 
 WorkProgressCount.propTypes = {
-    countValue:     PropTypes.number.isRequired,
+    countValue:     PropTypes.number,
     glyphicon:      PropTypes.string.isRequired,
     valueClass:     PropTypes.string.isRequired,
     iconClass:      PropTypes.string.isRequired,
