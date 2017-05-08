@@ -24,7 +24,7 @@ class DesignUpdateSummaryServices {
 
         if (Meteor.isServer) {
 
-            log((message) => console.log(message), LogLevel.INFO, 'In recreate design update summary for update id {} and force update = {}', userContext.designUpdateId, forceUpdate);
+            log((message) => console.log(message), LogLevel.DEBUG, 'In recreate design update summary for update id {} and force update = {}', userContext.designUpdateId, forceUpdate);
 
             const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
@@ -34,7 +34,7 @@ class DesignUpdateSummaryServices {
                 return;
             }
 
-            log((message) => console.log(message), LogLevel.INFO, 'Data stale is {}', designUpdate.summaryDataStale);
+            log((message) => console.log(message), LogLevel.DEBUG, 'Data stale is {}', designUpdate.summaryDataStale);
 
             const summaryData = UserDesignUpdateSummary.find({
                 userId:         userContext.userId,
@@ -261,7 +261,7 @@ class DesignUpdateSummaryServices {
                                 scenarioTestStatus = testStatus;
                             }
 
-                            log((message) => console.log(message), LogLevel.INFO, 'Adding {} item {} with test status {}', summaryType, item.componentNameNew, scenarioTestStatus);
+                            log((message) => console.log(message), LogLevel.DEBUG, 'Adding {} item {} with test status {}', summaryType, item.componentNameNew, scenarioTestStatus);
 
                             // Add the item
                             batchData.push({

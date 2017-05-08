@@ -523,7 +523,7 @@ Meteor.methods({
 
             console.log("Writing file " + fileName);
             results.forEach((result) => {
-                console.log("    Scenario: " + result.ScenarioName + " Result: " + result.result);
+                console.log("    Scenario: " + result.scenarioName + " Result: " + result.result);
             });
 
             const headerBollox = '[32m Master Chimp and become a testing Ninja! Check out our course: [39m[4m[34mhttp://bit.ly/2btQaFu [39m[24m [33m [chimp] Running...[39m\n';
