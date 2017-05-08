@@ -78,7 +78,7 @@ class ClientTestIntegrationServices {
     // Test Summary data needs refreshing - flag says if we need to recalculate all results or not
     updateTestSummaryData(userContext){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "REFRESH TEST SUMMARY DATA...");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST SUMMARY DATA...");
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
@@ -106,7 +106,7 @@ class ClientTestIntegrationServices {
     // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(userContext, fullRefresh){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "REFRESH TEST DATA...");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST DATA...");
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,

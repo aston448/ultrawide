@@ -743,6 +743,7 @@ class TestDataHelpers {
 
             // Assumption that unit test names are unique in a scenario in the test data
             const unitTestResult = UserUnitTestMashData.findOne({
+                userId:                     userContext.userId,
                 designScenarioReferenceId:  testScenario.componentReferenceId,
                 testName:                   unitTestName
             });

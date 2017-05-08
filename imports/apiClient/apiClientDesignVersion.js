@@ -224,7 +224,7 @@ class ClientDesignVersionServices{
     // Work Progress screen needs a refresh
     updateWorkProgress(userContext){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "UPDATE WORK PROGRESS...");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "UPDATE WORK PROGRESS...");
 
         ServerDesignVersionApi.updateWorkProgress(userContext, (err, result) => {
 
@@ -261,7 +261,7 @@ class ClientDesignVersionServices{
 
         let newContext = userContext;
 
-        log((msg) => console.log(msg), LogLevel.INFO, "SET DESIGN VERSION.  Current DV {}  New DV {} Force Context reset: ", userContext.designVersionId, newDesignVersionId, forceReset);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "SET DESIGN VERSION.  Current DV {}  New DV {} Force Context reset: ", userContext.designVersionId, newDesignVersionId, forceReset);
 
         // On change clears current DU / WP if any
 
@@ -297,7 +297,7 @@ class ClientDesignVersionServices{
                 store.dispatch(setDesignVersionDataLoadedTo(false));
                 // store.dispatch(setMashDataStaleTo(true));
                 // store.dispatch(setTestDataStaleTo(true));
-                log((msg) => console.log(msg), LogLevel.INFO, "Loading new DV data...");
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Loading new DV data...");
                 ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
 

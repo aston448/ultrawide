@@ -42,7 +42,7 @@ class WorkPackageModules {
 
             if (!otherWp) {
 
-                console.log("Adding component " + component.componentNameNew + " to scope");
+                //console.log("Adding component " + component.componentNameNew + " to scope");
 
                 WorkPackageComponents.insert(
                     {
@@ -67,7 +67,7 @@ class WorkPackageModules {
 
         } else {
 
-            console.log("Updating component " + component.componentNameNew + " to scope " + scopeType);
+            //console.log("Updating component " + component.componentNameNew + " to scope " + scopeType);
 
             // Component was already there.  If we are trying to activate it update the scope
             // Could be that this item was previously added to an update, removed and then added again  So update other details to be sure all is correct

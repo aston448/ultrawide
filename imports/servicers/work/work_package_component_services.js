@@ -46,7 +46,7 @@ class WorkPackageComponentServices{
                     // Also, putting a component in scope adds all its children.
                     // Except for Scenarios if they are already in other WPs
 
-                    console.log("Adding component " + designComponent.componentNameNew + " to WP scope");
+                    //console.log("Adding component " + designComponent.componentNameNew + " to WP scope");
 
                     // Add any required parents as parent scope
                     WorkPackageModules.addComponentParentsToWp(userContext, wpType, designComponent);
