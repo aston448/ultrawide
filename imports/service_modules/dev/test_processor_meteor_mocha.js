@@ -105,7 +105,9 @@ class MeteorMochaTestServices{
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
 
-                    UserUnitTestResults.batchInsert(resultsBatch);
+                    if(resultsBatch.length > 0) {
+                        UserUnitTestResults.batchInsert(resultsBatch);
+                    }
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
 

@@ -251,7 +251,9 @@ class ChimpMochaTestServices{
                     log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
 
                     // Bulk insert the new data
-                    UserIntTestResults.batchInsert(resultsBatch);
+                    if(resultsBatch.length > 0) {
+                        UserIntTestResults.batchInsert(resultsBatch);
+                    }
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
 

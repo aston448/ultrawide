@@ -286,7 +286,9 @@ class TestIntegrationModules{
         });
 
         // Use batch insert for efficiency
-        UserDesignVersionMashScenarios.batchInsert(batchData);
+        if(batchData.length > 0) {
+            UserDesignVersionMashScenarios.batchInsert(batchData);
+        }
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios - DONE {}", userContext.userId);
     };
@@ -364,7 +366,9 @@ class TestIntegrationModules{
         });
 
         // And bulk insert the scenario unit test results for efficiency
-        UserUnitTestMashData.batchInsert(batchData);
+        if(batchData.length > 0) {
+            UserUnitTestMashData.batchInsert(batchData);
+        }
 
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Unit test data complete");

@@ -524,7 +524,9 @@ class DesignVersionServices{
                     break;
             }
 
-            UserWorkProgressSummary.batchInsert(batchData);
+            if(batchData.length > 0) {
+                UserWorkProgressSummary.batchInsert(batchData);
+            }
         }
 
         log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Done Refreshing Work Progress Data...");

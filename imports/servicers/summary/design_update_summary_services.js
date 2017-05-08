@@ -58,7 +58,7 @@ class DesignUpdateSummaryServices {
                     scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                 });
 
-                let bulkData = [];
+                let batchData = [];
 
                 // Process new items
                 updateItems.forEach((item) => {
@@ -264,7 +264,7 @@ class DesignUpdateSummaryServices {
                             log((message) => console.log(message), LogLevel.INFO, 'Adding {} item {} with test status {}', summaryType, item.componentNameNew, scenarioTestStatus);
 
                             // Add the item
-                            bulkData.push({
+                            batchData.push({
                                 userId:                     userContext.userId,
                                 designVersionId:            item.designVersionId,
                                 designUpdateId:             item.designUpdateId,
@@ -286,7 +286,9 @@ class DesignUpdateSummaryServices {
                 });
 
                 // Bulk insert the body data for efficiency
-                UserDesignUpdateSummary.batchInsert(bulkData);
+                if(batchData.length > 0) {
+                    UserDesignUpdateSummary.batchInsert(batchData);
+                }
 
                 // No longer stale
                 DesignUpdates.update({_id: userContext.designUpdateId}, {$set: {summaryDataStale: false}});
