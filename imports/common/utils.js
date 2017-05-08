@@ -1,7 +1,5 @@
-/**
- * Created by aston on 08/09/2016.
- */
-//import React, { Component} from 'react';
+// Required for createSelectionList
+import React from 'react';
 
 import {ComponentType, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType} from '../constants/constants.js';
 import {DesignVersionComponents} from '../collections/design/design_version_components.js';
@@ -18,6 +16,8 @@ export function padDigits(number, digits) {
 }
 
 export function createSelectionList(typesArray){
+
+    // NOTE: This implicitly requires an import of React
 
     let items = [];
 
