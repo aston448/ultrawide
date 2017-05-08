@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
+import { TestDataStatus } from '../../constants/constants.js';
 
 export const UserDevTestSummaryData = new Mongo.Collection('userDevTestSummaryData');
 
@@ -25,6 +26,7 @@ let Schema = new SimpleSchema({
     wpFeatureTestPassCount:         {type: Number, defaultValue: 0},        // Number of tests passing in whole feature for current WP
     wpFeatureTestFailCount:         {type: Number, defaultValue: 0},        // Number of tests failing in whole feature for current WP
     wpFeatureNoTestCount:           {type: Number, defaultValue: 0},        // Number of scenarios with no tests for current WP
+
 });
 
 UserDevTestSummaryData.attachSchema(Schema);

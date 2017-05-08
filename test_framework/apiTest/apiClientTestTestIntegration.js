@@ -15,7 +15,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userContext.userId);
 
-        const outcome = ClientTestIntegrationServices.refreshTestData(userContext, viewOptions);
+        const outcome = ClientTestIntegrationServices.refreshTestData(userContext, true);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Refresh Test Results');
     },

@@ -21,7 +21,7 @@ import { TestOutputLocationFiles }          from '../../collections/configure/te
 import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
 
 // Ultrawide Services
-import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, WorkPackageScopeType,
+import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, TestDataStatus,
     ScenarioStepStatus, ScenarioStepType, TestLocationType, TestLocationFileType, UpdateMergeStatus, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
@@ -40,6 +40,361 @@ import ChimpCucumberTestServices    from './test_processor_chimp_cucumber.js';
 //======================================================================================================================
 
 class TestIntegrationModules{
+
+    getAcceptanceTestResults(userContext){
+
+    };
+
+    getIntegrationTestResults(userContext){
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration test results...");
+
+        // Reset existing results.  Assume no tests until we find otherwise
+        UserIntTestResults.update(
+            {userId: userContext.userId},
+            {
+                $set:{
+                    dataStatus: TestDataStatus.TEST_DATA_NO_TEST
+                }
+            },
+            {multi: true}
+        );
+
+        // Get a list of the expected test files for integration
+
+        // See which locations the user has marked as containing integration files for the current role
+        const userLocations = UserTestTypeLocations.find({
+            userId:         userContext.userId,
+            isIntLocation:  true
+        }).fetch();
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test locations", userLocations.length);
+
+        userLocations.forEach((userLocation) => {
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {} of type {}", userLocation.locationName, userLocation.locationType);
+
+            // Get the actual location data
+            const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {} of type {}", outputLocation.locationName, outputLocation.locationType);
+
+            if(outputLocation.locationType === TestLocationType.LOCAL){
+
+                // Grab any files here marked as integration test outputs
+                const testOutputFiles = TestOutputLocationFiles.find({
+                    locationId: outputLocation._id,
+                    fileType:   TestLocationFileType.INTEGRATION
+                }).fetch();
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test files", testOutputFiles.length);
+
+                testOutputFiles.forEach((file) => {
+
+                    const testFile = outputLocation.locationPath + file.fileName;
+
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Results from {}", testFile);
+
+                    // Call the appropriate file parser
+                    switch (file.testRunner) {
+                        case TestRunner.CHIMP_MOCHA:
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Results Data");
+
+                            ChimpMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
+                            break;
+
+                    }
+
+                });
+
+            } else {
+
+                // TODO - server access code...
+
+            }
+        });
+
+
+    };
+
+    getUnitTestResults(userContext){
+
+        // Reset existing results.  Assume no tests until we find otherwise
+        UserUnitTestResults.update(
+            {userId: userContext.userId},
+            {
+                $set:{
+                    dataStatus: TestDataStatus.TEST_DATA_NO_TEST
+                }
+            },
+            {multi: true}
+        );
+
+        // Get a list of the expected test files for unit tests
+
+        // See which locations the user has marked as containing unit test files for the current role
+        const userLocations = UserTestTypeLocations.find({
+            userId: userContext.userId,
+            isUnitLocation: true
+        }).fetch();
+
+        userLocations.forEach((userLocation) => {
+
+            // Get the actual location data
+            const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
+
+            if(outputLocation.locationType === TestLocationType.LOCAL){
+
+                // Grab any files here marked as integration test outputs
+                const testOutputFiles = TestOutputLocationFiles.find({
+                    locationId: outputLocation._id,
+                    fileType:   TestLocationFileType.UNIT
+                }).fetch();
+
+                testOutputFiles.forEach((file) => {
+
+                    const testFile = outputLocation.locationPath + file.fileName;
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Results from {}", testFile);
+
+                    // Call the appropriate file parser
+                    switch (file.testRunner) {
+                        case TestRunner.METEOR_MOCHA:
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting METEOR_MOCHA Results Data");
+
+                            MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
+                            break;
+
+                    }
+
+                });
+
+            } else {
+
+                // TODO - server access code...
+
+            }
+        });
+    };
+
+    updateUserMashScenariosForDesignVersion(userContext){
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios... {}", userContext.userId);
+
+
+        // Clear all data for user
+        UserDesignVersionMashScenarios.remove({
+            userId:             userContext.userId,
+            designVersionId:    userContext.designVersionId
+        });
+
+
+        // Get all non-removed Scenarios for current DV
+        const dvScenarios = DesignVersionComponents.find({
+            designVersionId:    userContext.designVersionId,
+            componentType:      ComponentType.SCENARIO,
+            updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+        }).fetch();
+
+        let batchData = [];
+
+        dvScenarios.forEach((scenario) => {
+
+            // TODO - ACC RESULTS
+
+            // INT RESULTS ---------------------------------------------------------------------------------------------
+            let intResult = UserIntTestResults.findOne({
+                userId:     userContext.userId,
+                testName:   scenario.componentNameNew
+            });
+
+            let intMashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+            let intTestResult = MashTestStatus.MASH_NOT_LINKED;
+            let intError = '';
+            let intStack = '';
+            let intDuration = 0;
+
+            if(intResult){
+                intMashStatus = MashStatus.MASH_LINKED;
+                intTestResult = intResult.testResult;
+                intError = intResult.testError;
+                intStack = intResult.stackTrace;
+                intDuration = intResult.testDuration
+            }
+
+            // UNIT RESULTS --------------------------------------------------------------------------------------------
+            let unitResults = UserUnitTestMashData.find({
+                userId:     userContext.userId,
+                designScenarioReferenceId: scenario.componentReferenceId
+            }).fetch();
+
+            let unitPasses = 0;
+            let unitFails = 0;
+            let scenarioUnitTestStatus = MashTestStatus.MASH_NOT_LINKED;
+            let scenarioUnitMashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+
+            unitResults.forEach((unitResult) => {
+                if(unitResult.testOutcome === MashTestStatus.MASH_PASS){
+                    unitPasses++;
+                }
+                if(unitResult.testOutcome === MashTestStatus.MASH_FAIL){
+                    unitFails++;
+                }
+            });
+
+            if(unitPasses > 0){
+                scenarioUnitTestStatus = MashTestStatus.MASH_PASS;
+                scenarioUnitMashStatus = MashStatus.MASH_LINKED;
+            }
+            // Override if failures
+            if(unitFails > 0){
+                scenarioUnitTestStatus = MashTestStatus.MASH_FAIL;
+                scenarioUnitMashStatus = MashStatus.MASH_LINKED;
+            }
+
+            batchData.push(
+                {
+                    userId:                         userContext.userId,
+                    designVersionId:                userContext.designVersionId,
+                    scenarioName:                   scenario.componentNameNew,
+                    designFeatureReferenceId:       scenario.componentFeatureReferenceIdNew,
+                    designFeatureAspectReferenceId: scenario.componentParentReferenceIdNew,
+                    designScenarioReferenceId:      scenario.componentReferenceId,
+                    mashItemIndex:                  scenario.componentIndexNew,
+                    // Test Data
+                    mashItemName:                   scenario.componentNameNew,
+                    mashItemTag:                    DevTestTag.TEST_TEST,
+                    // Test Results
+                    accMashStatus:                  MashStatus.MASH_NOT_LINKED,
+                    accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                    intMashStatus:                  intMashStatus,
+                    intMashTestStatus:              intTestResult,
+                    unitMashStatus:                 scenarioUnitMashStatus,
+                    unitMashTestStatus:             scenarioUnitTestStatus,
+                    unitPassCount:                  unitPasses,
+                    unitFailCount:                  unitFails,
+                    accErrorMessage:                '',
+                    intErrorMessage:                intError,
+                    accStackTrace:                  '',
+                    intStackTrace:                  intStack,
+                    accDuration:                    0,
+                    intDuration:                    intDuration,
+                    dataStatus:                     MashStatus.MASH_IN_DESIGN
+                }
+            );
+
+        });
+
+        // Use batch insert for efficiency
+        UserDesignVersionMashScenarios.batchInsert(batchData);
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios - DONE {}", userContext.userId);
+    };
+
+
+    updateUnitTestScenarioResults(userContext){
+
+        // Get the Module test results for current user
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Processing Unit Test Results for User {}", userContext.userId);
+
+        UserUnitTestMashData.remove({userId: userContext.userId});
+
+        let mashScenarios =  UserDesignVersionMashScenarios.find({
+            userId:             userContext.userId,
+            designVersionId:    userContext.designVersionId
+        }).fetch();
+
+        let batchData = [];
+
+        mashScenarios.forEach((scenario) => {
+
+            // See which updated test results relate to this scenario
+            let searchRegex = new RegExp(scenario.scenarioName);
+            let unitPassCount = 0;
+            let unitFailCount = 0;
+
+            const unitTests = UserUnitTestResults.find({
+                userId:         userContext.userId,
+                testFullName:   {$regex: searchRegex}
+            }).fetch();
+
+            let newResult = false;
+
+            unitTests.forEach((unitTestResult) => {
+
+                newResult = true;
+
+                const testIdentity = this.getUnitTestIdentity(unitTestResult.testFullName, scenario.scenarioName, unitTestResult.testName);
+
+                let testError = '';
+                let testStack = '';
+                let testDuration = 0;
+                if(unitTestResult.testResult === MashTestStatus.MASH_FAIL){
+                    testError = unitTestResult.testError;
+                    testStack = unitTestResult.stackTrace;
+                    unitFailCount++;
+                }
+                if(unitTestResult.testResult === MashTestStatus.MASH_PASS){
+                    testDuration = unitTestResult.testDuration;
+                    unitPassCount++;
+                }
+
+                // Insert a new child Module Test record
+                batchData.push(
+                    {
+                        // Identity
+                        userId:                      userContext.userId,
+                        suiteName:                   scenario.scenarioName,
+                        testGroupName:               testIdentity.subSuite,
+                        designScenarioReferenceId:   scenario.designScenarioReferenceId,
+                        designAspectReferenceId:     scenario.designFeatureAspectReferenceId,
+                        designFeatureReferenceId:    scenario.designFeatureReferenceId,
+                        // Data
+                        testName:                    unitTestResult.testName,
+                        // Status
+                        mashStatus:                  MashStatus.MASH_LINKED,
+                        testOutcome:                 unitTestResult.testResult,
+                        testErrors:                  testError,
+                        testStack:                   testStack,
+                        testDuration:                testDuration,
+                        isStale:                     false
+                    }
+                );
+            });
+        });
+
+        // And bulk insert the scenario unit test results for efficiency
+        UserUnitTestMashData.batchInsert(batchData);
+
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Unit test data complete");
+    }
+
+    getUnitTestIdentity(fullTitle, scenarioName, testName){
+
+        // A mod test full Title could be:
+        // SUITE...SCENARIO...SUBSUITE...TEST
+        // But SUITE and SUBSUITE might not be there
+
+        const scenarioStart = fullTitle.indexOf(scenarioName);
+        const testStart = fullTitle.indexOf(testName);
+
+        let suite = fullTitle.substring(0, scenarioStart).trim();
+        if(suite === ''){
+            suite = 'Test';
+        }
+        let subSuite = fullTitle.substring(scenarioStart + scenarioName.length, testStart).trim();
+
+        if(subSuite === ''){
+            subSuite = suite;
+        }
+        return({
+            suite: suite,
+            subSuite: subSuite
+        })
+    }
+
+    // DORMANT CODE - Scenario Steps Processing ========================================================================
 
     linkAcceptanceFilesToDesign(userContext){
 
@@ -203,492 +558,6 @@ class TestIntegrationModules{
         });
     }
 
-    getAcceptanceTestResults(userContext){
-
-    };
-
-    getIntegrationTestResults(userContext){
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration test results...");
-
-        // Clear existing results for user
-        UserIntTestResults.remove({userId: userContext.userId});
-
-        // Get a list of the expected test files for integration
-
-        // See which locations the user has marked as containing integration files for the current role
-        const userLocations = UserTestTypeLocations.find({
-            userId:         userContext.userId,
-            isIntLocation:  true
-        }).fetch();
-
-        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test locations", userLocations.length);
-
-        userLocations.forEach((userLocation) => {
-
-            log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {} of type {}", userLocation.locationName, userLocation.locationType);
-
-            // Get the actual location data
-            const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
-
-            log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {} of type {}", outputLocation.locationName, outputLocation.locationType);
-
-            if(outputLocation.locationType === TestLocationType.LOCAL){
-
-                // Grab any files here marked as integration test outputs
-                const testOutputFiles = TestOutputLocationFiles.find({
-                    locationId: outputLocation._id,
-                    fileType:   TestLocationFileType.INTEGRATION
-                }).fetch();
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test files", testOutputFiles.length);
-
-                testOutputFiles.forEach((file) => {
-
-                    const testFile = outputLocation.locationPath + file.fileName;
-
-                    log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Results from {}", testFile);
-
-                    // Call the appropriate file parser
-                    switch (file.testRunner) {
-                        case TestRunner.CHIMP_MOCHA:
-                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Results Data");
-
-                            ChimpMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
-                            break;
-
-                    }
-
-                });
-
-            } else {
-
-                // TODO - server access code...
-
-            }
-        });
-
-
-    };
-
-    getUnitTestResults(userContext){
-
-        // Clear existing results for user
-        UserUnitTestResults.remove({userId: userContext.userId});
-
-        // Get a list of the expected test files for unit tests
-
-        // See which locations the user has marked as containing unit test files for the current role
-        const userLocations = UserTestTypeLocations.find({
-            userId: userContext.userId,
-            isUnitLocation: true
-        }).fetch();
-
-        userLocations.forEach((userLocation) => {
-
-            // Get the actual location data
-            const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
-
-            if(outputLocation.locationType === TestLocationType.LOCAL){
-
-                // Grab any files here marked as integration test outputs
-                const testOutputFiles = TestOutputLocationFiles.find({
-                    locationId: outputLocation._id,
-                    fileType:   TestLocationFileType.UNIT
-                }).fetch();
-
-                testOutputFiles.forEach((file) => {
-
-                    const testFile = outputLocation.locationPath + file.fileName;
-
-                    log((msg) => console.log(msg), LogLevel.TRACE, "Getting Unit Results from {}", testFile);
-
-                    // Call the appropriate file parser
-                    switch (file.testRunner) {
-                        case TestRunner.METEOR_MOCHA:
-                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting METEOR_MOCHA Results Data");
-
-                            MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
-                            break;
-
-                    }
-
-                });
-
-            } else {
-
-                // TODO - server access code...
-
-            }
-        });
-
-
-
-
-
-        // Call the correct results service to get the test data
-
-
-    };
-
-    createUserMashScenariosForDesignVersion(userContext){
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios... {}", userContext.userId);
-
-        // Clear all data for user
-        UserDesignVersionMashScenarios.remove({userId: userContext.userId});
-
-        // Get all non-removed Scenarios for current DV
-        const dvScenarios = DesignVersionComponents.find({
-            designVersionId:    userContext.designVersionId,
-            componentType:      ComponentType.SCENARIO,
-            updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-        }).fetch();
-
-        dvScenarios.forEach((scenario) => {
-
-            UserDesignVersionMashScenarios.insert({
-                userId:                         userContext.userId,
-                designVersionId:                userContext.designVersionId,
-                scenarioName:                   scenario.componentNameNew,
-                designFeatureReferenceId:       scenario.componentFeatureReferenceIdNew,
-                designFeatureAspectReferenceId: scenario.componentParentReferenceIdNew,
-                designScenarioReferenceId:      scenario.componentReferenceId,
-                mashItemIndex:                  scenario.componentIndexNew,
-                // Test Data
-                mashItemName:                   scenario.componentNameNew,
-                mashItemTag:                    DevTestTag.TEST_TEST,
-                // Test Results
-                accMashStatus:                  MashStatus.MASH_NOT_LINKED,
-                accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
-                intMashStatus:                  MashStatus.MASH_NOT_LINKED,
-                intMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
-                unitMashStatus:                 MashStatus.MASH_NOT_LINKED,
-                unitMashTestStatus:             MashTestStatus.MASH_NOT_LINKED,
-                accErrorMessage:                '',
-                intErrorMessage:                '',
-                accStackTrace:                  '',
-                intStackTrace:                  '',
-                accDuration:                    0,
-                intDuration:                    0,
-            });
-        });
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios - DONE {}", userContext.userId);
-    };
-
-
-    updateIntTestScenarioResults(userContext){
-
-        const intResults = UserIntTestResults.find({
-            userId: userContext.userId
-        });
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Updating Scenarios with Integration test results...");
-
-        intResults.forEach((result) => {
-
-            //console.log("Integration test result for Scenario " + result.testName + " is " + result.testResult);
-
-            const updates = UserDesignVersionMashScenarios.update(
-                {
-                    userId: userContext.userId,
-                    designVersionId: userContext.designVersionId,
-                    scenarioName: result.testName
-                },
-                {
-                    $set: {
-                        intMashStatus: MashStatus.MASH_LINKED,
-                        intMashTestStatus: result.testResult,
-                        intErrorMessage: result.testError,
-                        intStackTrace: result.stackTrace,
-                        intDuration: result.testDuration
-                    }
-                },
-                {multi: true}
-            );
-
-            //console.log("Updated " + updates + " mash item");
-        });
-
-    };
-
-    updateUnitTestScenarioResults(userContext){
-
-        // Get the Module test results for current user
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Test Results for User {}", userContext.userId);
-
-        UserUnitTestMashData.remove({userId: userContext.userId});
-
-        let mashScenarios =  UserDesignVersionMashScenarios.find({
-            userId: userContext.userId,
-            designVersionId: userContext.designVersionId
-        }).fetch();
-
-
-        mashScenarios.forEach((scenario) => {
-
-            // See if the test relates to a Scenario
-            let searchRegex = new RegExp(scenario.scenarioName);
-
-            const unitTests = UserUnitTestResults.find({
-                userId:         userContext.userId,
-                testFullName:   {$regex: searchRegex},
-            }).fetch();
-
-            unitTests.forEach((unitTestResult) => {
-
-                const testIdentity = this.getUnitTestIdentity(unitTestResult.testFullName, scenario.scenarioName, unitTestResult.testName);
-
-                let testError = '';
-                let testStack = '';
-                let testDuration = 0;
-                if(unitTestResult.testResult === MashTestStatus.MASH_FAIL){
-                    testError = unitTestResult.testError;
-                    testStack = unitTestResult.stackTrace;
-                }
-                if(unitTestResult.testResult === MashTestStatus.MASH_PASS){
-                    testDuration = unitTestResult.testDuration;
-                }
-
-                // Insert a new child Module Test record
-                UserUnitTestMashData.insert(
-                    {
-                        // Identity
-                        userId:                      userContext.userId,
-                        suiteName:                   scenario.scenarioName,
-                        testGroupName:               testIdentity.subSuite,
-                        designScenarioReferenceId:   scenario.designScenarioReferenceId,
-                        designAspectReferenceId:     scenario.designFeatureAspectReferenceId,
-                        designFeatureReferenceId:    scenario.designFeatureReferenceId,
-                        // Data
-                        testName:                    unitTestResult.testName,
-                        // Status
-                        mashStatus:                  MashStatus.MASH_LINKED,
-                        testOutcome:                 unitTestResult.testResult,
-                        testErrors:                  testError,
-                        testStack:                   testStack,
-                        testDuration:                testDuration,
-                        isStale:                     false
-                    }
-                );
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "  Inserted Scenario: {}", scenario.scenarioName);
-            });
-
-            // Now update the mod test status of the scenario:
-            // Any failures = FAIL
-            // Any passes and no failures = PASS
-            // Neither = NO TEST
-
-
-            const modPassCount = UserUnitTestMashData.find({
-                userId:                     userContext.userId,
-                designScenarioReferenceId:  scenario.designScenarioReferenceId,
-                mashStatus:                 MashStatus.MASH_LINKED,
-                testOutcome:                MashTestStatus.MASH_PASS
-            }).count();
-
-            const modFailCount = UserUnitTestMashData.find({
-                userId:                     userContext.userId,
-                designScenarioReferenceId:  scenario.designScenarioReferenceId,
-                mashStatus:                 MashStatus.MASH_LINKED,
-                testOutcome:                MashTestStatus.MASH_FAIL
-            }).count();
-
-            let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
-
-            if(modPassCount > 0){
-                scenarioTestStatus = MashTestStatus.MASH_PASS;
-            }
-            // Override if failures
-            if(modFailCount > 0){
-                scenarioTestStatus = MashTestStatus.MASH_FAIL;
-            }
-
-            // Update the Mash i
-            UserDesignVersionMashScenarios.update(
-                {_id: scenario._id},
-                {
-                    $set: {
-                        unitMashTestStatus: scenarioTestStatus
-                    }
-                }
-            );
-
-        });
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Unit test data complete");
-    }
-
-
-
-
-    updateMashResults(userContext, viewOptions){
-
-        // Run through the test results and update Mash where tests are found
-
-        if(viewOptions.devAccTestsVisible){
-
-            // Get the Acceptance test SCENARIO results for current user - STEP results are in separate data mash
-            log((msg) => console.log(msg), LogLevel.TRACE, "Getting Acc Test Results for User {}", userContext.userId);
-
-            const accResultsData = UserAccTestResults.find({userId: userContext.userId, componentType: ComponentType.SCENARIO}).fetch();
-
-            if(accResultsData.length > 0){
-
-                accResultsData.forEach((testResult) => {
-
-                    // See if the test relates to a Scenario.  The tests should be structured so that the test names are Scenarios
-                    // For integration tests the Scenario should be the lowest level of test so the name should be unique
-                    // (Module tests should be used to test within a Scenario)
-
-                    let designScenario = UserWorkPackageMashData.findOne({
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: userContext.workPackageId,
-                        mashComponentType: ComponentType.SCENARIO,
-                        designComponentName: testResult.scenarioName
-                    });
-
-                    if (designScenario) {
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Found test {}", testResult.scenarioName);
-                        // Update to a linked record
-                        UserWorkPackageMashData.update(
-                            {_id: designScenario._id},
-                            {
-                                $set: {
-                                    accMashStatus: MashStatus.MASH_LINKED,
-                                    accMashTestStatus: testResult.testResult
-                                }
-                            }
-                        );
-
-                    } else {
-
-                        // See if this is an unknown Scenario in a known Feature
-                        let designFeature = UserWorkPackageMashData.findOne({
-                            userId: userContext.userId,
-                            designVersionId: userContext.designVersionId,
-                            designUpdateId: userContext.designUpdateId,
-                            workPackageId: userContext.workPackageId,
-                            mashComponentType: ComponentType.FEATURE,
-                            designComponentName: testResult.featureName
-                        });
-
-                        if(designFeature){
-
-                            // Add a new Mash entry for this scenario under the feature as "Not in Design"
-                            log((msg) => console.log(msg), LogLevel.TRACE, "Adding unknown Scenario {} for Feature {}", testResult.scenarioName, testResult.featureName);
-
-                            UserWorkPackageMashData.insert(
-                                {
-                                    // Design Identity
-                                    userId: userContext.userId,
-                                    designVersionId: userContext.designVersionId,
-                                    designUpdateId: userContext.designUpdateId,
-                                    workPackageId: userContext.workPackageId,
-                                    mashComponentType: ComponentType.SCENARIO,
-                                    designComponentName: 'NONE',
-                                    designComponentId: 'NONE',
-                                    designComponentReferenceId: 'NONE',
-                                    designFeatureReferenceId: designFeature.designFeatureReferenceId,
-                                    designFeatureAspectReferenceId: 'NONE',
-                                    designScenarioReferenceId: 'NONE',
-                                    // Status
-                                    hasChildren: false,
-                                    // Test Data
-                                    mashItemName:                   testResult.scenarioName,
-                                    mashItemTag:                    DevTestTag.TEST_TEST,
-                                    // Test Results
-                                    accMashStatus:                  MashStatus.MASH_NOT_DESIGNED,
-                                    accMashTestStatus:              testResult.testResult
-                                }
-                            );
-                        }
-                    }
-
-                    // And add the Scenario Step results too
-                    if(testResult.stepName !== 'NONE') {
-
-                        let designScenario = UserWorkPackageMashData.findOne({
-                            userId: userContext.userId,
-                            designVersionId: userContext.designVersionId,
-                            designUpdateId: userContext.designUpdateId,
-                            workPackageId: userContext.workPackageId,
-                            mashComponentType: ComponentType.SCENARIO,
-                            designComponentName: testResult.scenarioName
-                        });
-
-                        if(designScenario) {
-
-                            let designStep = UserWorkPackageFeatureStepData.findOne({
-                                userId: userContext.userId,
-                                designVersionId: userContext.designVersionId,
-                                designUpdateId: userContext.designUpdateId,
-                                workPackageId: userContext.workPackageId,
-                                designScenarioReferenceId: designScenario.designComponentReferenceId,
-                                designComponentName: testResult.stepName
-                            });
-
-                            if (designStep){
-
-                                UserWorkPackageFeatureStepData.update(
-                                    {_id: designStep._id},
-                                    {
-                                        $set: {
-                                            accMashStatus: MashStatus.MASH_LINKED,
-                                            accMashTestStatus: testResult.testResult
-                                        }
-                                    }
-                                );
-                            } else {
-
-                                // Insert Scenario Steps not in the Design if Scenario is in the Design
-                                let stepData = this.getTestStepData(testResult.stepName);
-
-                                UserWorkPackageFeatureStepData.insert(
-                                    {
-                                        userId:                         userContext.userId,
-                                        designVersionId:                userContext.designVersionId,
-                                        designUpdateId:                 userContext.designUpdateId,
-                                        workPackageId:                  userContext.workPackageId,
-                                        designComponentId:              'NONE',
-                                        mashComponentType:              ComponentType.SCENARIO_STEP,
-                                        designComponentName:            'NONE',
-                                        designComponentReferenceId:     'NONE',
-                                        designFeatureReferenceId:       designScenario.designFeatureReferenceId,
-                                        designScenarioReferenceId:      designScenario.designComponentReferenceId,
-                                        // Step Data
-                                        stepContext:                    StepContext.STEP_SCENARIO,
-                                        stepType:                       stepData.stepType,
-                                        stepText:                       stepData.stepText,
-                                        stepTextRaw:                    stepData.stepTextRaw,
-                                        // Test Data
-                                        mashItemName:                   testResult.stepName,
-                                        // Test Results
-                                        accMashStatus:                  MashStatus.MASH_NOT_DESIGNED,
-                                        accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
-                                    }
-                                );
-
-                            }
-                        }
-                    }
-
-                });
-
-
-
-            } else {
-                log((msg) => console.log(msg), LogLevel.DEBUG, "No acceptance test results data");
-            }
-
-        }
-
-    };
-
     setTestStepMashStatus(mashStepId, stepStatus, stepTestStatus){
 
         UserWorkPackageFeatureStepData.update(
@@ -723,29 +592,7 @@ class TestIntegrationModules{
         }
     };
 
-    getUnitTestIdentity(fullTitle, scenarioName, testName){
 
-        // A mod test full Title could be:
-        // SUITE...SCENARIO...SUBSUITE...TEST
-        // But SUITE and SUBSUITE might not be there
-
-        const scenarioStart = fullTitle.indexOf(scenarioName);
-        const testStart = fullTitle.indexOf(testName);
-
-        let suite = fullTitle.substring(0, scenarioStart).trim();
-        if(suite === ''){
-            suite = 'Test';
-        }
-        let subSuite = fullTitle.substring(scenarioStart + scenarioName.length, testStart).trim();
-
-        if(subSuite === ''){
-            subSuite = suite;
-        }
-        return({
-            suite: suite,
-            subSuite: subSuite
-        })
-    }
 
 }
 

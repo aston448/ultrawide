@@ -1957,6 +1957,12 @@ class ClientContainerServices{
 
         const userContext = store.getState().currentUserItemContext;
 
+        return UserDesignVersionMashScenarios.findOne({
+            userId:                     userContext.userId,
+            designVersionId:            scenario.designVersionId,
+            designScenarioReferenceId:  scenario.componentReferenceId
+        });
+
         return UserDevTestSummaryData.findOne({
             userId:                 userContext.userId,
             designVersionId:        scenario.designVersionId,
@@ -2279,6 +2285,16 @@ class ClientContainerServices{
             viewOptionType: ViewOptionType.NONE
         };
 
+        // TODO - Currently unused.  Possible option for different level of data refresh
+        const refreshAllData = {
+            key: MenuAction.MENU_ACTION_REFRESH_DATA,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_REFRESH_DATA),
+            action: MenuAction.MENU_ACTION_REFRESH_DATA,
+            hasCheckbox: false,
+            checkboxValue: false,
+            viewOptionType: ViewOptionType.NONE
+        };
+
         switch(view) {
 
             case ViewType.ADMIN:
@@ -2303,7 +2319,6 @@ class ClientContainerServices{
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
                         return [gotoConfig, gotoDesigns];
                         break;
-
 
                 }
                 break;

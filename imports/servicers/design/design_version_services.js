@@ -1,14 +1,14 @@
 
 // Ultrawide Collections
-import {DesignVersions}             from '../../collections/design/design_versions.js';
-import {DesignVersionComponents}    from '../../collections/design/design_version_components.js';
-import {DesignUpdates}              from '../../collections/design_update/design_updates.js';
-import {DesignUpdateComponents}     from '../../collections/design_update/design_update_components.js';
-import {WorkPackages}               from '../../collections/work/work_packages.js';
-import {WorkPackageComponents}      from '../../collections/work/work_package_components.js';
-import {UserWorkProgressSummary}    from '../../collections/summary/user_work_progress_summary.js';
-import {UserDevDesignSummaryData}   from '../../collections/summary/user_dev_design_summary_data.js';
-import {UserDevTestSummaryData}     from '../../collections/summary/user_dev_test_summary_data.js';
+import {DesignVersions}                 from '../../collections/design/design_versions.js';
+import {DesignVersionComponents}        from '../../collections/design/design_version_components.js';
+import {DesignUpdates}                  from '../../collections/design_update/design_updates.js';
+import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
+import {WorkPackages}                   from '../../collections/work/work_packages.js';
+import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
+import {UserWorkProgressSummary}        from '../../collections/summary/user_work_progress_summary.js';
+import {UserDevDesignSummaryData}       from '../../collections/summary/user_dev_design_summary_data.js';
+import {UserDesignVersionMashScenarios} from '../../collections/mash/user_dv_mash_scenarios.js';
 
 // Ultrawide Services
 import { DesignVersionStatus, WorkSummaryType, WorkPackageStatus, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, UpdateMergeStatus, LogLevel }      from '../../constants/constants.js';
@@ -273,17 +273,17 @@ class DesignVersionServices{
 
                         wpScenarios.forEach((wpScenario) =>{
 
-                            let testResult = UserDevTestSummaryData.findOne({
+                            let testResult = UserDesignVersionMashScenarios.findOne({
                                 userId:                     userContext.userId,
                                 designVersionId:            userContext.designVersionId,
-                                scenarioReferenceId:        wpScenario.componentReferenceId
+                                designScenarioReferenceId:  wpScenario.componentReferenceId
                             });
 
                             if(testResult) {
-                                if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+                                if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {
                                     wpFailingScenarios++;
                                 } else {
-                                    if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+                                    if (testResult.accMashTestStatus === MashTestStatus.MASH_PASS || testResult.intMashTestStatus === MashTestStatus.MASH_PASS || testResult.unitPassCount > 0) {
                                         wpPassingScenarios++;
                                     } else {
                                         wpUntestedScenarios++;
@@ -385,17 +385,17 @@ class DesignVersionServices{
                                 duWpScenarios++;
                             }
 
-                            let testResult = UserDevTestSummaryData.findOne({
+                            let testResult = UserDesignVersionMashScenarios.findOne({
                                 userId:                     userContext.userId,
                                 designVersionId:            userContext.designVersionId,
-                                scenarioReferenceId:        duScenario.componentReferenceId
+                                designScenarioReferenceId:  duScenario.componentReferenceId
                             });
 
                             if(testResult) {
-                                if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+                                if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {
                                     duFailingScenarios++;
                                 } else {
-                                    if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+                                    if (testResult.accMashTestStatus === MashTestStatus.MASH_PASS || testResult.intMashTestStatus === MashTestStatus.MASH_PASS || testResult.unitPassCount > 0) {
                                         duPassingScenarios++;
                                     } else {
                                         duUntestedScenarios++;
@@ -464,17 +464,17 @@ class DesignVersionServices{
 
                                     wpTotalScenarios++;
 
-                                    let testResult = UserDevTestSummaryData.findOne({
-                                        userId: userContext.userId,
-                                        designVersionId: userContext.designVersionId,
-                                        scenarioReferenceId: wpScenario.componentReferenceId
+                                    let testResult = UserDesignVersionMashScenarios.findOne({
+                                        userId:                     userContext.userId,
+                                        designVersionId:            userContext.designVersionId,
+                                        designScenarioReferenceId:  wpScenario.componentReferenceId
                                     });
 
                                     if (testResult) {
-                                        if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+                                        if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {
                                             wpFailingScenarios++;
                                         } else {
-                                            if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+                                            if (testResult.accMashTestStatus === MashTestStatus.MASH_PASS || testResult.intMashTestStatus === MashTestStatus.MASH_PASS || testResult.unitPassCount > 0) {
                                                 wpPassingScenarios++;
                                             } else {
                                                 wpUntestedScenarios++;

@@ -5,7 +5,7 @@ import {DesignUpdateComponents}         from '../../collections/design_update/de
 
 import {UserIntTestResults} from '../../collections/dev/user_int_test_results.js'
 
-import {ComponentType, TestType, MashTestStatus, LogLevel}   from '../../constants/constants.js';
+import {ComponentType, TestType, MashTestStatus, TestDataStatus, LogLevel}   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js';
 
 // Plugin class to read test results from a screen scraped chimp mocha JSON reported file
@@ -190,9 +190,19 @@ class ChimpMochaTestServices{
             switch(testType){
                 case TestType.INTEGRATION:
 
+                    // Clear data for current user
+                    UserIntTestResults.remove({
+                        userId:     userId
+                    });
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
+
+                    let resultsBatch = [];
+
                     // Add latest results
                     resultsJson.passes.forEach((test) => {
-                        UserIntTestResults.insert(
+
+                        resultsBatch.push(
                             {
                                 userId:             userId,
                                 testName:           test.title,
@@ -207,7 +217,8 @@ class ChimpMochaTestServices{
                     });
 
                     resultsJson.failures.forEach((test) => {
-                        UserIntTestResults.insert(
+
+                        resultsBatch.push(
                             {
                                 userId:             userId,
                                 testName:           test.title,
@@ -222,7 +233,8 @@ class ChimpMochaTestServices{
                     });
 
                     resultsJson.pending.forEach((test) => {
-                        UserIntTestResults.insert(
+
+                        resultsBatch.push(
                             {
                                 userId:             userId,
                                 testName:           test.title,
@@ -236,11 +248,18 @@ class ChimpMochaTestServices{
                         );
                     });
 
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
+
+                    // Bulk insert the new data
+                    UserIntTestResults.batchInsert(resultsBatch);
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
+
                     break;
                 default:
             }
 
-
+            log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Integration results");
 
         }
 

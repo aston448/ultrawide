@@ -4,6 +4,8 @@
 
 import { Mongo } from 'meteor/mongo';
 
+import { TestDataStatus } from '../../constants/constants.js';
+
 export const UserIntTestResults = new Mongo.Collection('userIntTestResults');
 
 let Schema = new SimpleSchema({
@@ -15,6 +17,7 @@ let Schema = new SimpleSchema({
     testErrorReason:    {type: String, optional: true}, // If fail
     testDuration:       {type: String, optional: true}, // If present
     stackTrace:         {type: String, optional: true}, // If fail
+    dataStatus:         {type: String, defaultValue: TestDataStatus.TEST_DATA_NEW_TEST} // Indicates latest changes to this data
 });
 
 UserIntTestResults.attachSchema(Schema);

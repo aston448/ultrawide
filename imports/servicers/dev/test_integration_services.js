@@ -37,19 +37,19 @@ class TestIntegrationServices{
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH MASH DATA...");
 
-            // Recalculate the Design Mash Scenarios
-            MashDataModules.createUserMashScenariosForDesignVersion(userContext);
-
             // Get latest results
             MashDataModules.getIntegrationTestResults(userContext);
             MashDataModules.getUnitTestResults(userContext);
 
-            // And load current test results
-            MashDataModules.updateIntTestScenarioResults(userContext);
+            // Load the unit test data below the Scenario level
             MashDataModules.updateUnitTestScenarioResults(userContext);
 
+            // Recalculate the Design Mash Scenarios
+            MashDataModules.updateUserMashScenariosForDesignVersion(userContext);
+
+
             // And update the test summary data
-            this.updateTestSummaryData(userContext, true);
+            this.updateTestSummaryData(userContext);
 
             // Update DU Summary if a DU selected
             if(userContext.designVersionId !== 'NONE') {
@@ -75,14 +75,14 @@ class TestIntegrationServices{
     }
 
 
-    updateTestSummaryData(userContext, updateTestData){
+    updateTestSummaryData(userContext){
 
         // Called if the test summary needs a refresh
 
         if(Meteor.isServer){
 
             // Recreate the summary mash
-            TestSummaryServices.refreshTestSummaryData(userContext, updateTestData);
+            TestSummaryServices.refreshTestSummaryData(userContext);
         }
     }
 

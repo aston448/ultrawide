@@ -58,6 +58,7 @@ mdg:validated-method@1.1.0
 mdg:validation-error@0.5.1
 meteor@1.6.1
 meteor-base@1.0.4
+mikowals:batch-insert@1.1.14
 minifier-css@1.2.16
 minifier-js@2.0.0
 minimongo@1.0.21

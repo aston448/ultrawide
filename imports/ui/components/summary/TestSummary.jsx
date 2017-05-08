@@ -43,15 +43,15 @@ class TestSummary extends Component {
 
         if(testSummaryData){
 
-            let accResultClass = 'test-summary-result ' + testSummaryData.accTestStatus;
-            let intResultClass = 'test-summary-result ' + testSummaryData.intTestStatus;
+            let accResultClass = 'test-summary-result ' + testSummaryData.accMashTestStatus;
+            let intResultClass = 'test-summary-result ' + testSummaryData.intMashTestStatus;
 
             let unitResultClass = 'test-summary-result mash-not-implemented';
             let unitTestResult = <span className={unitResultClass}>No Tests</span>;
 
-            if(testSummaryData.unitTestPassCount > 0 || testSummaryData.unitTestFailCount > 0){
+            if(testSummaryData.unitPassCount > 0 || testSummaryData.unitFailCount > 0){
 
-                if(testSummaryData.unitTestFailCount > 0){
+                if(testSummaryData.unitFailCount > 0){
                     unitResultClass = 'test-summary-result mash-fail';
                 } else {
                     unitResultClass = 'test-summary-result mash-pass';
@@ -59,8 +59,8 @@ class TestSummary extends Component {
 
                 unitTestResult =
                     <span>
-                        <span className={unitResultClass}>{'Pass: ' + testSummaryData.unitTestPassCount}</span>
-                        <span className={unitResultClass}>{'Fail: ' + testSummaryData.unitTestFailCount}</span>
+                        <span className={unitResultClass}>{'Pass: ' + testSummaryData.unitPassCount}</span>
+                        <span className={unitResultClass}>{'Fail: ' + testSummaryData.unitFailCount}</span>
                     </span>;
             }
 
@@ -71,11 +71,11 @@ class TestSummary extends Component {
                     <Row>
                         <Col md={4} className="close-col">
                             <span className="test-summary-text">Accept:</span>
-                            <span className={accResultClass}>{TextLookups.mashTestStatus(testSummaryData.accTestStatus)}</span>
+                            <span className={accResultClass}>{TextLookups.mashTestStatus(testSummaryData.accMashTestStatus)}</span>
                         </Col>
                         <Col md={4} className="close-col">
                             <span className="test-summary-text">Integ:</span>
-                            <span className={intResultClass}>{TextLookups.mashTestStatus(testSummaryData.intTestStatus)}</span>
+                            <span className={intResultClass}>{TextLookups.mashTestStatus(testSummaryData.intMashTestStatus)}</span>
                         </Col>
                         <Col md={4} className="close-col">
                             <span className="test-summary-text">Unit:</span>

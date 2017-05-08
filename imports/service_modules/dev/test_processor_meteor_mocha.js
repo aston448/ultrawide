@@ -5,7 +5,7 @@ import {DesignUpdateComponents}         from '../../collections/design_update/de
 
 import { UserUnitTestResults }           from '../../collections/dev/user_unit_test_results';
 
-import {ComponentType, MashStatus, MashTestStatus, TestType, LogLevel} from '../../constants/constants.js';
+import {ComponentType, MashStatus, MashTestStatus, TestType, TestDataStatus, LogLevel} from '../../constants/constants.js';
 import {log} from '../../common/utils.js';
 
 // Plugin class to read test results from a meteor -test mocha JSON reported file
@@ -45,9 +45,18 @@ class MeteorMochaTestServices{
             switch(testType){
                 case TestType.UNIT:
 
+                    UserUnitTestResults.remove({
+                        userId:     userId
+                    });
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
+
+                    let resultsBatch = [];
+
                     // Add latest results
                     resultsJson.passes.forEach((test) => {
-                        UserUnitTestResults.insert(
+
+                        resultsBatch.push(
                             {
                                 userId:             userId,
                                 testName:           test.title,
@@ -56,13 +65,15 @@ class MeteorMochaTestServices{
                                 testError:          '',
                                 testErrorReason:    '',
                                 testDuration:       test.duration,
-                                stackTrace:         ''
+                                stackTrace:         '',
+                                dataStatus:         TestDataStatus.TEST_DATA_NEW_TEST
                             }
                         );
                     });
 
                     resultsJson.failures.forEach((test) => {
-                        UserUnitTestResults.insert(
+
+                        resultsBatch.push(
                             {
                                 userId:             userId,
                                 testName:           test.title,
@@ -77,7 +88,8 @@ class MeteorMochaTestServices{
                     });
 
                     resultsJson.pending.forEach((test) => {
-                        UserUnitTestResults.insert(
+
+                        resultsBatch.push(
                             {
                                 userId:             userId,
                                 testName:           test.title,
@@ -91,10 +103,17 @@ class MeteorMochaTestServices{
                         );
                     });
 
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
+
+                    UserUnitTestResults.batchInsert(resultsBatch);
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
+
                     break;
                 default:
             }
 
+            log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Unit results");
         }
     };
 

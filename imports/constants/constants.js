@@ -82,7 +82,8 @@ export const MenuAction = {
     MENU_ACTION_VIEW_ACC_FILES:     'MENU_ACTION_VIEW_ACC_FILES',
     MENU_ACTION_VIEW_TEST_SUMM:     'MENU_ACTION_VIEW_TEST_SUMM',
     MENU_ACTION_VIEW_ALL_TABS:      'MENU_ACTION_VIEW_ALL_TABS',
-    MENU_ACTION_REFRESH_TESTS:      'MENU_ACTION_REFRESH_TESTS'
+    MENU_ACTION_REFRESH_TESTS:      'MENU_ACTION_REFRESH_TESTS',
+    MENU_ACTION_REFRESH_DATA:       'MENU_ACTION_REFRESH_DATA'
 };
 
 // In some views there is an option of seeing everything read-only (no controls visible)
@@ -385,7 +386,8 @@ export const DevTestTag = {
 export const MashStatus = {
     MASH_LINKED:            'mash-linked',              // This feature is recognised both in the Design and Dev Build
     MASH_NOT_IMPLEMENTED:   'mash-not-implemented',     // This is a Design feature not in Dev
-    MASH_NOT_DESIGNED:      'mash-not-designed',        // This is a Dev feature not in Design
+    MASH_NOT_DESIGNED:      'mash-not-designed',        // This item is not in the Design
+    MASH_IN_DESIGN:         'mash-in-design',           // This item is in the design
 };
 
 export const MashTestStatus = {
@@ -393,6 +395,13 @@ export const MashTestStatus = {
     MASH_PENDING:           'mash-pending',
     MASH_PASS:              'mash-pass',
     MASH_FAIL:              'mash-fail',
+};
+
+export const TestDataStatus = {
+    TEST_DATA_NEW_TEST:     'TEST_DATA_NEW_TEST',
+    TEST_DATA_NO_TEST:      'TEST_DATA_NO_TEST',
+    TEST_DATA_UNCHANGED:    'TEST_DATA_UNCHANGED',
+    TEST_DATA_NEW_RESULT:   'TEST_DATA_NEW_RESULT'
 };
 
 export const FeatureTestSummaryStatus = {
@@ -403,7 +412,7 @@ export const FeatureTestSummaryStatus = {
     FEATURE_HIGHLIGHT_FAIL:     'feature-highlight-fail',
     FEATURE_HIGHLIGHT_PASS:     'feature-highlight-pass',
     FEATURE_HIGHLIGHT_NO_TEST:  'feature-highlight-no-test'
-}
+};
 
 export const MessageType = {
     INFO:       'info',

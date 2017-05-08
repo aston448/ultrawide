@@ -419,7 +419,7 @@ class ClientDesignVersionServices{
 
         store.dispatch(setCurrentView(view));
 
-        ClientTestIntegrationServices.updateTestSummaryData(userContext, false);
+        ClientTestIntegrationServices.updateTestSummaryData(userContext);
 
         return {success: true, message: ''};
     };

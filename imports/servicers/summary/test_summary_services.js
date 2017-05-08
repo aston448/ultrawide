@@ -5,6 +5,7 @@ import { UserDevDesignSummaryData }     from '../../collections/summary/user_dev
 import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
+import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
 import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
 import { UserUnitTestResults }          from '../../collections/dev/user_unit_test_results.js';
 
@@ -25,9 +26,12 @@ import ChimpMochaTestServices       from '../../service_modules/dev/test_process
 
 class TestSummaryServices {
 
-    refreshTestSummaryData(userContext, updateTestData){
+    refreshTestSummaryData(userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Refreshing test summary data with update = {}", updateTestData);
+        // NOTE: Test Summary data only holds data at the Feature level.  The Scenario data in the test summary comes
+        // directly from the test results scenario mash data
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Refreshing test summary data...");
 
         let totalScenarioCount = 0;
         let totalUnitTestsPassing = 0;
@@ -43,140 +47,17 @@ class TestSummaryServices {
         let totalPassingScenarioCount = 0;
         let totalFailingScenarioCount = 0;
 
-        // If the test data needs refreshing...
-        if(updateTestData) {
+        // Delete data for current user context.
+        // Its MUCH faster to remove everything, recalc and then do a bulk insert than to do updates one by one
+        UserDevTestSummaryData.remove({
+            userId: userContext.userId,
+        });
 
-            // Delete data for current user context
-            UserDevTestSummaryData.remove({
-                userId: userContext.userId,
-            });
+        UserDevDesignSummaryData.remove({
+            userId:             userContext.userId,
+        });
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Data removed");
-
-            // Get the Design Scenario Data
-            const designScenarios = DesignVersionComponents.find({
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                componentType: ComponentType.SCENARIO,
-                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-            }).fetch();
-
-            totalScenarioCount = designScenarios.length;
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Got Scenarios");
-
-            // Populate the Scenario summary data
-            designScenarios.forEach((designScenario) => {
-
-                let integrationTestResult = null;
-                let scenarioName = '';
-                let featureReferenceId = '';
-
-                let acceptanceTestDisplay = MashTestStatus.MASH_NOT_LINKED;
-                let integrationTestDisplay = MashTestStatus.MASH_NOT_LINKED;
-                let unitTestPasses = 0;
-                let unitTestFails = 0;
-                let testsFound = false;
-
-                // See if we have any test results
-                scenarioName = designScenario.componentNameNew;
-                featureReferenceId = designScenario.componentFeatureReferenceIdNew;
-
-                // TODO Acceptance Tests
-
-                // Integration Tests
-                integrationTestResult = UserIntTestResults.findOne(
-                    {
-                        userId: userContext.userId,
-                        testName: scenarioName
-                    }
-                );
-
-                if (integrationTestResult) {
-                    integrationTestDisplay = integrationTestResult.testResult;
-
-                    switch (integrationTestResult.testResult) {
-                        case MashTestStatus.MASH_PASS:
-                            log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pass for Scenario {}", designScenario.componentNameNew);
-                            totalIntTestsPassing++;
-                            testsFound = true;
-                            break;
-                        case MashTestStatus.MASH_FAIL:
-                            log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test fail for Scenario {}", designScenario.componentNameNew);
-                            totalIntTestsFailing++;
-                            testsFound = true;
-                            break;
-                        case MashTestStatus.MASH_PENDING:
-                            log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pending for Scenario {}", designScenario.componentNameNew);
-                            totalIntTestsPending++;
-                    }
-                } else {
-
-                }
-
-                // Unit Tests - tests related to a Scenario
-                let searchRegex = new RegExp(scenarioName);
-
-                unitTestPasses = UserUnitTestResults.find({
-                    userId: userContext.userId,
-                    testFullName: {$regex: searchRegex},
-                    testResult: MashTestStatus.MASH_PASS
-                }).count();
-
-                if (unitTestPasses > 0) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- {} Unit Test pass for Scenario {}", unitTestPasses, designScenario.componentNameNew);
-                    testsFound = true;
-                }
-                totalUnitTestsPassing += unitTestPasses;
-
-                unitTestFails = UserUnitTestResults.find({
-                    userId: userContext.userId,
-                    testFullName: {$regex: searchRegex},
-                    testResult: MashTestStatus.MASH_FAIL
-                }).count();
-
-                if (unitTestFails > 0) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- {} Unit Test fail for Scenario {}", unitTestFails, designScenario.componentNameNew);
-                    testsFound = true;
-                }
-                totalUnitTestsFailing += unitTestFails;
-
-                // Update Scenario pass fail count
-                if(acceptanceTestDisplay === MashTestStatus.MASH_FAIL || integrationTestDisplay === MashTestStatus.MASH_FAIL || unitTestFails > 0){
-                    totalFailingScenarioCount++
-                } else {
-                    if(acceptanceTestDisplay === MashTestStatus.MASH_PASS || integrationTestDisplay === MashTestStatus.MASH_PASS || unitTestPasses > 0){
-                        totalPassingScenarioCount++
-                    }
-                }
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "  -- Inserting Summary data for Scenario {} with id {} scenRef {} featureRef {} and tests found {}",
-                    designScenario.componentNameNew, designScenario.componentReferenceId, designScenario.componentReferenceId, featureReferenceId, testsFound);
-
-                UserDevTestSummaryData.insert({
-                    userId: userContext.userId,
-                    designVersionId: userContext.designVersionId,
-                    scenarioReferenceId: designScenario.componentReferenceId,
-                    featureReferenceId: featureReferenceId,
-                    accTestStatus: acceptanceTestDisplay,
-                    intTestStatus: integrationTestDisplay,
-                    unitTestPassCount: unitTestPasses,
-                    unitTestFailCount: unitTestFails,
-                    featureSummaryStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
-                    duFeatureSummaryStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
-                    wpFeatureSummaryStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
-                });
-
-
-                if (!testsFound) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- No tests for Scenario {}", designScenario.componentNameNew);
-                    totalScenariosWithoutTests++;
-                }
-
-            });
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Scenarios populated");
-        }
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Data removed");
 
         // Populate the Feature summary data
         const designFeatures = DesignVersionComponents.find({
@@ -188,20 +69,21 @@ class TestSummaryServices {
 
         const totalFeatureCount = designFeatures.length;
 
+        let batchData = [];
+
         designFeatures.forEach((designFeature) =>{
 
             log((msg) => console.log(msg), LogLevel.TRACE, "FEATURE {}", designFeature.componentNameNew);
 
-            let featureScenarios = UserDevTestSummaryData.find({
-                userId:                 userContext.userId,
-                designVersionId:        userContext.designVersionId,
-                featureReferenceId:     designFeature.componentReferenceId,
-                scenarioReferenceId:    {$ne: 'NONE'}
+            let featureScenarios = UserDesignVersionMashScenarios.find({
+                userId:                     userContext.userId,
+                designVersionId:            userContext.designVersionId,
+                designFeatureReferenceId:   designFeature.componentReferenceId,
             }).fetch();
 
             let featureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
-            let passingTests = 0;
-            let failingTests = 0;
+            let featurePassingTests = 0;
+            let featureFailingTests = 0;
             let featureNoTestScenarios = 0;
 
             let duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
@@ -216,58 +98,72 @@ class TestSummaryServices {
 
             featureScenarios.forEach((featureScenario)=>{
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Processing Summary Scenario: {}", featureScenario.scenarioReferenceId);
+                totalScenarioCount++;
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Processing Summary Scenario: {} with unit pass count {}", featureScenario.scenarioName, featureScenario.unitPassCount);
 
                 let hasResult = false;
                 let duHasResult = false;
                 let wpHasResult = false;
 
-                if(featureScenario.accTestStatus === MashTestStatus.MASH_FAIL){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test fail {}", featureScenario.scenarioReferenceId);
-                    failingTests++;
+                let scenarioPassingTests = 0;
+                let scenarioFailingTests = 0;
+
+
+                if(featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test fail {}", featureScenario.scenarioName);
+                    featureFailingTests++;
+                    scenarioFailingTests++;
                     hasResult = true;
                 }
-                if(featureScenario.intTestStatus === MashTestStatus.MASH_FAIL){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test fail {}", featureScenario.scenarioReferenceId);
-                    failingTests++;
+                if(featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test fail {}", featureScenario.scenarioName);
+                    featureFailingTests++;
+                    scenarioFailingTests++;
                     hasResult = true;
                 }
 
-                if(featureScenario.unitTestFailCount > 0) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test fail {}", featureScenario.scenarioReferenceId);
-                    failingTests += featureScenario.unitTestFailCount;
+                if(featureScenario.unitFailCount > 0) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test fail {}", featureScenario.scenarioName);
+                    featureFailingTests += featureScenario.unitFailCount;
+                    scenarioFailingTests += featureScenario.unitFailCount;
                     hasResult = true;
                 }
 
-                if(featureScenario.accTestStatus === MashTestStatus.MASH_PASS){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test pass {}", featureScenario.scenarioReferenceId);
-                    passingTests++;
+                if(featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test pass {}", featureScenario.scenarioName);
+                    featurePassingTests++;
+                    scenarioPassingTests++;
                     hasResult = true;
                 }
-                if(featureScenario.intTestStatus === MashTestStatus.MASH_PASS){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pass {}", featureScenario.scenarioReferenceId);
-                    passingTests++;
+                if(featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pass {}", featureScenario.scenarioName);
+                    featurePassingTests++;
+                    scenarioPassingTests++;
                     hasResult = true;
                 }
 
-                if(featureScenario.unitTestPassCount > 0) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test pass {}", featureScenario.scenarioReferenceId);
-                    passingTests += featureScenario.unitTestPassCount;
+                if(featureScenario.unitPassCount > 0) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test pass {}", featureScenario.scenarioName);
+                    featurePassingTests += featureScenario.unitPassCount;
+                    scenarioPassingTests += featureScenario.unitPassCount;
                     hasResult = true;
                 }
 
                 // Any fails is a fail even if passes.  Any passes and no fails is a pass
-                if(failingTests > 0){
-                    featureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
+                if(scenarioFailingTests > 0){
+                    totalFailingScenarioCount ++;
                 } else {
-                    if(passingTests > 0){
-                        featureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+                    if(scenarioPassingTests > 0){
+                        totalPassingScenarioCount++;
                     }
                 }
 
                 if(!hasResult) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Scenario with no test {}", featureScenario.scenarioReferenceId);
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Scenario with no test {}", featureScenario.scenarioName);
                     featureNoTestScenarios++;
+                    totalScenariosWithoutTests++;
+
                 }
 
                 let duComponent = null;
@@ -279,7 +175,7 @@ class TestSummaryServices {
 
                     duComponent = DesignUpdateComponents.findOne({
                         designUpdateId: userContext.designUpdateId,
-                        componentReferenceId: featureScenario.scenarioReferenceId,
+                        componentReferenceId: featureScenario.designScenarioReferenceId,
                         scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                     });
 
@@ -287,33 +183,33 @@ class TestSummaryServices {
 
                         log((msg) => console.log(msg), LogLevel.TRACE, "Adding DU scenario {}", duComponent.componentNameNew);
 
-                        if (featureScenario.accTestStatus === MashTestStatus.MASH_FAIL) {
+                        if (featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL) {
                             duFailingTests++;
                             duHasResult = true;
                         }
-                        if (featureScenario.intTestStatus === MashTestStatus.MASH_FAIL) {
+                        if (featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL) {
                             duFailingTests++;
                             duHasResult = true;
                             log((msg) => console.log(msg), LogLevel.TRACE, "Failed INT test.  Count: {}", duFailingTests);
                         }
 
-                        if (featureScenario.unitTestFailCount > 0) {
-                            log((msg) => console.log(msg), LogLevel.TRACE, "Failed UNIT tests {}", featureScenario.unitTestFailCount);
-                            duFailingTests += featureScenario.unitTestFailCount;
+                        if (featureScenario.unitFailCount > 0) {
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Failed UNIT tests {}", featureScenario.unitFailCount);
+                            duFailingTests += featureScenario.unitFailCount;
                             duHasResult = true;
                         }
 
-                        if (featureScenario.accTestStatus === MashTestStatus.MASH_PASS) {
+                        if (featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS) {
                             duPassingTests++;
                             duHasResult = true;
                         }
-                        if (featureScenario.intTestStatus === MashTestStatus.MASH_PASS) {
+                        if (featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS) {
                             duPassingTests++;
                             duHasResult = true;
                         }
 
-                        if (featureScenario.unitTestPassCount > 0) {
-                            duPassingTests += featureScenario.unitTestPassCount;
+                        if (featureScenario.unitPassCount > 0) {
+                            duPassingTests += featureScenario.unitPassCount;
                             duHasResult = true;
                         }
 
@@ -337,7 +233,7 @@ class TestSummaryServices {
 
                     wpComponent = WorkPackageComponents.findOne({
                         workPackageId: userContext.workPackageId,
-                        componentReferenceId: featureScenario.scenarioReferenceId,
+                        componentReferenceId: featureScenario.designScenarioReferenceId,
                         scopeType: WorkPackageScopeType.SCOPE_ACTIVE
                     });
 
@@ -349,31 +245,31 @@ class TestSummaryServices {
 
                     if (wpComponent && nonRemovedComponent) {
 
-                        if (featureScenario.accTestStatus === MashTestStatus.MASH_FAIL) {
+                        if (featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL) {
                             wpFailingTests++;
                             wpHasResult = true;
                         }
-                        if (featureScenario.intTestStatus === MashTestStatus.MASH_FAIL) {
+                        if (featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL) {
                             wpFailingTests++;
                             wpHasResult = true;
                         }
 
-                        if (featureScenario.unitTestFailCount > 0) {
-                            wpFailingTests += featureScenario.unitTestFailCount;
+                        if (featureScenario.unitFailCount > 0) {
+                            wpFailingTests += featureScenario.unitFailCount;
                             wpHasResult = true;
                         }
 
-                        if (featureScenario.accTestStatus === MashTestStatus.MASH_PASS) {
+                        if (featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS) {
                             wpPassingTests++;
                             wpHasResult = true;
                         }
-                        if (featureScenario.intTestStatus === MashTestStatus.MASH_PASS) {
+                        if (featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS) {
                             wpPassingTests++;
                             wpHasResult = true;
                         }
 
-                        if (featureScenario.unitTestPassCount > 0) {
-                            wpPassingTests += featureScenario.unitTestPassCount;
+                        if (featureScenario.unitPassCount > 0) {
+                            wpPassingTests += featureScenario.unitPassCount;
                             wpHasResult = true;
                         }
 
@@ -397,99 +293,65 @@ class TestSummaryServices {
 
             });
 
-            if(updateTestData) {
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, passingTests, failingTests, featureNoTestScenarios);
-
-                UserDevTestSummaryData.insert({
-                    userId: userContext.userId,
-                    designVersionId: userContext.designVersionId,
-                    scenarioReferenceId: 'NONE',
-                    featureReferenceId: designFeature.componentReferenceId,
-                    accTestStatus: MashTestStatus.MASH_NOT_LINKED,
-                    intTestStatus: MashTestStatus.MASH_NOT_LINKED,
-                    unitTestPassCount: 0,
-                    unitTestFailCount: 0,
-                    featureSummaryStatus: featureTestStatus,
-                    featureTestPassCount: passingTests,
-                    featureTestFailCount: failingTests,
-                    featureNoTestCount: featureNoTestScenarios,
-                    duFeatureSummaryStatus: duFeatureTestStatus,
-                    duFeatureTestPassCount: duPassingTests,
-                    duFeatureTestFailCount: duFailingTests,
-                    duFeatureNoTestCount: duFeatureNoTestScenarios,
-                    wpFeatureSummaryStatus: wpFeatureTestStatus,
-                    wpFeatureTestPassCount: wpPassingTests,
-                    wpFeatureTestFailCount: wpFailingTests,
-                    wpFeatureNoTestCount: wpFeatureNoTestScenarios,
-                });
-
-                // And now refresh the Design Summary
-                UserDevDesignSummaryData.remove({
-                    userId:             userContext.userId,
-                });
-
-                UserDevDesignSummaryData.insert({
-                    userId:                         userContext.userId,
-                    designVersionId:                userContext.designVersionId,
-                    featureCount:                   totalFeatureCount,
-                    scenarioCount:                  totalScenarioCount,
-                    untestedScenarioCount:          totalScenariosWithoutTests,
-                    passingScenarioCount:           totalPassingScenarioCount,
-                    failingScenarioCount:           totalFailingScenarioCount,
-                    unitTestPassCount:              totalUnitTestsPassing,
-                    unitTestFailCount:              totalUnitTestsFailing,
-                    unitTestPendingCount:           totalUnitTestsPending,
-                    intTestPassCount:               totalIntTestsPassing,
-                    intTestFailCount:               totalIntTestsFailing,
-                    intTestPendingCount:            totalIntTestsPending,
-                    accTestPassCount:               totalAccTestsPassing,
-                    accTestFailCount:               totalAccTestsFailing,
-                    accTestPendingCount:            totalAccTestsPending
-                });
-
+            // Any fails at feature level is a fail even if passes.  Any passes and no fails is a pass
+            if(featureFailingTests > 0){
+                featureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
             } else {
-
-                // Just update the feature data to reflect a change in WP / DU...
-                log((msg) => console.log(msg), LogLevel.TRACE, "Updating feature {} setting no test count to {} ", designFeature.componentReferenceId, featureNoTestScenarios);
-
-                const updated = UserDevTestSummaryData.update(
-                    {
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        scenarioReferenceId: 'NONE',
-                        featureReferenceId: designFeature.componentReferenceId
-                    },
-                    {
-                        $set:{
-                            accTestStatus: MashTestStatus.MASH_NOT_LINKED,
-                            intTestStatus: MashTestStatus.MASH_NOT_LINKED,
-                            unitTestPassCount: 0,
-                            unitTestFailCount: 0,
-                            featureSummaryStatus: featureTestStatus,
-                            featureTestPassCount: passingTests,
-                            featureTestFailCount: failingTests,
-                            featureNoTestCount: featureNoTestScenarios,
-                            duFeatureSummaryStatus: duFeatureTestStatus,
-                            duFeatureTestPassCount: duPassingTests,
-                            duFeatureTestFailCount: duFailingTests,
-                            duFeatureNoTestCount: duFeatureNoTestScenarios,
-                            wpFeatureSummaryStatus: wpFeatureTestStatus,
-                            wpFeatureTestPassCount: wpPassingTests,
-                            wpFeatureTestFailCount: wpFailingTests,
-                            wpFeatureNoTestCount: wpFeatureNoTestScenarios
-                        }
-                    }
-                );
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "{} row updated", updated);
+                if(featurePassingTests > 0){
+                    featureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+                }
             }
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, featurePassingTests, featureFailingTests, featureNoTestScenarios);
+
+            batchData.push({
+                userId: userContext.userId,
+                designVersionId: userContext.designVersionId,
+                scenarioReferenceId: 'NONE',
+                featureReferenceId: designFeature.componentReferenceId,
+                accTestStatus: MashTestStatus.MASH_NOT_LINKED,
+                intTestStatus: MashTestStatus.MASH_NOT_LINKED,
+                unitTestPassCount: 0,
+                unitTestFailCount: 0,
+                featureSummaryStatus: featureTestStatus,
+                featureTestPassCount: featurePassingTests,
+                featureTestFailCount: featureFailingTests,
+                featureNoTestCount: featureNoTestScenarios,
+                duFeatureSummaryStatus: duFeatureTestStatus,
+                duFeatureTestPassCount: duPassingTests,
+                duFeatureTestFailCount: duFailingTests,
+                duFeatureNoTestCount: duFeatureNoTestScenarios,
+                wpFeatureSummaryStatus: wpFeatureTestStatus,
+                wpFeatureTestPassCount: wpPassingTests,
+                wpFeatureTestFailCount: wpFailingTests,
+                wpFeatureNoTestCount: wpFeatureNoTestScenarios,
+            });
 
         });
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Features calculated");
+        // Bulk insert new feature summary data
+        if(batchData.length > 0) {
+            UserDevTestSummaryData.batchInsert(batchData);
+        }
 
-
+        UserDevDesignSummaryData.insert({
+            userId: userContext.userId,
+            designVersionId: userContext.designVersionId,
+            featureCount: totalFeatureCount,
+            scenarioCount: totalScenarioCount,
+            untestedScenarioCount: totalScenariosWithoutTests,
+            passingScenarioCount: totalPassingScenarioCount,
+            failingScenarioCount: totalFailingScenarioCount,
+            unitTestPassCount: totalUnitTestsPassing,
+            unitTestFailCount: totalUnitTestsFailing,
+            unitTestPendingCount: totalUnitTestsPending,
+            intTestPassCount: totalIntTestsPassing,
+            intTestFailCount: totalIntTestsFailing,
+            intTestPendingCount: totalIntTestsPending,
+            accTestPassCount: totalAccTestsPassing,
+            accTestFailCount: totalAccTestsFailing,
+            accTestPendingCount: totalAccTestsPending
+        });
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Refreshing test summary data complete");
     }

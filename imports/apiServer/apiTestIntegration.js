@@ -15,11 +15,12 @@ import {
 // =====================================================================================================================
 class ServerTestIntegrationApi {
 
-    refreshTestData(userContext, callback){
+    refreshTestData(userContext, fullRefresh, callback){
 
         refreshTestData.call(
             {
-                userContext: userContext
+                userContext: userContext,
+                fullRefresh: fullRefresh
             },
             (err, result) => {
                 callback(err, result);
@@ -28,12 +29,11 @@ class ServerTestIntegrationApi {
     };
 
 
-    updateTestSummaryData(userContext, updateTestData, callback){
+    updateTestSummaryData(userContext, callback){
 
         updateTestSummaryData.call(
             {
-                userContext:    userContext,
-                updateTestData: updateTestData
+                userContext:    userContext
             },
             (err, result) => {
                 callback(err, result);

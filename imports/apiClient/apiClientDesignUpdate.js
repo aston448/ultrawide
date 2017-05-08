@@ -361,7 +361,7 @@ class ClientDesignUpdateServices {
         if(newDesignUpdateId !== userContext.designUpdateId) {
 
             // Update test summary if changing DU
-            ClientTestIntegrationServices.updateTestSummaryData(newContext, false);
+            ClientTestIntegrationServices.updateTestSummaryData(newContext);
         }
 
         return newContext;

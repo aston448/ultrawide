@@ -32,3 +32,4 @@ dispatch:mocha-browser
 dburles:factory
 dispatch:mocha
 practicalmeteor:mocha
+mikowals:batch-insert

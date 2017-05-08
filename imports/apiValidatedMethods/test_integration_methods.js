@@ -12,16 +12,19 @@ import TestIntegrationServices              from '../servicers/dev/test_integrat
 
 export const refreshTestData = new ValidatedMethod({
 
+    // The full refresh flag is here in case we want to implement more than one sort of test data refresh.
+
     name: 'testIntegration.refreshTestData',
 
     validate: new SimpleSchema({
-        userContext: {type: Object, blackbox: true}
+        userContext: {type: Object, blackbox: true},
+        fullRefresh: {type: Boolean}
     }).validator(),
 
-    run({userContext}){
+    run({userContext, fullRefresh}){
 
         try {
-            TestIntegrationServices.refreshTestData(userContext);
+            TestIntegrationServices.refreshTestData(userContext, fullRefresh);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.error, e.stack)
@@ -35,14 +38,13 @@ export const updateTestSummaryData = new ValidatedMethod({
     name: 'testIntegration.updateTestSummaryData',
 
     validate: new SimpleSchema({
-        userContext:    {type: Object, blackbox: true},
-        updateTestData: {type: Boolean}
+        userContext:    {type: Object, blackbox: true}
     }).validator(),
 
-    run({userContext, updateTestData}){
+    run({userContext}){
 
         try {
-            TestIntegrationServices.updateTestSummaryData(userContext, updateTestData);
+            TestIntegrationServices.updateTestSummaryData(userContext);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.error, e.stack)

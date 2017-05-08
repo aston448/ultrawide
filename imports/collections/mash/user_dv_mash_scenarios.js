@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { DevTestTag } from '../../constants/constants.js';
+import { DevTestTag, MashStatus } from '../../constants/constants.js';
 
 export const UserDesignVersionMashScenarios = new Mongo.Collection('userDesignVersionMashScenarios');
 
@@ -23,12 +23,15 @@ let Schema = new SimpleSchema({
     intMashTestStatus:              {type: String, optional: true},                     // If linked, latest test results status - Integration Tests
     unitMashStatus:                 {type: String, optional: true},                     // Whether linked to dev or not and where originating - Module Tests
     unitMashTestStatus:             {type: String, optional: true},                     // If linked, latest test results status - Module Tests
+    unitPassCount:                  {type: Number, optional: true},
+    unitFailCount:                  {type: Number, optional: true},
     accErrorMessage:                {type: String, optional: true},
     intErrorMessage:                {type: String, optional: true},
     accStackTrace:                  {type: String, optional: true},
     intStackTrace:                  {type: String, optional: true},
     accDuration:                    {type: Number, optional: true},
     intDuration:                    {type: Number, optional: true},
+    dataStatus:                     {type: String, defaultValue: MashStatus.MASH_NOT_IMPLEMENTED} // Indicates latest changes to this data
 });
 
 UserDesignVersionMashScenarios.attachSchema(Schema);

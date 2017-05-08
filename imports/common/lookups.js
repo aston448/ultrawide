@@ -224,6 +224,8 @@ class TextLookups {
                 return 'View All as Tabs';
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
                 return 'Test Data';
+            case MenuAction.MENU_ACTION_REFRESH_DATA:
+                return 'All Data';
         }
     }
 

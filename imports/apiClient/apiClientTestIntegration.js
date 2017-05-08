@@ -76,7 +76,7 @@ class ClientTestIntegrationServices {
 
 
     // Test Summary data needs refreshing - flag says if we need to recalculate all results or not
-    updateTestSummaryData(userContext, updateTestData){
+    updateTestSummaryData(userContext){
 
         log((msg) => console.log(msg), LogLevel.INFO, "REFRESH TEST SUMMARY DATA...");
 
@@ -85,7 +85,7 @@ class ClientTestIntegrationServices {
             messageText: 'Updating test summary data'
         }));
 
-        ServerTestIntegrationApi.updateTestSummaryData(userContext, updateTestData, (err, result) => {
+        ServerTestIntegrationApi.updateTestSummaryData(userContext, (err, result) => {
 
             if(err){
 
@@ -104,7 +104,7 @@ class ClientTestIntegrationServices {
     }
 
     // User has requested a complete refresh of test data --------------------------------------------------------------
-    refreshTestData(userContext){
+    refreshTestData(userContext, fullRefresh){
 
         log((msg) => console.log(msg), LogLevel.INFO, "REFRESH TEST DATA...");
 
@@ -113,7 +113,7 @@ class ClientTestIntegrationServices {
             messageText: 'Loading test definitions and results...'
         }));
 
-        ServerTestIntegrationApi.refreshTestData(userContext, (err, result) => {
+        ServerTestIntegrationApi.refreshTestData(userContext, fullRefresh, (err, result) => {
 
             if(err){
 

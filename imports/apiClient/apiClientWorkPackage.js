@@ -374,7 +374,7 @@ class ClientWorkPackageServices {
             ClientUserContextServices.setOpenWorkPackageItems(newContext);
 
             // Update the test summary data to reflect the WP.  No need to recalc data
-            ClientTestIntegrationServices.updateTestSummaryData(newContext, false);
+            ClientTestIntegrationServices.updateTestSummaryData(newContext);
 
             return newContext;
         }
