@@ -301,17 +301,20 @@ class TestIntegrationModules{
 
         UserUnitTestMashData.remove({userId: userContext.userId});
 
-        let mashScenarios =  UserDesignVersionMashScenarios.find({
-            userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId
-        }).fetch();
+        let designScenarios = DesignVersionComponents.find({
+            designVersionId:    userContext.designVersionId,
+            componentType:      ComponentType.SCENARIO,
+            updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+        });
 
         let batchData = [];
 
-        mashScenarios.forEach((scenario) => {
+        designScenarios.forEach((scenario) => {
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "  Processing Scenario {}", scenario.componentNameNew);
 
             // See which updated test results relate to this scenario
-            let searchRegex = new RegExp(scenario.scenarioName);
+            let searchRegex = new RegExp(scenario.componentNameNew);
             let unitPassCount = 0;
             let unitFailCount = 0;
 
@@ -324,9 +327,11 @@ class TestIntegrationModules{
 
             unitTests.forEach((unitTestResult) => {
 
+                log((msg) => console.log(msg), LogLevel.TRACE, "    Got unit result {}", unitTestResult.testName);
+
                 newResult = true;
 
-                const testIdentity = this.getUnitTestIdentity(unitTestResult.testFullName, scenario.scenarioName, unitTestResult.testName);
+                const testIdentity = this.getUnitTestIdentity(unitTestResult.testFullName, scenario.componentNameNew, unitTestResult.testName);
 
                 let testError = '';
                 let testStack = '';
@@ -346,11 +351,11 @@ class TestIntegrationModules{
                     {
                         // Identity
                         userId:                      userContext.userId,
-                        suiteName:                   scenario.scenarioName,
+                        suiteName:                   scenario.componentNameNew,
                         testGroupName:               testIdentity.subSuite,
-                        designScenarioReferenceId:   scenario.designScenarioReferenceId,
-                        designAspectReferenceId:     scenario.designFeatureAspectReferenceId,
-                        designFeatureReferenceId:    scenario.designFeatureReferenceId,
+                        designScenarioReferenceId:   scenario.componentReferenceId,
+                        designAspectReferenceId:     scenario.componentParentReferenceIdNew,
+                        designFeatureReferenceId:    scenario.componentFeatureReferenceIdNew,
                         // Data
                         testName:                    unitTestResult.testName,
                         // Status
