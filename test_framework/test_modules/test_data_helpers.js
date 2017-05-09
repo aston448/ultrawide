@@ -784,10 +784,12 @@ class TestDataHelpers {
 
     getTestSummaryScenarioData(userId, designVersionId, scenarioReferenceId, scenarioName){
 
-        const summaryData = UserDevTestSummaryData.findOne({
-            userId:             userId,
-            designVersionId:    designVersionId,
-            scenarioReferenceId: scenarioReferenceId
+        // Scenario data is actually the Design Mash data for the Test Summary
+
+        const summaryData = UserDesignVersionMashScenarios.findOne({
+            userId:                     userId,
+            designVersionId:            designVersionId,
+            designScenarioReferenceId:  scenarioReferenceId
         });
 
         if(summaryData){

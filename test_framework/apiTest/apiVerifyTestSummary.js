@@ -133,10 +133,10 @@ Meteor.methods({
 
         let actualTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
-        if(summaryData.accTestStatus === MashTestStatus.MASH_FAIL || summaryData.intTestStatus === MashTestStatus.MASH_FAIL || summaryData.unitTestFailCount > 0){
+        if(summaryData.accMashTestStatus === MashTestStatus.MASH_FAIL || summaryData.intMashTestStatus === MashTestStatus.MASH_FAIL || summaryData.unitFailCount > 0){
             actualTestStatus = MashTestStatus.MASH_FAIL;
         } else{
-            if(summaryData.accTestStatus === MashTestStatus.MASH_PASS || summaryData.intTestStatus === MashTestStatus.MASH_PASS || summaryData.unitTestPassCount > 0){
+            if(summaryData.accMashTestStatus === MashTestStatus.MASH_PASS || summaryData.intMashTestStatus === MashTestStatus.MASH_PASS || summaryData.unitPassCount > 0){
                 actualTestStatus = MashTestStatus.MASH_PASS;
             }
         }
@@ -154,8 +154,8 @@ Meteor.methods({
         const designScenario = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.SCENARIO, scenarioParent, scenarioName);
         const summaryData = TestDataHelpers.getTestSummaryScenarioData(userContext.userId, userContext.designVersionId, designScenario.componentReferenceId, scenarioName);
 
-        if (summaryData.unitTestPassCount !== testCount) {
-            throw new Meteor.Error("FAIL", "Expecting Unit Test pass count to be " + testCount + " but got " + summaryData.unitTestPassCount + " for Scenario " + scenarioName);
+        if (summaryData.unitPassCount !== testCount) {
+            throw new Meteor.Error("FAIL", "Expecting Unit Test pass count to be " + testCount + " but got " + summaryData.unitPassCount + " for Scenario " + scenarioName);
         } else {
             return true;
         }
@@ -167,8 +167,8 @@ Meteor.methods({
         const designScenario = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.SCENARIO, scenarioParent, scenarioName);
         const summaryData = TestDataHelpers.getTestSummaryScenarioData(userContext.userId, userContext.designVersionId, designScenario.componentReferenceId, scenarioName);
 
-        if (summaryData.unitTestFailCount !== testCount) {
-            throw new Meteor.Error("FAIL", "Expecting Unit Test fail count to be " + testCount + " but got " + summaryData.unitTestFailCount + " for Scenario " + scenarioName);
+        if (summaryData.unitFailCount !== testCount) {
+            throw new Meteor.Error("FAIL", "Expecting Unit Test fail count to be " + testCount + " but got " + summaryData.unitFailCount + " for Scenario " + scenarioName);
         } else {
             return true;
         }
@@ -180,8 +180,8 @@ Meteor.methods({
         const designScenario = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.SCENARIO, scenarioParent, scenarioName);
         const summaryData = TestDataHelpers.getTestSummaryScenarioData(userContext.userId, userContext.designVersionId, designScenario.componentReferenceId, scenarioName);
 
-        if (summaryData.intTestStatus !== testStatus) {
-            throw new Meteor.Error("FAIL", "Expecting Scenario Int Test to be " + testStatus + " but got " + summaryData.intTestStatus + " for Scenario " + scenarioName);
+        if (summaryData.intMashTestStatus !== testStatus) {
+            throw new Meteor.Error("FAIL", "Expecting Scenario Int Test to be " + testStatus + " but got " + summaryData.intMashTestStatus + " for Scenario " + scenarioName);
         } else {
             return true;
         }
