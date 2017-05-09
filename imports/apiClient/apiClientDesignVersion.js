@@ -530,12 +530,12 @@ class ClientDesignVersionServices{
 
             // Select the item wanted
             if(item.designUpdateId !== 'NONE'){
-                console.log("Setting Design Update... " + item.designUpdateId);
+                //console.log("Setting Design Update... " + item.designUpdateId);
                 newContext = ClientDesignUpdateServices.setDesignUpdate(newContext, item.designUpdateId)
             }
 
             if(item.workPackageId !== 'NONE'){
-                console.log("Setting Work package... " + item.workPackageId);
+                //console.log("Setting Work package... " + item.workPackageId);
                 ClientWorkPackageServices.setWorkPackage(newContext, item.workPackageId)
             }
 
