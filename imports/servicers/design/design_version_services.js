@@ -183,6 +183,9 @@ class DesignVersionServices{
 
     updateWorkProgress(userContext){
 
+        // NOTE!!!  Because we are using batch insert for speed here the batch array entries MUST contain all fields
+        // Not doing so causes no error but random results later on
+
         if(Meteor.isServer) {
 
             if(userContext.designVersionId === 'NONE'){
@@ -206,7 +209,6 @@ class DesignVersionServices{
                 designVersionId:    userContext.designVersionId
             });
 
-
             let dvTotalScenarios = 0;
             let dvPassingScenarios = 0;
             let dvFailingScenarios = 0;
@@ -224,10 +226,10 @@ class DesignVersionServices{
 
                 // No test data yet - set all as no test
                 const totalScenarios = DesignVersionComponents.find({
-                        designVersionId:    userContext.designVersionId,
-                        componentType:      ComponentType.SCENARIO,
-                        updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-                    }).count();
+                    designVersionId:    userContext.designVersionId,
+                    componentType:      ComponentType.SCENARIO,
+                    updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+                }).count();
 
                 dvTotalScenarios = totalScenarios;
                 dvNoTestScenarios = totalScenarios;
@@ -297,13 +299,16 @@ class DesignVersionServices{
                         });
 
                         // Insert the WP summary details
+                        log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Inserting Base WP Summary: Total: {}  Pass: {}  Fail: {}  No Test: {}", wpTotalScenarios, wpPassingScenarios, wpFailingScenarios, wpUntestedScenarios);
                         batchData.push({
                             userId:                     userContext.userId,
                             designVersionId:            userContext.designVersionId,
+                            designUpdateId:             'NONE',
                             workPackageId:              wp._id,
                             workSummaryType:            WorkSummaryType.WORK_SUMMARY_BASE_WP,
                             name:                       wp.workPackageName,
                             totalScenarios:             wpTotalScenarios,
+                            scenariosInWp:              0,
                             scenariosPassing:           wpPassingScenarios,
                             scenariosFailing:           wpFailingScenarios,
                             scenariosNoTests:           wpUntestedScenarios
@@ -311,9 +316,13 @@ class DesignVersionServices{
                     });
 
                     // Insert the DV summary details
+
+                    log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Inserting DV Summary: Total: {}  Pass: {}  Fail: {}  No Test: {}", dvTotalScenarios, dvPassingScenarios, dvFailingScenarios, dvNoTestScenarios);
                     batchData.push({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
+                        designUpdateId:             'NONE',
+                        workPackageId:              'NONE',
                         workSummaryType:            WorkSummaryType.WORK_SUMMARY_BASE_DV,
                         name:                       dv.designVersionName,
                         totalScenarios:             dvTotalScenarios,
@@ -334,6 +343,7 @@ class DesignVersionServices{
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         designUpdateId:             'NONE',
+                        workPackageId:              'NONE',
                         workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL,
                         name:                       dvName,
                         totalScenarios:             dvTotalScenarios,
@@ -417,11 +427,14 @@ class DesignVersionServices{
                         dvUpdateFailingCount += duFailingScenarios;
                         dvUpdateUntestedCount += duUntestedScenarios;
 
+                        log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Inserting DU Summary: Total: {}  Pass: {}  Fail: {}  No Test: {}", duScenarios.length, duPassingScenarios, duFailingScenarios, duUntestedScenarios);
+
                         // Insert this update to the summary
                         batchData.push({
                             userId:                     userContext.userId,
                             designVersionId:            userContext.designVersionId,
                             designUpdateId:             du._id,
+                            workPackageId:              'NONE',
                             workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE,
                             name:                       du.updateReference + ' - ' + du.updateName,
                             totalScenarios:             duScenarios.length,
@@ -488,6 +501,8 @@ class DesignVersionServices{
                                 }
                             });
 
+                            log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Inserting Update WP Summary: Total: {}  Pass: {}  Fail: {}  No Test: {}", wpTotalScenarios, wpPassingScenarios, wpFailingScenarios, wpUntestedScenarios);
+
                             // Insert this WP to the summary
                             batchData.push({
                                 userId:                     userContext.userId,
@@ -497,6 +512,7 @@ class DesignVersionServices{
                                 workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_WP,
                                 name:                       wp.workPackageName,
                                 totalScenarios:             wpTotalScenarios,
+                                scenariosInWp:              0,
                                 scenariosPassing:           wpPassingScenarios,
                                 scenariosFailing:           wpFailingScenarios,
                                 scenariosNoTests:           wpUntestedScenarios
@@ -512,6 +528,8 @@ class DesignVersionServices{
                     batchData.push({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
+                        designUpdateId:             'NONE',
+                        workPackageId:              'NONE',
                         workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_DV,
                         name:                       dvName,
                         totalScenarios:             dvUpdateScenarioCount,
@@ -527,9 +545,9 @@ class DesignVersionServices{
             if(batchData.length > 0) {
                 UserWorkProgressSummary.batchInsert(batchData);
             }
-        }
 
-        log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Done Refreshing Work Progress Data...");
+            log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Done Refreshing Work Progress Data...");
+        }
     }
 }
 
