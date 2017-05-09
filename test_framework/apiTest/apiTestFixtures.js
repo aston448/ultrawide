@@ -521,10 +521,10 @@ Meteor.methods({
             // Single output file test case
             const fileName = location.locationPath + filesExpected[0].fileName;
 
-            console.log("Writing file " + fileName);
-            results.forEach((result) => {
-                console.log("    Scenario: " + result.scenarioName + " Result: " + result.result);
-            });
+            // console.log("Writing file " + fileName);
+            // results.forEach((result) => {
+            //     console.log("    Scenario: " + result.scenarioName + " Result: " + result.result);
+            // });
 
             const headerBollox = '[32m Master Chimp and become a testing Ninja! Check out our course: [39m[4m[34mhttp://bit.ly/2btQaFu [39m[24m [33m [chimp] Running...[39m\n';
 
@@ -664,7 +664,7 @@ Meteor.methods({
                     };
 
                     // Everything is added to tests group unless not tested...
-                    if(result.resultOutcome != MashTestStatus.MASH_NOT_LINKED) {
+                    if(result.resultOutcome !== MashTestStatus.MASH_NOT_LINKED) {
                         outputTests.push(resultData);
                     }
 

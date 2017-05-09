@@ -725,7 +725,6 @@ class DesignVersionModules{
 
                     if (!(this.hasUpdateModifiedChildren(parent, child))) {
                         // Revert to base if parent-base
-                        console.log("Checking parent " + parent.componentNameNew);
                         if (parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT) {
                             DesignVersionComponents.update(
                                 {_id: parent._id},
@@ -1091,7 +1090,7 @@ class DesignVersionModules{
                         }
                     );
                 } else {
-                    console.log("Component with ref " + updateComponent.componentReferenceId + " not found in DV " + newDesignVersionId);
+                    //console.log("Component with ref " + updateComponent.componentReferenceId + " not found in DV " + newDesignVersionId);
                 }
             });
 
