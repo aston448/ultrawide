@@ -1,3 +1,4 @@
+import fs from 'fs';
 
 // Ultrawide Collections
 import { TestOutputLocations }      from '../../collections/configure/test_output_locations.js'
@@ -282,7 +283,24 @@ class TestOutputLocationServices {
                 _id: userLocationId
             });
         });
-    }
+    };
+
+    uploadTestResultsFile(blob, name, path, encoding){
+
+        if(Meteor.isServer){
+
+            let resultsLocation = process.env.TEST_RESULTS_DIR;
+
+            if((typeof(resultsLocation) === 'undefined')){
+                throw new Meteor.Error('TEST_UPLOAD_FAIL', 'Test Results directory is not defined');
+            } else {
+
+                //const filename = name.toLowerCase().replace(/ /g,'_').replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9_.]/g,'');
+
+                fs.writeFileSync(resultsLocation + name, blob, encoding);
+            }
+        }
+    };
 }
 
 export default new TestOutputLocationServices();

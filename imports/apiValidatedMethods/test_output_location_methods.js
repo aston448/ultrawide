@@ -23,7 +23,7 @@ export const addLocation = new ValidatedMethod({
 
         const result = TestOutputLocationValidationApi.validateAddLocation(userRole);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('testOutputs.addLocation.failValidation', result)
         }
 
@@ -50,7 +50,7 @@ export const saveLocation = new ValidatedMethod({
 
         const result = TestOutputLocationValidationApi.validateSaveLocation(userRole, location);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('testOutputs.saveLocation.failValidation', result)
         }
 
@@ -78,7 +78,7 @@ export const removeLocation = new ValidatedMethod({
 
         const result = TestOutputLocationValidationApi.validateRemoveLocation(userRole);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('testOutputs.removeLocation.failValidation', result)
         }
 
@@ -105,7 +105,7 @@ export const addLocationFile = new ValidatedMethod({
 
         const result = TestOutputLocationValidationApi.validateAddLocationFile(userRole);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('testOutputs.addLocationFile.failValidation', result)
         }
 
@@ -132,7 +132,7 @@ export const saveLocationFile = new ValidatedMethod({
 
         const result = TestOutputLocationValidationApi.validateSaveLocationFile(userRole, locationFile);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('testOutputs.saveLocationFile.failValidation', result)
         }
 
@@ -160,7 +160,7 @@ export const removeLocationFile = new ValidatedMethod({
 
         const result = TestOutputLocationValidationApi.validateRemoveLocationFile(userRole);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('testOutputs.removeLocationFile.failValidation', result)
         }
 
@@ -186,7 +186,7 @@ export const saveUserConfiguration = new ValidatedMethod({
 
         const result = TestOutputLocationValidationApi.validateSaveUserConfiguration();
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('testOutputs.saveUserConfiguration.failValidation', result)
         }
 
@@ -212,6 +212,29 @@ export const updateUserConfiguration = new ValidatedMethod({
 
         try {
             TestOutputLocationServices.updateUserConfiguration(userId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+
+});
+
+export const uploadTestResultsFile = new ValidatedMethod({
+
+    name: 'testOutputs.uploadTestResultsFile',
+
+    validate: new SimpleSchema({
+        blob: {type: String},
+        name: {type: String},
+        path: {type: String},
+        encoding: {type: String}
+    }).validator(),
+
+    run({blob, name, path, encoding}){
+
+        try {
+            TestOutputLocationServices.uploadTestResultsFile(blob, name, path, encoding);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.error, e.stack)

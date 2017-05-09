@@ -7,7 +7,8 @@ import {
     saveLocationFile,
     removeLocationFile,
     saveUserConfiguration,
-    updateUserConfiguration
+    updateUserConfiguration,
+    uploadTestResultsFile
 } from '../apiValidatedMethods/test_output_location_methods.js'
 
 // =====================================================================================================================
@@ -117,7 +118,25 @@ class ServerTestOutputLocationApi {
                 callback(err, result);
             }
         );
+    };
+
+    uploadTestResultsFile(blob, name, path, encoding, callback){
+
+        uploadTestResultsFile.call(
+            {
+                blob: blob,
+                name: name,
+                path: path,
+                encoding: encoding
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+
+        )
     }
+
+
 
 }
 

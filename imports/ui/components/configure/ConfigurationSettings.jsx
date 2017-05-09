@@ -7,8 +7,8 @@ import React, { Component } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
-import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import ClientUserSettingsServices               from '../../../apiClient/apiClientUserSettings.js';
+import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
 
 import {UserSettingValue, UserSetting} from '../../../constants/constants.js';
 
@@ -52,6 +52,9 @@ export class ConfigurationSettings extends Component {
 
     }
 
+    onUpload(event){
+        ClientTestOutputLocationServices.uploadTestFile(event.target.files[0]);
+    }
 
     render() {
         const {userRole, currentWindowSize} = this.props;
@@ -72,6 +75,15 @@ export class ConfigurationSettings extends Component {
                 </FormGroup>
             </div>;
 
+        const testDir = 'ultrawide_data/tests';
+
+        const uploadLocalTestFiles =
+            <div className="file-picker">
+                <div className="design-item-note">Upload local test results file to: </div>
+                <div className="design-item-note">{testDir}</div>
+                <input className="design-item-note" id="files" type="file" onChange={(e) => this.onUpload(e)}/>
+            </div>;
+
         // Layout ------------------------------------------------------------------------------------------------------
         const settingsGrid = (
             <Grid>
@@ -80,7 +92,7 @@ export class ConfigurationSettings extends Component {
                         {screenSizeSettings}
                     </Col>
                     <Col md={4}>
-
+                        {uploadLocalTestFiles}
                     </Col>
                 </Row>
             </Grid>

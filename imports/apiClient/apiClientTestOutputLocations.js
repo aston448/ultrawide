@@ -1,4 +1,5 @@
 // == IMPORTS ==========================================================================================================
+import fs from 'fs';
 
 // Ultrawide Collections
 import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
@@ -30,7 +31,7 @@ class ClientTestOutputLocationServices{
         // Client validation
         let result = TestOutputLocationValidationApi.validateAddLocation(userRole);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -63,7 +64,7 @@ class ClientTestOutputLocationServices{
         // Client validation
         let result = TestOutputLocationValidationApi.validateSaveLocation(userRole, location);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -96,7 +97,7 @@ class ClientTestOutputLocationServices{
         // Client validation
         let result = TestOutputLocationValidationApi.validateRemoveLocation(userRole);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -129,7 +130,7 @@ class ClientTestOutputLocationServices{
         // Client validation
         let result = TestOutputLocationValidationApi.validateAddLocationFile(userRole);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -162,7 +163,7 @@ class ClientTestOutputLocationServices{
         // Client validation
         let result = TestOutputLocationValidationApi.validateSaveLocationFile(userRole, locationFile);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -195,7 +196,7 @@ class ClientTestOutputLocationServices{
         // Client validation
         let result = TestOutputLocationValidationApi.validateRemoveLocationFile(userRole);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -220,6 +221,82 @@ class ClientTestOutputLocationServices{
 
         // Indicate that business validation passed
         return {success: true, message: ''};
+    }
+
+    uploadTestFile(locationFile){
+
+        let fileReader = new FileReader();
+        let encoding = "binary";
+        let name = locationFile.name;
+
+        fileReader.onload = () => {
+
+            if(fileReader.readAsBinaryString) {
+
+                ServerTestOutputLocationApi.uploadTestResultsFile(fileReader.result, name, '', encoding, (err, result) => {
+
+                    if (err) {
+                        // Unexpected error as all expected errors already handled - show alert.
+                        // Can't update screen here because of error
+                        alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    } else {
+
+                        // Show action success on screen
+                        store.dispatch(updateUserMessage({
+                            messageType: MessageType.INFO,
+                            messageText: 'File ' + name + " uploaded"
+                        }));
+                    }
+                });
+
+            } else {
+
+                let binary = "";
+                let bytes = new Uint8Array(fileReader.result);
+                let length = bytes.byteLength;
+                for(let i=0; i < length; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+
+                ServerTestOutputLocationApi.uploadTestResultsFile(binary, name, '', encoding, (err, result) => {
+
+                    if (err) {
+                        // Unexpected error as all expected errors already handled - show alert.
+                        // Can't update screen here because of error
+                        alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    } else {
+
+                        // Show action success on screen
+                        store.dispatch(updateUserMessage({
+                            messageType: MessageType.INFO,
+                            messageText: 'File ' + name + " uploaded"
+                        }));
+                    }
+                });
+            }
+        };
+
+        fileReader.onloadend = (e) => {
+            console.log(e);
+        };
+        fileReader.onloadstart = (e) => {
+            console.log(e);
+        };
+        fileReader.onprogress = (e) => {
+            console.log(e);
+        };
+        fileReader.onabort = (e) => {
+            console.log(e);
+        };
+        fileReader.onerror = (e) => {
+            console.log(e);
+        };
+
+        if(fileReader.readAsBinaryString) {
+            fileReader.readAsBinaryString(locationFile);
+        } else {
+            fileReader.readAsArrayBuffer(locationFile);
+        }
     }
 
     // User changes local configuration --------------------------------------------------------------------------------
