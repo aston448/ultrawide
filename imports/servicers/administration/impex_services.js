@@ -111,11 +111,9 @@ class ImpExServices{
                 ImpexModules.removeNonExistingBackups();
 
             } catch (e){
-                log((msg) => console.log(msg), LogLevel.ERROR, "Can't read backup directory: {}", e);
-                return false;
+                log((msg) => console.log(msg), LogLevel.ERROR, "Can't read backup directory: {}", e.stack);
+                throw new Meteor.Error(e.error, e.stack);
             }
-
-            return true;
         }
     }
 

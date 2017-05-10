@@ -10,11 +10,11 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
 
-import {TestLocationTypes, TestLocationAccessTypes} from '../../../constants/constants.js';
+import {UltrawideDirectory, TestLocationTypes, TestLocationAccessTypes} from '../../../constants/constants.js';
 import { createSelectionList }                  from '../../../common/utils.js'
 
 // Bootstrap
-import {Checkbox, Button} from 'react-bootstrap';
+import {Checkbox, Button, ButtonGroup} from 'react-bootstrap';
 import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-bootstrap';
 
 // REDUX services
@@ -39,9 +39,9 @@ export class TestOutputLocation extends Component {
             accessTypeValue:        this.props.location.locationAccessType,
             isSharedValue:          this.props.location.locationIsShared,
             pathValue:              this.props.location.locationPath,
-            serverNameValue:        this.props.location.locationServerName,
-            serverLoginValue:       this.props.location.serverLogin,
-            serverPasswordValue:    this.props.location.serverPassword
+            // serverNameValue:        this.props.location.locationServerName,
+            // serverLoginValue:       this.props.location.serverLogin,
+            // serverPasswordValue:    this.props.location.serverPassword
         };
 
     }
@@ -60,6 +60,15 @@ export class TestOutputLocation extends Component {
             locationUserId = userContext.userId;
         }
 
+        // Make sure all paths are saved with a final /
+        let pathValue = this.state.pathValue;
+
+        if(!pathValue.endsWith('/')){
+            pathValue = pathValue + '/';
+        }
+
+        const testOutputDir = UltrawideDirectory.TEST_OUTPUT_DIR;
+
         const location = {
             _id:                    this.props.location._id,
             locationName:           this.state.nameValue,
@@ -68,10 +77,11 @@ export class TestOutputLocation extends Component {
             locationAccessType:     this.state.accessTypeValue,
             locationIsShared:       this.state.isSharedValue,
             locationUserId:         locationUserId,
-            locationServerName:     this.state.serverNameValue,
-            serverLogin:            this.state.serverLoginValue,
-            serverPassword:         this.state.serverPasswordValue,
-            locationPath:           this.state.pathValue
+            // locationServerName:     this.state.serverNameValue,
+            // serverLogin:            this.state.serverLoginValue,
+            // serverPassword:         this.state.serverPasswordValue,
+            locationPath:           pathValue,
+            locationFullPath:       this.props.dataStore + testOutputDir + pathValue
         };
 
         ClientTestOutputLocationServices.saveLocation(role, location);
@@ -117,8 +127,12 @@ export class TestOutputLocation extends Component {
         this.setState({pathValue: e.target.value})
     }
 
+    onUpload(event){
+        ClientTestOutputLocationServices.uploadTestFile(event.target.files[0], this.props.location.locationName);
+    }
+
     render() {
-        const {location, userRole, userContext, currentLocationId} = this.props;
+        const {location, dataStore, userRole, userContext, currentLocationId} = this.props;
 
         const activeClass = (location._id === currentLocationId ? ' location-active' : ' location-inactive');
 
@@ -128,17 +142,11 @@ export class TestOutputLocation extends Component {
             <div onClick={() => this.setCurrentLocation(location)}>
                 <Grid>
                     <Row>
-                        <Col sm={1}>
-                            {location.locationType}
-                        </Col>
-                        <Col sm={1}>
-                            {location.locationAccessType}
-                        </Col>
-                        <Col sm={3}>
+                        <Col sm={4}>
                             {location.locationName}
                         </Col>
-                        <Col sm={5}>
-                            {location.locationPath}
+                        <Col sm={6}>
+                            {location.locationFullPath}
                         </Col>
                         <Col sm={2}>
                             {sharedText}
@@ -146,8 +154,14 @@ export class TestOutputLocation extends Component {
                     </Row>
                 </Grid>
                 <div className="output-location-buttons">
-                    <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
-                    <Button id="butRemove" bsSize="xs" onClick={() => this.onRemove(userRole, location)}>Remove</Button>
+                    <div className="file-picker">
+                        <div className="design-item-note">Upload test result files to this location... </div>
+                        <input className="design-item-note" id="files" type="file" onChange={(e) => this.onUpload(e)}/>
+                    </div>
+                    <ButtonGroup>
+                        <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
+                        <Button id="butRemove" bsSize="xs" onClick={() => this.onRemove(userRole, location)}>Remove</Button>
+                    </ButtonGroup>
                 </div>
             </div>
         );
@@ -200,37 +214,40 @@ export class TestOutputLocation extends Component {
                     <Col componentClass={ControlLabel} sm={2}>
                         Location Path
                     </Col>
-                    <Col sm={10}>
+                    <Col componentClass={ControlLabel} sm={6}>
+                        {dataStore + UltrawideDirectory.TEST_OUTPUT_DIR}
+                    </Col>
+                    <Col sm={4}>
                         <FormControl type="text" placeholder={location.locationPath} value={this.state.pathValue} onChange={(e) => this.onPathChange(e)}/>
                     </Col>
                 </FormGroup>
 
-                <FormGroup controlId="formLocationServerName">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Location Server
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl type="text" placeholder={location.locationServerName} />
-                    </Col>
-                </FormGroup>
+                {/*<FormGroup controlId="formLocationServerName">*/}
+                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
+                        {/*Location Server*/}
+                    {/*</Col>*/}
+                    {/*<Col sm={10}>*/}
+                        {/*<FormControl type="text" placeholder={location.locationServerName} />*/}
+                    {/*</Col>*/}
+                {/*</FormGroup>*/}
 
-                <FormGroup controlId="formServerLogin">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Server Login
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl type="text" placeholder={location.serverLogin} />
-                    </Col>
-                </FormGroup>
+                {/*<FormGroup controlId="formServerLogin">*/}
+                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
+                        {/*Server Login*/}
+                    {/*</Col>*/}
+                    {/*<Col sm={10}>*/}
+                        {/*<FormControl type="text" placeholder={location.serverLogin} />*/}
+                    {/*</Col>*/}
+                {/*</FormGroup>*/}
 
-                <FormGroup controlId="formServerPassword">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Password
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl type="password" placeholder="Password" />
-                    </Col>
-                </FormGroup>
+                {/*<FormGroup controlId="formServerPassword">*/}
+                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
+                        {/*Password*/}
+                    {/*</Col>*/}
+                    {/*<Col sm={10}>*/}
+                        {/*<FormControl type="password" placeholder="Password" />*/}
+                    {/*</Col>*/}
+                {/*</FormGroup>*/}
 
                 <Button bsSize="xs" onClick={() => this.onSave(userRole, userContext)}>
                     Save
@@ -262,7 +279,8 @@ export class TestOutputLocation extends Component {
 }
 
 TestOutputLocation.propTypes = {
-    location: PropTypes.object.isRequired
+    location:   PropTypes.object.isRequired,
+    dataStore:  PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

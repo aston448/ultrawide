@@ -2,6 +2,11 @@
  * Created by aston on 02/09/2016.
  */
 
+export const UltrawideDirectory = {
+    BACKUP_DIR:         'design_backups/',
+    TEST_OUTPUT_DIR:    'test_outputs/'
+};
+
 export const RoleType = {
     NONE:       'NONE',
     DESIGNER:   'DESIGNER',
@@ -23,7 +28,6 @@ export const ViewType = {
     AUTHORISE:                  'AUTHORISE',                // Login screen
     HOME:                       'HOME',                     // Home Screen - available user roles / actions
     CONFIGURE:                  'CONFIGURE',                // Change user settings
-    TEST_OUTPUTS:               'TEST_OUTPUTS',             // Configure Test Outputs
     DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
     SELECT:                     'SELECT',                   // Main Selection Screen once in a Design
     DESIGN_NEW_EDIT:            'DESIGN_NEW_EDIT',          // Edit an unpublished design version
@@ -471,5 +475,11 @@ export const TestLocationFileType = {
     INTEGRATION:    'INTEGRATION',
     ACCEPTANCE:     'ACCEPTANCE'
 };
+
+export const TestLocationFileStatus = {
+    FILE_UPLOADED:      'FILE_UPLOADED',
+    FILE_NOT_UPLOADED:  'FILE_NOT_UPLOADED'
+};
+
 // Array for Display lists
 export const TestLocationFileTypes = [TestLocationFileType.NONE, TestLocationFileType.UNIT, TestLocationFileType.INTEGRATION, TestLocationFileType.ACCEPTANCE]

@@ -1,14 +1,15 @@
 import fs from 'fs';
 
 // Ultrawide Collections
+import { AppGlobalData }            from '../../collections/app/app_global_data.js';
 import { TestOutputLocations }      from '../../collections/configure/test_output_locations.js'
 import { TestOutputLocationFiles }  from '../../collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../collections/configure/user_test_type_locations.js';
 
 
 // Ultrawide Services
-import { log } from '../../common/utils.js';
-import { TestLocationType, ComponentType, LogLevel} from '../../constants/constants.js';
+import { log, getDateTimeString} from '../../common/utils.js';
+import { TestLocationType, TestLocationFileStatus, LogLevel} from '../../constants/constants.js';
 import { DefaultLocationText } from '../../constants/default_names.js';
 
 //======================================================================================================================
@@ -50,10 +51,11 @@ class TestOutputLocationServices {
                     locationAccessType:     location.locationAccessType,
                     locationIsShared:       location.locationIsShared,
                     locationUserId:         userId,
-                    locationServerName:     location.locationServerName,
-                    serverLogin:            location.serverLogin,
-                    serverPassword:         location.serverPassword,
-                    locationPath:           location.locationPath
+                    // locationServerName:     location.locationServerName,
+                    // serverLogin:            location.serverLogin,
+                    // serverPassword:         location.serverPassword,
+                    locationPath:           location.locationPath,
+                    locationFullPath:       location.locationFullPath
                 }
             );
 
@@ -67,6 +69,31 @@ class TestOutputLocationServices {
 
         if (Meteor.isServer) {
 
+
+            // See if the existing location directory exists
+            const currentLocation = TestOutputLocations.findOne({
+                _id: location._id
+            });
+
+            if(currentLocation && currentLocation.locationFullPath !== 'NONE'){
+
+                if(fs.existsSync(currentLocation.locationFullPath)){
+
+                    // Update existing DIR if path is changing - it should not be possible to rename to another existing path
+                    if(currentLocation.locationPath !== location.locationPath){
+
+                        // Need to rename the actual DIR
+                        fs.renameSync(currentLocation.locationFullPath, location.locationFullPath)
+                    }
+                } else {
+
+                    // Need to create the actual DIR
+                    fs.mkdirSync(location.locationFullPath);
+
+                }
+            }
+
+
             TestOutputLocations.update(
                 {_id: location._id},
                 {
@@ -77,10 +104,11 @@ class TestOutputLocationServices {
                         locationAccessType:     location.locationAccessType,
                         locationIsShared:       location.locationIsShared,
                         locationUserId:         location.locationUserId,
-                        locationServerName:     location.locationServerName,
-                        serverLogin:            location.serverLogin,
-                        serverPassword:         location.serverPassword,
-                        locationPath:           location.locationPath
+                        // locationServerName:     location.locationServerName,
+                        // serverLogin:            location.serverLogin,
+                        // serverPassword:         location.serverPassword,
+                        locationPath:           location.locationPath,
+                        locationFullPath:       location.locationFullPath
                     }
                 }
             );
@@ -92,6 +120,10 @@ class TestOutputLocationServices {
 
         if (Meteor.isServer) {
 
+            const location = TestOutputLocations.findOne({
+                _id: locationId
+            });
+
             const result = TestOutputLocations.remove({_id: locationId});
 
             if(result > 0){
@@ -100,6 +132,11 @@ class TestOutputLocationServices {
 
                 // And any user config related to it as well
                 UserTestTypeLocations.remove({locationId: locationId});
+            }
+
+            // And remove the associated DIR on the server
+            if(fs.existsSync(location.locationFullPath)){
+                fs.rmdirSync(location.locationFullPath);
             }
         }
     };
@@ -285,22 +322,68 @@ class TestOutputLocationServices {
         });
     };
 
-    uploadTestResultsFile(blob, name, path, encoding){
+    uploadTestResultsFile(blob, name, locationName, encoding){
 
         if(Meteor.isServer){
 
-            let resultsLocation = process.env.TEST_RESULTS_DIR;
+            const location = TestOutputLocations.findOne({
+                locationName:   locationName
+            });
 
-            if((typeof(resultsLocation) === 'undefined')){
-                throw new Meteor.Error('TEST_UPLOAD_FAIL', 'Test Results directory is not defined');
-            } else {
-
-                //const filename = name.toLowerCase().replace(/ /g,'_').replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9_.]/g,'');
-
-                fs.writeFileSync(resultsLocation + name, blob, encoding);
+            if(!location){
+                throw new Meteor.Error('TEST_UPLOAD_FAIL', 'Invalid location name: ' + locationName);
             }
+
+            if(location.locationFullPath === 'NONE' || location.locationPath === 'NONE'){
+                throw new Meteor.Error('TEST_UPLOAD_FAIL', 'Invalid location path: ' + location.locationFullPath);
+            }
+
+            fs.writeFileSync(location.locationFullPath + name, blob, encoding);
+
+            this.updateResultsFileStatuses(location);
         }
     };
+
+    updateResultsFileStatuses(location){
+
+        // Set all location files as not uploaded
+        TestOutputLocationFiles.update(
+            {locationId: location._id},
+            {
+                $set: {
+                    fileStatus:     TestLocationFileStatus.FILE_NOT_UPLOADED,
+                    lastUpdated:    ''
+                }
+            },
+            {multi: true}
+        );
+
+        // Get a list of files at the location
+        const files = fs.readdirSync(location.locationFullPath);
+
+        // And set any matching location files as uploaded
+        files.forEach((file) => {
+
+            // Get the file details for the last modified date
+            const stats = fs.statSync(location.locationFullPath + file);
+            const modifiedDate = new Date(stats.mtime);
+            const dateString = getDateTimeString(modifiedDate);
+
+            TestOutputLocationFiles.update(
+                {
+                    locationId: location._id,
+                    fileName:   file
+                },
+                {
+                    $set: {
+                        fileStatus:     TestLocationFileStatus.FILE_UPLOADED,
+                        lastUpdated:    dateString
+                    }
+                }
+            );
+        });
+
+    }
 }
 
 export default new TestOutputLocationServices();

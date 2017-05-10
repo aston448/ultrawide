@@ -3,6 +3,8 @@
 import { UserRoles }                    from '../../collections/users/user_roles.js';
 
 // Ultrawide Services
+import { UltrawideDirectory, LogLevel } from '../../constants/constants.js';
+
 import ImpexServices                    from '../../servicers/administration/impex_services.js';
 import StartupModules                   from '../../service_modules/administration/startup_service_modules.js';
 
@@ -37,19 +39,17 @@ class StartupServices{
             }
 
             // Also make sure the global App data exists and is up to date for the current release
-            StartupModules.setUltrawideVersionData();
+            const dataStore = StartupModules.setUltrawideVersionData();
+
+            // We now have the base ultrawide data directory so check that the key sub-dirs exist
+            StartupModules.checkCreateDataDirs(dataStore);
 
             // Now check that all the backup files for this instance are represented
-            const backupLocation = process.env.ULTRAWIDE_BACKUP_PATH;
+            const backupLocation = dataStore + UltrawideDirectory.BACKUP_DIR;
 
-            if (typeof(backupLocation) !== 'undefined') {
+            // Get and populate backup file data.  This will allow new files to be picked up and removed ones to disappear
+            ImpexServices.checkAndPopulateBackupFileData(backupLocation);
 
-                // Get and populate backup file data.  This will allow new files to be picked up and removed ones to disappear
-                ImpexServices.checkAndPopulateBackupFileData(backupLocation);
-
-            } else {
-                console.log("CANNOT START ULTRAWIDE: Environment variable ULTRAWIDE_BACKUP_PATH must be set to a location accessible by this instance");
-            }
         }
     }
 }

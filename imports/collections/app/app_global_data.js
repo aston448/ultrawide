@@ -8,6 +8,7 @@ let Schema = new SimpleSchema({
     appVersion:         {type: Number},     // Version of Ultrawide
     dataVersion:        {type: Number},     // DB Version of Ultrawide
     versionDate:        {type: String},     // Date this version introduced
+    dataStore:          {type: String}      // Location of Ultrawide Server data
 });
 
 AppGlobalData.attachSchema(Schema);

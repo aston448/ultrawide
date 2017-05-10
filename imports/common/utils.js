@@ -15,6 +15,26 @@ export function padDigits(number, digits) {
     return new Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
 }
 
+
+export function getDateTimeString(dateTime){
+
+    return dateTime.getFullYear() + '-' +
+        padDigits((dateTime.getMonth() + 1), 2) + '-' +
+        padDigits(dateTime.getDate(), 2) + ' ' +
+        padDigits(dateTime.getHours(), 2)  + ':' +
+        padDigits(dateTime.getMinutes(), 2)
+}
+
+export function getDateTimeStringWithSeconds(dateTime){
+
+    return dateTime.getFullYear() + '-' +
+        padDigits((dateTime.getMonth() + 1), 2) + '-' +
+        padDigits(dateTime.getDate(), 2) + ' ' +
+        padDigits(dateTime.getHours(), 2)  + ':' +
+        padDigits(dateTime.getMinutes(), 2) + ':' +
+        padDigits(dateTime.getSeconds(), 2);
+}
+
 export function createSelectionList(typesArray){
 
     // NOTE: This implicitly requires an import of React

@@ -9,9 +9,9 @@ import PropTypes from 'prop-types';
 
 // Ultrawide Services
 import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
-import { TestLocationFileTypes, TestRunners}    from '../../../constants/constants.js';
-import { createSelectionList }                  from '../../../common/utils.js'
-
+import { TestLocationFileTypes, TestRunners, TestLocationFileStatus}    from '../../../constants/constants.js';
+import { createSelectionList }                  from '../../../common/utils.js';
+import TextLookups                              from '../../../common/lookups.js';
 // Bootstrap
 import {Button} from 'react-bootstrap';
 import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-bootstrap';
@@ -94,23 +94,34 @@ export class TestOutputFile extends Component {
     render() {
         const {locationFile, userRole, currentLocationId} = this.props;
 
-        const activeClass = (location.Id === currentLocationId ? ' location-active' : ' location-inactive');
+        const fileClass = (locationFile.fileStatus === TestLocationFileStatus.FILE_UPLOADED ? ' file-uploaded' : ' file-missing');
 
         const viewInstance = (
-            <div>
+            <div className={fileClass}>
                 <Grid>
                     <Row>
                         <Col sm={4}>
                             {locationFile.fileAlias}
                         </Col>
-                        <Col sm={4}>
+                        <Col sm={3}>
                             {locationFile.fileName}
                         </Col>
                         <Col sm={2}>
-                            {locationFile.fileType}
+                            {TextLookups.testFileType(locationFile.fileType)}
                         </Col>
                         <Col sm={2}>
                             {locationFile.testRunner}
+                        </Col>
+                    </Row>
+                    <Row className="file-status">
+                        <Col sm={2}>
+                            STATUS:
+                        </Col>
+                        <Col sm={3}>
+                            {TextLookups.fileStatus(locationFile.fileStatus)}
+                        </Col>
+                        <Col sm={7}>
+                            {locationFile.lastUpdated}
                         </Col>
                     </Row>
                 </Grid>
@@ -181,7 +192,7 @@ export class TestOutputFile extends Component {
             )
         } else {
             return (
-                <div className="test-output-file">
+                <div>
                     {viewInstance}
                 </div>
             )

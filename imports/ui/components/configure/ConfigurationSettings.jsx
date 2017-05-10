@@ -3,17 +3,19 @@
 
 // Meteor / React Services
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
+import TestOutputsContainer                     from '../../containers/configure/TestOutputsContainer.jsx';
+import LocalSettingsContainer                   from '../../containers/configure/LocalSettingsContainer.jsx';
 
 // Ultrawide Services
 import ClientUserSettingsServices               from '../../../apiClient/apiClientUserSettings.js';
-import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
 
 import {UserSettingValue, UserSetting} from '../../../constants/constants.js';
 
 // Bootstrap
-import {FormGroup, Radio, Grid, Row, Col} from 'react-bootstrap';
+import {FormGroup, Radio, Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -46,18 +48,10 @@ export class ConfigurationSettings extends Component {
         ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_SCREEN_SIZE, newSize);
     }
 
-    onSaveSettings(role){
-
-        event.preventDefault();
-
-    }
-
-    onUpload(event){
-        ClientTestOutputLocationServices.uploadTestFile(event.target.files[0]);
-    }
 
     render() {
-        const {userRole, currentWindowSize} = this.props;
+
+        const {userContext} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -75,44 +69,52 @@ export class ConfigurationSettings extends Component {
                 </FormGroup>
             </div>;
 
-        const testDir = 'ultrawide_data/tests';
-
-        const uploadLocalTestFiles =
-            <div className="file-picker">
-                <div className="design-item-note">Upload local test results file to: </div>
-                <div className="design-item-note">{testDir}</div>
-                <input className="design-item-note" id="files" type="file" onChange={(e) => this.onUpload(e)}/>
-            </div>;
-
-        // Layout ------------------------------------------------------------------------------------------------------
         const settingsGrid = (
             <Grid>
                 <Row>
                     <Col md={4}>
                         {screenSizeSettings}
                     </Col>
-                    <Col md={4}>
-                        {uploadLocalTestFiles}
-                    </Col>
+
                 </Row>
             </Grid>
         );
 
+        console.log("User context is " + userContext);
+
+        const testLocationManagement =
+            <TestOutputsContainer params={{
+                userContext: userContext
+            }}/>;
+
+        const userTestLocationsManagement =
+            <LocalSettingsContainer params={{
+                userContext: userContext
+            }}/>;
+
+
+        // Layout ------------------------------------------------------------------------------------------------------
+
+
         return (
-            settingsGrid
+            <Tabs defaultActiveKey={2} id="config-view_tabs">
+                <Tab eventKey={1} title="TEST LOCATION MANAGEMENT">{testLocationManagement}</Tab>
+                <Tab eventKey={2} title="MY TEST LOCATIONS">{userTestLocationsManagement}</Tab>
+                <Tab eventKey={3} title="ULTRAWIDE SETTINGS">{settingsGrid}</Tab>
+            </Tabs>
+
         )
 
     }
 }
 
 ConfigurationSettings.propTypes = {
+    userContext:    PropTypes.object.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole:           state.currentUserRole,
-        userContext:        state.currentUserItemContext,
         currentWindowSize:  state.currentWindowSize
     }
 }

@@ -5,6 +5,7 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
+import { AppGlobalData }                    from '../collections/app/app_global_data.js';
 import { UserRoles }                        from '../collections/users/user_roles.js';
 import { DesignBackups }                    from '../collections/backup/design_backups.js';
 import { UserCurrentEditContext }           from '../collections/context/user_current_edit_context.js';
@@ -67,6 +68,7 @@ class ClientContainerServices{
         if(Meteor.isClient) {
 
             // Subscribing to these here makes them available to the whole app...
+            const agHandle = Meteor.subscribe('appGlobalData');
             const urHandle = Meteor.subscribe('userRoles');
             const dbHandle = Meteor.subscribe('designBackups');
             const usHandle = Meteor.subscribe('userSettings');
@@ -81,7 +83,7 @@ class ClientContainerServices{
             const wpHandle = Meteor.subscribe('workPackages');
 
             const loading = (
-                !urHandle.ready() || !dbHandle.ready() || !usHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
+                !agHandle.ready() || !urHandle.ready() || !dbHandle.ready() || !usHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
             );
 
             return {isLoading: loading};
@@ -121,8 +123,7 @@ class ClientContainerServices{
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", userContext.designVersionId);
 
-
-
+                // Design Version specific data
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 const wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
@@ -130,14 +131,8 @@ class ClientContainerServices{
                 const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
 
-
+                // User specific data
                 const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId);
-                // const dfHandle = Meteor.subscribe('userDevFeatures', userId);
-                // const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
-                // const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
-                // const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps', userId);
-                // const wmHandle = Meteor.subscribe('userWorkPackageMashData', userId);
-                // const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData', userId);
                 const mmHandle = Meteor.subscribe('userUnitTestMashData', userContext.userId);
                 const arHandle = Meteor.subscribe('userAccTestResults', userContext.userId);
                 const irHandle = Meteor.subscribe('userIntTestResults', userContext.userId);
@@ -146,13 +141,6 @@ class ClientContainerServices{
                 const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userContext.userId);
                 const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
                 const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
-
-
-                // Load current WP data if WP is known
-                //let wcHandle = null;
-                //if(userContext.workPackageId !== 'NONE'){
-
-                //}
 
                 Tracker.autorun((loader) => {
 
@@ -174,11 +162,6 @@ class ClientContainerServices{
                             messageType: MessageType.INFO,
                             messageText: 'Design Version data loaded'
                         }));
-
-                        // Set open items now that data is loaded
-                        //ClientUserContextServices.setOpenWorkPackageItems(userContext);
-
-                        // ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
                         // If an action wanted after loading call it...
                         if (callback) {
@@ -320,6 +303,29 @@ class ClientContainerServices{
     getDesignBackups(){
 
         return DesignBackups.find({}).fetch();
+    }
+
+    // Global Data store
+    getDataStore(){
+
+        const appData = AppGlobalData.findOne({
+            versionKey: 'CURRENT_VERSION'
+        });
+
+        if(!appData){
+            throw new Meteor.Error('DATA_STORE_ERROR', 'Ultrawide global data is not defined');
+        }
+
+        if(appData.dataStore.length === 0){
+            throw new Meteor.Error('DATA_STORE_ERROR', 'Ultrawide data store is not defined');
+        }
+
+        // Make sure a proper path
+        if(appData.dataStore.endsWith('/')){
+            return appData.dataStore;
+        } else {
+            return appData.dataStore + '/';
+        }
     }
 
     // Test Output Locations
@@ -2175,15 +2181,6 @@ class ClientContainerServices{
             viewOptionType: ViewOptionType.NONE
         };
 
-        const gotoTestConfig = {
-            key: MenuAction.MENU_ACTION_GOTO_TEST_CONFIG,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_TEST_CONFIG),
-            action: MenuAction.MENU_ACTION_GOTO_TEST_CONFIG,
-            hasCheckbox: false,
-            checkboxValue: false,
-            viewOptionType: ViewOptionType.NONE
-        };
-
         // Dropdown Items - View
         const viewDetails = {
             key: MenuAction.MENU_ACTION_VIEW_DETAILS,
@@ -2310,16 +2307,7 @@ class ClientContainerServices{
 
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [gotoTestConfig, gotoDesigns];
-                }
-                break;
-
-            case ViewType.TEST_OUTPUTS:
-                switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [gotoConfig, gotoDesigns];
-                        break;
-
+                        return [gotoSelection, gotoDesigns];
                 }
                 break;
 
@@ -2341,7 +2329,7 @@ class ClientContainerServices{
 
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [gotoTestConfig];
+                        return [gotoSelection, gotoConfig];
                 }
                 break;
 

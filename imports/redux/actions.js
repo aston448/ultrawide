@@ -198,9 +198,10 @@ export function setCurrentWindowSize(newSize) {
 
 export function setCurrentUserItemContext(contextItem, saveToDb){
 
-    //console.log("ACTIONS: Current user context update: DE: " + contextItem.designId + " DV: " + contextItem.designVersionId + " DU: " + contextItem.designUpdateId + " WP: " + contextItem.workPackageId + " DC: " + contextItem.designComponentId);
+    console.log("ACTIONS: Current user context update: DE: " + contextItem.designId + " DV: " + contextItem.designVersionId + " DU: " + contextItem.designUpdateId + " WP: " + contextItem.workPackageId + " DC: " + contextItem.designComponentId);
 
     return function (dispatch) {
+
 
         dispatch({type: SET_CURRENT_USER_ITEM_CONTEXT, newUserItemContext: contextItem});
 

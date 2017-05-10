@@ -42,12 +42,13 @@ export class TestOutputsScreen extends Component {
         ClientTestOutputLocationServices.addLocation(role, userContext);
     };
 
-    renderLocationsList(locations){
+    renderLocationsList(locations, dataStore){
         return locations.map((location) => {
             return (
                 <TestOutputLocation
                     key={location._id}
                     location={location}
+                    dataStore={dataStore}
                 />
             );
         });
@@ -61,12 +62,12 @@ export class TestOutputsScreen extends Component {
 
     render() {
 
-        const {locationData, userRole, userContext, locationId} = this.props;
+        const {locationData, dataStore, userRole, userContext, locationId} = this.props;
 
         let bodyDataFunction = null;
 
         if(locationData && locationData.length > 0) {
-            bodyDataFunction = () => this.renderLocationsList(locationData);
+            bodyDataFunction = () => this.renderLocationsList(locationData, dataStore);
         } else {
             bodyDataFunction = () => this.noLocations();
         }
@@ -97,7 +98,8 @@ export class TestOutputsScreen extends Component {
 }
 
 TestOutputsScreen.propTypes = {
-    locationData:       PropTypes.array.isRequired
+    locationData:       PropTypes.array.isRequired,
+    dataStore:          PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -113,6 +115,8 @@ function mapStateToProps(state) {
 export default TestOutputsContainer = createContainer(({params}) => {
 
     const locationData =  ClientContainerServices.getTestOutputLocationData(params.userContext.userId);
-    return {locationData: locationData};
+    const dataStore = ClientContainerServices.getDataStore();
+
+    return {locationData: locationData, dataStore: dataStore};
 
 }, connect(mapStateToProps)(TestOutputsScreen));

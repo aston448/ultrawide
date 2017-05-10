@@ -65,9 +65,6 @@ export class UltrawideMenuDropdownItem extends Component {
         this.props.clickAction(false);
 
         switch(action){
-            case MenuAction.MENU_ACTION_GOTO_TEST_CONFIG:
-                ClientAppHeaderServices.setViewTestOutput();
-                break;
             case MenuAction.MENU_ACTION_GOTO_SELECTION:
                 ClientAppHeaderServices.setViewSelection();
                 break;

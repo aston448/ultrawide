@@ -11,8 +11,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
 import UltrawideAdmin                       from  '../../components/admin/UltrawideAdmin.jsx';
 import AppRolesContainer                    from  '../../containers/app/AppRolesContainer.jsx';
-import LocalSettingsContainer               from  '../../containers/configure/LocalSettingsContainer.jsx';
-import TestOutputsContainer                 from  '../../containers/configure/TestOutputsContainer.jsx';
 import DesignsContainer                     from  '../../containers/select/DesignsContainer.jsx';
 import DesignVersionsContainer              from  '../../containers/select/DesignVersionsContainer.jsx';
 import EditDesignContainer                  from  '../../containers/edit/EditDesignContainer.jsx';
@@ -28,6 +26,7 @@ import {ViewType} from '../../../constants/constants.js'
 
 // REDUX services
 import {connect} from 'react-redux';
+import {ConfigurationSettings} from "../configure/ConfigurationSettings";
 
 // React DnD
 
@@ -78,16 +77,9 @@ class AppBody extends Component {
                 break;
             case ViewType.CONFIGURE:
                 bodyHtml =
-                    <LocalSettingsContainer params={{
-                        userContext: userContext,
-                        userRole: userRole
-                    }}/>;
-                break;
-            case ViewType.TEST_OUTPUTS:
-                bodyHtml =
-                    <TestOutputsContainer params={{
-                        userContext: userContext
-                    }}/>;
+                    <ConfigurationSettings
+                        userContext={userContext}
+                    />;
                 break;
             case ViewType.DESIGNS:
                 bodyHtml =

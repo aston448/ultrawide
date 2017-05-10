@@ -1,4 +1,5 @@
-import {DesignVersionStatus, ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus, MenuAction} from '../constants/constants.js';
+import {DesignVersionStatus, ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus,
+    DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus, MenuAction, TestLocationFileStatus, TestLocationFileType} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -33,8 +34,6 @@ class TextLookups {
                 return 'ROLE SELECTION';
             case ViewType.CONFIGURE:
                 return 'LOCAL SETTINGS';
-            case ViewType.TEST_OUTPUTS:
-                return 'TEST OUTPUT LOCATIONS';
             case ViewType.DESIGN_NEW_EDIT:
                 return 'DESIGN EDITOR';
             case ViewType.DESIGN_PUBLISHED_VIEW:
@@ -200,8 +199,6 @@ class TextLookups {
                 return 'Configuration';
             case MenuAction.MENU_ACTION_GOTO_SELECTION:
                 return 'Item Selection';
-            case MenuAction.MENU_ACTION_GOTO_TEST_CONFIG:
-                return 'Test Output Config';
             case MenuAction.MENU_ACTION_VIEW_DETAILS:
                 return 'Details';
             case MenuAction.MENU_ACTION_VIEW_PROGRESS:
@@ -226,6 +223,31 @@ class TextLookups {
                 return 'Test Data';
             case MenuAction.MENU_ACTION_REFRESH_DATA:
                 return 'All Data';
+        }
+    }
+
+    testFileType(fileType){
+
+        switch(fileType){
+
+            case TestLocationFileType.UNIT:
+                return 'Unit';
+            case TestLocationFileType.INTEGRATION:
+                return 'Integration';
+            case TestLocationFileType.ACCEPTANCE:
+                return 'Acceptance';
+            default:
+                return 'None';
+        }
+    }
+
+    fileStatus(fileStatus){
+
+        switch(fileStatus){
+            case TestLocationFileStatus.FILE_UPLOADED:
+                return 'UPLOADED';
+            case TestLocationFileStatus.FILE_NOT_UPLOADED:
+                return 'MISSING';
         }
     }
 

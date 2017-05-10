@@ -403,10 +403,6 @@ class ClientAppHeaderServices{
         return true;
     }
 
-    setViewTestOutput() {
-        store.dispatch(setCurrentView(ViewType.TEST_OUTPUTS));
-        return true;
-    }
 
     setViewConfigure() {
         // Returns to the Config Screen

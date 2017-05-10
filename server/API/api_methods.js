@@ -13,6 +13,7 @@ JsonRoutes.ErrorMiddleware.use(RestMiddleware.handleErrorAsJson);
 // ++ Method Options +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // These implicitly define the external interface
+// NOTE: May be Postman bug but using header names in camel case does not work...
 
 SimpleRest.setMethodOptions('upload-file-v1', {
 
@@ -23,7 +24,7 @@ SimpleRest.setMethodOptions('upload-file-v1', {
         const header = request.headers;     // Must contain file name and authentication key
         const file = request.body;          // Contains file binary
 
-        return [file, header.name, header.key];
+        return [file, header.file, header.location, header.key];
     }
 });
 
@@ -33,11 +34,11 @@ SimpleRest.setMethodOptions('upload-file-v1', {
 
 Meteor.methods({
 
-    'upload-file-v1': (locationFile, name, key) => {
+    'upload-file-v1': (locationFile, name, location, key) => {
 
         try{
             UserManagementServices.verifyApiKey(key);
-            TestOutputLocationServices.uploadTestResultsFile(locationFile, name, '', 'binary');
+            TestOutputLocationServices.uploadTestResultsFile(locationFile, name, location, 'binary');
         } catch (e) {
             throw new Meteor.Error('API_UPLOAD_FILE_ERR', e.reason)
         }

@@ -54,12 +54,6 @@ export class LocalSettingsScreen extends Component {
         }
     };
 
-    renderOtherConfigSettings(){
-        return (
-            <ConfigurationSettings/>
-        )
-    }
-
     render(){
 
         const {userLocations, userRole} = this.props;
@@ -69,19 +63,10 @@ export class LocalSettingsScreen extends Component {
         return (
             <Grid>
                 <Row>
-                    <Col md={6} className="close-col">
+                    <Col md={8} className="close-col">
                         <ItemContainer
                             headerText={headerText}
                             bodyDataFunction={() => this.renderTestLocationsList(userLocations)}
-                            hasFooterAction={false}
-                            footerAction={'NONE'}
-                            footerActionFunction={null}
-                        />
-                    </Col>
-                    <Col md={6} className="close-col">
-                        <ItemContainer
-                            headerText={'Other configuration settings'}
-                            bodyDataFunction={() => this.renderOtherConfigSettings()}
                             hasFooterAction={false}
                             footerAction={'NONE'}
                             footerActionFunction={null}

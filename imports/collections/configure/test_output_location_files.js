@@ -1,5 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 
+import { TestLocationFileStatus } from '../../constants/constants.js';
+
 export const TestOutputLocationFiles = new Mongo.Collection('testOutputLocationFiles');
 
 let Schema = new SimpleSchema({
@@ -10,6 +12,8 @@ let Schema = new SimpleSchema({
     testRunner:             {type: String, defaultValue: 'NONE'},                   // Which plugin needed to read the test output
     fileName:               {type: String, defaultValue: 'NONE'},                   // Name of actual file
     allFilesOfType:         {type: String, defaultValue: 'NONE'},                   // Alternative to a name - *.xxx
+    fileStatus:             {type: String, defaultValue: TestLocationFileStatus.FILE_NOT_UPLOADED},                   // Present or not present on the server
+    lastUpdated:            {type: String, optional: true},                         // Last modified date for tests
 });
 
 TestOutputLocationFiles.attachSchema(Schema);

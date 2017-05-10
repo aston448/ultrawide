@@ -63,6 +63,7 @@ class ClientLoginServices{
 
                                 // Properly logged in as normal user so retrieve user settings - stored to REDUX
                                 const userContext = ClientUserContextServices.getUserContext(userId);
+
                                 ClientUserContextServices.getUserViewOptions(userId);
                                 store.dispatch(setCurrentUserName(user.displayName));
 

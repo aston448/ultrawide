@@ -1,10 +1,12 @@
 
+import fs from 'fs';
+
 // Ultrawide Collections
 import { AppGlobalData }                from '../../collections/app/app_global_data.js';
 
 
 // Ultrawide Services
-import { LogLevel } from '../../constants/constants.js';
+import { UltrawideDirectory, LogLevel } from '../../constants/constants.js';
 import { log }              from '../../common/utils.js';
 
 
@@ -19,6 +21,21 @@ import { log }              from '../../common/utils.js';
 class StartupModules{
 
     setUltrawideVersionData(){
+
+        let dataStore = process.env.ULTRAWIDE_DATA_STORE;
+
+        if (typeof(dataStore) === 'undefined') {
+            throw new Meteor.Error('STARTUP', 'Ultrawide Data Store is not defined');
+        }
+
+        if(dataStore.length === 0){
+            throw new Meteor.Error('STARTUP', 'Ultrawide Data Store is not defined');
+        }
+
+        // Add trailing / if missing
+        if(!dataStore.endsWith('/')){
+            dataStore = dataStore + '/';
+        }
 
         const appData = AppGlobalData.findOne({
             versionKey: 'CURRENT_VERSION'
@@ -35,7 +52,8 @@ class StartupModules{
                 versionKey:         'CURRENT_VERSION',
                 appVersion:         appVersion,
                 dataVersion:        dataVersion,
-                versionDate:        versionDate
+                versionDate:        versionDate,
+                dataStore:          dataStore
             });
 
         } else {
@@ -46,11 +64,32 @@ class StartupModules{
                     $set:{
                         appVersion:         appVersion,
                         dataVersion:        dataVersion,
-                        versionDate:        versionDate
+                        versionDate:        versionDate,
+                        dataStore:          dataStore
                     }
                 }
             )
         }
+
+        return dataStore;
+    }
+
+    checkCreateDataDirs(dataStore){
+
+        // There are two fixed dirs under the main ultrawide data dir: design_backups and test_outputs
+        try {
+            if (!fs.existsSync(dataStore + UltrawideDirectory.BACKUP_DIR)) {
+                fs.mkdirSync(dataStore + UltrawideDirectory.BACKUP_DIR);
+            }
+
+            if (!fs.existsSync(dataStore + UltrawideDirectory.TEST_OUTPUT_DIR)) {
+                fs.mkdirSync(dataStore + UltrawideDirectory.TEST_OUTPUT_DIR);
+            }
+        } catch (e) {
+            log((msg) => console.log(msg), LogLevel.ERROR, 'Failed to create basic Ultrawide directories: {}', e.stack);
+            throw new Meteor.Error(e.error, e.stack);
+        }
+
     }
 }
 

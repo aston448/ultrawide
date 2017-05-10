@@ -49,17 +49,6 @@ class TestIntegrationModules{
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration test results...");
 
-        // Reset existing results.  Assume no tests until we find otherwise
-        UserIntTestResults.update(
-            {userId: userContext.userId},
-            {
-                $set:{
-                    dataStatus: TestDataStatus.TEST_DATA_NO_TEST
-                }
-            },
-            {multi: true}
-        );
-
         // Get a list of the expected test files for integration
 
         // See which locations the user has marked as containing integration files for the current role
@@ -91,7 +80,7 @@ class TestIntegrationModules{
 
                 testOutputFiles.forEach((file) => {
 
-                    const testFile = outputLocation.locationPath + file.fileName;
+                    const testFile = outputLocation.locationFullPath + file.fileName;
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Results from {}", testFile);
 
@@ -107,10 +96,6 @@ class TestIntegrationModules{
 
                 });
 
-            } else {
-
-                // TODO - server access code...
-
             }
         });
 
@@ -118,17 +103,6 @@ class TestIntegrationModules{
     };
 
     getUnitTestResults(userContext){
-
-        // Reset existing results.  Assume no tests until we find otherwise
-        UserUnitTestResults.update(
-            {userId: userContext.userId},
-            {
-                $set:{
-                    dataStatus: TestDataStatus.TEST_DATA_NO_TEST
-                }
-            },
-            {multi: true}
-        );
 
         // Get a list of the expected test files for unit tests
 
@@ -153,7 +127,7 @@ class TestIntegrationModules{
 
                 testOutputFiles.forEach((file) => {
 
-                    const testFile = outputLocation.locationPath + file.fileName;
+                    const testFile = outputLocation.locationFullPath + file.fileName;
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Results from {}", testFile);
 
@@ -168,10 +142,6 @@ class TestIntegrationModules{
                     }
 
                 });
-
-            } else {
-
-                // TODO - server access code...
 
             }
         });
