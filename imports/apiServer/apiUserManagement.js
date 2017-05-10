@@ -3,7 +3,8 @@ import {
     addUser,
     saveUser,
     activateUser,
-    deactivateUser
+    deactivateUser,
+    saveUserApiKey
 } from '../apiValidatedMethods/user_management_methods.js'
 
 // =====================================================================================================================
@@ -64,6 +65,19 @@ class ServerUserManagementApi {
             }
         );
     };
+
+    saveUserApiKey(userId, apiKey, callback){
+
+        saveUserApiKey.call(
+            {
+                userId: userId,
+                apiKey: apiKey
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        )
+    }
 }
 
 export default new ServerUserManagementApi();

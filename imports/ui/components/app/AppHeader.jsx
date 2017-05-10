@@ -100,7 +100,9 @@ export class AppHeader extends Component {
                 status = 'MANAGER - ' + viewText;
                 break;
             default:
+                // Admin user
                 roleClass = 'no-role';
+                status = viewText;
         }
 
         // Display the required header for the view

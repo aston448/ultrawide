@@ -1,7 +1,7 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
-import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
+import { UserRoles }                        from '../collections/users/user_roles.js';
 
 // Ultrawide Services
 import { ViewType, MessageType }            from '../constants/constants.js';
@@ -156,6 +156,27 @@ class ClientUserManagementServices{
         return {success: true, message: ''};
     };
 
+    saveUserApiKey(apiKey){
+
+        const userId = store.getState().currentUserItemContext.userId;
+
+        ServerUserManagementApi.saveUserApiKey(userId, apiKey, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: UserManagementMessages.MSG_USER_API_KEY_SAVED
+                }));
+            }
+        });
+    }
+
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // Keep track of the currently selected location
@@ -164,6 +185,38 @@ class ClientUserManagementServices{
         store.dispatch(setCurrentUserId(userId));
 
     };
+
+    getUserApiKey(){
+
+        const userId = store.getState().currentUserItemContext.userId;
+
+        const userData = UserRoles.findOne(
+            {userId: userId}
+        );
+
+        if(userData){
+            return userData.apiKey;
+        } else {
+            return 'No key available'
+        }
+    }
+
+    generateUserApiKey(){
+
+        let newKey = "";
+        const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( let i=0; i < 16; i++ ) {
+            newKey += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+
+        // And store it
+        this.saveUserApiKey(newKey);
+
+        return newKey;
+    }
+
+
 }
 
 export default new ClientUserManagementServices();

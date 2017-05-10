@@ -9,7 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
-import UserManagementContainer              from  '../../containers/app/UserManagementContainer.jsx';
+import UltrawideAdmin                       from  '../../components/admin/UltrawideAdmin.jsx';
 import AppRolesContainer                    from  '../../containers/app/AppRolesContainer.jsx';
 import LocalSettingsContainer               from  '../../containers/configure/LocalSettingsContainer.jsx';
 import TestOutputsContainer                 from  '../../containers/configure/TestOutputsContainer.jsx';
@@ -68,8 +68,7 @@ class AppBody extends Component {
             case ViewType.ADMIN:
                 // Go to the User Admin screen
                 bodyHtml =
-                    <UserManagementContainer params={{
-                    }}/>;
+                    <UltrawideAdmin/>;
                 break;
             case ViewType.HOME:
                 bodyHtml =

@@ -111,6 +111,41 @@ class UserManagementServices {
             );
         }
     };
+
+    saveUserApiKey(userId, apiKey){
+
+        UserRoles.update(
+            {userId: userId},
+            {
+                $set:{
+                    apiKey: apiKey
+                }
+            }
+        );
+    }
+
+    verifyApiKey(apiKey){
+
+        // The api key should be that provided to the admin user
+        const userData = UserRoles.findOne({
+            userName: 'admin'
+        });
+
+        if(userData){
+            // And a key must have been deliberately generated
+            if(userData.apiKey !== 'NONE'){
+                if(userData.apiKey !== apiKey){
+                    throw new Meteor.Error('API', 'Invalid Access Key');
+                }
+            } else {
+                throw new Meteor.Error('API', 'No Access Key');
+            }
+        } else {
+            throw new Meteor.Error('API', 'No Access Key');
+        }
+
+        return true;
+    }
 }
 
 export default new UserManagementServices();

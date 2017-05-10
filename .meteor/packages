@@ -34,3 +34,5 @@ dispatch:mocha
 practicalmeteor:mocha
 mikowals:batch-insert
 simple:rest
+simple:rest-json-error-handler
+simple:json-routes

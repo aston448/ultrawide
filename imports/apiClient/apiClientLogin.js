@@ -53,11 +53,11 @@ class ClientLoginServices{
                         if(user.isActive) {
                             if (user.isAdmin) {
 
-                                // Special case - can only access the user admin view
-                                store.dispatch(setCurrentView(ViewType.ADMIN));
-
                                 // Set user context - will find no data but save the user id
                                 ClientUserContextServices.getUserContext(userId);
+
+                                // Special case - can only access the user admin view
+                                store.dispatch(setCurrentView(ViewType.ADMIN));
 
                             } else {
 

@@ -962,6 +962,12 @@ input {
     margin: 10px;
 }
 
+.api-key{
+    font-family: Consolas, Menlo, Monaco, monospace;
+    color: darkred;
+    letter-spacing: 1px;
+}
+
 /* -- Test Output Locations ----------------------------------------------------------------------------------------- */
 
 .test-output-location-edit{

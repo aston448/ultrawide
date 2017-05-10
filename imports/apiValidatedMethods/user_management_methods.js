@@ -22,7 +22,7 @@ export const addUser = new ValidatedMethod({
 
         const result = UserManagementValidationApi.validateAddUser(actionUserId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('userManagement.addUser.failValidation', result)
         }
 
@@ -48,7 +48,7 @@ export const saveUser = new ValidatedMethod({
 
         const result = UserManagementValidationApi.validateSaveUser(actionUserId, user);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('userManagement.saveUser.failValidation', result)
         }
 
@@ -74,7 +74,7 @@ export const activateUser = new ValidatedMethod({
 
         const result = UserManagementValidationApi.validateActivateDeactivateUser(actionUserId, true);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('userManagement.activateUser.failValidation', result)
         }
 
@@ -100,12 +100,32 @@ export const deactivateUser = new ValidatedMethod({
 
         const result = UserManagementValidationApi.validateActivateDeactivateUser(actionUserId, false);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('userManagement.deactivateUser.failValidation', result)
         }
 
         try {
             UserManagementServices.setUserInactive(userId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+});
+
+export const saveUserApiKey = new ValidatedMethod({
+
+    name: 'userManagement.saveUserApiKey',
+
+    validate: new SimpleSchema({
+        userId:         {type: String},
+        apiKey:         {type: String}
+    }).validator(),
+
+    run({userId, apiKey}){
+
+        try {
+            UserManagementServices.saveUserApiKey(userId, apiKey);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.error, e.stack)
