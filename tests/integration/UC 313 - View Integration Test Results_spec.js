@@ -118,6 +118,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();
+
     });
 
     afterEach(function(){

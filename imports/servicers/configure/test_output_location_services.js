@@ -75,7 +75,7 @@ class TestOutputLocationServices {
                 _id: location._id
             });
 
-            if(currentLocation && currentLocation.locationFullPath !== 'NONE'){
+            if(currentLocation){
 
                 if(fs.existsSync(currentLocation.locationFullPath)){
 
@@ -83,13 +83,27 @@ class TestOutputLocationServices {
                     if(currentLocation.locationPath !== location.locationPath){
 
                         // Need to rename the actual DIR
-                        fs.renameSync(currentLocation.locationFullPath, location.locationFullPath)
+                        if(location.locationFullPath !== 'NONE') {
+
+                            log((msg) => console.log(msg), LogLevel.DEBUG, "Renaming DIR from {} to {}", currentLocation.locationFullPath, location.locationFullPath);
+
+                            fs.renameSync(currentLocation.locationFullPath, location.locationFullPath)
+                        }
                     }
                 } else {
 
-                    // Need to create the actual DIR
-                    fs.mkdirSync(location.locationFullPath);
+                    if(location.locationFullPath !== 'NONE') {
 
+                        // Check that not created for a different location either
+                        if(!fs.existsSync(location.locationFullPath)) {
+
+                            log((msg) => console.log(msg), LogLevel.DEBUG, "Creating DIR {}", location.locationFullPath);
+
+                            // Need to create the actual DIR
+                            fs.mkdirSync(location.locationFullPath);
+
+                        }
+                    }
                 }
             }
 

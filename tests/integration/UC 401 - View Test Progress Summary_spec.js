@@ -91,6 +91,7 @@ describe('UC 401 - View Test Progress Summary', function(){
 
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();
+
     });
 
     afterEach(function(){

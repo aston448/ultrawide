@@ -229,6 +229,10 @@ describe('UC 310 - Refresh Test Data', function(){
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();
 
+        // Write test results so files exist and don't cause errors
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', oldIntResults);
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', oldUnitResults);
+
     });
 
     afterEach(function(){

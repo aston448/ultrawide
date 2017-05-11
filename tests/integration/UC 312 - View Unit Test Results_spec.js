@@ -172,6 +172,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();
+
     });
 
     afterEach(function(){

@@ -121,6 +121,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage2');
+
     });
 
     after(function(){
