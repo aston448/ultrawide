@@ -11,7 +11,7 @@ import React, { Component } from 'react';
 import ClientLoginServices  from '../../../apiClient/apiClientLogin.js'
 
 // Bootstrap
-import {Well, FormGroup, FormControl, ControlLabel, Button} from 'react-bootstrap';
+import {Well, FormGroup, FormControl, ControlLabel, Button, Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -46,12 +46,19 @@ export class UserLogin extends Component {
         this.setState({password: e.target.value});
     }
 
-    onLogin(){
+    onLogin(e){
+
+        // Cal this to prevent Submit reloading the page
+        e.preventDefault();
+
         ClientLoginServices.userLogin(this.state.userName, this.state.password);
     }
 
     // Temp dev timesaver
     onLoginUser(userName, password){
+
+
+
         ClientLoginServices.userLogin(userName, password);
     }
 
@@ -59,30 +66,40 @@ export class UserLogin extends Component {
         const {} = this.props;
 
         return(
-            <Well>
-                <form>
-                    <FormGroup controlId="loginUserName">
-                        <ControlLabel>User Name:</ControlLabel>
-                        <FormControl ref="userName" type="text" placeholder="Enter User Name" onChange={(e) => this.updateUserName(e)}/>
-                    </FormGroup>
-                    <FormGroup controlId="loginPassword">
-                        <ControlLabel>Password:</ControlLabel>
-                        <FormControl ref="password" type="password"  onChange={(e) => this.updatePassword(e)}/>
-                    </FormGroup>
-                    <Button onClick={() => this.onLogin()}>
-                        Submit
-                    </Button>
-                    <Button onClick={() => this.onLoginUser('gloria', 'gloria')}>
-                        Login Gloria
-                    </Button>
-                    <Button onClick={() => this.onLoginUser('hugh', 'hugh')}>
-                        Login Hugh
-                    </Button>
-                    <Button onClick={() => this.onLoginUser('miles', 'miles')}>
-                        Login Miles
-                    </Button>
-                </form>
-            </Well>
+            <Grid>
+                <Row>
+                    <Col md={4}>
+                    </Col>
+                    <Col md={4}>
+                        <Well className="login-well">
+                            <form onSubmit={(e) => this.onLogin(e)}>
+                                <FormGroup controlId="loginUserName">
+                                    <ControlLabel>User Name:</ControlLabel>
+                                    <FormControl ref="userName" type="text" placeholder="Enter User Name" onChange={(e) => this.updateUserName(e)}/>
+                                </FormGroup>
+                                <FormGroup controlId="loginPassword">
+                                    <ControlLabel>Password:</ControlLabel>
+                                    <FormControl ref="password" type="password"  onChange={(e) => this.updatePassword(e)}/>
+                                </FormGroup>
+                                <Button type="submit">
+                                    Submit
+                                </Button>
+                                {/*<Button onClick={() => this.onLoginUser('gloria', 'gloria')}>*/}
+                                    {/*Login Gloria*/}
+                                {/*</Button>*/}
+                                {/*<Button onClick={() => this.onLoginUser('hugh', 'hugh')}>*/}
+                                    {/*Login Hugh*/}
+                                {/*</Button>*/}
+                                {/*<Button onClick={() => this.onLoginUser('miles', 'miles')}>*/}
+                                    {/*Login Miles*/}
+                                {/*</Button>*/}
+                            </form>
+                        </Well>
+                    </Col>
+                    <Col md={4}>
+                    </Col>
+                </Row>
+            </Grid>
         )
     }
 }

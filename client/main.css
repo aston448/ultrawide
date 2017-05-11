@@ -576,10 +576,8 @@ input {
     color: blue;
 }
 
-.login-screen{
-    margin: 50px;
-    padding: 50px;
-    border: 1px solid blue;
+.login-well{
+    margin: 100px 0 0 0;
 }
 
 .main-grid{
