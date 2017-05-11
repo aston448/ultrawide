@@ -17,20 +17,10 @@ class TestOutputLocationValidationServices{
 
     validateAddLocation(userRole){
 
-        // To add a Location, user must be a Developer
-        if(userRole != RoleType.DEVELOPER){
-            return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_ADD
-        }
-
         return Validation.VALID;
     };
 
     validateSaveLocation(userRole, location, otherLocations){
-
-        // User must be a Developer
-        if(userRole != RoleType.DEVELOPER){
-            return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_SAVE
-        }
 
         // Location name cannot be the same as another location
         let duplicate = false;
@@ -44,20 +34,10 @@ class TestOutputLocationValidationServices{
             return TestOutputLocationValidationErrors.LOCATION_INVALID_NAME_DUPLICATE;
         }
 
-        // If location is remote, the access type must be set
-        if(location.locationType === TestLocationType.REMOTE && location.locationAccessType === TestLocationAccessType.NONE){
-            return TestOutputLocationValidationErrors.LOCATION_ACCESS_TYPE_NOT_SET;
-        }
-
         return Validation.VALID;
     };
 
     validateRemoveLocation(userRole){
-
-        // User must be a Developer
-        if(userRole != RoleType.DEVELOPER){
-            return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_REMOVE;
-        }
 
         return Validation.VALID;
     }
@@ -66,20 +46,10 @@ class TestOutputLocationValidationServices{
 
     validateAddLocationFile(userRole){
 
-        // To add a Location File, user must be a Developer
-        if(userRole != RoleType.DEVELOPER){
-            return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ROLE_ADD;
-        }
-
         return Validation.VALID;
     }
 
     validateSaveLocationFile(userRole, locationFile, otherLocationFiles){
-
-        // User must be a Developer
-        if(userRole != RoleType.DEVELOPER){
-            return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ROLE_SAVE;
-        }
 
         // Alias must not be same as that for another file at this location
         let duplicate = false;
@@ -93,15 +63,21 @@ class TestOutputLocationValidationServices{
             return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ALIAS_DUPLICATE;
         }
 
+        // Name must not be the same as that for another file at this location
+        otherLocationFiles.forEach((otherLocationFile) => {
+            if(otherLocationFile.fileName === locationFile.fileName){
+                duplicate = true;
+            }
+        });
+
+        if(duplicate){
+            return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_NAME_DUPLICATE;
+        }
+
         return Validation.VALID;
     }
 
     validateRemoveLocationFile(userRole){
-
-        // User must be a Developer
-        if(userRole != RoleType.DEVELOPER){
-            return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ROLE_REMOVE;
-        }
 
         return Validation.VALID;
     }

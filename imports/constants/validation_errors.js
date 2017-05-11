@@ -205,17 +205,12 @@ export const TestIntegrationValidationErrors = {
 };
 
 export const TestOutputLocationValidationErrors = {
-    LOCATION_INVALID_ROLE_ADD:                          'Only a Developer can add new test output locations',
-    LOCATION_INVALID_ROLE_SAVE:                         'Only a Developer can save test output location details',
-    LOCATION_INVALID_ROLE_REMOVE:                       'Only a Developer can remove test output locations',
     LOCATION_INVALID_NAME_DUPLICATE:                    'A test output location cannot be given the same name as an existing location',
     LOCATION_ACCESS_TYPE_NOT_SET:                       'The access type must be set for a remote location'
 };
 
 export const TestOutputLocationFileValidationErrors = {
-    LOCATION_FILE_INVALID_ROLE_ADD:                     'Only a Developer can add new test output location filess',
-    LOCATION_FILE_INVALID_ROLE_SAVE:                    'Only a Developer can save test output location file details',
-    LOCATION_FILE_INVALID_ROLE_REMOVE:                  'Only a Developer can remove test output location files',
-    LOCATION_FILE_INVALID_ALIAS_DUPLICATE:              'A test output location file cannot be given the same alias as an existing file for the location'
+    LOCATION_FILE_INVALID_ALIAS_DUPLICATE:              'A test output location file cannot be given the same alias as an existing file for the location',
+    LOCATION_FILE_INVALID_NAME_DUPLICATE:               'A test output location file cannot be given the same name as an existing file for the location'
 };
 
