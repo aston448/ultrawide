@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start-dev": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" meteor run",
-    "start": "ULTRAWIDE_BACKUP_PATH=\"/ultrawide_data/\" meteor run",
+    "start-test": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_test/\" meteor -p 3030 run",
     "test:unit": "SERVER_TEST_REPORTER=\"JSON\" meteor test --once --driver-package dispatch:mocha",
     "test:ui": "meteor test --once --driver-package practicalmeteor:mocha",
     "test:unit:watch": "SERVER_TEST_REPORTER=\"JSON\" meteor test --driver-package dispatch:mocha",

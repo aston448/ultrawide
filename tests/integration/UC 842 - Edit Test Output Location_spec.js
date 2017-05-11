@@ -39,10 +39,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   false,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       'NONE'
+            locationPath:       'NONE',
+            locationFullPath:   'NONE'
         };
 
         const newDetails = {
@@ -50,10 +48,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.REMOTE,
             locationAccessType: TestLocationAccessType.RLOGIN,
             locationIsShared:   true,
-            locationServerName: 'Server1',
-            serverLogin:        'login1',
-            serverPassword:     'password1',
-            locationPath:       '/test/integration/output_files/'
+            locationPath:       'test_test/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
         };
 
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
@@ -75,10 +71,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   false,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       'NONE'
+            locationPath:       'NONE',
+            locationFullPath:   'NONE'
         };
 
         const newDetails = {
@@ -86,10 +80,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.REMOTE,
             locationAccessType: TestLocationAccessType.RLOGIN,
             locationIsShared:   true,
-            locationServerName: 'Server1',
-            serverLogin:        'login1',
-            serverPassword:     'password1',
-            locationPath:       '/test/integration/output_files/'
+            locationPath:       'test_test/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
         };
 
         const expectation = {success: false, message: TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_SAVE};
@@ -115,10 +107,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   false,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       'NONE'
+            locationPath:       'NONE',
+            locationFullPath:   'NONE'
         };
 
         // Setup - update the new Location
@@ -127,10 +117,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.REMOTE,
             locationAccessType: TestLocationAccessType.RLOGIN,
             locationIsShared:   true,
-            locationServerName: 'Server1',
-            serverLogin:        'login1',
-            serverPassword:     'password1',
-            locationPath:       '/test/integration/output_files/'
+            locationPath:       'test_test/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
         };
 
         OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
@@ -154,10 +142,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   false,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       'NONE'
+            locationPath:       'NONE',
+            locationFullPath:   'NONE'
         };
 
         const newDetails = {
@@ -165,10 +151,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.REMOTE,
             locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   true,
-            locationServerName: 'Server1',
-            serverLogin:        'login1',
-            serverPassword:     'password1',
-            locationPath:       '/test/integration/output_files/'
+            locationPath:       'test_test/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
         };
 
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
@@ -191,10 +175,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.REMOTE,
             locationAccessType: TestLocationAccessType.RLOGIN,
             locationIsShared:   true,
-            locationServerName: 'Server1',
-            serverLogin:        'login1',
-            serverPassword:     'password1',
-            locationPath:       '/test/integration/output_files/'
+            locationPath:       'test_test/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
         };
 
         OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails1);
@@ -223,10 +205,8 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationType:       TestLocationType.LOCAL,
             locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       '/test/integration/output_files/'
+            locationPath:       'test_test2/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test2/'
         };
 
         OutputLocationsActions.developerSavesLocation('Location1', newDetails2);

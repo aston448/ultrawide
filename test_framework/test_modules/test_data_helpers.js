@@ -2,6 +2,7 @@
  * Created by aston on 05/12/2016.
  */
 
+import { AppGlobalData }            from '../../imports/collections/app/app_global_data.js';
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
@@ -68,6 +69,19 @@ class TestDataHelpers {
             }
         }
     };
+
+    getDataDir(){
+
+        const globalData = AppGlobalData.findOne({
+            versionKey: 'CURRENT_VERSION'
+        });
+
+        if(globalData){
+            return globalData.dataStore;
+        } else {
+            throw new Meteor.Error("FAIL", "Global data not found!");
+        }
+    }
 
     getUser(userName){
 

@@ -40,10 +40,8 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   false,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       'NONE'
+            locationPath:       'NONE',
+            locationFullPath:   'NONE'
         };
 
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectedLocation));
@@ -57,10 +55,8 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   true,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       'NONE'
+            locationPath:       'NONE',
+            locationFullPath:   'NONE'
         };
 
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newExpectedLocation));
@@ -82,10 +78,8 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   false,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       'NONE'
+            locationPath:       'NONE',
+            locationFullPath:   'NONE'
         };
 
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectedLocation));

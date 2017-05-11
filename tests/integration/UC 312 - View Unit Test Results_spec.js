@@ -142,10 +142,7 @@ describe('UC 312 - View Unit Test Results', function(){
             locationType:       TestLocationType.LOCAL,
             locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
-            locationServerName: 'NONE',
-            serverLogin:        'NONE',
-            serverPassword:     'NONE',
-            locationPath:       '/Users/aston/WebstormProjects/shared/test_test/'
+            locationPath:       'test_test/'
         };
 
         OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);

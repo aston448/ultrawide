@@ -4,7 +4,7 @@ import ClientTestOutputLocationServices from '../../imports/apiClient/apiClientT
 
 import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
 
-import {RoleType, TestType} from '../../imports/constants/constants.js';
+import {RoleType, TestType, UltrawideDirectory} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
@@ -37,15 +37,14 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         let location = TestDataHelpers.getTestOutputLocation(locationName);
+        let dataDir = TestDataHelpers.getDataDir();
 
         location.locationName = newLocation.locationName;
         location.locationType = newLocation.locationType;
         location.locationAccessType = newLocation.locationAccessType;
         location.locationIsShared = newLocation.locationIsShared;
-        location.locationServerName = newLocation.locationServerName;
-        location.serverLogin = newLocation.serverLogin;
-        location.serverPassword = newLocation.serverPassword;
         location.locationPath = newLocation.locationPath;
+        location.locationFullPath = dataDir + UltrawideDirectory.TEST_OUTPUT_DIR + newLocation.locationPath;
 
         const outcome = ClientTestOutputLocationServices.saveLocation(role, location);
 
