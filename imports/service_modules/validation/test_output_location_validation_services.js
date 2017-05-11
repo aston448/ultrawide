@@ -34,6 +34,17 @@ class TestOutputLocationValidationServices{
             return TestOutputLocationValidationErrors.LOCATION_INVALID_NAME_DUPLICATE;
         }
 
+        // Location path cannot be the same as another location
+        otherLocations.forEach((otherLocation) => {
+            if(otherLocation.locationFullPath === location.locationFullPath){
+                duplicate = true;
+            }
+        });
+
+        if(duplicate){
+            return TestOutputLocationValidationErrors.LOCATION_INVALID_PATH_DUPLICATE;
+        }
+
         return Validation.VALID;
     };
 

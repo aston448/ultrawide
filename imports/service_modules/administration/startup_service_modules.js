@@ -89,8 +89,8 @@ class StartupModules{
             log((msg) => console.log(msg), LogLevel.ERROR, 'Failed to create basic Ultrawide directories: {}', e.stack);
             throw new Meteor.Error(e.error, e.stack);
         }
-
     }
+
 }
 
 export default new StartupModules();

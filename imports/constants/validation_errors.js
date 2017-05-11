@@ -206,6 +206,7 @@ export const TestIntegrationValidationErrors = {
 
 export const TestOutputLocationValidationErrors = {
     LOCATION_INVALID_NAME_DUPLICATE:                    'A test output location cannot be given the same name as an existing location',
+    LOCATION_INVALID_PATH_DUPLICATE:                    'A test output location cannot be given the same path as an existing location',
     LOCATION_ACCESS_TYPE_NOT_SET:                       'The access type must be set for a remote location'
 };
 

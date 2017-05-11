@@ -258,9 +258,9 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_UPDATE_EDIT:
                 if(this.props.displayContext === DisplayContext.UPDATE_SCOPE){
                     // Base view.  Should not be updating
-                    if (newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew) {
-                        this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
-                    }
+                    // if (newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew) {
+                    //     this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
+                    // }
 
                     // // Reflect any changes in scope
                     // this.setState({inScope: (newProps.updateItem !== null)});
@@ -312,7 +312,7 @@ export class DesignComponentHeader extends Component{
     // Refresh the component name text
     updateTitleText(props, newRawText){
 
-        let currentContent = {};
+        let currentContent = null;
         let compositeDecorator = null;
         let item = props.currentItem;
 
@@ -362,7 +362,12 @@ export class DesignComponentHeader extends Component{
         if(newRawText){
             // Immediate update of latest text
             log((msg) => console.log(msg), LogLevel.TRACE, "Updating title editor with {}", newRawText);
-            currentContent = convertFromRaw(newRawText);
+
+            // Don't want to update SCOPE in DU when content is edited
+            if(!(props.view === ViewType.DESIGN_UPDATE_EDIT && props.displayContext === DisplayContext.UPDATE_SCOPE)){
+                currentContent = convertFromRaw(newRawText);
+            }
+
         } else {
             // Getting stored text
             let existingRawText = null;
@@ -411,7 +416,7 @@ export class DesignComponentHeader extends Component{
                     switch(props.displayContext){
                         case  DisplayContext.UPDATE_SCOPE:
                             // Scope uses the base DV components
-                            existingRawText = item.componentNameRawNew;
+                            existingRawText = item.componentNameRawOld;
                             break;
                         case DisplayContext.UPDATE_VIEW:
                         case DisplayContext.UPDATE_EDIT:
@@ -451,9 +456,8 @@ export class DesignComponentHeader extends Component{
         }
 
         // Got some content...
-        log((msg) => console.log(msg), LogLevel.TRACE, "Updating title editor with {}", currentContent.getPlainText());
-
-        if (currentContent.hasText()) {
+        if (currentContent && currentContent.hasText()) {
+            log((msg) => console.log(msg), LogLevel.TRACE, "Updating title editor with {}", currentContent.getPlainText());
             this.state.name = currentContent.getPlainText();
             this.state.editorState = EditorState.createWithContent(currentContent, compositeDecorator);
         } else {
@@ -1463,11 +1467,11 @@ export class DesignComponentHeader extends Component{
 
                     if(testSummaryData) {
                         // Any failures at all it's a fail
-                        if (testSummaryData.accTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.intTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.unitTestFailCount > 0) {
+                        if (testSummaryData.accMashTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.intMashTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.unitFailCount > 0) {
                             rowClass = 'scenario-test-row-fail'
                         } else {
                             // No failures so any passes its a pass for now
-                            if (testSummaryData.accTestStatus === MashTestStatus.MASH_PASS || testSummaryData.intTestStatus === MashTestStatus.MASH_PASS || testSummaryData.unitTestPassCount > 0) {
+                            if (testSummaryData.accMashTestStatus === MashTestStatus.MASH_PASS || testSummaryData.intMashTestStatus === MashTestStatus.MASH_PASS || testSummaryData.unitPassCount > 0) {
                                 rowClass = 'scenario-test-row-pass'
                             }
                         }

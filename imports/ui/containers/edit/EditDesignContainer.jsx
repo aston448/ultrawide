@@ -322,7 +322,7 @@ export class DesignApplicationsList extends Component {
                 displayedItems++;
             }
 
-            if (viewOptions.devIntTestsVisible && userRole === RoleType.DEVELOPER) {
+            if (viewOptions.devIntTestsVisible) {
 
                 switch (displayedItems) {
                     case 1:
@@ -354,7 +354,7 @@ export class DesignApplicationsList extends Component {
                 displayedItems++;
             }
 
-            if (viewOptions.devUnitTestsVisible && userRole === RoleType.DEVELOPER) {
+            if (viewOptions.devUnitTestsVisible) {
 
                 switch (displayedItems) {
                     case 1:
@@ -507,7 +507,7 @@ export class DesignApplicationsList extends Component {
                 }
 
                 let col4 = '';
-                if (viewOptions.devIntTestsVisible && userRole === RoleType.DEVELOPER) {
+                if (viewOptions.devIntTestsVisible) {
                     col4 =
                         <Col id="column4" md={col4width} className="close-col">
                             {intTests}
@@ -515,7 +515,7 @@ export class DesignApplicationsList extends Component {
                 }
 
                 let col5 = '';
-                if (viewOptions.devUnitTestsVisible && userRole === RoleType.DEVELOPER) {
+                if (viewOptions.devUnitTestsVisible) {
                     col5 =
                         <Col id="column5" md={col5width} className="close-col">
                             {unitTests}

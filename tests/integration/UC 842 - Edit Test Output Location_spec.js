@@ -4,7 +4,7 @@ import OutputLocationsActions           from '../../test_framework/test_wrappers
 import OutputLocationsVerifications     from '../../test_framework/test_wrappers/output_locations_verifications.js';
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType} from '../../imports/constants/constants.js';
+import {TestLocationType, TestLocationAccessType, UltrawideDirectory} from '../../imports/constants/constants.js';
 
 describe('UC 842 - Edit Test Output Location', function(){
 

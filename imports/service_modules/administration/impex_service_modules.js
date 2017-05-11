@@ -24,7 +24,7 @@ import { DesignUpdateComponents }       from '../../collections/design_update/de
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ComponentType, WorkPackageStatus, WorkPackageType, LogLevel } from '../../constants/constants.js';
+import { UltrawideDirectory, WorkPackageType, LogLevel } from '../../constants/constants.js';
 import { getIdFromMap, padDigits, log }              from '../../common/utils.js';
 
 import DesignComponentServices          from '../../servicers/design/design_component_services.js';
@@ -113,15 +113,12 @@ class ImpexModules{
 
     getBackupLocation(){
 
-        let backupLocation = process.env.ULTRAWIDE_BACKUP_PATH;
+        const baseDir = this.getDataDirectory();
 
-        if (typeof(backupLocation) === 'undefined') {
-            log((msg) => console.log(msg), LogLevel.ERROR, "Can't access backup location env var ULTRAWIDE_BACKUP_PATH.  Error {}", e);
-            return null;
-        } else {
-            if(!backupLocation.endsWith('/')){
-                backupLocation = backupLocation + '/';
-            }
+        let backupLocation = baseDir + UltrawideDirectory.BACKUP_DIR;
+
+        if(!backupLocation.endsWith('/')){
+            backupLocation = backupLocation + '/';
         }
 
         return backupLocation;
@@ -136,9 +133,24 @@ class ImpexModules{
         if(appData){
             return appData.dataVersion;
         } else {
-            return 0;
+            throw new Meteor.Error('NO_GLOBAL_DATA', 'Cannot find Ultrawide global data');
         }
 
+    }
+
+    getDataDirectory(){
+
+        const appData = AppGlobalData.findOne({
+            versionKey: 'CURRENT_VERSION'
+        });
+
+        if(appData){
+
+            return appData.dataStore;
+
+        } else {
+            throw new Meteor.Error('NO_GLOBAL_DATA', 'Cannot find Ultrawide global data');
+        }
     }
 
     readBackupFile(backupFileName){
@@ -153,7 +165,7 @@ class ImpexModules{
                 const backupContents = fs.readFileSync(backupLocation + backupFileName);
                 backupData = JSON.parse(backupContents);
             } catch (e) {
-                log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Backup file: {}  Error: {}", fileName, e);
+                log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Backup file: {}  Error: {}", backupLocation + backupFileName, e);
             }
 
             return backupData;

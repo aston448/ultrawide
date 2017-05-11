@@ -1969,12 +1969,6 @@ class ClientContainerServices{
             designScenarioReferenceId:  scenario.componentReferenceId
         });
 
-        return UserDevTestSummaryData.findOne({
-            userId:                 userContext.userId,
-            designVersionId:        scenario.designVersionId,
-            scenarioReferenceId:    scenario.componentReferenceId
-        });
-
     }
 
     getTestSummaryFeatureData(feature){

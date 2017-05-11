@@ -146,13 +146,13 @@ class ImpExServices{
             const backupName = design.designName + ': ' + dateString;
             const designName = design.designName;
 
-            const ultrawide = AppGlobalData.findOne({versionKey: 'CURRENT_VERSION'});
+            const ultrawideDataVersion =  ImpexModules.getCurrentDataVersion();
 
             let metadata = {
                 backupName: backupName,
                 designName: designName,
                 backupDate: dateTime,
-                backupDataVersion: ultrawide.dataVersion
+                backupDataVersion: ultrawideDataVersion
             };
 
             let designVersions = [];

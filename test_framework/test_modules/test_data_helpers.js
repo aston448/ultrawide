@@ -64,7 +64,7 @@ class TestDataHelpers {
             }
 
             // Were expecting a validation failure - check its the right one
-            if(outcome.message != expectation.message){
+            if(outcome.message !== expectation.message){
                 throw new Meteor.Error('UNEXPECTED', location + ': Expecting failure: \"' + expectation.message + '\" but got: \"' + outcome.message + '\"');
             }
         }
