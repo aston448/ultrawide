@@ -492,8 +492,8 @@ Meteor.methods({
             const filesExpected = TestDataHelpers.getIntegrationResultsOutputFiles_ChimpMocha(locationName);
 
             filesExpected.forEach((file) => {
-                if (fs.existsSync(location.locationPath + file.fileName)) {
-                    fs.unlinkSync(location.locationPath + file.fileName);
+                if (fs.existsSync(location.locationFullPath + file.fileName)) {
+                    fs.unlinkSync(location.locationFullPath + file.fileName);
                 }
             })
         }
@@ -519,7 +519,7 @@ Meteor.methods({
 
 
             // Single output file test case
-            const fileName = location.locationPath + filesExpected[0].fileName;
+            const fileName = location.locationFullPath + filesExpected[0].fileName;
 
             // console.log("Writing file " + fileName);
             // results.forEach((result) => {
@@ -611,7 +611,7 @@ Meteor.methods({
 
         if(filesExpected.length === 1) {
             // Single output file test case
-            const fileName = location.locationPath + filesExpected[0].fileName;
+            const fileName = location.locationFullPath + filesExpected[0].fileName;
 
             // Expected test input is:
             // results
