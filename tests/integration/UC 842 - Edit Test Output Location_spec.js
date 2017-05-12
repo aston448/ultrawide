@@ -295,7 +295,7 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test/unit/build/'
         };
 
-        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+        OutputLocationsActions.developerSavesLocation('Location1', newDetails);
 
         // Verify old gone
         expect(OutputLocationsVerifications.locationDirectoryDoesNotExist('test/integration/build/'));
@@ -334,7 +334,7 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test/integration/test/'
         };
 
-        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+        OutputLocationsActions.developerSavesLocation('Location1', newDetails);
 
         // Verify old gone
         expect(OutputLocationsVerifications.locationDirectoryDoesNotExist('test/integration/build/'));

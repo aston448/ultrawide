@@ -81,7 +81,7 @@ describe('UC 843 - Add Test Output Location File', function(){
             allFilesOfType: '*.mocha'
         };
 
-        OutputLocationsActions.managerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile2);
+        OutputLocationsActions.managerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile3);
 
         // Verify
         expect(OutputLocationsVerifications.locationFileExistsForLocation_Called(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, 'FileAlias3'));
