@@ -22,7 +22,7 @@ import { UserUnitTestMashData }     from '../../imports/collections/dev/user_uni
 import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
-import {RoleType, WorkSummaryType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
+import {RoleType, WorkSummaryType, UltrawideDirectory, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
 class TestDataHelpers {
 
@@ -81,6 +81,11 @@ class TestDataHelpers {
         } else {
             throw new Meteor.Error("FAIL", "Global data not found!");
         }
+    }
+
+    getTestOutputDir(){
+
+        return this.getDataDir() + UltrawideDirectory.TEST_OUTPUT_DIR;
     }
 
     getUser(userName){

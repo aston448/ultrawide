@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 import { Meteor } from 'meteor/meteor';
 
 import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
@@ -5,6 +7,8 @@ import { TestOutputLocationFiles }  from '../../imports/collections/configure/te
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+
+
 
 Meteor.methods({
 
@@ -66,6 +70,30 @@ Meteor.methods({
             } else {
                 throw new Meteor.Error("FAIL", "Expecting location type " + locationDetails.locationType + " but got " + location.locationType + " for location " + locationName);
             }
+        }
+    },
+
+    'verifyTestOutputLocations.locationDirectoryExists'(directoryName){
+
+        const basePath = TestDataHelpers.getTestOutputDir();
+        const dir = basePath + directoryName;
+
+        if(fs.existsSync(dir)){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Directory " + dir +  " does not exist");
+        }
+    },
+
+    'verifyTestOutputLocations.locationDirectoryDoesNotExist'(directoryName){
+
+        const basePath = TestDataHelpers.getTestOutputDir();
+        const dir = basePath + directoryName;
+
+        if(fs.existsSync(dir)){
+            throw new Meteor.Error("FAIL", "Directory " + dir +  " was found!");
+        } else {
+            return true;
         }
     },
 

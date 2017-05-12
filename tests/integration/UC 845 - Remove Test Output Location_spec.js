@@ -32,8 +32,9 @@ describe('UC 845 - Remove Test Output Location', function(){
 
 
     // Actions
-    it('A Developer can remove a Test Output Location', function(){
+    it('Any user can remove a Test Output Location', function(){
 
+        // DEVELOPER
         // Setup - confirm exists
         expect(OutputLocationsVerifications.locationExistsCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
 
@@ -42,27 +43,34 @@ describe('UC 845 - Remove Test Output Location', function(){
 
         // Verify
         expect(OutputLocationsVerifications.locationDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
-    });
 
 
-    // Conditions
-    it('Only a Developer can remove a Test Output Location', function(){
+        OutputLocationsActions.developerAddsNewLocation();
 
+
+        // DESIGNER
         // Setup - confirm exists
         expect(OutputLocationsVerifications.locationExistsCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
 
-        // Execute - Designer
-        const expectation = {success: false, message: TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_REMOVE};
-        OutputLocationsActions.designerRemovesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectation);
+        // Execute
+        OutputLocationsActions.designerRemovesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
 
-        // Verify - still there
+        // Verify
+        expect(OutputLocationsVerifications.locationDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+
+
+        OutputLocationsActions.developerAddsNewLocation();
+
+
+        // MANAGER
+        // Setup - confirm exists
         expect(OutputLocationsVerifications.locationExistsCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
 
-        // Execute - Manager - same expectation
-        OutputLocationsActions.managerRemovesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectation);
+        // Execute
+        OutputLocationsActions.managerRemovesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
 
-        // Verify - still there
-        expect(OutputLocationsVerifications.locationExistsCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        // Verify
+        expect(OutputLocationsVerifications.locationDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
     });
 
 

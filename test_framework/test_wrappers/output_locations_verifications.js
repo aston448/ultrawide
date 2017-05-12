@@ -30,6 +30,22 @@ class OutputLocationsVerifications{
         );
     };
 
+    locationDirectoryExists(directoryPath){
+        server.call('verifyTestOutputLocations.locationDirectoryExists', directoryPath,
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    };
+
+    locationDirectoryDoesNotExist(directoryPath){
+        server.call('verifyTestOutputLocations.locationDirectoryDoesNotExist', directoryPath,
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    };
+
     // LOCATION FILES --------------------------------------------------------------------------------------------------
 
     locationFileExistsForLocation_Called(locationName, fileAlias){

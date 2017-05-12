@@ -64,7 +64,7 @@ describe('UC 847 - Configure User Role Test Outputs', function(){
 
 
     // Conditions
-    it('The Test Output Location Configuration list does not show private Test Output Locations to Designers and Managers');
+    it('The Test Output Location Configuration list does not show private Test Output Locations to users that did not create them');
 
     it('The Test Output Location Configuration list does not show private Test Output Locations to Developers if they were not created by that Developer');
 

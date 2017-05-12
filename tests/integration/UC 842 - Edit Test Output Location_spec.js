@@ -240,4 +240,97 @@ describe('UC 842 - Edit Test Output Location', function(){
         expect(OutputLocationsVerifications.managerTestConfigurationIs('Location2', expectedConfig2));
     });
 
+    it('When a Test Output Location path is specified the corresponding directories are created on the Ultrawide server', function(){
+
+        // Setup - update the new Location
+        const newDetails = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationPath:       'test/integration/build/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test/integration/build/'
+        };
+
+        // Execute
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+
+        // Verify
+        expect(OutputLocationsVerifications.locationDirectoryExists('test/integration/build/'));
+
+    });
+
+    it('When a Test Output Location path is modified the old directories are removed and new created on the Ultrawide server', function(){
+
+        // Setup - update the new Location
+        let newDetails = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationPath:       'test/integration/build/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test/integration/build/'
+        };
+
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+
+        // Check
+        expect(OutputLocationsVerifications.locationDirectoryExists('test/integration/build/'));
+
+        // Now change the path
+        newDetails = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationPath:       'test/unit/build/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test/unit/build/'
+        };
+
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+
+        // Verify old gone
+        expect(OutputLocationsVerifications.locationDirectoryDoesNotExist('test/integration/build/'));
+
+        // And new created
+        expect(OutputLocationsVerifications.locationDirectoryExists('test/unit/build/'));
+
+    });
+
+    it('When a Test Output Location path directory is renamed the corresponding directory is renamed on the Ultrawide server', function(){
+
+        // Setup - update the new Location
+        let newDetails = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationPath:       'test/integration/build/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test/integration/build/'
+        };
+
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+
+        // Check
+        expect(OutputLocationsVerifications.locationDirectoryExists('test/integration/build/'));
+
+        // Now change the path
+        newDetails = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationPath:       'test/integration/test/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test/integration/test/'
+        };
+
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+
+        // Verify old gone
+        expect(OutputLocationsVerifications.locationDirectoryDoesNotExist('test/integration/build/'));
+
+        // And new created
+        expect(OutputLocationsVerifications.locationDirectoryExists('test/integration/test/'));
+    });
+
 });

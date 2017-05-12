@@ -31,7 +31,7 @@ describe('UC 844 - Edit Test Output Location File', function(){
 
 
     // Actions
-    it('A Developer can update and save the properties of a Test Output File', function(){
+    it('Any user can update and save the properties of a Test Output File', function(){
 
         const defaultFile = {
             fileAlias:      DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS,
@@ -41,11 +41,27 @@ describe('UC 844 - Edit Test Output Location File', function(){
             allFilesOfType: 'NONE'
         };
 
-        const newFile = {
+        const newFile1 = {
             fileAlias:      'FileAlias1',
             fileType:       TestLocationFileType.UNIT,
             testRunner:     TestRunner.METEOR_MOCHA,
             fileName:       'FileName1.mocha',
+            allFilesOfType: '*.mocha'
+        };
+
+        const newFile2 = {
+            fileAlias:      'FileAlias2',
+            fileType:       TestLocationFileType.UNIT,
+            testRunner:     TestRunner.METEOR_MOCHA,
+            fileName:       'FileName2.mocha',
+            allFilesOfType: '*.mocha'
+        };
+
+        const newFile3 = {
+            fileAlias:      'FileAlias3',
+            fileType:       TestLocationFileType.UNIT,
+            testRunner:     TestRunner.METEOR_MOCHA,
+            fileName:       'FileName3.mocha',
             allFilesOfType: '*.mocha'
         };
 
@@ -54,55 +70,31 @@ describe('UC 844 - Edit Test Output Location File', function(){
         // Check default properties
         expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultFile));
 
-        // Execute
-        OutputLocationsActions.developerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile);
+        // Execute - developer
+        OutputLocationsActions.developerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile1);
 
         // Verify
-        expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails('FileAlias1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newFile));
+        expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails('FileAlias1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newFile1));
 
+
+        // Execute - deigner
+        OutputLocationsActions.designerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, 'FileAlias1', newFile2);
+
+        // Verify
+        expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails('FileAlias2', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newFile2));
+
+
+        // Execute
+        OutputLocationsActions.managerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, 'FileAlias2', newFile3);
+
+        // Verify
+        expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails('FileAlias3', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newFile3));
     });
 
 
     // Conditions
-    it('Only a Developer can update a Test Output File', function(){
 
-        const defaultFile = {
-            fileAlias:      DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS,
-            fileType:       TestLocationFileType.NONE,
-            testRunner:     TestRunner.NONE,
-            fileName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_NAME,
-            allFilesOfType: 'NONE'
-        };
-
-        const newFile = {
-            fileAlias:      'FileAlias1',
-            fileType:       TestLocationFileType.UNIT,
-            testRunner:     TestRunner.METEOR_MOCHA,
-            fileName:       'FileName1.mocha',
-            allFilesOfType: '*.mocha'
-        };
-
-        // Setup - Add a file to the Location
-        OutputLocationsActions.developerAddsFileToLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
-        // Check default properties
-        expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultFile));
-
-        // Execute - Designer
-        const expectation = {success: false, message: TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ROLE_SAVE};
-        OutputLocationsActions.designerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile, expectation);
-
-        // Verify not changed
-        expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultFile));
-
-        // Execute - Manager - same expectation
-        OutputLocationsActions.managerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile, expectation);
-
-        // Verify not changed
-        expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultFile));
-
-    });
-
-    it('A Test Output File may not be given the same name as an existing Test Output File for the Test Output Location', function(){
+    it('A Test Output File may not be given the same alias as an existing Test Output File for the Test Output Location', function(){
 
         const defaultFile = {
             fileAlias:      DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS,
@@ -134,4 +126,43 @@ describe('UC 844 - Edit Test Output Location File', function(){
         expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultFile));
     });
 
+    it('A Test Output File may not be given the same name as an existing Test Output File for the Test Output Location', function(){
+
+        const defaultFile = {
+            fileAlias:      DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS,
+            fileType:       TestLocationFileType.NONE,
+            testRunner:     TestRunner.NONE,
+            fileName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_NAME,
+            allFilesOfType: 'NONE'
+        };
+
+        const newFile1 = {
+            fileAlias:      'FileAlias1',
+            fileType:       TestLocationFileType.UNIT,
+            testRunner:     TestRunner.METEOR_MOCHA,
+            fileName:       'FileName1.mocha',
+            allFilesOfType: '*.mocha'
+        };
+
+        const newFile2 = {
+            fileAlias:      'FileAlias2',
+            fileType:       TestLocationFileType.UNIT,
+            testRunner:     TestRunner.METEOR_MOCHA,
+            fileName:       'FileName1.mocha',
+            allFilesOfType: '*.mocha'
+        };
+
+        // Setup - Add a file to the Location and update details
+        OutputLocationsActions.developerAddsFileToLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+        OutputLocationsActions.developerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile1);
+        // Add another file...
+        OutputLocationsActions.developerAddsFileToLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+
+        // Execute - try to update with same details
+        const expectation = {success: false, message: TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_NAME_DUPLICATE};
+        OutputLocationsActions.developerSavesLocationFile(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile2, expectation);
+
+        // Verify
+        expect(OutputLocationsVerifications.locationFile_ForLocation_HasDetails(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultFile));
+    });
 });
