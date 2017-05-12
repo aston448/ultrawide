@@ -33,6 +33,8 @@ describe('UC 842 - Edit Test Output Location', function(){
     // Actions
     it('Any user can update and save the properties of a Test Output Location', function(){
 
+        TestFixtures.clearTestResultsFiles('Location1');
+
         // Setup
         const oldDetails = {
             locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
@@ -79,13 +81,13 @@ describe('UC 842 - Edit Test Output Location', function(){
         expect(OutputLocationsVerifications.location_DetailsAre('Location1', newDetailsDev));
 
         // Execute - designer
-        OutputLocationsActions.designerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetailsDes);
+        OutputLocationsActions.designerSavesLocation('Location1', newDetailsDes);
 
         // Verify
         expect(OutputLocationsVerifications.location_DetailsAre('Location1', newDetailsDes));
 
         // Execute - developer
-        OutputLocationsActions.managerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetailsMan);
+        OutputLocationsActions.managerSavesLocation('Location1', newDetailsMan);
 
         // Verify
         expect(OutputLocationsVerifications.location_DetailsAre('Location1', newDetailsMan));
@@ -173,6 +175,8 @@ describe('UC 842 - Edit Test Output Location', function(){
     // Consequences
     it('When a Test Output Location is updated the changes are visible in the Test Output Location Configurations available to other users', function(){
 
+        TestFixtures.clearTestResultsFiles('Location1');
+
         // Setup - developer changes location to shared and changes details
         const newDetails1 = {
             locationName:       'Location1',
@@ -230,9 +234,9 @@ describe('UC 842 - Edit Test Output Location', function(){
 
         // Now Location2, LOCAL
         expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation('Location1'));
-        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation('Location1'));
-        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation('Location1'));
-        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation('Location1'));
+        expect(OutputLocationsVerifications.developerDoesNotHaveTestConfigLocation('Location1'));
+        expect(OutputLocationsVerifications.anotherDeveloperDoesNotHaveTestConfigLocation('Location1'));
+        expect(OutputLocationsVerifications.managerDoesNotHaveTestConfigLocation('Location1'));
 
         expect(OutputLocationsVerifications.designerTestConfigurationIs('Location2', expectedConfig2));
         expect(OutputLocationsVerifications.developerTestConfigurationIs('Location2', expectedConfig2));
@@ -241,6 +245,8 @@ describe('UC 842 - Edit Test Output Location', function(){
     });
 
     it('When a Test Output Location path is specified the corresponding directories are created on the Ultrawide server', function(){
+
+        TestFixtures.clearTestResultsFiles('Location1');
 
         // Setup - update the new Location
         const newDetails = {
@@ -261,6 +267,8 @@ describe('UC 842 - Edit Test Output Location', function(){
     });
 
     it('When a Test Output Location path is modified the old directories are removed and new created on the Ultrawide server', function(){
+
+        TestFixtures.clearTestResultsFiles('Location1');
 
         // Setup - update the new Location
         let newDetails = {
@@ -298,6 +306,8 @@ describe('UC 842 - Edit Test Output Location', function(){
     });
 
     it('When a Test Output Location path directory is renamed the corresponding directory is renamed on the Ultrawide server', function(){
+
+        TestFixtures.clearTestResultsFiles('Location1');
 
         // Setup - update the new Location
         let newDetails = {
