@@ -31,7 +31,7 @@ describe('UC 846 - Remove Test Output Location File', function(){
 
 
     // Actions
-    it('A Developer can remove a Test Output File', function(){
+    it('Any user can remove a Test Output File', function(){
 
         // DEVELOPER
         // Setup - add a file to the location
