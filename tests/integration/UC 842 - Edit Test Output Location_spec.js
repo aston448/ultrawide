@@ -31,7 +31,7 @@ describe('UC 842 - Edit Test Output Location', function(){
 
 
     // Actions
-    it('A Developer can update and save the properties of a Test Output Location', function(){
+    it('Any user can update and save the properties of a Test Output Location', function(){
 
         // Setup
         const oldDetails = {
@@ -43,63 +43,55 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationFullPath:   'NONE'
         };
 
-        const newDetails = {
+        const newDetailsDev = {
             locationName:       'Location1',
-            locationType:       TestLocationType.REMOTE,
-            locationAccessType: TestLocationAccessType.RLOGIN,
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
-            locationPath:       'test_test/',
-            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
+            locationPath:       'test_dev/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_dev/'
+        };
+
+        const newDetailsDes = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationPath:       'test_des/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_des/'
+        };
+
+        const newDetailsMan = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationPath:       'test_man/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_man/'
         };
 
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
 
-        // Execute
-        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+        // Execute - developer
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetailsDev);
 
         // Verify
-        expect(OutputLocationsVerifications.location_DetailsAre('Location1', newDetails));
-    });
+        expect(OutputLocationsVerifications.location_DetailsAre('Location1', newDetailsDev));
 
+        // Execute - designer
+        OutputLocationsActions.designerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetailsDes);
+
+        // Verify
+        expect(OutputLocationsVerifications.location_DetailsAre('Location1', newDetailsDes));
+
+        // Execute - developer
+        OutputLocationsActions.managerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetailsMan);
+
+        // Verify
+        expect(OutputLocationsVerifications.location_DetailsAre('Location1', newDetailsMan));
+    });
 
     // Conditions
-    it('Only a Developer can update a Test Output Location', function(){
-
-        // Setup
-        const oldDetails = {
-            locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-            locationType:       TestLocationType.NONE,
-            locationAccessType: TestLocationAccessType.NONE,
-            locationIsShared:   false,
-            locationPath:       'NONE',
-            locationFullPath:   'NONE'
-        };
-
-        const newDetails = {
-            locationName:       'Location1',
-            locationType:       TestLocationType.REMOTE,
-            locationAccessType: TestLocationAccessType.RLOGIN,
-            locationIsShared:   true,
-            locationPath:       'test_test/',
-            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
-        };
-
-        const expectation = {success: false, message: TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_SAVE};
-
-        // Execute - Designer
-        OutputLocationsActions.designerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails, expectation);
-
-        // Verify unchanged
-        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
-
-        // Execute - Manager
-        OutputLocationsActions.managerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails, expectation);
-
-        // Verify unchanged
-        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
-
-    });
-
     it('A Test Output Location may not be given the same name as an existing Test Output Location', function(){
 
         const defaultDetails = {
@@ -114,8 +106,8 @@ describe('UC 842 - Edit Test Output Location', function(){
         // Setup - update the new Location
         const newDetails = {
             locationName:       'Location1',
-            locationType:       TestLocationType.REMOTE,
-            locationAccessType: TestLocationAccessType.RLOGIN,
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
             locationPath:       'test_test/',
             locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
@@ -134,10 +126,9 @@ describe('UC 842 - Edit Test Output Location', function(){
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultDetails));
     });
 
-    it('A remote Test Output Location must have an access type set', function(){
+    it('A Test Output Location may not be given the same path as an existing Test Output Location', function(){
 
-        // Setup
-        const oldDetails = {
+        const defaultDetails = {
             locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
@@ -146,23 +137,36 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationFullPath:   'NONE'
         };
 
+        // Setup - update the new Location
         const newDetails = {
             locationName:       'Location1',
-            locationType:       TestLocationType.REMOTE,
-            locationAccessType: TestLocationAccessType.NONE,
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
             locationPath:       'test_test/',
             locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
         };
 
-        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
+        const dupePathDetails = {
+            locationName:       'Location2',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationPath:       'test_test/',
+            locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
+        };
 
-        // Execute
-        const expectation = {success: false, message: TestOutputLocationValidationErrors.LOCATION_ACCESS_TYPE_NOT_SET};
-        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails, expectation);
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
 
-        // Verify
-        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
+        // Add another location
+        OutputLocationsActions.developerAddsNewLocation();
+
+        // Execute - try to update it with same name - Location1
+        const expectation = {success:false, message: TestOutputLocationValidationErrors.LOCATION_INVALID_PATH_DUPLICATE};
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, dupePathDetails, expectation);
+
+        // Verify - still default
+        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultDetails));
 
     });
 
@@ -172,8 +176,8 @@ describe('UC 842 - Edit Test Output Location', function(){
         // Setup - developer changes location to shared and changes details
         const newDetails1 = {
             locationName:       'Location1',
-            locationType:       TestLocationType.REMOTE,
-            locationAccessType: TestLocationAccessType.RLOGIN,
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
             locationPath:       'test_test/',
             locationFullPath:   process.env.ULTRAWIDE_DATA_STORE + UltrawideDirectory.TEST_OUTPUT_DIR + 'test_test/'
@@ -188,7 +192,7 @@ describe('UC 842 - Edit Test Output Location', function(){
         OutputLocationsActions.anotherDeveloperEditsTestLocationConfig();
 
         const expectedConfig1 = {
-            locationType:  TestLocationType.REMOTE,
+            locationType:  TestLocationType.LOCAL,
             isUnitLocation: false,
             isIntLocation: false,
             isAccLocation: false

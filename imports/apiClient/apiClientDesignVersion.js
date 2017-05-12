@@ -314,18 +314,18 @@ class ClientDesignVersionServices{
         // Open default items
         ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
-        // Force a re-render of each App to trigger opening
-        const designVersionApplications = DesignVersionComponents.find({
-            designVersionId: userContext.designVersionId,
-            componentType: ComponentType.APPLICATION
-        }).fetch();
-
-        designVersionApplications.forEach((app) => {
-            store.dispatch((updateOpenItemsFlag(app._id)));
-        });
+        // // Force a re-render of each App to trigger opening
+        // const designVersionApplications = DesignVersionComponents.find({
+        //     designVersionId: userContext.designVersionId,
+        //     componentType: ComponentType.APPLICATION
+        // }).fetch();
+        //
+        // designVersionApplications.forEach((app) => {
+        //     store.dispatch((updateOpenItemsFlag(app._id)));
+        // });
 
         // Recalculate the work summary
-        ClientDesignVersionServices.updateWorkProgress(userContext);
+        //this.updateWorkProgress(userContext);
 
         // Get latest status on DUs
         ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);

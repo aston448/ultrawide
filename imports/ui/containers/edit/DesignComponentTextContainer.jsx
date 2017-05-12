@@ -169,7 +169,7 @@ class DesignComponentText extends Component {
                                     </div>;
                             }
                         } else {
-                            if (designItem.isTextChanged) {
+                            if (designItem.isTextChanged && !designItem.isNew) {
                                 details =
                                     <div>
                                         {nameItem}
@@ -204,7 +204,8 @@ class DesignComponentText extends Component {
                         if(designItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_DETAILS_MODIFIED){
                             details =
                                 <div>
-                                    {nameItem}
+                                    {newNameItem}
+                                    {oldNameItem}
                                     {divider}
                                     {newTextItem}
                                     {oldTextItem}

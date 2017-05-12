@@ -163,34 +163,38 @@ export default class Narrative extends React.Component {
         let currentContent = {};
         let rawNarrative = null;
 
-        // The design component passed in is the original Design component for WPs
-        switch(props.view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.DEVELOP_BASE_WP:
-                //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
-                rawNarrative = props.designComponent.componentNarrativeRawNew;
-                break;
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.DEVELOP_UPDATE_WP:
-                if(props.displayContext === DisplayContext.UPDATE_SCOPE){
-                    //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
-                    rawNarrative = props.designComponent.componentNarrativeRawNew;
-
+        // // The design component passed in is the original Design component for WPs
+        // switch(props.view){
+        //     case ViewType.DESIGN_NEW_EDIT:
+        //     case ViewType.DESIGN_PUBLISHED_VIEW:
+        //     case ViewType.DESIGN_UPDATABLE_VIEW:
+        //     case ViewType.WORK_PACKAGE_BASE_VIEW:
+        //     case ViewType.WORK_PACKAGE_BASE_EDIT:
+        //     case ViewType.DEVELOP_BASE_WP:
+        //         //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
+                if(props.displayOldValue){
+                    rawNarrative = props.designComponent.componentNarrativeRawOld;
                 } else {
-                    //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
                     rawNarrative = props.designComponent.componentNarrativeRawNew;
                 }
-                break;
-            default:
-                log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", props.view);
-        }
+        //         break;
+        //     case ViewType.DESIGN_UPDATE_EDIT:
+        //     case ViewType.DESIGN_UPDATE_VIEW:
+        //     case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+        //     case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+        //     case ViewType.DEVELOP_UPDATE_WP:
+        //         if(props.displayContext === DisplayContext.UPDATE_SCOPE){
+        //             //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
+        //             rawNarrative = props.designComponent.componentNarrativeRawNew;
+        //
+        //         } else {
+        //             //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
+        //             rawNarrative = props.designComponent.componentNarrativeRawNew;
+        //         }
+        //         break;
+        //     default:
+        //         log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", props.view);
+        // }
 
         if (rawNarrative) {
 
@@ -403,5 +407,6 @@ Narrative.propTypes = {
     mode: PropTypes.string.isRequired,
     displayContext: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,
-    testSummary: PropTypes.bool.isRequired
+    testSummary: PropTypes.bool.isRequired,
+    displayOldValue: PropTypes.bool
 };

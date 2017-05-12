@@ -27,7 +27,7 @@ describe('UC 840 - Add Test Output Location', function(){
 
 
     // Actions
-    it('A Developer can add a new Test Output Location to the list of test locations', function(){
+    it('Any user can add a new Test Output Location to the list of test locations', function(){
 
         // Setup
         expect(OutputLocationsVerifications.locationDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
@@ -40,29 +40,9 @@ describe('UC 840 - Add Test Output Location', function(){
     });
 
 
-    // Conditions
-    it('Only a Developer can add a new Test Output Location', function(){
-
-        // Setup
-        expect(OutputLocationsVerifications.locationDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
-
-        // Execute - Designer
-        let expectation = {success: false, message: TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_ADD};
-        OutputLocationsActions.designerAddsNewLocation(expectation);
-
-        // Verify
-        expect(OutputLocationsVerifications.locationDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
-
-        // Execute - Manager
-        // Same expectation
-        OutputLocationsActions.designerAddsNewLocation(expectation);
-
-        // Verify
-        expect(OutputLocationsVerifications.locationDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
-    });
 
     // Consequences
-    it('A new Test Output Location added by a developer is private by default', function(){
+    it('A new Test Output Location added is private by default', function(){
 
         // Setup
         expect(OutputLocationsVerifications.locationDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));

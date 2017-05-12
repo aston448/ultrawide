@@ -115,13 +115,15 @@ export class DesignComponent extends Component{
             }
         }
 
+        let shouldComponentUpdate = false;
+
         switch (nextProps.view) {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-                return !(
+                shouldComponentUpdate =!(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
                     nextState.editable === this.state.editable &&
@@ -137,7 +139,7 @@ export class DesignComponent extends Component{
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                return !(
+                shouldComponentUpdate =!(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
                     nextState.editable === this.state.editable &&
@@ -153,7 +155,7 @@ export class DesignComponent extends Component{
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                return !(
+                shouldComponentUpdate = !(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
@@ -163,34 +165,14 @@ export class DesignComponent extends Component{
                  );
         }
 
+        //console.log("Component " + nextProps.currentItem.componentNameNew + " old open = " + this.state.open + " new open = " + nextState.open);
+        //console.log("Component " + nextProps.currentItem.componentNameNew + " updating = " + shouldComponentUpdate);
+
+        return shouldComponentUpdate;
+
     }
 
     componentDidMount(){
-
-        // If this is a new component just added, set it as open
-        switch(this.props.displayContext){
-            case DisplayContext.BASE_EDIT:
-
-                // Open New items in the base design editor
-                if(this.props.currentItem.isNew){
-                    //console.log("Opening DV item on mount" + this.props.currentItem.componentNameNew);
-                    ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, true);
-                }
-                break;
-
-            case DisplayContext.UPDATE_EDIT:
-
-                // In the update editor open any item that is added to scope
-                if(this.props.updateItem){
-                    if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE || this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE) {
-                        //console.log("Opening DU item on mount" + this.props.updateItem.componentNameNew);
-                        ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, true);
-                        this.setState({open: true});
-                    }
-                }
-
-                break;
-        }
 
         // Generally open things that are open...
         this.setOpenState(this.props);
@@ -270,12 +252,14 @@ export class DesignComponent extends Component{
     }
 
     setOpenStateIfUpdateItemChanging(newProps){
+        //console.log("Updating open state...?");
         if (
             (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.updateItem._id))) ||
             (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.props.openDesignUpdateItems.includes(this.props.updateItem._id)) ||
             (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !this.state.open) ||
             (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.state.open)
         ) {
+            //console.log("YES. Updating open state...");
             this.setOpenState(newProps);
         }
     }
@@ -310,8 +294,8 @@ export class DesignComponent extends Component{
                     this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
                 } else {
                     if(props.updateItem) {
-                        //console.log("Setting open state for " + props.updateItem.componentNameNew + " to " + openUpdateItems.includes(props.updateItem._id));
-                        this.setState({open: this.props.openDesignUpdateItems.includes(props.updateItem._id)});
+                        //console.log("Setting open state for " + props.updateItem.componentNameNew + " to " + props.openDesignUpdateItems.includes(props.updateItem._id));
+                        this.setState({open: props.openDesignUpdateItems.includes(props.updateItem._id)});
                     }
                 }
                 break;

@@ -1457,7 +1457,7 @@ input {
 }
 
 .editableItem{
-    padding: 0 0 0 5px;
+    padding-left: 5px;
     background-color: lightyellow;
     border-top: 1px solid lightgrey;
     border-right: 1px solid ghostwhite;
@@ -1467,7 +1467,6 @@ input {
 }
 
 .readOnlyItem{
-    padding: 0 0 0 0;
     background-color: transparent;
     border: 1px solid transparent;
     min-height: 24px;
@@ -1477,36 +1476,33 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  20px;
     font-weight: bold;
-    color: black;
+    color: darkseagreen;
 }
 
 .section1{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  20px;
-    color: black;
-    background-color: transparent;
+    color: cadetblue;
+
 }
 
 .section2{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  16px;
     width: 100%;
-    color: darkslategray;
-    background-color: transparent;
+    color: darkseagreen;
 }
 
 .section3{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
-    color: black;
-    background-color: transparent;
+    color: darkseagreen;
 }
 
 .section4{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
-    color: black;
-    background-color: transparent;
+    color: darkseagreen;
 }
 
 .control-table-data-app{
@@ -1538,48 +1534,45 @@ input {
 
 .feature {
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    padding: 3px 0 0 0;
+    padding-top: 3px;
     font-size:  15px;
     font-weight: bold;
-    color: darkred;
-    background-color: transparent;
+    color: black;
 }
 
 .feature-aspect {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    padding: 4px 0 0 0;
+    padding-top: 4px;
     font-size:  14px;
     font-weight: bold;
-    color: black;
-    background-color: transparent;
+    color: cadetblue;
 }
 
 .narrative {
-    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  12px;
-    font-style: italic;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
     padding: 0 0 0 60px;
     color: black;
     background-color: transparent;
 }
 
 .narrative-edit {
-    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  12px;
-    font-style: italic;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
     padding: 0 0 0 60px;
     color: black;
-    background-color: papayawhip;
-    border-top: 0px solid lightgrey;
-    border-bottom: 0px solid lightgrey;
+    background-color: lightyellow;
+    border-top: 1px solid lightgrey;
+    border-right: 1px solid ghostwhite;
+    border-bottom: 1px solid ghostwhite;
+    border-left: 1px solid lightgrey;
 }
 
 .scenario{
-    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  13px;
-    padding: 2px 0 0 0px;
-    color: darkslategrey;
-    background-color: transparent;
+    font-family: 'Baskervile', 'Palatino Linotype', Times, serif;
+    font-size:  14px;
+    padding-top: 2px;
+    color: black;
 }
 
 .open-status-open{
@@ -1742,14 +1735,14 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     padding: 3px 0 0 5px;
     font-size:  14px;
-    color: darkblue;
+    color: cadetblue;
     font-weight: bold;
 }
 
 .domain-definition{
-    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-family: 'Baskervile', 'Palatino Linotype', Times, serif;
     padding: 3px 10px 0 5px;
-    font-size:  13px;
+    font-size:  14px;
     color: black;
     font-weight: normal;
 }
@@ -2002,7 +1995,7 @@ input {
 }
 
 .red{
-  color: red;
+  color: indianred;
 }
 
 .lgrey {

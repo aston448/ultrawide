@@ -640,12 +640,6 @@ export class DesignComponentHeader extends Component{
     render() {
         const {currentItem, updateItem, wpItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
-        // TODO - add all the tooltips required
-        const tooltipEdit = (
-            <Tooltip id="modal-tooltip">
-                Edit...
-            </Tooltip>
-        );
 
         //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with test summary " + testSummary + " and test summary data " + testSummaryData);
 
@@ -908,17 +902,7 @@ export class DesignComponentHeader extends Component{
         }
 
 
-        const tooltipUpdateStatus = (
-            <Tooltip id="modal-tooltip">
-                {updateStatusText}
-            </Tooltip>
-        );
 
-        const tooltipGotoWp = (
-            <Tooltip id="modal-tooltip">
-                Go to Work Package
-            </Tooltip>
-        );
 
         // Header options: ---------------------------------------------------------------------------------------------
 
@@ -945,6 +929,68 @@ export class DesignComponentHeader extends Component{
 
         // Minor --------------------------
 
+        // MS to wait before tooltips are shown
+        const tooltipDelay = 1000;
+
+        const tooltipUpdateStatus = (
+            <Tooltip id="modal-tooltip">
+                {'Update Status: ' + updateStatusText}
+            </Tooltip>
+        );
+
+        const tooltipGotoWp = (
+            <Tooltip id="modal-tooltip">
+                Go to Work Package
+            </Tooltip>
+        );
+
+        const tooltipEdit = (
+            <Tooltip id="modal-tooltip">
+                Edit...
+            </Tooltip>
+        );
+
+        let tooltipDelete = '';
+
+        if(isDeleted){
+
+            const tooltipDelete = (
+                <Tooltip id="modal-tooltip">
+                    Undo Delete
+                </Tooltip>
+            );
+        } else {
+
+            tooltipDelete = (
+                <Tooltip id="modal-tooltip">
+                    Delete
+                </Tooltip>
+            );
+        }
+
+        const tooltipMove = (
+            <Tooltip id="modal-tooltip">
+                Move
+            </Tooltip>
+        );
+
+        const tooltipSave = (
+            <Tooltip id="modal-tooltip">
+                Save Edit
+            </Tooltip>
+        );
+
+        const tooltipCancel = (
+            <Tooltip id="modal-tooltip">
+                Cancel Edit
+            </Tooltip>
+        );
+
+        let hiddenIcon =
+            <InputGroup.Addon>
+                <div className="invisible"><Glyphicon glyph="star"/></div>
+            </InputGroup.Addon>;
+
         let openClose =
             <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                 <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
@@ -960,7 +1006,7 @@ export class DesignComponentHeader extends Component{
             </InputGroup.Addon>;
 
         let editableEditor =
-            <div id="editorEdit" className="editableItem" onClick={ () => this.setCurrentComponent()}>
+            <div id="editorEdit" className={'editableItem ' + itemStyle} onClick={ () => this.setCurrentComponent()}>
                 <Editor
                     editorState={this.state.editorState}
                     handleKeyCommand={this.handleTitleKeyCommand}
@@ -985,18 +1031,18 @@ export class DesignComponentHeader extends Component{
 
         let wpStatus =
             <InputGroup.Addon>
-                <OverlayTrigger placement="right" overlay={tooltipGotoWp}>
+                <OverlayTrigger delayShow={tooltipDelay} placement="right" overlay={tooltipGotoWp}>
                     <div id="wpStatusIcon" className={wpStatusClass}
                          onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon
                         glyph={wpStatusGlyph}/></div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
 
-        let updateStatus = '';
+        let updateStatus = hiddenIcon;
 
         if (updateStatusClass === 'update-merge-status component-hidden') {
 
-            updateStatus = <div></div>;
+            updateStatus = hiddenIcon;
 
         } else {
             if (updateStatusText === '') {
@@ -1007,21 +1053,18 @@ export class DesignComponentHeader extends Component{
             } else {
                 updateStatus =
                     <InputGroup.Addon>
-                        <OverlayTrigger placement="right" overlay={tooltipUpdateStatus}>
+                        <OverlayTrigger delayShow={tooltipDelay} placement="right" overlay={tooltipUpdateStatus}>
                             <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>;
             }
         }
 
-        let hiddenIcon =
-            <InputGroup.Addon>
-                <div className="invisible"><Glyphicon glyph="star"/></div>
-            </InputGroup.Addon>;
+
 
         let editAction =
             <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
-                <OverlayTrigger overlay={tooltipEdit}>
+                <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipEdit}>
                     <div className="blue"><Glyphicon glyph="edit"/></div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
@@ -1029,13 +1072,17 @@ export class DesignComponentHeader extends Component{
         let deleteAction =
             <InputGroup.Addon id="actionDelete"
                               onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
+                <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipDelete}>
+                    <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
+                </OverlayTrigger>
             </InputGroup.Addon>;
 
         let moveAction =
             <InputGroup.Addon>
                 <div id="actionMove" className="lgrey">
-                    <Glyphicon glyph="move"/>
+                    <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipMove}>
+                        <Glyphicon glyph="move"/>
+                    </OverlayTrigger>
                 </div>
             </InputGroup.Addon>;
 
@@ -1045,7 +1092,9 @@ export class DesignComponentHeader extends Component{
                 <InputGroup.Addon>
                     {connectDragSource(
                         <div id="actionMove" className="lgrey">
-                            <Glyphicon glyph="move"/>
+                            <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipMove}>
+                                <Glyphicon glyph="move"/>
+                            </OverlayTrigger>
                         </div>)
                     }
                 </InputGroup.Addon>
@@ -1053,12 +1102,16 @@ export class DesignComponentHeader extends Component{
 
         let saveAction =
             <InputGroup.Addon id="actionSave" onClick={ () => this.saveComponentName(view, mode)}>
-                <div className="green"><Glyphicon glyph="ok"/></div>
+                <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipSave}>
+                    <div className="green"><Glyphicon glyph="ok"/></div>
+                </OverlayTrigger>
             </InputGroup.Addon>;
 
         let undoAction =
             <InputGroup.Addon id="actionUndo" onClick={ () => this.undoComponentNameChange()}>
-                <div className="red"><Glyphicon glyph="arrow-left"/></div>
+                <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipCancel}>
+                    <div className="red"><Glyphicon glyph="arrow-left"/></div>
+                </OverlayTrigger>
             </InputGroup.Addon>;
 
         // Major --------------------------
@@ -1114,7 +1167,7 @@ export class DesignComponentHeader extends Component{
         let editingHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    {hiddenIcon}
+                    {/*{hiddenIcon}*/}
                     {indent}
                     {editableEditor}
                     {saveAction}
@@ -1126,7 +1179,7 @@ export class DesignComponentHeader extends Component{
         let updateEditingHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    {hiddenIcon}
+                    {/*{hiddenIcon}*/}
                     {hiddenIcon}
                     {indent}
                     {editableEditor}
@@ -1231,11 +1284,11 @@ export class DesignComponentHeader extends Component{
         let viewOnlyVersionProgressHeader =
             <div id="workingHeaderItem">
                 <InputGroup>
-                    {wpStatus}
                     {updateStatus}
                     {openClose}
                     {indent}
                     {readOnlyEditor}
+                    {wpStatus}
                 </InputGroup>
             </div>;
 

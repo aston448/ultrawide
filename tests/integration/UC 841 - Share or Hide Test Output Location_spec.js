@@ -32,7 +32,7 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
 
     // Actions
-    it('A Developer can update a private Test Output Location to be shared', function(){
+    it('A private Test Output Location to be updated to be shared', function(){
 
         // Setup - current location is private
         const expectedLocation = {
@@ -64,7 +64,7 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
     });
 
-    it('A Developer can update a shared Test Output Location to be private', function(){
+    it('A shared Test Output Location can be updated to be private', function(){
 
         // Setup - share it first
         OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
@@ -85,21 +85,6 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectedLocation));
     });
 
-
-
-
-    // Conditions
-    it('Only a Developer can update a Test Output Location as private or shared', function(){
-
-        // Check expected validation error is raised
-
-        // Designer
-        const expectation = {success: false, message: TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_SAVE};
-        OutputLocationsActions.designerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectation);
-
-        // Manager
-        OutputLocationsActions.managerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectation);
-    });
 
 
     // Consequences
