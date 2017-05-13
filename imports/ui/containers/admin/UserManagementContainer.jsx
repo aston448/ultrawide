@@ -17,7 +17,7 @@ import ClientContainerServices              from '../../../apiClient/apiClientCo
 import ClientUserManagementServices         from '../../../apiClient/apiClientUserManagement.js';
 
 // Bootstrap
-import {Panel}          from 'react-bootstrap';
+import {Well, FormGroup, ControlLabel, FormControl, Button}          from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
@@ -35,6 +35,12 @@ import {connect} from 'react-redux';
 class UserManagementScreen extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            oldPassword: '',
+            newPassword1: '',
+            newPassword2: ''
+        };
 
     };
 
@@ -62,6 +68,26 @@ class UserManagementScreen extends Component {
         );
     }
 
+    updateOldPassword(e){
+        this.setState({oldPassword: e.target.value});
+    }
+
+    updateNewPassword1(e){
+        this.setState({newPassword1: e.target.value});
+    }
+
+    updateNewPassword2(e){
+        this.setState({newPassword2: e.target.value});
+    }
+
+    onUpdateAdminPassword(e){
+
+        // Cal this to prevent Submit reloading the page
+        e.preventDefault();
+
+        ClientUserManagementServices.changeAdminPassword(this.state.oldPassword, this.state.newPassword1, this.state.newPassword2);
+    }
+
     render() {
 
         const {userData} = this.props;
@@ -87,11 +113,36 @@ class UserManagementScreen extends Component {
                 footerActionFunction={footerActionFunction}
             />;
 
+        const changeAdminPassword =
+            <Well className="admin-password-well">
+                <form onSubmit={(e) => this.onUpdateAdminPassword(e)}>
+                    <div className="design-item-note">Change Admin Password...</div>
+                    <FormGroup controlId="oldPassword">
+                        <ControlLabel>Current Password:</ControlLabel>
+                        <FormControl ref="oldPassword" type="password"  onChange={(e) => this.updateOldPassword(e)}/>
+                    </FormGroup>
+                    <FormGroup controlId="newPassword1">
+                        <ControlLabel>New Password:</ControlLabel>
+                        <FormControl ref="newPassword1" type="password"  onChange={(e) => this.updateNewPassword1(e)}/>
+                    </FormGroup>
+                    <FormGroup controlId="newPassword2">
+                        <ControlLabel>Repeat New Password:</ControlLabel>
+                        <FormControl ref="newPassword2" type="password"  onChange={(e) => this.updateNewPassword2(e)}/>
+                    </FormGroup>
+                    <Button type="submit">
+                        Change Admin Password
+                    </Button>
+                </form>
+            </Well>;
+
         return (
             <Grid>
                 <Row>
-                    <Col md={8} className="col">
+                    <Col md={6} className="col">
                         {users}
+                    </Col>
+                    <Col md={6} className="col">
+                        {changeAdminPassword}
                     </Col>
                 </Row>
             </Grid>

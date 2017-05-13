@@ -59,12 +59,12 @@ class UserManagementServices {
             const existingUser = UserRoles.findOne({userId: newUser.userId});
 
             // If username changed update it
-            if (existingUser.userName != newUser.userName) {
+            if (existingUser.userName !== newUser.userName) {
                 Accounts.setUsername(newUser.userId, newUser.userName);
             }
 
             // If password changed, update it
-            if (existingUser.password != newUser.password) {
+            if (existingUser.password !== newUser.password) {
                 Accounts.setPassword(newUser.userId, newUser.password);
             }
 
@@ -145,6 +145,15 @@ class UserManagementServices {
         }
 
         return true;
+    }
+
+    changeAdminPassword(oldPassword, newPassword1){
+
+        if(Meteor.isClient){
+
+            Accounts.changePassword(oldPassword, newPassword1);
+        }
+
     }
 }
 

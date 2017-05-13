@@ -10,6 +10,8 @@ import { UserManagementMessages }           from '../constants/message_texts.js'
 
 import ServerUserManagementApi              from '../apiServer/apiUserManagement';
 import UserManagementValidationApi          from '../apiValidation/apiUserManagementValidation.js';
+import ClientAppHeaderServices              from '../apiClient/apiClientAppHeader.js';
+
 
 // REDUX services
 import store from '../redux/store'
@@ -175,6 +177,64 @@ class ClientUserManagementServices{
                 }));
             }
         });
+    }
+
+    changeAdminPassword(oldPassword, newPassword1, newPassword2){
+
+        const userId = store.getState().currentUserItemContext.userId;
+
+        // Client validation
+        let result = UserManagementValidationApi.validateChangeAdminPassword(userId, newPassword1, newPassword2);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - Client Action
+        // ServerUserManagementApi.changeAdminPassword(userId, oldPassword, newPassword1, newPassword2, (err, result) => {
+        //
+        //     if (err) {
+        //         // Unexpected error as all expected errors already handled - show alert.
+        //         // Can't update screen here because of error
+        //         alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+        //     } else {
+        //
+        //         // Show action success on screen
+        //         store.dispatch(updateUserMessage({
+        //             messageType: MessageType.INFO,
+        //             messageText: UserManagementMessages.MSG_AMIN_PASSWORD_CHANGED
+        //         }));
+        //     }
+        // });
+
+        if(Meteor.isClient){
+            try{
+
+                Accounts.changePassword(oldPassword, newPassword1);
+
+            } catch (e){
+
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.ERROR,
+                    messageText: e.reason
+                }));
+
+                return {success: false, message: e.reason};
+            }
+
+            // Show action success on screen
+            store.dispatch(updateUserMessage({
+                messageType: MessageType.INFO,
+                messageText: UserManagementMessages.MSG_AMIN_PASSWORD_CHANGED
+            }));
+
+            ClientAppHeaderServices.setViewLogin(store.getState().currentUserItemContext);
+        }
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
     }
 
     // LOCAL CLIENT ACTIONS ============================================================================================

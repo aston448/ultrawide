@@ -23,6 +23,8 @@ export const UserManagementValidationErrors = {
     USER_MANAGEMENT_INVALID_USER_NAME_BLANK:    'A user cannot have no user name',
     USER_MANAGEMENT_INVALID_USER_NAME_ALPHANUM: 'A user name should be alphanumeric with no spaces',
     USER_MANAGEMENT_INVALID_PASSWORD_BLANK:     'A user cannot have no password',
+    USER_MANAGEMENT_INVALID_USER_CHANGE_ADMIN_PASSWD:   'Only the Admin user can change the admin password',
+    USER_MANAGEMENT_INVALID_NEW_PASSWORDS:      'The new passwords you have entered are not the same'
 
 };
 

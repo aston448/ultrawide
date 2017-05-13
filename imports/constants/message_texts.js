@@ -20,7 +20,8 @@ export const UserManagementMessages = {
     MSG_USER_UPDATED:               'User details saved',
     MSG_USER_ACTIVATED:             'User made active',
     MSG_USER_DEACTIVATED:           'User made inactive',
-    MSG_USER_API_KEY_SAVED:         'API key saved'
+    MSG_USER_API_KEY_SAVED:         'API key saved',
+    MSG_AMIN_PASSWORD_CHANGED:      'Admin password changed'
 };
 
 export const DesignMessages = {

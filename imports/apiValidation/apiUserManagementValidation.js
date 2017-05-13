@@ -48,6 +48,18 @@ class UserManagementValidationApi{
             return UserManagementValidationServices.validateActivateDeactivateUser(actionUser, isActive)
         }
     }
+
+    validateChangeAdminPassword(userId, newPassword1, newPassword2){
+
+        const actionUser = UserRoles.findOne({userId: userId});
+
+        if(!actionUser){
+            return UserManagementValidationErrors.USER_MANAGEMENT_NO_ADMIN_USER;
+        } else {
+            return UserManagementValidationServices.validateChangeAdminPassword(actionUser, newPassword1, newPassword2);
+        }
+
+    }
 }
 
 export default new UserManagementValidationApi();

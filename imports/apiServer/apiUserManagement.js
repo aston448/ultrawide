@@ -4,7 +4,8 @@ import {
     saveUser,
     activateUser,
     deactivateUser,
-    saveUserApiKey
+    saveUserApiKey,
+    changeAdminPassword
 } from '../apiValidatedMethods/user_management_methods.js'
 
 // =====================================================================================================================
@@ -72,6 +73,21 @@ class ServerUserManagementApi {
             {
                 userId: userId,
                 apiKey: apiKey
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        )
+    }
+
+    changeAdminPassword(userId, oldPassword, newPassword1, newPassword2, callback){
+
+        changeAdminPassword.call(
+            {
+                userId:         userId,
+                oldPassword:    oldPassword,
+                newPassword1:    newPassword1,
+                newPassword2:    newPassword2
             },
             (err, result) => {
                 callback(err, result);

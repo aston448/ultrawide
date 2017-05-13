@@ -580,6 +580,10 @@ input {
     margin: 100px 0 0 0;
 }
 
+.admin-password-well{
+    margin: 100px;
+}
+
 .main-grid{
     margin: 0;
     padding: 0px;

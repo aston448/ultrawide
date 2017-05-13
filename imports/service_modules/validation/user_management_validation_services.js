@@ -79,7 +79,23 @@ class UserManagementValidationServices {
         }
 
         return Validation.VALID;
-    }
+    };
+
+    validateChangeAdminPassword(actionUser, newPassword1, newPassword2){
+
+        // The actioning user must be the Admin user
+        if (!(actionUser.isAdmin)) {
+
+            return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_USER_CHANGE_ADMIN_PASSWD;
+        }
+
+        // The new passwords must match
+        if(newPassword1 !== newPassword2){
+            return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_NEW_PASSWORDS
+        }
+
+        return Validation.VALID;
+    };
 }
 
 export default new UserManagementValidationServices();

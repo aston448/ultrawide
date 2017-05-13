@@ -132,3 +132,31 @@ export const saveUserApiKey = new ValidatedMethod({
         }
     }
 });
+
+export const changeAdminPassword = new ValidatedMethod({
+
+    name: 'userManagement.changeAdminPassword',
+
+    validate: new SimpleSchema({
+        userId:             {type: String},
+        oldPassword:        {type: String},
+        newPassword1:       {type: String},
+        newPassword2:       {type: String}
+    }).validator(),
+
+    run({userId, oldPassword, newPassword1, newPassword2}){
+
+        const result = UserManagementValidationApi.validateChangeAdminPassword(userId, newPassword1, newPassword2);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('userManagement.changeAdminPassword.failValidation', result)
+        }
+
+        try {
+            UserManagementServices.changeAdminPassword(oldPassword, newPassword1);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+});
