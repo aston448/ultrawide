@@ -72,7 +72,7 @@ export const UPDATE_USER_MESSAGE = 'UPDATE_USER_MESSAGE';
 // Sets the current user role - one user can change roles if allowed to
 export function setCurrentRole(userId, role) {
     return function (dispatch) {
-        console.log("ACTIONS: Role to " + role);
+        //console.log("ACTIONS: Role to " + role);
         dispatch({type: SET_CURRENT_USER_ROLE, newUserRole: role});
     };
 }
@@ -184,6 +184,9 @@ export function setCurrentUserViewOptions(viewOptions, userId, saveToDb){
 }
 
 export function setCurrentWindowSize(newSize) {
+
+    //console.log("ACTIONS: Window size set to " + newSize);
+
     return function (dispatch) {
         dispatch({type: SET_WINDOW_SIZE, newSize: newSize});
     };
@@ -459,7 +462,7 @@ export function setMashDataStaleTo(newValue) {
 // User View Options
 export function updateViewOptionsData() {
 
-    let newValue = store.getState().currentViewOptionsDataValue + 1
+    let newValue = store.getState().currentViewOptionsDataValue + 1;
     if(newValue > 100){
         newValue = 0;
     }
@@ -471,7 +474,7 @@ export function updateViewOptionsData() {
 
 export function updateOpenItemsFlag(itemId) {
 
-    let newFlag = store.getState().openItemsFlag.flag + 1
+    let newFlag = store.getState().openItemsFlag.flag + 1;
     if(newFlag > 100){
         newFlag = 0;
     }

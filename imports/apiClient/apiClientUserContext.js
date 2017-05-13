@@ -193,6 +193,7 @@ class ClientUserContextServices {
 
         // Restore User Settings
         const screenSize = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_SCREEN_SIZE);
+
         store.dispatch(setCurrentWindowSize(screenSize));
 
         // Go to Home screen

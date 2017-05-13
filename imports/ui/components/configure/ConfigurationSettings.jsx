@@ -29,6 +29,7 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 export class ConfigurationSettings extends Component {
+
     constructor(props) {
         super(props);
 
@@ -79,8 +80,6 @@ export class ConfigurationSettings extends Component {
                 </Row>
             </Grid>
         );
-
-        console.log("User context is " + userContext);
 
         const testLocationManagement =
             <TestOutputsContainer params={{

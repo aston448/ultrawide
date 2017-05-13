@@ -50,7 +50,7 @@ class TextLookups {
             case ViewType.DEVELOP_UPDATE_WP:
                 return 'WORK PACKAGE IMPLEMENTATION';
             case ViewType.SELECT:
-                return 'ITEM SELECTION';
+                return 'HOME PAGE FOR: ';
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 return 'WORK PACKAGE SCOPING';

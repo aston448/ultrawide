@@ -64,6 +64,7 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin(userContext);
     }
 
+
     render() {
 
         const {mode, view, userRole, userContext, message} = this.props;
@@ -80,6 +81,10 @@ export class AppHeader extends Component {
         let roleClass = '';
         let roleStatusClass = '';
         let viewText = TextLookups.viewText(view);
+
+        if(view === ViewType.SELECT){
+            viewText = viewText + ClientAppHeaderServices.getCurrentDesign(userContext);
+        }
 
         // Get current status
         let status = '';

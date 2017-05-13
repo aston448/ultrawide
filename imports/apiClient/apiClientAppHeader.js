@@ -34,6 +34,21 @@ import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurren
 
 class ClientAppHeaderServices{
 
+    getCurrentDesign(userContext){
+
+        if(userContext.designId === 'NONE'){
+            return 'No Design';
+        } else {
+            const design = Designs.findOne({_id: userContext.designId});
+
+            if(design){
+                return design.designName;
+            } else {
+                return 'No Design';
+            }
+        }
+    };
+
     setEditorMode(newMode, view, viewOptions, userId){
 
         // Sets the design editor to Edit or View mode

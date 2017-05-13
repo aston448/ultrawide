@@ -82,7 +82,7 @@ export class DesignsList extends Component {
         return (
             <Grid>
                 <Row>
-                    <Col md={4}>
+                    <Col md={6}>
                         <ItemContainer
                             headerText={'Designs'}
                             bodyDataFunction={bodyDataFunction}

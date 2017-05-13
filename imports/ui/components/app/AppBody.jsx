@@ -27,7 +27,7 @@ import {ViewType, RoleType} from '../../../constants/constants.js'
 // REDUX services
 import {connect} from 'react-redux';
 
-import {ConfigurationSettings} from "../configure/ConfigurationSettings";
+import ConfigurationSettings from "../configure/ConfigurationSettings";
 
 // React DnD
 
