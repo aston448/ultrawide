@@ -192,45 +192,30 @@ class ClientUserManagementServices{
             return {success: false, message: result};
         }
 
-        // Real action call - Client Action
-        // ServerUserManagementApi.changeAdminPassword(userId, oldPassword, newPassword1, newPassword2, (err, result) => {
-        //
-        //     if (err) {
-        //         // Unexpected error as all expected errors already handled - show alert.
-        //         // Can't update screen here because of error
-        //         alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-        //     } else {
-        //
-        //         // Show action success on screen
-        //         store.dispatch(updateUserMessage({
-        //             messageType: MessageType.INFO,
-        //             messageText: UserManagementMessages.MSG_AMIN_PASSWORD_CHANGED
-        //         }));
-        //     }
-        // });
-
         if(Meteor.isClient){
-            try{
 
-                Accounts.changePassword(oldPassword, newPassword1);
+            Accounts.changePassword(oldPassword, newPassword1, (err) => {
 
-            } catch (e){
+                if(err){
 
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.ERROR,
-                    messageText: e.reason
-                }));
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.ERROR,
+                        messageText: err.reason
+                    }));
 
-                return {success: false, message: e.reason};
-            }
+                    return {success: false, message: err.reason};
 
-            // Show action success on screen
-            store.dispatch(updateUserMessage({
-                messageType: MessageType.INFO,
-                messageText: UserManagementMessages.MSG_AMIN_PASSWORD_CHANGED
-            }));
+                } else {
 
-            ClientAppHeaderServices.setViewLogin(store.getState().currentUserItemContext);
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: UserManagementMessages.MSG_AMIN_PASSWORD_CHANGED
+                    }));
+
+                    ClientAppHeaderServices.setViewLogin(store.getState().currentUserItemContext);
+                }
+            });
+
         }
 
         // Indicate that business validation passed

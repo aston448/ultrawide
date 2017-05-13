@@ -116,7 +116,8 @@ class UserManagementScreen extends Component {
         const changeAdminPassword =
             <Well className="admin-password-well">
                 <form onSubmit={(e) => this.onUpdateAdminPassword(e)}>
-                    <div className="design-item-note">Change Admin Password...</div>
+                    <div className="design-item-header">Change Admin Password</div>
+                    <div className="design-item-note">You'll need to remember it so be careful!</div>
                     <FormGroup controlId="oldPassword">
                         <ControlLabel>Current Password:</ControlLabel>
                         <FormControl ref="oldPassword" type="password"  onChange={(e) => this.updateOldPassword(e)}/>

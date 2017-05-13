@@ -147,14 +147,6 @@ class UserManagementServices {
         return true;
     }
 
-    changeAdminPassword(oldPassword, newPassword1){
-
-        if(Meteor.isClient){
-
-            Accounts.changePassword(oldPassword, newPassword1);
-        }
-
-    }
 }
 
 export default new UserManagementServices();
