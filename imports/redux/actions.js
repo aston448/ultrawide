@@ -72,10 +72,8 @@ export const UPDATE_USER_MESSAGE = 'UPDATE_USER_MESSAGE';
 // Sets the current user role - one user can change roles if allowed to
 export function setCurrentRole(userId, role) {
     return function (dispatch) {
-        //console.log("ACTIONS: Role to " + role);
+        console.log("ACTIONS: Role to " + role);
         dispatch({type: SET_CURRENT_USER_ROLE, newUserRole: role});
-
-        Meteor.call('userContext.setCurrentUserRole', userId, role);
     };
 }
 
@@ -104,9 +102,6 @@ export function setCurrentView(view) {
                 break;
             case ViewType.CONFIGURE:
                 message = 'User Settings';
-                break;
-            case ViewType.TEST_OUTPUTS:
-                message = 'Test Output Locations';
                 break;
             case ViewType.DESIGNS:
                 message = 'Available Designs';

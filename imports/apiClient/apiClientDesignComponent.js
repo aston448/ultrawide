@@ -33,6 +33,9 @@ class ClientDesignComponentServices{
     // User saved a change to design component name --------------------------------------------------------------------
     updateComponentName(view, mode, designComponentId, newPlainText, newRawText){
 
+        const designVersionComponent = DesignVersionComponents.findOne({_id: designComponentId});
+        const wasNew = designVersionComponent.isNew;
+
         // Client validation
         let result = DesignComponentValidationApi.validateUpdateComponentName(view, mode, designComponentId, newPlainText);
 
@@ -63,6 +66,12 @@ class ClientDesignComponentServices{
                 }));
             }
         });
+
+        // If it was a new component, open it on first naming
+        if(wasNew && designVersionComponent.componentType !== ComponentType.SCENARIO){
+            const existingOpenItems = store.getState().currentUserOpenDesignItems;
+            store.dispatch(setCurrentUserOpenDesignItems(existingOpenItems, designComponentId, true))
+        }
 
         // Indicate that business validation passed
         return {success: true, message: ''};

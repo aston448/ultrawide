@@ -5,7 +5,8 @@
 export const ImpexMessages = {
 
     MSG_DESIGN_BACKUP:              'Design backup saved',
-    MSG_DESIGN_RESTORE:             'Design restored from backup'
+    MSG_DESIGN_RESTORE:             'Design restored from backup',
+    MSG_DESIGN_ARCHIVE:             'Design archived'
 };
 
 export const UserSettingMessages = {

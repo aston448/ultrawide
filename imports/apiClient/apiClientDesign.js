@@ -31,7 +31,7 @@ class ClientDesignServices{
         // Client validation
         let result = DesignValidationApi.validateAddDesign(userRole);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -65,7 +65,7 @@ class ClientDesignServices{
         // Client validation
         let result = DesignValidationApi.validateUpdateDesignName(userRole, newName, designId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -100,7 +100,7 @@ class ClientDesignServices{
         // Client validation
         let result = DesignValidationApi.validateRemoveDesign(userRole, designId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};

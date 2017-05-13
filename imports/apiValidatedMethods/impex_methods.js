@@ -61,3 +61,29 @@ export const restoreDesign = new ValidatedMethod({
         }
     }
 });
+
+export const archiveDesign = new ValidatedMethod({
+
+    name: 'impex.archiveDesign',
+
+    validate: new SimpleSchema({
+        designId:   {type: String},
+        userId:     {type: String}
+    }).validator(),
+
+    run({designId, userId}){
+
+        const result = BackupValidationApi.validateArchiveDesign(userId);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('impex.archiveDesign.failValidation', result)
+        }
+
+        try {
+            ImpExServices.archiveDesign(designId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+});

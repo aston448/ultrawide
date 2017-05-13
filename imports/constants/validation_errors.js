@@ -8,7 +8,8 @@ export const Validation = {
 };
 
 export const ImpExValidationErrors = {
-    BACKUP_DESIGN_INVALID_ROLE_RESTORE:     'Only the admin user can restore a Design'
+    BACKUP_DESIGN_INVALID_ROLE_RESTORE:     'Only the admin user can restore a Design',
+    BACKUP_DESIGN_INVALID_ROLE_ARCHIVE:     'Only the admin user can archive a Design'
 };
 
 export const UserManagementValidationErrors = {

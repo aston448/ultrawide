@@ -724,6 +724,10 @@ input {
     background-color: #EEFFEE;
 }
 
+.item-status-removable{
+    background-color: #EEEEEE;
+}
+
 .item-status-ignored{
     background-color: #FFEEEE;
 }

@@ -59,7 +59,7 @@ export class DesignBackup extends Component {
             <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
 
         const viewInstance = (
-            <div onClick={() => this.setCurrentUser(user)}>
+            <div>
                 <Grid>
                     <Row>
                         <Col sm={4}>

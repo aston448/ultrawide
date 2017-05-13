@@ -30,6 +30,19 @@ class ImpExValidationServices{
 
         return Validation.VALID;
     };
+
+    validateArchiveDesign(user){
+
+        if(!user){
+            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_ROLE_ARCHIVE;
+        }
+
+        if(!(user.isAdmin)){
+            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_ROLE_ARCHIVE;
+        }
+
+        return Validation.VALID;
+    }
 }
 
 export default new ImpExValidationServices();

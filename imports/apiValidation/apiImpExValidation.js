@@ -26,5 +26,12 @@ class ImpExValidationApi{
 
     };
 
+    validateArchiveDesign(userId){
+
+        const user = UserRoles.findOne({userId: userId});
+
+        return ImpExValidationServices.validateArchiveDesign(user);
+    }
+
 }
 export default new ImpExValidationApi();

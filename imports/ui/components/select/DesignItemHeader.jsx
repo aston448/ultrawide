@@ -251,7 +251,7 @@ export class DesignItemHeader extends Component{
                     titleClass = 'design-item-header greyed-out'
                 }
                 return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
-
+                break;
             case RoleType.MANAGER:
                 // Managers can edit Work Packages
                 if(currentItemType === ItemType.WORK_PACKAGE){
@@ -268,7 +268,7 @@ export class DesignItemHeader extends Component{
                     }
                     return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
                 }
-
+                break;
             case RoleType.DESIGNER:
                 if(currentItemType === ItemType.WORK_PACKAGE){
                     // Designers can see WPs read only and new stuff is greyed out
@@ -294,6 +294,10 @@ export class DesignItemHeader extends Component{
                         return (<div className="design-item-header">{nameEditorNotEditing}{refEditorNotEditing}</div>);
                     }
                 }
+                break;
+            case RoleType.ADMIN:
+                // Must be in the Designs List as those are the only items Admin can see
+                return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
 
         }
 

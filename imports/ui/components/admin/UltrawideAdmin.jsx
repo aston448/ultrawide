@@ -13,6 +13,7 @@ import BackupManagementContainer            from '../../containers/admin/BackupM
 import ApiManagement                        from '../../components/admin/ApiManagement.jsx';
 
 // Ultrawide Services
+import { RoleType }                         from '../../../constants/constants.js';
 
 // Bootstrap
 import {Tabs, Tab} from 'react-bootstrap';
@@ -36,19 +37,26 @@ import {connect} from 'react-redux';
 
     render(){
 
+        const {userRole} = this.props;
+
         const userContainer = <UserManagementContainer/>;
 
         const backupContainer = <BackupManagementContainer/>;
 
         const apiDetails = <ApiManagement/>;
 
-        return (
-            <Tabs defaultActiveKey={1} id="admin-view_tabs">
-                <Tab eventKey={1} title="USER MANAGEMENT">{userContainer}</Tab>
-                <Tab eventKey={2} title="BACKUP MANAGEMENT">{backupContainer}</Tab>
-                <Tab eventKey={3} title="API MANAGEMENT">{apiDetails}</Tab>
-            </Tabs>
-        );
+        if(userRole === RoleType.ADMIN){
+            return (
+                <Tabs defaultActiveKey={1} id="admin-view_tabs">
+                    <Tab eventKey={1} title="USER MANAGEMENT">{userContainer}</Tab>
+                    <Tab eventKey={2} title="BACKUP MANAGEMENT">{backupContainer}</Tab>
+                    <Tab eventKey={3} title="API MANAGEMENT">{apiDetails}</Tab>
+                </Tabs>
+            );
+        } else {
+            return <div></div>;
+        }
+
     }
 }
 
@@ -59,7 +67,7 @@ UltrawideAdmin.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-
+        userRole: state.currentUserRole
     }
 }
 

@@ -21,6 +21,10 @@ import { DesignUpdateComponents }       from '../../collections/design_update/de
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
 import { DesignBackups }                from '../../collections/backup/design_backups.js';
 import { AppGlobalData }                from '../../collections/app/app_global_data.js';
+import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
+import { UserDevDesignSummaryData }     from '../../collections/summary/user_dev_design_summary_data.js';
+import { UserDevTestSummaryData }       from '../../collections/summary/user_dev_test_summary_data.js';
+import { UserWorkProgressSummary }      from '../../collections/summary/user_work_progress_summary.js';
 
 // Ultrawide Services
 import {getIdFromMap, padDigits, log}              from '../../common/utils.js';
@@ -266,6 +270,7 @@ class ImpExServices{
 
             } catch (e){
                 log((msg) => console.log(msg), LogLevel.ERROR, "Can't save Design backup: {}", e);
+                throw e;
             }
 
         }
@@ -274,116 +279,159 @@ class ImpExServices{
     // User has chosen to restore a Design from a backup ---------------------------------------------------------------
     restoreDesign(backupFileName){
 
-        let backupDataVersion = 0;
-        const currentDataVersion = ImpexModules.getCurrentDataVersion();
+        if(Meteor.isServer) {
+            let backupDataVersion = 0;
+            const currentDataVersion = ImpexModules.getCurrentDataVersion();
 
-        let usersMapping = [];
-        let locationsMapping = [];
-        let designsMapping = [];
-        let designVersionsMapping = [];
-        let designUpdatesMapping = [];
-        let workPackagesMapping = [];
-        let designVersionComponentsMapping = [];
-        let designUpdateComponentsMapping = [];
+            let usersMapping = [];
+            let locationsMapping = [];
+            let designsMapping = [];
+            let designVersionsMapping = [];
+            let designUpdatesMapping = [];
+            let workPackagesMapping = [];
+            let designVersionComponentsMapping = [];
+            let designUpdateComponentsMapping = [];
 
-        if(currentDataVersion > 0) {
+            if (currentDataVersion > 0) {
 
-            // Read the required backup file
-            const backupData = ImpexModules.readBackupFile(backupFileName);
+                // Read the required backup file
+                const backupData = ImpexModules.readBackupFile(backupFileName);
 
-            if (backupData) {
+                if (backupData) {
 
-                backupDataVersion = backupData.metadata.backupDataVersion;
+                    backupDataVersion = backupData.metadata.backupDataVersion;
 
-                // Data to MERGE ---------------------------------------------------------------------------------------
+                    // Data to MERGE ---------------------------------------------------------------------------------------
 
-                // Merge user data.  Make sure all the users associated with this design exist and create a map of any new users created
-                usersMapping = ImpexModules.restoreDesignUsers(backupData.userRoles, backupDataVersion, currentDataVersion);
+                    // Merge user data.  Make sure all the users associated with this design exist and create a map of any new users created
+                    usersMapping = ImpexModules.restoreDesignUsers(backupData.userRoles, backupDataVersion, currentDataVersion);
 
-                // Merge test output location data
-                locationsMapping = ImpexModules.restoreTestOutputLocationData(backupData.testOutputLocations, backupDataVersion, currentDataVersion, usersMapping);
+                    // Merge test output location data
+                    locationsMapping = ImpexModules.restoreTestOutputLocationData(backupData.testOutputLocations, backupDataVersion, currentDataVersion, usersMapping);
 
-                // Merge test output location files data
-                ImpexModules.restoreTestOutputLocationFileData(backupData.testOutputLocationFiles, backupDataVersion, currentDataVersion, locationsMapping);
+                    // Merge test output location files data
+                    ImpexModules.restoreTestOutputLocationFileData(backupData.testOutputLocationFiles, backupDataVersion, currentDataVersion, locationsMapping);
 
-                // Merge user test type locations data
-                ImpexModules.restoreUserTestTypeLocationsData(backupData.userTestTypeLocations, backupDataVersion, currentDataVersion, usersMapping, locationsMapping);
+                    // Merge user test type locations data
+                    ImpexModules.restoreUserTestTypeLocationsData(backupData.userTestTypeLocations, backupDataVersion, currentDataVersion, usersMapping, locationsMapping);
 
-                // Merge user settings
-                ImpexModules.restoreUserSettingsData(backupData.userSettings, backupDataVersion, currentDataVersion, usersMapping);
+                    // Merge user settings
+                    ImpexModules.restoreUserSettingsData(backupData.userSettings, backupDataVersion, currentDataVersion, usersMapping);
 
-                // Data to REPLACE -------------------------------------------------------------------------------------
+                    // Data to REPLACE -------------------------------------------------------------------------------------
 
-                // Get this BEFORE we create the replacement Design
-                const oldDesign = Designs.findOne({designName: backupData.metadata.designName});
+                    // Get this BEFORE we create the replacement Design
+                    const oldDesign = Designs.findOne({designName: backupData.metadata.designName});
 
-                // Restore Data - this creates new data with new IDs in parallel to any existing data ++++++++++++++++++
+                    // Restore Data - this creates new data with new IDs in parallel to any existing data ++++++++++++++++++
 
-                // Restore Designs
-                designsMapping = ImpexModules.restoreDesignData(backupData.designs, backupDataVersion, currentDataVersion);
+                    // Restore Designs
+                    designsMapping = ImpexModules.restoreDesignData(backupData.designs, backupDataVersion, currentDataVersion);
 
-                // Restore Design Versions
-                designVersionsMapping = ImpexModules.restoreDesignVersionData(backupData.designVersions, backupDataVersion, currentDataVersion, designsMapping);
+                    // Restore Design Versions
+                    designVersionsMapping = ImpexModules.restoreDesignVersionData(backupData.designVersions, backupDataVersion, currentDataVersion, designsMapping);
 
-                // Restore Design Updates
-                designUpdatesMapping = ImpexModules.restoreDesignUpdateData(backupData.designUpdates, backupDataVersion, currentDataVersion, designVersionsMapping);
+                    // Restore Design Updates
+                    designUpdatesMapping = ImpexModules.restoreDesignUpdateData(backupData.designUpdates, backupDataVersion, currentDataVersion, designVersionsMapping);
 
-                // Restore Work Packages
-                const hasDesignUpdates = (backupData.designUpdates.length > 0);
+                    // Restore Work Packages
+                    const hasDesignUpdates = (backupData.designUpdates.length > 0);
 
-                workPackagesMapping = ImpexModules.restoreWorkPackageData(backupData.workPackages, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, usersMapping, hasDesignUpdates);
+                    workPackagesMapping = ImpexModules.restoreWorkPackageData(backupData.workPackages, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, usersMapping, hasDesignUpdates);
 
-                // Restore Domain Dictionary
-                ImpexModules.restoreDomainDictionaryData(backupData.domainDictionary, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping);
+                    // Restore Domain Dictionary
+                    ImpexModules.restoreDomainDictionaryData(backupData.domainDictionary, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping);
 
-                // Restore Design Version Components
-                designVersionComponentsMapping = ImpexModules.restoreDesignVersionComponentData(backupData.designVersionComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, workPackagesMapping);
+                    // Restore Design Version Components
+                    designVersionComponentsMapping = ImpexModules.restoreDesignVersionComponentData(backupData.designVersionComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, workPackagesMapping);
 
-                // Restore Design Update Components
-                designUpdateComponentsMapping = ImpexModules.restoreDesignUpdateComponentData(backupData.designUpdateComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
+                    // Restore Design Update Components
+                    designUpdateComponentsMapping = ImpexModules.restoreDesignUpdateComponentData(backupData.designUpdateComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
 
-                // Restore Work Package Components
-                const hasDesignVersionComponents = (backupData.designVersionComponents.length > 0);
-                const hasDesignUpdateComponents = (backupData.designUpdateComponents.length > 0);
+                    // Restore Work Package Components
+                    const hasDesignVersionComponents = (backupData.designVersionComponents.length > 0);
+                    const hasDesignUpdateComponents = (backupData.designUpdateComponents.length > 0);
 
-                ImpexModules.restoreWorkPackageComponentData(backupData.workPackageComponents, backupDataVersion, currentDataVersion, workPackagesMapping, designVersionComponentsMapping, designUpdateComponentsMapping, hasDesignVersionComponents, hasDesignUpdateComponents);
+                    ImpexModules.restoreWorkPackageComponentData(backupData.workPackageComponents, backupDataVersion, currentDataVersion, workPackagesMapping, designVersionComponentsMapping, designUpdateComponentsMapping, hasDesignVersionComponents, hasDesignUpdateComponents);
 
 
-                // Replacement / restore has succeeded so remove the old data if it existed ++++++++++++++++++++++++++++
+                    // Replacement / restore has succeeded so remove the old data if it existed ++++++++++++++++++++++++++++
 
-                if (oldDesign){
+                    if (oldDesign) {
 
-                    log((msg) => console.log(msg), LogLevel.INFO, "Removing old version of Design {}", oldDesign.designName);
+                        log((msg) => console.log(msg), LogLevel.INFO, "Removing old version of Design {}", oldDesign.designName);
 
-                    let oldDesignVersions = [];
+                        let oldDesignVersions = [];
 
-                    oldDesignVersions = DesignVersions.find({designId: oldDesign._id}).fetch();
+                        oldDesignVersions = DesignVersions.find({designId: oldDesign._id}).fetch();
 
-                    Designs.remove({_id: oldDesign._id});
+                        Designs.remove({_id: oldDesign._id});
 
-                    DesignVersions.remove({designId: oldDesign._id});
+                        DesignVersions.remove({designId: oldDesign._id});
 
-                    oldDesignVersions.forEach((oldDesignVersion) => {
-                        DesignUpdates.remove({designVersionId: oldDesignVersion._id});
-                        WorkPackages.remove({designVersionId: oldDesignVersion._id});
-                        DesignVersionComponents.remove({designVersionId: oldDesignVersion._id});
-                        DesignUpdateComponents.remove({designVersionId: oldDesignVersion._id});
-                        WorkPackageComponents.remove({designVersionId: oldDesignVersion._id});
-                        DomainDictionary.remove({designVersionId: oldDesignVersion._id});
-                    });
+                        oldDesignVersions.forEach((oldDesignVersion) => {
+                            DesignUpdates.remove({designVersionId: oldDesignVersion._id});
+                            WorkPackages.remove({designVersionId: oldDesignVersion._id});
+                            DesignVersionComponents.remove({designVersionId: oldDesignVersion._id});
+                            DesignUpdateComponents.remove({designVersionId: oldDesignVersion._id});
+                            WorkPackageComponents.remove({designVersionId: oldDesignVersion._id});
+                            DomainDictionary.remove({designVersionId: oldDesignVersion._id});
+                        });
+
+                    }
+
+                    log((msg) => console.log(msg), LogLevel.INFO, "Restore complete.");
 
                 }
 
+            } else {
+                log((msg) => console.log(msg), LogLevel.ERROR, "Current application data version is not found.");
+                throw new Meteor.Error('DESIGN_RESTORE_FAIL', 'Current application data version is not found.');
             }
+        }
+    }
 
-        } else {
+    // User has chosen to archive a Design -----------------------------------------------------------------------------
+    archiveDesign(designId){
 
-            log((msg) => console.log(msg), LogLevel.ERROR, "Current application data version is not found.");
+        // 1. Make a Backup
+        try{
+            this.backupDesign(designId);
+        } catch (e) {
+            throw new Meteor.Error('DESIGN_ARCHIVE_FAIL', 'Unable to backup the design due to error: ' + e.stack);
         }
 
+        // 2. Delete all data.  The standard restore process can be used to 'un-archive' the design
 
+        log((msg) => console.log(msg), LogLevel.INFO, "Removing Design data...");
 
+        let archivedDesignVersions = DesignVersions.find({designId: designId}).fetch();
+
+        archivedDesignVersions.forEach((archivedDesignVersion) => {
+
+            // Remove the restorable data
+            DesignUpdates.remove({designVersionId: archivedDesignVersion._id});
+            WorkPackages.remove({designVersionId: archivedDesignVersion._id});
+            DesignVersionComponents.remove({designVersionId: archivedDesignVersion._id});
+            DesignUpdateComponents.remove({designVersionId: archivedDesignVersion._id});
+            WorkPackageComponents.remove({designVersionId: archivedDesignVersion._id});
+            DomainDictionary.remove({designVersionId: archivedDesignVersion._id});
+
+            // Remove ephemeral data
+            UserDesignVersionMashScenarios.remove({designVersionId: archivedDesignVersion._id});
+            UserDesignUpdateSummary.remove({designVersionId: archivedDesignVersion._id});
+            UserDevDesignSummaryData.remove({designVersionId: archivedDesignVersion._id});
+            UserDevTestSummaryData.remove({designVersionId: archivedDesignVersion._id});
+            UserWorkProgressSummary.remove({designVersionId: archivedDesignVersion._id});
+        });
+
+        DesignVersions.remove({designId: designId});
+
+        Designs.remove({_id: designId});
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Archiving complete.");
     }
+
 
     // Internal
 

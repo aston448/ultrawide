@@ -10,7 +10,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import ItemContainer        from '../../components/common/ItemContainer.jsx';
-import DesignBackup         from '../../components/app/DesignBackup.jsx';
+import DesignBackup         from '../../components/admin/DesignBackup.jsx';
+import DesignsContainer     from '../../containers/select/DesignsContainer.jsx';
 
 // Ultrawide Services
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
@@ -81,11 +82,17 @@ class BackupManagementScreen extends Component {
                 footerActionFunction={footerActionFunction}
             />;
 
+        const designs =
+            <DesignsContainer/>;
+
         return (
             <Grid>
                 <Row>
-                    <Col md={8} className="col">
+                    <Col md={6} className="col">
                         {backups}
+                    </Col>
+                    <Col md={6} className="col">
+                        {designs}
                     </Col>
                 </Row>
             </Grid>

@@ -6,6 +6,9 @@ import { Mongo } from 'meteor/mongo';
 
 import { DevTestTag } from '../../constants/constants.js';
 
+// NOTE: This collection is obsolete and can be removed when dormant Feature File code is updated or junked...  NOT CURRENTLY USED
+// See UserDesignVersionMashScenarios instead.
+
 export const UserWorkPackageMashData = new Mongo.Collection('userWorkPackageMashData');
 
 let Schema = new SimpleSchema({

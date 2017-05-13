@@ -11,7 +11,8 @@ export const RoleType = {
     NONE:       'NONE',
     DESIGNER:   'DESIGNER',
     DEVELOPER:  'DEVELOPER',
-    MANAGER:    'MANAGER'
+    MANAGER:    'MANAGER',
+    ADMIN:      'ADMIN'
 };
 
 export const UltrawideAction = {

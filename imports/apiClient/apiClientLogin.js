@@ -11,7 +11,7 @@ import ClientUserContextServices from './apiClientUserContext.js'
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserName, setCurrentView, toggleDomainDictionary, updateUserMessage} from '../redux/actions'
+import {setCurrentUserName, setCurrentView, setCurrentRole, updateUserMessage} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -52,6 +52,9 @@ class ClientLoginServices{
                     if (user) {
                         if(user.isActive) {
                             if (user.isAdmin) {
+
+                                // Set Role so view displays properly
+                                store.dispatch(setCurrentRole(userId, RoleType.ADMIN));
 
                                 // Set user context - will find no data but save the user id
                                 ClientUserContextServices.getUserContext(userId);

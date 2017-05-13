@@ -20,12 +20,13 @@ import DevelopWorkPackageContainer          from  '../../containers/edit/Develop
 import WaitMessage                          from  './Wait.jsx';
 
 // Ultrawide Services
-import {ViewType} from '../../../constants/constants.js'
+import {ViewType, RoleType} from '../../../constants/constants.js'
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 import {ConfigurationSettings} from "../configure/ConfigurationSettings";
 
 // React DnD

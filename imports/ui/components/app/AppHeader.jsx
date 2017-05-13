@@ -74,7 +74,7 @@ export class AppHeader extends Component {
 
         // Menu Items
         const rolesItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="ROLES" actionFunction={() => this.onGoToRoles()}/>;
-        const selectItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="SELECT" actionFunction={() => this.onGoToSelect()}/>;
+        const selectItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="HOME" actionFunction={() => this.onGoToSelect()}/>;
         const logoutItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="Logout" actionFunction={() => this.onLogOut(userContext)}/>;
 
         let roleClass = '';
@@ -137,26 +137,28 @@ export class AppHeader extends Component {
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
                         {rolesItem}
+                        {selectItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;
                 break;
 
-            case ViewType.TEST_OUTPUTS:
-
-                appHeaderMenuContent =
-                    <div className="top-menu-bar">
-                        {rolesItem}
-                        <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
-                        {logoutItem}
-                    </div>;
-                break;
+            // case ViewType.TEST_OUTPUTS:
+            //
+            //     appHeaderMenuContent =
+            //         <div className="top-menu-bar">
+            //             {rolesItem}
+            //             <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
+            //             {logoutItem}
+            //         </div>;
+            //     break;
 
             case ViewType.DESIGNS:
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
                         {rolesItem}
+                        {selectItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;

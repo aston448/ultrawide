@@ -54,14 +54,6 @@ export class UserLogin extends Component {
         ClientLoginServices.userLogin(this.state.userName, this.state.password);
     }
 
-    // Temp dev timesaver
-    onLoginUser(userName, password){
-
-
-
-        ClientLoginServices.userLogin(userName, password);
-    }
-
     render() {
         const {} = this.props;
 
@@ -84,15 +76,6 @@ export class UserLogin extends Component {
                                 <Button type="submit">
                                     Submit
                                 </Button>
-                                {/*<Button onClick={() => this.onLoginUser('gloria', 'gloria')}>*/}
-                                    {/*Login Gloria*/}
-                                {/*</Button>*/}
-                                {/*<Button onClick={() => this.onLoginUser('hugh', 'hugh')}>*/}
-                                    {/*Login Hugh*/}
-                                {/*</Button>*/}
-                                {/*<Button onClick={() => this.onLoginUser('miles', 'miles')}>*/}
-                                    {/*Login Miles*/}
-                                {/*</Button>*/}
                             </form>
                         </Well>
                     </Col>

@@ -15,8 +15,5 @@ Meteor.methods({
         UserContextServices.saveUserViewOptions(viewOptions, userId);
     },
 
-    'userContext.setCurrentUserRole'(userId, role){
-        UserContextServices.saveUserRole(userId, role);
-    }
 
 });

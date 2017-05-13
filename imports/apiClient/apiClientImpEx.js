@@ -103,6 +103,39 @@ class ClientImpExServices{
         return true;
     };
 
+    // User chooses to archive a Design --------------------------------------------------------------------------------
+    archiveDesign(designId, userId){
+
+        // Client validation
+        let result = BackupValidationApi.validateArchiveDesign(userId);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerImpExApi.archiveDesign(designId, userId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Restore Design client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: ImpexMessages.MSG_DESIGN_ARCHIVE
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
 
     forceRemoveDesign(designId){
         Meteor.call('fixtures.forceRemoveDesign', designId);

@@ -13,10 +13,10 @@ import DesignItemHeader         from './DesignItemHeader.jsx';
 import { ItemType, RoleType, DesignStatus } from '../../../constants/constants.js';
 
 import ClientDesignServices     from '../../../apiClient/apiClientDesign.js';
-import ClientBackupServices     from '../../../apiClient/apiClientImpEx.js';
+import ClientImpExServices     from '../../../apiClient/apiClientImpEx.js';
 
 // Bootstrap
-import {Button, ButtonGroup} from 'react-bootstrap';
+import {Button, ButtonGroup, Modal} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -32,6 +32,10 @@ import {connect} from 'react-redux';
 export class Design extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            showModal: false
+        };
     }
 
     onSelectDesign(userContext, newDesignId){
@@ -47,11 +51,19 @@ export class Design extends Component {
     }
 
     onBackupDesign(userRole, designId){
-        ClientBackupServices.backupDesign(designId, userRole);
+        ClientImpExServices.backupDesign(designId, userRole);
     }
 
-    onForceRemoveDesign(userRole, designId){
-        ClientBackupServices.forceRemoveDesign(designId);
+    onArchiveDesign(userContext, designId){
+        ClientImpExServices.archiveDesign(designId, userContext.userId)
+    }
+
+    onShowModal(){
+        this.setState({showModal: true});
+    }
+
+    onCloseModal() {
+        this.setState({ showModal: false });
     }
 
     render() {
@@ -70,24 +82,22 @@ export class Design extends Component {
         const removeButton =
             <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
 
-        // TODO - Remove this
-        const forceRemoveButton =
-            <Button id="butBackup" bsSize="xs" onClick={ () => this.onForceRemoveDesign(userRole, design._id)}>Force Remove Design</Button>
-
         const backupButton =
             <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>;
 
+        const archiveButton =
+            <Button id="butBackup" bsSize="xs" onClick={ () => this.onShowModal()} >Archive Design</Button>;
 
-        let statusClass = 'design-item-status';
+        const modalOkButton =
+            <Button onClick={ () => this.onArchiveDesign(userContext, design._id)}>OK</Button>;
 
+        const modalCancelButton =
+            <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
 
-        switch(design.designStatus){
-            case DesignStatus.DESIGN_LIVE:
-                statusClass = 'design-item-status item-status-available';
-                break;
-            case DesignStatus.DESIGN_ARCHIVED:
-                statusClass = 'design-item-status item-status-complete';
-                break;
+        let statusClass = 'design-item-status item-status-available';
+
+        if(design.isRemovable){
+            statusClass = 'design-item-status item-status-removable';
         }
 
         const summary =
@@ -107,10 +117,25 @@ export class Design extends Component {
                 //onSelectItem={ () => this.onSelectDesign(userContext, design._id)}
             />;
 
+        const confirmArchiveModal =
+            <Modal show={this.state.showModal} onHide={() => this.onCloseModal()}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Archive Design</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p className="merge-alert">{'You are about to archive design "' + design.designName + '"'}</p>
+                    <p className="merge-normal">This action saves all Design data to a backup file and then removes the Design from Ultrawide.  It is possible to restore the Design from the backup file.</p>
+                    <p className="merge-alert">Are you sure you want to proceed?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    {modalOkButton}
+                    {modalCancelButton}
+                </Modal.Footer>
+            </Modal>;
+
         // Layout ------------------------------------------------------------------------------------------------------
 
-        if(userContext && userRole) {
-
+        if(userContext && userRole && userRole !== RoleType.NONE) {
 
             let itemStyle = (active ? 'design-item di-active' : 'design-item');
 
@@ -123,26 +148,42 @@ export class Design extends Component {
                             {removeButton}
                         </ButtonGroup>
                 } else {
-                    // if(design.designName !== 'Ultrawide Project'){
-                    //     buttons =
-                    //         <ButtonGroup className="button-group-left">
-                    //             {workButton}
-                    //             {forceRemoveButton}
-                    //         </ButtonGroup>
-                    // } else {
-                        buttons =
-                            <ButtonGroup className="button-group-left">
-                                {workButton}
-                                {backupButton}
-                            </ButtonGroup>
-                    //}
+
+                    buttons =
+                        <ButtonGroup className="button-group-left">
+                            {workButton}
+                            {backupButton}
+                        </ButtonGroup>
+
                 }
             } else {
-                // Other users can just work on a Design
-                buttons =
-                    <ButtonGroup className="button-group-left">
-                        {workButton}
-                    </ButtonGroup>
+
+                if(userRole === RoleType.ADMIN){
+                    // Admin can remove, archive or backup a Design
+                    if (design.isRemovable) {
+
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                {removeButton}
+                            </ButtonGroup>
+                    } else {
+
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                {backupButton}
+                                {archiveButton}
+                                {confirmArchiveModal}
+                            </ButtonGroup>
+                    }
+
+                } else {
+
+                    // Other users can just work on a Design
+                    buttons =
+                        <ButtonGroup className="button-group-left">
+                            {workButton}
+                        </ButtonGroup>
+                }
             }
 
             if(active) {
