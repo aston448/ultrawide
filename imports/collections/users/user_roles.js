@@ -9,7 +9,6 @@ export const UserRoles = new Mongo.Collection('userRoles');
 let Schema = new SimpleSchema({
     userId:             {type: String},                 // Meteor user id
     userName:           {type: String},                 // Login
-    password:           {type: String, defaultValue: 'password'},
     displayName:        {type: String},                 // Actual Name
     isDesigner:         {type: Boolean},                // Developer role
     isDeveloper:        {type: Boolean},

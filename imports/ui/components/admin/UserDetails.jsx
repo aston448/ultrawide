@@ -33,7 +33,6 @@ export class UserDetails extends Component {
         this.state = {
             editing:                false,
             userNameValue:          this.props.user.userName,
-            passwordValue:          this.props.user.password,
             displayNameValue:       this.props.user.displayName,
             isDesignerValue:        this.props.user.isDesigner,
             isDeveloperValue:       this.props.user.isDeveloper,
@@ -53,7 +52,6 @@ export class UserDetails extends Component {
             _id:            this.props.user._id,
             userId:         this.props.user.userId,
             userName:       this.state.userNameValue,
-            password:       this.state.passwordValue,
             displayName:    this.state.displayNameValue,
             isDesigner:     this.state.isDesignerValue,
             isDeveloper:    this.state.isDeveloperValue,
@@ -63,6 +61,16 @@ export class UserDetails extends Component {
         };
 
         ClientUserManagementServices.saveUser(actionUserId, user);
+
+        this.setState({editing: false});
+    }
+
+    onResetPassword(userContext, user){
+
+        // Validate that it is the admin user doing this edit
+        const actionUserId = userContext.userId;
+
+        ClientUserManagementServices.resetUserPassword(actionUserId, user);
 
         this.setState({editing: false});
     }
@@ -94,10 +102,6 @@ export class UserDetails extends Component {
 
     onUserNameChange(e){
         this.setState({userNameValue: e.target.value})
-    }
-
-    onPasswordChange(e){
-        this.setState({passwordValue: e.target.value})
     }
 
     onDisplayNameChange(e){
@@ -176,16 +180,6 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup controlId="formPassword">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Password (Login)
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl type="text" placeholder={user.password} value={this.state.passwordValue}
-                                         onChange={(e) => this.onPasswordChange(e)}/>
-                        </Col>
-                    </FormGroup>
-
                     <FormGroup controlId="formDisplayName">
                         <Col componentClass={ControlLabel} sm={2}>
                             Display Name
@@ -234,6 +228,9 @@ export class UserDetails extends Component {
                     </Button>
                     <Button bsSize="xs" onClick={() => this.onCancel()}>
                         Cancel
+                    </Button>
+                    <Button bsSize="xs" onClick={() => this.onResetPassword(userContext, user)}>
+                        Reset Password
                     </Button>
 
                 </Form>

@@ -33,7 +33,6 @@ describe('UC 803 - Deactivate User', function(){
 
         const defaultUser = {
             userName:       DefaultUserDetails.NEW_USER_NAME,
-            password:       DefaultUserDetails.NEW_USER_PASSWORD,
             displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
             isDesigner:     false,
             isDeveloper:    false,

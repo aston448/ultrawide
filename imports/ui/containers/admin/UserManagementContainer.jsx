@@ -82,7 +82,7 @@ class UserManagementScreen extends Component {
 
     onUpdateAdminPassword(e){
 
-        // Cal this to prevent Submit reloading the page
+        // Call this to prevent Submit reloading the page
         e.preventDefault();
 
         ClientUserManagementServices.changeAdminPassword(this.state.oldPassword, this.state.newPassword1, this.state.newPassword2);

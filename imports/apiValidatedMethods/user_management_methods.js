@@ -61,6 +61,32 @@ export const saveUser = new ValidatedMethod({
     }
 });
 
+export const resetUserPassword = new ValidatedMethod({
+
+    name: 'userManagement.resetUserPassword',
+
+    validate: new SimpleSchema({
+        actionUserId:   {type: String},
+        user:           {type: Object, blackbox: true}
+    }).validator(),
+
+    run({actionUserId, user}){
+
+        const result = UserManagementValidationApi.validateResetUserPassword(actionUserId, user);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('userManagement.resetUserPassword.failValidation', result)
+        }
+
+        try {
+            UserManagementServices.resetUserPassword(user);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+});
+
 export const activateUser = new ValidatedMethod({
 
     name: 'userManagement.activateUser',

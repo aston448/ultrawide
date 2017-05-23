@@ -92,6 +92,39 @@ class ClientUserManagementServices{
         return {success: true, message: ''};
     };
 
+    // Admin resets user password --------------------------------------------------------------------------------------
+    resetUserPassword(actionUserId, user){
+
+        // Client validation
+        let result = UserManagementValidationApi.validateResetUserPassword(actionUserId, user);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerUserManagementApi.resetUserPassword(actionUserId, user, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: UserManagementMessages.MSG_USER_PASSWORD_RESET
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    }
+
     // Admin sets user active ------------------------------------------------------------------------------------------
     activateUser(actionUserId, userId){
 

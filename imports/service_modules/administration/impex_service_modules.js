@@ -249,7 +249,6 @@ class ImpexModules{
                     UserRoles.insert({
                         userId: newUserId,
                         userName: user.userName,
-                        password: password,
                         displayName: user.displayName,
                         isDesigner: user.isDesigner,
                         isDeveloper: user.isDeveloper,
@@ -270,7 +269,6 @@ class ImpexModules{
                         workPackageId: 'NONE',
                         designComponentId: 'NONE',
                         designComponentType: 'NONE',
-
                         featureReferenceId: 'NONE',
                         featureAspectReferenceId: 'NONE',
                         scenarioReferenceId: 'NONE',

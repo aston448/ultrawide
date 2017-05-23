@@ -222,33 +222,6 @@ export class TestOutputLocation extends Component {
                     </Col>
                 </FormGroup>
 
-                {/*<FormGroup controlId="formLocationServerName">*/}
-                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
-                        {/*Location Server*/}
-                    {/*</Col>*/}
-                    {/*<Col sm={10}>*/}
-                        {/*<FormControl type="text" placeholder={location.locationServerName} />*/}
-                    {/*</Col>*/}
-                {/*</FormGroup>*/}
-
-                {/*<FormGroup controlId="formServerLogin">*/}
-                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
-                        {/*Server Login*/}
-                    {/*</Col>*/}
-                    {/*<Col sm={10}>*/}
-                        {/*<FormControl type="text" placeholder={location.serverLogin} />*/}
-                    {/*</Col>*/}
-                {/*</FormGroup>*/}
-
-                {/*<FormGroup controlId="formServerPassword">*/}
-                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
-                        {/*Password*/}
-                    {/*</Col>*/}
-                    {/*<Col sm={10}>*/}
-                        {/*<FormControl type="password" placeholder="Password" />*/}
-                    {/*</Col>*/}
-                {/*</FormGroup>*/}
-
                 <Button bsSize="xs" onClick={() => this.onSave(userRole, userContext)}>
                     Save
                 </Button>

@@ -40,7 +40,6 @@ class UserManagementServices {
                 {
                     userId:             userId,
                     userName:           DefaultUserDetails.NEW_USER_NAME,
-                    password:           DefaultUserDetails.NEW_USER_PASSWORD,
                     displayName:        DefaultUserDetails.NEW_USER_DISPLAY_NAME,
                     isDesigner:         false,
                     isDeveloper:        false,
@@ -63,17 +62,11 @@ class UserManagementServices {
                 Accounts.setUsername(newUser.userId, newUser.userName);
             }
 
-            // If password changed, update it
-            if (existingUser.password !== newUser.password) {
-                Accounts.setPassword(newUser.userId, newUser.password);
-            }
-
             UserRoles.update(
                 {userId: newUser.userId},
                 {
                     $set: {
                         userName:       newUser.userName,
-                        password:       newUser.password,
                         displayName:    newUser.displayName,
                         isDesigner:     newUser.isDesigner,
                         isDeveloper:    newUser.isDeveloper,
@@ -81,6 +74,15 @@ class UserManagementServices {
                     }
                 }
             );
+        }
+    };
+
+    resetUserPassword(user){
+
+        if (Meteor.isServer) {
+
+            Accounts.setPassword(user.userId, user.userName + '123');
+
         }
     };
 

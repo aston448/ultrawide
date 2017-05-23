@@ -46,7 +46,6 @@ Meteor.methods({
         const newUser = {
             userId:         targetUser.userId,
             userName:       newDetails.userName,
-            password:       newDetails.password,
             displayName:    newDetails.displayName,
             isDesigner:     newDetails.isDesigner,
             isDeveloper:    newDetails.isDeveloper,

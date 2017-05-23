@@ -78,7 +78,6 @@ class ImpExServices{
             UserRoles.insert({
                 userId:         userId,
                 userName:       'admin',
-                password:       'admin123',
                 displayName:    'Admin User',
                 isDesigner:     false,
                 isDeveloper:    false,
@@ -864,7 +863,6 @@ class ImpExServices{
                     UserRoles.insert({
                         userId: userId,
                         userName: user.userName,
-                        password: user.password,
                         displayName: user.displayName,
                         isDesigner: user.isDesigner,
                         isDeveloper: user.isDeveloper,

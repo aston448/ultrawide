@@ -2,6 +2,7 @@
 import {
     addUser,
     saveUser,
+    resetUserPassword,
     activateUser,
     deactivateUser,
     saveUserApiKey
@@ -30,6 +31,19 @@ class ServerUserManagementApi {
     saveUser(actionUserId, user, callback) {
 
         saveUser.call(
+            {
+                actionUserId:   actionUserId,
+                user:           user
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    resetUserPassword(actionUserId, user, callback) {
+
+        resetUserPassword.call(
             {
                 actionUserId:   actionUserId,
                 user:           user

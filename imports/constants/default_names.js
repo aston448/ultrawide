@@ -42,6 +42,5 @@ export const DefaultLocationText = {
 
 export const DefaultUserDetails = {
     NEW_USER_NAME:                  'newUser',
-    NEW_USER_PASSWORD:              'password',
     NEW_USER_DISPLAY_NAME:          'New User'
 };

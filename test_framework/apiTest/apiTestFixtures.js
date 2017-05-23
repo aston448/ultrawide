@@ -100,11 +100,11 @@ Meteor.methods({
 
             const adminUser = Accounts.findUserByUsername('admin');
             if(!adminUser){
-                console.log('Recreating admin user');
+
                 adminUserId = Accounts.createUser(
                     {
                         username: 'admin',
-                        password: 'admin'
+                        password: 'admin123'
                     }
                 );
             } else {
@@ -114,7 +114,6 @@ Meteor.methods({
             UserRoles.insert({
                 userId: adminUserId,
                 userName: 'admin',
-                password: 'admin',
                 displayName: 'Administrator',
                 isDesigner: false,
                 isDeveloper: false,
@@ -127,11 +126,11 @@ Meteor.methods({
             // Designer ------------------------------------------------------------------------------------------------
             const designerUser = Accounts.findUserByUsername('gloria');
             if(!designerUser) {
-                console.log('Recreating designer user');
+
                 designerUserId = Accounts.createUser(
                     {
                         username: 'gloria',
-                        password: 'gloria'
+                        password: 'gloria123'
                     }
                 );
             } else {
@@ -141,7 +140,6 @@ Meteor.methods({
             UserRoles.insert({
                 userId: designerUserId,
                 userName: 'gloria',
-                password: 'gloria',
                 displayName: 'Gloria Slap',
                 isDesigner: true,
                 isDeveloper: false,
@@ -151,11 +149,11 @@ Meteor.methods({
             // Developer -----------------------------------------------------------------------------------------------
             const developerUser = Accounts.findUserByUsername('hugh');
             if(!developerUser) {
-                console.log('Recreating developer user');
+
                 developerUserId = Accounts.createUser(
                     {
                         username: 'hugh',
-                        password: 'hugh'
+                        password: 'hugh123'
                     }
                 );
             } else {
@@ -165,7 +163,6 @@ Meteor.methods({
             UserRoles.insert({
                 userId: developerUserId,
                 userName: 'hugh',
-                password: 'hugh',
                 displayName: 'Hugh Gengin',
                 isDesigner: false,
                 isDeveloper: true,
@@ -175,11 +172,11 @@ Meteor.methods({
             // Another developer ---------------------------------------------------------------------------------------
             const anotherDeveloperUser = Accounts.findUserByUsername('davey');
             if(!anotherDeveloperUser) {
-                console.log('Recreating another developer user');
+
                 anotherDeveloperUserId = Accounts.createUser(
                     {
                         username: 'davey',
-                        password: 'davey'
+                        password: 'davey123'
                     }
                 );
             } else {
@@ -189,7 +186,6 @@ Meteor.methods({
             UserRoles.insert({
                 userId: anotherDeveloperUserId,
                 userName: 'davey',
-                password: 'davey',
                 displayName: 'Davey Rocket',
                 isDesigner: false,
                 isDeveloper: true,
@@ -199,11 +195,11 @@ Meteor.methods({
             // Manager -------------------------------------------------------------------------------------------------
             const managerUser = Accounts.findUserByUsername('miles');
             if(!managerUser) {
-                console.log('Recreating manager user');
+
                 managerUserId = Accounts.createUser(
                     {
                         username: 'miles',
-                        password: 'miles'
+                        password: 'miles123'
                     }
                 );
             } else {
@@ -213,7 +209,6 @@ Meteor.methods({
             UserRoles.insert({
                 userId: managerUserId,
                 userName: 'miles',
-                password: 'miles',
                 displayName: 'Miles Behind',
                 isDesigner: false,
                 isDeveloper: false,

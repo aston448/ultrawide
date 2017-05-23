@@ -33,7 +33,6 @@ describe('UC 802 - Edit User Details', function(){
 
         const defaultUser = {
             userName:       DefaultUserDetails.NEW_USER_NAME,
-            password:       DefaultUserDetails.NEW_USER_PASSWORD,
             displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
             isDesigner:     false,
             isDeveloper:    false,
@@ -47,7 +46,6 @@ describe('UC 802 - Edit User Details', function(){
         // Execute - make some updates
         const newUserDetails = {
             userName:       'wilma',
-            password:       'wilma123',
             displayName:    'Wilma Cargo',
             isDesigner:     true,
             isDeveloper:    false,
@@ -73,7 +71,6 @@ describe('UC 802 - Edit User Details', function(){
         // Execute - a non-admin user called admin
         const newUserDetails = {
             userName:       'admin',
-            password:       'admin123',
             displayName:    'Admin Istrator',
             isDesigner:     true,
             isDeveloper:    false,
@@ -88,7 +85,6 @@ describe('UC 802 - Edit User Details', function(){
         // Verify new user still exists
         const defaultUser = {
             userName:       DefaultUserDetails.NEW_USER_NAME,
-            password:       DefaultUserDetails.NEW_USER_PASSWORD,
             displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
             isDesigner:     false,
             isDeveloper:    false,
@@ -109,7 +105,6 @@ describe('UC 802 - Edit User Details', function(){
         // Execute - try to rename as 'gloria' - existing designer user
         const newUserDetails = {
             userName:       'gloria',
-            password:       'gloria123',
             displayName:    'Gloria Hunniford',
             isDesigner:     true,
             isDeveloper:    false,
@@ -124,7 +119,6 @@ describe('UC 802 - Edit User Details', function(){
         // Verify new user still exists
         const defaultUser = {
             userName:       DefaultUserDetails.NEW_USER_NAME,
-            password:       DefaultUserDetails.NEW_USER_PASSWORD,
             displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
             isDesigner:     false,
             isDeveloper:    false,
@@ -148,7 +142,6 @@ describe('UC 802 - Edit User Details', function(){
         // Check
         const milesDetails = {
             userName:       'miles',
-            password:       'miles',
             displayName:    'Miles Behind',
             isDesigner:     false,
             isDeveloper:    false,
@@ -161,7 +154,6 @@ describe('UC 802 - Edit User Details', function(){
         // Execute - try to rename as 'miles' - existing deactivated user
         const newUserDetails = {
             userName:       'miles',
-            password:       'miles123',
             displayName:    'Miles Ahead',
             isDesigner:     false,
             isDeveloper:    false,
@@ -176,7 +168,6 @@ describe('UC 802 - Edit User Details', function(){
         // Verify new user still exists
         const defaultUser = {
             userName:       DefaultUserDetails.NEW_USER_NAME,
-            password:       DefaultUserDetails.NEW_USER_PASSWORD,
             displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
             isDesigner:     false,
             isDeveloper:    false,
@@ -200,7 +191,6 @@ describe('UC 802 - Edit User Details', function(){
         // Execute - try to save space in it
         let newUserDetails = {
             userName:       'user name',
-            password:       'password',
             displayName:    'No Name',
             isDesigner:     false,
             isDeveloper:    false,
@@ -229,7 +219,6 @@ describe('UC 802 - Edit User Details', function(){
         // Execute - try to save with no user name
         const newUserDetails = {
             userName:       '',
-            password:       'password',
             displayName:    'No Name',
             isDesigner:     false,
             isDeveloper:    false,
@@ -244,7 +233,6 @@ describe('UC 802 - Edit User Details', function(){
         // Verify new user still exists
         const defaultUser = {
             userName:       DefaultUserDetails.NEW_USER_NAME,
-            password:       DefaultUserDetails.NEW_USER_PASSWORD,
             displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
             isDesigner:     false,
             isDeveloper:    false,
@@ -264,7 +252,6 @@ describe('UC 802 - Edit User Details', function(){
         // Execute - try to save with no user name
         const newUserDetails = {
             userName:       'wilma',
-            password:       '',
             displayName:    'No Password',
             isDesigner:     false,
             isDeveloper:    false,
@@ -279,7 +266,6 @@ describe('UC 802 - Edit User Details', function(){
         // Verify new user still exists
         const defaultUser = {
             userName:       DefaultUserDetails.NEW_USER_NAME,
-            password:       DefaultUserDetails.NEW_USER_PASSWORD,
             displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
             isDesigner:     false,
             isDeveloper:    false,
@@ -298,7 +284,6 @@ describe('UC 802 - Edit User Details', function(){
 
         const defaultUser = {
             userName:       DefaultUserDetails.NEW_USER_NAME,
-            password:       DefaultUserDetails.NEW_USER_PASSWORD,
             displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
             isDesigner:     false,
             isDeveloper:    false,
@@ -312,7 +297,6 @@ describe('UC 802 - Edit User Details', function(){
         // Execute - make some updates
         const newUserDetails = {
             userName:       'wilma',
-            password:       'wilma123',
             displayName:    'Wilma Cargo',
             isDesigner:     true,
             isDeveloper:    false,

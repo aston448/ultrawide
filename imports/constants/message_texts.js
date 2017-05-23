@@ -18,6 +18,7 @@ export const UserManagementMessages = {
 
     MSG_USER_ADDED:                 'New User added',
     MSG_USER_UPDATED:               'User details saved',
+    MSG_USER_PASSWORD_RESET:        'User password reset to default',
     MSG_USER_ACTIVATED:             'User made active',
     MSG_USER_DEACTIVATED:           'User made inactive',
     MSG_USER_API_KEY_SAVED:         'API key saved',

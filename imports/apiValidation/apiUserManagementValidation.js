@@ -38,6 +38,17 @@ class UserManagementValidationApi{
         }
     };
 
+    validateResetUserPassword(actionUserId, user){
+
+        const actionUser = UserRoles.findOne({userId: actionUserId});
+
+        if(!actionUser){
+            return UserManagementValidationErrors.USER_MANAGEMENT_NO_ADMIN_USER;
+        } else {
+            return UserManagementValidationServices.validateResetUserPassword(actionUser)
+        }
+    }
+
     validateActivateDeactivateUser(actionUserId, isActive){
 
         const actionUser = UserRoles.findOne({userId: actionUserId});

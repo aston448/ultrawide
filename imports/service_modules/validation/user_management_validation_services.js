@@ -47,11 +47,6 @@ class UserManagementValidationServices {
             return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_USER_NAME_ALPHANUM;
         }
 
-        // The password cannot be blank
-        if(thisUser.password === ''){
-            return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_PASSWORD_BLANK;
-        }
-
         // The user cannot be given an existing user name
         let duplicate = false;
         otherUsers.forEach((user) => {
@@ -66,6 +61,18 @@ class UserManagementValidationServices {
 
         return Validation.VALID;
     };
+
+    validateResetUserPassword(actionUser){
+
+        console.log("Action user: " + actionUser.userName);
+
+        // Action user must be Admin
+        if (!(actionUser.isAdmin)) {
+            return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_USER_RESET_PASSWORD;
+        }
+
+        return Validation.VALID;
+    }
 
     validateActivateDeactivateUser(actionUser, isActive){
 
