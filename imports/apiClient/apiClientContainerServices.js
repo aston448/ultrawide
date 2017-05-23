@@ -2546,7 +2546,8 @@ class ClientContainerServices{
                         userId:                 userContext.userId,
                         designVersionId:        userContext.designVersionId,
                         workSummaryType:        WorkSummaryType.WORK_SUMMARY_BASE_WP
-                    }
+                    },
+                    {sort: {name: 1}}
                 ).fetch();
 
                 break;
@@ -2577,7 +2578,8 @@ class ClientContainerServices{
                         userId:                 userContext.userId,
                         designVersionId:        userContext.designVersionId,
                         workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE
-                    }
+                    },
+                    {sort: {name: 1}}
                 ).fetch()
         }
 
@@ -2613,7 +2615,8 @@ class ClientContainerServices{
                 designVersionId:    userContext.designVersionId,
                 designUpdateId:     designUpdateId,
                 workSummaryType:    WorkSummaryType.WORK_SUMMARY_UPDATE_WP
-            }
+            },
+            {sort: {name: 1}}
         ).fetch();
 
         return{
