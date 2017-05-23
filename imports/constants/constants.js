@@ -16,6 +16,7 @@ export const RoleType = {
 };
 
 export const UltrawideAction = {
+    ACTION_HOME:                'HOME FOR CURRENT DESIGN VERSION',
     ACTION_DESIGNS:             'DESIGNS MENU',
     ACTION_LAST_DESIGNER:       'RESUME CURRENT WORK',
     ACTION_LAST_DEVELOPER:      'RESUME CURRENT WORK',

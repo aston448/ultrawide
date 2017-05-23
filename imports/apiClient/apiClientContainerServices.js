@@ -453,16 +453,19 @@ class ClientContainerServices{
 
         switch(roleType){
             case RoleType.DESIGNER:
+                roleActions.push(UltrawideAction.ACTION_HOME);
                 roleActions.push(UltrawideAction.ACTION_DESIGNS);
                 roleActions.push(UltrawideAction.ACTION_LAST_DESIGNER);
                 roleActions.push(UltrawideAction.ACTION_TEST_CONFIGURE);
                 break;
             case RoleType.DEVELOPER:
+                roleActions.push(UltrawideAction.ACTION_HOME);
                 roleActions.push(UltrawideAction.ACTION_DESIGNS);
                 roleActions.push(UltrawideAction.ACTION_LAST_DEVELOPER);
                 roleActions.push(UltrawideAction.ACTION_TEST_CONFIGURE);
                 break;
             case RoleType.MANAGER:
+                roleActions.push(UltrawideAction.ACTION_HOME);
                 roleActions.push(UltrawideAction.ACTION_DESIGNS);
                 roleActions.push(UltrawideAction.ACTION_LAST_MANAGER);
                 roleActions.push(UltrawideAction.ACTION_TEST_CONFIGURE);

@@ -76,6 +76,9 @@ class RoleAction extends Component {
 
         // Now go where the user wanted...
         switch(roleAction){
+            case UltrawideAction.ACTION_HOME:
+                ClientAppHeaderServices.setViewSelection();
+                break;
             case UltrawideAction.ACTION_LAST_DESIGNER:
             case UltrawideAction.ACTION_LAST_DEVELOPER:
             case UltrawideAction.ACTION_LAST_MANAGER:
