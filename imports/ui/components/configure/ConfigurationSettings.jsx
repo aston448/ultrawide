@@ -11,10 +11,12 @@ import LocalSettingsContainer                   from '../../containers/configure
 
 // Ultrawide Services
 import ClientUserSettingsServices               from '../../../apiClient/apiClientUserSettings.js';
+import ClientUserManagementServices             from '../../../apiClient/apiClientUserManagement.js';
 
 import {UserSettingValue, UserSetting} from '../../../constants/constants.js';
 
 // Bootstrap
+import {Well, ControlLabel, FormControl, Button}     from 'react-bootstrap';
 import {FormGroup, Radio, Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
@@ -34,7 +36,10 @@ export class ConfigurationSettings extends Component {
         super(props);
 
         this.state = {
-            currentWindowSize: this.props.currentWindowSize
+            currentWindowSize: this.props.currentWindowSize,
+            oldPassword: '',
+            newPassword1: '',
+            newPassword2: ''
         };
 
     }
@@ -49,6 +54,25 @@ export class ConfigurationSettings extends Component {
         ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_SCREEN_SIZE, newSize);
     }
 
+    updateOldPassword(e){
+        this.setState({oldPassword: e.target.value});
+    }
+
+    updateNewPassword1(e){
+        this.setState({newPassword1: e.target.value});
+    }
+
+    updateNewPassword2(e){
+        this.setState({newPassword2: e.target.value});
+    }
+
+    onUpdateUserPassword(e){
+
+        // Call this to prevent Submit reloading the page
+        e.preventDefault();
+
+        ClientUserManagementServices.changeUserPassword(this.state.oldPassword, this.state.newPassword1, this.state.newPassword2);
+    }
 
     render() {
 
@@ -70,13 +94,45 @@ export class ConfigurationSettings extends Component {
                 </FormGroup>
             </div>;
 
+        const changeUserPassword =
+            <Well className="admin-password-well">
+                <form onSubmit={(e) => this.onUpdateUserPassword(e)}>
+                    <div className="design-item-header">Change My Password</div>
+                    <div className="design-item-note">You'll need to remember it so be careful!</div>
+                    <FormGroup controlId="oldPassword">
+                        <ControlLabel>Current Password:</ControlLabel>
+                        <FormControl ref="oldPassword" type="password"  onChange={(e) => this.updateOldPassword(e)}/>
+                    </FormGroup>
+                    <FormGroup controlId="newPassword1">
+                        <ControlLabel>New Password:</ControlLabel>
+                        <FormControl ref="newPassword1" type="password"  onChange={(e) => this.updateNewPassword1(e)}/>
+                    </FormGroup>
+                    <FormGroup controlId="newPassword2">
+                        <ControlLabel>Repeat New Password:</ControlLabel>
+                        <FormControl ref="newPassword2" type="password"  onChange={(e) => this.updateNewPassword2(e)}/>
+                    </FormGroup>
+                    <Button type="submit">
+                        Change My Password
+                    </Button>
+                </form>
+            </Well>;
+
         const settingsGrid = (
             <Grid>
                 <Row>
-                    <Col md={4}>
-                        {screenSizeSettings}
+                    <Col md={6}>
+                        <Grid>
+                            <Row>
+                                <Col md={12}>
+                                    <div className="design-item-header">My Settings</div>
+                                    {screenSizeSettings}
+                                </Col>
+                            </Row>
+                        </Grid>
                     </Col>
-
+                    <Col md={6}>
+                        {changeUserPassword}
+                    </Col>
                 </Row>
             </Grid>
         );

@@ -255,6 +255,47 @@ class ClientUserManagementServices{
         return {success: true, message: ''};
     }
 
+    changeUserPassword(oldPassword, newPassword1, newPassword2){
+
+        // Client validation
+        let result = UserManagementValidationApi.validateChangeUserPassword(newPassword1, newPassword2);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        if(Meteor.isClient){
+
+            Accounts.changePassword(oldPassword, newPassword1, (err) => {
+
+                if(err){
+
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.ERROR,
+                        messageText: err.reason
+                    }));
+
+                    return {success: false, message: err.reason};
+
+                } else {
+
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: UserManagementMessages.MSG_AMIN_PASSWORD_CHANGED
+                    }));
+
+                    ClientAppHeaderServices.setViewLogin(store.getState().currentUserItemContext);
+                }
+            });
+
+        }
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    }
+
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // Keep track of the currently selected location

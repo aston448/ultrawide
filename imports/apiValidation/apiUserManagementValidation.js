@@ -71,6 +71,11 @@ class UserManagementValidationApi{
         }
 
     }
+
+    validateChangeUserPassword(newPassword1, newPassword2){
+
+        return UserManagementValidationServices.validateChangeUserPassword(newPassword1, newPassword2);
+    }
 }
 
 export default new UserManagementValidationApi();

@@ -103,6 +103,16 @@ class UserManagementValidationServices {
 
         return Validation.VALID;
     };
+
+    validateChangeUserPassword(newPassword1, newPassword2){
+
+        // The new passwords must match
+        if(newPassword1 !== newPassword2){
+            return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_NEW_PASSWORDS
+        }
+
+        return Validation.VALID;
+    };
 }
 
 export default new UserManagementValidationServices();
