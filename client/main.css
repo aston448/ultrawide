@@ -1157,7 +1157,7 @@ input {
 }
 
 .no-icon{
-    color: transparent;
+    color: lightgrey;
 }
 
 .row-progress-1{
@@ -1187,6 +1187,14 @@ input {
     background-color: palegoldenrod;
 }
 
+.non-adopted-wp{
+    color: darkgrey;
+}
+
+.adopted-wp{
+    color: indianred;
+}
+
 .progress-value{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
@@ -1212,7 +1220,6 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
     font-weight: normal;
-    color: darkblue;
     padding: 0 0 0 20px;
 }
 

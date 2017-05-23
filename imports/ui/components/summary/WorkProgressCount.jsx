@@ -32,6 +32,7 @@ class WorkProgressCount extends Component {
     render(){
         const {countValue, glyphicon, valueClass, iconClass, tooltip} = this.props;
 
+        const tooltipDelay = 1000;
 
         const iconTooltip = (
             <Tooltip id="modal-tooltip">
@@ -42,7 +43,7 @@ class WorkProgressCount extends Component {
         if(countValue) {
 
             return (
-                <OverlayTrigger placement="left" overlay={iconTooltip}>
+                <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltip}>
                     <InputGroup>
                         <InputGroup.Addon>
                             <div className={iconClass}><Glyphicon glyph={glyphicon}/></div>
@@ -55,7 +56,7 @@ class WorkProgressCount extends Component {
         } else {
 
             return (
-                <OverlayTrigger placement="left" overlay={iconTooltip}>
+                <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltip}>
                     <InputGroup>
                         <InputGroup.Addon>
                             <div className={iconClass}><Glyphicon glyph={glyphicon}/></div>

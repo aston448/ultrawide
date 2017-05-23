@@ -9,10 +9,11 @@ import WorkProgressCount        from '../../components/summary/WorkProgressCount
 import WorkProgressWpContainer  from '../../containers/summary/WorkProgressWpContainer.jsx';
 
 // Ultrawide Services
-import {DesignUpdateSummaryType, RoleType, WorkSummaryType} from '../../../constants/constants.js';
+import {WorkPackageStatus, RoleType, WorkSummaryType} from '../../../constants/constants.js';
 
 
 import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
+import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
 
 // Bootstrap
 import {InputGroup, Grid, Row, Col, Tooltip, OverlayTrigger} from 'react-bootstrap';
@@ -38,6 +39,10 @@ class WorkProgressItem extends Component {
         ClientDesignVersionServices.gotoWorkProgressSummaryItemAsRole(item, roleType);
     }
 
+    getWorkPackageStatus(wpId){
+        return ClientWorkPackageServices.getWorkPackageStatus(wpId);
+    }
+
     render(){
         const {item, userRoles, userContext} = this.props;
 
@@ -46,6 +51,12 @@ class WorkProgressItem extends Component {
         let rowClass = '';
         let itemRowClass = '';
         let roleGlyph = '';
+        let wpStatus = 'NONE';
+        let itemName = item.name;
+
+        if(item.workPackageId !== 'NONE'){
+            wpStatus = this.getWorkPackageStatus(item.workPackageId);
+        }
 
         switch(item.workSummaryType){
             case WorkSummaryType.WORK_SUMMARY_BASE_DV:
@@ -82,39 +93,104 @@ class WorkProgressItem extends Component {
                 break;
         }
 
+        // Highlight adopted WPs
+        if(wpStatus.status === WorkPackageStatus.WP_ADOPTED){
+            itemClass = itemClass + ' adopted-wp';
+        } else {
+            if(item.workPackageId !== 'NONE'){
+                itemClass = itemClass + ' non-adopted-wp';
+            }
+        }
+
         let designerIconClass = 'no-icon';
         let developerIconClass = 'no-icon';
         let managerIconClass = 'no-icon';
 
+        let designerGotoText = 'Designer role not assigned to you';
+        let developerGotoText = 'Developer role not assigned to you';
+        let managerGotoText = 'Manager role not assigned to you';
+
         if(userRoles.isDesigner){
-            designerIconClass = 'designer-icon'
+            designerIconClass = 'designer-icon';
+            designerGotoText = 'Go to this item as Designer';
         }
 
         if(userRoles.isDeveloper){
-            developerIconClass = 'developer-icon'
+            developerIconClass = 'developer-icon';
+            developerGotoText = 'Go to this item as Developer';
         }
 
         if(userRoles.isManager){
-            managerIconClass = 'manager-icon'
+            managerIconClass = 'manager-icon';
+            managerGotoText = 'Go to this item as Manager';
         }
 
-        const iconTooltip = (
+        const tooltipDelay = 1000;
+
+        const iconTooltipDes = (
             <Tooltip id="modal-tooltip">
-                Go to this item as the selected role type...
+                {designerGotoText}
+            </Tooltip>
+        );
+
+        const iconTooltipDev = (
+            <Tooltip id="modal-tooltip">
+                {developerGotoText}
+            </Tooltip>
+        );
+
+        const iconTooltipMan = (
+            <Tooltip id="modal-tooltip">
+                {managerGotoText}
+            </Tooltip>
+        );
+
+        let adopterTooltipText = 'Not adopted';
+
+        if(wpStatus.status === WorkPackageStatus.WP_ADOPTED){
+            adopterTooltipText = 'Adopted by ' + wpStatus.adopter
+        }
+        const adopterTooltip = (
+            <Tooltip id="modal-tooltip">
+                {adopterTooltipText}
             </Tooltip>
         );
 
         let workProgressItem = <div></div>;
 
         let workProgressName =
-            <OverlayTrigger placement="left" overlay={iconTooltip}>
-                <InputGroup>
+
+            <InputGroup>
+                <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipDes}>
                     <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.DESIGNER, item)}><div className={designerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                </OverlayTrigger>
+                <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipDev}>
                     <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.DEVELOPER, item)}><div className={developerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                </OverlayTrigger>
+                <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipMan}>
                     <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.MANAGER, item)}><div className={managerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
-                    <div className={itemClass}>{item.name}</div>
-                </InputGroup>
-            </OverlayTrigger>;
+                </OverlayTrigger>
+                <div className={itemClass}>{itemName}</div>
+            </InputGroup>;
+
+        let workProgressNameWp =
+
+            <InputGroup>
+                <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipDes}>
+                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.DESIGNER, item)}><div className={designerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                </OverlayTrigger>
+                <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipDev}>
+                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.DEVELOPER, item)}><div className={developerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                </OverlayTrigger>
+                <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipMan}>
+                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.MANAGER, item)}><div className={managerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                </OverlayTrigger>
+                <OverlayTrigger placement="right" delayShow={tooltipDelay} overlay={adopterTooltip}>
+                    <div className={itemClass}>{itemName}</div>
+                </OverlayTrigger>
+            </InputGroup>;
+
+
 
         let scenariosIconClass = 'mash-not-linked';
         if(item.scenariosFailing > 0){
@@ -262,6 +338,35 @@ class WorkProgressItem extends Component {
                     </Grid>;
                 break;
             case WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL:
+                workProgressItem =
+                    <Grid>
+                        <Row>
+                            <Col md={6} className="close-col">
+                                {workProgressName}
+                            </Col>
+                            <Col  md={6} className="close-col">
+                                <Grid>
+                                    <Row>
+                                        <Col md={3} className="close-col">
+                                            {workProgressScenarios}
+                                        </Col>
+                                        <Col md={3} className="close-col">
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            {workProgressPasses}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            {workProgressFails}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            {workProgressNoTests}
+                                        </Col>
+                                    </Row>
+                                </Grid>
+                            </Col>
+                        </Row>
+                    </Grid>;
+                break;
             case WorkSummaryType.WORK_SUMMARY_BASE_WP:
             case WorkSummaryType.WORK_SUMMARY_UPDATE_WP:
                 // WP summary
@@ -269,7 +374,7 @@ class WorkProgressItem extends Component {
                     <Grid>
                         <Row>
                             <Col md={6} className="close-col">
-                                {workProgressName}
+                                {workProgressNameWp}
                             </Col>
                             <Col  md={6} className="close-col">
                                 <Grid>

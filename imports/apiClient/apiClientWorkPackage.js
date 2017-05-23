@@ -525,6 +525,21 @@ class ClientWorkPackageServices {
             return 'Unknown User'
         }
     }
+
+    getWorkPackageStatus(wpId){
+
+        const wp = WorkPackages.findOne({_id: wpId});
+
+        if(wp){
+            return {
+                status: wp.workPackageStatus,
+                adopter: this.getAdopterName(wp.adoptingUserId)
+            };
+        } else {
+            return 'NONE';
+        }
+    }
+
 }
 
 export default new ClientWorkPackageServices();
