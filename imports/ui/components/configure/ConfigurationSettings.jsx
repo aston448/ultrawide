@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
 import TestOutputsContainer                     from '../../containers/configure/TestOutputsContainer.jsx';
-import LocalSettingsContainer                   from '../../containers/configure/LocalSettingsContainer.jsx';
+import UserTestOutputsContainer                 from '../../containers/configure/UserTestOutputsContainer.jsx';
 
 // Ultrawide Services
 import ClientUserSettingsServices               from '../../../apiClient/apiClientUserSettings.js';
@@ -143,7 +143,7 @@ export class ConfigurationSettings extends Component {
             }}/>;
 
         const userTestLocationsManagement =
-            <LocalSettingsContainer params={{
+            <UserTestOutputsContainer params={{
                 userContext: userContext
             }}/>;
 

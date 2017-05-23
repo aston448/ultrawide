@@ -27,11 +27,11 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// User Local Settings Container.
+// User Test Outputs Local Config.
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class LocalSettingsScreen extends Component {
+export class UserTestOutputConfiguration extends Component {
     constructor(props) {
         super(props);
 
@@ -56,9 +56,9 @@ export class LocalSettingsScreen extends Component {
 
     render(){
 
-        const {userLocations, userRole} = this.props;
+        const {userLocations} = this.props;
 
-        const headerText = 'Test Output Configuration for ' + userRole;
+        const headerText = 'My Local Test Output Configuration';
 
         return (
             <Grid>
@@ -78,21 +78,20 @@ export class LocalSettingsScreen extends Component {
     }
 }
 
-LocalSettingsScreen.propTypes = {
+UserTestOutputConfiguration.propTypes = {
     userLocations:       PropTypes.array.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        view:           state.currentAppView,
-        userRole:       state.currentUserRole
+        view:           state.currentAppView
     }
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-export default LocalSettingsContainer = createContainer(({params}) => {
+export default UserTestOutputsContainer = createContainer(({params}) => {
 
     return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext)};
 
-}, connect(mapStateToProps)(LocalSettingsScreen));
+}, connect(mapStateToProps)(UserTestOutputConfiguration));

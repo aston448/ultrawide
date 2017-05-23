@@ -73,8 +73,8 @@ export class TestOutputLocation extends Component {
             _id:                    this.props.location._id,
             locationName:           this.state.nameValue,
             locationRawText:        null,
-            locationType:           this.state.typeValue,
-            locationAccessType:     this.state.accessTypeValue,
+            // locationType:           this.state.typeValue,
+            // locationAccessType:     this.state.accessTypeValue,
             locationIsShared:       this.state.isSharedValue,
             locationUserId:         locationUserId,
             // locationServerName:     this.state.serverNameValue,
@@ -111,13 +111,13 @@ export class TestOutputLocation extends Component {
         this.setState({nameValue: e.target.value})
     }
 
-    onTypeChange(e){
-        this.setState({typeValue: e.target.value})
-    }
-
-    onAccessTypeChange(e){
-        this.setState({accessTypeValue: e.target.value})
-    }
+    // onTypeChange(e){
+    //     this.setState({typeValue: e.target.value})
+    // }
+    //
+    // onAccessTypeChange(e){
+    //     this.setState({accessTypeValue: e.target.value})
+    // }
 
     onIsSharedChange(e){
         this.setState({isSharedValue: e.target.checked})
@@ -188,27 +188,27 @@ export class TestOutputLocation extends Component {
                     </Col>
                 </FormGroup>
 
-                <FormGroup controlId="formTypeSelect">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Type
-                    </Col>
-                    <Col sm={10}>
-                    <FormControl componentClass="select" placeholder={location.locationType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>
-                        {createSelectionList(TestLocationTypes)}
-                    </FormControl>
-                    </Col>
-                </FormGroup>
+                {/*<FormGroup controlId="formTypeSelect">*/}
+                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
+                        {/*Type*/}
+                    {/*</Col>*/}
+                    {/*<Col sm={10}>*/}
+                    {/*<FormControl componentClass="select" placeholder={location.locationType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>*/}
+                        {/*{createSelectionList(TestLocationTypes)}*/}
+                    {/*</FormControl>*/}
+                    {/*</Col>*/}
+                {/*</FormGroup>*/}
 
-                <FormGroup controlId="formTypeSelect">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Access Type
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl componentClass="select" placeholder={location.locationAccessType} value={this.state.accessTypeValue} onChange={(e) => this.onAccessTypeChange(e)}>
-                            {createSelectionList(TestLocationAccessTypes)}
-                        </FormControl>
-                    </Col>
-                </FormGroup>
+                {/*<FormGroup controlId="formTypeSelect">*/}
+                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
+                        {/*Access Type*/}
+                    {/*</Col>*/}
+                    {/*<Col sm={10}>*/}
+                        {/*<FormControl componentClass="select" placeholder={location.locationAccessType} value={this.state.accessTypeValue} onChange={(e) => this.onAccessTypeChange(e)}>*/}
+                            {/*{createSelectionList(TestLocationAccessTypes)}*/}
+                        {/*</FormControl>*/}
+                    {/*</Col>*/}
+                {/*</FormGroup>*/}
 
                 <FormGroup controlId="formLocationPath">
                     <Col componentClass={ControlLabel} sm={2}>

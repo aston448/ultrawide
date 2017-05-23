@@ -107,10 +107,10 @@ export class UserTestLocationConfiguration extends Component {
         return (
             <Grid>
                 <Row className="user-test-location">
-                    <Col md={2}>
-                       <div>{userLocation.locationType}</div>
-                    </Col>
-                    <Col md={3}>
+                    {/*<Col md={2}>*/}
+                       {/*<div>{userLocation.locationType}</div>*/}
+                    {/*</Col>*/}
+                    <Col md={5}>
                         <div>{userLocation.locationName}</div>
                     </Col>
                     <Col md={2}>
