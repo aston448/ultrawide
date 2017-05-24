@@ -23,14 +23,6 @@ describe('UC 901 - User Login', function(){
     });
 
 
-    // Interface
-    it('A username may be entered');
-
-    it('A password may be entered');
-
-    it('There is an option to log in');
-
-
     // Actions
     it('A user may log in with the correct username and password', function(){
 
@@ -53,9 +45,41 @@ describe('UC 901 - User Login', function(){
 
 
     // Conditions
-    it('An error is shown if an unknown username is entered');
+    it('An error is shown if an unknown username is entered', function(){
 
-    it('An error is shown if a password that is not correct for the username is entered');
+        // Execute
+        browser.url('http://localhost:3030/');
+
+        browser.waitForExist('#loginUserName');
+
+        browser.setValue('#loginUserName', 'hen');
+        browser.setValue('#loginPassword', 'hen123');
+
+        browser.click('#loginSubmit');
+
+        // Verify
+        browser.waitUntil(function () {
+            return browser.getText('#headerMessage') === 'Invalid login credentials'
+        }, 5000, 'expected rejection after 5s');
+    });
+
+    it('An error is shown if a password that is not correct for the username is entered', function(){
+
+        // Execute
+        browser.url('http://localhost:3030/');
+
+        browser.waitForExist('#loginUserName');
+
+        browser.setValue('#loginUserName', 'gloria');
+        browser.setValue('#loginPassword', 'bollox');
+
+        browser.click('#loginSubmit');
+
+        // Verify
+        browser.waitUntil(function () {
+            return browser.getText('#headerMessage') === 'Invalid login credentials'
+        }, 5000, 'expected rejection after 5s');
+    });
 
 
     // Consequences
