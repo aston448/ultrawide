@@ -45,7 +45,9 @@ describe('UC 901 - User Login', function(){
         browser.click('#loginSubmit');
 
         // Verify
-        chai.assert.equal(browser.getValue('#headerMessage'), 'Login Success');
+        browser.waitUntil(function () {
+            return browser.getText('#headerView') === 'ROLE SELECTION'
+        }, 5000, 'expected login after 5s');
 
     });
 

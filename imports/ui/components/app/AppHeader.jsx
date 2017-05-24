@@ -219,7 +219,7 @@ export class AppHeader extends Component {
             return (
                 <div className={'ultrawide-header ' + roleClass}>
                     <div className="ultrawide-logo">{logo}</div>
-                    <div className={'ultrawide-status ' + roleStatusClass}>{status}</div>
+                    <div id="headerView" className={'ultrawide-status ' + roleStatusClass}>{status}</div>
                     <HeaderMessage/>
                     {appHeaderMenuContent}
                 </div>
