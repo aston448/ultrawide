@@ -9,8 +9,14 @@
     "test:unit:watch": "SERVER_TEST_REPORTER=\"JSON\" meteor test --driver-package dispatch:mocha",
     "test:unit:3030": "SERVER_TEST_REPORTER=\"JSON\" meteor -p 3030 test --once --driver-package dispatch:mocha",
     "test:unit:watch:3030": "SERVER_TEST_REPORTER=\"JSON\" meteor -p 3030 test --driver-package dispatch:mocha",
-    "chimp:integration": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_results.json",
-    "chimp:acceptance": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/acceptance  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_acc_results.json"
+    "chimp:int_server_des": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration_server/100_designs  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_int_results_server_des.json",
+    "chimp:int_server_wp": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration_server/200_work_packages  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_int_results_server_wp.json",
+    "chimp:int_server_dev": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration_server/300_development  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_int_results_server_dev.json",
+    "chimp:int_server_sum": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration_server/400_summaries  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_int_results_server_sum.json",
+    "chimp:int_server_du": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration_server/500_design_updates  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_int_results_server_du.json",
+    "chimp:int_server_dom": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration_server/700_domain  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_int_results_server_dom.json",
+    "chimp:int_server_adm": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration_server/800_admin  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_int_results_server_adm.json",
+    "chimp:int_client": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration_client  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_int_results_client.json"
   },
   "dependencies": {
     "babel-runtime": "^6.23.0",
