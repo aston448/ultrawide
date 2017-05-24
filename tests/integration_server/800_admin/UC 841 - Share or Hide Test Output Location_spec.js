@@ -37,8 +37,6 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
         // Setup - current location is private
         const expectedLocation = {
             locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-            locationType:       TestLocationType.NONE,
-            locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   false,
             locationPath:       'NONE',
             locationFullPath:   'NONE'
@@ -52,8 +50,6 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
         // Verify
         const newExpectedLocation = {
             locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-            locationType:       TestLocationType.NONE,
-            locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   true,
             locationPath:       'NONE',
             locationFullPath:   'NONE'
@@ -75,8 +71,6 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
         // Verify
         const expectedLocation = {
             locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-            locationType:       TestLocationType.NONE,
-            locationAccessType: TestLocationAccessType.NONE,
             locationIsShared:   false,
             locationPath:       'NONE',
             locationFullPath:   'NONE'

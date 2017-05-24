@@ -41,22 +41,14 @@ Meteor.methods({
         } else {
 
             // Already know name is OK...
-            if(location.locationType === locationDetails.locationType){
-                if(location.locationAccessType === locationDetails.locationAccessType){
-                    if(location.locationIsShared === locationDetails.locationIsShared){
-                        if(location.locationPath === locationDetails.locationPath){
-                            return true;
-                        } else {
-                            throw new Meteor.Error("FAIL", "Expecting location server password " + locationDetails.locationPath + " but got " + location.locationPath + " for location " + locationName);
-                        }
-                    } else {
-                        throw new Meteor.Error("FAIL", "Expecting location is shared " + locationDetails.locationIsShared + " but got " + location.locationIsShared + " for location " + locationName);
-                    }
+            if(location.locationIsShared === locationDetails.locationIsShared){
+                if(location.locationPath === locationDetails.locationPath){
+                    return true;
                 } else {
-                    throw new Meteor.Error("FAIL", "Expecting location access type " + locationDetails.locationAccessType + " but got " + location.locationAccessType + " for location " + locationName);
+                    throw new Meteor.Error("FAIL", "Expecting location server password " + locationDetails.locationPath + " but got " + location.locationPath + " for location " + locationName);
                 }
             } else {
-                throw new Meteor.Error("FAIL", "Expecting location type " + locationDetails.locationType + " but got " + location.locationType + " for location " + locationName);
+                throw new Meteor.Error("FAIL", "Expecting location is shared " + locationDetails.locationIsShared + " but got " + location.locationIsShared + " for location " + locationName);
             }
         }
     },
