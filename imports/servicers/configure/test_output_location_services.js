@@ -33,7 +33,6 @@ class TestOutputLocationServices {
             TestOutputLocations.insert(
                 {
                     locationName:           DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-                    locationType:           TestLocationType.NONE,
                     locationUserId:         userId,
                 }
             );
@@ -48,14 +47,8 @@ class TestOutputLocationServices {
             const locationId =  TestOutputLocations.insert(
                 {
                     locationName:           location.locationName,
-                    locationRawText:        location.locationRawText,
-                    locationType:           location.locationType,
-                    locationAccessType:     location.locationAccessType,
                     locationIsShared:       location.locationIsShared,
                     locationUserId:         userId,
-                    // locationServerName:     location.locationServerName,
-                    // serverLogin:            location.serverLogin,
-                    // serverPassword:         location.serverPassword,
                     locationPath:           location.locationPath,
                     locationFullPath:       location.locationFullPath
                 }
@@ -154,14 +147,8 @@ class TestOutputLocationServices {
                 {
                     $set: {
                         locationName:           location.locationName,
-                        locationRawText:        location.locationRawText,
-                        locationType:           location.locationType,
-                        locationAccessType:     location.locationAccessType,
                         locationIsShared:       location.locationIsShared,
                         locationUserId:         location.locationUserId,
-                        // locationServerName:     location.locationServerName,
-                        // serverLogin:            location.serverLogin,
-                        // serverPassword:         location.serverPassword,
                         locationPath:           location.locationPath,
                         locationFullPath:       location.locationFullPath
                     }
@@ -271,19 +258,21 @@ class TestOutputLocationServices {
         }
     };
 
-    importLocationFile(locationfile, locationId){
+    importLocationFile(locationFile, locationId){
 
         if (Meteor.isServer) {
 
             const locationFileId = TestOutputLocationFiles.insert(
                 {
                     locationId:             locationId,
-                    fileAlias:              locationfile.fileAlias,
-                    fileDescription:        locationfile.fileDescription,
-                    fileType:               locationfile.fileType,
-                    testRunner:             locationfile.testRunner,
-                    fileName:               locationfile.fileName,
-                    allFilesOfType:         locationfile.allFilesOfType
+                    fileAlias:              locationFile.fileAlias,
+                    fileDescription:        locationFile.fileDescription,
+                    fileType:               locationFile.fileType,
+                    testRunner:             locationFile.testRunner,
+                    fileName:               locationFile.fileName,
+                    allFilesOfType:         locationFile.allFilesOfType,
+                    fileStatus:             locationFile.fileStatus,
+                    lastUpdated:            locationFile.lastUpdated
                 }
             );
 
@@ -304,7 +293,8 @@ class TestOutputLocationServices {
                         fileType:               locationFile.fileType,
                         testRunner:             locationFile.testRunner,
                         fileName:               locationFile.fileName,
-                        allFilesOfType:         locationFile.allFilesOfType
+                        allFilesOfType:         locationFile.allFilesOfType,
+                        fileStatus:             TestLocationFileStatus.FILE_NOT_UPLOADED
                     }
                 }
             )

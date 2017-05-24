@@ -954,7 +954,7 @@ export class DesignComponentHeader extends Component{
 
         if(isDeleted){
 
-            const tooltipDelete = (
+            tooltipDelete = (
                 <Tooltip id="modal-tooltip">
                     Undo Delete
                 </Tooltip>
@@ -1031,7 +1031,7 @@ export class DesignComponentHeader extends Component{
 
         let wpStatus =
             <InputGroup.Addon>
-                <OverlayTrigger delayShow={tooltipDelay} placement="right" overlay={tooltipGotoWp}>
+                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipGotoWp}>
                     <div id="wpStatusIcon" className={wpStatusClass}
                          onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon
                         glyph={wpStatusGlyph}/></div>
@@ -1053,7 +1053,7 @@ export class DesignComponentHeader extends Component{
             } else {
                 updateStatus =
                     <InputGroup.Addon>
-                        <OverlayTrigger delayShow={tooltipDelay} placement="right" overlay={tooltipUpdateStatus}>
+                        <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipUpdateStatus}>
                             <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>;
@@ -1064,7 +1064,7 @@ export class DesignComponentHeader extends Component{
 
         let editAction =
             <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
-                <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipEdit}>
+                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipEdit}>
                     <div className="blue"><Glyphicon glyph="edit"/></div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
@@ -1072,7 +1072,7 @@ export class DesignComponentHeader extends Component{
         let deleteAction =
             <InputGroup.Addon id="actionDelete"
                               onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipDelete}>
+                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipDelete}>
                     <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
@@ -1080,7 +1080,7 @@ export class DesignComponentHeader extends Component{
         let moveAction =
             <InputGroup.Addon>
                 <div id="actionMove" className="lgrey">
-                    <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipMove}>
+                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMove}>
                         <Glyphicon glyph="move"/>
                     </OverlayTrigger>
                 </div>
@@ -1092,7 +1092,7 @@ export class DesignComponentHeader extends Component{
                 <InputGroup.Addon>
                     {connectDragSource(
                         <div id="actionMove" className="lgrey">
-                            <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipMove}>
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMove}>
                                 <Glyphicon glyph="move"/>
                             </OverlayTrigger>
                         </div>)
@@ -1102,14 +1102,14 @@ export class DesignComponentHeader extends Component{
 
         let saveAction =
             <InputGroup.Addon id="actionSave" onClick={ () => this.saveComponentName(view, mode)}>
-                <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipSave}>
+                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipSave}>
                     <div className="green"><Glyphicon glyph="ok"/></div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
 
         let undoAction =
             <InputGroup.Addon id="actionUndo" onClick={ () => this.undoComponentNameChange()}>
-                <OverlayTrigger delayShow={tooltipDelay} overlay={tooltipCancel}>
+                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipCancel}>
                     <div className="red"><Glyphicon glyph="arrow-left"/></div>
                 </OverlayTrigger>
             </InputGroup.Addon>;

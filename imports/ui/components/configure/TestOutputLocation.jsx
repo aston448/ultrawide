@@ -35,13 +35,8 @@ export class TestOutputLocation extends Component {
         this.state = {
             editing:                false,
             nameValue:              this.props.location.locationName,
-            typeValue:              this.props.location.locationType,
-            accessTypeValue:        this.props.location.locationAccessType,
             isSharedValue:          this.props.location.locationIsShared,
             pathValue:              this.props.location.locationPath,
-            // serverNameValue:        this.props.location.locationServerName,
-            // serverLoginValue:       this.props.location.serverLogin,
-            // serverPasswordValue:    this.props.location.serverPassword
         };
 
     }
@@ -72,14 +67,8 @@ export class TestOutputLocation extends Component {
         const location = {
             _id:                    this.props.location._id,
             locationName:           this.state.nameValue,
-            locationRawText:        null,
-            // locationType:           this.state.typeValue,
-            // locationAccessType:     this.state.accessTypeValue,
             locationIsShared:       this.state.isSharedValue,
             locationUserId:         locationUserId,
-            // locationServerName:     this.state.serverNameValue,
-            // serverLogin:            this.state.serverLoginValue,
-            // serverPassword:         this.state.serverPasswordValue,
             locationPath:           pathValue,
             locationFullPath:       this.props.dataStore + testOutputDir + pathValue
         };
@@ -110,14 +99,6 @@ export class TestOutputLocation extends Component {
     onNameChange(e){
         this.setState({nameValue: e.target.value})
     }
-
-    // onTypeChange(e){
-    //     this.setState({typeValue: e.target.value})
-    // }
-    //
-    // onAccessTypeChange(e){
-    //     this.setState({accessTypeValue: e.target.value})
-    // }
 
     onIsSharedChange(e){
         this.setState({isSharedValue: e.target.checked})
@@ -187,28 +168,6 @@ export class TestOutputLocation extends Component {
                         <FormControl type="text" placeholder={location.locationName} value={this.state.nameValue} onChange={(e) => this.onNameChange(e)} />
                     </Col>
                 </FormGroup>
-
-                {/*<FormGroup controlId="formTypeSelect">*/}
-                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
-                        {/*Type*/}
-                    {/*</Col>*/}
-                    {/*<Col sm={10}>*/}
-                    {/*<FormControl componentClass="select" placeholder={location.locationType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>*/}
-                        {/*{createSelectionList(TestLocationTypes)}*/}
-                    {/*</FormControl>*/}
-                    {/*</Col>*/}
-                {/*</FormGroup>*/}
-
-                {/*<FormGroup controlId="formTypeSelect">*/}
-                    {/*<Col componentClass={ControlLabel} sm={2}>*/}
-                        {/*Access Type*/}
-                    {/*</Col>*/}
-                    {/*<Col sm={10}>*/}
-                        {/*<FormControl componentClass="select" placeholder={location.locationAccessType} value={this.state.accessTypeValue} onChange={(e) => this.onAccessTypeChange(e)}>*/}
-                            {/*{createSelectionList(TestLocationAccessTypes)}*/}
-                        {/*</FormControl>*/}
-                    {/*</Col>*/}
-                {/*</FormGroup>*/}
 
                 <FormGroup controlId="formLocationPath">
                     <Col componentClass={ControlLabel} sm={2}>

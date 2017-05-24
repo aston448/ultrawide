@@ -40,8 +40,6 @@ Meteor.methods({
         let dataDir = TestDataHelpers.getDataDir();
 
         location.locationName = newLocation.locationName;
-        location.locationType = newLocation.locationType;
-        location.locationAccessType = newLocation.locationAccessType;
         location.locationIsShared = newLocation.locationIsShared;
         location.locationPath = newLocation.locationPath;
         location.locationFullPath = dataDir + UltrawideDirectory.TEST_OUTPUT_DIR + newLocation.locationPath;
