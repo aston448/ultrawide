@@ -45,7 +45,7 @@ describe('UC 901 - User Login', function(){
         browser.click('#loginSubmit');
 
         // Verify
-        LoginVerifications.user_IsLoggedIn('gloria');
+        chai.assert.equal(browser.getValue('#headerMessage'), 'hen');
 
     });
 

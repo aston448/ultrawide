@@ -40,7 +40,7 @@ export class HeaderMessage extends Component {
     componentWillReceiveProps(newProps){
 
         // When message changes toggle between animations so the animation runs
-        if(newProps.message.messageText != this.props.message.messageText || (newProps.message.messageType === MessageType.ERROR)){
+        if(newProps.message.messageText !== this.props.message.messageText || (newProps.message.messageType === MessageType.ERROR)){
 
             if(this.state.displayClass.endsWith('1')){
                 this.setState({displayClass: newProps.message.messageType + '2'});
@@ -55,7 +55,7 @@ export class HeaderMessage extends Component {
         const {message} = this.props;
 
         return(
-            <div className={'header-message ' + this.state.displayClass}>
+            <div id="headerMessage" className={'header-message ' + this.state.displayClass}>
                 {message.messageText}
             </div>
         )
