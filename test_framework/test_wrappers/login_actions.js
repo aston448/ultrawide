@@ -4,7 +4,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 class LoginActions {
 
     userLogsInAs(userName, password, expectation) {
-        server.call('testLogin.loginIser', userName, password, expectation);
+        server.call('testLogin.loginUser', userName, password, expectation);
     }
 
 }
