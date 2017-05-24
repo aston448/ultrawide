@@ -150,13 +150,13 @@ export class ConfigurationSettings extends Component {
         const settingsGrid = (
             <Grid>
                 <Row>
+                    <Col md={12}>
+                        <div className="design-item-header">Local User Settings</div>
+                    </Col>
+                </Row>
+                <Row>
                     <Col md={6}>
                         <Grid>
-                            <Row>
-                                <Col md={12}>
-                                    <div className="design-item-header">My Settings</div>
-                                </Col>
-                            </Row>
                             <Row>
                                 <Col md={12}>
                                     {screenSizeSettings}
@@ -191,7 +191,7 @@ export class ConfigurationSettings extends Component {
 
 
         return (
-            <Tabs defaultActiveKey={2} id="config-view_tabs">
+            <Tabs defaultActiveKey={1} id="config-view_tabs">
                 <Tab eventKey={1} title="TEST LOCATION MANAGEMENT">{testLocationManagement}</Tab>
                 <Tab eventKey={2} title="MY TEST LOCATIONS">{userTestLocationsManagement}</Tab>
                 <Tab eventKey={3} title="ULTRAWIDE SETTINGS">{settingsGrid}</Tab>

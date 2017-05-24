@@ -1,4 +1,8 @@
 import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
+import TextLookups                      from '../../imports/common/lookups.js'
+
+import { ViewType }           from '../../imports/constants/constants.js';
+import { LoginMessages }      from '../../imports/constants/message_texts.js';
 
 describe('UC 901 - User Login', function(){
 
@@ -36,7 +40,7 @@ describe('UC 901 - User Login', function(){
 
         // Verify
         browser.waitUntil(function () {
-            return browser.getText('#headerView') === 'ROLE SELECTION'
+            return browser.getText('#headerView') === TextLookups.viewText(ViewType.ROLES)
         }, 5000, 'expected login after 5s');
 
     });
@@ -57,7 +61,7 @@ describe('UC 901 - User Login', function(){
 
         // Verify
         browser.waitUntil(function () {
-            return browser.getText('#headerMessage') === 'Invalid login credentials'
+            return browser.getText('#headerMessage') === LoginMessages.MSG_LOGIN_FAIL
         }, 5000, 'expected rejection after 5s');
     });
 
@@ -75,7 +79,7 @@ describe('UC 901 - User Login', function(){
 
         // Verify
         browser.waitUntil(function () {
-            return browser.getText('#headerMessage') === 'Invalid login credentials'
+            return browser.getText('#headerMessage') === LoginMessages.MSG_LOGIN_FAIL
         }, 5000, 'expected rejection after 5s');
     });
 
@@ -95,7 +99,7 @@ describe('UC 901 - User Login', function(){
 
         // Verify
         browser.waitUntil(function () {
-            return browser.getText('#headerView') === 'ROLE SELECTION'
+            return browser.getText('#headerView') === TextLookups.viewText(ViewType.ROLES)
         }, 5000, 'expected login after 5s');
     });
 

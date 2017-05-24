@@ -28,10 +28,10 @@ export const UltrawideAction = {
 export const ViewType = {
     ADMIN:                      'ADMIN',                    // User Management Screen
     AUTHORISE:                  'AUTHORISE',                // Login screen
-    HOME:                       'HOME',                     // Home Screen - available user roles / actions
+    ROLES:                      'ROLES',                    // Available user roles / actions
     CONFIGURE:                  'CONFIGURE',                // Change user settings
     DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
-    SELECT:                     'SELECT',                   // Main Selection Screen once in a Design
+    SELECT:                     'SELECT',                   // Home Selection Screen once in a Design
     DESIGN_NEW_EDIT:            'DESIGN_NEW_EDIT',          // Edit an unpublished design version
     DESIGN_PUBLISHED_VIEW:      'DESIGN_PUBLISHED_VIEW',    // View a published Initial Design Version
     DESIGN_UPDATABLE_VIEW:      'DESIGN_UPDATABLE_VIEW',    // View progress on an Updatable Design Version

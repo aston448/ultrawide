@@ -431,7 +431,7 @@ class ClientAppHeaderServices{
 
     setViewRoles() {
         // Returns to the Change Role Screen
-        store.dispatch(setCurrentView(ViewType.HOME));
+        store.dispatch(setCurrentView(ViewType.ROLES));
         return true;
     }
 

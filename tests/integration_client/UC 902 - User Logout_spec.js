@@ -1,4 +1,7 @@
 import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
+import TextLookups                      from '../../imports/common/lookups.js'
+
+import { ViewType }           from '../../imports/constants/constants.js';
 
 describe('UC 902 - User Logout', function(){
 
@@ -36,7 +39,7 @@ describe('UC 902 - User Logout', function(){
 
         // Verify
         browser.waitUntil(function () {
-            return browser.getText('#headerView') === 'ROLE SELECTION'
+            return browser.getText('#headerView') === TextLookups.viewText(ViewType.ROLES)
         }, 5000, 'expected roles screen after 5s');
 
         // Logout
@@ -44,7 +47,7 @@ describe('UC 902 - User Logout', function(){
 
         // Verify
         browser.waitUntil(function () {
-            return browser.getText('#headerView') === 'LOGIN'
+            return browser.getText('#headerView') === TextLookups.viewText(ViewType.AUTHORISE)
         }, 5000, 'expected login after 5s');
 
     });

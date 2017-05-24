@@ -129,7 +129,7 @@ export class AppHeader extends Component {
                     </div>;
                 break;
 
-            case ViewType.HOME:
+            case ViewType.ROLES:
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">

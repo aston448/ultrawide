@@ -199,7 +199,7 @@ class ClientUserContextServices {
         store.dispatch(setIntTestOutputDir(intTestOutputDir));
 
         // Go to Home screen
-        store.dispatch(setCurrentView(ViewType.HOME));
+        store.dispatch(setCurrentView(ViewType.ROLES));
     }
 
     setOpenDesignVersionItems(userContext){

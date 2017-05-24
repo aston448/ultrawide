@@ -30,10 +30,10 @@ class TextLookups {
                 return 'ADMINISTRATION';
             case ViewType.AUTHORISE:
                 return 'LOGIN';
-            case ViewType.HOME:
+            case ViewType.ROLES:
                 return 'ROLE SELECTION';
             case ViewType.CONFIGURE:
-                return 'LOCAL SETTINGS';
+                return 'USER SETTINGS';
             case ViewType.DESIGN_NEW_EDIT:
                 return 'DESIGN EDITOR';
             case ViewType.DESIGN_PUBLISHED_VIEW:

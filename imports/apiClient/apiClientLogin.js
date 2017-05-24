@@ -7,6 +7,7 @@ import {UserRoles}    from '../collections/users/user_roles.js';
 
 // Ultrawide Services
 import {RoleType, ViewType, MessageType} from '../constants/constants.js'
+import {LoginMessages} from '../constants/message_texts.js';
 import ClientUserContextServices from './apiClientUserContext.js'
 
 // REDUX services
@@ -39,10 +40,10 @@ class ClientLoginServices{
                 if (error) {
                     store.dispatch(updateUserMessage({
                         messageType: MessageType.ERROR,
-                        messageText: 'Invalid login credentials'
+                        messageText: LoginMessages.MSG_LOGIN_FAIL
                     }));
 
-                    return {success: false, message: 'Invalid login credentials'};
+                    return {success: false, message: LoginMessages.MSG_LOGIN_FAIL};
 
                 } else {
                     let userId = Meteor.userId();
@@ -69,7 +70,7 @@ class ClientLoginServices{
 
                                 store.dispatch(updateUserMessage({
                                     messageType: MessageType.INFO,
-                                    messageText: 'Login Success'
+                                    messageText: LoginMessages.MSG_LOGIN_OK
                                 }));
 
                                 // Properly logged in as normal user so retrieve user settings - stored to REDUX
@@ -84,13 +85,13 @@ class ClientLoginServices{
                         } else {
                             store.dispatch(updateUserMessage({
                                 messageType: MessageType.ERROR,
-                                messageText: 'This user is no longer active'
+                                messageText: LoginMessages.MSG_LOGIN_NOT_ACTIVE
                             }));
                         }
                     } else {
                         store.dispatch(updateUserMessage({
                             messageType: MessageType.ERROR,
-                            messageText: 'User not recognised'
+                            messageText: LoginMessages.MSG_LOGIN_NOT_RECOGNISED
                         }));
 
                     }

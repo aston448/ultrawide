@@ -1,6 +1,10 @@
-/**
- * Created by aston on 17/11/2016.
- */
+
+export const LoginMessages = {
+    MSG_LOGIN_OK:                   'Logged in',
+    MSG_LOGIN_FAIL:                 'Invalid login credentials',
+    MSG_LOGIN_NOT_ACTIVE:           'This user is no longer active',
+    MSG_LOGIN_NOT_RECOGNISED:       'User not recognised'
+};
 
 export const ImpexMessages = {
 

@@ -70,7 +70,7 @@ class AppBody extends Component {
                 bodyHtml =
                     <UltrawideAdmin/>;
                 break;
-            case ViewType.HOME:
+            case ViewType.ROLES:
                 bodyHtml =
                     <AppRolesContainer params={{
                         userId: userContext.userId
