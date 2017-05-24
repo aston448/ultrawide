@@ -5,7 +5,6 @@ export const TestOutputLocations = new Mongo.Collection('testOutputLocations');
 
 let Schema = new SimpleSchema({
     locationName:           {type: String},                                                 // Location identifier
-    locationRawText:        {type: Object, blackbox: true, optional: true},                 // Text descriptive of this location
     locationIsShared:       {type: Boolean, defaultValue: false},                           // Determines if location available to all users
     locationUserId:         {type: String, defaultValue: 'NONE'},                           // Set for non-shared locations
     locationPath:           {type: String, defaultValue: 'NONE'},                           // Path where files will be found under the application base data path
