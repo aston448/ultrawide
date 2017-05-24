@@ -22,9 +22,15 @@ import { UserUnitTestMashData }     from '../../imports/collections/dev/user_uni
 import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
+import ClientAppHeaderServices      from '../../imports/apiClient/apiClientAppHeader.js';
+
 import {RoleType, WorkSummaryType, UltrawideDirectory, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
 class TestDataHelpers {
+
+    getStore(){
+        return ClientAppHeaderServices.getStore();
+    }
 
     getRawTextFor(plainText){
         return {

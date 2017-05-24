@@ -34,6 +34,10 @@ import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurren
 
 class ClientAppHeaderServices{
 
+    getStore(){
+        return store.getState();
+    }
+
     getCurrentDesign(userContext){
 
         if(userContext.designId === 'NONE'){
