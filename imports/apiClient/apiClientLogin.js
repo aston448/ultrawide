@@ -41,6 +41,9 @@ class ClientLoginServices{
                         messageType: MessageType.ERROR,
                         messageText: 'Invalid login credentials'
                     }));
+
+                    return {success: false, message: 'Invalid login credentials'};
+
                 } else {
                     let userId = Meteor.userId();
                     //console.log("LOGGED IN AS METEOR USER: " + userId);
@@ -86,6 +89,8 @@ class ClientLoginServices{
                         }));
 
                     }
+
+                    return {success: true, message: ''};
                 }
             });
         }
