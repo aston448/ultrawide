@@ -33,6 +33,8 @@ class ClientTestIntegrationServices {
     // Developer chooses to export an integration test file from a WP Feature
     exportIntegrationTestFile(userContext, userRole){
 
+        const outputDir = store.getState().intTestOutputDir;
+
         // Client validation
         let result = TestIntegrationValidationApi.validateExportIntegrationTests(userRole, userContext);
 
@@ -44,7 +46,7 @@ class ClientTestIntegrationServices {
 
         // TODO - Get Test Runner from user settings
         // Real action call - server actions
-        ServerTestIntegrationApi.exportIntegrationTests(userContext, userRole, TestRunner.CHIMP_MOCHA, (err, result) => {
+        ServerTestIntegrationApi.exportIntegrationTests(userContext, outputDir, userRole, TestRunner.CHIMP_MOCHA, (err, result) => {
 
             if (err) {
                 if(err.error === "FILE_EXISTS"){

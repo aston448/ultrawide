@@ -13,6 +13,7 @@ const initialState = {
     currentAppView:                     ViewType.AUTHORISE,
     currentViewMode:                    ViewMode.MODE_VIEW,
     currentWindowSize:                  UserSettingValue.SCREEN_SIZE_LARGE,
+    intTestOutputDir:                   '',
     domainDictionaryVisible:            false,
     currentUserViewOptions:             {
         designDetailsVisible:       false,
@@ -97,6 +98,10 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_WINDOW_SIZE:
             return Object.assign({}, state, {
                 currentWindowSize: action.newSize
+            });
+        case Actions.SET_INT_TEST_OUTPUT_DIR:
+            return Object.assign({}, state, {
+                intTestOutputDir: action.newDir
             });
         case Actions.SET_CURRENT_USER_ITEM_CONTEXT:
             //console.log("Updated User Item Context: " + action.newUserItemContext);

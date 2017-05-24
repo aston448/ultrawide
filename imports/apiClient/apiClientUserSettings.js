@@ -13,7 +13,7 @@ import ServerUserSettingsApi                from '../apiServer/apiUserSettings';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentWindowSize, updateUserMessage} from '../redux/actions'
+import {setCurrentWindowSize, setIntTestOutputDir, updateUserMessage} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for User Management
@@ -103,6 +103,10 @@ class ClientUserSettingServices {
 
     setWindowSize(newSize){
         store.dispatch(setCurrentWindowSize(newSize));
+    }
+
+    setIntTestOutputDir(newPath){
+        store.dispatch(setIntTestOutputDir(newPath));
     }
 }
 

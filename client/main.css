@@ -584,6 +584,10 @@ input {
     margin: 100px;
 }
 
+.settings-well{
+    margin: 20px;
+}
+
 .main-grid{
     margin: 0;
     padding: 0px;

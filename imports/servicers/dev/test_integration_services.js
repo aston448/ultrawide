@@ -87,12 +87,12 @@ class TestIntegrationServices{
     }
 
     // User generates a test file from a Design or Design Update Feature
-    exportIntegrationTestFile(userContext, testRunner){
+    exportIntegrationTestFile(userContext, outputDir, testRunner){
 
         // Add in other test generation here...
         switch(testRunner){
             case TestRunner.CHIMP_MOCHA:
-                ChimpMochaTestServices.writeIntegrationTestFile(userContext);
+                ChimpMochaTestServices.writeIntegrationTestFile(userContext, outputDir);
                 break;
         }
     };

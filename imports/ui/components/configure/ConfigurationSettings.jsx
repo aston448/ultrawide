@@ -16,7 +16,7 @@ import ClientUserManagementServices             from '../../../apiClient/apiClie
 import {UserSettingValue, UserSetting} from '../../../constants/constants.js';
 
 // Bootstrap
-import {Well, ControlLabel, FormControl, Button}     from 'react-bootstrap';
+import {Well, ControlLabel, FormControl, Button, InputGroup}     from 'react-bootstrap';
 import {FormGroup, Radio, Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
@@ -37,6 +37,7 @@ export class ConfigurationSettings extends Component {
 
         this.state = {
             currentWindowSize: this.props.currentWindowSize,
+            currentIntOutputPath: this.props.intTestOutputDir,
             oldPassword: '',
             newPassword1: '',
             newPassword2: ''
@@ -54,6 +55,16 @@ export class ConfigurationSettings extends Component {
         ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_SCREEN_SIZE, newSize);
     }
 
+    onUpdateIntOutputPath(e){
+
+        // Call this to prevent Submit reloading the page
+        e.preventDefault();
+
+        ClientUserSettingsServices.setIntTestOutputDir(this.state.currentIntOutputPath);
+
+        ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_INT_OUTPUT_LOCATION, this.state.currentIntOutputPath);
+    }
+
     updateOldPassword(e){
         this.setState({oldPassword: e.target.value});
     }
@@ -64,6 +75,10 @@ export class ConfigurationSettings extends Component {
 
     updateNewPassword2(e){
         this.setState({newPassword2: e.target.value});
+    }
+
+    updateIntOutputDir(e){
+        this.setState({currentIntOutputPath: e.target.value});
     }
 
     onUpdateUserPassword(e){
@@ -81,7 +96,7 @@ export class ConfigurationSettings extends Component {
         // Items -------------------------------------------------------------------------------------------------------
 
         const screenSizeSettings =
-            <div>
+            <Well className="settings-well">
                 <FormGroup id="sizeOptions">
                     <Radio id="optionLarge" checked={this.state.currentWindowSize === UserSettingValue.SCREEN_SIZE_LARGE}
                            onChange={() => this.onWindowSizeChange(UserSettingValue.SCREEN_SIZE_LARGE)}>
@@ -92,10 +107,25 @@ export class ConfigurationSettings extends Component {
                         View Height Small (900px)
                     </Radio>
                 </FormGroup>
-            </div>;
+            </Well>;
+
+        const intTestOutputPath =
+            <Well className="settings-well">
+                <form onSubmit={(e) => this.onUpdateIntOutputPath(e)}>
+                    <div className="design-item-header">Set Integration Test Output Path</div>
+                    <div className="design-item-note">Set to a directory where you can safely generate integration test template files</div>
+                    <FormGroup controlId="oldPassword">
+                        <ControlLabel>Directory:</ControlLabel>
+                        <FormControl ref="intOutputDir" type="input" value={this.state.currentIntOutputPath} onChange={(e) => this.updateIntOutputDir(e)}/>
+                    </FormGroup>
+                    <Button type="submit">
+                        Save
+                    </Button>
+                </form>
+            </Well>;
 
         const changeUserPassword =
-            <Well className="admin-password-well">
+            <Well className="settings-well">
                 <form onSubmit={(e) => this.onUpdateUserPassword(e)}>
                     <div className="design-item-header">Change My Password</div>
                     <div className="design-item-note">You'll need to remember it so be careful!</div>
@@ -125,7 +155,16 @@ export class ConfigurationSettings extends Component {
                             <Row>
                                 <Col md={12}>
                                     <div className="design-item-header">My Settings</div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={12}>
                                     {screenSizeSettings}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={12}>
+                                    {intTestOutputPath}
                                 </Col>
                             </Row>
                         </Grid>
@@ -170,7 +209,8 @@ ConfigurationSettings.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentWindowSize:  state.currentWindowSize
+        currentWindowSize:  state.currentWindowSize,
+        intTestOutputDir:   state.intTestOutputDir
     }
 }
 

@@ -1,9 +1,9 @@
 import fs from 'fs';
 
-import {DesignVersionComponents}               from '../../collections/design/design_version_components.js';
-import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
+import {DesignVersionComponents}                from '../../collections/design/design_version_components.js';
+import {DesignUpdateComponents}                 from '../../collections/design_update/design_update_components.js';
+import {UserIntTestResults}                     from '../../collections/dev/user_int_test_results.js'
 
-import {UserIntTestResults} from '../../collections/dev/user_int_test_results.js'
 
 import {ComponentType, TestType, MashTestStatus, TestDataStatus, LogLevel}   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js';
@@ -11,7 +11,7 @@ import {log}        from '../../common/utils.js';
 // Plugin class to read test results from a screen scraped chimp mocha JSON reported file
 class ChimpMochaTestServices{
 
-    writeIntegrationTestFile(userContext){
+    writeIntegrationTestFile(userContext, outputDir){
 
         if(Meteor.isServer) {
 
@@ -34,12 +34,9 @@ class ChimpMochaTestServices{
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Writing integration test file {}", fileName);
 
-            // TODO replace this in user context
-            const filePath = '/Users/aston/WebstormProjects/ultrawide/tests/integration/';
-
 
             // Safety - don't export if file exists to prevent accidental overwrite of good data
-            if(fs.existsSync(filePath + fileName)){
+            if(fs.existsSync(outputDir + fileName)){
                 log((msg) => console.log(msg), LogLevel.DEBUG, "File {} already exists, not overwriting.", fileName);
                 throw new Meteor.Error("FILE_EXISTS", "Integration test exists already for this Feature.  Remove file first if you want to replace it");
             }
@@ -134,7 +131,7 @@ class ChimpMochaTestServices{
             fileText += "});\n";
 
             // And write the file
-            fs.writeFileSync(filePath + fileName, fileText);
+            fs.writeFileSync(outputDir + fileName, fileText);
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "File written: {}", fileName);
         }

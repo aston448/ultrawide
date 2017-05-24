@@ -322,7 +322,8 @@ export const ScenarioStepStatus = {
 };
 
 export const UserSetting = {
-    SETTING_SCREEN_SIZE:    'SETTING_SCREEN_SIZE'
+    SETTING_SCREEN_SIZE:            'SETTING_SCREEN_SIZE',
+    SETTING_INT_OUTPUT_LOCATION:    'SETTING_INT_OUTPUT_LOCATION'
 };
 
 export const UserSettingValue = {

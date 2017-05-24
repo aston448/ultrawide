@@ -14,6 +14,7 @@ export const TOGGLE_DOMAIN_DICTIONARY = 'TOGGLE_DOMAIN_DICTIONARY';
 
 export const SET_CURRENT_USER_VIEW_OPTIONS = 'SET_CURRENT_USER_VIEW_OPTIONS';
 export const SET_WINDOW_SIZE = 'SET_WINDOW_SIZE';
+export const SET_INT_TEST_OUTPUT_DIR = 'SET_INT_TEST_OUTPUT_DIR';
 
 // the currently selected user in the User Management screen - NOT the currently logged in user
 export const SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID';
@@ -189,6 +190,13 @@ export function setCurrentWindowSize(newSize) {
 
     return function (dispatch) {
         dispatch({type: SET_WINDOW_SIZE, newSize: newSize});
+    };
+}
+
+export function setIntTestOutputDir(newDir) {
+
+    return function (dispatch) {
+        dispatch({type: SET_INT_TEST_OUTPUT_DIR, newDir: newDir});
     };
 }
 

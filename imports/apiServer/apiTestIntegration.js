@@ -41,11 +41,12 @@ class ServerTestIntegrationApi {
         );
     };
 
-    exportIntegrationTests(userContext, userRole, testRunner, callback){
+    exportIntegrationTests(userContext, outputDir, userRole, testRunner, callback){
 
         exportIntegrationTests.call(
             {
                 userContext:    userContext,
+                outputDir:      outputDir,
                 userRole:       userRole,
                 testRunner:     testRunner
             },

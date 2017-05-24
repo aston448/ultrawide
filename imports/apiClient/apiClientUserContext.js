@@ -31,7 +31,7 @@ import ClientUserSettingsServices           from '../apiClient/apiClientUserSett
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentWindowSize, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag} from '../redux/actions'
+import {setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentWindowSize, setIntTestOutputDir, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -193,8 +193,10 @@ class ClientUserContextServices {
 
         // Restore User Settings
         const screenSize = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_SCREEN_SIZE);
-
         store.dispatch(setCurrentWindowSize(screenSize));
+
+        const intTestOutputDir = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_INT_OUTPUT_LOCATION);
+        store.dispatch(setIntTestOutputDir(intTestOutputDir));
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));
