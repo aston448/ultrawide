@@ -30,7 +30,7 @@ export const addDesign = new ValidatedMethod({
             DesignServices.addDesign(true);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -58,7 +58,7 @@ export const updateDesignName = new ValidatedMethod({
             DesignServices.updateDesignName(designId, newName);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -85,7 +85,7 @@ export const removeDesign = new ValidatedMethod({
             DesignServices.removeDesign(designId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 

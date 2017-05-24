@@ -49,7 +49,7 @@ export const addApplicationToDesignVersion = new ValidatedMethod({
             );
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -91,7 +91,7 @@ export const addDesignSectionToApplication = new ValidatedMethod({
             );
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -134,7 +134,7 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
             );
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -176,7 +176,7 @@ export const addFeatureToDesignSection = new ValidatedMethod({
             );
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -218,7 +218,7 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
             );
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -262,7 +262,7 @@ export const addScenario = new ValidatedMethod({
             );
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -294,7 +294,7 @@ export const updateComponentName = new ValidatedMethod({
             DesignUpdateComponentServices.updateComponentName(designUpdateComponentId, newPlainText, newRawText);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -326,7 +326,7 @@ export const updateFeatureNarrative = new ValidatedMethod({
             DesignUpdateComponentServices.updateFeatureNarrative(designUpdateComponentId, newPlainText, newRawText);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -357,7 +357,7 @@ export const removeDesignComponent = new ValidatedMethod({
             DesignUpdateComponentServices.removeComponent(designUpdateComponentId, parentId);
         // } catch (e) {
         //     console.log(e.stack);
-        //     throw new Meteor.Error(e.error, e.stack)
+        //     throw new Meteor.Error(e.code, e.stack)
         // }
     }
 
@@ -388,7 +388,7 @@ export const restoreDesignComponent = new ValidatedMethod({
             DesignUpdateComponentServices.restoreComponent(designUpdateComponentId, parentId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -420,7 +420,7 @@ export const moveDesignComponent = new ValidatedMethod({
             DesignUpdateComponentServices.moveComponent(movingComponentId, targetComponentId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -451,7 +451,7 @@ export const reorderDesignComponent = new ValidatedMethod({
             DesignUpdateComponentServices.reorderComponent(movingComponentId, targetComponentId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -484,7 +484,7 @@ export const toggleScope = new ValidatedMethod({
             DesignUpdateComponentServices.toggleScope(baseComponentId, designUpdateId, newScope);
         // } catch (e) {
         //     console.log(e.stack);
-        //     throw new Meteor.Error(e.error, e.stack)
+        //     throw new Meteor.Error(e.code, e.stack)
         // }
     }
 

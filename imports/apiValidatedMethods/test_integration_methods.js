@@ -27,7 +27,7 @@ export const refreshTestData = new ValidatedMethod({
             TestIntegrationServices.refreshTestData(userContext, fullRefresh);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -47,7 +47,7 @@ export const updateTestSummaryData = new ValidatedMethod({
             TestIntegrationServices.updateTestSummaryData(userContext);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -75,7 +75,7 @@ export const exportIntegrationTests = new ValidatedMethod({
             TestIntegrationServices.exportIntegrationTestFile(userContext, outputDir, testRunner);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });

@@ -32,7 +32,7 @@ export const updateDesignVersionName = new ValidatedMethod({
             DesignVersionServices.updateDesignVersionName(designVersionId, newName);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -60,7 +60,7 @@ export const updateDesignVersionNumber = new ValidatedMethod({
             DesignVersionServices.updateDesignVersionNumber(designVersionId, newNumber);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -88,7 +88,7 @@ export const publishDesignVersion = new ValidatedMethod({
             DesignVersionServices.publishDesignVersion(designVersionId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -115,7 +115,7 @@ export const withdrawDesignVersion = new ValidatedMethod({
             DesignVersionServices.withdrawDesignVersion(designVersionId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -142,7 +142,7 @@ export const createNextDesignVersion = new ValidatedMethod({
             DesignVersionServices.createNextDesignVersion(designVersionId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 
@@ -162,7 +162,7 @@ export const updateWorkProgress = new ValidatedMethod({
             DesignVersionServices.updateWorkProgress(userContext);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 

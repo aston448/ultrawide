@@ -31,7 +31,7 @@ export const backupDesign = new ValidatedMethod({
             ImpExServices.backupDesign(designId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -57,7 +57,7 @@ export const restoreDesign = new ValidatedMethod({
             ImpExServices.restoreDesign(backupFileName);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -83,7 +83,7 @@ export const archiveDesign = new ValidatedMethod({
             ImpExServices.archiveDesign(designId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });

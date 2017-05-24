@@ -14,7 +14,7 @@ import {UltrawideDirectory, TestLocationTypes, TestLocationAccessTypes} from '..
 import { createSelectionList }                  from '../../../common/utils.js'
 
 // Bootstrap
-import {Checkbox, Button, ButtonGroup} from 'react-bootstrap';
+import {Checkbox, Button, ButtonGroup, Modal} from 'react-bootstrap';
 import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-bootstrap';
 
 // REDUX services
@@ -37,6 +37,7 @@ export class TestOutputLocation extends Component {
             nameValue:              this.props.location.locationName,
             isSharedValue:          this.props.location.locationIsShared,
             pathValue:              this.props.location.locationPath,
+            showModal:              false
         };
 
     }
@@ -112,12 +113,43 @@ export class TestOutputLocation extends Component {
         ClientTestOutputLocationServices.uploadTestFile(event.target.files[0], this.props.location.locationName);
     }
 
+    onShowModal(){
+        this.setState({showModal: true});
+    }
+
+    onCloseModal() {
+        this.setState({ showModal: false });
+    }
+
     render() {
         const {location, dataStore, userRole, userContext, currentLocationId} = this.props;
 
         const activeClass = (location._id === currentLocationId ? ' location-active' : ' location-inactive');
 
         const sharedText = this.state.isSharedValue ? 'Shared' : 'Not Shared';
+
+        const modalOkButton =
+            <Button onClick={() => this.onRemove(userRole, location)}>OK</Button>;
+
+        const modalCancelButton =
+            <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
+
+        const confirmDeleteModal =
+            <Modal show={this.state.showModal} onHide={() => this.onCloseModal()}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete Test Location</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p className="merge-alert">{'You are about to remove the location "' + location.locationName + '"'}</p>
+                    <p className="merge-normal">This will delete all the location file definitions you have defined for this location</p>
+                    <p className="merge-normal">Note that if there are actual files at this location on the server they will not be deleted</p>
+                    <p className="merge-alert">This action cannot be undone.  Are you sure you want to proceed?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    {modalOkButton}
+                    {modalCancelButton}
+                </Modal.Footer>
+            </Modal>;
 
         const viewInstance = (
             <div onClick={() => this.setCurrentLocation(location)}>
@@ -141,9 +173,10 @@ export class TestOutputLocation extends Component {
                     </div>
                     <ButtonGroup>
                         <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
-                        <Button id="butRemove" bsSize="xs" onClick={() => this.onRemove(userRole, location)}>Remove</Button>
+                        <Button id="butRemove" bsSize="xs" onClick={() => this.onShowModal()}>Remove</Button>
                     </ButtonGroup>
                 </div>
+                {confirmDeleteModal}
             </div>
         );
 

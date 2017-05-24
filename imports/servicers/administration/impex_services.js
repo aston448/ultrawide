@@ -115,7 +115,7 @@ class ImpExServices{
 
             } catch (e){
                 log((msg) => console.log(msg), LogLevel.ERROR, "Can't read backup directory: {}", e.stack);
-                throw new Meteor.Error(e.error, e.stack);
+                throw new Meteor.Error(e.code, e.stack);
             }
         }
     }

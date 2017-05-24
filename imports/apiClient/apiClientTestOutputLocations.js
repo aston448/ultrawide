@@ -109,7 +109,12 @@ class ClientTestOutputLocationServices{
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                if(err.error === 'ENOTEMPTY'){
+                    alert('Server files existed for this location.  Actual files were not removed.');
+                } else {
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                }
+
             } else {
 
                 // Show action success on screen

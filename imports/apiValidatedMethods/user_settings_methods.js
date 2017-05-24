@@ -26,7 +26,7 @@ export const saveSetting = new ValidatedMethod({
             UserSettingsServices.saveUserSetting(userId, settingName, newValue);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });

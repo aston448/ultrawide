@@ -172,7 +172,7 @@ class DesignVersionServices{
                     // If anything went wrong roll back to where we were
                     //DesignVersionModules.rollBackNewDesignVersion(currentDesignVersionId, newDesignVersionId);
                     console.log(e.stack);
-                    throw new Meteor.Error(e.error, e.stack);
+                    throw new Meteor.Error(e.code, e.stack);
                 }
 
                 // And finally update the old design version to complete

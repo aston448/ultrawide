@@ -35,7 +35,7 @@ export const addWorkPackage = new ValidatedMethod({
             WorkPackageServices.addNewWorkPackage(designVersionId, designUpdateId, workPackageType, true);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -64,7 +64,7 @@ export const updateWorkPackageName = new ValidatedMethod({
             WorkPackageServices.updateWorkPackageName(workPackageId, newName);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -92,7 +92,7 @@ export const publishWorkPackage = new ValidatedMethod({
             WorkPackageServices.publishWorkPackage(workPackageId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -120,7 +120,7 @@ export const withdrawWorkPackage = new ValidatedMethod({
             WorkPackageServices.withdrawWorkPackage(workPackageId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -149,7 +149,7 @@ export const adoptWorkPackage = new ValidatedMethod({
             WorkPackageServices.adoptWorkPackage(workPackageId, userId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -178,7 +178,7 @@ export const releaseWorkPackage = new ValidatedMethod({
             WorkPackageServices.releaseWorkPackage(workPackageId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
@@ -206,7 +206,7 @@ export const removeWorkPackage = new ValidatedMethod({
             WorkPackageServices.removeWorkPackage(workPackageId);
         } catch (e) {
             console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
+            throw new Meteor.Error(e.code, e.stack)
         }
     }
 });
