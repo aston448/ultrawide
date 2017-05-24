@@ -45,12 +45,6 @@ class MeteorMochaTestServices{
             switch(testType){
                 case TestType.UNIT:
 
-                    UserUnitTestResults.remove({
-                        userId:     userId
-                    });
-
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
-
                     let resultsBatch = [];
 
                     // Add latest results

@@ -305,7 +305,7 @@ class ClientTestOutputLocationServices{
         // Client validation
         let result = TestOutputLocationValidationApi.validateSaveUserConfiguration();
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};

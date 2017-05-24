@@ -190,13 +190,6 @@ class ChimpMochaTestServices{
             switch(testType){
                 case TestType.INTEGRATION:
 
-                    // Clear data for current user
-                    UserIntTestResults.remove({
-                        userId:     userId
-                    });
-
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
-
                     let resultsBatch = [];
 
                     // Add latest results

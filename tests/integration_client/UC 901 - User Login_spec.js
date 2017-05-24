@@ -1,6 +1,4 @@
 import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
-import LoginActions                     from '../../test_framework/test_wrappers/login_actions.js';
-import LoginVerifications               from '../../test_framework/test_wrappers/login_verifications.js';
 
 describe('UC 901 - User Login', function(){
 
@@ -83,6 +81,22 @@ describe('UC 901 - User Login', function(){
 
 
     // Consequences
-    it('When successfully logged in the role selection screen is shown');
+    it('When successfully logged in the role selection screen is shown', function(){
+
+        // Execute
+        browser.url('http://localhost:3030/');
+
+        browser.waitForExist('#loginUserName');
+
+        browser.setValue('#loginUserName', 'miles');
+        browser.setValue('#loginPassword', 'miles123');
+
+        browser.click('#loginSubmit');
+
+        // Verify
+        browser.waitUntil(function () {
+            return browser.getText('#headerView') === 'ROLE SELECTION'
+        }, 5000, 'expected login after 5s');
+    });
 
 });

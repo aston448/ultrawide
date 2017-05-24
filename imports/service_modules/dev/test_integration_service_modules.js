@@ -49,6 +49,13 @@ class TestIntegrationModules{
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration test results...");
 
+        // Clear data for current user
+        UserIntTestResults.remove({
+            userId:     userContext.userId
+        });
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
+
         // Get a list of the expected test files for integration
 
         // See which locations the user has marked as containing integration files for the current role
@@ -101,6 +108,13 @@ class TestIntegrationModules{
     };
 
     getUnitTestResults(userContext){
+
+        // Clear data for current user
+        UserUnitTestResults.remove({
+            userId:     userContext.userId
+        });
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
 
         // Get a list of the expected test files for unit tests
 
