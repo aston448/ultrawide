@@ -67,13 +67,13 @@ export class UserLogin extends Component {
                             <form onSubmit={(e) => this.onLogin(e)}>
                                 <FormGroup controlId="loginUserName">
                                     <ControlLabel>User Name:</ControlLabel>
-                                    <FormControl ref="userName" type="text" placeholder="Enter User Name" onChange={(e) => this.updateUserName(e)}/>
+                                    <FormControl id="loginUserName" ref="userName" type="text" placeholder="Enter User Name" onChange={(e) => this.updateUserName(e)}/>
                                 </FormGroup>
                                 <FormGroup controlId="loginPassword">
                                     <ControlLabel>Password:</ControlLabel>
-                                    <FormControl ref="password" type="password"  onChange={(e) => this.updatePassword(e)}/>
+                                    <FormControl id="loginPassword" ref="password" type="password"  onChange={(e) => this.updatePassword(e)}/>
                                 </FormGroup>
-                                <Button type="submit">
+                                <Button id="loginSubmit" type="submit">
                                     Submit
                                 </Button>
                             </form>

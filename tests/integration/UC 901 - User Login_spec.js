@@ -35,7 +35,14 @@ describe('UC 901 - User Login', function(){
     it('A user may log in with the correct username and password', function(){
 
         // Execute
-        LoginActions.userLogsInAs('gloria', 'gloria123');
+        browser.url('http://localhost:3030/');
+
+        browser.waitForExist('#loginUserName');
+
+        browser.setValue('#loginUserName', 'gloria');
+        browser.setValue('#loginPassword', 'gloria123');
+
+        browser.click('#loginSubmit');
 
         // Verify
         LoginVerifications.user_IsLoggedIn('gloria');
