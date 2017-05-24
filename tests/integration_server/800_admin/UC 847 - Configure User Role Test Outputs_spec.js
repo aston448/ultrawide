@@ -34,14 +34,12 @@ describe('UC 847 - Configure User Role Test Outputs', function(){
     it('One or more test options may be selected for a Test Output Location Configuration', function(){
 
         const defaultConfig = {
-            locationType:   TestLocationType.NONE,
             isUnitLocation: false,
             isIntLocation:  false,
             isAccLocation:  false
         };
 
         const newConfig = {
-            locationType:   TestLocationType.NONE,
             isUnitLocation: true,
             isIntLocation:  true,
             isAccLocation:  false

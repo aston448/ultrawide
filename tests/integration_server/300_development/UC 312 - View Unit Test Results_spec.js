@@ -139,8 +139,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         const newDetails = {
             locationName:       'Location1',
-            locationType:       TestLocationType.LOCAL,
-            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
             locationPath:       'test_test/'
         };

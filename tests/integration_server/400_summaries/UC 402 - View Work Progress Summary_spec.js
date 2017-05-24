@@ -39,8 +39,6 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         const newDetails = {
             locationName:       'Location1',
-            locationType:       TestLocationType.LOCAL,
-            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
             locationPath:       'test_test/'
         };

@@ -51,7 +51,6 @@ export class UserTestLocationConfiguration extends Component {
             _id:                    userLocationConfig._id,
             locationId:             userLocationConfig.locationId,
             locationName:           userLocationConfig.locationName,
-            locationType:           userLocationConfig.locationType,
             userId:                 userLocationConfig.userId,
             isUnitLocation:         e.target.checked,
             isIntLocation:          userLocationConfig.isIntLocation,
@@ -70,7 +69,6 @@ export class UserTestLocationConfiguration extends Component {
             _id:                    userLocationConfig._id,
             locationId:             userLocationConfig.locationId,
             locationName:           userLocationConfig.locationName,
-            locationType:           userLocationConfig.locationType,
             userId:                 userLocationConfig.userId,
             isUnitLocation:         userLocationConfig.isUnitLocation,
             isIntLocation:          e.target.checked,
@@ -89,7 +87,6 @@ export class UserTestLocationConfiguration extends Component {
             _id:                    userLocationConfig._id,
             locationId:             userLocationConfig.locationId,
             locationName:           userLocationConfig.locationName,
-            locationType:           userLocationConfig.locationType,
             userId:                 userLocationConfig.userId,
             isUnitLocation:         userLocationConfig.isUnitLocation,
             isIntLocation:          userLocationConfig.isIntLocation,
@@ -107,9 +104,6 @@ export class UserTestLocationConfiguration extends Component {
         return (
             <Grid>
                 <Row className="user-test-location">
-                    {/*<Col md={2}>*/}
-                       {/*<div>{userLocation.locationType}</div>*/}
-                    {/*</Col>*/}
                     <Col md={5}>
                         <div>{userLocation.locationName}</div>
                     </Col>

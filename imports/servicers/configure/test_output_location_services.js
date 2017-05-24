@@ -318,7 +318,6 @@ class TestOutputLocationServices {
                 {
                     locationId:             locationId,
                     locationName:           userConfiguration.locationName,
-                    locationType:           userConfiguration.locationType,
                     userId:                 userId,
                     isUnitLocation:         userConfiguration.isUnitLocation,
                     isIntLocation:          userConfiguration.isIntLocation,
@@ -377,7 +376,6 @@ class TestOutputLocationServices {
                 UserTestTypeLocations.insert({
                     locationId:             location._id,
                     locationName:           location.locationName,
-                    locationType:           location.locationType,
                     userId:                 userId
                 });
             } else {
@@ -391,7 +389,6 @@ class TestOutputLocationServices {
                     {
                         $set:{
                             locationName: location.locationName,
-                            locationType: location.locationType
                         }
                     }
                 );

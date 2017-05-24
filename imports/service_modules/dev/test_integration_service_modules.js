@@ -61,42 +61,40 @@ class TestIntegrationModules{
 
         userLocations.forEach((userLocation) => {
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {} of type {}", userLocation.locationName, userLocation.locationType);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {}", userLocation.locationName);
 
             // Get the actual location data
             const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {} of type {}", outputLocation.locationName, outputLocation.locationType);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
 
-            if(outputLocation.locationType === TestLocationType.LOCAL){
+            // Grab any files here marked as integration test outputs
+            const testOutputFiles = TestOutputLocationFiles.find({
+                locationId: outputLocation._id,
+                fileType:   TestLocationFileType.INTEGRATION
+            }).fetch();
 
-                // Grab any files here marked as integration test outputs
-                const testOutputFiles = TestOutputLocationFiles.find({
-                    locationId: outputLocation._id,
-                    fileType:   TestLocationFileType.INTEGRATION
-                }).fetch();
+            log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test files", testOutputFiles.length);
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test files", testOutputFiles.length);
+            testOutputFiles.forEach((file) => {
 
-                testOutputFiles.forEach((file) => {
+                const testFile = outputLocation.locationFullPath + file.fileName;
 
-                    const testFile = outputLocation.locationFullPath + file.fileName;
+                log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Results from {}", testFile);
 
-                    log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Results from {}", testFile);
+                // Call the appropriate file parser
+                switch (file.testRunner) {
+                    case TestRunner.CHIMP_MOCHA:
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Results Data");
 
-                    // Call the appropriate file parser
-                    switch (file.testRunner) {
-                        case TestRunner.CHIMP_MOCHA:
-                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Results Data");
+                        ChimpMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
+                        break;
 
-                            ChimpMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
-                            break;
+                }
 
-                    }
+            });
 
-                });
 
-            }
         });
 
 
@@ -117,33 +115,30 @@ class TestIntegrationModules{
             // Get the actual location data
             const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
 
-            if(outputLocation.locationType === TestLocationType.LOCAL){
+            // Grab any files here marked as integration test outputs
+            const testOutputFiles = TestOutputLocationFiles.find({
+                locationId: outputLocation._id,
+                fileType:   TestLocationFileType.UNIT
+            }).fetch();
 
-                // Grab any files here marked as integration test outputs
-                const testOutputFiles = TestOutputLocationFiles.find({
-                    locationId: outputLocation._id,
-                    fileType:   TestLocationFileType.UNIT
-                }).fetch();
+            testOutputFiles.forEach((file) => {
 
-                testOutputFiles.forEach((file) => {
+                const testFile = outputLocation.locationFullPath + file.fileName;
 
-                    const testFile = outputLocation.locationFullPath + file.fileName;
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Results from {}", testFile);
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Results from {}", testFile);
+                // Call the appropriate file parser
+                switch (file.testRunner) {
+                    case TestRunner.METEOR_MOCHA:
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Getting METEOR_MOCHA Results Data");
 
-                    // Call the appropriate file parser
-                    switch (file.testRunner) {
-                        case TestRunner.METEOR_MOCHA:
-                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting METEOR_MOCHA Results Data");
+                        MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
+                        break;
 
-                            MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
-                            break;
+                }
 
-                    }
+            });
 
-                });
-
-            }
         });
     };
 

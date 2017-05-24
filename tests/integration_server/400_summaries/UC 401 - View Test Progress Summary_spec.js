@@ -45,8 +45,6 @@ describe('UC 401 - View Test Progress Summary', function(){
 
         const newDetails = {
             locationName:       'Location1',
-            locationType:       TestLocationType.LOCAL,
-            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
             locationPath:       'test_test/'
         };

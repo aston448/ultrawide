@@ -181,8 +181,6 @@ describe('UC 310 - Refresh Test Data', function(){
 
         const newDetails = {
             locationName:       'Location1',
-            locationType:       TestLocationType.LOCAL,
-            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
             locationPath:       'test_test/'
         };

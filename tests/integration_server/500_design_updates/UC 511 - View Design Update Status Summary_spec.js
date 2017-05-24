@@ -46,8 +46,6 @@ describe('UC 511 - View Design Update Status Summary', function(){
 
         const newDetails = {
             locationName:       'Location1',
-            locationType:       TestLocationType.LOCAL,
-            locationAccessType: TestLocationAccessType.FILE,
             locationIsShared:   true,
             locationPath:       'test_test/'
         };

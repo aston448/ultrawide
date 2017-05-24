@@ -208,25 +208,20 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " does not exist for user " + userName);
         } else {
             // OK we know the name was OK...
-            if(userTestTypeLocation.locationType === configDetails.locationType){
-                if(userTestTypeLocation.isUnitLocation === configDetails.isUnitLocation){
-                    if(userTestTypeLocation.isIntLocation === configDetails.isIntLocation){
-                        if(userTestTypeLocation.isAccLocation === configDetails.isAccLocation){
-                            return true;
-                        } else {
-                            throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Acc flag " + configDetails.isAccLocation + " but got " + userTestTypeLocation.isAccLocation + "  for user " + userName);
-                        }
+            if(userTestTypeLocation.isUnitLocation === configDetails.isUnitLocation){
+                if(userTestTypeLocation.isIntLocation === configDetails.isIntLocation){
+                    if(userTestTypeLocation.isAccLocation === configDetails.isAccLocation){
+                        return true;
                     } else {
-                        throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Int flag " + configDetails.isIntLocation + " but got " + userTestTypeLocation.isIntLocation + "  for user " + userName);
+                        throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Acc flag " + configDetails.isAccLocation + " but got " + userTestTypeLocation.isAccLocation + "  for user " + userName);
                     }
                 } else {
-                    throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Unit flag " + configDetails.isUnitLocation + " but got " + userTestTypeLocation.isUnitLocation + "  for user " + userName);
+                    throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Int flag " + configDetails.isIntLocation + " but got " + userTestTypeLocation.isIntLocation + "  for user " + userName);
                 }
             } else {
-                throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have location type " + configDetails.locationType + " but got " + userTestTypeLocation.locationType + "  for user " + userName);
+                throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Unit flag " + configDetails.isUnitLocation + " but got " + userTestTypeLocation.isUnitLocation + "  for user " + userName);
             }
         }
-
     }
 
 });
