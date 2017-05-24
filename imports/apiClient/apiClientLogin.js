@@ -67,6 +67,11 @@ class ClientLoginServices{
 
                             } else {
 
+                                store.dispatch(updateUserMessage({
+                                    messageType: MessageType.INFO,
+                                    messageText: 'Login Success'
+                                }));
+
                                 // Properly logged in as normal user so retrieve user settings - stored to REDUX
                                 const userContext = ClientUserContextServices.getUserContext(userId);
 
