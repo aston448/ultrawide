@@ -42,18 +42,18 @@ describe('UC 822 - Backup Design', function(){
     }
 
     // Actions
-    it('Any user can back up the current version of a Design', function(){
+    it('Any user can back up the current version of a Design', async function(){
 
         // Just check that each role can back up the design without errors
         DesignActions.designerWorksOnDesign('Design1');
         DesignActions.designerBacksUpDesign('Design1');
 
-        sleep(2000);
+        await sleep(2000);
 
         DesignActions.developerWorksOnDesign('Design1');
         DesignActions.developerBacksUpDesign('Design1');
 
-        sleep(2000);
+        await sleep(2000);
 
         DesignActions.managerWorksOnDesign('Design1');
         DesignActions.managerBacksUpDesign('Design1');
