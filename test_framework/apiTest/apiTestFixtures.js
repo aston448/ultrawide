@@ -549,9 +549,9 @@ Meteor.methods({
                     if(dirContents.length > 0) {
                         // Clear the dir of files and remove
                         clearDir(dir + item + '/');
-                        fs.unlinkSync(dir + item);
+                        fs.rmdirSync(dir + item);
                     } else {
-                        fs.unlinkSync(dir + item);
+                        fs.rmdirSync(dir + item);
                     }
                 }
             });
