@@ -223,7 +223,7 @@ export class AppHeader extends Component {
             return (
                 <div className={'ultrawide-header ' + roleClass}>
                     <div className="ultrawide-logo">{logo}</div>
-                    <div id="headerView" className={'ultrawide-status ' + roleStatusClass}>
+                    <div className={'ultrawide-status ' + roleStatusClass}>
                         <span id="headerRole">{roleDisplay}</span>
                         <span>{joiner}</span>
                         <span id="headerView">{viewDisplay}</span>
