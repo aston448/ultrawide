@@ -50,6 +50,7 @@ describe('UC 805 User Password Change', function(){
 
     afterEach(function(){
 
+        browser.click('#Logout');
     });
 
 
@@ -57,11 +58,15 @@ describe('UC 805 User Password Change', function(){
     it('An Ultrawide user may update their password', function(){
 
         // Set new values
+        browser.waitForExist('#configOldPassword');
         browser.setValue('#configOldPassword', 'gloria123');
+        browser.waitForExist('#configNewPassword1');
         browser.setValue('#configNewPassword1', 'gloria456');
+        browser.waitForExist('#configNewPassword2');
         browser.setValue('#configNewPassword2', 'gloria456');
 
         // Execute
+        browser.waitForExist('#configChangePassword');
         browser.click('#configChangePassword');
 
         // Verify - should now be logged out
