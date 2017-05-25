@@ -82,32 +82,36 @@ export class AppHeader extends Component {
         let roleStatusClass = '';
         let viewText = TextLookups.viewText(view);
 
-        if(view === ViewType.SELECT){
-            viewText = viewText + ClientAppHeaderServices.getCurrentDesign(userContext);
-        }
+
 
         // Get current status
-        let status = '';
+        let roleDisplay = userRole;
+        let viewDisplay = TextLookups.viewText(view);
+        let extra = '';
+        let joiner = ' - ';
+
+        if(view === ViewType.SELECT){
+            extra = ClientAppHeaderServices.getCurrentDesign(userContext);
+        }
+
         switch(userRole){
             case RoleType.DESIGNER:
                 roleClass = 'designer';
                 roleStatusClass = 'status-designer';
-                status = 'DESIGNER - ' + viewText;
                 break;
             case RoleType.DEVELOPER:
                 roleClass = 'developer';
                 roleStatusClass = 'status-developer';
-                status = 'DEVELOPER - ' + viewText;
                 break;
             case RoleType.MANAGER:
                 roleClass = 'manager';
                 roleStatusClass = 'status-manager';
-                status = 'MANAGER - ' + viewText;
                 break;
             default:
                 // Admin user
                 roleClass = 'no-role';
-                status = viewText;
+                roleDisplay = '';
+                joiner = '';
         }
 
         // Display the required header for the view
@@ -219,7 +223,12 @@ export class AppHeader extends Component {
             return (
                 <div className={'ultrawide-header ' + roleClass}>
                     <div className="ultrawide-logo">{logo}</div>
-                    <div id="headerView" className={'ultrawide-status ' + roleStatusClass}>{status}</div>
+                    <div id="headerView" className={'ultrawide-status ' + roleStatusClass}>
+                        <span id="headerRole">{roleDisplay}</span>
+                        <span>{joiner}</span>
+                        <span id="headerView">{viewDisplay}</span>
+                        <span>{extra}</span>
+                    </div>
                     <HeaderMessage/>
                     {appHeaderMenuContent}
                 </div>
