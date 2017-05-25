@@ -114,7 +114,7 @@ export class ConfigurationSettings extends Component {
                 <form onSubmit={(e) => this.onUpdateIntOutputPath(e)}>
                     <div className="design-item-header">Set Integration Test Output Path</div>
                     <div className="design-item-note">Set to a directory where you can safely generate integration test template files</div>
-                    <FormGroup controlId="oldPassword">
+                    <FormGroup controlId="intOutputDir">
                         <ControlLabel>Directory:</ControlLabel>
                         <FormControl ref="intOutputDir" type="input" value={this.state.currentIntOutputPath} onChange={(e) => this.updateIntOutputDir(e)}/>
                     </FormGroup>
@@ -129,17 +129,17 @@ export class ConfigurationSettings extends Component {
                 <form onSubmit={(e) => this.onUpdateUserPassword(e)}>
                     <div className="design-item-header">Change My Password</div>
                     <div className="design-item-note">You'll need to remember it so be careful!</div>
-                    <FormGroup controlId="oldPassword">
+                    <FormGroup controlId="configOldPassword">
                         <ControlLabel>Current Password:</ControlLabel>
-                        <FormControl id="configOldPassword" ref="oldPassword" type="password"  onChange={(e) => this.updateOldPassword(e)}/>
+                        <FormControl id="configOldPassword" ref="configOldPassword" type="password"  onChange={(e) => this.updateOldPassword(e)}/>
                     </FormGroup>
-                    <FormGroup controlId="newPassword1">
+                    <FormGroup controlId="configNewPassword1">
                         <ControlLabel>New Password:</ControlLabel>
-                        <FormControl id="configNewPassword1" ref="newPassword1" type="password"  onChange={(e) => this.updateNewPassword1(e)}/>
+                        <FormControl id="configNewPassword1" ref="configNewPassword1" type="password"  onChange={(e) => this.updateNewPassword1(e)}/>
                     </FormGroup>
-                    <FormGroup controlId="newPassword2">
+                    <FormGroup controlId="configNewPassword2">
                         <ControlLabel>Repeat New Password:</ControlLabel>
-                        <FormControl id="configNewPassword2" ref="newPassword2" type="password"  onChange={(e) => this.updateNewPassword2(e)}/>
+                        <FormControl id="configNewPassword2" ref="configNewPassword2" type="password"  onChange={(e) => this.updateNewPassword2(e)}/>
                     </FormGroup>
                     <Button id="configChangePassword" type="submit">
                         Change My Password
