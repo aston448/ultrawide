@@ -109,6 +109,10 @@ export class ConfigurationSettings extends Component {
                 </FormGroup>
             </Well>;
 
+        let pathValue = this.state.currentIntOutputPath;
+        if(!pathValue){
+            pathValue = 'Not Set';
+        }
         const intTestOutputPath =
             <Well className="settings-well">
                 <form onSubmit={(e) => this.onUpdateIntOutputPath(e)}>
@@ -116,7 +120,7 @@ export class ConfigurationSettings extends Component {
                     <div className="design-item-note">Set to a directory where you can safely generate integration test template files</div>
                     <FormGroup controlId="intOutputDir">
                         <ControlLabel>Directory:</ControlLabel>
-                        <FormControl ref="intOutputDir" type="input" value={this.state.currentIntOutputPath} onChange={(e) => this.updateIntOutputDir(e)}/>
+                        <FormControl ref="intOutputDir" type="input" value={pathValue} onChange={(e) => this.updateIntOutputDir(e)}/>
                     </FormGroup>
                     <Button type="submit">
                         Save
