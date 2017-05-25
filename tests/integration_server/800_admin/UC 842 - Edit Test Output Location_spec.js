@@ -14,6 +14,7 @@ describe('UC 842 - Edit Test Output Location', function(){
 
     after(function(){
 
+        TestFixtures.clearTestLocations();
     });
 
     beforeEach(function(){
@@ -28,6 +29,7 @@ describe('UC 842 - Edit Test Output Location', function(){
     });
 
     afterEach(function(){
+
 
     });
 
@@ -174,8 +176,6 @@ describe('UC 842 - Edit Test Output Location', function(){
     });
 
     it('When a Test Output Location path is modified the old directories are removed and new created on the Ultrawide server', function(){
-
-        TestFixtures.clearTestResultsFiles('Location1');
 
         // Setup - update the new Location
         let newDetails = {
