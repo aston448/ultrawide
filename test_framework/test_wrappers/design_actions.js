@@ -66,6 +66,18 @@ class DesignActions{
         server.call('testDesigns.workDesign', designName, 'miles', expectation);
     }
 
+    designerBacksUpDesign(designName, expectation){
+        server.call('testBackup.backupDesign', designName, 'gloria', expectation);
+    }
+
+    developerBacksUpDesign(designName, expectation){
+        server.call('testBackup.backupDesign', designName, 'hugh', expectation);
+    }
+
+    managerBacksUpDesign(designName, expectation){
+        server.call('testBackup.backupDesign', designName, 'miles', expectation);
+    }
+
 
 
 
