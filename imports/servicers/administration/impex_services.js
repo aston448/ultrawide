@@ -144,7 +144,8 @@ class ImpExServices{
                 padDigits((dateTime.getMonth()+1), 2) + '_' +
                 padDigits(dateTime.getDate(), 2) + '_' +
                 padDigits(dateTime.getHours(), 2) + '_' +
-                padDigits(dateTime.getMinutes(), 2);
+                padDigits(dateTime.getMinutes(), 2) + '_' +
+                padDigits(dateTime.getSeconds(), 2);
 
             const backupName = design.designName + ': ' + dateString;
             const designName = design.designName;
