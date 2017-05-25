@@ -44,7 +44,7 @@ class ClientImpExServices{
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -66,7 +66,7 @@ class ClientImpExServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chooses to restore a Design from a backup ------------------------------------------------------------------
@@ -78,7 +78,7 @@ class ClientImpExServices{
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -100,7 +100,7 @@ class ClientImpExServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chooses to archive a Design --------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ class ClientImpExServices{
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -134,7 +134,7 @@ class ClientImpExServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     forceRemoveDesign(designId){
