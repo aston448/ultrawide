@@ -13,13 +13,17 @@ import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
-    'testBackup.backupDesign'(designName, role, expectation){
+    'testBackup.backupDesign'(designName, userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
+
+        const role = TestDataHelpers.getUserRole(userName);
 
         const design = Designs.findOne({designName: designName});
 
         const outcome = ClientBackupServices.backupDesign(design._id, role);
+
+        console.log("Called backup Design");
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Backup Design');
     },
