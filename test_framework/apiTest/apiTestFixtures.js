@@ -109,6 +109,9 @@ Meteor.methods({
                 );
             } else {
                 adminUserId = adminUser._id;
+
+                // Reset to default password
+                Accounts.setPassword('admin', 'admin123')
             }
 
             UserRoles.insert({
@@ -135,6 +138,9 @@ Meteor.methods({
                 );
             } else {
                 designerUserId = designerUser._id;
+
+                // Reset to default password
+                Accounts.setPassword('gloria', 'gloria123')
             }
 
             UserRoles.insert({
@@ -158,6 +164,9 @@ Meteor.methods({
                 );
             } else {
                 developerUserId = developerUser._id;
+
+                // Reset to default password
+                Accounts.setPassword('hugh', 'hugh123')
             }
 
             UserRoles.insert({
@@ -181,6 +190,9 @@ Meteor.methods({
                 );
             } else {
                 anotherDeveloperUserId = anotherDeveloperUser._id;
+
+                // Reset to default password
+                Accounts.setPassword('davey', 'davey123')
             }
 
             UserRoles.insert({
@@ -204,6 +216,9 @@ Meteor.methods({
                 );
             } else {
                 managerUserId = managerUser._id;
+
+                // Reset to default password
+                Accounts.setPassword('miles', 'miles123')
             }
 
             UserRoles.insert({
