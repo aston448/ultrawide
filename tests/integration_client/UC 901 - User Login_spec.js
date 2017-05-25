@@ -31,7 +31,7 @@ describe('UC 901 - User Login', function(){
         // Execute
         browser.url('http://localhost:3030/');
 
-        browser.waitForExist('#loginUserName');
+        browser.waitForVisible('#loginUserName');
 
         browser.setValue('#loginUserName', 'gloria');
         browser.setValue('#loginPassword', 'gloria123');
@@ -52,7 +52,7 @@ describe('UC 901 - User Login', function(){
         // Execute
         browser.url('http://localhost:3030/');
 
-        browser.waitForExist('#loginUserName');
+        browser.waitForVisible('#loginUserName');
 
         browser.setValue('#loginUserName', 'hen');
         browser.setValue('#loginPassword', 'hen123');
@@ -70,7 +70,7 @@ describe('UC 901 - User Login', function(){
         // Execute
         browser.url('http://localhost:3030/');
 
-        browser.waitForExist('#loginUserName');
+        browser.waitForVisible('#loginUserName');
 
         browser.setValue('#loginUserName', 'gloria');
         browser.setValue('#loginPassword', 'bollox');
@@ -90,7 +90,7 @@ describe('UC 901 - User Login', function(){
         // Execute
         browser.url('http://localhost:3030/');
 
-        browser.waitForExist('#loginUserName');
+        browser.waitForVisible('#loginUserName');
 
         browser.setValue('#loginUserName', 'miles');
         browser.setValue('#loginPassword', 'miles123');

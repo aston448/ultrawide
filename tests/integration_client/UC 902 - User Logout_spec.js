@@ -30,7 +30,7 @@ describe('UC 902 - User Logout', function(){
         // Setup - Login
         browser.url('http://localhost:3030/');
 
-        browser.waitForExist('#loginUserName');
+        browser.waitForVisible('#loginUserName');
 
         browser.setValue('#loginUserName', 'gloria');
         browser.setValue('#loginPassword', 'gloria123');
@@ -59,7 +59,7 @@ describe('UC 902 - User Logout', function(){
         // Setup - Login
         browser.url('http://localhost:3030/');
 
-        browser.waitForExist('#loginUserName');
+        browser.waitForVisible('#loginUserName');
 
         browser.setValue('#loginUserName', 'gloria');
         browser.setValue('#loginPassword', 'gloria123');
