@@ -90,6 +90,11 @@ class TestFixtures{
         server.call('testFixtures.clearTestFiles', locationName);
     }
 
+    clearBackupFiles(){
+
+        server.call('testFixtures.clearBackupFiles');
+    }
+
 }
 
 export default new TestFixtures();

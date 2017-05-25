@@ -6,9 +6,10 @@ import { UserRoles }                from '../../imports/collections/users/user_r
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 import { UserCurrentViewOptions}    from '../../imports/collections/context/user_current_view_options.js';
 import { Designs }                  from '../../imports/collections/design/designs.js';
+import { DesignBackups }            from '../../imports/collections/backup/design_backups.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
-import { UserDesignUpdateSummary }      from '../../imports/collections/summary/user_design_update_summary.js';
+import { UserDesignUpdateSummary }  from '../../imports/collections/summary/user_design_update_summary.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 import { DesignVersionComponents }  from '../../imports/collections/design/design_version_components.js';
@@ -34,6 +35,7 @@ import ClientIdentityServices from '../../imports/apiClient/apiIdentity.js';
 import ClientDesignComponentServices    from '../../imports/apiClient/apiClientDesignComponent.js';
 import DesignComponentModules           from '../../imports/service_modules/design/design_component_service_modules.js';
 import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
+import ImpexServiceModules              from '../../imports/service_modules/administration/impex_service_modules.js';
 
 Meteor.methods({
 
@@ -71,6 +73,7 @@ Meteor.methods({
             DesignUpdates.remove({});
             DesignVersions.remove({});
             Designs.remove({});
+            DesignBackups.remove({});
             UserTestTypeLocations.remove({});
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
@@ -506,6 +509,22 @@ Meteor.methods({
                     fs.unlinkSync(location.locationFullPath + file.fileName);
                 }
             })
+        }
+
+    },
+
+    'testFixtures.clearBackupFiles'(){
+
+        const location = ImpexServiceModules.getBackupLocation();
+
+        if(location) {
+            const backupFiles = fs.readdirSync(location);
+
+            backupFiles.forEach((file) => {
+                if(file.endsWith('.UBK')){
+                    fs.unlinkSync(location + file);
+                }
+            });
         }
 
     },
