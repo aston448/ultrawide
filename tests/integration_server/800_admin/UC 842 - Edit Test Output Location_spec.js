@@ -21,6 +21,8 @@ describe('UC 842 - Edit Test Output Location', function(){
         // Don't need any design data for these tests
         TestFixtures.clearAllData();
 
+        TestFixtures.clearTestLocations();
+
         // Add a new location
         OutputLocationsActions.developerAddsNewLocation();
     });
@@ -32,8 +34,6 @@ describe('UC 842 - Edit Test Output Location', function(){
 
     // Actions
     it('Any user can update and save the properties of a Test Output Location', function(){
-
-        TestFixtures.clearTestResultsFiles('Location1');
 
         // Setup
         const oldDetails = {
@@ -157,8 +157,6 @@ describe('UC 842 - Edit Test Output Location', function(){
     // Consequences
     it('When a Test Output Location path is specified the corresponding directories are created on the Ultrawide server', function(){
 
-        TestFixtures.clearTestResultsFiles('Location1');
-
         // Setup - update the new Location
         const newDetails = {
             locationName:       'Location1',
@@ -211,8 +209,6 @@ describe('UC 842 - Edit Test Output Location', function(){
     });
 
     it('When a Test Output Location path directory is renamed the corresponding directory is renamed on the Ultrawide server', function(){
-
-        TestFixtures.clearTestResultsFiles('Location1');
 
         // Setup - update the new Location
         let newDetails = {

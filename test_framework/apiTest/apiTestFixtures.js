@@ -529,6 +529,32 @@ Meteor.methods({
 
     },
 
+    'testFixtures.clearTestLocations'(){
+
+        let clearDir = function(dir){
+
+            const contents = fs.readdirSync(dir);
+
+            contents.forEach((item) => {
+                let details = fs.statSync(dir + item);
+
+                if(details.isFile()){
+                    fs.unlinkSync(dir + item);
+                }
+
+                if(details.isDirectory()){
+                    clearDir(item + '/');
+                }
+            });
+
+        };
+
+        const location = TestDataHelpers.getTestOutputDir();
+
+        clearDir(location);
+    },
+
+
     'testFixtures.writeIntegrationTestResults_ChimpMocha'(locationName, results){
 
         // Expected input is
