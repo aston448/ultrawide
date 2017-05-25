@@ -105,6 +105,23 @@ class ClientTestIntegrationServices {
 
     }
 
+    // User has requested update of WP / DU progress data
+    refreshProgressData(userContext){
+
+        store.dispatch(updateUserMessage({
+            messageType: MessageType.INFO,
+            messageText: 'Updating Design Updates and Work Packages...'
+        }));
+
+        // After tests are updated work progress should be too
+        ClientDesignVersionServices.updateWorkProgress(userContext);
+
+        // Get latest status on DUs
+        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+
+        return {success: true, message: ''};
+    }
+
     // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(userContext, fullRefresh){
 

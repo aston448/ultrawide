@@ -60,8 +60,8 @@ export class DesignVersionsList extends Component {
         const {designVersions, userRole, userContext} = this.props;
 
         // Column layout -----------------------------------------------------------------------------------------------
-        let col1Size = 4;
-        let col2Size = 8;
+        let col1Size = 3;
+        let col2Size = 9;
 
         if(userContext.designVersionId !== 'NONE'){
             const dvStatus = this.getCurrentVersionStatus(userContext.designVersionId);

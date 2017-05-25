@@ -220,7 +220,9 @@ class TextLookups {
             case MenuAction.MENU_ACTION_VIEW_ALL_TABS:
                 return 'View All as Tabs';
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
-                return 'Test Data';
+                return 'Test and Progress Data';
+            case MenuAction.MENU_ACTION_REFRESH_PROGRESS:
+                return 'Progress Data';
             case MenuAction.MENU_ACTION_REFRESH_DATA:
                 return 'All Data';
         }

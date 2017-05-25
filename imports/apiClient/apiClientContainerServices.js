@@ -2064,6 +2064,8 @@ class ClientContainerServices{
                 detailsValue = userViewOptions.designDetailsVisible;
                 dictOption = ViewOptionType.WP_DICT;
                 dictValue = userViewOptions.designDomainDictVisible;
+                testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.testSummaryVisible;
                 allAsTabsOption = ViewOptionType.WORK_ALL_AS_TABS;
                 allAsTabsValue = userViewOptions.workShowAllAsTabs;
                 break;
@@ -2279,6 +2281,15 @@ class ClientContainerServices{
             viewOptionType: ViewOptionType.NONE
         };
 
+        const refreshProgressData = {
+            key: MenuAction.MENU_ACTION_REFRESH_PROGRESS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_REFRESH_PROGRESS),
+            action: MenuAction.MENU_ACTION_REFRESH_PROGRESS,
+            hasCheckbox: false,
+            checkboxValue: false,
+            viewOptionType: ViewOptionType.NONE
+        };
+
         // TODO - Currently unused.  Possible option for different level of data refresh
         const refreshAllData = {
             key: MenuAction.MENU_ACTION_REFRESH_DATA,
@@ -2316,6 +2327,7 @@ class ClientContainerServices{
                         break;
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
                         return [
+                            refreshProgressData,
                             refreshTestData
                         ];
 
@@ -2457,6 +2469,7 @@ class ClientContainerServices{
                         return [
                             viewDetails,
                             viewDomainDict,
+                            viewTestSummary,
                             viewAllAsTabs
                         ];
 

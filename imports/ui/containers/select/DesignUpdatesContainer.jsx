@@ -173,10 +173,10 @@ export class DesignUpdatesList extends Component {
                     layout =
                         <Grid>
                             <Row>
-                                <Col md={6}>
+                                <Col md={4}>
                                     {baseWorkPackages}
                                 </Col>
-                                <Col md={6}>
+                                <Col md={8}>
                                     {workProgressSummary}
                                 </Col>
                             </Row>

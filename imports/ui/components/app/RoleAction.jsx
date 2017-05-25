@@ -164,7 +164,7 @@ class RoleAction extends Component {
                                         <Glyphicon glyph='th-large'/>
                                     </div>
                                 </InputGroup.Addon>
-                                <div>
+                                <div id={roleType + '_' + roleAction}>
                                     {roleAction}
                                 </div>
                             </InputGroup>

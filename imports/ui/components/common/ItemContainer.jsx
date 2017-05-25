@@ -71,7 +71,7 @@ export default class ItemContainer extends Component {
 
                 <div className="item-container">
                     <div className="item-container-header">{headerText}</div>
-                    <div className="scroll-col">
+                    <div className={bodyClass}>
                         {this.bodyData()}
                     </div>
                     <div className="item-container-footer">
