@@ -254,7 +254,7 @@ class ImpExServices{
 
             try {
 
-                fs.writeFile(backupLocation + fileName, jsonData);
+                fs.writeFileSync(backupLocation + fileName, jsonData);
 
                 log((msg) => console.log(msg), LogLevel.INFO, "Design backed up as: {}", backupLocation + fileName);
 
