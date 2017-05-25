@@ -111,7 +111,7 @@ Meteor.methods({
                 adminUserId = adminUser._id;
 
                 // Reset to default password
-                Accounts.setPassword('admin', 'admin123')
+                Accounts.setPassword(adminUserId, 'admin123')
             }
 
             UserRoles.insert({
@@ -140,7 +140,7 @@ Meteor.methods({
                 designerUserId = designerUser._id;
 
                 // Reset to default password
-                Accounts.setPassword('gloria', 'gloria123')
+                Accounts.setPassword(designerUserId, 'gloria123')
             }
 
             UserRoles.insert({
@@ -166,7 +166,7 @@ Meteor.methods({
                 developerUserId = developerUser._id;
 
                 // Reset to default password
-                Accounts.setPassword('hugh', 'hugh123')
+                Accounts.setPassword(developerUserId, 'hugh123')
             }
 
             UserRoles.insert({
@@ -192,7 +192,7 @@ Meteor.methods({
                 anotherDeveloperUserId = anotherDeveloperUser._id;
 
                 // Reset to default password
-                Accounts.setPassword('davey', 'davey123')
+                Accounts.setPassword(anotherDeveloperUserId, 'davey123')
             }
 
             UserRoles.insert({
@@ -218,7 +218,7 @@ Meteor.methods({
                 managerUserId = managerUser._id;
 
                 // Reset to default password
-                Accounts.setPassword('miles', 'miles123')
+                Accounts.setPassword(managerUserId, 'miles123')
             }
 
             UserRoles.insert({
