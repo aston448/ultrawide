@@ -131,15 +131,15 @@ export class ConfigurationSettings extends Component {
                     <div className="design-item-note">You'll need to remember it so be careful!</div>
                     <FormGroup controlId="configOldPassword">
                         <ControlLabel>Current Password:</ControlLabel>
-                        <FormControl id="configOldPassword" ref="configOldPassword" type="password"  onChange={(e) => this.updateOldPassword(e)}/>
+                        <FormControl id="configOldPassword" ref="configOldPassword" type="password" value="" onChange={(e) => this.updateOldPassword(e)}/>
                     </FormGroup>
                     <FormGroup controlId="configNewPassword1">
                         <ControlLabel>New Password:</ControlLabel>
-                        <FormControl id="configNewPassword1" ref="configNewPassword1" type="password"  onChange={(e) => this.updateNewPassword1(e)}/>
+                        <FormControl id="configNewPassword1" ref="configNewPassword1" type="password" value="" onChange={(e) => this.updateNewPassword1(e)}/>
                     </FormGroup>
                     <FormGroup controlId="configNewPassword2">
                         <ControlLabel>Repeat New Password:</ControlLabel>
-                        <FormControl id="configNewPassword2" ref="configNewPassword2" type="password"  onChange={(e) => this.updateNewPassword2(e)}/>
+                        <FormControl id="configNewPassword2" ref="configNewPassword2" type="password" value="" onChange={(e) => this.updateNewPassword2(e)}/>
                     </FormGroup>
                     <Button id="configChangePassword" type="submit">
                         Change My Password
