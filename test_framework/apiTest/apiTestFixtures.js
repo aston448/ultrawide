@@ -543,7 +543,7 @@ Meteor.methods({
                 }
 
                 if(details.isDirectory()){
-                    clearDir(item + '/');
+                    clearDir(dir + item + '/');
                 }
             });
 
