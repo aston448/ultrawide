@@ -39,7 +39,7 @@ describe('UC 805 User Password Change', function(){
         browser.click(actionId);
 
         browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.CONFIGURE)
+            return browser.getText('#headerView') === (RoleType.DESIGNER + ' - ' + TextLookups.viewText(ViewType.CONFIGURE))
         }, 5000, 'expected config screen after 5s');
 
         // Select My Settings tab
