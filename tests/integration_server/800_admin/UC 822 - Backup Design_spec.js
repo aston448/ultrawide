@@ -37,6 +37,9 @@ describe('UC 822 - Backup Design', function(){
 
     });
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     // Actions
     it('Any user can back up the current version of a Design', function(){
@@ -45,8 +48,12 @@ describe('UC 822 - Backup Design', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignActions.designerBacksUpDesign('Design1');
 
+        sleep(2000);
+
         DesignActions.developerWorksOnDesign('Design1');
         DesignActions.developerBacksUpDesign('Design1');
+
+        sleep(2000);
 
         DesignActions.managerWorksOnDesign('Design1');
         DesignActions.managerBacksUpDesign('Design1');
