@@ -43,8 +43,8 @@ describe('UC 805 User Password Change', function(){
         }, 5000, 'expected config screen after 5s');
 
         // Select My Settings tab
-        browser.waitForExist('#configTabMySettings');
-        browser.click('#configTabMySettings');
+        browser.waitForExist('#config-view_tabs-tab-3');
+        browser.click('#config-view_tabs-tab-3');
 
     });
 

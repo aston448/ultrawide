@@ -192,9 +192,9 @@ export class ConfigurationSettings extends Component {
 
         return (
             <Tabs defaultActiveKey={1} id="config-view_tabs">
-                <Tab id="configTabLocations" eventKey={1} title="TEST LOCATION MANAGEMENT">{testLocationManagement}</Tab>
-                <Tab id="configTabTestSettings" eventKey={2} title="MY TEST LOCATIONS">{userTestLocationsManagement}</Tab>
-                <Tab id="configTabMySettings" eventKey={3} title="ULTRAWIDE SETTINGS">{settingsGrid}</Tab>
+                <Tab eventKey={1} title="TEST LOCATION MANAGEMENT"><div id="configTabLocations">{testLocationManagement}</div></Tab>
+                <Tab eventKey={2} title="MY TEST LOCATIONS"><div id="configTabTestSettings">{userTestLocationsManagement}</div></Tab>
+                <Tab eventKey={3} title="ULTRAWIDE SETTINGS"><div id="configTabMySettings">{settingsGrid}</div></Tab>
             </Tabs>
 
         )
