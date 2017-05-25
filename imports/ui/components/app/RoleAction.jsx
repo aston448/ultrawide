@@ -13,8 +13,10 @@ import RoleActionsContainer     from '../../containers/app/RoleActionsContainer.
 
 // Ultrawide Services
 import {RoleType, LocationType, ViewType, UltrawideAction} from '../../../constants/constants.js';
-import ClientUserContextServices from '../../../apiClient/apiClientUserContext.js';
-import ClientAppHeaderServices   from '../../../apiClient/apiClientAppHeader.js';
+
+import TextLookups                  from '../../../common/lookups.js';
+import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
+import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 
 // Bootstrap
 import {InputGroup, Glyphicon} from 'react-bootstrap';
@@ -117,7 +119,7 @@ class RoleAction extends Component {
                 ClientUserContextServices.setViewFromUserContext(newContext, userRole, testIntegrationDataContext, this.props.testDataFlag);
 
                 break;
-            case UltrawideAction.ACTION_TEST_CONFIGURE:
+            case UltrawideAction.ACTION_CONFIGURE:
                 ClientAppHeaderServices.setViewConfigure();
                 break;
             case UltrawideAction.ACTION_DESIGNS:
@@ -155,7 +157,7 @@ class RoleAction extends Component {
             <Grid>
                 <Row>
                     <Col md={12}>
-                        <div className={this.state.highlighted ? 'role-action' + activeClass : 'role-action' + roleClass}
+                        <div id={roleType + '_' + roleAction} className={this.state.highlighted ? 'role-action' + activeClass : 'role-action' + roleClass}
                              onClick={() => this.onActionSelect(roleAction, roleType, userContext, userRole, view)}
                              onMouseEnter={ () => this.setActionHighlighted()} onMouseLeave={ () => this.setActionNormal()}>
                             <InputGroup>
@@ -164,8 +166,8 @@ class RoleAction extends Component {
                                         <Glyphicon glyph='th-large'/>
                                     </div>
                                 </InputGroup.Addon>
-                                <div id={roleType + '_' + roleAction}>
-                                    {roleAction}
+                                <div>
+                                    {TextLookups.ultrawideAction(roleAction)}
                                 </div>
                             </InputGroup>
                         </div>

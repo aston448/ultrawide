@@ -34,7 +34,8 @@ describe('UC 805 User Password Change', function(){
         }, 5000, 'expected login after 5s');
 
         // Go to Config Screen
-        const actionId = RoleType.DESIGNER + '_' + UltrawideAction.ACTION_TEST_CONFIGURE;
+        const actionId = '#' + RoleType.DESIGNER + '_' + UltrawideAction.ACTION_CONFIGURE;
+        browser.waitForExist(actionId);
         browser.click(actionId);
 
         browser.waitUntil(function () {

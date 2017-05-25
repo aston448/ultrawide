@@ -1,4 +1,4 @@
-import {DesignVersionStatus, ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus,
+import {DesignVersionStatus, ViewType, UltrawideAction, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus,
     DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus, MenuAction, TestLocationFileStatus, TestLocationFileType} from '../constants/constants.js';
 
 
@@ -57,6 +57,22 @@ class TextLookups {
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 return 'WORK PACKAGE VIEW';
+        }
+    }
+
+    ultrawideAction(action){
+
+        switch(action){
+            case UltrawideAction.ACTION_HOME:
+                return 'HOME FOR CURRENT DESIGN VERSION';
+            case UltrawideAction.ACTION_DESIGNS:
+                return 'CHOOSE WORKING DESIGN';
+            case UltrawideAction.ACTION_LAST_DESIGNER:
+            case UltrawideAction.ACTION_LAST_DEVELOPER:
+            case UltrawideAction.ACTION_LAST_MANAGER:
+                return 'RESUME CURRENT WORK';
+            case UltrawideAction.ACTION_CONFIGURE:
+                return 'CONFIGURATION and SETTINGS';
         }
     }
 

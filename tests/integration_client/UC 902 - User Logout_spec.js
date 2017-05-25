@@ -71,7 +71,7 @@ describe('UC 902 - User Logout', function(){
         }, 5000, 'expected roles screen after 5s');
 
         // Go to Home screen as designer
-        const actionId = RoleType.DESIGNER + '_' + UltrawideAction.ACTION_HOME;
+        const actionId = '#' + RoleType.DESIGNER + '_' + UltrawideAction.ACTION_HOME;
         browser.click(actionId);
 
         browser.waitUntil(function () {
