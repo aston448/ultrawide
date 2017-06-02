@@ -66,7 +66,7 @@ class TestIntegrationServices{
 
                 // And update the current update now in needed
                 if(userContext.designUpdateId !== 'NONE') {
-                    DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
+                    DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext, true);
                 }
             }
 

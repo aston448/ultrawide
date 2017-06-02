@@ -27,14 +27,86 @@ It runs on a Meteor server and is currently only fully tested to be accessed via
 
 To be used with a range of test outputs, additional modules will need to be written though this is a relatively trivial task if the tests have a machine readable output.
 
-## How Would I use Ultrawide? ##
+## Deploying Ultrawide ##
 
-#### The Application ####
-Ultrawide should be installed on a Meteor server.  In a project situation this could be on a Unix / Linux server.  See the installation section for full details.
-For small scale or trial use it could be installed on a development machine (e.g. MacOS) and served via the local host.
+Ultrawide runs on a Meteor server.  Must be v1.4 or higher.  In a project situation this should be on a Unix / Linux server.
+
+For trial use it could be installed and run on a development machine (e.g. MacOS) and served via the local host.
+
 Ultrawide has primarily a web GUI interface but there is also a REST API by which the transfer of test results data to Ultrawide can be automated.
 
-#### Users ####
+Once a server for Ultrawide has been commissioned, you will need to build the Ultrawide project from code and deploy it.  The easiest way to deploy is to use Meteor Up.  The mup.js configuration file should contain the following:
+
+```javascript
+module.exports = {
+  servers: {
+    one: {
+      // This is the Ultrawide server you have commissioned
+      host: '<IP or hostname>',
+      username: '<your ultrawide account user>',  // A user on the server authorised to run Ultrawide
+      // The following may be needed depending on how you set up secure access
+      // pem: '~/.ssh/id_rsa'
+      // password: 'server-password'
+      // or neither for authenticate from ssh-agent
+    }
+  },
+
+  meteor: {
+    name: 'ultrawide',
+    path: '<path to your ultrawide code project you are deploying from>',
+
+    // This is important.  It is the main ultrawide data store.  You must specify a location accessible on your server.
+    // Your backups and test files will be located beneath this directory
+    volumes: {
+    	"<absolute server path>": "/ultrawide_data"
+    },
+
+    servers: {
+      one: {},
+    },
+
+    buildOptions: {
+      serverOnly: true,
+    },
+
+    env: {
+      // TODO: Change to your app's url
+      // If you are using ssl, it needs to start with https://
+      ROOT_URL: 'http://app.com',
+      MONGO_URL: 'mongodb://localhost/meteor',
+      ULTRAWIDE_DATA_STORE: '/ultrawide_data/'   // Important: this tells Ultrawide where its data store is
+    },
+
+    docker: {
+      image: 'abernix/meteord:base',
+      // imagePort: 80, // (default: 80, some images EXPOSE different ports)
+    },
+
+    // This is the maximum time in seconds it will wait
+    // for your app to start
+    // Add 30 seconds if the server has 512mb of ram
+    // And 30 more if you have binary npm dependencies.
+    deployCheckWaitTime: 60,
+
+    // Show progress bar while uploading bundle to server
+    // You might need to disable it on CI servers
+    enableUploadProgressBar: false
+  },
+
+  mongo: {
+    port: 27017,
+    version: '3.4.1',
+    servers: {
+      one: {}
+    }
+  }
+};
+```
+See the Meteor Up documentation for more details on using Meteor Up.
+
+## Using Ultrawide ##
+
+### Users ###
 Ultrawide initially has no data and one admin user.  Log in as user 'admin' with password 'admin123'.
 You can now (as admin):
   * change the admin password
@@ -53,7 +125,7 @@ For this guide we will assume one user with all roles to keep things simple.
  * Edit the user.  The user name you give is their login. The display name is their full name.  For example: username 'john', display name 'John Smith'.  Tick the roles you want the user to have.
  * Save the user. The user password defaults to username123 (i.e. john123 in this case). The user can set their own password after logging in.
  
-#### Designs ####
+### Designs ###
  * Log in as a user with the Designer role.  You will see the roles menu with choices for the roles that user has.
  * Click 'Choose Working Design' for the Designer role.  You will now see the (empty) Designs list.
  * Click Add Design
@@ -89,7 +161,7 @@ The editor allows you to create 3 types of organisational design components:
  
 In the editor you will see first the ability to add a new Application.  Once this is done you will see an option to add a Design Section to the application... and so on.
 
-#### Functional Design Components ####
+#### Functional Design Components #####
 These are the core of Ultrawide and of two types:
  * Feature - definition of a capability or use case for your application.  For example: 'Add new user'.
  * Scenario - testable definition of a functional aspect of a Feature
@@ -128,7 +200,7 @@ Each design component (except Feature Aspects) has a Details pane (can be displa
 
 ![Design Update](./images/DesignComponentDetails.png?raw=true)
 
-## Create Work Packages ##
+### Work Packages ###
 Once you have some or all of your initial design version defined you can divide it up into one or more Work Packages to dole out the implementation work.  You can decide how best to do this.  Could be one big work package for everything or individual work packages down to the granularity of a Senario.  A Scenario cannot appear in more than one Work Package.
 
 Create Work Packages as the Manager role.  Either go to the Roles screen and go to the current design version as Manager or, after refreshing the work summary, click the blue design icon beside the design version to switch to manager role.
@@ -154,7 +226,7 @@ When the current design version is selected you see a list or work packages (emp
 
  ![Design Update](./images/InitialVersionSummary.png?raw=true)
  
-## Implement Work Packages ##
+### Implement Work Packages ###
 As the Developer role, (either via roles screen or red work package icon in progress summary) select a Work Package (WP).
 
  * Click Adopt - this WP is now yours until you or a manager user releases it
@@ -197,7 +269,7 @@ In both cases, Ultrawide, once supplied with the output of these tests, will lin
 
 Once the tests are run and the data uploaded to Ultrawide the Unit / Integration test panes and the test summary will show the results against the Design.  And the work progress summary will start counting passing and failing tests.
 
-## Test Outputs ##
+### Test Outputs ###
 
 **NOTE:**  Acceptance Tests are not currently implemented as a separate category in Ultrawide.  Use Integration tests to cover these.
 
@@ -229,7 +301,7 @@ When you have run tests on, say, your build server and output the results to a f
 
 Once new test data has been uploaded to Ultrawide, refreshing the test data in the GUI (Refresh menu) will update the results displayed against the Design.
 
-## Summary Information ##
+### Summary Information ###
 #### Test Summary ####
 A Test Summary can be overlaid on the Design in many Ultrawide views.  The allows the user to see immediately which Features and Scenarios are passing, failing or untested.  The test summary is shown or hidden from the View menu.  For example a user may view the current Design Version and overlay a test summary.  Zooming to Feature level will show any Features with failing tests as highlighted in red.  The user can then drill down and see which Scenarios are failing and, by displaying the test panes, the failing tests and the failure reasons.
 This gives an at a glance view of the overall health and test coverage of the application and allows rapid pinpointing of the problem areas.
@@ -242,7 +314,7 @@ Example Test Summary for one Feature:
 #### Progress Summary ####
 On the Design Version home screen there is a progress summary that shows the number of Scenarios in the Design and how they have been broken down into Work Packages.  For each the number of passing / failing / untested Scenarios is shown.  It also shows where Scenarios are or are not in a Work Package.
 
-## Design Updates ##
+### Design Updates ###
 
 When you decide that you want to close the initial Design Version you do this by clicking Create Next as Designer on the Design Version.  This is a big step.  Once you go past here all changes to the Design are controlled.  So stay free until you are sure you want to explicitly record all changes from now on.
 
@@ -310,12 +382,8 @@ The design update list shows the work package status and test status for each up
  * Work Package Status - grey: not all Scenarios covered by WP; black: all Scenarios covered
  * Test status: grey: no tests; pale green: some passing; dark green: all passing; red: one or more failing
 
+## REST API ##
 
 
- ## Code Example ## ##
-  ## ## ## Motivation ## ## 
-  ## ## ## Installation ## ## 
-  ## ## ## API Reference ## ## 
-  ## ## ## Tests ## ## 
-  ## ## ## Contributors ## ##
-   ## ## ## License ## ## 
+## Contributors ##
+## License ##

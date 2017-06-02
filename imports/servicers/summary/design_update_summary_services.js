@@ -1,10 +1,10 @@
 
 // Ultrawide Collections
-import { Designs }                  from '../../collections/design/designs.js';
-import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { UserDesignUpdateSummary }  from '../../collections/summary/user_design_update_summary.js';
-import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
-import { UserDevTestSummaryData }   from '../../collections/summary/user_dev_test_summary_data.js';
+import { Designs }                          from '../../collections/design/designs.js';
+import { DesignUpdates }                    from '../../collections/design_update/design_updates.js';
+import { UserDesignUpdateSummary }          from '../../collections/summary/user_design_update_summary.js';
+import { DesignUpdateComponents }           from '../../collections/design_update/design_update_components.js';
+import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
 
 // Ultrawide Services
 import { ComponentType, DesignUpdateSummaryCategory, DesignUpdateSummaryType, UpdateScopeType, MashTestStatus, LogLevel } from '../../constants/constants.js';
@@ -185,27 +185,27 @@ class DesignUpdateSummaryServices {
                         // If the item is a Scenario - get its test status
                         if (item.componentType === ComponentType.SCENARIO) {
 
-                            const testSummary = UserDevTestSummaryData.findOne({
-                                userId:                 userContext.userId,
-                                designVersionId:        item.designVersionId,
-                                scenarioReferenceId:    item.componentReferenceId
+                            const mashScenario = UserDesignVersionMashScenarios.findOne({
+                                userId:                     userContext.userId,
+                                designVersionId:            item.designVersionId,
+                                designScenarioReferenceId:  item.componentReferenceId
                             });
 
-                            if (testSummary) {
+                            if (mashScenario) {
 
                                 // Any fails its bad
                                 if (
-                                    testSummary.accTestStatus === MashTestStatus.MASH_FAIL ||
-                                    testSummary.intTestStatus === MashTestStatus.MASH_FAIL ||
-                                    testSummary.unitTestFailCount > 0
+                                    mashScenario.accMashTestStatus === MashTestStatus.MASH_FAIL ||
+                                    mashScenario.intMashTestStatus === MashTestStatus.MASH_FAIL ||
+                                    mashScenario.unitFailCount > 0
                                 ) {
                                     testStatus = MashTestStatus.MASH_FAIL;
                                 } else {
                                     // No fails so any passes is good
                                     if (
-                                        testSummary.accTestStatus === MashTestStatus.MASH_PASS ||
-                                        testSummary.intTestStatus === MashTestStatus.MASH_PASS ||
-                                        testSummary.unitTestPassCount > 0
+                                        mashScenario.accMashTestStatus === MashTestStatus.MASH_PASS ||
+                                        mashScenario.intMashTestStatus === MashTestStatus.MASH_PASS ||
+                                        mashScenario.unitPassCount > 0
                                     ) {
                                         testStatus = MashTestStatus.MASH_PASS;
                                     }

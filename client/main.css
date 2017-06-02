@@ -635,7 +635,7 @@ input {
 }
 
 .item-container{
-    margin: 15px 0 0 0;
+    margin: 10px 0 0 0;
     padding: 0 1px 1px 1px;
     box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
     border-radius: 4px;
@@ -644,9 +644,9 @@ input {
 
 .item-container-header{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  20px;
-    color: ghostwhite;
-    background-color: darkslategrey;
+    font-size:  18px;
+    color: lightgrey;
+    background-color: darkslategray;
     margin: 0;
     padding: 3px 10px 3px 20px;
     border: 1px solid ghostwhite;
@@ -676,14 +676,14 @@ input {
 
 .design-item{
     border: 1px solid lightgrey;
-    border-radius: 2px;
-    margin: 20px;
+    border-radius: 0px;
+    margin: 10px;
     padding: 0px;
 }
 
 .di-active{
     border: 1px solid black;
-    border-radius: 2px;
+    border-radius: 0px;
     background-color: aliceblue;
     /*box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);*/
 }
@@ -705,10 +705,10 @@ input {
     margin: 0;
     padding: 3px 3px 3px 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  13px;
-    font-weight: bold;
+    font-size:  14px;
+    font-weight: normal;
     /*border-bottom: 1px solid lightgrey;*/
-    color: darkslateblue;
+    color: black;
     width: 100%;
 }
 
@@ -750,8 +750,8 @@ input {
     margin: 0;
     padding: 10px 10px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  16px;
-    font-weight: normal;
+    font-size:  14px;
+    font-weight: bold;
     color: black;
 }
 
