@@ -382,8 +382,39 @@ The design update list shows the work package status and test status for each up
  * Work Package Status - grey: not all Scenarios covered by WP; black: all Scenarios covered
  * Test status: grey: no tests; pale green: some passing; dark green: all passing; red: one or more failing
 
+### Backup, Restore and Archive ###
+
+It is possible to take a backup of your current Design once you have added meaningful data to it.  Anyone can do this from the Designs list.  A JSON backup file of your Design data is saved on the Ultrawide server in a file that reflects the Design anme and backup time.
+
+As admin you can see the list of Design backups that Ultrawide knows about.  This list is refreshed from what Ultrawide finds on the server so you can can transfer a valid backup from another instance and it will be recognised.
+
+As admin you can restore a Design from a backup.  If the Design does not exist it will be created.  If it does it will be replaced by the backup version and any non-backed up data will be lost.
+
+As admin you can Archive a Design.  This first creates a backup and then removes that Design from the Ultrawide database.  It can be restored from the backup if required.
+
+Users are saved as part of backups.  User data (e.g. test data or current context) and summary data is not backed up.
+
 ## REST API ##
 
+It will be possible in theory to call various Ultrawide functions via the REST API.  At present the only implemented function is to upload a file to one of the test output locations you have defined in Ultrawide.
+
+To use the api you will need to generate a key as the admin user.  Log in as admin and in the API Management tab either read the existing key or generate a new one.
+
+### Upload File ###
+
+```
+Call Type: POST
+URL: <server>/api/v1/upload-file
+```
+
+#### Header Params ####
+```
+file:   <file name>
+location: <the location name of the Ultrawide test output location you want to upload to>
+key: <the current valid api key>
+```
+#### Body ####
+The binary file
 
 ## Contributors ##
 ## License ##
