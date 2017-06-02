@@ -1031,7 +1031,7 @@ export class DesignComponentHeader extends Component{
 
         let wpStatus =
             <InputGroup.Addon>
-                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipGotoWp}>
+                <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipGotoWp}>
                     <div id="wpStatusIcon" className={wpStatusClass}
                          onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon
                         glyph={wpStatusGlyph}/></div>
@@ -1053,7 +1053,7 @@ export class DesignComponentHeader extends Component{
             } else {
                 updateStatus =
                     <InputGroup.Addon>
-                        <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipUpdateStatus}>
+                        <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipUpdateStatus}>
                             <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>;
