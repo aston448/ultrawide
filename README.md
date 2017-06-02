@@ -417,4 +417,6 @@ key: <the current valid api key>
 The binary file
 
 ## Contributors ##
+
 ## License ##
+MIT
