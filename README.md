@@ -27,9 +27,11 @@ It runs on a Meteor server and is currently only fully tested to be accessed via
 
 To be used with a range of test outputs, additional modules will need to be written though this is a relatively trivial task if the tests have a machine readable output.
 
+These notes will help you get an idea of what Ultrawide is and what it can do but if you are seriously interested in exploring it further you can ask for further information at nghtcity2@gmail.com.
+
 ## Deploying Ultrawide ##
 
-Ultrawide runs on a Meteor server.  Must be v1.4 or higher.  In a project situation this should be on a Unix / Linux server.
+Ultrawide runs on Meteor.  Must be v1.4 or higher.  In a project situation this should be on a Unix / Linux server.
 
 For trial use it could be installed and run on a development machine (e.g. MacOS) and served via the local host.
 
@@ -179,12 +181,12 @@ By default, Ultrawide splits a Feature into four Feature Aspects.  You can chang
 Of course you can add more Feature Aspects or remove unwanted aspects as necessary.
 
 #### Editing ####
-Each section of your design has the options of what can be added to it at the bottom - e.g. a Feature Aspect has 'Add Scenario'  A Design Section has add Design Section or Add Feature.
-On the right are options to edit delete or move design items.  When you create a new item the first thing to do is edit it.  Items can be moved to different sections or have their order rearranged within a section.  Only items with no children can be deleted so delete unwanted stuff from the bottom up.  Changes are automatically saved.
+Each section of your design has the options of what can be added to it at the bottom - e.g. a Feature Aspect has 'Add Scenario'  A Design Section has 'Add Design Section' or 'Add Feature'.
+On the right are options to edit, delete or move design items.  When you create a new item the first thing to do is edit it.  Items can be moved to different sections or have their order rearranged within a section.  Only items with no children can be deleted so delete unwanted stuff from the bottom up.  Changes are automatically saved.
 
 The following illustrates a simple Feature added to your design.  The Domain Dictionary pane is visible.
 
-![Design Update](./images/InitialDesignVersion.png?raw=true)
+![Edit Design Version](./images/InitialDesignVersion.png?raw=true)
 
 A cleaner view can be obtained by switching to View Only (eye icon at top of editor) to remove all editing controls.
 
@@ -196,14 +198,14 @@ Each Feature has a BDD style Narrative you can edit to give a clear summary of w
 
 Use this to give a high level understanding of what the feature is for.
 
-Each design component (except Feature Aspects) has a Details pane (can be displayed / hidden in View menu).  Here you can write detailed notes that apply the the section, Feature or Scenario in question to give examples or functional notes.
+Each design component (except Feature Aspects) has a Details pane (can be displayed / hidden in View menu).  Here you can write detailed notes that apply the the Section, Feature or Scenario in question to give examples or functional notes.
 
-![Design Update](./images/DesignComponentDetails.png?raw=true)
+![Details](./images/DesignComponentDetails.png?raw=true)
 
 ### Work Packages ###
-Once you have some or all of your initial design version defined you can divide it up into one or more Work Packages to dole out the implementation work.  You can decide how best to do this.  Could be one big work package for everything or individual work packages down to the granularity of a Senario.  A Scenario cannot appear in more than one Work Package.
+Once you have some or all of your initial design version defined you can divide it up into one or more Work Packages to dole out the implementation work.  You can decide how best to do this.  Could be one big work package for everything or individual work packages down to the granularity of a Scenario.  A Scenario cannot appear in more than one Work Package.
 
-Create Work Packages as the Manager role.  Either go to the Roles screen and go to the current design version as Manager or, after refreshing the work summary, click the blue design icon beside the design version to switch to manager role.
+Create Work Packages as the Manager role.  Either go to the Roles screen and go to the current design version as Manager or, after refreshing the progress summary, click the blue design icon beside the design version to switch to manager role.
 
 When the current design version is selected you see a list or work packages (empty to start) and you can add new work packages to it.
 
@@ -216,7 +218,7 @@ When the current design version is selected you see a list or work packages (emp
  
  Check the section, feature etc. you want to add to the Work Package.  This adds everything beneath that section.  You can remove things by unchecking them.
 
- ![Design Update](./images/WorkPackageEdit.png?raw=true)
+ ![Work Package Edit](./images/WorkPackageEdit.png?raw=true)
 
  When done, go back to the home screen and publish the Work Package.  Its now available to all users.
  
@@ -224,7 +226,7 @@ When the current design version is selected you see a list or work packages (emp
 
  In this case the Manager created two Work Packages, one for the Interface code and one for the rest.  The Scenarios not checkable the scope in the above editor view are so because they are in the other work package.
 
- ![Design Update](./images/InitialVersionSummary.png?raw=true)
+ ![Progress Summary](./images/InitialVersionSummary.png?raw=true)
  
 ### Implement Work Packages ###
 As the Developer role, (either via roles screen or red work package icon in progress summary) select a Work Package (WP).
@@ -234,7 +236,7 @@ As the Developer role, (either via roles screen or red work package icon in prog
 
 The WP editor shows the part of the design in the WP on the left.  On the right you can display Details, Dictionary, Unit Tests, Acceptance Tests.  You can also overlay a Test Summary on the Design
 
- ![Design Update](./images/DevelopWorkpackage_NoTests.png?raw=true)
+ ![Develop Work Package](./images/DevelopWorkPackage_NoTests.png?raw=true)
 
 You would now go away and code the features required for your part of the design. It doesn't matter how you do this.  The only things you need to do to integrate your code with Ultrawide are:
  
@@ -247,7 +249,7 @@ Say that your Scenario is 'A Super User can add an Application User' then an int
 ```javascript
 describe('Add New User', function(){
     it('A Super User can add an Application User', function(){
-        // Acceptance test code here
+        // Integration test code here
     });
 }); 
 ```
@@ -284,7 +286,7 @@ In order for Ultrawide to be able to process your test results the following nee
 #### Test Output Locations and Files ####
 
 These may be configured in the Ultrawide Configuration screen (Go To menu or from Roles screen).  You are defining a location on the Ultrawide server where a particular set of test files will be placed.
-Add a new location and edit it to set its path.  If shared, everyone can use it.  If not only the creating user can use it.
+Add a new location and edit it to set its path.  If shared, everyone can use it.  If not, only the creating user can use it.
 When setting the path you do not need to specify a full path.  The path you set will be within the default test output path on the server which is shown in the interface.  So your path may be just an additional directory.
 
 For each location a set of files can be defined.  Here you set:
@@ -297,7 +299,7 @@ For each location a set of files can be defined.  Here you set:
 In the My Test Locations tab you can see all locations available to you.  You can choose from these where you want your instance of Ultrawide to get Integration and Unit test results.  It will then pick up results from any files defined for those locations.  Each user has their own test data so it is possible for different users to view different test outputs against the same design.
 
 #### Uploading Test Data ####
-When you have run tests on, say, your build server and output the results to a file that file needs to be uploaded to the Ultrawide server.  You can do this manually if the build server is a local machine by going to the test location in Ultrawide and uploading the file to it.  When you do this the defined location file will have a status of uploaded and the upload date/time.  For a more formal set up the best option is to use the REST API to upload the file.  See the API section for more details.
+When you have run tests on, say, your build server and output the results to a file, that file needs to be uploaded to the Ultrawide server.  You can do this manually if the build server is a local machine by going to the test location in Ultrawide and uploading the file to it.  When you do this the defined location file will have a status of uploaded and the upload date/time.  For a more formal set up the best option is to use the REST API to upload the file.  See the API section for more details.
 
 Once new test data has been uploaded to Ultrawide, refreshing the test data in the GUI (Refresh menu) will update the results displayed against the Design.
 
@@ -309,7 +311,7 @@ This gives an at a glance view of the overall health and test coverage of the ap
 Example Test Summary for one Feature:
 
 
- ![Design Update](./images/TestSummary.png?raw=true)
+ ![Test Summary](./images/TestSummary.png?raw=true)
 
 #### Progress Summary ####
 On the Design Version home screen there is a progress summary that shows the number of Scenarios in the Design and how they have been broken down into Work Packages.  For each the number of passing / failing / untested Scenarios is shown.  It also shows where Scenarios are or are not in a Work Package.
@@ -328,12 +330,13 @@ Once you have created a new Updatable Design Version and named it appropriately 
 #### Adding a New Design Item ####
 To add, say, a new Feature to your design:
 
- * Scope the Design Section to which the Feature is to be added by checking it in the scope (left) pane.  It wil now appear in the editor pane.
+ * Scope the Design Section to which the Feature is to be added by checking it in the scope (left) pane.  It will now appear in the editor pane.
  * Use the normal Add Feature control in the editor pane.
  * Default Feature Aspects are also added.
  * Edit the new Feature and add Scenarios to it as required.
 
- The Feature will not appear on the left as this is the baseline view.  However, it will appear in its new place the Working Design pane if the Design Update is published and set to be included in the current Design Version.  It will be marked as an added item (green plus icon)
+ The Feature will not appear on the left as this is the baseline view.  However, it will appear in its new place the Working Design pane if the Design Update is published and set to be included in the current Design Version.  It will be marked as an added item (green plus icon)*[]:
+ 
  New Design Items added can be reordered in their current lists.  Peer items are shown as placeholders so that a new item can be ordered as desired.  New design items can be deleted completely if they were added by mistake.
  
 #### Modifying an Existing Design Item ####
@@ -351,6 +354,9 @@ To remove a Feature from your design:
  * Delete the Feature in the editor.
 
 This will mark the Feature and everything below it as deleted.  It will still be visible but marked as deleted.  You can restore any item deleted by mistake using the back icon now by the deleted item.
+
+#### Marking an Existing Item for Attention ####
+As part of a release you might want to do something to a Scenario without actually changing its wording.  For example, perhaps it is failing a test or needs more tests.  Adding it to the Design Update Scope without modifying it makes it available to work packages and marks it as requiring a check.
 
 #### Limitations ####
 The Update editor will not let you make changes that do not make sense, for example:
@@ -381,6 +387,16 @@ The design update list shows the work package status and test status for each up
 
  * Work Package Status - grey: not all Scenarios covered by WP; black: all Scenarios covered
  * Test status: grey: no tests; pale green: some passing; dark green: all passing; red: one or more failing
+
+#### Update Progress Summary ####
+In an updatable Design Version the progress summary shows all the updates added to the current version.  These are then broken down into the work packages assigned for each update.  There is also a total summary for the entire design and for all the updates together.
+It is therefore possible to see for a release:
+
+ * how many Scenarios are new or changed
+ * how many of these are assigned to work packages (and who is working on them)
+ * how many Scenarios are tested
+ * where any test failures are
+ * if regression failures are occurring in Scenarios outside the specified changes
 
 ### Backup, Restore and Archive ###
 
