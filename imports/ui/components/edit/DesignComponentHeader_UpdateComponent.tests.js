@@ -134,12 +134,12 @@ describe('JSX: DesignComponentHeader', () => {
     });
 
     // Put in scope
-    describe('A component in the Design Update Scope pane has a toggle that allows it to be put in scope', () => {
+    describe('A component in the Design Update Scope pane has a toggle that allows it to be put into Scope', () => {
 
         it('non scoped feature has an unchecked toggle', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
-            const updateItem = {scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_OUT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -157,7 +157,7 @@ describe('JSX: DesignComponentHeader', () => {
         it('non scoped feature aspect has an unchecked toggle', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
-            const updateItem = {scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_OUT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -175,7 +175,7 @@ describe('JSX: DesignComponentHeader', () => {
         it('non scoped scenario has an unchecked toggle', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
-            const updateItem = {scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_OUT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -195,7 +195,7 @@ describe('JSX: DesignComponentHeader', () => {
     // Put out of scope
     describe('A component in the Design Update Scope pane has a toggle that allows it to be put out of scope', () => {
 
-        it('non scoped feature has an unchecked toggle', () => {
+        it('scoped feature has a checked toggle', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
@@ -213,7 +213,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         });
 
-        it('non scoped feature aspect has an unchecked toggle', () => {
+        it('scoped feature aspect has a checked toggle', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
@@ -231,7 +231,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         });
 
-        it('non scoped scenario has an unchecked toggle', () => {
+        it('scoped scenario has a checked toggle', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
