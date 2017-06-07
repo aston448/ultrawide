@@ -33,7 +33,7 @@ These notes will help you get an idea of what Ultrawide is and what it can do bu
 
 Ultrawide runs on Meteor.  Must be v1.4 or higher.  In a project situation this should be on a Unix / Linux server.
 
-For trial use it could be installed and run on a development machine (e.g. MacOS) and served via the local host.
+For trial use it could be built and run on a development machine (e.g. MacOS) and served via the local host.
 
 Ultrawide has primarily a web GUI interface but there is also a REST API by which the transfer of test results data to Ultrawide can be automated.
 
