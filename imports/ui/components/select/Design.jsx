@@ -178,10 +178,11 @@ export class Design extends Component {
 
                 } else {
 
-                    // Other users can just work on a Design
+                    // Other users can just work on a Design or back it up
                     buttons =
                         <ButtonGroup className="button-group-left">
                             {workButton}
+                            {backupButton}
                         </ButtonGroup>
                 }
             }
