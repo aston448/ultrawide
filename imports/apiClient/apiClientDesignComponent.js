@@ -711,6 +711,55 @@ class ClientDesignComponentServices{
         }
     };
 
+    openSearchResultScenario(scenarioId, userContext, displayContext){
+
+        // Close all items to start with
+
+        let openList = [];
+
+        store.dispatch(setCurrentUserOpenDesignItems(
+            openList,
+            null,
+            false
+        ));
+
+        // Open the selected item and set it as current
+
+        store.dispatch(setCurrentUserOpenDesignItems(
+            openList,
+            scenarioId,
+            true
+        ));
+
+        this.setDesignComponent(scenarioId, userContext, displayContext);
+
+        // Recursively open up to top
+        const newList = store.getState().currentUserOpenDesignItems;
+
+        // And move on up
+        this.openParent(scenarioId, newList);
+    }
+
+    openParent(componentId, currentList){
+
+        const component = DesignVersionComponents.findOne({_id: componentId});
+
+        if(component.componentParentIdNew !== 'NONE'){
+
+            // Open the parent
+            store.dispatch(setCurrentUserOpenDesignItems(
+                currentList,
+                component.componentParentIdNew,
+                true
+            ));
+
+            const newList = store.getState().currentUserOpenDesignItems;
+
+            // And move on up
+            this.openParent(component.componentParentIdNew, newList);
+        }
+    }
+
     getCurrentItem(userContext){
 
         return DesignVersionComponents.findOne({

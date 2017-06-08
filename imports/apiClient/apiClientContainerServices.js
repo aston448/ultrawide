@@ -2642,6 +2642,56 @@ class ClientContainerServices{
 
     }
 
+
+    getMatchingScenarios(searchString, userContext){
+
+        // Find Scenarios containing the search string
+        let searchRegex = new RegExp(searchString);
+        let results = [];
+
+        const matchingScenarios = DesignVersionComponents.find({
+            designVersionId:    userContext.designVersionId,
+            componentType:      ComponentType.SCENARIO,
+            componentNameNew:   {$regex: searchRegex}
+        }).fetch();
+
+        // Don't start displaying until there is a reasonable filter
+        if(matchingScenarios.length > 50){
+            return [
+                {
+                    id:             'NONE',
+                    scenarioName:   'More than 50 matching scenarios',
+                    featureName:    ''
+                }
+            ];
+        } else {
+
+            matchingScenarios.forEach((scenario) => {
+                // Get feature name
+                let feature = DesignVersionComponents.findOne({
+                    designVersionId: userContext.designVersionId,
+                    componentReferenceId: scenario.componentFeatureReferenceIdNew
+                });
+
+                let featureName = 'Unknown';
+
+                if (feature) {
+                    featureName = feature.componentNameNew
+                }
+
+                let result = {
+                    id:             scenario._id,
+                    scenarioName:   scenario.componentNameNew,
+                    featureName:    featureName
+                };
+
+                results.push(result);
+            });
+
+            return results;
+        }
+    }
+
 }
 
 export default new ClientContainerServices();

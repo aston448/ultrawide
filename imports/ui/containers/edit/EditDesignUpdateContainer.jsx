@@ -15,6 +15,7 @@ import DesignComponentAdd           from '../../components/common/DesignComponen
 import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer    from './DomainDictionaryContainer.jsx';
 import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx';
+import ScenarioFinder               from '../../components/search/ScenarioFinder.jsx';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
@@ -274,6 +275,12 @@ export class UpdateApplicationsList extends Component {
                 }}/>
             </div>;
 
+        // The scenario finder here will locate stuff in the update scope
+        const scenarioFinder =
+            <ScenarioFinder
+                displayContext={DisplayContext.UPDATE_SCOPE}
+            />;
+
         // Layout ------------------------------------------------------------------------------------------------------
         let layout = '';
 
@@ -328,6 +335,7 @@ export class UpdateApplicationsList extends Component {
                             <Tab eventKey={2} title="WORKING VIEW">{workingVersionComponent}</Tab>
                             <Tab eventKey={3} title="SUMMARY">{updateSummary}</Tab>
                             <Tab eventKey={4} title="DICTIONARY">{domainDictionary}</Tab>
+                            <Tab eventKey={5} title="FIND SCENARIO">{scenarioFinder}</Tab>
                         </Tabs>
                     </Col>;
 

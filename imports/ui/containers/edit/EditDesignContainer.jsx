@@ -15,6 +15,7 @@ import DesignComponentAdd               from '../../components/common/DesignComp
 import DesignComponentTextContainer     from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
 import MashSelectedItemContainer        from '../mash/MashSelectedItemContainer.jsx';
+import ScenarioFinder                   from '../../components/search/ScenarioFinder.jsx';
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType } from '../../../constants/constants.js';
@@ -30,6 +31,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -184,6 +186,11 @@ export class DesignApplicationsList extends Component {
                 designId: userContext.designId,
                 designVersionId: userContext.designVersionId
             }}/>;
+
+        const scenarioFinder =
+            <ScenarioFinder
+                displayContext={DisplayContext.BASE_VIEW}
+            />;
 
         let intTests = '';
 
@@ -464,6 +471,7 @@ export class DesignApplicationsList extends Component {
                                 <Tabs defaultActiveKey={1} id="updatable-view_tabs">
                                     <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
                                     <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
+                                    <Tab eventKey={3} title="FIND SCENARIO">{scenarioFinder}</Tab>
                                 </Tabs>
                             </Col>;
                         break;
@@ -476,6 +484,7 @@ export class DesignApplicationsList extends Component {
                                     <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
                                     <Tab eventKey={3} title="INTEGRATION TESTS">{intTests}</Tab>
                                     <Tab eventKey={4} title="UNIT TESTS">{unitTests}</Tab>
+                                    <Tab eventKey={5} title="FIND SCENARIO">{scenarioFinder}</Tab>
                                 </Tabs>
                             </Col>;
                         break;

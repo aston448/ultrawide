@@ -1367,6 +1367,30 @@ input {
     text-align: right;
 }
 
+/* -- Search -------------------------------------------------------------------------------------------------------- */
+
+.search-input{
+    margin: 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    background-color: lightgrey;
+    border: 1px solid lightgrey;
+    border-radius: 4px;
+}
+
+.results-list{
+    margin: 10px;
+    border: 1px solid lightgrey;
+}
+
+.result-item{
+    padding: 5px 10px 5px 10px;
+}
+
+.selected-result{
+    background-color: palegoldenrod;
+}
+
 /* -- Design Editor ------------------------------------------------------------------------------------------------- */
 
 .design-editor-container{

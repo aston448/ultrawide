@@ -77,46 +77,56 @@ class RoleAction extends Component {
         //console.log("TEST SUMMARY DATA LOADED: " + this.props.summaryDataLoaded);
 
         // Now go where the user wanted...
-        switch(roleAction){
+        switch(roleAction) {
             case UltrawideAction.ACTION_HOME:
-                ClientAppHeaderServices.setViewSelection();
+                if (userContext.designId !== 'NONE') {
+                    ClientAppHeaderServices.setViewSelection();
+                    ClientUserContextServices.setOpenDesignVersionItems(userContext);
+                } else {
+                    ClientAppHeaderServices.setViewDesigns();
+                }
                 break;
             case UltrawideAction.ACTION_LAST_DESIGNER:
             case UltrawideAction.ACTION_LAST_DEVELOPER:
             case UltrawideAction.ACTION_LAST_MANAGER:
 
-                let newContext = userContext;
+                if (userContext.designId !== 'NONE') {
+                    let newContext = userContext;
 
-                if(userContext.workPackageId === 'NONE') {
+                    if (userContext.workPackageId === 'NONE') {
 
-                    // Not going to a WP so open any Design Version or Design Update items that need it...
-                    if (store.getState().designVersionDataLoaded) {
+                        // Not going to a WP so open any Design Version or Design Update items that need it...
+                        if (store.getState().designVersionDataLoaded) {
 
-                        newContext = ClientUserContextServices.setOpenDesignVersionItems(userContext);
+                            newContext = ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
-                        if(newContext.designUpdateId !== 'NONE'){
+                            if (newContext.designUpdateId !== 'NONE') {
 
-                            newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
+                                newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
+                            }
+                        }
+
+                    } else {
+
+                        // If the data is there, open the WP items that need it
+                        if (store.getState().designVersionDataLoaded) {
+
+                            // If update WP then open the scope items too...db
+                            if (newContext.designUpdateId !== 'NONE') {
+
+                                newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
+                            }
+
+                            newContext = ClientUserContextServices.setOpenWorkPackageItems(newContext);
                         }
                     }
+
+                    // And now go to the correct view
+                    ClientUserContextServices.setViewFromUserContext(newContext, userRole, testIntegrationDataContext, this.props.testDataFlag);
 
                 } else {
-
-                    // If the data is there, open the WP items that need it
-                    if (store.getState().designVersionDataLoaded) {
-
-                        // If update WP then open the scope items too...db
-                        if(newContext.designUpdateId !== 'NONE'){
-
-                            newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
-                        }
-
-                        newContext = ClientUserContextServices.setOpenWorkPackageItems(newContext);
-                    }
+                    ClientAppHeaderServices.setViewDesigns();
                 }
-
-                // And now go to the correct view
-                ClientUserContextServices.setViewFromUserContext(newContext, userRole, testIntegrationDataContext, this.props.testDataFlag);
 
                 break;
             case UltrawideAction.ACTION_CONFIGURE:
