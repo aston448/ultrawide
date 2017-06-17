@@ -248,9 +248,10 @@ class ImpExServices{
                 };
 
 
-            const jsonData = JSON.stringify(designBackup, null, 2);
+            const jsonData = JSON.stringify(designBackup);
+            //const jsonData = JSON.stringify(designBackup, null, 2); // Use if want readable backup file - but much bigger
 
-            const fileName = 'ULTRAWIDE_' + design.designName.trim() + '_' + fileDate + '.UBK';
+            const fileName = 'ULTRAWIDE_' + design.designName.trim().replace(' ', '_') + '_' + fileDate + '.UBK';
 
             try {
 
