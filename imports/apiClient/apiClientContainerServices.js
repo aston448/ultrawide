@@ -131,8 +131,6 @@ class ClientContainerServices{
 
                 // User specific data
                 const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId);
-                const mmHandle = Meteor.subscribe('userUnitTestMashData', userContext.userId);
-                const arHandle = Meteor.subscribe('userAccTestResults', userContext.userId);
                 const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
                 const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
                 const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
@@ -146,8 +144,8 @@ class ClientContainerServices{
                     let loading = (
                         !dusHandle.ready() ||
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
-                        !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !mmHandle.ready() ||
-                        !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
+                        !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() ||
+                        !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
                         !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready()
                     );
 

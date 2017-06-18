@@ -12,6 +12,7 @@ import ClientTestOutputLocationServices         from '../../../apiClient/apiClie
 import { TestLocationFileTypes, TestRunners, TestLocationFileStatus}    from '../../../constants/constants.js';
 import { createSelectionList }                  from '../../../common/utils.js';
 import TextLookups                              from '../../../common/lookups.js';
+import { getDateTimeString} from '../../../common/utils.js';
 // Bootstrap
 import {Button} from 'react-bootstrap';
 import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-bootstrap';
@@ -94,7 +95,21 @@ export class TestOutputFile extends Component {
     render() {
         const {locationFile, userRole, currentLocationId} = this.props;
 
-        const fileClass = (locationFile.fileStatus === TestLocationFileStatus.FILE_UPLOADED ? ' file-uploaded' : ' file-missing');
+        let fileClass = (locationFile.fileStatus === TestLocationFileStatus.FILE_UPLOADED ? ' file-uploaded' : ' file-missing');
+
+        const dateString = getDateTimeString(new Date(locationFile.lastUpdated));
+
+        // Check for uploaded files being old
+        if(locationFile.fileStatus === TestLocationFileStatus.FILE_UPLOADED){
+            const now = new Date();
+
+            const timeDiff = Math.abs(now.getTime() - new Date(locationFile.lastUpdated).getTime());
+            const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            if(diffDays > 1){
+                fileClass = ' file-old';
+            }
+        }
 
         const viewInstance = (
             <div className={fileClass}>
@@ -121,7 +136,7 @@ export class TestOutputFile extends Component {
                             {TextLookups.fileStatus(locationFile.fileStatus)}
                         </Col>
                         <Col sm={7}>
-                            {locationFile.lastUpdated}
+                            {dateString}
                         </Col>
                     </Row>
                 </Grid>

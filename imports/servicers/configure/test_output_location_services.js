@@ -470,7 +470,7 @@ class TestOutputLocationServices {
             // Get the file details for the last modified date
             const stats = fs.statSync(location.locationFullPath + file);
             const modifiedDate = new Date(stats.mtime);
-            const dateString = getDateTimeString(modifiedDate);
+
 
             TestOutputLocationFiles.update(
                 {
@@ -480,7 +480,7 @@ class TestOutputLocationServices {
                 {
                     $set: {
                         fileStatus:     TestLocationFileStatus.FILE_UPLOADED,
-                        lastUpdated:    dateString
+                        lastUpdated:    modifiedDate
                     }
                 }
             );

@@ -69,15 +69,15 @@ class TestSummary extends Component {
             return(
                 <Grid className="close-grid">
                     <Row>
-                        <Col md={4} className="close-col">
-                            <span className="test-summary-text">Accept:</span>
-                            <span className={accResultClass}>{TextLookups.mashTestStatus(testSummaryData.accMashTestStatus)}</span>
-                        </Col>
-                        <Col md={4} className="close-col">
-                            <span className="test-summary-text">Integ:</span>
+                        {/*<Col md={4} className="close-col">*/}
+                            {/*<span className="test-summary-text">Accept:</span>*/}
+                            {/*<span className={accResultClass}>{TextLookups.mashTestStatus(testSummaryData.accMashTestStatus)}</span>*/}
+                        {/*</Col>*/}
+                        <Col md={5} className="close-col">
+                            <span className="test-summary-text">Integration:</span>
                             <span className={intResultClass}>{TextLookups.mashTestStatus(testSummaryData.intMashTestStatus)}</span>
                         </Col>
-                        <Col md={4} className="close-col">
+                        <Col md={7} className="close-col">
                             <span className="test-summary-text">Unit:</span>
                             {unitTestResult}
                         </Col>

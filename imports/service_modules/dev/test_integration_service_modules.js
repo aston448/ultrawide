@@ -197,10 +197,10 @@ class TestIntegrationModules{
             let intTestCount = 0;
             let intTestPasses = 0;
             let intTestFails = 0;
-            let scenarioUnitTestStatus = MashTestStatus.MASH_NOT_IMPLEMENTED;
-            let scenarioIntTestStatus = MashTestStatus.MASH_NOT_IMPLEMENTED;
-            let scenarioUnitMashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
-            let scenarioIntMashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+            let scenarioUnitTestStatus = MashTestStatus.MASH_NOT_LINKED;
+            let scenarioIntTestStatus = MashTestStatus.MASH_NOT_LINKED;
+            let scenarioUnitMashStatus = MashStatus.MASH_NOT_LINKED;
+            let scenarioIntMashStatus = MashStatus.MASH_NOT_LINKED;
 
             unitTests.forEach((unitTest) => {
 

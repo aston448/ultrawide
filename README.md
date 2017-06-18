@@ -267,9 +267,15 @@ describe('AddUser', function(){`
 }); 
 ```
 
-In both cases, Ultrawide, once supplied with the output of these tests, will link them to the appropriate Scenario in the Design so the first will have one integration test and the second 3 unit tests.  There is nothing to stop you having both acceptance tests and unit tests for a Scenario.  There is no limit to the number of unit tests per Scenario and they can be in different places if required.  But there can be only one integration test per Scenario.
+In both cases, Ultrawide, once supplied with the output of these tests, will link them to the appropriate Scenario in the Design so the first will have one integration test and the second 3 unit tests.  There is nothing to stop you having both acceptance tests and unit tests for a Scenario.  There is no limit to the number of unit tests per Scenario and they can be in different places if required.
 
 Once the tests are run and the data uploaded to Ultrawide the Unit / Integration test panes and the test summary will show the results against the Design.  And the work progress summary will start counting passing and failing tests.
+
+It is possible to have more than one test for an Integration test Scenario.  If you tag a test group with the Scenario name then any tests inside that group will appear as listed against the Scenario in Ultrawide.  Otherwise just the Scenario is shown with the test status:
+
+![Integration Tests](./images/IntegrationTests.png?raw=true)
+
+Full details of test errors can be displayed by clicking on the relevant test.
 
 ### Test Outputs ###
 
@@ -299,6 +305,7 @@ For each location a set of files can be defined.  Here you set:
 In the My Test Locations tab you can see all locations available to you.  You can choose from these where you want your instance of Ultrawide to get Integration and Unit test results.  It will then pick up results from any files defined for those locations.  Each user has their own test data so it is possible for different users to view different test outputs against the same design.
 
 #### Uploading Test Data ####
+
 When you have run tests on, say, your build server and output the results to a file, that file needs to be uploaded to the Ultrawide server.  You can do this manually if the build server is a local machine by going to the test location in Ultrawide and uploading the file to it.  When you do this the defined location file will have a status of uploaded and the upload date/time.  For a more formal set up the best option is to use the REST API to upload the file.  See the API section for more details.
 
 Once new test data has been uploaded to Ultrawide, refreshing the test data in the GUI (Refresh menu) will update the results displayed against the Design.
@@ -309,7 +316,6 @@ A Test Summary can be overlaid on the Design in many Ultrawide views.  The allow
 This gives an at a glance view of the overall health and test coverage of the application and allows rapid pinpointing of the problem areas.
 
 Example Test Summary for one Feature:
-
 
  ![Test Summary](./images/TestSummary.png?raw=true)
 

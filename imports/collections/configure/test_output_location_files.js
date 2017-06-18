@@ -13,7 +13,7 @@ let Schema = new SimpleSchema({
     fileName:               {type: String, defaultValue: 'NONE'},                   // Name of actual file
     allFilesOfType:         {type: String, defaultValue: 'NONE'},                   // Alternative to a name - *.xxx
     fileStatus:             {type: String, defaultValue: TestLocationFileStatus.FILE_NOT_UPLOADED},                   // Present or not present on the server
-    lastUpdated:            {type: String, optional: true},                         // Last modified date for tests
+    lastUpdated:            {type: Date, optional: true},                           // Last modified date for tests
 });
 
 TestOutputLocationFiles.attachSchema(Schema);
