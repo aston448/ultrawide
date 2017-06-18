@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
 import MashSelectedItemContainer        from '../../containers/mash/MashSelectedItemContainer.jsx';
 import ScenarioTestResultsContainer     from '../../containers/mash/ScenarioTestResultsContainer.jsx';
 import AcceptanceTestScenarioMashItem   from './AcceptanceTestScenarioMashItem.jsx';
-import IntegrationTestScenarioMashItem  from './IntegrationTestScenarioMashItem.jsx';
-import UnitTestScenarioMashItem         from './UnitTestScenarioMashItem.jsx';
+import IntegrationTestScenarioMashItem  from './SingleTestScenarioMashItem.jsx';
+import UnitTestScenarioMashItem         from './MultiTestScenarioMashItem.jsx';
 
 // Ultrawide Services
 import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
@@ -149,7 +149,7 @@ class MashDesignItem extends Component {
 
                     case DisplayContext.MASH_INT_TESTS:
                         return (
-                            <IntegrationTestScenarioMashItem
+                            <SingleTestScenarioMashItem
                                 mashItem={designItem}
                             />
                         );

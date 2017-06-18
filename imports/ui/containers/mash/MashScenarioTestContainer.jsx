@@ -8,10 +8,10 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import MashUnitTestResult           from '../../components/mash/MashUnitTestResult.jsx';
+import ScenarioTestResult           from '../../components/mash/ScenarioTestResult.jsx';
 
 // Ultrawide Services
-import {DisplayContext}             from '../../../constants/constants.js';
+import {DisplayContext, TestType} from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 
@@ -28,7 +28,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class MashUnitTestList extends Component {
+class MashScenarioTestList extends Component {
     constructor(props) {
         super(props);
 
@@ -40,7 +40,7 @@ class MashUnitTestList extends Component {
         return testResults.map((testResult) => {
 
             return (
-                <MashUnitTestResult
+                <ScenarioTestResult
                     key={testResult._id}
                     testResult={testResult}
                 />
@@ -70,7 +70,7 @@ class MashUnitTestList extends Component {
     }
 }
 
-MashUnitTestList.propTypes = {
+MashScenarioTestList.propTypes = {
     testResults: PropTypes.array.isRequired
 };
 
@@ -84,30 +84,27 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-MashUnitTestList = connect(mapStateToProps)(MashUnitTestList);
+MashScenarioTestList = connect(mapStateToProps)(MashScenarioTestList);
 
 
-export default MashUnitTestContainer = createContainer(({params}) => {
+export default MashScenarioTestContainer = createContainer(({params}) => {
 
     let testResults = [];
 
     switch(params.displayContext){
-        case DisplayContext.VIEW_UNIT_MASH:
-            testResults = ClientContainerServices.getMashScenarioUnitTestResults(params.userContext, params.scenario);
-            //console.log("Found " + testResults.length + " unit tests for " + params.scenario.scenarioName) ;
+        case DisplayContext.MASH_UNIT_TESTS:
+            testResults = ClientContainerServices.getMashScenarioTestResults(params.userContext, params.scenario, TestType.UNIT);
             break;
 
-        case DisplayContext.VIEW_UNIT_UNLINKED:
-            testResults = ClientContainerServices.getMashUnlinkedUnitTestResults(params.userContext);
-            //console.log("Found " + testResults.length + " unlinked unit tests") ;
+        case DisplayContext.MASH_INT_TESTS:
+            testResults = ClientContainerServices.getMashScenarioTestResults(params.userContext, params.scenario, TestType.INTEGRATION);
             break;
+
     }
-
-
 
     return{
         testResults: testResults
     }
 
 
-}, MashUnitTestList);
+}, MashScenarioTestList);

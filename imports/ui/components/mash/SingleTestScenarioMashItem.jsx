@@ -5,11 +5,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import TestResultOverlay from '../dev/TestResultOverlay.jsx';
+import TestResultDetails from './TestResultDetails.jsx';
 
 // Ultrawide Services
 import TextLookups  from '../../../common/lookups.js';
-import {TestType}   from '../../../constants/constants.js'
+import {TestType, DisplayContext}   from '../../../constants/constants.js'
+
+import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
@@ -26,7 +28,7 @@ import {Glyphicon}      from 'react-bootstrap';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class IntegrationTestScenarioMashItem extends Component {
+export default class SingleTestScenarioMashItem extends Component {
 
     constructor(props) {
         super(props);
@@ -41,11 +43,37 @@ export default class IntegrationTestScenarioMashItem extends Component {
         this.setState({showResultDetails: !this.state.showResultDetails});
     }
 
-    render(){
-        const { mashItem } = this.props;
+    getTestResultDetails(userId, designVersionId, scenarioRef, testType){
 
-        const testStyle = mashItem.intMashTestStatus;
-        const testResult = TextLookups.mashTestStatus(mashItem.intMashTestStatus);
+        return ClientContainerServices.getMashScenarioTestResult(userId, designVersionId, scenarioRef, testType)
+    }
+
+    render(){
+        const { mashItem, displayContext } = this.props;
+
+        let testStyle = '';
+        let testOutcome = '';
+        let testType = '';
+
+        switch(displayContext){
+            case DisplayContext.MASH_ACC_TESTS:
+                break;
+
+            case DisplayContext.MASH_INT_TESTS:
+                testStyle = mashItem.intMashTestStatus;
+                testOutcome = TextLookups.mashTestStatus(mashItem.intMashTestStatus);
+                testType = TestType.INTEGRATION;
+                break;
+
+            case DisplayContext.MASH_UNIT_TESTS:
+                testStyle = mashItem.unitMashTestStatus;
+                testOutcome = TextLookups.mashTestStatus(mashItem.unitMashTestStatus);
+                testType = TestType.UNIT;
+                break;
+        }
+
+        // Get the details so we can display them for the one test for the scenario
+        const testResult = this.getTestResultDetails(mashItem.userId, mashItem.designVersionId, mashItem.designScenarioReferenceId, testType);
 
         if(this.state.showResultDetails) {
             return (
@@ -63,14 +91,13 @@ export default class IntegrationTestScenarioMashItem extends Component {
                         </Col>
                         <Col md={2} className="close-col">
                             <div className={'mash-scenario-result ' + testStyle}>
-                                {testResult}
+                                {testOutcome}
                             </div>
                         </Col>
                     </Row>
                     <Row>
-                        <TestResultOverlay
-                            testType={TestType.INTEGRATION}
-                            testResult={mashItem}
+                        <TestResultDetails
+                            testResult={testResult}
                         />
                     </Row>
                 </Grid>
@@ -92,7 +119,7 @@ export default class IntegrationTestScenarioMashItem extends Component {
                         </Col>
                         <Col md={2} className="close-col">
                             <div className={'mash-scenario-result ' + testStyle}>
-                                {testResult}
+                                {testOutcome}
                             </div>
                         </Col>
                     </Row>
@@ -103,6 +130,7 @@ export default class IntegrationTestScenarioMashItem extends Component {
 
 }
 
-IntegrationTestScenarioMashItem.propTypes = {
-    mashItem: PropTypes.object.isRequired,
+SingleTestScenarioMashItem.propTypes = {
+    mashItem:       PropTypes.object.isRequired,
+    displayContext: PropTypes.string.isRequired
 };

@@ -2,7 +2,7 @@ import fs from 'fs';
 
 import {DesignVersionComponents}                from '../../collections/design/design_version_components.js';
 import {DesignUpdateComponents}                 from '../../collections/design_update/design_update_components.js';
-import {UserIntTestResults}                     from '../../collections/dev/user_int_test_results.js'
+import {UserIntegrationTestResults}             from '../../collections/test_results/user_integration_test_results.js'
 
 
 import {ComponentType, TestType, MashTestStatus, TestDataStatus, LogLevel}   from '../../constants/constants.js';
@@ -138,7 +138,7 @@ class ChimpMochaTestServices{
 
     }
 
-    getJsonTestResults(resultsFile, userId, testType){
+    getJsonTestResults(resultsFile, userId){
 
         if(Meteor.isServer) {
 
@@ -179,79 +179,82 @@ class ChimpMochaTestServices{
                 return [];
             }
 
-
             // Return Standard Data ------------------------------------------------------------------------------------
+
+            // testFullName must always contain the Scenario as all of part of it.  May also contain test Suite Group and Name as well
+            // If it contains these it should be in the form 'Suite Group Name'
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Results: Passes {}, Fails {}, Pending {}", resultsJson.passes.length, resultsJson.failures.length, resultsJson.pending.length,);
 
-            switch(testType){
-                case TestType.INTEGRATION:
+            let resultsBatch = [];
 
-                    let resultsBatch = [];
+            // Add latest results
+            resultsJson.passes.forEach((test) => {
 
-                    // Add latest results
-                    resultsJson.passes.forEach((test) => {
-
-                        resultsBatch.push(
-                            {
-                                userId:             userId,
-                                testName:           test.title,
-                                testFullName:       test.fullTitle,
-                                testResult:         MashTestStatus.MASH_PASS,
-                                testError:          '',
-                                testErrorReason:    '',
-                                testDuration:       test.duration,
-                                stackTrace:         ''
-                            }
-                        );
-                    });
-
-                    resultsJson.failures.forEach((test) => {
-
-                        resultsBatch.push(
-                            {
-                                userId:             userId,
-                                testName:           test.title,
-                                testFullName:       test.fullTitle,
-                                testResult:         MashTestStatus.MASH_FAIL,
-                                testError:          test.err.message,       // This is the Reason plus the Error
-                                testErrorReason:    test.err.reason,
-                                testDuration:       test.duration,
-                                stackTrace:         test.err.stack
-                            }
-                        );
-                    });
-
-                    resultsJson.pending.forEach((test) => {
-
-                        resultsBatch.push(
-                            {
-                                userId:             userId,
-                                testName:           test.title,
-                                testFullName:       test.fullTitle,
-                                testResult:         MashTestStatus.MASH_PENDING,
-                                testError:          '',
-                                testErrorReason:    '',
-                                testDuration:       0,
-                                stackTrace:         ''
-                            }
-                        );
-                    });
-
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
-
-                    // Bulk insert the new data
-                    if(resultsBatch.length > 0) {
-                        UserIntTestResults.batchInsert(resultsBatch);
+                resultsBatch.push(
+                    {
+                        userId:             userId,
+                        testFullName:       test.fullTitle,
+                        testSuite:          'NONE',             // Not yet calculated
+                        testGroup:          'NONE',             // Not yet calculated
+                        testName:           test.title,
+                        testResult:         MashTestStatus.MASH_PASS,
+                        testError:          '',
+                        testErrorReason:    '',
+                        testDuration:       test.duration,
+                        testStackTrace:     ''
                     }
+                );
+            });
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
+            resultsJson.failures.forEach((test) => {
 
-                    break;
-                default:
+                resultsBatch.push(
+                    {
+                        userId:             userId,
+                        testFullName:       test.fullTitle,
+                        testSuite:          'NONE',             // Not yet calculated
+                        testGroup:          'NONE',             // Not yet calculated
+                        testName:           test.title,
+
+                        testResult:         MashTestStatus.MASH_FAIL,
+                        testError:          test.err.message,       // This is the Reason plus the Error
+                        testErrorReason:    test.err.reason,
+                        testDuration:       test.duration,
+                        testStackTrace:     test.err.stack
+                    }
+                );
+            });
+
+            resultsJson.pending.forEach((test) => {
+
+                resultsBatch.push(
+                    {
+                        userId:             userId,
+                        testFullName:       test.fullTitle,
+                        testSuite:          'NONE',             // Not yet calculated
+                        testGroup:          'NONE',             // Not yet calculated
+                        testName:           test.title,
+                        testResult:         MashTestStatus.MASH_PENDING,
+                        testError:          '',
+                        testErrorReason:    '',
+                        testDuration:       0,
+                        testStackTrace:     ''
+                    }
+                );
+            });
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
+
+            // Bulk insert the new data
+            if(resultsBatch.length > 0) {
+                UserIntegrationTestResults.batchInsert(resultsBatch);
             }
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Integration results");
+            log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
+
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Chimp Mocha results");
 
         }
 

@@ -10,14 +10,15 @@ export const UserUnitTestResults = new Mongo.Collection('userUnitTestResults');
 
 let Schema = new SimpleSchema({
     userId:             {type: String},                 // This user's results
-    testName:           {type: String},                 // Tests within Scenario scope
-    testFullName:       {type: String},                 // Includes Scenario Name
+    testFullName:       {type: String},                 // for results where suite / group not separated
+    testSuite:          {type: String},                 // e.g a Module
+    testGroup:          {type: String},                 // Scenario if multiple tests
+    testName:           {type: String},                 // Test if multiple tests or Scenario if just one test
     testResult:         {type: String},                 // Pass, Fail, Pending
     testError:          {type: String, optional: true}, // If fail
     testErrorReason:    {type: String, optional: true}, // If fail
     testDuration:       {type: String, optional: true}, // If present
-    stackTrace:         {type: String, optional: true}, // If fail
-    dataStatus:         {type: String, defaultValue: TestDataStatus.TEST_DATA_NEW_TEST} // Indicates latest changes to this data
+    testStackTrace:     {type: String, optional: true}, // If fail
 });
 
 UserUnitTestResults.attachSchema(Schema);

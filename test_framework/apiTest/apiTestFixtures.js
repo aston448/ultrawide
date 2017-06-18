@@ -23,7 +23,7 @@ import { UserTestTypeLocations }    from '../../imports/collections/configure/us
 import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserUnitTestMashData }     from '../../imports/collections/dev/user_unit_test_mash_data.js';
 import { UserIntTestResults }       from '../../imports/collections/dev/user_int_test_results.js';
-import { UserUnitTestResults }      from '../../imports/collections/dev/user_unit_test_results.js';
+import { UserUnitTestResults }      from '../../imports/collections/test_results/user_unit_test_results.js';
 import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 

@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import MashUnitTestContainer        from '../../containers/mash/MashUnitTestContainer.jsx';
+import MashScenarioTestContainer        from '../../containers/mash/MashScenarioTestContainer.jsx';
 
 // Ultrawide Services
 import { DisplayContext, MashTestStatus } from '../../../constants/constants.js';
@@ -26,7 +26,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class UnitTestScenarioMashItem extends Component {
+export class MultiTestScenarioMashItem extends Component {
 
     constructor(props) {
         super(props);
@@ -42,7 +42,7 @@ export class UnitTestScenarioMashItem extends Component {
     }
 
     render(){
-        const { mashItem, userContext } = this.props;
+        const { mashItem, userContext, displayContext } = this.props;
 
         const testStyle = mashItem.unitMashTestStatus;
 
@@ -71,10 +71,10 @@ export class UnitTestScenarioMashItem extends Component {
                     </Row>
                 </Grid>
 
-                <MashUnitTestContainer params={{
+                <MashScenarioTestContainer params={{
                     scenario: mashItem,
                     userContext: userContext,
-                    displayContext: DisplayContext.VIEW_UNIT_MASH
+                    displayContext: displayContext
                 }}/>
             </div>
         );
@@ -82,8 +82,9 @@ export class UnitTestScenarioMashItem extends Component {
 
 }
 
-UnitTestScenarioMashItem.propTypes = {
-    mashItem: PropTypes.object.isRequired,
+MultiTestScenarioMashItem.propTypes = {
+    mashItem:       PropTypes.object.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -94,4 +95,4 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-export default connect(mapStateToProps)(UnitTestScenarioMashItem);
+export default connect(mapStateToProps)(MultiTestScenarioMashItem);

@@ -6,6 +6,7 @@ import DesignVersionVerifications from '../../../test_framework/test_wrappers/de
 
 import {RoleType} from '../../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../../imports/constants/default_names.js';
+import {DesignValidationErrors} from '../../../imports/constants/validation_errors.js';
 
 describe('UC 101 - Add New Design', function() {
 
@@ -37,6 +38,30 @@ describe('UC 101 - Add New Design', function() {
         // Verify ------------------------------------------------------------------------------------------------------
         // Created a new Design
         expect(DesignVerifications.defaultNewDesignExists());
+
+    });
+
+    describe('A new Design can only be added by a Designer', function(){
+
+        it('cannot be added by Developer', function(){
+
+            // Expect failure with error
+            const expectation = {success: false, message: DesignValidationErrors.DESIGN_INVALID_ROLE_ADD};
+
+            DesignActions.addNewDesignAsRole(RoleType.DEVELOPER, expectation);
+
+            expect(DesignVerifications.defaultNewDesignDoesNotExist());
+        });
+
+        it('cannot be added by Manager', function(){
+
+            // Expect failure with error
+            const expectation = {success: false, message: DesignValidationErrors.DESIGN_INVALID_ROLE_ADD};
+
+            DesignActions.addNewDesignAsRole(RoleType.MANAGER, expectation);
+
+            expect(DesignVerifications.defaultNewDesignDoesNotExist());
+        });
 
     });
 

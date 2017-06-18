@@ -20,12 +20,12 @@ import { FeatureBackgroundSteps }           from '../collections/design/feature_
 import { ScenarioSteps }                    from '../collections/design/scenario_steps.js';
 import { DomainDictionary }                 from '../collections/design/domain_dictionary.js';
 import { UserDevFeatures }                  from '../collections/dev/user_dev_features.js';
-import { UserWorkPackageMashData }          from '../collections/dev/user_work_package_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
 import { UserUnitTestMashData }             from '../collections/dev/user_unit_test_mash_data.js';
 import { UserDevTestSummaryData }           from '../collections/summary/user_dev_test_summary_data.js';
 import { UserDevDesignSummaryData }         from '../collections/summary/user_dev_design_summary_data.js';
 import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
+import { UserMashScenarioTests }            from '../collections/mash/user_mash_scenario_tests.js';
 import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
 import { TestOutputLocationFiles }          from '../collections/configure/test_output_location_files.js';
 import { UserTestTypeLocations }            from '../collections/configure/user_test_type_locations.js';
@@ -135,8 +135,9 @@ class ClientContainerServices{
                 const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId);
                 const mmHandle = Meteor.subscribe('userUnitTestMashData', userContext.userId);
                 const arHandle = Meteor.subscribe('userAccTestResults', userContext.userId);
-                const irHandle = Meteor.subscribe('userIntTestResults', userContext.userId);
+                const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
                 const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
+                const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
                 const tsHandle = Meteor.subscribe('userDevTestSummaryData', userContext.userId);
                 const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userContext.userId);
                 const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
@@ -148,7 +149,7 @@ class ClientContainerServices{
                         !dusHandle.ready() ||
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !mmHandle.ready() ||
-                        !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() ||
+                        !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
                         !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready()
                     );
 
@@ -1856,6 +1857,27 @@ class ClientContainerServices{
     //     ).fetch();
     //
     // };
+
+    getMashScenarioTestResults(userContext, mashScenario, testType){
+
+        return UserMashScenarioTests.find({
+            userId:                         userContext.userId,
+            designVersionId:                userContext.designVersionId,
+            designScenarioReferenceId:      mashScenario.designScenarioReferenceId,
+            testType:                       testType
+        }).fetch();
+    }
+
+    // To be used when there is one test only of the given type for a Scenario
+    getMashScenarioTestResult(userId, designVersionId, scenarioRef, testType){
+
+        return UserMashScenarioTests.findOne({
+            userId:                         userId,
+            designVersionId:                designVersionId,
+            designScenarioReferenceId:      scenarioRef,
+            testType:                       testType
+        });
+    }
 
     // Get all unit test results relating to a specific Design Scenario
     getMashScenarioUnitTestResults(userContext, scenario){

@@ -41,11 +41,14 @@ class TestIntegrationServices{
             MashDataModules.getIntegrationTestResults(userContext);
             MashDataModules.getUnitTestResults(userContext);
 
-            // Load the unit test data below the Scenario level
-            MashDataModules.updateUnitTestScenarioResults(userContext);
+            // Recalculate the design-test mash
+            MashDataModules.recreateUserScenarioTestMashData(userContext);
 
-            // Recalculate the Design Mash Scenarios
-            MashDataModules.updateUserMashScenariosForDesignVersion(userContext);
+            // // Load the unit test data below the Scenario level
+            // MashDataModules.updateUnitTestScenarioResults(userContext);
+            //
+            // // Recalculate the Design Mash Scenarios
+            // MashDataModules.updateUserMashScenariosForDesignVersion(userContext);
 
 
             // And update the test summary data

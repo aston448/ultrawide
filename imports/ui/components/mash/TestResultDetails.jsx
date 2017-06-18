@@ -21,7 +21,7 @@ import {MashTestStatus, TestType} from '../../../constants/constants.js';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class TestResultOverlay extends Component {
+export default class TestResultDetails extends Component {
 
     constructor(props) {
         super(props);
@@ -33,45 +33,20 @@ export default class TestResultOverlay extends Component {
     }
 
     render(){
-        const { testType, testResult } = this.props;
+        const { testResult } = this.props;
 
         let resultDisplay = '';
 
-        let testOutcome = '';
-        let testError = '';
-        let testStack = '';
-        let testDuration = '';
-
-        switch(testType){
-            case TestType.UNIT:
-                testOutcome = testResult.testOutcome;
-                testError = testResult.testErrors;
-                testStack = testResult.testStack;
-                testDuration = testResult.testDuration;
-                break;
-            case TestType.INTEGRATION:
-                testOutcome = testResult.intMashTestStatus;
-                testError = testResult.intErrorMessage;
-                testStack = testResult.intStackTrace;
-                testDuration = testResult.intDuration;
-                break;
-            case TestType.ACCEPTANCE:
-                testOutcome = testResult.accMashTestStatus;
-                testError = testResult.accErrorMessage;
-                testStack = 'NONE';
-                testDuration = testResult.accDuration;
-                break;
-        }
-
-        switch(testOutcome){
+        switch(testResult.testOutcome){
             case  MashTestStatus.MASH_FAIL:
 
                 resultDisplay =
                     <div className="test-fail-overlay">
                         <div className="test-result-header">Error</div>
-                        <div className="test-result-error">{testError}</div>
+                        <div className="test-result-error">{testResult.testError}</div>
+                        <div className="test-result-error">{testResult.testErrorReason}</div>
                         <div className="test-result-header">Stack</div>
-                        <div className="test-result-stack">{testStack}</div>
+                        <div className="test-result-stack">{testResult.testStack}</div>
                     </div>;
                 break;
 
@@ -79,7 +54,15 @@ export default class TestResultOverlay extends Component {
 
                 resultDisplay =
                     <div className="test-pass-overlay">
-                        <div className="test-result-pass">{'Passed in ' + testDuration + 'ms'}</div>
+                        <div className="test-result-pass">{'Passed in ' + testResult.testDuration + 'ms'}</div>
+                    </div>;
+                break;
+
+            case MashTestStatus.MASH_PENDING:
+
+                resultDisplay =
+                    <div className="test-none-overlay">
+                        <div className="test-result-none">Test is pending.  Not yet implemented</div>
                     </div>;
                 break;
 
@@ -99,7 +82,6 @@ export default class TestResultOverlay extends Component {
 
 }
 
-TestResultOverlay.propTypes = {
-    testType: PropTypes.string.isRequired,
+TestResultDetails.propTypes = {
     testResult: PropTypes.object.isRequired
 };

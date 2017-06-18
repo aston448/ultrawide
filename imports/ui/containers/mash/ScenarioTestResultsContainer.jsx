@@ -9,8 +9,9 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import AcceptanceTestScenarioMashItem       from '../../components/mash/AcceptanceTestScenarioMashItem.jsx';
-import IntegrationTestScenarioMashItem      from '../../components/mash/IntegrationTestScenarioMashItem.jsx';
-import UnitTestScenarioMashItem             from '../../components/mash/UnitTestScenarioMashItem.jsx';
+import SingleTestScenarioMashItem           from '../../components/mash/SingleTestScenarioMashItem.jsx';
+import MultiTestScenarioMashItem            from '../../components/mash/MultiTestScenarioMashItem.jsx';
+import UnitTestScenarioMashItem             from '../../components/mash/MultiTestScenarioMashItem.jsx';
 
 // Ultrawide Services
 import { DisplayContext }    from '../../../constants/constants.js';
@@ -40,30 +41,43 @@ class ScenarioTestResultsList extends Component {
         return true;
     };
 
-    renderAcceptanceScenarios(mashData){
-
-        return mashData.map((mashItem) => {
-            if(mashItem) {
-                return (
-                    <AcceptanceTestScenarioMashItem
-                        key={mashItem._id}
-                        mashItem={mashItem}
-                    />
-                );
-            }
-        });
-    };
+    // renderAcceptanceScenarios(mashData){
+    //
+    //     return mashData.map((mashItem) => {
+    //         if(mashItem) {
+    //             return (
+    //                 <AcceptanceTestScenarioMashItem
+    //                     key={mashItem._id}
+    //                     mashItem={mashItem}
+    //                 />
+    //             );
+    //         }
+    //     });
+    // };
 
     renderIntegrationScenarios(mashData){
 
         return mashData.map((mashItem) => {
             if(mashItem) {
-                return (
-                    <IntegrationTestScenarioMashItem
-                        key={mashItem._id}
-                        mashItem={mashItem}
-                    />
-                );
+
+                // For integration tests sow as a list if more than one test is defined for a scenario
+                if(mashItem.intTestCount > 1){
+                    return (
+                        <MultiTestScenarioMashItem
+                            key={mashItem._id}
+                            mashItem={mashItem}
+                            displayContext={DisplayContext.MASH_INT_TESTS}
+                        />
+                    );
+                } else {
+                    return (
+                        <SingleTestScenarioMashItem
+                            key={mashItem._id}
+                            mashItem={mashItem}
+                            displayContext={DisplayContext.MASH_INT_TESTS}
+                        />
+                    );
+                }
             }
         });
     };
@@ -72,12 +86,16 @@ class ScenarioTestResultsList extends Component {
 
         return mashData.map((mashItem) => {
             if(mashItem) {
+
+                // For unit tests we always show as a list even if just one test
                 return (
-                    <UnitTestScenarioMashItem
+                    <MultiTestScenarioMashItem
                         key={mashItem._id}
                         mashItem={mashItem}
+                        displayContext={DisplayContext.MASH_UNIT_TESTS}
                     />
                 );
+
             }
         });
     };
@@ -88,9 +106,9 @@ class ScenarioTestResultsList extends Component {
 
         switch(displayContext){
             case DisplayContext.MASH_ACC_TESTS:
+                // TODO
                 return(
                     <div>
-                        {this.renderAcceptanceScenarios(scenarioMashData)}
                     </div>
                 );
                 break;

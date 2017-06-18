@@ -7,7 +7,7 @@ import { DesignUpdateComponents }       from '../../collections/design_update/de
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
 import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
 import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
-import { UserUnitTestResults }          from '../../collections/dev/user_unit_test_results.js';
+import { UserUnitTestResults }          from '../../collections/test_results/user_unit_test_results.js';
 
 // Ultrawide services
 import { ComponentType, ViewType, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';

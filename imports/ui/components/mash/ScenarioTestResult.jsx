@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import TestResultOverlay    from '../dev/TestResultOverlay.jsx';
+import TestResultDetails    from './TestResultDetails.jsx';
 
 // Ultrawide Services
 import {TestType}       from '../../../constants/constants.js';
@@ -20,11 +20,11 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Mash Unit Test Result Component - A single Mocha test result
+// Mash Test Result Component - A single test result for a Scenario with multiple tests
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class MashUnitTestResult extends Component {
+export default class ScenarioTestResult extends Component {
 
     constructor(props) {
         super(props);
@@ -51,7 +51,7 @@ export default class MashUnitTestResult extends Component {
                         <Row className="unit-test-result">
                             <Col md={4} className="close-col">
                                 <div className="unit-test-group">
-                                    {testResult.testGroupName + ': '}
+                                    {testResult.suiteName + ': '}
                                 </div>
                             </Col>
                             <Col md={7} className="close-col">
@@ -66,8 +66,7 @@ export default class MashUnitTestResult extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <TestResultOverlay
-                                testType={TestType.UNIT}
+                            <TestResultDetails
                                 testResult={testResult}
                             />
                         </Row>
@@ -81,7 +80,7 @@ export default class MashUnitTestResult extends Component {
                         <Row className="unit-test-result">
                             <Col md={4} className="close-col">
                                 <div className="unit-test-group">
-                                    {testResult.testGroupName + ': '}
+                                    {testResult.suiteName + ': '}
                                 </div>
                             </Col>
                             <Col md={7} className="close-col">
@@ -102,6 +101,6 @@ export default class MashUnitTestResult extends Component {
     }
 }
 
-MashUnitTestResult.propTypes = {
+ScenarioTestResult.propTypes = {
     testResult: PropTypes.object.isRequired
 };
