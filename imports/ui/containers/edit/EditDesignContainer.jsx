@@ -201,7 +201,7 @@ export class DesignApplicationsList extends Component {
                     // Tests not displayed for these items
                     intTests =
                         <MashSelectedItemContainer params={{
-                            componentType: 'NONE',
+                            childComponentType: 'NONE',
                             designItemId: 'NONE',
                             userContext: userContext,
                             view: view,
@@ -211,7 +211,7 @@ export class DesignApplicationsList extends Component {
                 case ComponentType.FEATURE:
                     intTests =
                         <MashSelectedItemContainer params={{
-                            componentType: ComponentType.FEATURE_ASPECT,
+                            childComponentType: ComponentType.FEATURE_ASPECT,
                             designItemId: 'NONE',
                             userContext: userContext,
                             view: view,
@@ -219,10 +219,19 @@ export class DesignApplicationsList extends Component {
                         }}/>;
                     break;
                 case ComponentType.FEATURE_ASPECT:
+                    intTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.SCENARIO,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_INT_TESTS
+                        }}/>;
+                        break;
                 case ComponentType.SCENARIO:
                     intTests =
                         <MashSelectedItemContainer params={{
-                            componentType: ComponentType.SCENARIO,
+                            childComponentType: ComponentType.TEST,
                             designItemId: 'NONE',
                             userContext: userContext,
                             view: view,
@@ -234,7 +243,7 @@ export class DesignApplicationsList extends Component {
         } else {
             intTests =
                 <MashSelectedItemContainer params={{
-                    componentType: 'NONE',
+                    childComponentType: 'NONE',
                     designItemId: 'NONE',
                     userContext: userContext,
                     view: view,
@@ -251,7 +260,7 @@ export class DesignApplicationsList extends Component {
                     // Tests not displayed for these items
                     unitTests =
                         <MashSelectedItemContainer params={{
-                            componentType: 'NONE',
+                            childComponentType: 'NONE',
                             designItemId: 'NONE',
                             userContext: userContext,
                             view: view,
@@ -261,7 +270,7 @@ export class DesignApplicationsList extends Component {
                 case ComponentType.FEATURE:
                     unitTests =
                         <MashSelectedItemContainer params={{
-                            componentType: ComponentType.FEATURE_ASPECT,
+                            childComponentType: ComponentType.FEATURE_ASPECT,
                             designItemId: 'NONE',
                             userContext: userContext,
                             view: view,
@@ -269,10 +278,19 @@ export class DesignApplicationsList extends Component {
                         }}/>;
                     break;
                 case ComponentType.FEATURE_ASPECT:
+                    unitTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.SCENARIO,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_UNIT_TESTS
+                        }}/>;
+                        break;
                 case ComponentType.SCENARIO:
                     unitTests =
                         <MashSelectedItemContainer params={{
-                            componentType: ComponentType.SCENARIO,
+                            childComponentType: ComponentType.TEST,
                             designItemId: 'NONE',
                             userContext: userContext,
                             view: view,
@@ -284,7 +302,7 @@ export class DesignApplicationsList extends Component {
         } else {
             unitTests =
                 <MashSelectedItemContainer params={{
-                    componentType: 'NONE',
+                    childComponentType: 'NONE',
                     designItemId: 'NONE',
                     userContext: userContext,
                     view: view,

@@ -48,7 +48,7 @@ export default class ScenarioTestResult extends Component {
             return (
                 <div onClick={() => this.toggleOverlay()}>
                     <Grid className="close-grid">
-                        <Row className="unit-test-result">
+                        <Row>
                             <Col md={4} className="close-col">
                                 <div className="unit-test-group">
                                     {testResult.suiteName + ': '}
@@ -60,7 +60,7 @@ export default class ScenarioTestResult extends Component {
                                 </div>
                             </Col>
                             <Col md={1} className="close-col">
-                                <div className={"unit-test " + testStyle}>
+                                <div className={"unit-test-result " + testStyle}>
                                     {TextLookups.mashTestStatus(testResult.testOutcome)}
                                 </div>
                             </Col>
@@ -77,7 +77,7 @@ export default class ScenarioTestResult extends Component {
             return (
                 <div onClick={() => this.toggleOverlay()}>
                     <Grid className="close-grid">
-                        <Row className="unit-test-result">
+                        <Row>
                             <Col md={4} className="close-col">
                                 <div className="unit-test-group">
                                     {testResult.suiteName + ': '}
@@ -89,7 +89,7 @@ export default class ScenarioTestResult extends Component {
                                 </div>
                             </Col>
                             <Col md={1} className="close-col">
-                                <div className={"unit-test " + testStyle}>
+                                <div className={"unit-test-result " + testStyle}>
                                     {TextLookups.mashTestStatus(testResult.testOutcome)}
                                 </div>
                             </Col>

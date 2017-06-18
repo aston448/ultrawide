@@ -13,3 +13,4 @@ imports/service_modules/context/
 imports/servicers/audit/
 npm-debug.log
 tests/mocha-mod-output.json
+!/imports/collections/test_results/user_acc_test_results.js

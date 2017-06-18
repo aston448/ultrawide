@@ -182,6 +182,7 @@ export const ComponentType = {
     FEATURE:            'FEATURE',
     FEATURE_ASPECT:     'FEATURE_ASPECT',
     SCENARIO:           'SCENARIO',
+    TEST:               'TEST',
     SCENARIO_STEP:      'SCENARIO_STEP',
     BACKGROUND_STEP:    'BACKGROUND_STEP',
     DRAGGABLE_ITEM:     'DRAGGABLE'

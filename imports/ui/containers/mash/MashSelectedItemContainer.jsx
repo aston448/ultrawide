@@ -257,10 +257,14 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
 
     let designItems = [];
 
+    //console.log("Selected item type is " + itemType);
+
     switch(itemType){
+        case ComponentType.FEATURE_ASPECT:
         case ComponentType.SCENARIO:
 
-            // User has selected a Scenario in the design
+            // For both of these we want to get Scenario Mash data rather than more design items
+
             designItems = ClientContainerServices.getScenarioMashData(
                 params.userContext,
                 featureAspectReferenceId,
@@ -269,21 +273,11 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
 
             break;
 
-        case ComponentType.FEATURE_ASPECT:
-
-            // User has selected a Feature Aspect in the design
-            designItems = ClientContainerServices.getScenarioMashData(
-                params.userContext,
-                featureAspectReferenceId
-            );
-
-            break;
-
         default:
 
             // Anything else we get the actual design items, not the scenario mash
             designItems = ClientContainerServices.getComponentDataForParentComponent(
-                params.componentType,
+                params.childComponentType,
                 params.view,
                 params.userContext.designVersionId,
                 params.userContext.designUpdateId,
@@ -294,7 +288,7 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
 
     }
 
-    //console.log("Found " + designItems.length + " items of type " + params.componentType);
+    //console.log("Found " + designItems.length + " items of type " + params.childComponentType + " for item type " + itemType);
 
     return{
         designItems:    designItems,

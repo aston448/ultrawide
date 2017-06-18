@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { UserAccTestResults } from '../../collections/dev/user_acc_test_results.js'
+import { UserAccTestResults } from '../../collections/test_results/user_acc_test_results.js'
 
 import { ComponentType, TestType, MashTestStatus, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js';

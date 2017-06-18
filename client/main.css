@@ -2115,8 +2115,18 @@ input {
     background-color: transparent;
 }
 
+.mash-unit-scenario-header{
+    margin: 0 5px 0 5px;
+
+}
+
+.mash-unit-scenario-header-multi{
+    margin: 0 5px 0 5px;
+    border-bottom: 1px solid lightgrey;
+}
+
 .mash-unit-scenario-results{
-    margin: 0 10px 0 25px;
+    margin: 0 5px 0 25px;
 
 }
 
@@ -2126,6 +2136,7 @@ input {
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
     background-color: transparent;
+    text-align: right;
 }
 
 .mash-unit-test-scenario{
@@ -2165,11 +2176,21 @@ input {
 
 .unit-test{
     margin: 0;
-    padding: 2px 0 0 20px;
+    padding: 2px 0 0 0px;
     border: none;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  11px;
     background-color: transparent;
+}
+
+.unit-test-result{
+    margin: 0;
+    padding: 2px 0 0 0px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    background-color: transparent;
+    text-align: right;
 }
 
 .test-summary-text{

@@ -52,35 +52,29 @@ class MashDesignItem extends Component {
 
         let componentType = ComponentType.SCENARIO;
 
+        //console.log("Design Item Component Type: " + designItem.componentType);
+
         if(designItem.componentType){
             componentType = designItem.componentType;
         }
 
+        //console.log("Component Type: " + componentType);
+
         switch(componentType){
-            // case ComponentType.APPLICATION:
-            //     return(
-            //         <MashSelectedItemContainer params={{
-            //             componentType: ComponentType.DESIGN_SECTION,
-            //             designItemId: designItem._id,
-            //             userContext: userContext,
-            //             view: view,
-            //             displayContext: displayContext
-            //         }}/>
-            //     );
 
             case ComponentType.DESIGN_SECTION:
                 // Just get more items.  Could be Features or more Sections
                 return(
                     <div>
                         <MashSelectedItemContainer params={{
-                            componentType: ComponentType.FEATURE,
+                            childComponentType: ComponentType.FEATURE,
                             designItemId: designItem._id,
                             userContext: userContext,
                             view: view,
                             displayContext: displayContext
                         }}/>
                         <MashSelectedItemContainer params={{
-                            componentType: ComponentType.DESIGN_SECTION,
+                            childComponentType: ComponentType.DESIGN_SECTION,
                             designItemId: designItem._id,
                             userContext: userContext,
                             view: view,
@@ -99,7 +93,7 @@ class MashDesignItem extends Component {
                         </div>
 
                         <MashSelectedItemContainer params={{
-                            componentType: ComponentType.FEATURE_ASPECT,
+                            childComponentType: ComponentType.FEATURE_ASPECT,
                             designItemId: designItem._id,
                             userContext: userContext,
                             view: view,
@@ -115,6 +109,8 @@ class MashDesignItem extends Component {
 
                 if(this.hasScenarios(designItem, userContext)) {
 
+                    //console.log("Displaying scenarios for feature aspect " + designItem.componentNameNew);
+
                     return (
                         <div>
 
@@ -125,7 +121,8 @@ class MashDesignItem extends Component {
                             <ScenarioTestResultsContainer params={{
                                 userContext: userContext,
                                 featureAspectReferenceId: designItem.componentReferenceId,
-                                displayContext: displayContext
+                                displayContext: displayContext,
+                                mashData: null
                             }}/>
                         </div>
                     );
@@ -136,31 +133,19 @@ class MashDesignItem extends Component {
 
             case ComponentType.SCENARIO:
 
-                // For a scenario there is no further list of Design items and we have the mash data in designItem
-                // so display the test results...
+                // Here the designItem contains the actual Scenario Mash data - should be for one scenario
 
-                switch(displayContext){
-                    case DisplayContext.MASH_ACC_TESTS:
-                        return(
-                            <AcceptanceTestScenarioMashItem
-                                mashItem={designItem}
-                            />
-                        );
+                return (
+                    <div>
 
-                    case DisplayContext.MASH_INT_TESTS:
-                        return (
-                            <SingleTestScenarioMashItem
-                                mashItem={designItem}
-                            />
-                        );
-
-                    case DisplayContext.MASH_UNIT_TESTS:
-                        return (
-                            <UnitTestScenarioMashItem
-                                mashItem={designItem}
-                            />
-                        );
-                }
+                        <ScenarioTestResultsContainer params={{
+                            userContext: userContext,
+                            featureAspectReferenceId: 'NONE',
+                            displayContext: displayContext,
+                            mashData: designItem
+                        }}/>
+                    </div>
+                );
 
         }
 

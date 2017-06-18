@@ -9,6 +9,7 @@ import MashScenarioTestContainer        from '../../containers/mash/MashScenario
 
 // Ultrawide Services
 import { DisplayContext, MashTestStatus } from '../../../constants/constants.js';
+import TextLookups  from '../../../common/lookups.js';
 
 // Bootstrap
 import {Grid, Row, Col}     from 'react-bootstrap';
@@ -44,29 +45,42 @@ export class MultiTestScenarioMashItem extends Component {
     render(){
         const { mashItem, userContext, displayContext } = this.props;
 
-        const testStyle = mashItem.unitMashTestStatus;
+        let testStyle = '';
+        let testOutcome = '';
 
-        let resultStyle = 'scenario-test-row-untested';
-        if(mashItem.unitMashTestStatus === MashTestStatus.MASH_PASS){
-            resultStyle = 'scenario-test-row-pass';
-        }
-        if(mashItem.unitMashTestStatus === MashTestStatus.MASH_FAIL){
-            resultStyle = 'scenario-test-row-fail';
+        switch(displayContext){
+            case DisplayContext.MASH_ACC_TESTS:
+                break;
+
+            case DisplayContext.MASH_INT_TESTS:
+                testStyle = mashItem.intMashTestStatus;
+                testOutcome = TextLookups.mashTestStatus(mashItem.intMashTestStatus);
+                break;
+
+            case DisplayContext.MASH_UNIT_TESTS:
+                testStyle = mashItem.unitMashTestStatus;
+                testOutcome = TextLookups.mashTestStatus(mashItem.unitMashTestStatus);
+                break;
         }
 
         return(
             <div className="mash-unit-scenario">
                 <Grid>
-                    <Row>
-                        <Col md={12} className="close-col">
+                    <Row className="mash-unit-scenario-header-multi">
+                        <Col md={11} className="close-col">
                             <InputGroup>
                                 <InputGroup.Addon>
                                     <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/></div>
                                 </InputGroup.Addon>
-                                <div className="mash-scenario">
+                                <div className={'mash-scenario ' + testStyle}>
                                     {mashItem.scenarioName}
                                 </div>
                             </InputGroup>
+                        </Col>
+                        <Col md={1} className="close-col">
+                            <div className={'mash-scenario-result ' + testStyle}>
+                                {testOutcome}
+                            </div>
                         </Col>
                     </Row>
                 </Grid>

@@ -18,7 +18,7 @@ import { TestOutputLocations }      from '../../imports/collections/configure/te
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
-import { UserUnitTestMashData }     from '../../imports/collections/dev/user_unit_test_mash_data.js';
+import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
 import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
@@ -767,8 +767,9 @@ class TestDataHelpers {
         if(testScenario){
 
             // Assumption that unit test names are unique in a scenario in the test data
-            const unitTestResult = UserUnitTestMashData.findOne({
+            const unitTestResult = UserMashScenarioTests.findOne({
                 userId:                     userContext.userId,
+                designVersionId:            userContext.designVersionId,
                 designScenarioReferenceId:  testScenario.componentReferenceId,
                 testName:                   unitTestName
             });

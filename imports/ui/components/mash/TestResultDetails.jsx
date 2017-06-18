@@ -37,42 +37,51 @@ export default class TestResultDetails extends Component {
 
         let resultDisplay = '';
 
-        switch(testResult.testOutcome){
-            case  MashTestStatus.MASH_FAIL:
+        if(testResult){
 
-                resultDisplay =
-                    <div className="test-fail-overlay">
-                        <div className="test-result-header">Error</div>
-                        <div className="test-result-error">{testResult.testError}</div>
-                        <div className="test-result-error">{testResult.testErrorReason}</div>
-                        <div className="test-result-header">Stack</div>
-                        <div className="test-result-stack">{testResult.testStack}</div>
-                    </div>;
-                break;
+            switch(testResult.testOutcome){
+                case  MashTestStatus.MASH_FAIL:
 
-            case MashTestStatus.MASH_PASS:
+                    resultDisplay =
+                        <div className="test-fail-overlay">
+                            <div className="test-result-header">Error</div>
+                            <div className="test-result-error">{testResult.testError}</div>
+                            <div className="test-result-error">{testResult.testErrorReason}</div>
+                            <div className="test-result-header">Stack</div>
+                            <div className="test-result-stack">{testResult.testStack}</div>
+                        </div>;
+                    break;
 
-                resultDisplay =
-                    <div className="test-pass-overlay">
-                        <div className="test-result-pass">{'Passed in ' + testResult.testDuration + 'ms'}</div>
-                    </div>;
-                break;
+                case MashTestStatus.MASH_PASS:
 
-            case MashTestStatus.MASH_PENDING:
+                    resultDisplay =
+                        <div className="test-pass-overlay">
+                            <div className="test-result-pass">{'Passed in ' + testResult.testDuration + 'ms'}</div>
+                        </div>;
+                    break;
 
-                resultDisplay =
-                    <div className="test-none-overlay">
-                        <div className="test-result-none">Test is pending.  Not yet implemented</div>
-                    </div>;
-                break;
+                case MashTestStatus.MASH_PENDING:
 
-            default:
+                    resultDisplay =
+                        <div className="test-none-overlay">
+                            <div className="test-result-none">Test is pending.  Not yet implemented</div>
+                        </div>;
+                    break;
 
-                resultDisplay =
-                    <div className="test-none-overlay">
-                        <div className="test-result-none">No test completed yet.  Check that Scenario names match exactly</div>
-                    </div>;
-                break;
+                default:
+
+                    resultDisplay =
+                        <div className="test-none-overlay">
+                            <div className="test-result-none">No test completed yet.</div>
+                        </div>;
+                    break;
+            }
+        } else {
+
+            resultDisplay =
+                <div className="test-none-overlay">
+                    <div className="test-result-none">No test found.  Check that Scenario names match exactly if you think there is a test</div>
+                </div>;
         }
 
         return(
@@ -83,5 +92,5 @@ export default class TestResultDetails extends Component {
 }
 
 TestResultDetails.propTypes = {
-    testResult: PropTypes.object.isRequired
+    testResult: PropTypes.object
 };

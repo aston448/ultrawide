@@ -21,10 +21,8 @@ import { ScenarioSteps }                    from '../collections/design/scenario
 import { DomainDictionary }                 from '../collections/design/domain_dictionary.js';
 import { UserDevFeatures }                  from '../collections/dev/user_dev_features.js';
 import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
-import { UserUnitTestMashData }             from '../collections/dev/user_unit_test_mash_data.js';
 import { UserDevTestSummaryData }           from '../collections/summary/user_dev_test_summary_data.js';
 import { UserDevDesignSummaryData }         from '../collections/summary/user_dev_design_summary_data.js';
-import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
 import { UserMashScenarioTests }            from '../collections/mash/user_mash_scenario_tests.js';
 import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
 import { TestOutputLocationFiles }          from '../collections/configure/test_output_location_files.js';
@@ -898,11 +896,11 @@ class ClientContainerServices{
     }
 
     // Get data for all nested design components inside the specified parent
-    getComponentDataForParentComponent(componentType, view, designVersionId, designUpdateId, workPackageId, parentId, displayContext){
+    getComponentDataForParentComponent(childComponentType, view, designVersionId, designUpdateId, workPackageId, parentId, displayContext){
         let currentComponents = [];
         let wpComponents = [];
 
-        //console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
+        //console.log("Looking for " + childComponentType + " data for view " + view + " and context " + displayContext);
 
         switch(view)
         {
@@ -913,7 +911,7 @@ class ClientContainerServices{
                 currentComponents = DesignVersionComponents.find(
                     {
                         designVersionId:        designVersionId,
-                        componentType:          componentType,
+                        componentType:          childComponentType,
                         componentParentIdNew:   parentId,
                         updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
                     },
@@ -933,7 +931,7 @@ class ClientContainerServices{
                         currentComponents = DesignVersionComponents.find(
                             {
                                 designVersionId:        designVersionId,
-                                componentType:          componentType,
+                                componentType:          childComponentType,
                                 componentParentIdNew:   parentId,
                                 updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
                             },
@@ -948,7 +946,7 @@ class ClientContainerServices{
                     currentComponents = DesignVersionComponents.find(
                         {
                             designVersionId: designVersionId,
-                            componentType: componentType,
+                            componentType: childComponentType,
                             componentParentIdNew: parentId
                         },
                         {sort: {componentIndexNew: 1}}
@@ -973,7 +971,7 @@ class ClientContainerServices{
                             {
                                 designVersionId:        designVersionId,
                                 designUpdateId:         designUpdateId,
-                                componentType:          componentType,
+                                componentType:          childComponentType,
                                 componentParentIdNew:   parentId,
                             },
                             {sort:{componentIndexNew: 1}}
@@ -988,7 +986,7 @@ class ClientContainerServices{
                             {
                                 designVersionId:        designVersionId,
                                 designUpdateId:         designUpdateId,
-                                componentType:          componentType,
+                                componentType:          childComponentType,
                                 componentParentIdNew:   parentId,
                                 scopeType:              {$ne: UpdateScopeType.SCOPE_PEER_SCOPE}
                             },
@@ -1003,7 +1001,7 @@ class ClientContainerServices{
                         currentComponents = DesignVersionComponents.find(
                             {
                                 designVersionId:        designVersionId,
-                                componentType:          componentType,
+                                componentType:          childComponentType,
                                 componentParentIdOld:   parentId,
                                 updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_ADDED}
                             },
@@ -1017,7 +1015,7 @@ class ClientContainerServices{
                         currentComponents = DesignVersionComponents.find(
                             {
                                 designVersionId:        designVersionId,
-                                componentType:          componentType,
+                                componentType:          childComponentType,
                                 componentParentIdNew:   parentId
                             },
                             {sort:{componentIndexNew: 1}}
@@ -1043,7 +1041,7 @@ class ClientContainerServices{
                             {
                                 designVersionId: designVersionId,
                                 componentParentIdNew: parentId,
-                                componentType: componentType
+                                componentType: childComponentType
                             },
                             {sort: {componentIndexNew: 1}}
                         ).fetch();
@@ -1065,7 +1063,7 @@ class ClientContainerServices{
                                 {
                                     workPackageId: workPackageId,
                                     componentParentReferenceId: parent.componentReferenceId,
-                                    componentType: componentType
+                                    componentType: childComponentType
                                 },
                                 {sort: {componentIndex: 1}}
                             ).fetch();
@@ -1105,7 +1103,7 @@ class ClientContainerServices{
                                 designVersionId: designVersionId,
                                 designUpdateId: designUpdateId,
                                 componentParentIdNew: parentId,
-                                componentType: componentType,
+                                componentType: childComponentType,
                                 scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
                             },
                             {sort: {componentIndexNew: 1}}
@@ -1129,7 +1127,7 @@ class ClientContainerServices{
                                 {
                                     workPackageId: workPackageId,
                                     componentParentReferenceId: parent.componentReferenceId,
-                                    componentType: componentType
+                                    componentType: childComponentType
                                 },
                                 {sort: {componentIndex: 1}}
                             ).fetch();
@@ -1446,6 +1444,8 @@ class ClientContainerServices{
 
         // Return all scenario mash data for the current Feature Aspect or Scenario
 
+        //console.log("looking for scenarios with FA: " + featureAspectReferenceId + " and SC: " + scenarioReferenceId);
+
         if(userContext.workPackageId === 'NONE') {
 
             // Get all scenarios
@@ -1516,348 +1516,6 @@ class ClientContainerServices{
         }
     }
 
-    // getDesignDevMashData(userContext, mashCurrentItem){
-    //
-    //     // Return all the data that is relevant to the currently selected Design Item or item in the Mash
-    //
-    //     let selectionComponentId = userContext.designComponentId;
-    //     let selectionComponentType = userContext.designComponentType;
-    //
-    //     if(mashCurrentItem){
-    //         // We don't want the main selection from the design - we want local mash data
-    //         selectionComponentId = mashCurrentItem.designComponentId;
-    //         selectionComponentType = mashCurrentItem.mashComponentType;
-    //     }
-    //
-    //     log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Mash Data for component type {} with id {} ", selectionComponentType, selectionComponentId);
-    //
-    //     // Get user context current Design Component
-    //     let selectedDesignComponent = null;
-    //
-    //     if(selectionComponentId === 'NONE'){
-    //         return [];
-    //
-    //     } else {
-    //         if (userContext.designUpdateId === 'NONE') {
-    //             selectedDesignComponent = DesignVersionComponents.findOne({_id: selectionComponentId})
-    //         } else {
-    //             selectedDesignComponent = DesignUpdateComponents.findOne({_id: selectionComponentId})
-    //         }
-    //
-    //         if(!selectedDesignComponent){
-    //             return [];
-    //         }
-    //
-    //         log((msg) => console.log(msg), LogLevel.TRACE, "User context is USER: {}, DV: {}, DU: {}, WP: {}",
-    //         userContext.userId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
-    //
-    //         switch (selectionComponentType) {
-    //             case ComponentType.APPLICATION:
-    //             case ComponentType.DESIGN_SECTION:
-    //                 // Return any FEATURE that is a child of this item
-    //                 let returnData = [];
-    //
-    //                 const intTestMash = UserWorkPackageMashData.find(
-    //                     {
-    //                         userId: userContext.userId,
-    //                         designVersionId: userContext.designVersionId,
-    //                         designUpdateId: userContext.designUpdateId,
-    //                         workPackageId: userContext.workPackageId,
-    //                         mashComponentType: ComponentType.FEATURE
-    //                     },
-    //                     {sort:{mashItemFeatureIndex: 1}}    // Features have their own sorting so as to get a global order
-    //                 ).fetch();
-    //
-    //                 log((msg) => console.log(msg), LogLevel.TRACE, "Found {} Features in total", intTestMash.length);
-    //
-    //                 intTestMash.forEach((mashItem) => {
-    //
-    //                     let mashDesignComponent = null;
-    //                     if (userContext.designUpdateId === 'NONE' || userContext.workPackageId === 'NONE') {
-    //                         mashDesignComponent = DesignVersionComponents.findOne({_id: mashItem.designComponentId})
-    //                     } else {
-    //                         mashDesignComponent = DesignUpdateComponents.findOne({_id: mashItem.designComponentId})
-    //                     }
-    //
-    //                     console.log("Design component for mash item " + mashItem.designComponentId + " is " + mashDesignComponent);
-    //                     if (this.isDescendantOf(mashDesignComponent, selectedDesignComponent, userContext)) {
-    //                         returnData.push(mashItem);
-    //                     }
-    //
-    //                     log((msg) => console.log(msg), LogLevel.TRACE, "Found {} descendant Features", returnData.length);
-    //
-    //                 });
-    //
-    //                 return returnData;
-    //
-    //             case ComponentType.FEATURE:
-    //                 // Return any FEATURE ASPECT related to this Feature
-    //                 return UserWorkPackageMashData.find(
-    //                     {
-    //                         userId: userContext.userId,
-    //                         designVersionId: userContext.designVersionId,
-    //                         designUpdateId: userContext.designUpdateId,
-    //                         workPackageId: userContext.workPackageId,
-    //                         mashComponentType: ComponentType.FEATURE_ASPECT,
-    //                         designFeatureReferenceId: selectedDesignComponent.componentReferenceId
-    //                     },
-    //                     {sort:{mashItemIndex: 1}}
-    //                 ).fetch();
-    //
-    //             case ComponentType.FEATURE_ASPECT:
-    //                 // Return any SCENARIO data related to this Feature Aspect
-    //                 if(selectedDesignComponent) {
-    //                     return UserWorkPackageMashData.find(
-    //                         {
-    //                             userId: userContext.userId,
-    //                             designVersionId: userContext.designVersionId,
-    //                             designUpdateId: userContext.designUpdateId,
-    //                             workPackageId: userContext.workPackageId,
-    //                             mashComponentType: ComponentType.SCENARIO,
-    //                             designFeatureAspectReferenceId: selectedDesignComponent.componentReferenceId
-    //                         },
-    //                         {sort: {mashItemIndex: 1}}
-    //                     ).fetch();
-    //                 } else {
-    //                     // Its just possible the Developer deleted this component
-    //                     return[];
-    //                 }
-    //
-    //             case ComponentType.SCENARIO:
-    //                 // Return any data related to this Scenario (at most one test)
-    //                 if(selectedDesignComponent) {
-    //                     return UserWorkPackageMashData.find(
-    //                         {
-    //                             userId: userContext.userId,
-    //                             designVersionId: userContext.designVersionId,
-    //                             designUpdateId: userContext.designUpdateId,
-    //                             workPackageId: userContext.workPackageId,
-    //                             mashComponentType: ComponentType.SCENARIO,
-    //                             designScenarioReferenceId: selectedDesignComponent.componentReferenceId
-    //                         },
-    //                         {sort:{mashItemIndex: 1}}
-    //                     ).fetch();
-    //                 } else {
-    //                     // Its just possible the Developer deleted this component
-    //                     return[];
-    //                 }
-    //
-    //             default:
-    //                 // No component or irrelevant component:
-    //                 return [];
-    //         }
-    //     }
-    //
-    // }
-
-    // getNonDesignAcceptanceScenarioData(userContext){
-    //
-    //     // For acceptance tests get any Scenarios found in the tests for a Design Feature that are not in the Design
-    //     let selectedDesignComponent = null;
-    //
-    //     if (userContext.designUpdateId === 'NONE') {
-    //         selectedDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId})
-    //     } else {
-    //         selectedDesignComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId})
-    //     }
-    //
-    //     if(selectedDesignComponent){
-    //
-    //         log((msg) => console.log(msg), LogLevel.DEBUG, "Looking for feature with ref id {}", selectedDesignComponent.componentReferenceId);
-    //
-    //         const feature = UserWorkPackageMashData.findOne({
-    //             userId: userContext.userId,
-    //             designVersionId: userContext.designVersionId,
-    //             designUpdateId: userContext.designUpdateId,
-    //             workPackageId: userContext.workPackageId,
-    //             designFeatureReferenceId: selectedDesignComponent.componentReferenceId,
-    //             mashComponentType: ComponentType.FEATURE
-    //         });
-    //
-    //         if(feature){
-    //             let nonDesignedScenarios = UserWorkPackageMashData.find({
-    //                 userId: userContext.userId,
-    //                 designVersionId: userContext.designVersionId,
-    //                 designUpdateId: userContext.designUpdateId,
-    //                 workPackageId: userContext.workPackageId,
-    //                 mashComponentType: ComponentType.SCENARIO,
-    //                 accMashStatus: MashStatus.MASH_NOT_DESIGNED
-    //             }).fetch();
-    //
-    //             log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} non-designed Scenarios", nonDesignedScenarios.length);
-    //
-    //             return nonDesignedScenarios;
-    //
-    //         } else {
-    //             return [];
-    //         }
-    //     } else {
-    //         return [];
-    //     }
-    //
-    //
-    // }
-
-    // checkForExistingFeatureFile(userContext){
-    //
-    //     let featureName = '';
-    //
-    //     if(userContext.designComponentType === ComponentType.FEATURE){
-    //
-    //         // The selected Feature must relate to a design or design update feature...
-    //         if(userContext.designUpdateId === 'NONE'){
-    //             featureName = DesignVersionComponents.findOne({componentReferenceId: userContext.featureReferenceId}).componentNameNew
-    //         } else {
-    //             featureName = DesignUpdateComponents.findOne({componentReferenceId: userContext.featureReferenceId}).componentNameNew
-    //         }
-    //     }
-    //
-    //     const featureFile = UserDevFeatures.findOne({featureName: featureName});
-    //
-    //     return featureFile;
-    //
-    // }
-
-    // isDescendantOf(child, parent, userContext){
-    //
-    //     let parentRefId = 'NONE';
-    //     let found = false;
-    //
-    //     if (userContext.designUpdateId === 'NONE') {
-    //         // DESIGN VERSION SEARCH
-    //
-    //         // Check immediate parent
-    //         parentRefId = child.componentParentReferenceIdNew;
-    //
-    //         log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant: ParentId = {} Current Item Id = {}", parentRefId, parent.componentReferenceId);
-    //
-    //         // If the component is directly under the current component then wanted
-    //         if(parentRefId === parent.componentReferenceId){
-    //             return true;
-    //         }
-    //
-    //         // Iterate up until we reach top of tree
-    //         found = false;
-    //
-    //         while((parentRefId !== 'NONE') && !found){
-    //             // Get next parent up
-    //
-    //             parentRefId = DesignVersionComponents.findOne({
-    //                 designVersionId: userContext.designVersionId,
-    //                 componentReferenceId: parentRefId
-    //             }).componentParentReferenceIdNew;
-    //
-    //             log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant (loop): ParentId = {} Current Item Id = {}", parentRefId, parent.componentReferenceId);
-    //
-    //             // Return true if match
-    //             if(parentRefId === parent.componentReferenceId){
-    //                 found =  true;
-    //             }
-    //         }
-    //
-    //         return found;
-    //
-    //     } else {
-    //         // DESIGN UPDATE SEARCH
-    //
-    //         // Check immediate parent
-    //         parentRefId = child.componentParentReferenceIdNew;
-    //
-    //         log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant: ParentId = {} Current Item Id = {}", parentRefId, parent.componentReferenceId);
-    //
-    //         // If the component is directly under the current component then wanted
-    //         if(parentRefId === parent.componentReferenceId){
-    //             return true;
-    //         }
-    //
-    //         // Iterate up until we reach top of tree
-    //         found = false;
-    //
-    //         while((parentRefId !== 'NONE') && !found){
-    //             // Get next parent up
-    //
-    //             parentRefId = DesignUpdateComponents.findOne({
-    //                 designVersionId: userContext.designVersionId,
-    //                 componentReferenceId: parentRefId
-    //             }).componentParentReferenceIdNew;
-    //
-    //             log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant (loop): ParentId = {} Current Item Id = {}", parentRefId, parent.componentReferenceId);
-    //
-    //             // Return true if match
-    //             if(parentRefId === parent.componentReferenceId){
-    //                 found =  true;
-    //             }
-    //         }
-    //
-    //         return found;
-    //
-    //     }
-    //
-    //     // Iterate up until we reach top of tree
-    //     let parentId = '';
-    //
-    //     while(parentId !== 'NONE'){
-    //         // Get next parent up
-    //
-    //         parentId = WorkPackageComponents.findOne({
-    //             workPackageId: userContext.workPackageId,
-    //             componentReferenceId: parentId
-    //         }).componentParentReferenceIdNew;
-    //
-    //         log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendent (loop): ParentId = {} Current Item Id = {}", parentId, parent.componentReferenceId);
-    //
-    //         // Return true if match
-    //         if(parentId === parent.componentReferenceId){return true;}
-    //     }
-    //
-    //     // No parent found
-    //     return false;
-    //
-    // };
-
-    // getMashFeatureAspects(userContext, view){
-    //
-    //     log((msg) => console.log(msg), LogLevel.TRACE, "Getting mash feature aspects for component {} userId: {} DV: {} DU: {} WP: {} FRef: {}",
-    //         userContext.designComponentType, userContext.userId, userContext.designVersionId,
-    //         userContext.designUpdateId, userContext.workPackageId, userContext.featureReferenceId);
-    //
-    //
-    //     if(userContext.designComponentType === ComponentType.FEATURE){
-    //
-    //         return UserWorkPackageMashData.find(
-    //             {
-    //                 userId:                         userContext.userId,
-    //                 designVersionId:                userContext.designVersionId,
-    //                 designUpdateId:                 userContext.designUpdateId,
-    //                 workPackageId:                  userContext.workPackageId,
-    //                 designFeatureReferenceId:       userContext.featureReferenceId,
-    //                 mashComponentType:              ComponentType.FEATURE_ASPECT
-    //             },
-    //             {sort: {mashItemIndex: 1}}
-    //         ).fetch();
-    //
-    //     } else {
-    //         return [];
-    //     }
-    //
-    // };
-
-    // getMashFeatureAspectScenarios(aspect){
-    //
-    //     return UserWorkPackageMashData.find(
-    //         {
-    //             userId:                         aspect.userId,
-    //             designVersionId:                aspect.designVersionId,
-    //             designUpdateId:                 aspect.designUpdateId,
-    //             workPackageId:                  aspect.workPackageId,
-    //             designFeatureAspectReferenceId: aspect.designComponentReferenceId,
-    //             mashComponentType:              ComponentType.SCENARIO
-    //         },
-    //         {sort: {mashItemIndex: 1}}
-    //     ).fetch();
-    //
-    // };
-
     getMashScenarioTestResults(userContext, mashScenario, testType){
 
         return UserMashScenarioTests.find({
@@ -1879,26 +1537,6 @@ class ClientContainerServices{
         });
     }
 
-    // Get all unit test results relating to a specific Design Scenario
-    getMashScenarioUnitTestResults(userContext, scenario){
-
-        //console.log("getting unit tests with user id: " + userContext.userId + " and scenario ref " + scenario.designScenarioReferenceId);
-
-        return UserUnitTestMashData.find({
-            userId:                         userContext.userId,
-            designScenarioReferenceId:      scenario.designScenarioReferenceId,
-        }).fetch();
-
-    }
-
-    getMashUnlinkedUnitTestResults(userContext){
-
-
-        return UserUnitTestMashData.find({
-            userId:                         userContext.userId,
-            designScenarioReferenceId:      'NONE'
-        }).fetch();
-    }
 
     getMashScenarioSteps(userContext){
         // Returns steps for the current scenario that are:

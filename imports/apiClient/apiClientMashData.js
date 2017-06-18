@@ -6,7 +6,6 @@ import { Meteor } from 'meteor/meteor';
 // Ultrawide Collections
 import { DesignVersionComponents }      from '../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../collections/design_update/design_update_components.js';
-import { UserWorkPackageMashData }      from '../collections/dev/user_work_package_mash_data.js';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, MessageType, MashStatus, LogLevel} from '../constants/constants.js';
@@ -14,7 +13,7 @@ import { mashMoveDropAllowed, log} from '../common/utils.js';
 
 // REDUX
 import store from '../redux/store'
-import {setCurrentUserItemContext, updateTestDataFlag, updateUserMessage} from '../redux/actions'
+import {updateUserMessage} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -29,7 +28,6 @@ import {setCurrentUserItemContext, updateTestDataFlag, updateUserMessage} from '
 // ---------------------------------------------------------------------------------------------------------------------
 
 class ClientMashDataServices {
-
 
     // User has dragged a mash Scenario Step into the FINAL step configuration
     relocateMashStep(view, mode, targetContext, movingComponent, targetComponent, userContext){
@@ -70,22 +68,6 @@ class ClientMashDataServices {
 
     }
 
-    // updateTestData(viewOptions, userContext,currentProgressDataValue){
-    //     Meteor.call('mash.updateTestData', viewOptions, userContext, (err) => {
-    //         store.dispatch(updateProgressData(!currentProgressDataValue));
-    //     });
-    // };
-
-    featureHasAspects(userContext, featureComponentId){
-
-        log((msg) => console.log(msg), LogLevel.TRACE, "Checking for feature aspects for feature {}", featureComponentId);
-
-        if(userContext.designUpdateId === 'NONE'){
-            return DesignVersionComponents.find({componentParentIdNew: featureComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
-        } else {
-            return DesignUpdateComponents.find({componentParentIdNew: featureComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
-        }
-    };
 
     // User has chosen to export a Scenario in the design to the dev feature file
     exportFeatureScenario(view, scenarioReferenceId, userContext){
@@ -131,37 +113,6 @@ class ClientMashDataServices {
         }
     }
 
-    featureHasUnknownScenarios(userContext){
-        return UserWorkPackageMashData.find({
-            userId:                         userContext.userId,
-            designVersionId:                userContext.designVersionId,
-            designUpdateId:                 userContext.designUpdateId,
-            workPackageId:                  userContext.workPackageId,
-            mashComponentType:              ComponentType.SCENARIO,
-            designFeatureReferenceId:       userContext.featureReferenceId,
-            mashStatus:                     MashStatus.MASH_NOT_DESIGNED
-        }).fetch().length > 0;
-    };
-
-    // Returns true if mash item Feature has a Dev feature file
-    featureIsImplemented(mashItemId){
-
-        const mashItem = UserWorkPackageMashData.findOne({_id: mashItemId});
-
-        // There must be a parent Feature
-        const parentFeature = UserWorkPackageMashData.findOne({
-            userId: mashItem.userId,
-            designVersionId:                mashItem.designVersionId,
-            designUpdateId:                 mashItem.designUpdateId,
-            workPackageId:                  mashItem.workPackageId,
-            designComponentReferenceId:     mashItem.designFeatureReferenceId,
-            mashComponentType:              ComponentType.FEATURE
-        });
-
-        // And if there is a Feature File it will be linked
-        return(parentFeature.mashStatus === MashStatus.MASH_LINKED);
-
-    };
 }
 
 export default new ClientMashDataServices();

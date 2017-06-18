@@ -155,8 +155,23 @@ ScenarioTestResultsList = connect(mapStateToProps)(ScenarioTestResultsList);
 
 export default ScenarioTestResultsContainer = createContainer(({params}) => {
 
+    let scenarioMashData = [];
 
-    let scenarioMashData = ClientContainerServices.getScenarioMashData(params.userContext, params.featureAspectReferenceId);
+    // If we already have the mash data for one scenario so just pass it on
+    if(params.mashData !== null){
+
+        //console.log("Using scenario mash data");
+        scenarioMashData = [params.mashData];
+
+    } else {
+
+        // Otherwise we are gathering scenarios for a feature aspect so get the mash data
+        //console.log("Getting scenario mash data");
+        scenarioMashData = ClientContainerServices.getScenarioMashData(params.userContext, params.featureAspectReferenceId);
+    }
+
+
+    //console.log("Got " + scenarioMashData.length + " scenario records");
 
     return{
         scenarioMashData: scenarioMashData,

@@ -6,15 +6,11 @@ import { DesignVersionComponents }      from '../../collections/design/design_ve
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
 import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
-import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
-import { UserUnitTestResults }          from '../../collections/test_results/user_unit_test_results.js';
+
 
 // Ultrawide services
-import { ComponentType, ViewType, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
+import { ComponentType, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
-
-import ClientIdentityServices       from '../../apiClient/apiIdentity.js';
-import ChimpMochaTestServices       from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
 //======================================================================================================================
 //

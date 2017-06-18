@@ -4,6 +4,8 @@
 
 import { Mongo } from 'meteor/mongo';
 
+// TODO - update this to test results standard when adding ACC test functionality
+
 export const UserAccTestResults = new Mongo.Collection('userAccTestResults');
 
 let Schema = new SimpleSchema({
