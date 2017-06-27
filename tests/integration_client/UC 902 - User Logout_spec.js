@@ -75,8 +75,8 @@ describe('UC 902 - User Logout', function(){
         browser.click(actionId);
 
         browser.waitUntil(function () {
-            return browser.getText('#headerView').trim() === TextLookups.viewText(ViewType.SELECT).trim()
-        }, 5000, 'expected home selection screen after 5s');
+            return browser.getText('#headerView').trim() === TextLookups.viewText(ViewType.DESIGNS).trim()
+        }, 5000, 'expected designs screen after 5s');
 
         // Click Logout
         browser.click('#Logout');
