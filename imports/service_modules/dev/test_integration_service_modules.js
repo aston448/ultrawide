@@ -194,9 +194,11 @@ class TestIntegrationModules{
             let unitTestCount = 0;
             let unitTestPasses = 0;
             let unitTestFails = 0;
+            let unitTestPendings = 0;
             let intTestCount = 0;
             let intTestPasses = 0;
             let intTestFails = 0;
+            let intTestPendings = 0;
             let scenarioUnitTestStatus = MashTestStatus.MASH_NOT_LINKED;
             let scenarioIntTestStatus = MashTestStatus.MASH_NOT_LINKED;
             let scenarioUnitMashStatus = MashStatus.MASH_NOT_LINKED;
@@ -212,6 +214,9 @@ class TestIntegrationModules{
                 }
                 if(unitTest.testResult === MashTestStatus.MASH_FAIL){
                     unitTestFails++;
+                }
+                if(unitTest.testResult === MashTestStatus.MASH_PENDING){
+                    unitTestPendings++;
                 }
                 const testIdentity = this.getTestIdentity(unitTest.testFullName, scenario.componentNameNew, unitTest.testSuite, unitTest.testGroup, unitTest.testName);
 
@@ -250,6 +255,9 @@ class TestIntegrationModules{
                 if(intTest.testResult === MashTestStatus.MASH_FAIL){
                     intTestFails++;
                 }
+                if(intTest.testResult === MashTestStatus.MASH_PENDING){
+                    intTestPendings++;
+                }
                 const testIdentity = this.getTestIdentity(intTest.testFullName, scenario.componentNameNew, intTest.testSuite, intTest.testGroup, intTest.testName);
 
                 // Insert an int test record
@@ -281,6 +289,10 @@ class TestIntegrationModules{
             } else {
                 if(unitTestPasses > 0){
                     scenarioUnitTestStatus = MashTestStatus.MASH_PASS;
+                } else {
+                    if(unitTestPendings > 0){
+                        scenarioUnitTestStatus = MashTestStatus.MASH_PENDING;
+                    }
                 }
             }
 
@@ -289,6 +301,10 @@ class TestIntegrationModules{
             } else {
                 if(intTestPasses > 0){
                     scenarioIntTestStatus = MashTestStatus.MASH_PASS;
+                }else {
+                    if(intTestPendings > 0){
+                        scenarioIntTestStatus = MashTestStatus.MASH_PENDING;
+                    }
                 }
             }
 
