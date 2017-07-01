@@ -21,6 +21,7 @@ import { TestOutputLocations }      from '../../imports/collections/configure/te
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserDesignVersionMashScenarios } from '../../imports/collections/mash/user_dv_mash_scenarios.js';
+import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
 import { UserIntegrationTestResults } from '../../imports/collections/test_results/user_integration_test_results.js';
 import { UserUnitTestResults }      from '../../imports/collections/test_results/user_unit_test_results.js';
 import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
@@ -78,6 +79,8 @@ Meteor.methods({
             TestOutputLocations.remove({});
 
             UserDesignVersionMashScenarios.remove({});
+            UserMashScenarioTests.remove({});
+
             UserUnitTestResults.remove({});
             UserIntegrationTestResults.remove({});
             UserDevTestSummaryData.remove({});
@@ -701,9 +704,9 @@ Meteor.methods({
 
             results.scenarios.forEach((scenario) => {
 
-                fullTitle = scenario.scenarioGroup + ' ' + scenario.scenarioName;
-
                 scenario.unitResults.forEach((result) => {
+
+                    fullTitle = scenario.scenarioGroup + ' ' + scenario.scenarioName + ' ' + result.resultName;
 
                     // Make error data if a failure
                     if(result.resultOutcome === MashTestStatus.MASH_FAIL){
