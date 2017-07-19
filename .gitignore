@@ -1,10 +1,12 @@
 node_modules/
 .idea/
+.meteor/
 backup/
 imports/client/
 mocha-output.json
 imports/service_modules/design/unit_modules/
 mocha-unit-output.json
+
 
 
 !/imports/collections/backup/
