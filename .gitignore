@@ -1,13 +1,10 @@
 node_modules/
 .idea/
-.meteor/
 backup/
 imports/client/
 mocha-output.json
 imports/service_modules/design/unit_modules/
 mocha-unit-output.json
-
-
 
 !/imports/collections/backup/
 !/imports/servicers/administration/
@@ -16,3 +13,5 @@ imports/servicers/audit/
 npm-debug.log
 tests/mocha-mod-output.json
 !/imports/collections/test_results/user_acc_test_results.js
+/.test_results/
+

@@ -94,7 +94,7 @@ describe('VAL: Update Component', () => {
 
     });
 
-    it('A Design Component name may not be edited if that Design Component has been removed in the Design Update', () => {
+    describe('A Design Component name may not be edited if that Design Component has been removed in the Design Update', () => {
 
         it('cannot be edited if already removed', () => {
 
