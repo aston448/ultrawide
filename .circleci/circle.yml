@@ -9,4 +9,4 @@ checkout:
 
 test:
   override:
-    - test:unit
+    - npm test:unit
