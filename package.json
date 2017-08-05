@@ -16,13 +16,13 @@
     "chimp:int_client": "chimp .config/chimp_client.js --ddp=http://localhost:3030 --path=tests/integration_client"
   },
   "dependencies": {
-    "babel-runtime": "^6.23.0",
+    "babel-runtime": "^6.25.0",
     "bcrypt": "^0.8.7",
     "classnames": "^2.2.5",
     "draft-js": "^0.8.1",
     "meteor-node-stubs": "^0.2.5",
     "node-jsdom": "^3.1.5",
-    "prop-types": "^15.5.8",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-addons-pure-render-mixin": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
@@ -32,9 +32,8 @@
     "react-dnd-html5-backend": "^2.2.4",
     "react-dom": "^15.4.2",
     "react-redux": "^4.4.6",
-    "react-split-container": "^1.2.0",
     "react-test-renderer": "^15.5.4",
-    "redux": "^3.6.0",
+    "redux": "^3.7.2",
     "redux-test-utils": "^0.1.2",
     "redux-thunk": "^2.2.0"
   },

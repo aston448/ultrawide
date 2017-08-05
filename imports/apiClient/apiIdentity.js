@@ -21,7 +21,7 @@
 class ClientIdentityServices{
 
     getApplicationName(){
-        return 'ULTRAWIDE';
+        return 'ULTRAWIDE TEST';
     };
 
 }
