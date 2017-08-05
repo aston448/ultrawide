@@ -40,7 +40,6 @@
     "enzyme-redux": "^0.1.6",
     "react-addons-test-utils": "^15.6.0",
     "react-dom": "^15.6.1",
-    "redux-test-utils": "^0.1.1",
     "ultrawide-mocha-reporter": "^1.0.4"
   }
 }
