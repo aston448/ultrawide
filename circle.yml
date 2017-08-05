@@ -3,6 +3,9 @@ machine:
     version: 6.10.2
 
 dependencies:
+  cache_directories:
+    - "/usr/local/lib/node_modules/ultrawide-mocha-reporter"
+
   override:
     - curl https://install.meteor.com | /bin/sh
     - npm install
