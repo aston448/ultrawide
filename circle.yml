@@ -7,7 +7,6 @@ dependencies:
   override:
     - curl https://install.meteor.com | /bin/sh
     - npm install
-    - npm install --dev
 
 checkout:
   post:
@@ -15,4 +14,4 @@ checkout:
 
 test:
   override:
-    - npm test:unit
+    - test:unit
