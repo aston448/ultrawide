@@ -14,4 +14,4 @@ checkout:
 
 test:
   override:
-    - test:unit
+    - npm run test:unit
