@@ -15,3 +15,4 @@ tests/mocha-mod-output.json
 !/imports/collections/test_results/user_acc_test_results.js
 /.test_results/
 
+!/node_modules/ultrawide-mocha-reporter/
