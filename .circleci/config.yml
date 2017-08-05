@@ -1,2 +1,5 @@
+version: 1
+
 test:
-   - test:unit
+  override:
+    - test:unit
