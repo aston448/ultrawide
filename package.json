@@ -5,7 +5,7 @@
     "start-dev": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" meteor run",
     "start-test": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_test/\" meteor -p 3030 run",
     "test": "meteor test --once  --driver-package dispatch:mocha",
-    "test:unit": "SERVER_TEST_REPORTER=$PWD/node_modules/ultrawide-mocha-reporter OUTPUT_FILE=.test_results/unit_results.json CONSOLE=ON meteor test --once  --driver-package dispatch:mocha",
+    "test:unit": "SERVER_TEST_REPORTER=$PWD/node_modules/ultrawide-mocha-reporter OUTPUT_FILE=/.test_results/unit_results.json CONSOLE=RESULT meteor test --once  --driver-package dispatch:mocha",
     "test:unit:3030": "SERVER_TEST_REPORTER=/usr/local/lib/node_modules/ultrawide-mocha-reporter OUTPUT_FILE=.test_results/unit_results.json CONSOLE=ON meteor -p 3030 test --once  --driver-package dispatch:mocha",
     "chimp:int_server_des": "chimp .config/chimp_des.js --ddp=http://localhost:3030 --path=tests/integration_server/100_designs",
     "chimp:int_server_wp": "chimp .config/chimp_wp.js --ddp=http://localhost:3030 --path=tests/integration_server/200_work_packages",
@@ -35,13 +35,12 @@
     "redux": "^3.7.2",
     "redux-test-utils": "^0.1.2",
     "redux-thunk": "^2.2.0",
-    "ultrawide-mocha-reporter": "^1.0.4"
+    "ultrawide-mocha-reporter": "^1.0.5"
   },
   "devDependencies": {
     "enzyme": "^2.9.1",
     "enzyme-redux": "^0.1.6",
     "react-addons-test-utils": "^15.6.0",
     "react-dom": "^15.6.1"
-
   }
 }
