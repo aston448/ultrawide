@@ -441,7 +441,11 @@ class TestOutputLocationServices {
                 throw new Meteor.Error('TEST_UPLOAD_FAIL', 'Invalid location path: ' + location.locationFullPath);
             }
 
-            fs.writeFileSync(location.locationFullPath + name, blob, encoding);
+            console.log("Writing file: " + location.locationFullPath + name);
+
+            let text = JSON.stringify(blob, null, 2);
+
+            fs.writeFileSync(location.locationFullPath + name, text, 'utf8');
 
             this.updateResultsFileStatuses(location);
         }

@@ -17,5 +17,4 @@ test:
     - npm run test:unit
 
   post:
-    - cp ~/ultrawide/.test_results/unit_results.json  ~/.test_results/copy_file.json
-    - ls -l ~/ultrawide/.test_results
+    - npm run upload-unit-results

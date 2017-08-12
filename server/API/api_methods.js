@@ -24,7 +24,9 @@ SimpleRest.setMethodOptions('upload-file-v1', {
         const header = request.headers;     // Must contain file name and authentication key
         const file = request.body;          // Contains file binary
 
-        return [file, header.file, header.location, header.key];
+        //console.log("Body %o", file);
+
+        return [file, header.name, header.location, header.key];
     }
 });
 
