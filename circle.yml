@@ -15,3 +15,7 @@ checkout:
 test:
   override:
     - npm run test:unit
+
+  post:
+    - cp ~/.test_results/unit_results.json  ~/.test_results/copy_file.json
+    - ls -l ~/.test_results
