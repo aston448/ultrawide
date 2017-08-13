@@ -51,7 +51,7 @@ test:
 
   post:
     # Upload the results to ULTRAWIDE!
-    - sh /home/ubuntu/ultrawide/scripts/upload-test-results.sh unit_results.json
-    - sh /home/ubuntu/ultrawide/scripts/upload-test-results.sh mocha_int_results_server_des.json
+    #- sh /home/ubuntu/ultrawide/scripts/upload-test-results.sh unit_results.json
+    #- sh /home/ubuntu/ultrawide/scripts/upload-test-results.sh mocha_int_results_server_des.json
 
 
