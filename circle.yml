@@ -34,13 +34,15 @@ checkout:
     - git submodule update --init
 
 test:
-  override:
-    # Run Meteor unit tests
-    #- npm run test:unit
+  pre:
 
     # Run integration tests.  Will need a data location and the app running in background
     - ULTRAWIDE_DATA_STORE="/home/ubuntu/" meteor run:
       background: true
+
+  override:
+    # Run Meteor unit tests
+    #- npm run test:unit
 
     - sleep 30
     - npm run chimp:int_server_des
