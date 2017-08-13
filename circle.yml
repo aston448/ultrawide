@@ -12,6 +12,9 @@ dependencies:
 
   override:
 
+    # Create Ultrawide working dir
+    - sh /home/ubuntu/ultrawide/scripts/setup-dirs.sh
+
     # Install & cache Meteor
     - sh /home/ubuntu/ultrawide/scripts/install-meteor.sh
 
@@ -32,10 +35,10 @@ checkout:
 
 test:
   override:
-    - npm run test:unit
+    # Run Meteor unit tests
+    #- npm run test:unit
 
     # Run integration tests.  Will need a data location and the app running
-    - sh /home/ubuntu/ultrawide/scripts/setup-dirs.sh
     - npm run start-ci
     - npm run chimp:int_server_des
 
