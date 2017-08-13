@@ -45,72 +45,78 @@ class MeteorMochaTestServices{
             // testFullName must always contain the Scenario as all of part of it.  May also contain test Suite Group and Name as well
             // If it contains these it should be in the form 'Suite Group Name'
 
-            let resultsBatch = [];
+            if(resultsJson) {
 
-            // Add latest results
-            resultsJson.passes.forEach((test) => {
+                let resultsBatch = [];
 
-                resultsBatch.push(
-                    {
-                        userId:             userId,
-                        testFullName:       test.fullTitle,
-                        testSuite:          'NONE',             // Not yet calculated
-                        testGroup:          'NONE',             // Not yet calculated
-                        testName:           test.title,
-                        testResult:         MashTestStatus.MASH_PASS,
-                        testError:          '',
-                        testErrorReason:    '',
-                        testDuration:       test.duration,
-                        testStackTrace:     '',
-                    }
-                );
-            });
+                // Add latest results
+                resultsJson.passes.forEach((test) => {
 
-            resultsJson.failures.forEach((test) => {
+                    resultsBatch.push(
+                        {
+                            userId: userId,
+                            testFullName: test.fullTitle,
+                            testSuite: 'NONE',             // Not yet calculated
+                            testGroup: 'NONE',             // Not yet calculated
+                            testName: test.title,
+                            testResult: MashTestStatus.MASH_PASS,
+                            testError: '',
+                            testErrorReason: '',
+                            testDuration: test.duration,
+                            testStackTrace: '',
+                        }
+                    );
+                });
 
-                resultsBatch.push(
-                    {
-                        userId:             userId,
-                        testFullName:       test.fullTitle,
-                        testSuite:          'NONE',             // Not yet calculated
-                        testGroup:          'NONE',             // Not yet calculated
-                        testName:           test.title,
-                        testResult:         MashTestStatus.MASH_FAIL,
-                        testError:          test.err.message,
-                        testErrorReason:    'Expected "' +  test.err.expected + '" but got "' + test.err.actual + '"',
-                        testDuration:       test.duration,
-                        testStackTrace:     test.err.stack
-                    }
-                );
-            });
+                resultsJson.failures.forEach((test) => {
 
-            resultsJson.pending.forEach((test) => {
+                    resultsBatch.push(
+                        {
+                            userId: userId,
+                            testFullName: test.fullTitle,
+                            testSuite: 'NONE',             // Not yet calculated
+                            testGroup: 'NONE',             // Not yet calculated
+                            testName: test.title,
+                            testResult: MashTestStatus.MASH_FAIL,
+                            testError: test.err.message,
+                            testErrorReason: 'Expected "' + test.err.expected + '" but got "' + test.err.actual + '"',
+                            testDuration: test.duration,
+                            testStackTrace: test.err.stack
+                        }
+                    );
+                });
 
-                resultsBatch.push(
-                    {
-                        userId:             userId,
-                        testFullName:       test.fullTitle,
-                        testName:           test.title,
-                        testSuite:          'NONE',             // Not yet calculated
-                        testGroup:          'NONE',             // Not yet calculated
-                        testResult:         MashTestStatus.MASH_PENDING,
-                        testError:          '',
-                        testErrorReason:    '',
-                        testDuration:       0,
-                        stackTrace:         ''
-                    }
-                );
-            });
+                resultsJson.pending.forEach((test) => {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
+                    resultsBatch.push(
+                        {
+                            userId: userId,
+                            testFullName: test.fullTitle,
+                            testName: test.title,
+                            testSuite: 'NONE',             // Not yet calculated
+                            testGroup: 'NONE',             // Not yet calculated
+                            testResult: MashTestStatus.MASH_PENDING,
+                            testError: '',
+                            testErrorReason: '',
+                            testDuration: 0,
+                            stackTrace: ''
+                        }
+                    );
+                });
 
-            if(resultsBatch.length > 0) {
-                UserUnitTestResults.batchInsert(resultsBatch);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
+
+                if (resultsBatch.length > 0) {
+                    UserUnitTestResults.batchInsert(resultsBatch);
+                }
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Meteor Mocha results");
+
+            } else {
+                log((msg) => console.log(msg), LogLevel.WARN, "File <{}> had no data.", resultsFile);
             }
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Meteor Mocha results");
         }
     };
 

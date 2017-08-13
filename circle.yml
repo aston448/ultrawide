@@ -4,9 +4,27 @@ machine:
 
 dependencies:
 
+  cache_directories:
+      - "node_modules"
+      - "~/.npm"
+      - "~/.meteor"
+      - "~/.ultrawide_data"
+
   override:
-    - curl https://install.meteor.com | /bin/sh
+
+    # Install & cache Meteor
+    - scripts/install-meteor.sh
+
+    #- curl https://install.meteor.com | /bin/sh
+
+    # Install and cache NPM dependencies
     - npm install
+
+    # Install chimp
+    - npm install -g chimp
+
+    # Download & cache Chimp's dependencies
+    - scripts/download-chimp-dependencies.sh
 
 checkout:
   post:
@@ -15,6 +33,9 @@ checkout:
 test:
   override:
     - npm run test:unit
+
+    - npm run start-ci
+    - npm run chimp:int_server_des
 
   post:
     - npm run upload-unit-results
