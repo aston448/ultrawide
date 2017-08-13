@@ -16,7 +16,9 @@
     "chimp:int_server_dom": "chimp .config/chimp_dom.js --ddp=http://localhost:3030 --path=tests/integration_server/700_domain",
     "chimp:int_server_adm": "chimp .config/chimp_adm.js --ddp=http://localhost:3030 --path=tests/integration_server/800_admin",
     "chimp:int_client": "chimp .config/chimp_client.js --ddp=http://localhost:3030 --path=tests/integration_client",
-    "upload-unit-results": "curl -i -H \"name: unit_results.json\" -H \"location: Ultrawide Dev Test Outputs\" -H \"key: lySGChJwdI6OKO3e\" -H \"Content-Type:application/json\" -X POST --data-binary @/home/ubuntu/ultrawide/.test_results/unit_results.json http://178.62.78.222/api/v1/upload-file"
+    "upload-unit-results": "curl -i -H \"name: unit_results.json\" -H \"location: Ultrawide Dev Test Outputs\" -H \"key: lySGChJwdI6OKO3e\" -H \"Content-Type:application/json\" -X POST --data-binary @/home/ubuntu/ultrawide/.test_results/unit_results.json http://178.62.78.222/api/v1/upload-file",
+    "upload-int-des-results": "curl -i -H \"name: mocha_int_results_server_des.json\" -H \"location: Ultrawide Dev Test Outputs\" -H \"key: lySGChJwdI6OKO3e\" -H \"Content-Type:application/json\" -X POST --data-binary @/home/ubuntu/ultrawide/.test_results/mocha_int_results_server_des.json http://178.62.78.222/api/v1/upload-file"
+
   },
   "dependencies": {
     "babel-runtime": "^6.25.0",
