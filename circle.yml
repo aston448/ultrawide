@@ -3,7 +3,6 @@ machine:
     version: 6.10.2
 
 dependencies:
-
   pre:
     - curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     - sudo dpkg -i google-chrome.deb
@@ -53,3 +52,6 @@ test:
 
   post:
     - npm run upload-unit-results
+
+    - pkill -SIGQUIT meteor
+
