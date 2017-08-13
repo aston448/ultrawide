@@ -13,7 +13,7 @@ dependencies:
   override:
 
     # Install & cache Meteor
-    - scripts/install-meteor.sh
+    - sudo scripts/install-meteor.sh
 
     #- curl https://install.meteor.com | /bin/sh
 
@@ -24,7 +24,7 @@ dependencies:
     - npm install -g chimp
 
     # Download & cache Chimp's dependencies
-    - scripts/download-chimp-dependencies.sh
+    - sudo scripts/download-chimp-dependencies.sh
 
 checkout:
   post:
