@@ -4,7 +4,7 @@
 mkdir ./tmp
 
 echo Starting Chimp without any tests to download dependencies
-./node_modules/.bin/chimp --path=./tmp
+chimp --path=./tmp
 
 # Clean up
 rm -rf ./tmp
