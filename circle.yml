@@ -41,7 +41,7 @@ test:
 
     # Run integration tests.  Will need a data location and the app running in background
     - npm run start-ci:
-        background: true
+    #    background: true
 
     # Seems to take 2 mins to start app... :(
     - sleep 120
