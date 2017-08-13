@@ -28,7 +28,7 @@ dependencies:
     - npm install -g chimp
 
     # Download & cache Chimp's dependencies
-    - sh /home/ubuntu/ultrawide/scripts/download-chimp-dependencies.sh
+    - sh scripts/download-chimp-dependencies.sh
 
 checkout:
   post:
@@ -36,8 +36,12 @@ checkout:
 
 test:
   override:
+    # Unit tests -------------------------------------------------------------------------------------------------------
+
     # Run Meteor unit tests
     - npm run test:unit
+
+    # Integration tests ------------------------------------------------------------------------------------------------
 
     # Run integration tests.  Will need a data location and the app running in background
     - npm run start-ci:
@@ -47,12 +51,33 @@ test:
     # Note that this is MUCH slower (3 mins) if you don't run the unit tests first
     - sleep 50
 
-    # Integration tests...
+    # Designs
     - npm run chimp:int_server_des
+    # Work Packages
+    - npm run chimp:int_server_wp
+    # Developer Testing
+    - npm run chimp:int_server_dev
+    # Summary Data
+    - npm run chimp:int_server_sum
+    # Design Updates
+    - npm run chimp:int_server_du
+    # Domain Dictionary
+    - npm run chimp:int_server_dom
+    # Administration
+    - npm run chimp:int_server_adm
+    # Client UI Tests
+    - npm run chimp:int_client
 
   post:
     # Upload the results to ULTRAWIDE!
-    - sh /home/ubuntu/ultrawide/scripts/upload-test-results.sh unit_results.json
-    - sh /home/ubuntu/ultrawide/scripts/upload-test-results.sh mocha_int_results_server_des.json
+    - sh scripts/upload-test-results.sh unit_results.json
+    - sh scripts/upload-test-results.sh mocha_int_results_server_des.json
+    - sh scripts/upload-test-results.sh mocha_int_results_server_wp.json
+    - sh scripts/upload-test-results.sh mocha_int_results_server_dev.json
+    - sh scripts/upload-test-results.sh mocha_int_results_server_sum.json
+    - sh scripts/upload-test-results.sh mocha_int_results_server_du.json
+    - sh scripts/upload-test-results.sh mocha_int_results_server_dom.json
+    - sh scripts/upload-test-results.sh mocha_int_results_server_adm.json
+    - sh scripts/upload-test-results.sh mocha_int_results_client.json
 
 
