@@ -8,12 +8,12 @@ dependencies:
       - "node_modules"
       - "~/.npm"
       - "~/.meteor"
-      - "~/.ultrawide_data"
+      #- "~/.ultrawide_data"
 
   override:
 
     # Create Ultrawide working dir
-    - sh /home/ubuntu/ultrawide/scripts/setup-dirs.sh
+    #- sh /home/ubuntu/ultrawide/scripts/setup-dirs.sh
 
     # Install & cache Meteor
     - sh /home/ubuntu/ultrawide/scripts/install-meteor.sh
