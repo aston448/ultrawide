@@ -19,7 +19,7 @@ dependencies:
   override:
 
     # Install & cache Meteor
-    - sh /home/ubuntu/ultrawide/scripts/install-meteor.sh
+    - sh scripts/install-meteor.sh
 
     # Install and cache NPM dependencies
     - npm install
@@ -41,10 +41,11 @@ test:
 
     # Run integration tests.  Will need a data location and the app running in background
     - npm run start-ci:
-    #    background: true
+        background: true
 
-    # Seems to take 2 mins to start app... :(
-    - sleep 120
+    # Wait for Chimp meteor instance to start up...
+    # Note that this is MUCH slower (3 mins) if you don't run the unit tests first
+    - sleep 50
 
     # Integration tests...
     - npm run chimp:int_server_des
