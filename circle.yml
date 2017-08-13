@@ -38,8 +38,11 @@ test:
     # Run Meteor unit tests
     #- npm run test:unit
 
-    # Run integration tests.  Will need a data location and the app running
-    - npm run start-ci
+    # Run integration tests.  Will need a data location and the app running in background
+    - npm run start-ci:
+      background: true
+
+    - sleep 30
     - npm run chimp:int_server_des
 
   post:
