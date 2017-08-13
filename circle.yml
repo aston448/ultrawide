@@ -39,7 +39,7 @@ test:
     #- npm run test:unit
 
     # Run integration tests.  Will need a data location and the app running in background
-    - npm run start-ci:
+    - ULTRAWIDE_DATA_STORE="/home/ubuntu/" meteor run:
       background: true
 
     - sleep 30
