@@ -2001,32 +2001,6 @@ class ClientContainerServices{
                 break;
 
             case ViewType.DESIGN_NEW_EDIT:
-
-                switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return  [
-                            gotoSelection,
-                            gotoConfig,
-                            gotoDesigns
-                        ];
-
-                    case MenuDropdown.MENU_DROPDOWN_VIEW:
-
-                        return [
-                            viewDetails,
-                            viewDomainDict,
-                            viewTestSummary,
-                            viewAllAsTabs
-                        ];
-
-                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
-
-                        return [
-                            refreshTestData
-                        ];
-                }
-                break;
-
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
                 switch (menuType) {

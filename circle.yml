@@ -26,6 +26,7 @@ dependencies:
 
     # Install chimp
     - npm install -g chimp
+    - npm install -g selenium-standalone
 
     # Download & cache Chimp's dependencies
     - sh scripts/download-chimp-dependencies.sh

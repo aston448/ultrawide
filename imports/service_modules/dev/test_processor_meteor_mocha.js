@@ -31,7 +31,7 @@ class MeteorMochaTestServices{
             let cleanText = resultsText;
 
             // Parse ---------------------------------------------------------------------------------------------------
-            let resultsJson = [];
+            let resultsJson = {};
 
             try{
                 resultsJson = JSON.parse(cleanText);
@@ -45,7 +45,7 @@ class MeteorMochaTestServices{
             // testFullName must always contain the Scenario as all of part of it.  May also contain test Suite Group and Name as well
             // If it contains these it should be in the form 'Suite Group Name'
 
-            if(resultsJson) {
+            if(resultsJson && resultsJson.passes && resultsJson.failures && resultsJson.pending) {
 
                 let resultsBatch = [];
 
