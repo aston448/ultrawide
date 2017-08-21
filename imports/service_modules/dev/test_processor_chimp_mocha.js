@@ -153,19 +153,21 @@ class ChimpMochaTestServices{
             }
 
             // Clean ---------------------------------------------------------------------------------------------------
-            let cleanText = '';
-            try {
-                cleanText = this.cleanResults(resultsText.toString());
-            } catch (e) {
-                log((msg) => console.log(msg), LogLevel.ERROR, "Failed to clean mocha tests file: {}", e);
-                return [];
-            }
+            // Cleaning no longer needed
+            let cleanText = resultsText;
+            // let cleanText = '';
+            // try {
+            //     cleanText = this.cleanResults(resultsText.toString());
+            // } catch (e) {
+            //     log((msg) => console.log(msg), LogLevel.ERROR, "Failed to clean mocha tests file: {}", e);
+            //     return [];
+            // }
 
             //log((msg) => console.log(msg), LogLevel.TRACE, "Cleaned file text is:\n {}", cleanText);
 
 
             // Parse ---------------------------------------------------------------------------------------------------
-            let resultsJson = [];
+            let resultsJson = {};
 
             if(cleanText.length > 0) {
                 try {
@@ -179,82 +181,84 @@ class ChimpMochaTestServices{
                 return [];
             }
 
-            // Return Standard Data ------------------------------------------------------------------------------------
+            if(resultsJson && resultsJson.passes && resultsJson.failures && resultsJson.pending) {
+                // Return Standard Data ------------------------------------------------------------------------------------
 
-            // testFullName must always contain the Scenario as all of part of it.  May also contain test Suite Group and Name as well
-            // If it contains these it should be in the form 'Suite Group Name'
+                // testFullName must always contain the Scenario as all of part of it.  May also contain test Suite Group and Name as well
+                // If it contains these it should be in the form 'Suite Group Name'
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Results: Passes {}, Fails {}, Pending {}", resultsJson.passes.length, resultsJson.failures.length, resultsJson.pending.length,);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Results: Passes {}, Fails {}, Pending {}", resultsJson.passes.length, resultsJson.failures.length, resultsJson.pending.length,);
 
-            let resultsBatch = [];
+                let resultsBatch = [];
 
-            // Add latest results
-            resultsJson.passes.forEach((test) => {
+                // Add latest results
+                resultsJson.passes.forEach((test) => {
 
-                resultsBatch.push(
-                    {
-                        userId:             userId,
-                        testFullName:       test.fullTitle,
-                        testSuite:          'NONE',             // Not yet calculated
-                        testGroup:          'NONE',             // Not yet calculated
-                        testName:           test.title,
-                        testResult:         MashTestStatus.MASH_PASS,
-                        testError:          '',
-                        testErrorReason:    '',
-                        testDuration:       test.duration,
-                        testStackTrace:     ''
-                    }
-                );
-            });
+                    resultsBatch.push(
+                        {
+                            userId: userId,
+                            testFullName: test.fullTitle,
+                            testSuite: 'NONE',             // Not yet calculated
+                            testGroup: 'NONE',             // Not yet calculated
+                            testName: test.title,
+                            testResult: MashTestStatus.MASH_PASS,
+                            testError: '',
+                            testErrorReason: '',
+                            testDuration: test.duration,
+                            testStackTrace: ''
+                        }
+                    );
+                });
 
-            resultsJson.failures.forEach((test) => {
+                resultsJson.failures.forEach((test) => {
 
-                resultsBatch.push(
-                    {
-                        userId:             userId,
-                        testFullName:       test.fullTitle,
-                        testSuite:          'NONE',             // Not yet calculated
-                        testGroup:          'NONE',             // Not yet calculated
-                        testName:           test.title,
+                    resultsBatch.push(
+                        {
+                            userId: userId,
+                            testFullName: test.fullTitle,
+                            testSuite: 'NONE',             // Not yet calculated
+                            testGroup: 'NONE',             // Not yet calculated
+                            testName: test.title,
 
-                        testResult:         MashTestStatus.MASH_FAIL,
-                        testError:          test.err.message,       // This is the Reason plus the Error
-                        testErrorReason:    test.err.reason,
-                        testDuration:       test.duration,
-                        testStackTrace:     test.err.stack
-                    }
-                );
-            });
+                            testResult: MashTestStatus.MASH_FAIL,
+                            testError: test.err.message,       // This is the Reason plus the Error
+                            testErrorReason: test.err.reason,
+                            testDuration: test.duration,
+                            testStackTrace: test.err.stack
+                        }
+                    );
+                });
 
-            resultsJson.pending.forEach((test) => {
+                resultsJson.pending.forEach((test) => {
 
-                resultsBatch.push(
-                    {
-                        userId:             userId,
-                        testFullName:       test.fullTitle,
-                        testSuite:          'NONE',             // Not yet calculated
-                        testGroup:          'NONE',             // Not yet calculated
-                        testName:           test.title,
-                        testResult:         MashTestStatus.MASH_PENDING,
-                        testError:          '',
-                        testErrorReason:    '',
-                        testDuration:       0,
-                        testStackTrace:     ''
-                    }
-                );
-            });
+                    resultsBatch.push(
+                        {
+                            userId: userId,
+                            testFullName: test.fullTitle,
+                            testSuite: 'NONE',             // Not yet calculated
+                            testGroup: 'NONE',             // Not yet calculated
+                            testName: test.title,
+                            testResult: MashTestStatus.MASH_PENDING,
+                            testError: '',
+                            testErrorReason: '',
+                            testDuration: 0,
+                            testStackTrace: ''
+                        }
+                    );
+                });
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
+                log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
 
-            // Bulk insert the new data
-            if(resultsBatch.length > 0) {
-                UserIntegrationTestResults.batchInsert(resultsBatch);
+                // Bulk insert the new data
+                if (resultsBatch.length > 0) {
+                    UserIntegrationTestResults.batchInsert(resultsBatch);
+                }
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
+
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Chimp Mocha results");
             }
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
-
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Chimp Mocha results");
 
         }
 
