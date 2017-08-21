@@ -484,15 +484,6 @@ export class DesignApplicationsList extends Component {
                 let col2 = '';
                 switch(view){
                     case ViewType.DESIGN_NEW_EDIT:
-                        col2 =
-                            <Col id="column2" md={col2width} className="close-col">
-                                <Tabs defaultActiveKey={1} id="updatable-view_tabs">
-                                    <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
-                                    <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
-                                    <Tab eventKey={3} title="FIND SCENARIO">{scenarioFinder}</Tab>
-                                </Tabs>
-                            </Col>;
-                        break;
                     case ViewType.DESIGN_PUBLISHED_VIEW:
                     case ViewType.DESIGN_UPDATABLE_VIEW:
                         col2 =
