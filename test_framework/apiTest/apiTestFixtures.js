@@ -591,7 +591,8 @@ Meteor.methods({
             //     console.log("    Scenario: " + result.scenarioName + " Result: " + result.result);
             // });
 
-            const headerBollox = '[32m Master Chimp and become a testing Ninja! Check out our course: [39m[4m[34mhttp://bit.ly/2btQaFu [39m[24m [33m [chimp] Running...[39m\n';
+
+            // Assumption that we are using Ultrawide Mocha Reporter
 
             // Proper start of file
 
@@ -655,10 +656,7 @@ Meteor.methods({
 
             const jsonData = JSON.stringify(outputData, null, 2);
 
-            // Add in the screen scrape garbage
-            const fileText = headerBollox + jsonData;
-
-            fs.writeFileSync(fileName, fileText);
+            fs.writeFileSync(fileName, jsonData);
 
         } else {
 
