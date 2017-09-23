@@ -24,6 +24,10 @@ class ClientIdentityServices{
         return 'ULTRAWIDE';
     };
 
+    getHen(){
+        return 'DUMMY';
+    }
+
 }
 
 export default new ClientIdentityServices();
