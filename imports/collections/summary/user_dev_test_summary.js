@@ -1,8 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { TestDataStatus } from '../../constants/constants.js';
-
-export const UserDevTestSummaryData = new Mongo.Collection('userDevTestSummaryData');
+export const UserDevTestSummary = new Mongo.Collection('userDevTestSummary');
 
 let Schema = new SimpleSchema({
     // Design Identity
@@ -29,14 +27,14 @@ let Schema = new SimpleSchema({
 
 });
 
-UserDevTestSummaryData.attachSchema(Schema);
+UserDevTestSummary.attachSchema(Schema);
 
 
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userDevTestSummaryData', function userDevTestSummaryDataPublication(userId){
-        return UserDevTestSummaryData.find({userId: userId});
+    Meteor.publish('userDevTestSummary', function userDevTestSummaryDataPublication(userId){
+        return UserDevTestSummary.find({userId: userId});
     })
 }
 

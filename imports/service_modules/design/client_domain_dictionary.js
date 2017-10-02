@@ -68,7 +68,7 @@ class ClientDomainDictionaryServices {
                 let subsetAction = null;
                 actionsArr.forEach((action1) => {
                     actionsArr.forEach((action2) => {
-                        if(action2.index != action1.index){
+                        if(action2.index !== action1.index){
                             // Two different actions
                             subsetAction = this.isSubsetCase(action1, action2);
                             if(subsetAction){

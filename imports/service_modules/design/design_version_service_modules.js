@@ -1,13 +1,14 @@
 
-// Ultrawide Collections
-import { DesignVersions }           from '../../collections/design/design_versions.js';
-import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
-import { DomainDictionary }         from '../../collections/design/domain_dictionary.js';
-
 // Ultrawide Services
-import { DesignUpdateMergeAction, DesignVersionStatus, DesignUpdateStatus, UpdateMergeStatus, ComponentType, UpdateScopeType } from '../../constants/constants.js';
+import { DesignVersionStatus, UpdateMergeStatus, ComponentType, LogLevel } from '../../constants/constants.js';
+import { log } from '../../common/utils.js';
+
+// Data Access
+import DesignVersionData            from '../../service_modules_db/design/design_version_db.js';
+import DesignComponentData          from '../../service_modules_db/design/design_component_db.js';
+import DesignUpdateData             from '../../service_modules_db/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
+import DomainDictionaryData         from '../../service_modules_db/design/domain_dictionry_db.js';
 
 //======================================================================================================================
 //
@@ -19,49 +20,52 @@ import { DesignUpdateMergeAction, DesignVersionStatus, DesignUpdateStatus, Updat
 
 class DesignVersionModules{
 
-    // Create a final version of the working design version before completeing it for good
-    finaliseCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId){
+    // // Create a final version of the working design version before completeing it for good
+    // finaliseCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId){
+    //
+    //     // Delete all design components from current version
+    //     this.deleteCurrentVersionComponents(currentDesignVersionId);
+    //
+    //     // Copy previous version to current
+    //     this.copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId);
+    //
+    //     // Merge updates as FINAL
+    //     this.mergeUpdates(currentDesignVersionId, true);
+    //
+    // };
+    //
+    // // Create a progress update for the working design version
+    // updateCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId){
+    //
+    //     // Delete all design components from current version
+    //     this.deleteCurrentVersionComponents(currentDesignVersionId);
+    //
+    //     // Copy previous version to current
+    //     this.copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId);
+    //
+    //     // Merge updates as CHANGES
+    //     this.mergeUpdates(currentDesignVersionId, false);
+    // };
 
-        // Delete all design components from current version
-        this.deleteCurrentVersionComponents(currentDesignVersionId);
 
-        // Copy previous version to current
-        this.copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId);
-
-        // Merge updates as FINAL
-        this.mergeUpdates(currentDesignVersionId, true);
-
-    };
-
-    // Create a progress update for the working design version
-    updateCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId){
-
-        // Delete all design components from current version
-        this.deleteCurrentVersionComponents(currentDesignVersionId);
-
-        // Copy previous version to current
-        this.copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId);
-
-        // Merge updates as CHANGES
-        this.mergeUpdates(currentDesignVersionId, false);
-    };
-
-
-    deleteCurrentVersionComponents(currentDesignVersionId){
-
-        DesignVersionComponents.remove({designVersionId: currentDesignVersionId});
-    };
+    // deleteCurrentVersionComponents(currentDesignVersionId){
+    //
+    //     DesignVersionComponents.remove({designVersionId: currentDesignVersionId});
+    // };
 
     copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId){
 
         // Abort if current version has not been cleared
-        const currentComponentsCount = DesignVersionComponents.find({designVersionId: currentDesignVersionId}).count();
+        const currentComponentsCount = DesignVersionData.getComponentCount(currentDesignVersionId);
+
         if(currentComponentsCount > 0){
             throw new Meteor.Error('COPY DV', 'Current version has not been cleared');
         }
 
         // Get all the old version components
-        const oldDesignComponents = DesignVersionComponents.find({designVersionId: previousDesignVersionId});
+        const oldDesignComponents = DesignVersionData.getAllComponents(previousDesignVersionId);
+
+        let newDesignVersionBatch = [];
 
         // Recreate the current version as an exact copy with the NEW values being used
         oldDesignComponents.forEach((previousComponent) => {
@@ -69,7 +73,7 @@ class DesignVersionModules{
             // Insert all except removed items
             if(previousComponent.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED) {
 
-                DesignVersionComponents.insert(
+                newDesignVersionBatch.push(
                     {
                         // Identity
                         componentReferenceId:           previousComponent.componentReferenceId,
@@ -78,8 +82,6 @@ class DesignVersionModules{
                         componentType:                  previousComponent.componentType,
                         componentLevel:                 previousComponent.componentLevel,
 
-                        componentParentIdOld:           previousComponent.componentParentIdNew,
-                        componentParentIdNew:           previousComponent.componentParentIdNew,
                         componentParentReferenceIdOld:  previousComponent.componentParentReferenceIdNew,
                         componentParentReferenceIdNew:  previousComponent.componentParentReferenceIdNew,
                         componentFeatureReferenceIdOld: previousComponent.componentFeatureReferenceIdNew,
@@ -113,8 +115,13 @@ class DesignVersionModules{
 
         });
 
-        // Fix the parent ids
-        this.fixParentIdsForDesignVersion(currentDesignVersionId);
+        // Batch insert for speed
+        if(newDesignVersionBatch.length > 0) {
+            DesignComponentData.bulkInsert(newDesignVersionBatch);
+        }
+
+        log(msg => console.log(msg), LogLevel.INFO, "  Populated new DV with copy of previous");
+
     };
 
     // populateNextDesignVersion(currentDesignVersionId, newDesignVersionId){
@@ -169,82 +176,70 @@ class DesignVersionModules{
     // }
 
     // Change the old design version parent ids to the ids for the new design version
-    fixParentIdsForDesignVersion(newDesignVersionId){
+    // fixParentIdsForDesignVersion(newDesignVersionId){
+    //
+    //     // The correct parent id for the new version will be the id of the component that has the reference id relating to the parent reference id
+    //     const newDesignVersionComponents = DesignVersionComponents.find({designVersionId: newDesignVersionId});
+    //
+    //     newDesignVersionComponents.forEach((component) => {
+    //
+    //         this.fixParentIds(component);
+    //     });
+    // };
 
-        // The correct parent id for the new version will be the id of the component that has the reference id relating to the parent reference id
-        const newDesignVersionComponents = DesignVersionComponents.find({designVersionId: newDesignVersionId});
 
-        newDesignVersionComponents.forEach((component) => {
+    // fixParentIdsForComponent(componentId){
+    //
+    //     // The correct parent id for the new version will be the id of the component that has the reference id relating to the parent reference id
+    //     const component = DesignVersionComponents.findOne({_id: componentId});
+    //
+    //     this.fixParentIds(component);
+    //
+    // };
 
-            this.fixParentIds(component);
-        });
-    };
-
-
-    fixParentIdsForComponent(componentId){
-
-        // The correct parent id for the new version will be the id of the component that has the reference id relating to the parent reference id
-        const component = DesignVersionComponents.findOne({_id: componentId});
-
-        this.fixParentIds(component);
-
-    };
-
-    fixParentIds(component){
-
-        // Get the id of the new component that has the parent reference id as its unchanging reference id
-        let parentNew = DesignVersionComponents.findOne({designVersionId: component.designVersionId, componentReferenceId: component.componentParentReferenceIdNew});
-        let parentOld = DesignVersionComponents.findOne({designVersionId: component.designVersionId, componentReferenceId: component.componentParentReferenceIdOld});
-
-        let parentIdNew = 'NONE';
-        let parentIdOld = 'NONE';
-
-        if(parentNew){
-            parentIdNew = parentNew._id;
-        }
-
-        if(parentOld){
-            parentIdOld = parentOld._id;
-        }
-
-        // Update
-        DesignVersionComponents.update(
-            { _id: component._id},
-            {
-                $set:{
-                    componentParentIdOld: parentIdOld,
-                    componentParentIdNew: parentIdNew
-                }
-            }
-        );
-    }
+    // fixParentIds(component){
+    //
+    //     // Get the id of the new component that has the parent reference id as its unchanging reference id
+    //     let parentNew = DesignVersionComponents.findOne({designVersionId: component.designVersionId, componentReferenceId: component.componentParentReferenceIdNew});
+    //     let parentOld = DesignVersionComponents.findOne({designVersionId: component.designVersionId, componentReferenceId: component.componentParentReferenceIdOld});
+    //
+    //     let parentIdNew = 'NONE';
+    //     let parentIdOld = 'NONE';
+    //
+    //     if(parentNew){
+    //         parentIdNew = parentNew._id;
+    //     }
+    //
+    //     if(parentOld){
+    //         parentIdOld = parentOld._id;
+    //     }
+    //
+    //     // Update
+    //     DesignVersionComponents.update(
+    //         { _id: component._id},
+    //         {
+    //             $set:{
+    //                 componentParentIdOld: parentIdOld,
+    //                 componentParentIdNew: parentIdNew
+    //             }
+    //         }
+    //     );
+    // }
 
     mergeDesignUpdate(designUpdateId){
 
         // An update previously not merged is now merged so add all its changes to the current design version
-        const update = DesignUpdates.findOne({_id: designUpdateId});
+        const update = DesignUpdateData.getDesignUpdateById(designUpdateId);
+
 
         // QUERIES -----------------------------------------------------------------------------------------------------
 
         // Update any Scenarios that are in scope but not changed to queried status
-        const queriedScenarios = DesignUpdateComponents.find({
-            designUpdateId: update._id,
-            componentType:  ComponentType.SCENARIO,
-            isNew:          false,
-            isRemoved:      false,
-            isRemovedElsewhere: false,
-            isMoved:        false,
-            isChanged:      false,
-            isTextChanged:  false,
-            scopeType:      UpdateScopeType.SCOPE_IN_SCOPE
-        });
+        const queriedScenarios = DesignUpdateData.getUnchangedInScopeScenarios(designUpdateId);
 
         queriedScenarios.forEach((scenario) => {
 
-            let baseScenario = DesignVersionComponents.findOne({
-                designVersionId:        update.designVersionId,
-                componentReferenceId:   scenario.componentReferenceId
-            });
+            let baseScenario = DesignComponentData.getDesignComponentByRef(update.designVersionId, scenario.componentReferenceId);
 
             // Only set stuff that is BASE
             if(baseScenario.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE) {
@@ -256,11 +251,7 @@ class DesignVersionModules{
         // UPDATES -----------------------------------------------------------------------------------------------------
 
         // Update all design components that are changed but not new as well
-        const changedComponents = DesignUpdateComponents.find({
-            designUpdateId: update._id,
-            isNew:          false,
-            $or:[{isChanged: true}, {isTextChanged: true}]
-        });
+        const changedComponents = DesignUpdateData.getChangedComponents(designUpdateId);
 
         changedComponents.forEach((changedComponent) => {
 
@@ -272,19 +263,17 @@ class DesignVersionModules{
 
                 this.updateItemNameInDesignVersion(changedComponent);
             }
-
         });
 
         // MOVES -------------------------------------------------------------------------------------------------------
 
         // Update any components that have been moved to have the correct parents and list index
 
-        const movedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isMoved: true});
+        const movedComponents = DesignUpdateData.getMovedComponents(designUpdateId);
 
         movedComponents.forEach((movedComponent) => {
 
             this.moveUpdateItemInDesignVersion(movedComponent);
-
         });
 
         // REMOVALS ----------------------------------------------------------------------------------------------------
@@ -292,19 +281,18 @@ class DesignVersionModules{
         // Remove any design components that are removed
         // For update previews we want to logically remove then rather than actually so the removal can be seen.
 
-        const removedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isRemoved: true});
+        const removedComponents = DesignUpdateData.getRemovedComponents(designUpdateId);
 
         // This is a work progress update - logically delete - just mark as removed
         removedComponents.forEach((removedComponent) => {
 
             this.removeUpdateItemInDesignVersion(removedComponent);
-
         });
 
         // ADDITIONS ---------------------------------------------------------------------------------------------------
 
         // Add any design components that are new.  They may be changed as well but as new they just need to be inserted
-        const newComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: true});
+        const newComponents = DesignUpdateData.getNewComponents(designUpdateId);
 
         newComponents.forEach((newComponent) => {
 
@@ -313,12 +301,7 @@ class DesignVersionModules{
             // And add any default Feature Aspects added to a new Feature
             if(newComponent.componentType === ComponentType.FEATURE){
 
-                let defaultAspects = DesignUpdateComponents.find({
-                    designUpdateId:                 update._id,
-                    componentFeatureReferenceIdNew: newComponent.componentReferenceId,
-                    componentType:                  ComponentType.FEATURE_ASPECT,
-                    isNew:                          false,
-                });
+                let defaultAspects = DesignUpdateComponentData.getExistingAspectsForFeature(designUpdateId, newComponent.componentReferenceId);
 
                 defaultAspects.forEach((aspect) => {
 
@@ -326,20 +309,16 @@ class DesignVersionModules{
                 });
             }
         });
-
-
-
-        this.fixParentIdsForDesignVersion(update.designVersionId);
     }
 
     unmergeDesignUpdate(designUpdateId){
 
         // An update previously merged is now not merged so undo all its changes to the current design version
-        const update = DesignUpdates.findOne({_id: designUpdateId});
+        const update = DesignUpdateData.getDesignUpdateById(designUpdateId);
 
         // ADDITIONS ---------------------------------------------------------------------------------------------------
 
-        const newComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: true}).fetch();
+        const newComponents = DesignUpdateData.getNewComponents(designUpdateId);
 
         newComponents.forEach((newComponent) => {
 
@@ -348,12 +327,7 @@ class DesignVersionModules{
             // And remove any default Feature Aspects added to a new Feature
             if(newComponent.componentType === ComponentType.FEATURE){
 
-                let defaultAspects = DesignUpdateComponents.find({
-                    designUpdateId:                 update._id,
-                    componentFeatureReferenceIdNew: newComponent.componentReferenceId,
-                    componentType:                  ComponentType.FEATURE_ASPECT,
-                    isNew:                          false,
-                });
+                let defaultAspects = DesignUpdateComponentData.getExistingAspectsForFeature(designUpdateId, newComponent.componentReferenceId);
 
                 defaultAspects.forEach((aspect) => {
 
@@ -366,7 +340,7 @@ class DesignVersionModules{
 
         // Restore any design components that are removed
 
-        const removedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isRemoved: true}).fetch();
+        const removedComponents = DesignUpdateData.getRemovedComponents(designUpdateId);
 
         // This is a work progress update - logically delete - just mark as removed
         removedComponents.forEach((removedComponent) => {
@@ -379,7 +353,7 @@ class DesignVersionModules{
         // Put moved components back to where they were.  As only new components can be moved there cannot be
         // a combination of moves of an existing item by various updates
 
-        const movedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isMoved: true}).fetch();
+        const movedComponents = DesignUpdateData.getMovedComponents(designUpdateId);
 
         movedComponents.forEach((movedComponent) => {
 
@@ -389,11 +363,7 @@ class DesignVersionModules{
         // UPDATES -----------------------------------------------------------------------------------------------------
 
         // Revert all design components that are changed but not new as well
-        const changedComponents = DesignUpdateComponents.find({
-            designUpdateId: update._id,
-            isNew:          false,
-            $or:[{isChanged: true}, {isTextChanged: true}]
-        }).fetch();
+        const changedComponents = DesignUpdateData.getChangedComponents(designUpdateId);
 
         changedComponents.forEach((changedComponent) => {
 
@@ -409,24 +379,11 @@ class DesignVersionModules{
         // QUERIES -----------------------------------------------------------------------------------------------------
 
         // Update any Scenarios that are in scope but not changed from queried back to base
-        const queriedScenarios = DesignUpdateComponents.find({
-            designUpdateId: update._id,
-            componentType:  ComponentType.SCENARIO,
-            isNew:          false,
-            isRemoved:      false,
-            isRemovedElsewhere: false,
-            isMoved:        false,
-            isChanged:      false,
-            isTextChanged:  false,
-            scopeType:      UpdateScopeType.SCOPE_IN_SCOPE
-        });
+        const queriedScenarios = DesignUpdateData.getUnchangedInScopeScenarios(designUpdateId);
 
         queriedScenarios.forEach((scenario) => {
 
-            let baseScenario = DesignVersionComponents.findOne({
-                designVersionId:        update.designVersionId,
-                componentReferenceId:   scenario.componentReferenceId
-            });
+            let baseScenario = DesignComponentData.getDesignComponentByRef(update.designVersionId, scenario.componentReferenceId);
 
             // Only set stuff that is QUERIED
             if(baseScenario.updateMergeStatus === UpdateMergeStatus.COMPONENT_SCENARIO_QUERIED) {
@@ -438,79 +395,25 @@ class DesignVersionModules{
 
     setDesignVersionScenarioAsQueried(scenario){
 
-        DesignVersionComponents.update(
-            {_id: scenario._id},
-            {
-                $set:{ updateMergeStatus: UpdateMergeStatus.COMPONENT_SCENARIO_QUERIED}
-            }
-        );
+        DesignComponentData.setUpdateMergeStatus(scenario._id, UpdateMergeStatus.COMPONENT_SCENARIO_QUERIED);
     }
 
     setDesignVersionScenarioAsBase(scenario){
 
-        DesignVersionComponents.update(
-            {_id: scenario._id},
-            {
-                $set:{ updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE}
-            }
-        );
+        DesignComponentData.setUpdateMergeStatus(scenario._id, UpdateMergeStatus.COMPONENT_BASE);
     }
 
     addUpdateItemToDesignVersion(updateItem){
 
         // First check that this item is not already added.  It is already impossible to add duplicated items.
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId: updateItem.designVersionId,
-            componentReferenceId: updateItem.componentReferenceId
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
         if(!designVersionItem){
 
-            const newComponentId = DesignVersionComponents.insert(
-                {
-                    // Identity
-                    componentReferenceId:           updateItem.componentReferenceId,
-                    designId:                       updateItem.designId,
-                    designVersionId:                updateItem.designVersionId,
-                    componentType:                  updateItem.componentType,
-                    componentLevel:                 updateItem.componentLevel,
-
-                    componentParentIdOld:           updateItem.componentParentIdNew,
-                    componentParentIdNew:           updateItem.componentParentIdNew,
-                    componentParentReferenceIdOld:  updateItem.componentParentReferenceIdNew,
-                    componentParentReferenceIdNew:  updateItem.componentParentReferenceIdNew,
-                    componentFeatureReferenceIdOld: updateItem.componentFeatureReferenceIdNew,
-                    componentFeatureReferenceIdNew: updateItem.componentFeatureReferenceIdNew,
-                    componentIndexOld:              updateItem.componentIndexNew,
-                    componentIndexNew:              updateItem.componentIndexNew,
-
-                    // Data
-                    componentNameOld:               updateItem.componentNameNew,
-                    componentNameNew:               updateItem.componentNameNew,
-                    componentNameRawOld:            updateItem.componentNameRawNew,
-                    componentNameRawNew:            updateItem.componentNameRawNew,
-                    componentNarrativeOld:          updateItem.componentNarrativeNew,
-                    componentNarrativeNew:          updateItem.componentNarrativeNew,
-                    componentNarrativeRawOld:       updateItem.componentNarrativeRawNew,
-                    componentNarrativeRawNew:       updateItem.componentNarrativeRawNew,
-                    componentTextRawOld:            updateItem.componentTextRawNew,
-                    componentTextRawNew:            updateItem.componentTextRawNew,
-
-                    // Update State
-                    isNew:                          false,  // Not new in terms of editing
-                    workPackageId:                  'NONE',
-                    updateMergeStatus:              UpdateMergeStatus.COMPONENT_ADDED,  // But is new in terms of the design version
-                    isDevUpdated:                   false,
-                    isDevAdded:                     false,
-
-                    isRemovable:                    updateItem.isRemovable,
-                }
-            );
-
-            this.fixParentIdsForComponent(newComponentId);
+            const newComponentId = DesignComponentData.addUpdateComponentToDesignVersion(updateItem);
 
             // Need to get the component again to get the latest update merge status
-            const child = DesignVersionComponents.findOne({_id: newComponentId});
+            const child = DesignComponentData.getDesignComponentById(newComponentId);
 
             // Flag parents for added item
             this.setParentsUpdateMergeStatus(child, true);
@@ -521,30 +424,20 @@ class DesignVersionModules{
 
         // Just remove the item from the current design version if it was added
 
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId:        updateItem.designVersionId,
-            componentReferenceId:   updateItem.componentReferenceId,
-            updateMergeStatus:      UpdateMergeStatus.COMPONENT_ADDED
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
-        if(designVersionItem){
+        if(designVersionItem && designVersionItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_ADDED){
 
             // First un-flag parents as necessary
             this.setParentsUpdateMergeStatus(designVersionItem, false);
 
-            DesignVersionComponents.remove({
-                _id: designVersionItem._id
-            });
+            DesignComponentData.removeComponent(designVersionItem._id);
         }
-
     };
 
     moveUpdateItemInDesignVersion(updateItem){
 
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId: updateItem.designVersionId,
-            componentReferenceId: updateItem.componentReferenceId
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
         // Only mark as moved if that is the only thing new about it
         let mergeStatus = UpdateMergeStatus.COMPONENT_MOVED;
@@ -555,29 +448,11 @@ class DesignVersionModules{
 
         if(designVersionItem){
 
-            // Get the new design version parent id
-            const newParentItem = DesignVersionComponents.findOne({
-                designVersionId: updateItem.designVersionId,
-                componentReferenceId: updateItem.componentParentReferenceIdNew
-            });
+            // Logically move the Design Version component
+            DesignComponentData.moveInDesignVersionFromUpdate(designVersionItem._id, updateItem, mergeStatus);
 
-            // Update to new parent data all that might have changed
-            DesignVersionComponents.update(
-                {_id: designVersionItem._id},
-                {
-                    $set:{
-                        componentLevel:                 updateItem.componentLevel,
-                        componentParentIdNew:           newParentItem._id,
-                        componentParentReferenceIdNew:  updateItem.componentParentReferenceIdNew,
-                        componentFeatureReferenceIdNew: updateItem.componentFeatureReferenceIdNew,
-                        componentIndexNew:              updateItem.componentIndexNew,
-                        updateMergeStatus:              mergeStatus
-                    }
-                }
-            );
-
-            // Need to get the component again to get the latest update merge status
-            const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+            // Need to get the component again to get the latest data
+            const child = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
             // Flag parents
             this.setParentsUpdateMergeStatus(child, true);
@@ -586,10 +461,7 @@ class DesignVersionModules{
 
     undoMoveUpdateItemInDesignVersion(updateItem){
 
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId: updateItem.designVersionId,
-            componentReferenceId: updateItem.componentReferenceId
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
         // Only go back to base if move is the only thing new about it
         let mergeStatus = UpdateMergeStatus.COMPONENT_BASE;
@@ -600,31 +472,16 @@ class DesignVersionModules{
 
         if(designVersionItem){
 
-            // Get the old design version parent id according to the Design Update
-            const oldParentItem = DesignVersionComponents.findOne({
-                designVersionId: updateItem.designVersionId,
-                componentReferenceId: updateItem.componentParentReferenceIdOld
-            });
 
-            // Update to new parent data all that might have changed
-            DesignVersionComponents.update(
-                {_id: designVersionItem._id},
-                {
-                    $set:{
-                        componentLevel:                 updateItem.componentLevel,
-                        componentParentIdNew:           oldParentItem._id,
-                        componentParentReferenceIdNew:  updateItem.componentParentReferenceIdOld,
-                        componentFeatureReferenceIdNew: updateItem.componentFeatureReferenceIdOld,
-                        componentIndexNew:              updateItem.componentIndexOld,
-                        updateMergeStatus:              mergeStatus
-                    }
-                }
-            );
+            // Logically undo move of Design Version component
+            DesignComponentData.undoMoveInDesignVersionFromUpdate(designVersionItem._id, updateItem, mergeStatus);
+
 
             // Clear parents if going back to base
             if(mergeStatus === UpdateMergeStatus.COMPONENT_BASE){
+
                 // Need to get the component again to get the latest update merge status
-                const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+                const child = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
                 // Flag parents
                 this.setParentsUpdateMergeStatus(child, true);
@@ -635,22 +492,13 @@ class DesignVersionModules{
 
     logicallyDeleteDesignVersionItem(designVersionItem){
 
-        const dvComponent = DesignVersionComponents.findOne({_id: designVersionItem._id});
+        const dvComponent = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
         // Set as removed and revert any name modifications
-        DesignVersionComponents.update(
-            {_id: designVersionItem._id},
-            {
-                $set: {
-                    updateMergeStatus: UpdateMergeStatus.COMPONENT_REMOVED,
-                    componentNameNew: dvComponent.componentNameOld,
-                    componentNameRawNew: dvComponent.componentNameRawOld
-                }
-            }
-        );
+        DesignComponentData.logicallyDeleteInDesignVersion(dvComponent);
 
         // Need to get the component again to get the latest update merge status
-        const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+        const child = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
         // Flag parents
         this.setParentsUpdateMergeStatus(child, true);
@@ -672,19 +520,12 @@ class DesignVersionModules{
             updateMergeStatus = UpdateMergeStatus.COMPONENT_MODIFIED;
         }
 
-        DesignVersionComponents.update(
-            {_id: designVersionItem._id},
-            {
-                $set:{
-                    updateMergeStatus:  updateMergeStatus
-                }
-            }
-        );
+        DesignComponentData.setUpdateMergeStatus(designVersionItem._id, updateMergeStatus);
 
         // Clear parents if going back to base
         if(updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE){
             // Need to get the component again to get the latest update merge status
-            const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+            const child = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
             // Clear parents
             this.setParentsUpdateMergeStatus(child, false);
@@ -694,25 +535,17 @@ class DesignVersionModules{
 
     setParentsUpdateMergeStatus(child, set){
 
-        if(child.componentParentIdNew !== 'NONE') {
+        if(child.componentParentReferenceIdNew !== 'NONE') {
 
-            const parent = DesignVersionComponents.findOne({
-                _id: child.componentParentIdNew
-            });
+            const parent = DesignComponentData.getDesignComponentByRef(child.designVersionId, child.componentParentReferenceIdNew);
 
             if(parent) {
 
                 if (set) {
                     // If setting only update if not set already as something
                     if (parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE) {
-                        DesignVersionComponents.update(
-                            {_id: parent._id},
-                            {
-                                $set: {
-                                    updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE_PARENT
-                                }
-                            }
-                        );
+
+                        DesignComponentData.setUpdateMergeStatus(parent._id, UpdateMergeStatus.COMPONENT_BASE_PARENT);
                     }
 
                     // Carry on up
@@ -726,14 +559,8 @@ class DesignVersionModules{
                     if (!(this.hasUpdateModifiedChildren(parent, child))) {
                         // Revert to base if parent-base
                         if (parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT) {
-                            DesignVersionComponents.update(
-                                {_id: parent._id},
-                                {
-                                    $set: {
-                                        updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE
-                                    }
-                                }
-                            );
+
+                            DesignComponentData.setUpdateMergeStatus(parent._id, UpdateMergeStatus.COMPONENT_BASE);
                         }
 
                         // Carry on up
@@ -746,19 +573,19 @@ class DesignVersionModules{
 
     hasUpdateModifiedChildren(designVersionComponent, originalChildComponent){
 
-        // Get children that are not the original item
-        const children = DesignVersionComponents.find({
-            designVersionId: designVersionComponent.designVersionId,
-            componentParentIdNew: designVersionComponent._id,
-            _id: {$ne: originalChildComponent._id}
-        }).fetch();
+        // Get children
+        const children = DesignComponentData.getChildComponents(
+            designVersionComponent.designVersionId,
+            designVersionComponent.componentReferenceId
+        );
 
         let found = false;
 
         if(children.length > 0){
             children.forEach((child) => {
 
-                if(child.updateMergeStatus !== UpdateMergeStatus.COMPONENT_BASE){
+                // Get modified children that are not the original item
+                if((child.id !== originalChildComponent._id) && (child.updateMergeStatus !== UpdateMergeStatus.COMPONENT_BASE)){
 
                     found = true;
                 }
@@ -777,10 +604,7 @@ class DesignVersionModules{
 
     removeUpdateItemInDesignVersion(updateItem){
 
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId: updateItem.designVersionId,
-            componentReferenceId: updateItem.componentReferenceId
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
         if(designVersionItem){
 
@@ -791,7 +615,7 @@ class DesignVersionModules{
                 this.setParentsUpdateMergeStatus(designVersionItem, false);
 
                 // Complete delete - this sort of delete does not delete children as only bottom level can be deleted
-                DesignVersionComponents.remove({_id: designVersionItem._id});
+                DesignComponentData.removeComponent(designVersionItem._id);
 
             } else {
                 // Existing DV item
@@ -807,10 +631,7 @@ class DesignVersionModules{
 
     removeUpdateItemChildren(designVersionItem){
 
-        const children = DesignVersionComponents.find({
-            designVersionId:        designVersionItem.designVersionId,
-            componentParentIdNew:   designVersionItem._id
-        }).fetch();
+        const children = DesignComponentData.getChildComponents(designVersionItem.designVersionId, designVersionItem.componentReferenceId);
 
         children.forEach((child) => {
 
@@ -827,13 +648,9 @@ class DesignVersionModules{
 
     restoreUpdateItemInDesignVersion(updateItem){
 
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId:        updateItem.designVersionId,
-            componentReferenceId:   updateItem.componentReferenceId,
-            updateMergeStatus:      UpdateMergeStatus.COMPONENT_REMOVED
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
-        if(designVersionItem){
+        if(designVersionItem && designVersionItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
 
             this.logicallyRestoreDesignVersionItem(designVersionItem);
 
@@ -843,10 +660,7 @@ class DesignVersionModules{
 
     restoreUpdateItemChildren(designVersionItem){
 
-        const children = DesignVersionComponents.find({
-            designVersionId:        designVersionItem.designVersionId,
-            componentParentIdNew:   designVersionItem._id
-        }).fetch();
+        const children = DesignComponentData.getChildComponents(designVersionItem.designVersionId, designVersionItem.componentReferenceId);
 
         children.forEach((child) => {
 
@@ -862,10 +676,7 @@ class DesignVersionModules{
 
     updateItemNameInDesignVersion(updateItem){
 
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId: updateItem.designVersionId,
-            componentReferenceId: updateItem.componentReferenceId
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
         if(designVersionItem){
 
@@ -879,19 +690,10 @@ class DesignVersionModules{
             //console.log('Updating component name to ' + updateItem.componentNameNew + ' in DV');
 
             // Update the name to the latest value
-            DesignVersionComponents.update(
-                {_id: designVersionItem._id},
-                {
-                    $set:{
-                        componentNameNew:               updateItem.componentNameNew,
-                        componentNameRawNew:            updateItem.componentNameRawNew,
-                        updateMergeStatus:              updateMergeStatus
-                    }
-                }
-            );
+            DesignComponentData.updateNameFromDesignUpdate(designVersionItem._id, updateItem, updateMergeStatus);
 
             // Need to get the component again to get the latest update merge status
-            const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+            const child = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
             // Flag parents
             this.setParentsUpdateMergeStatus(child, true);
@@ -902,14 +704,9 @@ class DesignVersionModules{
 
         // Also check that the DV component has the same name as in this DU.  If not it is modified elsewhere
         // and we'll leave it as it is
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId:        updateItem.designVersionId,
-            componentReferenceId:   updateItem.componentReferenceId,
-            updateMergeStatus:      UpdateMergeStatus.COMPONENT_MODIFIED,
-            componentNameNew:       updateItem.componentNameNew
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
-        if(designVersionItem){
+        if(designVersionItem && designVersionItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED && designVersionItem.componentNameNew === updateItem.componentNameNew){
 
             // Only go back to base status if the details not also changed
             let updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
@@ -919,35 +716,22 @@ class DesignVersionModules{
             }
 
             // Update the name to the previous value
-            DesignVersionComponents.update(
-                {_id: designVersionItem._id},
-                {
-                    $set:{
-                        componentNameNew:               updateItem.componentNameOld,
-                        componentNameRawNew:            updateItem.componentNameRawOld,
-                        updateMergeStatus:              updateMergeStatus
-                    }
-                }
-            );
+            DesignComponentData.undoUpdateNameFromDesignUpdate(designVersionItem._id, updateItem, updateMergeStatus);
 
             // Clear parents if going back to base
             if(updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE){
                 // Need to get the component again to get the latest update merge status
-                const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+                const child = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
                 // Flag parents
                 this.setParentsUpdateMergeStatus(child, true);
             }
-
         }
     }
 
     updateItemDetailsInDesignVersion(updateItem){
 
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId: updateItem.designVersionId,
-            componentReferenceId: updateItem.componentReferenceId
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
         if(designVersionItem){
 
@@ -963,21 +747,11 @@ class DesignVersionModules{
                 }
             }
 
-            // Update the name to the latest value
-            DesignVersionComponents.update(
-                {_id: designVersionItem._id},
-                {
-                    $set:{
-                        componentNarrativeNew:          updateItem.componentNarrativeNew,
-                        componentNarrativeRawNew:       updateItem.componentNarrativeRawNew,
-                        componentTextRawNew:            updateItem.componentTextRawNew,
-                        updateMergeStatus:              updateMergeStatus
-                    }
-                }
-            );
+            // Update the details to the latest value
+            DesignComponentData.updateDetailsFromDesignUpdate(designVersionItem._id, updateItem, updateMergeStatus);
 
             // Need to get the component again to get the latest update merge status
-            const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+            const child = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
             // Flag parents
             this.setParentsUpdateMergeStatus(child, true);
@@ -989,34 +763,20 @@ class DesignVersionModules{
         // Also check that the DV component has the same details as in this DU.  If not it is modified elsewhere
         // and we'll leave it as it is
         // TODO: changes in details text
-        const designVersionItem = DesignVersionComponents.findOne({
-            designVersionId:        updateItem.designVersionId,
-            componentReferenceId:   updateItem.componentReferenceId,
-            componentNarrativeNew:  updateItem.componentNarrativeNew,
-        });
+        const designVersionItem = DesignComponentData.getDesignComponentByRef(updateItem.designVersionId, updateItem.componentReferenceId);
 
-        if(designVersionItem){
+        if(designVersionItem && designVersionItem.componentNarrativeNew === updateItem.componentNarrativeNew){
 
             // Only go back to base status
             let updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
 
-            // Update the name to the latest value
-            DesignVersionComponents.update(
-                {_id: designVersionItem._id},
-                {
-                    $set:{
-                        componentNarrativeNew:          updateItem.componentNarrativeOld,
-                        componentNarrativeRawNew:       updateItem.componentNarrativeRawOld,
-                        componentTextRawNew:            updateItem.componentTextRawOld,
-                        updateMergeStatus:              updateMergeStatus
-                    }
-                }
-            );
+            // Update the details to the previous value
+            DesignComponentData.undoUpdateDetailsFromDesignUpdate(designVersionItem._id, updateItem, updateMergeStatus);
 
             // Clear parents if going back to base
             if(updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE){
                 // Need to get the component again to get the latest update merge status
-                const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+                const child = DesignComponentData.getDesignComponentById(designVersionItem._id);
 
                 // Flag parents
                 this.setParentsUpdateMergeStatus(child, true);
@@ -1029,12 +789,7 @@ class DesignVersionModules{
 
         //console.log("MERGE: Rolling forward updates...");
 
-        const updatesToRollForward = DesignUpdates.find(
-            {
-                designVersionId: currentDesignVersionId,
-                updateMergeAction: DesignUpdateMergeAction.MERGE_ROLL
-            }
-        );
+        const updatesToRollForward = DesignVersionData.getRollForwardUpdates(currentDesignVersionId);
 
         let updateComponentsToUpdate = null;
         let currentDesignVersionComponent = null;
@@ -1043,165 +798,91 @@ class DesignVersionModules{
         // Also, anything that is not new or changed in the update needs to be reset to match the latest design version
         updatesToRollForward.forEach((update) => {
 
-            // Update details of any non-changed and non-new or removed components
-            updateComponentsToUpdate = DesignUpdateComponents.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    isNew: false,
-                    isChanged: false,
-                    isTextChanged: false,
-                    isRemoved: false,
-                    isMoved: false,
-                    isRemovedElsewhere: false  // Or not anything that is removed in another update
-                }
-            );
+            // Update details of any non-changed and non-new or removed update components
+            updateComponentsToUpdate = DesignVersionData.getUnchangedUpdateComponents(update._id);
 
             updateComponentsToUpdate.forEach((updateComponent) => {
 
                 // Update the details to that of the same component in the new DV
-                currentDesignVersionComponent = DesignVersionComponents.findOne({designVersionId: newDesignVersionId, componentReferenceId: updateComponent.componentReferenceId});
+                currentDesignVersionComponent = DesignComponentData.getDesignComponentByRef(newDesignVersionId, updateComponent.componentReferenceId);
 
                 if(currentDesignVersionComponent) {
 
-                    DesignUpdateComponents.update(
-                        {_id: updateComponent._id},
-                        {
-                            $set: {
-                                componentLevel:                 currentDesignVersionComponent.componentLevel,
-                                componentParentIdOld:           currentDesignVersionComponent.componentParentIdNew,
-                                componentParentIdNew:           currentDesignVersionComponent.componentParentIdNew,
-                                componentParentReferenceIdOld:  currentDesignVersionComponent.componentParentReferenceIdNew,
-                                componentParentReferenceIdNew:  currentDesignVersionComponent.componentParentReferenceIdNew,
-                                componentFeatureReferenceIdOld: currentDesignVersionComponent.componentFeatureReferenceIdNew,
-                                componentFeatureReferenceIdNew: currentDesignVersionComponent.componentFeatureReferenceIdNew,
-                                componentIndexOld:              currentDesignVersionComponent.componentIndexNew,
-                                componentIndexNew:              currentDesignVersionComponent.componentIndexNew,
-                                componentNameOld:               currentDesignVersionComponent.componentNameNew,
-                                componentNameNew:               currentDesignVersionComponent.componentNameNew,
-                                componentNameRawOld:            currentDesignVersionComponent.componentNameRawNew,
-                                componentNameRawNew:            currentDesignVersionComponent.componentNameRawNew,
-                                componentNarrativeOld:          currentDesignVersionComponent.componentNarrativeNew,
-                                componentNarrativeNew:          currentDesignVersionComponent.componentNarrativeNew,
-                                componentNarrativeRawOld:       currentDesignVersionComponent.componentNarrativeRawNew,
-                                componentNarrativeRawNew:       currentDesignVersionComponent.componentNarrativeRawNew,
-                                componentTextRawOld:            currentDesignVersionComponent.componentTextRawNew,
-                                componentTextRawNew:            currentDesignVersionComponent.componentTextRawNew
-                            }
-                        }
-                    );
+                    DesignUpdateComponentData.updateWithLatestDvComponentDetails(updateComponent._id, currentDesignVersionComponent);
+
                 } else {
                     //console.log("Component with ref " + updateComponent.componentReferenceId + " not found in DV " + newDesignVersionId);
                 }
             });
 
             // Move all components to new design version
-            DesignUpdateComponents.update(
-                {designUpdateId: update._id},
-                {
-                    $set:{
-                        designVersionId: newDesignVersionId
-                    }
-                },
-                {multi: true}
-            );
+            DesignUpdateComponentData.bulkUpdateDesignVersion(update._id, newDesignVersionId)
 
         });
 
+        // Move all roll forward updates to the new design version.  Status remains same.  Action goes back to default
+        const rolled = DesignUpdateData.bulkMoveRollForwardUpdatesToNewDesignVersion(currentDesignVersionId, newDesignVersionId);
 
-
-        // Move all updates to the new design version.  Status remains same.  Action goes back to default
-        DesignUpdates.update(
-            {designVersionId: currentDesignVersionId, updateMergeAction: DesignUpdateMergeAction.MERGE_ROLL},
-            {
-                $set:{
-                    designVersionId: newDesignVersionId,
-                    updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE
-                }
-            },
-            {multi: true}
-        );
-
+        log(msg => console.log(msg), LogLevel.INFO, "  {} updates were rolled forward", rolled);
 
     }
 
     closeDownIgnoreUpdates(currentDesignVersionId){
 
         // Just mark them all as IGNORED
-        DesignUpdates.update(
-            {
-                designVersionId: currentDesignVersionId,
-                updateMergeAction: DesignUpdateMergeAction.MERGE_IGNORE
-            },
-            {
-                $set:{
-                    updateStatus: DesignUpdateStatus.UPDATE_IGNORED
-                }
-            },
-            {multi: true}
-        );
+        const ignored = DesignUpdateData.bulkSetDesignUpdatesAsIgnore(currentDesignVersionId);
+
+        log(msg => console.log(msg), LogLevel.INFO, "  {} updates were ignored", ignored);
+
     }
 
     rollForwardDomainDictionary(currentDesignVersionId, newDesignVersionId){
 
         // We want to copy ALL dictionary entries to the new DV.
 
-        const oldEntries = DomainDictionary.find({
-            designVersionId: currentDesignVersionId
-        }).fetch();
+        const oldEntries = DesignVersionData.getDomainDictionaryEntries(currentDesignVersionId);
+
+        let newDomainDictionaryBatch = [];
 
         oldEntries.forEach((entry) => {
 
-            DomainDictionary.insert({
-                designId:               entry.designId,
-                designVersionId:        newDesignVersionId,
-                domainTermOld:          entry.domainTermOld,
-                domainTermNew:          entry.domainTermNew,
-                domainTextRaw:          entry.domainTextRaw,
-                sortingName:            entry.sortingName,
-                markInDesign:           entry.markInDesign,
-                isNew:                  entry.isNew,
-                isChanged:              entry.isChanged,
-            });
+            newDomainDictionaryBatch.push(
+                {
+                    designId:               entry.designId,
+                    designVersionId:        newDesignVersionId,
+                    domainTermOld:          entry.domainTermOld,
+                    domainTermNew:          entry.domainTermNew,
+                    domainTextRaw:          entry.domainTextRaw,
+                    sortingName:            entry.sortingName,
+                    markInDesign:           entry.markInDesign,
+                    isNew:                  entry.isNew,
+                    isChanged:              entry.isChanged,
+                }
+            );
         });
+
+        DomainDictionaryData.bulkInsertEntries(newDomainDictionaryBatch);
     }
 
     completePreviousDesignVersion(previousDesignVersionId){
 
         // Complete status depends on current status
-        const currentDv = DesignVersions.findOne({_id: previousDesignVersionId});
+        const currentDv = DesignVersionData.getDesignVersionById(previousDesignVersionId);
 
         let newDvStatus = DesignVersionStatus.VERSION_DRAFT_COMPLETE;
 
         if(currentDv.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE){
 
             // Complete the merged updates
-            DesignUpdates.update(
-                {
-                    designVersionId: previousDesignVersionId,
-                    updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE
-                },
-                {
-                    $set:{
-                        updateStatus: DesignUpdateStatus.UPDATE_MERGED
-                    }
-                },
-                {multi: true}
-            );
+            const completed = DesignUpdateData.bulkCompleteMergedUpdates(previousDesignVersionId);
+
+            log(msg => console.log(msg), LogLevel.INFO, "  {} updates were completed in previous design version", completed);
 
             newDvStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
         }
 
-        DesignVersions.update(
-            {_id: previousDesignVersionId},
-            {
-                $set:{
-                    designVersionStatus: newDvStatus
-                }
-            }
-        );
+        DesignVersionData.setDesignVersionStatus(previousDesignVersionId, newDvStatus);
     }
-
-
 }
 
 export default new DesignVersionModules()

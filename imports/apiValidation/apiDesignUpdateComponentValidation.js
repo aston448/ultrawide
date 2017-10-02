@@ -18,7 +18,7 @@ import DesignUpdateComponentModules             from '../service_modules/design_
 
 class DesignUpdateComponentValidationApi{
 
-    validateAddDesignUpdateComponent(view, mode, parentComponentId, componentType){
+    validateAddDesignUpdateComponent(view, mode, parentComponentRefId, componentType){
 
         if(parentComponentId) {
             const parentComponent = DesignUpdateComponents.findOne({_id: parentComponentId});
@@ -57,7 +57,7 @@ class DesignUpdateComponentValidationApi{
             // Only removable items (i.e. with no children) can be removed...
             if (designUpdateComponent.isRemovable){
                 // Just double check....
-                if(DesignUpdateComponentModules.hasNoChildren(designUpdateComponentId)){
+                if(DesignUpdateComponentModules.hasNoNonRemovedChildren(designUpdateComponentId)){
                     return DesignUpdateComponentValidationServices.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent);
                 } else {
                     return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE;

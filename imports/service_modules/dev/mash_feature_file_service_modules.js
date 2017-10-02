@@ -15,7 +15,9 @@ import { UserDevFeatureScenarioSteps }      from '../../collections/dev/user_dev
 import { TestType, TestRunner, ComponentType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, WorkPackageScopeType, StepContext, ScenarioStepStatus, ScenarioStepType, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
-
+import DesignComponentData          from '../../service_modules_db/design/design_component_db.js';
+import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
+import WorkPackageComponentData     from '../../service_modules_db/work/work_package_component_db.js';
 
 //======================================================================================================================
 //
@@ -75,26 +77,21 @@ class MashFeatureFileModules{
                 let designFeature = null;
 
                 // Get the corresponding design feature (if any)
-                if (userContext.designUpdateId != 'NONE') {
+                if (userContext.designUpdateId !== 'NONE') {
+
                     // Working from a Design Update
-                    designFeature = DesignUpdateComponents.findOne(
-                        {
-                            designId: userContext.designId,
-                            designVersionId: userContext.designVersionId,
-                            designUpdateId: userContext.designUpdateId,
-                            componentType: ComponentType.FEATURE,
-                            componentNameNew: featureName
-                        }
+                    designFeature = DesignUpdateComponentData.getFeatureByName(
+                        userContext.designVersionId,
+                        userContext.designUpdateId,
+                        featureName
                     );
+
                 } else {
+
                     // Working from a base design
-                    designFeature = DesignVersionComponents.findOne(
-                        {
-                            designId: userContext.designId,
-                            designVersionId: userContext.designVersionId,
-                            componentType: ComponentType.FEATURE,
-                            componentNameNew: featureName
-                        }
+                    designFeature = DesignComponentData.getFeatureByName(
+                        userContext.designVersionId,
+                        featureName
                     );
                 }
 
@@ -103,16 +100,12 @@ class MashFeatureFileModules{
                     featureRefId = designFeature.componentReferenceId;
 
                     // The feature is in the design - is it in the current work package?
-                    const wpFeature = WorkPackageComponents.findOne(
-                        {
-                            workPackageId: userContext.workPackageId,
-                            componentType: ComponentType.FEATURE,
-                            scopeType: WorkPackageScopeType.SCOPE_ACTIVE,
-                            componentReferenceId: designFeature.componentReferenceId
-                        }
+                    const wpFeature = WorkPackageComponentData.getWorkPackageFeatureByRef(
+                        userContext.workPackageId,
+                        designFeature.componentReferenceId
                     );
 
-                    if(wpFeature){
+                    if(wpFeature && wpFeature.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
                         // This file is implemented for the WP
                         devFeatureData.featureStatus = UserDevFeatureStatus.FEATURE_IN_WP;
 

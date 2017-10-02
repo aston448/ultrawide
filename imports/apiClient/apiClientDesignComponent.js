@@ -162,7 +162,7 @@ class ClientDesignComponentServices{
             view,
             mode,
             parentComponent.designVersionId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             (err, result) => {
 
                 if(err){
@@ -202,7 +202,7 @@ class ClientDesignComponentServices{
             view,
             mode,
             parentComponent.designVersionId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             parentComponent.componentLevel,
             (err, result) => {
 
@@ -243,7 +243,7 @@ class ClientDesignComponentServices{
             view,
             mode,
             parentComponent.designVersionId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             (err, result) => {
 
                 if(err){
@@ -283,7 +283,7 @@ class ClientDesignComponentServices{
             view,
             mode,
             parentComponent.designVersionId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             (err, result) => {
 
                 if(err){
@@ -324,7 +324,7 @@ class ClientDesignComponentServices{
             view,
             mode,
             parentComponent.designVersionId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             workPackageId,
             (err, result) => {
 
@@ -382,7 +382,6 @@ class ClientDesignComponentServices{
             view,
             mode,
             designComponent._id,
-            designComponent.componentParentIdNew,
             (err, result) => {
 
                 if(err){

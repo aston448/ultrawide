@@ -1,16 +1,16 @@
 
-// Ultrawide Collections
-import { DesignUpdates }                    from '../../collections/design_update/design_updates.js';
-import { DesignUpdateComponents }           from '../../collections/design_update/design_update_components.js';
-import { WorkPackageComponents }            from '../../collections/work/work_package_components.js';
-import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
-
 // Ultrawide Services
 import { DesignUpdateStatus, DesignUpdateMergeAction, DesignUpdateTestStatus, DesignUpdateWpStatus, MashTestStatus, ComponentType, UpdateScopeType, LogLevel } from '../../constants/constants.js';
 import { DefaultItemNames }         from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
 import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
+
+// Data Access
+import DesignVersionData            from '../../service_modules_db/design/design_version_db.js';
+import DesignUpdateData             from '../../service_modules_db/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
+import UserDvMashScenarioData       from '../../service_modules_db/mash/user_dv_mash_scenario_db.js'
 
 //======================================================================================================================
 //
@@ -27,52 +27,21 @@ class DesignUpdateServices{
 
         if(Meteor.isServer) {
 
-            const designUpdateId = DesignUpdates.insert(
-                {
-                    designVersionId:    designVersionId,                                // The design version this is a change to
-                    updateName:         DefaultItemNames.NEW_DESIGN_UPDATE_NAME,        // Identifier of this update
-                    updateReference:    DefaultItemNames.NEW_DESIGN_UPDATE_REF,     // Update version number if required
-                    updateStatus:       DesignUpdateStatus.UPDATE_NEW
-                }
-            );
+            return DesignUpdateData.addNewDesignUpdate(designVersionId);
 
-            return designUpdateId;
         }
     };
 
-    importDesignUpdate(designVersionId, designUpdate){
-
-        if(Meteor.isServer) {
-
-            let designUpdateId = DesignUpdates.insert(
-                {
-                    designVersionId:    designVersionId,
-                    updateName:         designUpdate.updateName,
-                    updateReference:    designUpdate.updateReference,
-                    updateRawText:      designUpdate.updateRawText,
-                    updateStatus:       designUpdate.updateStatus,
-                    updateMergeAction:  designUpdate.updateMergeAction,
-                    summaryDataStale:   true,                               // Ensure that all summaries get recreated after an import as various IDs will be broken
-                    updateWpStatus:     designUpdate.updateWpStatus,
-                    updateTestStatus:   designUpdate.updateTestStatus
-                }
-            );
-
-            return designUpdateId;
-        }
-    }
 
     publishUpdate(designUpdateId){
 
         if(Meteor.isServer) {
-            DesignUpdates.update(
-                {_id: designUpdateId},
-                {
-                    $set: {
-                        updateStatus:       DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
-                        updateMergeAction:  DesignUpdateMergeAction.MERGE_INCLUDE    // By default include this update for the next DV
-                    }
-                }
+
+            // Set published
+            DesignUpdateData.updateDuStatus(
+                designUpdateId,
+                DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                DesignUpdateMergeAction.MERGE_INCLUDE           // By default include this update for the next DV
             );
 
             // Merge this update with the Design Version
@@ -87,16 +56,12 @@ class DesignUpdateServices{
             // This call will only act if DU is currently merged
             DesignUpdateModules.removeMergedUpdateFromDesignVersion(designUpdateId);
 
-            DesignUpdates.update(
-                {_id: designUpdateId},
-                {
-                    $set: {
-                        updateStatus:       DesignUpdateStatus.UPDATE_NEW,
-                        updateMergeAction:  DesignUpdateMergeAction.MERGE_IGNORE
-                    }
-                }
+            // Set back to new
+            DesignUpdateData.updateDuStatus(
+                designUpdateId,
+                DesignUpdateStatus.UPDATE_NEW,
+                DesignUpdateMergeAction.MERGE_IGNORE
             );
-
 
         }
     };
@@ -104,14 +69,8 @@ class DesignUpdateServices{
     updateDesignUpdateName(designUpdateId, newName){
 
         if(Meteor.isServer) {
-            DesignUpdates.update(
-                {_id: designUpdateId},
-                {
-                    $set: {
-                        updateName: newName
-                    }
-                }
-            );
+
+            DesignUpdateData.setUpdateName(designUpdateId, newName);
         }
 
     };
@@ -119,14 +78,8 @@ class DesignUpdateServices{
     updateDesignUpdateRef(designUpdateId, newRef){
 
         if(Meteor.isServer) {
-            DesignUpdates.update(
-                {_id: designUpdateId},
-                {
-                    $set: {
-                        updateReference: newRef
-                    }
-                }
-            );
+
+            DesignUpdateData.setUpdateReference(designUpdateId, newRef);
         }
 
     };
@@ -139,14 +92,12 @@ class DesignUpdateServices{
             DesignUpdateModules.removeMergedUpdateFromDesignVersion(designUpdateId);
 
             // Delete all components in the design update
-            let removedComponents = DesignUpdateComponents.remove(
-                {designUpdateId: designUpdateId}
-            );
+            const removedComponents = DesignUpdateComponentData.removeAllUpdateComponents(designUpdateId);
 
             if(removedComponents >= 0){
 
                 // OK so delete the update itself
-                DesignUpdates.remove({_id: designUpdateId});
+                DesignUpdateData.removeUpdate(designUpdateId);
             }
         }
     };
@@ -162,14 +113,7 @@ class DesignUpdateServices{
                 DesignUpdateModules.removeMergedUpdateFromDesignVersion(designUpdateId);
             }
 
-            DesignUpdates.update(
-                {_id: designUpdateId},
-                {
-                    $set:{
-                        updateMergeAction: newAction
-                    }
-                }
-            );
+            DesignUpdateData.setUpdateMergeAction(designUpdateId, newAction);
 
             // Merge this update with the Design Version if now merged
             if(newAction === DesignUpdateMergeAction.MERGE_INCLUDE){
@@ -183,7 +127,7 @@ class DesignUpdateServices{
 
         if(Meteor.isServer) {
 
-            const designUpdates = DesignUpdates.find({designVersionId: userContext.designVersionId});
+            const designUpdates = DesignVersionData.getAllUpdates(userContext.designVersionId);
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Updating DU Statuses...");
 
@@ -191,11 +135,8 @@ class DesignUpdateServices{
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "  DU: {}", du.updateName);
 
-                let duScenarios = DesignUpdateComponents.find({
-                    designUpdateId: du._id,
-                    componentType: ComponentType.SCENARIO,
-                    scopeType: {$ne: UpdateScopeType.SCOPE_PEER_SCOPE}
-                }).fetch();
+                let duScenarios = DesignUpdateData.getNonPeerScopeScenarios(du._id);
+
                 let allInWp = true;
                 let someInWp = false;
                 let noneInWp = true;
@@ -208,11 +149,7 @@ class DesignUpdateServices{
                     log((msg) => console.log(msg), LogLevel.TRACE, "    DU Scenario: {}", duScenario.componentNameNew);
 
 
-                    let scenarioTestResult = UserDesignVersionMashScenarios.findOne({
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designScenarioReferenceId: duScenario.componentReferenceId
-                    });
+                    let scenarioTestResult = UserDvMashScenarioData.getScenario(userContext, duScenario.componentReferenceId);
 
                     if (duScenario.workPackageId !== 'NONE' ) {
                         someInWp = true;
@@ -268,17 +205,8 @@ class DesignUpdateServices{
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "    WP Status: {}  Test Status: {}", duWpStatus, duTestStatus);
 
-                DesignUpdates.update(
-                    {
-                        _id: du._id
-                    },
-                    {
-                        $set: {
-                            updateWpStatus: duWpStatus,
-                            updateTestStatus: duTestStatus
-                        }
-                    }
-                );
+                DesignUpdateData.updateProgressStatus(du._id, duWpStatus, duTestStatus);
+
             });
         }
     }

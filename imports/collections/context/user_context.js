@@ -4,7 +4,7 @@
 
 //import { Mongo } from 'meteor/mongo';
 
-export const UserCurrentEditContext = new Mongo.Collection('userCurrentEditContext');
+export const UserContext = new Mongo.Collection('userContext');
 
 // This represents the current / last thing the user was editing / working with
 
@@ -23,11 +23,11 @@ let Schema = new SimpleSchema({
     scenarioStepId:                 {type: String, defaultValue: 'NONE'},       // DEV Mash Step Ref (if any)
 });
 
-UserCurrentEditContext.attachSchema(Schema);
+UserContext.attachSchema(Schema);
 
 // Publish
 if(Meteor.isServer){
-    Meteor.publish('userCurrentEditContext', function userCurrentEditContextPublication(){
-        return UserCurrentEditContext.find({});
+    Meteor.publish('userContext', function userCurrentEditContextPublication(){
+        return UserContext.find({});
     })
 }

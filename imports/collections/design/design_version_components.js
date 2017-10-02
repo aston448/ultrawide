@@ -5,19 +5,19 @@ export const DesignVersionComponents = new Mongo.Collection('designVersionCompon
 
 let Schema = new SimpleSchema({
     // Identity
-    componentReferenceId:           {type: String},                                     // A unique ID that persists across design versions
+    componentReferenceId:           {type: String, index: 1},                           // A unique ID that persists across design versions
     designId:                       {type: String},                                     // Denormalisation for easy access of design id
     designVersionId:                {type: String},                                     // The design version this is a change to
     componentType:                  {type: String},                                     // App, Section, Feature, Feature Aspect, Scenario
     componentLevel:                 {type: Number, defaultValue: 0},                    // Level of nested section items
 
     // Location
-    componentParentIdOld:           {type: String},                                     // Position of item in design hierarchy
-    componentParentIdNew:           {type: String},                                     // Position of item in design hierarchy - after move
-    componentParentReferenceIdOld:  {type: String},                                     // A unique ID that persists across design versions
-    componentParentReferenceIdNew:  {type: String},                                     // A unique ID that persists across design versions - after move
+    //componentParentIdOld:           {type: String},                                     // Position of item in design hierarchy
+    //componentParentIdNew:           {type: String, index: 1},                           // Position of item in design hierarchy - after move
+    componentParentReferenceIdOld:  {type: String, defaultValue: 'NONE'},               // A unique ID that persists across design versions
+    componentParentReferenceIdNew:  {type: String, defaultValue: 'NONE', index: 1},     // A unique ID that persists across design versions - after move
     componentFeatureReferenceIdOld: {type: String, defaultValue: 'NONE'},               // If a component is part of a feature this is set
-    componentFeatureReferenceIdNew: {type: String, defaultValue: 'NONE'},               // If a component is part of a feature this is set - after move
+    componentFeatureReferenceIdNew: {type: String, defaultValue: 'NONE', index: 1},     // If a component is part of a feature this is set - after move
     componentIndexOld:              {type: Number, decimal: true, defaultValue: 100000},  // Used for ordering
     componentIndexNew:              {type: Number, decimal: true, defaultValue: 100000},  // Used for ordering
 
@@ -45,6 +45,8 @@ let Schema = new SimpleSchema({
 
 
 });
+
+//DesignVersionComponents.createIndex({componentReferenceId: 1});
 
 DesignVersionComponents.attachSchema(Schema);
 

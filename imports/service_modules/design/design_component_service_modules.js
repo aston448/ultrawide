@@ -1,14 +1,14 @@
 
-// Ultrawide Collections
-import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
-import { WorkPackages }             from '../../collections/work/work_packages.js';
-import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
-
 // Ultrawide Services
-import { ComponentType, WorkPackageStatus, WorkPackageType, LogLevel } from '../../constants/constants.js';
+import { ComponentType, LogLevel }  from '../../constants/constants.js';
+import { log } from '../../common/utils.js';
 
 import DesignComponentServices      from '../../servicers/design/design_component_services.js';
 import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
+
+// Data Access
+import DesignVersionData            from '../../service_modules_db/design/design_version_db.js';
+import DesignComponentData          from '../../service_modules_db/design/design_component_db.js';
 
 //======================================================================================================================
 //
@@ -20,11 +20,13 @@ import WorkPackageModules           from '../../service_modules/work/work_packag
 
 class DesignComponentModules{
 
-    addDefaultFeatureAspects(designVersionId, featureId, defaultRawText, view){
-        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', this.getRawTextFor('Interface'), defaultRawText, false, view);
-        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', this.getRawTextFor('Actions'), defaultRawText, false, view);
-        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', this.getRawTextFor('Conditions'), defaultRawText, false, view);
-        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', this.getRawTextFor('Consequences'), defaultRawText, false, view);
+
+
+    addDefaultFeatureAspects(designVersionId, featureReferenceId, defaultRawText, view){
+        DesignComponentServices.addNewComponent(designVersionId, featureReferenceId, ComponentType.FEATURE_ASPECT, 0, 'Interface', this.getRawTextFor('Interface'), defaultRawText, false, view);
+        DesignComponentServices.addNewComponent(designVersionId, featureReferenceId, ComponentType.FEATURE_ASPECT, 0, 'Actions', this.getRawTextFor('Actions'), defaultRawText, false, view);
+        DesignComponentServices.addNewComponent(designVersionId, featureReferenceId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', this.getRawTextFor('Conditions'), defaultRawText, false, view);
+        DesignComponentServices.addNewComponent(designVersionId, featureReferenceId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', this.getRawTextFor('Consequences'), defaultRawText, false, view);
     }
 
     getRawTextFor(plainText){
@@ -45,122 +47,68 @@ class DesignComponentModules{
     updateWorkPackagesWithNewItem(designVersionId, newComponentId){
 
         // See if any base WPs affected by this update
-        const workPackages = WorkPackages.find({
-            designVersionId:    designVersionId,
-            designUpdateId:     'NONE',
-            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
-            workPackageType:    WorkPackageType.WP_BASE
-        }).fetch();
+        const workPackages = DesignVersionData.getNonCompleteBaseWorkPackages(designVersionId);
 
-        const component = DesignVersionComponents.findOne({_id: newComponentId});
-        const componentParent = DesignVersionComponents.findOne({_id: component.componentParentIdNew});
+        const component = DesignComponentData.getDesignComponentById(newComponentId);
+        const componentParent = DesignComponentData.getDesignComponentByRef(designVersionId, component.componentParentReferenceIdNew);
 
         // If the parent is in the WP actual scope, add in this component too
         workPackages.forEach((wp) => {
 
             WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParent._id, designVersionId);
-
         });
     };
 
     updateWorkPackageLocation(designComponentId, reorder){
 
-        const component = DesignVersionComponents.findOne({_id: designComponentId});
+        const component = DesignComponentData.getDesignComponentById(designComponentId);
 
         // See if any base WPs affected by this update
-        const workPackages = WorkPackages.find({
-            designVersionId:    component.designVersionId,
-            designUpdateId:     'NONE',
-            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
-            workPackageType:    WorkPackageType.WP_BASE
-        }).fetch();
+        const workPackages = DesignVersionData.getNonCompleteBaseWorkPackages(component.designVersionId);
 
-        const componentParent = DesignVersionComponents.findOne({_id: component.componentParentIdNew});
+        const componentParent = DesignComponentData.getDesignComponentByRef(component.designVersionId, component.componentParentReferenceIdNew);
 
         workPackages.forEach((wp) => {
 
             WorkPackageModules.updateDesignComponentLocationInWorkPackage(reorder, wp, component, componentParent);
-
         });
     }
 
     removeWorkPackageItems(designComponentId, designVersionId){
 
         // See if any base WPs affected by this update
-        const workPackages = WorkPackages.find({
-            designVersionId:    designVersionId,
-            designUpdateId:     'NONE',
-            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
-            workPackageType:    WorkPackageType.WP_BASE
-        }).fetch();
+        const workPackages = DesignVersionData.getNonCompleteBaseWorkPackages(designVersionId);
 
         workPackages.forEach((wp) => {
 
             WorkPackageModules.removeDesignComponentFromWorkPackage(wp._id, designComponentId);
-
         });
-
     };
-
-    // Set any other components to no longer new
-    setComponentsOld(designComponentId){
-        DesignVersionComponents.update(
-            {
-                _id:     {$ne: designComponentId},
-                isNew:   true
-            },
-            {
-                $set:{
-                    isNew: false
-                }
-            },
-            {multi: true},
-
-            (error, result) => {
-                if(error){
-                    // Error handler
-                    //console.log("Error: " + error);
-                } else {
-                    //console.log("Success: " + result);
-                }
-            }
-        );
-    }
 
     hasNoChildren(designComponentId){
-        return DesignVersionComponents.find({componentParentIdNew: designComponentId}).count() === 0;
+
+        const component = DesignComponentData.getDesignComponentById(designComponentId);
+        const count = DesignComponentData.getChildCount(component.designVersionId, component.componentReferenceId);
+
+        return count === 0;
     };
 
-    setIndex(componentId, componentType, parentId){
+    setIndex(componentId){
 
         // Get the max index of OTHER components of this type under the same parent
-        const peerComponents = DesignVersionComponents.find(
-            {
-                _id: {$ne: componentId},
-                componentType: componentType,
-                componentParentIdNew: parentId
-            },
-            {sort:{componentIndexNew: -1}}
-        ).fetch();
+        const component = DesignComponentData.getDesignComponentById(componentId);
+
+        const peerComponents = DesignComponentData.getPeerComponents(component.designVersionId, component.componentReferenceId, component.componentType, component.componentParentReferenceIdNew);
 
         // If no components then leave as default
         if(peerComponents.length > 0){
-            //console.log("Highest peer is " + peerComponents[0].componentNameNew);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Setting index.  Current highest peer is {}", peerComponents[0].componentNameNew);
 
             let newIndex = peerComponents[0].componentIndexNew + 100;
 
-            DesignVersionComponents.update(
-                {_id: componentId},
-                {
-                    $set:{
-                        componentIndexOld: newIndex,
-                        componentIndexNew: newIndex
-                    }
-                }
-            );
+            DesignComponentData.updateIndex(componentId, newIndex, newIndex);
         }
     }
-
 }
 
 export default new DesignComponentModules();

@@ -10,18 +10,16 @@ export const DesignUpdateComponents = new Mongo.Collection('designUpdateComponen
 
 let Schema = new SimpleSchema({
     // Identity
-    componentReferenceId:           {type: String},                                     // A unique ID that persists across design updates
+    componentReferenceId:           {type: String, index: 1},                           // A unique ID that persists across design updates
     designId:                       {type: String},                                     // Denormalisation for easy access of design id
     designVersionId:                {type: String},                                     // The design version this is a change to
     designUpdateId:                 {type: String},                                     // The id of the update this relates to
     componentType:                  {type: String},                                     // Feature, Scenario, Scenario Step etc
     componentLevel:                 {type: Number, defaultValue: 0},                    // Level of nested section items
-    componentParentIdOld:           {type: String},                                     // Position of item in design hierarchy
-    componentParentIdNew:           {type: String},                                     // Position of item in design hierarchy - after move
-    componentParentReferenceIdOld:  {type: String},                                     // A unique ID that persists across design updates
-    componentParentReferenceIdNew:  {type: String},                                     // A unique ID that persists across design updates - after move
+    componentParentReferenceIdOld:  {type: String, defaultValue: 'NONE'},               // A unique ID that persists across design updates
+    componentParentReferenceIdNew:  {type: String, defaultValue: 'NONE', index: 1},     // A unique ID that persists across design updates - after move
     componentFeatureReferenceIdOld: {type: String, defaultValue: 'NONE'},               // If a component is part of a feature this is set
-    componentFeatureReferenceIdNew: {type: String, defaultValue: 'NONE'},               // If a component is part of a feature this is set - after move
+    componentFeatureReferenceIdNew: {type: String, defaultValue: 'NONE', index: 1},     // If a component is part of a feature this is set - after move
     componentIndexOld:              {type: Number, decimal: true, defaultValue: 1000000},  // Used for ordering
     componentIndexNew:              {type: Number, decimal: true, defaultValue: 1000000},  // Used for ordering
 

@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 
 
-export const UserDevDesignSummaryData = new Mongo.Collection('userDevDesignSummaryData');
+export const UserDevDesignSummary = new Mongo.Collection('userDevDesignSummary');
 
 let Schema = new SimpleSchema({
     // Design Identity
@@ -24,14 +24,14 @@ let Schema = new SimpleSchema({
     accTestPendingCount:            {type: Number, defaultValue: 0},        // Number of acceptance tests pending
 });
 
-UserDevDesignSummaryData.attachSchema(Schema);
+UserDevDesignSummary.attachSchema(Schema);
 
 
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userDevDesignSummaryData', function userDevDesignSummaryDataPublication(userId){
-        return UserDevDesignSummaryData.find({userId: userId});
+    Meteor.publish('userDevDesignSummary', function userDevDesignSummaryPublication(userId){
+        return UserDevDesignSummary.find({userId: userId});
     })
 }
 

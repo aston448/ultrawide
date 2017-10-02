@@ -38,7 +38,7 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addDesignSectionToApplication(view, mode, designVersionId, designUpdateId, parentId, callback){
+    addDesignSectionToApplication(view, mode, designVersionId, designUpdateId, parentRefId, callback){
 
         addDesignSectionToApplication.call(
             {
@@ -46,7 +46,7 @@ class ServerDesignUpdateComponentApi {
                 mode: mode,
                 designVersionId: designVersionId,
                 designUpdateId: designUpdateId,
-                parentId: parentId
+                parentRefId: parentRefId
             },
             (err, result) => {
                 callback(err, result);
@@ -54,7 +54,7 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addDesignSectionToDesignSection(view, mode, designVersionId, designUpdateId, parentId, parentLevel, callback){
+    addDesignSectionToDesignSection(view, mode, designVersionId, designUpdateId, parentRefId, parentLevel, callback){
 
         addDesignSectionToDesignSection.call(
             {
@@ -62,7 +62,7 @@ class ServerDesignUpdateComponentApi {
                 mode: mode,
                 designVersionId: designVersionId,
                 designUpdateId: designUpdateId,
-                parentId: parentId,
+                parentRefId: parentRefId,
                 parentLevel: parentLevel
             },
             (err, result) => {
@@ -71,7 +71,7 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addFeatureToDesignSection(view, mode, designVersionId, designUpdateId, parentId, callback){
+    addFeatureToDesignSection(view, mode, designVersionId, designUpdateId, parentRefId, callback){
 
         addFeatureToDesignSection.call(
             {
@@ -79,7 +79,7 @@ class ServerDesignUpdateComponentApi {
                 mode: mode,
                 designVersionId: designVersionId,
                 designUpdateId: designUpdateId,
-                parentId: parentId
+                parentRefId: parentRefId
             },
             (err, result) => {
                 callback(err, result);
@@ -87,7 +87,7 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addFeatureAspectToFeature(view, mode, designVersionId, designUpdateId, parentId, callback){
+    addFeatureAspectToFeature(view, mode, designVersionId, designUpdateId, parentRefId, callback){
 
         addFeatureAspectToFeature.call(
             {
@@ -95,7 +95,7 @@ class ServerDesignUpdateComponentApi {
                 mode: mode,
                 designVersionId: designVersionId,
                 designUpdateId: designUpdateId,
-                parentId: parentId
+                parentRefId: parentRefId
             },
             (err, result) => {
                 callback(err, result);
@@ -103,7 +103,7 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addScenario(view, mode, designVersionId, designUpdateId, parentId, callback){
+    addScenario(view, mode, designVersionId, designUpdateId, parentRefId, callback){
 
         addScenario.call(
             {
@@ -111,7 +111,7 @@ class ServerDesignUpdateComponentApi {
                 mode: mode,
                 designVersionId: designVersionId,
                 designUpdateId: designUpdateId,
-                parentId: parentId
+                parentRefId: parentRefId
             },
             (err, result) => {
                 callback(err, result);
@@ -167,14 +167,13 @@ class ServerDesignUpdateComponentApi {
 
     };
 
-    restoreDesignComponent(view, mode, designUpdateComponentId, parentId, callback){
+    restoreDesignComponent(view, mode, designUpdateComponentId, callback){
 
         restoreDesignComponent.call(
             {
                 view: view,
                 mode: mode,
-                designUpdateComponentId: designUpdateComponentId,
-                parentId: parentId,
+                designUpdateComponentId: designUpdateComponentId
             },
             (err, result) => {
                 callback(err, result);

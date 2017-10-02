@@ -2,40 +2,32 @@
 // External
 import fs from 'fs';
 
-// Ultrawide Collections
-import { AppGlobalData }                from '../../collections/app/app_global_data.js';
-import { DesignBackups }                from '../../collections/backup/design_backups.js';
-import { UserRoles }                    from '../../collections/users/user_roles.js';
-import { UserCurrentEditContext }       from '../../collections/context/user_current_edit_context.js';
-import { UserTestTypeLocations }        from '../../collections/configure/user_test_type_locations.js';
-import { UserSettings }                 from '../../collections/configure/user_settings.js';
-import { TestOutputLocations }          from '../../collections/configure/test_output_locations.js';
-import { TestOutputLocationFiles }      from '../../collections/configure/test_output_location_files.js';
-import { Designs }                      from '../../collections/design/designs.js';
-import { DesignVersions }               from '../../collections/design/design_versions.js';
-import { DesignUpdates }                from '../../collections/design_update/design_updates.js';
-import { UserDesignUpdateSummary }      from '../../collections/summary/user_design_update_summary.js';
-import { WorkPackages }                 from '../../collections/work/work_packages.js';
-import { DomainDictionary }             from '../../collections/design/domain_dictionary.js'
-import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
-import { ScenarioSteps }                from '../../collections/design/scenario_steps.js';
-import { FeatureBackgroundSteps }       from '../../collections/design/feature_background_steps.js';
-import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
-import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
-
 // Ultrawide Services
 import { UltrawideDirectory, WorkPackageType, LogLevel } from '../../constants/constants.js';
-import { getIdFromMap, padDigits, log }              from '../../common/utils.js';
+import { getIdFromMap, log }            from '../../common/utils.js';
 
-import DesignComponentServices          from '../../servicers/design/design_component_services.js';
 import TestOutputLocationServices       from '../../servicers/configure/test_output_location_services.js';
 import DesignServices                   from '../../servicers/design/design_services.js';
-import DesignVersionServices            from '../../servicers/design/design_version_services.js';
 import DesignUpdateServices             from '../../servicers/design_update/design_update_services.js';
 import WorkPackageServices              from '../../servicers/work/work_package_services.js';
 import DomainDictionaryServices         from '../../servicers/design/domain_dictionary_services.js';
-import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
 import UserSettingServices              from '../../servicers/configure/user_setting_services.js';
+
+// Data Access
+import AppGlobalData                    from '../../service_modules_db/app/app_global_db.js';
+import UserContextData                  from '../../service_modules_db/context/user_context_db.js';
+import UserRoleData                     from '../../service_modules_db/users/user_role_db.js';
+import UserSettingData                  from '../../service_modules_db/configure/user_setting_db.js';
+import DesignData                       from '../../service_modules_db/design/design_db.js';
+import DesignVersionData                from '../../service_modules_db/design/design_version_db.js';
+import DesignUpdateData                 from '../../service_modules_db/design_update/design_update_db.js';
+import WorkPackageData                  from '../../service_modules_db/work/work_package_db.js';
+import DesignComponentData              from '../../service_modules_db/design/design_component_db.js';
+import DesignUpdateComponentData        from '../../service_modules_db/design_update/design_update_component_db.js';
+import DesignBackupData                 from '../../service_modules_db/backups/design_backup_db.js';
+import UserTestTypeLocationData         from '../../service_modules_db/configure/user_test_type_location_db.js';
+import TestOutputLocationData           from '../../service_modules_db/configure/test_output_location_db.js';
+import TestOutputLocationFileData       from '../../service_modules_db/configure/test_output_location_file_db.js';
 
 //======================================================================================================================
 //
@@ -50,27 +42,20 @@ class ImpexModules{
     markAllBackupsAsUnconfirmed(){
 
         // Set all to no existing - we are about to confirm if files do actually exist
-        const updated = DesignBackups.update({}, {$set: {fileExists: false}}, {multi: true});
+        const updated = DesignBackupData.markAllAsNoFile();
 
         console.log(updated + " backup file records set to non-existent");
     }
 
     addConfirmBackupFile(fileName, filePath){
 
-        const existingFile = DesignBackups.findOne({backupFileName: fileName});
+        const existingFile = DesignBackupData.getBackupByFileName(fileName);
 
         if(existingFile){
 
             console.log("Found existing backup file: " + fileName);
             // Confirm as existing
-            DesignBackups.update(
-                {_id: existingFile._id},
-                {
-                    $set:{
-                        fileExists: true
-                    }
-                }
-            );
+            DesignBackupData.setFileExists(existingFile._id, true);
 
         } else {
 
@@ -79,22 +64,13 @@ class ImpexModules{
 
             console.log("Adding new backup file: " + fileName);
 
-            DesignBackups.insert({
-                backupName:             metadata.backupName,
-                backupFileName:         fileName,
-                backupDesignName:       metadata.designName,
-                backupDate:             metadata.backupDate,
-                backupDataVersion:      metadata.backupDataVersion,
-                fileExists:             true
-            })
+            DesignBackupData.insertNewBackup(metadata, fileName);
         }
     }
 
     removeNonExistingBackups(){
 
-        DesignBackups.remove({
-            fileExists: false
-        });
+        DesignBackupData.removeAllNonExistingBackups();
     }
 
 
@@ -126,9 +102,7 @@ class ImpexModules{
 
     getCurrentDataVersion(){
 
-        const appData = AppGlobalData.findOne({
-            versionKey: 'CURRENT_VERSION'
-        });
+        const appData = AppGlobalData.getDataByVersionKey('CURRENT_VERSION');
 
         if(appData){
             return appData.dataVersion;
@@ -140,9 +114,7 @@ class ImpexModules{
 
     getDataDirectory(){
 
-        const appData = AppGlobalData.findOne({
-            versionKey: 'CURRENT_VERSION'
-        });
+        const appData = AppGlobalData.getDataByVersionKey('CURRENT_VERSION');
 
         if(appData){
 
@@ -193,7 +165,7 @@ class ImpexModules{
             if(user.userName !== 'admin') {
 
                 // See if user exists
-                const existingUser = UserRoles.findOne({userName: user.userName});
+                const existingUser = UserRoleData.getRoleByUserName(user.userName);
 
                 if(existingUser){
 
@@ -201,24 +173,7 @@ class ImpexModules{
                     usersMapping.push({oldId: user.userId, newId: existingUser.userId});
 
                     // But do need to reset the user context as ids may be out of date
-                    UserCurrentEditContext.update(
-                        {userId: existingUser.userId},
-                        {
-                            $set:{
-                                designId: 'NONE',
-                                designVersionId: 'NONE',
-                                designUpdateId: 'NONE',
-                                workPackageId: 'NONE',
-                                designComponentId: 'NONE',
-                                designComponentType: 'NONE',
-
-                                featureReferenceId: 'NONE',
-                                featureAspectReferenceId: 'NONE',
-                                scenarioReferenceId: 'NONE',
-                                scenarioStepId: 'NONE'
-                            }
-                        }
-                    );
+                    UserContextData.clearUserContext(existingUser.userId);
 
                 } else {
 
@@ -246,34 +201,13 @@ class ImpexModules{
                     }
 
                     // And add to the DB
-                    UserRoles.insert({
-                        userId: newUserId,
-                        userName: user.userName,
-                        displayName: user.displayName,
-                        isDesigner: user.isDesigner,
-                        isDeveloper: user.isDeveloper,
-                        isManager: user.isManager,
-                        isAdmin: false,
-                        isActive: user.isActive
-                    });
+                    UserRoleData.insertNewUserRole(newUserId, user);
 
                     // Add to mapping
                     usersMapping.push({oldId: user.userId, newId: newUserId});
 
                     // And create a default new User Context
-                    UserCurrentEditContext.insert({
-                        userId: newUserId,
-                        designId: 'NONE',
-                        designVersionId: 'NONE',
-                        designUpdateId: 'NONE',
-                        workPackageId: 'NONE',
-                        designComponentId: 'NONE',
-                        designComponentType: 'NONE',
-                        featureReferenceId: 'NONE',
-                        featureAspectReferenceId: 'NONE',
-                        scenarioReferenceId: 'NONE',
-                        scenarioStepId: 'NONE'
-                    });
+                    UserContextData.insertEmptyUserContext(newUserId);
                 }
             }
         });
@@ -294,9 +228,7 @@ class ImpexModules{
 
             let locationId = 'NONE';
 
-            const existingLocation = TestOutputLocations.findOne({
-                locationName: location.locationName
-            });
+            const existingLocation = TestOutputLocationData.getOutputLocationByName(location.locationName);
 
             if(existingLocation){
 
@@ -311,7 +243,7 @@ class ImpexModules{
 
                 const userId = getIdFromMap(userMapping, location.userId);
 
-                locationId = TestOutputLocationServices.importLocation(location, userId);
+                locationId = TestOutputLocationData.importLocation(location, userId);
             }
 
             locationsMapping.push({oldId: location._id, newId: locationId});
@@ -331,17 +263,14 @@ class ImpexModules{
 
             const locationId = getIdFromMap(locationsMapping, locationFile.locationId);
 
-            const existingLocationFile = TestOutputLocationFiles.findOne({
-                locationId: locationFile.locationId,
-                fileAlias: locationFile.fileAlias
-            });
+            const existingLocationFile = TestOutputLocationFileData.getLocationFileByAlias(locationFile.locationId, locationFile.fileAlias);
 
             // Add the location file if not already existing
             if(!existingLocationFile) {
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Test Output Location File: {}", locationFile.fileAlias);
 
-                let locationFileId = TestOutputLocationServices.importLocationFile(locationFile, locationId);
+                let locationFileId = TestOutputLocationFileData.importLocationFile(locationFile, locationId);
             }
 
         });
@@ -359,17 +288,14 @@ class ImpexModules{
             const locationId = getIdFromMap(locationsMapping, userLocation.locationId);
             const userId = getIdFromMap(userMapping, userLocation.userId);
 
-            const existingUserLocation = UserTestTypeLocations.findOne({
-                userId: userId,
-                locationId: locationId,
-            });
+            const existingUserLocation = UserTestTypeLocationData.getUserLocationById(userId, locationId);
 
             // Add the user location config if not already existing
             if(!existingUserLocation) {
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Test Location: {}", userLocation.locationName);
 
-                TestOutputLocationServices.importUserConfiguration(userLocation, locationId, userId);
+                UserTestTypeLocationData.importUserConfiguration(userLocation, locationId, userId);
             }
         });
     }
@@ -384,16 +310,13 @@ class ImpexModules{
 
             const userId = getIdFromMap(userMapping, userSetting.userId);
 
-            const existingUserSetting = UserSettings.findOne({
-                userId: userId,
-                settingName: userSetting.settingName
-            });
+            const existingUserSetting = UserSettingData.getUserSettingByName(userId, userSetting.settingName);
 
             if(!existingUserSetting) {
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Setting: {}", userSetting.settingName);
 
-                UserSettingServices.importUserSetting(userSetting, userId);
+                UserSettingData.importUserSetting(userSetting, userId);
             }
         });
     }
@@ -408,7 +331,7 @@ class ImpexModules{
 
             log((msg) => console.log(msg), LogLevel.INFO, "Adding Design: {}", design.designName);
 
-            let designId = DesignServices.importDesign(design);
+            let designId = DesignData.importDesign(design);
 
             if (designId) {
                 // Store the new Design ID
@@ -434,7 +357,7 @@ class ImpexModules{
 
                 log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Version: {} to Design {}", designVersion.designVersionName, designId);
 
-                let designVersionId = DesignVersionServices.importDesignVersion(
+                let designVersionId = DesignVersionData.importDesignVersion(
                     designId,
                     designVersion
                 );
@@ -463,7 +386,7 @@ class ImpexModules{
 
                 log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Update: {} to Design Version {}", designUpdate.updateName, designVersionId);
 
-                let designUpdateId = DesignUpdateServices.importDesignUpdate(
+                let designUpdateId = DesignUpdateData.importDesignUpdate(
                     designVersionId,
                     designUpdate
                 );
@@ -566,7 +489,7 @@ class ImpexModules{
             let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
             let workPackageId = getIdFromMap(workPackagesMapping, component.workPackageId);
 
-            let designComponentId = DesignComponentServices.importComponent(
+            let designComponentId = DesignComponentData.importComponent(
                 designId,
                 designVersionId,
                 workPackageId,
@@ -582,9 +505,9 @@ class ImpexModules{
         });
 
         // Update Design Component parents for the new design components
-        designComponentsMapping.forEach((component) => {
-            DesignComponentServices.importRestoreParent(component.newId, designComponentsMapping)
-        });
+        // designComponentsMapping.forEach((component) => {
+        //     DesignComponentServices.importRestoreParent(component.newId, designComponentsMapping)
+        // });
 
         // Make sure any Designs affected are no longer removable
         designsMapping.forEach((designMap) => {
@@ -615,7 +538,7 @@ class ImpexModules{
                 let designUpdateId = getIdFromMap(designUpdatesMapping, updateComponent.designUpdateId);
                 let workPackageId = getIdFromMap(workPackagesMapping, updateComponent.workPackageId);
 
-                let designUpdateComponentId = DesignUpdateComponentServices.importComponent(
+                let designUpdateComponentId = DesignUpdateComponentData.importComponent(
                     designId,
                     designVersionId,
                     designUpdateId,
@@ -636,9 +559,9 @@ class ImpexModules{
             });
 
             // Update Design Update Component parents for the new design update components
-            designUpdateComponentsMapping.forEach((updateComponent) => {
-                DesignUpdateComponentServices.importRestoreParent(updateComponent.newId, designUpdateComponentsMapping)
-            });
+            // designUpdateComponentsMapping.forEach((updateComponent) => {
+            //     DesignUpdateComponentServices.importRestoreParent(updateComponent.newId, designUpdateComponentsMapping)
+            // });
 
             // Make sure Design is no longer removable
             designsMapping.forEach((designMap) => {
@@ -672,7 +595,7 @@ class ImpexModules{
             let workPackageId = getIdFromMap(workPackagesMapping, wpComponent.workPackageId);
 
             // WP Component could be a Design Component or a Design Update Component
-            workPackage = WorkPackages.findOne({_id: workPackageId});
+            workPackage = WorkPackageData.getWorkPackageById(workPackageId);
 
             let designVersionId = workPackage.designVersionId;
 

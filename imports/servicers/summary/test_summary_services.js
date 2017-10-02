@@ -1,7 +1,7 @@
 
 // Ultrawide Collections
-import { UserDevTestSummaryData }       from '../../collections/summary/user_dev_test_summary_data.js';
-import { UserDevDesignSummaryData }     from '../../collections/summary/user_dev_design_summary_data.js';
+import { UserDevTestSummary }       from '../../collections/summary/user_dev_test_summary.js';
+import { UserDevDesignSummary }     from '../../collections/summary/user_dev_design_summary.js';
 import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
@@ -45,11 +45,11 @@ class TestSummaryServices {
 
         // Delete data for current user context.
         // Its MUCH faster to remove everything, recalc and then do a bulk insert than to do updates one by one
-        UserDevTestSummaryData.remove({
+        UserDevTestSummary.remove({
             userId: userContext.userId,
         });
 
-        UserDevDesignSummaryData.remove({
+        UserDevDesignSummary.remove({
             userId:             userContext.userId,
         });
 
@@ -327,10 +327,10 @@ class TestSummaryServices {
 
         // Bulk insert new feature summary data
         if(batchData.length > 0) {
-            UserDevTestSummaryData.batchInsert(batchData);
+            UserDevTestSummary.batchInsert(batchData);
         }
 
-        UserDevDesignSummaryData.insert({
+        UserDevDesignSummary.insert({
             userId: userContext.userId,
             designVersionId: userContext.designVersionId,
             featureCount: totalFeatureCount,

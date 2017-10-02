@@ -4,7 +4,9 @@ import { DomainDictionary } from '../../collections/design/domain_dictionary.js'
 
 // Ultrawide services
 import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js'
-import DesignComponentServices from '../../service_modules/design/design_component_service_modules.js';
+import DesignComponentServices  from '../../service_modules/design/design_component_service_modules.js';
+
+import DomainDictionaryData     from '../../service_modules_db/design/domain_dictionry_db.js';
 
 //======================================================================================================================
 //
@@ -22,30 +24,17 @@ class DomainDictionaryServices{
 
             const now = new Date().getTime();
 
-            const domainTermId = DomainDictionary.insert(
-                {
-                    designId: designId,
-                    designVersionId: designVersionId,
-                    domainTermOld: DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME,
-                    domainTermNew: DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME,
-                    domainTextRaw: DesignComponentServices.getRawTextFor(DefaultDetailsText.NEW_DICTIONARY_ENTRY_TEXT),
-                    sortingName: 'AAAAA' + now,       // Will appear at start of list.  If more than one new added, in order
-                    markInDesign: true,
-                    isNew: true,
-                    isChanged: false
-                }
-            );
-
-            return domainTermId;
+            return DomainDictionaryData.insertNewDictionaryTerm(designId, designVersionId, DesignComponentServices.getRawTextFor(DefaultDetailsText.NEW_DICTIONARY_ENTRY_TEXT));
         }
 
     };
 
     updateTermName(termId, newTermName, oldTermName){
-        if(Meteor.isServer) {
-            // RESTORE: All terms will be NEW as just been created with default values
 
-            const domainTerm = DomainDictionary.findOne({_id: termId});
+        if(Meteor.isServer) {
+            // RESTORE: All terms will still be NEW
+
+            const domainTerm = DomainDictionaryData.getTermById(termId);
 
             // Don't count an update that makes no change
             if (domainTerm.domainTermNew === newTermName) {
@@ -53,6 +42,7 @@ class DomainDictionaryServices{
             }
 
             if (domainTerm.isNew) {
+
                 // First time update - not a real update
                 let oldName = newTermName;
 
@@ -61,68 +51,42 @@ class DomainDictionaryServices{
                     oldName = oldTermName;
                 }
 
-                DomainDictionary.update(
-                    {_id: termId},
-                    {
-                        $set: {
-                            domainTermOld: oldName,
-                            domainTermNew: newTermName,
-                            isChanged: (newTermName != oldName)  // Only will be true for restored data
-                        }
-                    }
-                )
+                DomainDictionaryData.updateNewTermName(termId, oldName, newTermName, (newTermName !== oldName));
 
             } else {
+
                 // Real update
-                DomainDictionary.update(
-                    {_id: termId},
-                    {
-                        $set: {
-                            domainTermNew: newTermName,
-                            sortingName: newTermName,       // Make sure term is correctly sorted
-                            isChanged: true
-                        }
-                    }
-                )
+                DomainDictionaryData.updateExistingTermName(termId, newTermName);
             }
         }
     };
 
     updateTermDefinition(termId, newTermDefinitionTextRaw){
+
         if(Meteor.isServer) {
             // RESTORE: All terms will still be NEW
 
-            const term = DomainDictionary.findOne({_id: termId});
+            const term = DomainDictionaryData.getTermById(termId);
 
             if (term.isNew) {
+
                 // New term having definition set for first time
-                DomainDictionary.update(
-                    {_id: termId},
-                    {
-                        $set: {
-                            domainTextRaw: newTermDefinitionTextRaw,
-                            sortingName: term.domainTermNew,                // Once the definition is updated abandon any initial sorting name
-                            isNew: false,                                   // And set a no longer new
-                        }
-                    }
-                );
+                DomainDictionaryData.updateNewTermDefinition(termId, newTermDefinitionTextRaw);
+
             } else {
+
                 // Just a regular change to the text
-                DomainDictionary.update(
-                    {_id: termId},
-                    {
-                        $set: {
-                            domainTextRaw: newTermDefinitionTextRaw,
-                        }
-                    }
-                );
+                DomainDictionaryData.updateExistingTermDefinition(termId, newTermDefinitionTextRaw);
+
             }
         }
     };
 
     removeTerm(termId){
+
         if(Meteor.isServer) {
-            DomainDictionary.remove({_id: termId});
+
+            DomainDictionaryData.removeTerm(termId);
         }
     };
 }

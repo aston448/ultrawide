@@ -5,10 +5,10 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
-import { AppGlobalData }                    from '../collections/app/app_global_data.js';
+import { AppGlobal }                    from '../collections/app/app_global.js';
 import { UserRoles }                        from '../collections/users/user_roles.js';
-import { DesignBackups }                    from '../collections/backup/design_backups.js';
-import { UserCurrentEditContext }           from '../collections/context/user_current_edit_context.js';
+import { DesignBackups }                    from '../collections/backups/design_backups.js';
+import { UserContext }           from '../collections/context/user_context.js';
 import { Designs }                          from '../collections/design/designs.js';
 import { DesignVersions }                   from '../collections/design/design_versions.js';
 import { DesignUpdates }                    from '../collections/design_update/design_updates.js';
@@ -21,8 +21,8 @@ import { ScenarioSteps }                    from '../collections/design/scenario
 import { DomainDictionary }                 from '../collections/design/domain_dictionary.js';
 import { UserDevFeatures }                  from '../collections/dev/user_dev_features.js';
 import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
-import { UserDevTestSummaryData }           from '../collections/summary/user_dev_test_summary_data.js';
-import { UserDevDesignSummaryData }         from '../collections/summary/user_dev_design_summary_data.js';
+import { UserDevTestSummary }           from '../collections/summary/user_dev_test_summary.js';
+import { UserDevDesignSummary }         from '../collections/summary/user_dev_design_summary.js';
 import { UserMashScenarioTests }            from '../collections/mash/user_mash_scenario_tests.js';
 import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
 import { TestOutputLocationFiles }          from '../collections/configure/test_output_location_files.js';
@@ -66,11 +66,11 @@ class ClientContainerServices{
         if(Meteor.isClient) {
 
             // Subscribing to these here makes them available to the whole app...
-            const agHandle = Meteor.subscribe('appGlobalData');
+            const agHandle = Meteor.subscribe('appGlobal');
             const urHandle = Meteor.subscribe('userRoles');
             const dbHandle = Meteor.subscribe('designBackups');
             const usHandle = Meteor.subscribe('userSettings');
-            const ucHandle = Meteor.subscribe('userCurrentEditContext');
+            const ucHandle = Meteor.subscribe('userContext');
             const uvHandle = Meteor.subscribe('userCurrentViewOptions');
             const tlHandle = Meteor.subscribe('testOutputLocations');
             const tfHandle = Meteor.subscribe('testOutputLocationFiles');
@@ -134,8 +134,8 @@ class ClientContainerServices{
                 const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
                 const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
                 const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
-                const tsHandle = Meteor.subscribe('userDevTestSummaryData', userContext.userId);
-                const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userContext.userId);
+                const tsHandle = Meteor.subscribe('userDevTestSummary', userContext.userId);
+                const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
                 const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
                 const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
 
@@ -250,8 +250,8 @@ class ClientContainerServices{
     //             const arHandle = Meteor.subscribe('userAccTestResults', userId);
     //             const irHandle = Meteor.subscribe('userIntTestResults', userId);
     //             const mrHandle = Meteor.subscribe('userUnitTestResults', userId);
-    //             const tsHandle = Meteor.subscribe('userDevTestSummaryData', userId);
-    //             const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userId);
+    //             const tsHandle = Meteor.subscribe('userDevTestSummary', userId);
+    //             const dsHandle = Meteor.subscribe('userDevDesignSummary', userId);
     //
     //             Tracker.autorun((loader) => {
     //
@@ -305,7 +305,7 @@ class ClientContainerServices{
     // Global Data store
     getDataStore(){
 
-        const appData = AppGlobalData.findOne({
+        const appData = AppGlobal.findOne({
             versionKey: 'CURRENT_VERSION'
         });
 
@@ -837,7 +837,7 @@ class ClientContainerServices{
         let designSummaryData = null;
 
         if(userContext) {
-            designSummaryData = UserDevDesignSummaryData.findOne({
+            designSummaryData = UserDevDesignSummary.findOne({
                 userId:             userContext.userId,
                 designVersionId:    userContext.designVersionId,
                 designUpdateId:     userContext.designUpdateId
@@ -1636,7 +1636,7 @@ class ClientContainerServices{
 
         const userContext = store.getState().currentUserItemContext;
 
-        return UserDevTestSummaryData.findOne({
+        return UserDevTestSummary.findOne({
             userId:                 userContext.userId,
             designVersionId:        feature.designVersionId,
             scenarioReferenceId:    'NONE',

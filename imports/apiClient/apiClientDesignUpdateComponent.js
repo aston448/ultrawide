@@ -154,7 +154,7 @@ class ClientDesignUpdateComponentServices{
     addDesignSectionToApplication(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.DESIGN_SECTION);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent.componentReferenceId, ComponentType.DESIGN_SECTION);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -168,7 +168,7 @@ class ClientDesignUpdateComponentServices{
             mode,
             parentComponent.designVersionId,
             parentComponent.designUpdateId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             (err, result) => {
 
                 if(err){
@@ -200,7 +200,7 @@ class ClientDesignUpdateComponentServices{
         // const auditKey = ClientAuditServices.logUserAction('DU_ADD_SECTION_TO_SECTION');
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.DESIGN_SECTION);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent.componentReferenceId, ComponentType.DESIGN_SECTION);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -215,7 +215,7 @@ class ClientDesignUpdateComponentServices{
             mode,
             parentComponent.designVersionId,
             parentComponent.designUpdateId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             parentComponent.componentLevel,
             (err, result) => {
 
@@ -245,7 +245,7 @@ class ClientDesignUpdateComponentServices{
     addFeatureToDesignSection(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.FEATURE);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent.componentReferenceId, ComponentType.FEATURE);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -259,7 +259,7 @@ class ClientDesignUpdateComponentServices{
             mode,
             parentComponent.designVersionId,
             parentComponent.designUpdateId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             (err, result) => {
 
                 if(err){
@@ -288,7 +288,7 @@ class ClientDesignUpdateComponentServices{
     addFeatureAspectToFeature(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.FEATURE_ASPECT);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent.componentReferenceId, ComponentType.FEATURE_ASPECT);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -302,7 +302,7 @@ class ClientDesignUpdateComponentServices{
             mode,
             parentComponent.designVersionId,
             parentComponent.designUpdateId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             (err, result) => {
 
                 if(err){
@@ -334,7 +334,7 @@ class ClientDesignUpdateComponentServices{
 
         // Client validation
         log((msg) => console.log(msg), LogLevel.DEBUG, '  Client Validation...');
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.SCENARIO);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent.componentReferenceId, ComponentType.SCENARIO);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -349,7 +349,7 @@ class ClientDesignUpdateComponentServices{
             mode,
             parentComponent.designVersionId,
             parentComponent.designUpdateId,
-            parentComponent._id,
+            parentComponent.componentReferenceId,
             (err, result) => {
 
                 if(err){
@@ -440,7 +440,6 @@ class ClientDesignUpdateComponentServices{
             view,
             mode,
             designUpdateComponent._id,
-            designUpdateComponent.componentParentIdNew,
             (err, result) => {
 
 

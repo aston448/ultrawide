@@ -1,16 +1,12 @@
 
-// Ultrawide Collections
-import { DesignVersions }           from '../../collections/design/design_versions.js';
-import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { DesignVersionComponents }  from '../../collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
-
 // Ultrawide Services
 import { ComponentType, DesignUpdateMergeAction, LogLevel } from '../../constants/constants.js';
 
-import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
 import DesignVersionModules         from '../../service_modules/design/design_version_service_modules.js';
 
+// Data Access
+import DesignUpdateData             from '../../service_modules_db/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
 //======================================================================================================================
 //
 // Server Modules for Design Update Items.
@@ -88,55 +84,49 @@ class DesignUpdateModules{
 
 
     // Change the old design parent ids to the ids for the new design update
-    fixParentIds(designVersionId, designUpdateId){
-        //console.log("Insert Design Update Components - Callback: ");
-
-        //The correct parent id for the update will be the id of the component that has the reference id relating to the parent reference id
-        let updateComponents = DesignUpdateComponents.find({designVersionId: designVersionId, designUpdateId: designUpdateId});
-
-        updateComponents.forEach((component) => {
-
-            // Get the id of the new component IN THIS DESIGN UPDATE that has the parent reference id as its unchanging reference id
-            let parent = DesignUpdateComponents.findOne(
-                {
-                    designVersionId: designVersionId,
-                    designUpdateId: designUpdateId,
-                    componentReferenceId: component.componentParentReferenceIdNew
-                }
-            );
-
-            let parentId = 'NONE';
-            if(parent){
-                parentId = parent._id;
-            }
-
-            DesignUpdateComponents.update(
-                { _id: component._id},
-                {
-                    $set:{
-                        componentParentIdOld: parentId,
-                        componentParentIdNew: parentId
-                    }
-                }
-            );
-        });
-    };
+    // fixParentIds(designVersionId, designUpdateId){
+    //     //console.log("Insert Design Update Components - Callback: ");
+    //
+    //     //The correct parent id for the update will be the id of the component that has the reference id relating to the parent reference id
+    //     let updateComponents = DesignUpdateComponents.find({designVersionId: designVersionId, designUpdateId: designUpdateId});
+    //
+    //     updateComponents.forEach((component) => {
+    //
+    //         // Get the id of the new component IN THIS DESIGN UPDATE that has the parent reference id as its unchanging reference id
+    //         let parent = DesignUpdateComponents.findOne(
+    //             {
+    //                 designVersionId: designVersionId,
+    //                 designUpdateId: designUpdateId,
+    //                 componentReferenceId: component.componentParentReferenceIdNew
+    //             }
+    //         );
+    //
+    //         let parentId = 'NONE';
+    //         if(parent){
+    //             parentId = parent._id;
+    //         }
+    //
+    //         DesignUpdateComponents.update(
+    //             { _id: component._id},
+    //             {
+    //                 $set:{
+    //                     componentParentIdOld: parentId,
+    //                     componentParentIdNew: parentId
+    //                 }
+    //             }
+    //         );
+    //     });
+    // };
 
     componentIsRemovedInOtherUpdate(component, currentDesignVersionId){
 
         // Is there a parallel update where the same component is removed
-        const componentRemovedInOtherUpdates = DesignUpdateComponents.find({
-            designVersionId:        currentDesignVersionId,
-            componentReferenceId:   component.componentReferenceId,
-            isRemoved:              true
-        }).fetch();
-
-        return (componentRemovedInOtherUpdates.length > 0);
+        return DesignUpdateComponentData.hasOtherRemovedInstancesInDesignVersion(currentDesignVersionId, component.designUpdateId, component.componentReferenceId);
     };
 
     removeMergedUpdateFromDesignVersion(designUpdateId){
 
-        const update = DesignUpdates.findOne({_id: designUpdateId});
+        const update = DesignUpdateData.getDesignUpdateById(designUpdateId);
 
         if(update.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
 
@@ -146,7 +136,7 @@ class DesignUpdateModules{
 
     addUpdateToDesignVersion(designUpdateId){
 
-        const update = DesignUpdates.findOne({_id: designUpdateId});
+        const update = DesignUpdateData.getDesignUpdateById(designUpdateId);
 
         if(update.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
 

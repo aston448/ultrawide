@@ -1,19 +1,19 @@
 
-// Ultrawide Collections
-import { DesignVersions }           from '../../collections/design/design_versions.js';
-import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
-
 // Ultrawide services
 import { ComponentType, ViewType, UpdateScopeType, LogLevel }  from '../../constants/constants.js';
 import { DefaultComponentNames }    from '../../constants/default_names.js';
-import { getIdFromMap, log }        from '../../common/utils.js';
+import { log }        from '../../common/utils.js';
 
 import DesignServices               from '../design/design_services.js';
 import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
 import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
+
+// Data Access
+import DesignVersionData            from '../../service_modules_db/design/design_version_db.js';
+import DesignComponentData          from '../../service_modules_db/design/design_component_db.js';
+import DesignUpdateData             from '../../service_modules_db/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
 
 //======================================================================================================================
 //
@@ -26,269 +26,130 @@ import DesignUpdateComponentModules from '../../service_modules/design_update/de
 class DesignUpdateComponentServices{
 
     // Add a new design update component to design update
-    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false){
+    addNewComponent(designVersionId, designUpdateId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false){
 
         if(Meteor.isServer) {
 
             log((msg) => console.log(msg), LogLevel.DEBUG, 'Adding Update {} Component', componentType);
 
             // Get the parent reference id (if there is a parent)
-            let parentRefId = 'NONE';
             let featureRefId = 'NONE';
 
-            let parent = DesignUpdateComponents.findOne({_id: parentId});
+            let parent = DesignUpdateComponentData.getUpdateComponentByRef(designVersionId, designUpdateId, parentRefId);
 
             if (parent) {
-                parentRefId = parent.componentReferenceId;
 
                 // Get the Feature Reference ID.  This will be NONE for anything that is not under a Feature
                 featureRefId = parent.componentFeatureReferenceIdNew;
             }
 
-            // Get the design id - this is added to the components for easier access to data
-            let designId = DesignVersions.findOne({_id: designVersionId}).designId;
+            const dv = DesignVersionData.getDesignVersionById(designVersionId);
 
             // If adding from a Work Package set as dev added
             let devAdded = (view === ViewType.DEVELOP_UPDATE_WP);
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, '  Inserting Component...', componentType);
+            log((msg) => console.log(msg), LogLevel.DEBUG, '  Inserting Component...');
 
-            let newUpdateComponentId = DesignUpdateComponents.insert(
-                {
-                    componentReferenceId:           'TEMP',                 // Will update this after component created
-                    designId:                       designId,
-                    designVersionId:                designVersionId,
-                    designUpdateId:                 designUpdateId,
-                    componentType:                  componentType,
-                    componentLevel:                 componentLevel,
-                    componentParentIdOld:           parentId,
-                    componentParentIdNew:           parentId,               // Because this component may be moved later
-                    componentParentReferenceIdOld:  parentRefId,
-                    componentParentReferenceIdNew:  parentRefId,
-                    componentFeatureReferenceIdOld: featureRefId,
-                    componentFeatureReferenceIdNew: featureRefId,
-                    componentIndexOld:              999999999,              // Temp - bottom of list
-                    componentIndexNew:              999999999,              // Temp - bottom of list
-
-                    // Data is all defaults to start with
-                    componentNameOld:               defaultName,
-                    componentNameRawOld:            defaultRawName,
-                    componentNameNew:               defaultName,
-                    componentNameRawNew:            defaultRawName,
-                    componentTextRawOld:            defaultRawText,
-                    componentTextRawNew:            defaultRawText,
-
-                    // State is a new item
-                    isNew:                          isNew,                  // New item added to design
-                    isChanged:                      isChanged,              // Usually false
-                    isTextChanged:                  false,                  // For now - will go to true when text is edited
-                    isMoved:                        false,
-                    isRemoved:                      false,
-                    isDevAdded:                     devAdded,
-
-                    scopeType:                      UpdateScopeType.SCOPE_IN_SCOPE,                         // All new items are automatically in scope
-                    isScopable:                     DesignUpdateModules.isScopable(componentType)           // A Scopable item can be picked as part of a change
-                }
+            let newUpdateComponentId = DesignUpdateComponentData.insertNewUpdateComponent(
+                dv.designId,
+                designVersionId,
+                designUpdateId,
+                componentType,
+                componentLevel,
+                parentRefId,
+                featureRefId,
+                defaultName,
+                defaultRawName,
+                defaultRawText,
+                isNew,
+                isChanged,
+                devAdded,
+                DesignUpdateModules.isScopable(componentType)
             );
+
 
             if(newUpdateComponentId){
 
                 // Update the component reference to be the _id.  Note that this is not silly because the CR ID will
                 // always be the _id of the component that was created first.  So for components added in a design new edit
                 // it will be the design component _id...
-                log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating reference...', componentType);
-                DesignUpdateComponents.update(
-                    {_id: newUpdateComponentId},
-                    {$set: {componentReferenceId: newUpdateComponentId}}
-                );
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating reference...');
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting Index...', componentType);
+                DesignUpdateComponentData.setComponentReferenceId(newUpdateComponentId);
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting Index...');
                 // Set the starting index for a new component (at end of list).  This checks against the working design, not just this update
-                DesignUpdateComponentModules.setIndex(newUpdateComponentId, componentType, parentId);
+                DesignUpdateComponentModules.setIndex(newUpdateComponentId, componentType);
 
-                // Ensure that all parents of the component are now in ParentScope
-                //DesignUpdateComponentModules.updateParentScope(newUpdateComponentId, true);
 
                 // If a Feature also update the Feature Ref Id to the new ID + add the default narrative
                 if (componentType === ComponentType.FEATURE) {
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Configuring Feature...', componentType);
-                    DesignUpdateComponents.update(
-                        {_id: newUpdateComponentId},
-                        {
-                            $set: {
-                                componentFeatureReferenceIdOld: newUpdateComponentId,
-                                componentFeatureReferenceIdNew: newUpdateComponentId,
-                                componentNarrativeOld: DefaultComponentNames.NEW_NARRATIVE_TEXT,
-                                componentNarrativeNew: DefaultComponentNames.NEW_NARRATIVE_TEXT,
-                                componentNarrativeRawOld: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT),
-                                componentNarrativeRawNew: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
-                            }
-                        }
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Configuring Feature...');
+
+                    DesignUpdateComponentData.initialiseFeatureDetails(
+                        newUpdateComponentId,
+                        DefaultComponentNames.NEW_NARRATIVE_TEXT,
+                        DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
                     );
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting removable on Design...', componentType);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting removable on Design...');
                     // Make sure Design is no longer removable now that a feature added
-                    DesignServices.setRemovable(designId);
+                    DesignServices.setRemovable(dv.designId);
 
-                    //log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating WPs...', componentType);
-                    // Update any WPs before adding the feature aspects
-                    //DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
-
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...', componentType);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...');
                     // And update the Working Design Version if update is for Merging
                     DesignUpdateComponentModules.updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId);
 
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding Default Aspects...', componentType);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding Default Aspects...');
                     DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '', view);
-                } else {
-                    // Just update any WPs
-                    //log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating WPs...', componentType);
-                    //DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
 
-                    // And update the Working Design Version if update is for Merging
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...', componentType);
+                } else {
+
+                    // Update the Working Design Version if update is for Merging
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...');
                     DesignUpdateComponentModules.updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId);
                 }
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting parent removability...', componentType);
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting parent removability...');
+
                 // When inserting a new design component its parent becomes non-removable
-                if (parentId) {
-                    DesignUpdateComponents.update(
-                        {_id: parentId},
-                        {
-                            $set: {isRemovable: false}
-                        }
-                    );
+                if (parent) {
+                    DesignUpdateComponentData.setRemovable(parent._id, false);
                 }
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding peers...', componentType);
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding peers...');
+
                 // Peer components are also added in peer scope if not already added so that new component can be placed by user
                 DesignUpdateComponentModules.addComponentPeers(designVersionId, designUpdateId, parentRefId, componentType, newUpdateComponentId);
 
                 // And the Design Update Summary is now stale
-                log((msg) => console.log(msg), LogLevel.DEBUG, '  Set summary stale...', componentType);
-                DesignUpdates.update({_id: designUpdateId}, {$set:{summaryDataStale: true}});
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Set summary stale...');
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, 'DONE Add Update Component', componentType);
+                DesignUpdateData.setSummaryDataStale(designUpdateId, true);
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, 'DONE Add Update Component');
             }
         }
     };
-
-    importComponent(designId, designVersionId, designUpdateId, workPackageId, component){
-        if(Meteor.isServer) {
-
-            // Fix any missing feature refs
-            let componentFeatureReferenceIdNew = component.componentFeatureReferenceIdNew;
-            if (component.componentType === ComponentType.FEATURE && componentFeatureReferenceIdNew === 'NONE') {
-                componentFeatureReferenceIdNew = component.componentReferenceId;
-            }
-
-            const designUpdateComponentId = DesignUpdateComponents.insert(
-                {
-                    // Identity
-                    componentReferenceId: component.componentReferenceId,
-                    designId: designId,                                           // Restored Design Id
-                    designVersionId: designVersionId,                                    // Restored Design Version Id
-                    designUpdateId: designUpdateId,                                     // Restored Design Update Id
-                    componentType: component.componentType,
-                    componentLevel: component.componentLevel,
-                    componentParentIdOld: component.componentParentIdOld,                     // Will be wrong and corrected later
-                    componentParentIdNew: component.componentParentIdNew,                     // Ditto
-                    componentParentReferenceIdOld: component.componentParentReferenceIdOld,
-                    componentParentReferenceIdNew: component.componentParentReferenceIdNew,
-                    componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
-                    componentFeatureReferenceIdNew: componentFeatureReferenceIdNew,
-                    componentIndexOld: component.componentIndexOld,
-                    componentIndexNew: component.componentIndexNew,
-
-                    // Data
-                    componentNameOld: component.componentNameOld,
-                    componentNameNew: component.componentNameNew,
-                    componentNameRawOld: component.componentNameRawOld,
-                    componentNameRawNew: component.componentNameRawNew,
-                    componentNarrativeOld: component.componentNarrativeOld,
-                    componentNarrativeNew: component.componentNarrativeNew,
-                    componentNarrativeRawOld: component.componentNarrativeRawOld,
-                    componentNarrativeRawNew: component.componentNarrativeRawNew,
-                    componentTextRawOld: component.componentTextRawOld,
-                    componentTextRawNew: component.componentTextRawNew,
-
-                    // Update State
-                    isNew: component.isNew,
-                    isChanged: component.isChanged,
-                    isTextChanged: component.isTextChanged,
-                    isMoved: component.isMoved,
-                    isRemoved: component.isRemoved,
-                    isDevUpdated: component.isDevUpdated,
-                    isDevAdded: component.isDevAdded,
-                    workPackageId: workPackageId,
-
-                    // Editing state (shared and persistent)
-                    isRemovable: component.isRemovable,
-                    isScopable: component.isScopable,
-                    scopeType: component.scopeType,
-                    lockingUser: component.lockingUser
-                }
-            );
-
-            return designUpdateComponentId;
-        }
-    };
-
-    // Resets parent ids after an import of data
-    importRestoreParent(designUpdateComponentId, componentMap){
-        if(Meteor.isServer) {
-            const designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
-
-            const oldParentIdOld = designUpdateComponent.componentParentIdOld;
-            const oldParentIdNew = designUpdateComponent.componentParentIdNew;
-
-            // log(LogLevel.TRACE, "Restoring parent for DU component {} with previous old parent id {} and previous new parent id {}",
-            //     designUpdateComponent.componentNameNew,
-            //     oldParentIdOld,
-            //     oldParentIdNew);
-
-            let newParentIdOld = 'NONE';
-            let newParentIdNew = 'NONE';
-
-            if (oldParentIdOld != 'NONE') {
-                newParentIdOld = getIdFromMap(componentMap, oldParentIdOld);
-                log(LogLevel.TRACE, "New Parent Id Old is {}", newParentIdOld);
-            }
-
-            if (oldParentIdNew != 'NONE') {
-                newParentIdNew = getIdFromMap(componentMap, oldParentIdNew);
-                log(LogLevel.TRACE, "New Parent Id New is {}", newParentIdNew);
-            }
-
-            DesignUpdateComponents.update(
-                {_id: designUpdateComponentId},
-                {
-                    $set: {
-                        componentParentIdOld: newParentIdOld,
-                        componentParentIdNew: newParentIdNew
-                    }
-                }
-            );
-        }
-    }
 
 
     // Move a design update component to a new parent
     moveComponent(componentId, newParentId){
 
         if(Meteor.isServer) {
-            const newParent = DesignUpdateComponents.findOne({_id: newParentId});
-            const movingComponent = DesignUpdateComponents.findOne({_id: componentId});
+
+            const newParent = DesignUpdateComponentData.getUpdateComponentById(newParentId);
+            const movingComponent = DesignUpdateComponentData.getUpdateComponentById(componentId);
+            const oldParent = DesignUpdateComponentData.getUpdateComponentByRef(movingComponent.designVersionId, movingComponent.designUpdateId, movingComponent.componentParentReferenceIdNew);
 
             // Check for move back to old position
-            const oldParentId = movingComponent.componentParentIdOld;
+            const oldParentRefId = movingComponent.componentParentReferenceIdOld;
 
             // Not moved if the old parent is the same as the new one
-            let isMoved = (oldParentId !== newParentId);
+            let isMoved = (oldParentRefId !== newParent.componentReferenceId);
 
             // If a Design Section, make sure the level gets changed correctly
             let newLevel = movingComponent.componentLevel;
@@ -297,56 +158,26 @@ class DesignUpdateComponentServices{
                 newLevel = newParent.componentLevel + 1;
             }
 
-            let updatedComponents = 0;
+            // If moving a feature it must keep its feature ref id - otherwise take on the parent feature ref
+            let componentFeatureReferenceId = newParent.componentFeatureReferenceIdNew;
             if(movingComponent.componentType === ComponentType.FEATURE) {
-                // The Feature Reference does not change
-                updatedComponents = DesignUpdateComponents.update(
-                    {_id: componentId},
-                    {
-                        $set: {
-                            componentParentIdNew: newParentId,
-                            componentParentReferenceIdNew: newParent.componentReferenceId,
-                            componentLevel: newLevel,
-                            isMoved: isMoved
-                        }
-                    }
-                );
-            } else {
-                // The Feature Reference is the feature reference of the new parent.  A Feature has its own reference as the Feature Reference
-                updatedComponents = DesignUpdateComponents.update(
-                    {_id: componentId},
-                    {
-                        $set: {
-                            componentParentIdNew: newParentId,
-                            componentParentReferenceIdNew: newParent.componentReferenceId,
-                            componentFeatureReferenceIdNew: newParent.componentFeatureReferenceIdNew,
-                            componentLevel: newLevel,
-                            isMoved: isMoved
-                        }
-                    }
-                );
+                componentFeatureReferenceId = movingComponent.componentFeatureReferenceIdNew;
             }
+
+            const updatedComponents = DesignUpdateComponentData.updateAfterMove(componentId, newParent.componentReferenceId, componentFeatureReferenceId, newLevel, isMoved);
 
             if(updatedComponents > 0){
 
                 // Make sure new Parent is now not removable as it must have a child
-                DesignUpdateComponents.update(
-                    {_id: newParentId},
-                    {
-                        $set: {
-                            isRemovable: false
-                        }
-                    }
-                );
+                DesignUpdateComponentData.setRemovable(newParentId, false);
 
                 // But the old parent may now be removable
-                if (DesignUpdateComponentModules.hasNoChildren(oldParentId)) {
-                    DesignUpdateComponents.update(
-                        {_id: oldParentId},
-                        {$set: {isRemovable: true}}
-                    );
-                }
+                if(oldParent) {
+                    if (DesignUpdateComponentModules.hasNoNonRemovedChildren(oldParent._id)) {
 
+                        DesignUpdateComponentData.setRemovable(oldParent._id, true);
+                    }
+                }
                 // Make sure this component is also moved in any work packages
                 DesignUpdateComponentModules.updateWorkPackageLocation(componentId, false);
 
@@ -354,7 +185,7 @@ class DesignUpdateComponentServices{
                 DesignUpdateComponentModules.updateCurrentDesignVersionWithNewLocation(componentId);
 
                 // Design Update Summary is now stale
-                DesignUpdates.update({_id: movingComponent.designUpdateId}, {$set:{summaryDataStale: true}});
+                DesignUpdateData.setSummaryDataStale(movingComponent.designUpdateId, true);
             }
         }
     };
@@ -365,34 +196,32 @@ class DesignUpdateComponentServices{
         if(Meteor.isServer) {
             // The new position is always just above the target component
 
-            const movingComponent = DesignUpdateComponents.findOne({_id: componentId});
-            const targetComponent = DesignUpdateComponents.findOne({_id: targetComponentId});
+            const movingComponent = DesignUpdateComponentData.getUpdateComponentById(componentId);
+            const targetComponent = DesignUpdateComponentData.getUpdateComponentById(targetComponentId);
+            const oldIndex = movingComponent.componentIndexNew;
 
-            const peerComponents = DesignUpdateComponents.find(
-                {
-                    _id: {$ne: componentId},
-                    componentType: movingComponent.componentType,
-                    componentParentIdNew: movingComponent.componentParentIdNew
-                },
-                {sort: {componentIndexNew: -1}}
+            const peerComponents = DesignUpdateComponentData.getPeerComponents(
+                movingComponent.designUpdateId,
+                movingComponent.componentReferenceId,
+                movingComponent.componentType,
+                movingComponent.componentParentReferenceIdNew
             );
 
             let indexBelow = targetComponent.componentIndexNew;
             //console.log("Index below = " + indexBelow);
 
             let indexAbove = 0;                                 // The default if nothing exists above
-            const listMaxArrayIndex = peerComponents.count() - 1;
+            const listMaxArrayIndex = peerComponents.length - 1;
             //console.log("List max = " + listMaxArrayIndex);
 
-            const peerArray = peerComponents.fetch();
 
             // Go through the list of peers (ordered from bottom to top)
             let i = 0;
             while (i <= listMaxArrayIndex) {
-                if (peerArray[i].componentIndexNew === targetComponent.componentIndexNew) {
+                if (peerComponents[i].componentIndexNew === targetComponent.componentIndexNew) {
                     // OK, this is the target component so the next one in the list (if there is one) is the one that will be above the new position
                     if (i < listMaxArrayIndex) {
-                        indexAbove = peerArray[i + 1].componentIndexNew;
+                        indexAbove = peerComponents[i + 1].componentIndexNew;
                     }
                     break;
                 }
@@ -407,14 +236,7 @@ class DesignUpdateComponentServices{
 
             //console.log("Setting new index for " + movingComponent.componentNameNew + " to " + newIndex);
 
-            DesignUpdateComponents.update(
-                {_id: componentId},
-                {
-                    $set: {
-                        componentIndexNew: newIndex
-                    }
-                }
-            );
+            DesignUpdateComponentData.setIndex(componentId, oldIndex, newIndex);
 
             // Update any WPs with new ordering
             DesignUpdateComponentModules.updateWorkPackageLocation(componentId, true);
@@ -427,27 +249,13 @@ class DesignUpdateComponentServices{
                 //console.log("Index reset!");
 
                 // Get the components in current order
-                const resetComponents = DesignUpdateComponents.find(
-                    {
-                        componentType: movingComponent.componentType,
-                        componentParentIdNew: movingComponent.componentParentIdNew
-                    },
-                    {sort: {componentIndexNew: 1}}
-                );
+                const resetComponents = DesignUpdateComponentData.getChildComponentsOfType(movingComponent.designUpdateId, movingComponent.componentType, movingComponent.componentParentReferenceIdNew);
 
                 let resetIndex = 100;
 
                 // Reset them to 100, 200, 300 etc...
                 resetComponents.forEach((component) => {
-                    DesignUpdateComponents.update(
-                        {_id: component._id},
-                        {
-                            $set: {
-                                componentIndexNew: resetIndex
-                            }
-                        }
-                    );
-
+                    DesignUpdateComponentData.setIndex(component._id, resetIndex, resetIndex);
                     resetIndex = resetIndex + 100;
                 })
             }
@@ -460,14 +268,11 @@ class DesignUpdateComponentServices{
 
         if(Meteor.isServer) {
 
-            const baseComponent = DesignVersionComponents.findOne({_id: baseComponentId});
+            const baseComponent = DesignComponentData.getDesignComponentById(baseComponentId);
 
             if (baseComponent) {
 
-                const currentUpdateComponent = DesignUpdateComponents.findOne({
-                    designUpdateId: designUpdateId,
-                    componentReferenceId: baseComponent.componentReferenceId
-                });
+                const currentUpdateComponent = DesignUpdateComponentData.getUpdateComponentByRef(baseComponent.designVersionId, designUpdateId, baseComponent.componentReferenceId);
 
                 // Adding to scope means adding to the current DU
                 if(newScope) {
@@ -481,15 +286,11 @@ class DesignUpdateComponentServices{
                             // Add all parents not already added
                             DesignUpdateComponentModules.addParentsToScope(baseComponent, designUpdateId);
 
-                            // And fix the parent ids for all the items added
-                            DesignUpdateModules.fixParentIds(baseComponent.designVersionId, designUpdateId);
                         } else {
 
                             // Component already exists so put in real scope
                             DesignUpdateComponentModules.updateToActualScope(currentUpdateComponent._id);
                         }
-
-                        // Add to WP if WP exists for update with
 
                 } else {
 
@@ -529,7 +330,7 @@ class DesignUpdateComponentServices{
                     }
                 }
 
-                DesignUpdates.update({_id: designUpdateId}, {$set: {summaryDataStale: true}});
+                DesignUpdateData.setSummaryDataStale(designUpdateId, true);
             }
         }
     }
@@ -542,28 +343,25 @@ class DesignUpdateComponentServices{
             // Item only counts as logically changed if the new name is still different to that in the existing design version.
             // So it becomes not changed if reverted back to the original name after a change...
 
-            let duComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+            let duComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
             // For a new component, the name updates to whatever the latest name is - no old and new versions as the whole thing is NEW
             if(duComponent.isNew){
 
-                DesignUpdateComponents.update(
-                    {_id: designUpdateComponentId},
-                    {
-                        $set: {
-                            componentNameOld: componentNewName,
-                            componentNameNew: componentNewName,
-                            componentNameRawOld: componentNewNameRaw,
-                            componentNameRawNew: componentNewNameRaw,
-                        }
-                    }
+                DesignUpdateComponentData.updateComponentName(
+                    designUpdateComponentId,
+                    componentNewName,
+                    componentNewName,
+                    componentNewNameRaw,
+                    componentNewNameRaw,
+                    false
                 );
 
                 // Keep DV up to date
                 DesignUpdateComponentModules.updateCurrentDesignVersionComponentName(designUpdateComponentId);
 
                 // Make sure summary updates...
-                DesignUpdates.update({_id: duComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+                DesignUpdateData.setSummaryDataStale(duComponent.designUpdateId, true);
 
 
             } else {
@@ -573,17 +371,14 @@ class DesignUpdateComponentServices{
                 let changed = (componentNewName !== duComponent.componentNameOld);
 
                 // Update the new names for the update
-                DesignUpdateComponents.update(
-                    {_id: designUpdateComponentId},
-                    {
-                        $set: {
-                            componentNameNew: componentNewName,
-                            componentNameRawNew: componentNewNameRaw,
-                            isChanged: changed
-                        }
-                    }
+                DesignUpdateComponentData.updateComponentName(
+                    designUpdateComponentId,
+                    duComponent.componentNameOld,
+                    componentNewName,
+                    duComponent.componentNameRawOld,
+                    componentNewNameRaw,
+                    changed
                 );
-
 
                 if (changed) {
 
@@ -591,7 +386,7 @@ class DesignUpdateComponentServices{
                     DesignUpdateComponentModules.updateCurrentDesignVersionComponentName(designUpdateComponentId);
 
                     // And the Design Update Summary is now stale if it was a real change
-                    DesignUpdates.update({_id: duComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+                    DesignUpdateData.setSummaryDataStale(duComponent.designUpdateId, true);
                 }
             }
         }
@@ -603,21 +398,18 @@ class DesignUpdateComponentServices{
 
         if(Meteor.isServer) {
 
-            let duComponent = DesignUpdateComponents.findOne({_id: featureId});
+            let duComponent = DesignUpdateComponentData.getUpdateComponentById(featureId);
 
             // For a new component, the narrative updates to whatever the latest name is - no old and new versions as the whole thing is NEW
             if(duComponent.isNew){
 
-                DesignUpdateComponents.update(
-                    {_id: featureId},
-                    {
-                        $set: {
-                            componentNarrativeOld: newNarrative,
-                            componentNarrativeNew: newNarrative,
-                            componentNarrativeRawOld: newRawNarrative,
-                            componentNarrativeRawNew: newRawNarrative,
-                        }
-                    }
+                DesignUpdateComponentData.updateFeatureNarrative(
+                    featureId,
+                    newNarrative,
+                    newNarrative,
+                    newRawNarrative,
+                    newRawNarrative,
+                    false
                 );
 
                 // Keep DV up to date
@@ -628,15 +420,13 @@ class DesignUpdateComponentServices{
 
                 let changed = (newNarrative !== duComponent.componentNarrativeOld);
 
-                DesignUpdateComponents.update(
-                    {_id: featureId},
-                    {
-                        $set: {
-                            componentNarrativeNew: newNarrative,
-                            componentNarrativeRawNew: newRawNarrative,
-                            isChanged: changed
-                        }
-                    }
+                DesignUpdateComponentData.updateFeatureNarrative(
+                    featureId,
+                    duComponent.componentNarrativeOld,
+                    newNarrative,
+                    duComponent.componentNarrativeRawOld,
+                    newRawNarrative,
+                    changed
                 );
 
                 if (changed) {
@@ -655,107 +445,80 @@ class DesignUpdateComponentServices{
             // For a design update this is a logical delete it it was an existing item
             // If however it was new in the update and is removable, remove it completely
 
-            let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+            let duComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
             // For Feature aspects added as default items and not marked as new as such (so they don't appear as user changes)
             // treat them as new so if deleted they go completely...
 
             let newDefaultAspect = false;
 
-            if(designUpdateComponent.componentType === ComponentType.FEATURE_ASPECT){
-                const feature = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentIdNew});
+            if(duComponent.componentType === ComponentType.FEATURE_ASPECT){
+                // The feature is the parent component
+                const feature = DesignUpdateComponentData.getUpdateComponentByRef(
+                    duComponent.designVersionId,
+                    duComponent.designUpdateId,
+                    duComponent.componentParentReferenceIdNew
+                );
 
-                if(feature.isNew && !designUpdateComponent.isNew){
+                if(feature.isNew && !duComponent.isNew){
                     newDefaultAspect = true;
                 }
             }
 
-            if (designUpdateComponent.isNew || newDefaultAspect) {
+            if (duComponent.isNew || newDefaultAspect) {
 
                 // Remove from the Design Version
-                DesignUpdateComponentModules.updateCurrentDesignVersionWithRemoval(designUpdateComponent);
+                DesignUpdateComponentModules.updateCurrentDesignVersionWithRemoval(duComponent);
 
                 // Actually delete it - Validation has already confirmed it is removable
-                let removedComponents = DesignUpdateComponents.remove(
-                    {_id: designUpdateComponentId}
-                );
+                let removedComponents = DesignUpdateComponentData.removeComponent(designUpdateComponentId);
 
                 if (removedComponents > 0) {
 
                     // When removing a design component its parent may become removable
-                    if (DesignUpdateComponentModules.hasNoChildren(parentId)) {
-                        DesignUpdateComponents.update(
-                            {_id: parentId},
-                            {$set: {isRemovable: true}}
-                        )
+                    if (DesignUpdateComponentModules.hasNoNonRemovedChildren(parentId)) {
+
+                        DesignUpdateComponentData.setRemovable(parentId, true);
                     }
 
                     // Remove peers if they are no longer necessary
-                    DesignUpdateComponentModules.removeUnwantedPeers(designUpdateComponent, parentId);
+                    DesignUpdateComponentModules.removeUnwantedPeers(duComponent);
 
                     // Remove component from any related work packages
-                    DesignUpdateComponentModules.removeWorkPackageItems(designUpdateComponent._id, designUpdateComponent.designVersionId, designUpdateComponent.designUpdateId);
+                    DesignUpdateComponentModules.removeWorkPackageItems(duComponent._id, duComponent.designVersionId, duComponent.designUpdateId);
 
 
                     // If this happened to be the last Feature, Design is now removable
-                    if (designUpdateComponent.componentType === ComponentType.FEATURE) {
-                        DesignServices.setRemovable(designUpdateComponent.designId);
+                    if (duComponent.componentType === ComponentType.FEATURE) {
+                        DesignServices.setRemovable(duComponent.designId);
                     }
 
                     // Set as stale so that adding and removing a new component is picked up
-                    DesignUpdates.update({_id: designUpdateComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+                    DesignUpdateData.setSummaryDataStale(duComponent.designUpdateId, true);
                 }
 
             } else {
 
                 // An existing component so Logically delete it for this update ad mark as removed elswhere for other updates
-                let thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+                let thisComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
                 // Set removed component removed.  Undo any name modifications made in this update
-                let deletedComponents = DesignUpdateComponents.update(
-                    {
-                        _id: designUpdateComponentId
-                    },
-                    {
-                        $set: {
-                            isRemoved:              true,
-                            isChanged:              false,
-                            isTextChanged:          false,
-                            componentNameNew:       thisComponent.componentNameOld,
-                            componentNameRawNew:    thisComponent.componentNameRawOld
-                            // Keep isRemovable as is so that restore can work
-                        }
-                    }
+                let deletedComponents = DesignUpdateComponentData.logicallyDeleteComponent(
+                    designUpdateComponentId,
+                    thisComponent.componentNameOld,
+                    thisComponent.componentNameRawOld
                 );
 
                 // Set other Update component instances as removed elsewhere
-                DesignUpdateComponents.update(
-                    {
-                        _id:                    {$ne: designUpdateComponentId},
-                        designUpdateId:         {$ne: thisComponent.designUpdateId},
-                        designVersionId:        thisComponent.designVersionId,
-                        componentReferenceId:   thisComponent.componentReferenceId
-                    },
-                    {
-                        $set: {
-                            isRemovedElsewhere: true
-                        }
-                    },
-                    {multi: true}
+                DesignUpdateComponentData.setOtherDvInstancesRemovedElsewhere(
+                    designUpdateComponentId,
+                    thisComponent.designUpdateId,
+                    thisComponent.designVersionId,
+                    thisComponent.componentReferenceId,
+                    true
                 );
 
                 if(deletedComponents > 0){
-
-                    // For logically deleted components set the deleted component as in scope only in the update where it was deleted
-
-                    DesignUpdateComponents.update(
-                        {_id: designUpdateComponentId},
-                        {
-                            $set: {
-                                scopeType: UpdateScopeType.SCOPE_IN_SCOPE
-                            }
-                        }
-                    );
 
                     // For a logical delete we allow deletion of all children if we are allowing the delete
                     // We would not allow it if any new Components are under the component being deleted
@@ -769,38 +532,28 @@ class DesignUpdateComponentServices{
                     DesignUpdateComponentModules.updateCurrentDesignVersionWithRemoval(thisComponent);
 
                     // This is a real change to functionality so set DU Summary as stale
-                    DesignUpdates.update({_id: thisComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+                    DesignUpdateData.setSummaryDataStale(thisComponent.designUpdateId, true);
                 }
             }
         }
     };
 
-    restoreComponent(designUpdateComponentId, parentId){
+    restoreComponent(designUpdateComponentId,){
 
         if(Meteor.isServer) {
 
             // Undo a logical delete
-            let thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+            let thisComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
-            let baseComponent = DesignVersionComponents.findOne({
-                designVersionId: thisComponent.designVersionId,
-                componentReferenceId: thisComponent.componentReferenceId
-            });
+            let baseComponent = DesignComponentData.getDesignComponentByRef(thisComponent.designVersionId, thisComponent.componentReferenceId);
 
             // Clear any parallel update components
-            DesignUpdateComponents.update(
-                {
-                    _id:                    {$ne: designUpdateComponentId},
-                    designUpdateId:         {$ne: thisComponent.designUpdateId},
-                    designVersionId:        thisComponent.designVersionId,
-                    componentReferenceId:   thisComponent.componentReferenceId
-                },
-                {
-                    $set: {
-                        isRemovedElsewhere: false
-                    }
-                },
-                {multi: true}
+            DesignUpdateComponentData.setOtherDvInstancesRemovedElsewhere(
+                designUpdateComponentId,
+                thisComponent.designUpdateId,
+                thisComponent.designVersionId,
+                thisComponent.componentReferenceId,
+                false
             );
 
             // Mark as no longer removed in the Design Version
@@ -810,7 +563,7 @@ class DesignUpdateComponentServices{
             // Use force remove option to remove everything
             this.toggleScope(baseComponent._id, thisComponent.designUpdateId, false, true);
 
-            DesignUpdates.update({_id: thisComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+            DesignUpdateData.setSummaryDataStale(thisComponent.designUpdateId, true);
         }
     }
 

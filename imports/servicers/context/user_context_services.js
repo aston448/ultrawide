@@ -1,7 +1,7 @@
 
-// Ultrawide Collections
-import {UserCurrentEditContext} from '../../collections/context/user_current_edit_context.js'
-import {UserCurrentViewOptions} from '../../collections/context/user_current_view_options.js'
+// Data Access
+import UserContextData          from '../../service_modules_db/context/user_context_db.js';
+import UserViewOptionData       from '../../service_modules_db/context/user_view_option_db.js';
 
 //======================================================================================================================
 //
@@ -18,23 +18,11 @@ class UserContextServices{
 
         if(Meteor.isServer) {
             // Remove the current context
-            UserCurrentEditContext.remove({userId: context.userId});
+            UserContextData.removeUserContext(context.userId);
+
 
             // Add the new one
-            UserCurrentEditContext.insert(
-                {
-                    userId:                         context.userId,
-                    designId:                       context.designId,
-                    designVersionId:                context.designVersionId,
-                    designUpdateId:                 context.designUpdateId,
-                    workPackageId:                  context.workPackageId,
-                    designComponentId:              context.designComponentId,
-                    designComponentType:            context.designComponentType,
-                    featureReferenceId:             context.featureReferenceId,
-                    scenarioReferenceId:            context.scenarioReferenceId,
-                    scenarioStepId:                 context.scenarioStepId
-                }
-            );
+            UserContextData.insertNewUserContext(context);
         }
 
         //console.log("User Context Saved.  DV: " + context.designVersionId + " DU: " + context.designUpdateId + " WP: " + context.workPackageId);
@@ -44,47 +32,16 @@ class UserContextServices{
 
         if(Meteor.isServer) {
 
-            const currentViewOptions = UserCurrentViewOptions.findOne({userId: userId});
+            const currentViewOptions = UserViewOptionData.getUserViewOptions(userId);
 
             if(currentViewOptions){
 
-                UserCurrentViewOptions.update(
-                    {userId: userId},
-                    {
-                        $set:{
-                            designDetailsVisible:       userViewOptions.designDetailsVisible,
-                            designDomainDictVisible:    userViewOptions.designDomainDictVisible,
-                            testSummaryVisible:         userViewOptions.testSummaryVisible,
-                            updateProgressVisible:      userViewOptions.updateProgressVisible,
-                            updateSummaryVisible:       userViewOptions.updateSummaryVisible,
-                            devAccTestsVisible:         userViewOptions.devAccTestsVisible,
-                            devIntTestsVisible:         userViewOptions.devIntTestsVisible,
-                            devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
-                            devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
-                            designShowAllAsTabs:        userViewOptions.designShowAllAsTabs,
-                            updateShowAllAsTabs:        userViewOptions.updateShowAllAsTabs,
-                            workShowAllAsTabs:          userViewOptions.workShowAllAsTabs
-                        }
-                    }
-                );
+                UserViewOptionData.updateUserViewOptions(userId, userViewOptions);
 
             } else {
 
-                UserCurrentViewOptions.insert({
-                    userId:                     userId,
-                    designDetailsVisible:       userViewOptions.designDetailsVisible,
-                    designDomainDictVisible:    userViewOptions.designDomainDictVisible,
-                    testSummaryVisible:         userViewOptions.testSummaryVisible,
-                    updateProgressVisible:      userViewOptions.updateProgressVisible,
-                    updateSummaryVisible:       userViewOptions.updateSummaryVisible,
-                    devAccTestsVisible:         userViewOptions.devAccTestsVisible,
-                    devIntTestsVisible:         userViewOptions.devIntTestsVisible,
-                    devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
-                    devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
-                    designShowAllAsTabs:        userViewOptions.designShowAllAsTabs,
-                    updateShowAllAsTabs:        userViewOptions.updateShowAllAsTabs,
-                    workShowAllAsTabs:          userViewOptions.workShowAllAsTabs
-                });
+                UserViewOptionData.insertNewUserViewOptions(userId, userViewOptions);
+
             }
         }
     };

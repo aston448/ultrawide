@@ -1,23 +1,20 @@
 
-// Ultrawide Collections
-import { DesignVersionComponents }          from '../../collections/design/design_version_components.js';
-import { UserUnitTestResults }              from '../../collections/test_results/user_unit_test_results.js';
-import { UserIntegrationTestResults }       from '../../collections/test_results/user_integration_test_results.js';
-import { UserTestTypeLocations }            from '../../collections/configure/user_test_type_locations.js';
-import { TestOutputLocations }              from '../../collections/configure/test_output_locations.js';
-import { TestOutputLocationFiles }          from '../../collections/configure/test_output_location_files.js';
-import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
-import { UserMashScenarioTests }            from '../../collections/mash/user_mash_scenario_tests.js';
-
 // Ultrawide Services
-import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus,
-     TestLocationFileType, UpdateMergeStatus, LogLevel } from '../../constants/constants.js';
+import { TestType, TestRunner, MashStatus, MashTestStatus, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
-import MeteorMochaTestServices      from './test_processor_meteor_mocha.js';
-import ChimpMochaTestServices       from './test_processor_chimp_mocha.js';
-import ChimpCucumberTestServices    from './test_processor_chimp_cucumber.js';
+import UltrawideMochaTestServices       from '../../service_modules/dev/test_processor_ultrawide_mocha.js';
 
+// Data Access
+import DesignComponentData              from '../../service_modules_db/design/design_component_db.js';
+import UserIntegrationTestResultData    from '../../service_modules_db/test_results/user_integration_test_result_db.js';
+import UserUnitTestResultData           from '../../service_modules_db/test_results/user_unit_test_result_db.js';
+import UserTestTypeLocationData         from '../../service_modules_db/configure/user_test_type_location_db.js';
+import TestOutputLocationData           from '../../service_modules_db/configure/test_output_location_db.js';
+import TestOutputLocationFileData       from '../../service_modules_db/configure/test_output_location_file_db.js';
+import UserDvMashScenarioData           from '../../service_modules_db/mash/user_dv_mash_scenario_db.js'
+import UserMashScenarioTestData         from '../../service_modules_db/mash/user_mash_scenario_test_db.js';
+;
 //======================================================================================================================
 //
 // Server Modules for Test Integration Services.
@@ -28,28 +25,19 @@ import ChimpCucumberTestServices    from './test_processor_chimp_cucumber.js';
 
 class TestIntegrationModules{
 
-    getAcceptanceTestResults(userContext){
-        // TODO
-    };
-
     getIntegrationTestResults(userContext){
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration test results...");
 
         // Clear data for current user
-        UserIntegrationTestResults.remove({
-            userId:     userContext.userId
-        });
+        UserIntegrationTestResultData.removeAllDataForUser(userContext.userId);
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
 
         // Get a list of the expected test files for integration
 
         // See which locations the user has marked as containing integration files for the current role
-        const userLocations = UserTestTypeLocations.find({
-            userId:         userContext.userId,
-            isIntLocation:  true
-        }).fetch();
+        const userLocations = UserTestTypeLocationData.getUserIntegrationTestsLocations(userContext.userId);
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test locations", userLocations.length);
 
@@ -58,15 +46,12 @@ class TestIntegrationModules{
             log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {}", userLocation.locationName);
 
             // Get the actual location data
-            const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
+            const outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
 
             // Grab any files here marked as integration test outputs
-            const testOutputFiles = TestOutputLocationFiles.find({
-                locationId: outputLocation._id,
-                fileType:   TestLocationFileType.INTEGRATION
-            }).fetch();
+            const testOutputFiles = TestOutputLocationFileData.getIntegrationTestFilesForLocation(outputLocation._id);
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test files", testOutputFiles.length);
 
@@ -79,13 +64,12 @@ class TestIntegrationModules{
                 // Call the appropriate file parser
                 switch (file.testRunner) {
                     case TestRunner.CHIMP_MOCHA:
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Results Data");
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Integration Results Data");
 
-                        ChimpMochaTestServices.getJsonTestResults(testFile, userContext.userId);
+                        UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
                         break;
 
                 }
-
             });
         });
     };
@@ -93,30 +77,22 @@ class TestIntegrationModules{
     getUnitTestResults(userContext){
 
         // Clear data for current user
-        UserUnitTestResults.remove({
-            userId:     userContext.userId
-        });
+        UserUnitTestResultData.removeAllDataForUser(userContext.userId);
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
 
         // Get a list of the expected test files for unit tests
 
         // See which locations the user has marked as containing unit test files for the current role
-        const userLocations = UserTestTypeLocations.find({
-            userId: userContext.userId,
-            isUnitLocation: true
-        }).fetch();
+        const userLocations = UserTestTypeLocationData.getUserUnitTestsLocations(userContext.userId);
 
         userLocations.forEach((userLocation) => {
 
             // Get the actual location data
-            const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
+            const outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
 
             // Grab any files here marked as integration test outputs
-            const testOutputFiles = TestOutputLocationFiles.find({
-                locationId: outputLocation._id,
-                fileType:   TestLocationFileType.UNIT
-            }).fetch();
+            const testOutputFiles = TestOutputLocationFileData.getUnitTestFilesForLocation(outputLocation._id);
 
             testOutputFiles.forEach((file) => {
 
@@ -129,13 +105,11 @@ class TestIntegrationModules{
                     case TestRunner.METEOR_MOCHA:
                         log((msg) => console.log(msg), LogLevel.TRACE, "Getting METEOR_MOCHA Results Data");
 
-                        MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId);
+                        UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
                         break;
 
                 }
-
             });
-
         });
     };
 
@@ -144,24 +118,13 @@ class TestIntegrationModules{
         log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios... {}", userContext.userId);
 
         // Clear all data for user-designVersion
-        UserDesignVersionMashScenarios.remove({
-            userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId
-        });
-
-        UserMashScenarioTests.remove({
-            userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId
-        });
+        UserDvMashScenarioData.removeAllDvScenariosForUser(userContext.userId, userContext.designVersionId);
+        UserMashScenarioTestData.removeAllDvTestsForUser(userContext.userId, userContext.designVersionId);
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Old data removed...");
 
         // Get all non-removed Scenarios for current DV
-        const dvScenarios = DesignVersionComponents.find({
-            designVersionId:    userContext.designVersionId,
-            componentType:      ComponentType.SCENARIO,
-            updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-        }).fetch();
+        const dvScenarios = DesignComponentData.getNonRemovedDvScenarios(userContext.designVersionId);
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Scenarios loaded...");
 
@@ -176,19 +139,10 @@ class TestIntegrationModules{
             let searchRegex = new RegExp(scenario.componentNameNew);
 
             // Unit Tests
-            const unitTests = UserUnitTestResults.find({
-                userId:         userContext.userId,
-                testFullName:   {$regex: searchRegex}
-            }).fetch();
+            const unitTests = UserUnitTestResultData.getUserMatchingTestResults(userContext.userId, searchRegex);
 
             // Integration Tests
-            const intTests = UserIntegrationTestResults.find({
-                userId:         userContext.userId,
-                testFullName:   {$regex: searchRegex}
-            }).fetch();
-
-            // Acceptance Tests
-            // TODO
+            const intTests = UserIntegrationTestResultData.getUserMatchingTestResults(userContext.userId, searchRegex);
 
             // Create the basic Scenario Mash
             let unitTestCount = 0;
@@ -348,13 +302,12 @@ class TestIntegrationModules{
 
         // Bulk insert the data
         if(scenarioBatchData.length > 0) {
-            UserDesignVersionMashScenarios.batchInsert(scenarioBatchData);
+            UserDvMashScenarioData.bulkInsertData(scenarioBatchData);
         }
 
         if(scenarioTestBatchData.length > 0) {
-            UserMashScenarioTests.batchInsert(scenarioTestBatchData);
+            UserMashScenarioTestData.bulkInsertData(scenarioTestBatchData);
         }
-
     }
 
 

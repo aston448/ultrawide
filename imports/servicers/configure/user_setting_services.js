@@ -1,12 +1,10 @@
 
-// Ultrawide Collections
-import { UserSettings }      from '../../collections/configure/user_settings.js'
-
-
 // Ultrawide Services
 import { log } from '../../common/utils.js';
-import { TestLocationType, ComponentType, LogLevel} from '../../constants/constants.js';
+import { LogLevel} from '../../constants/constants.js';
 
+// Data Access
+import UserSettingData from '../../service_modules_db/configure/user_setting_db.js';
 
 //======================================================================================================================
 //
@@ -18,51 +16,22 @@ import { TestLocationType, ComponentType, LogLevel} from '../../constants/consta
 
 class UserSettingServices {
 
-    importUserSetting(setting, userId) {
-
-        if (Meteor.isServer) {
-
-            const settingId = UserSettings.insert(
-                {
-                    userId:         userId,
-                    settingName:    setting.settingName,
-                    settingValue:   setting.settingValue
-                }
-            );
-
-            return settingId;
-        }
-    };
 
     saveUserSetting(userId, settingName, newValue){
 
         if (Meteor.isServer) {
 
-            const setting = UserSettings.findOne({
-                userId:         userId,
-                settingName:    settingName
-            });
+            const setting = UserSettingData.getUserSettingByName(userId, settingName);
+
 
             if(setting){
 
-                UserSettings.update(
-                    {_id: setting._id},
-                    {
-                        $set:{
-                            settingValue: newValue
-                        }
-                    }
-                );
+                UserSettingData.updateUserSettingValue(setting._id, newValue);
 
             } else {
 
-                UserSettings.insert(
-                    {
-                        userId:         userId,
-                        settingName:    settingName,
-                        settingValue:   newValue
-                    }
-                );
+                UserSettingData.insertNewUserSetting(userId, settingName, newValue);
+
             }
         }
     }

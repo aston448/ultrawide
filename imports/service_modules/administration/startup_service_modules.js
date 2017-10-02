@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 // Ultrawide Collections
-import { AppGlobalData }                from '../../collections/app/app_global_data.js';
+import { AppGlobal }                from '../../collections/app/app_global.js';
 
 
 // Ultrawide Services
@@ -37,7 +37,7 @@ class StartupModules{
             dataStore = dataStore + '/';
         }
 
-        const appData = AppGlobalData.findOne({
+        const appData = AppGlobal.findOne({
             versionKey: 'CURRENT_VERSION'
         });
 
@@ -48,7 +48,7 @@ class StartupModules{
 
         if(!appData){
 
-            AppGlobalData.insert({
+            AppGlobal.insert({
                 versionKey:         'CURRENT_VERSION',
                 appVersion:         appVersion,
                 dataVersion:        dataVersion,
@@ -58,7 +58,7 @@ class StartupModules{
 
         } else {
 
-            AppGlobalData.update(
+            AppGlobal.update(
                 {versionKey: 'CURRENT_VERSION'},
                 {
                     $set:{

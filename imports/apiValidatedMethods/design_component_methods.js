@@ -60,10 +60,10 @@ export const addDesignSectionToApplication = new ValidatedMethod({
         view:               {type: String},
         mode:               {type: String},
         designVersionId:    {type: String},
-        parentId:           {type: String}
+        parentRefId:        {type: String}
     }).validator(),
 
-    run({view, mode, designVersionId, parentId}){
+    run({view, mode, designVersionId, parentRefId}){
 
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);
@@ -76,7 +76,7 @@ export const addDesignSectionToApplication = new ValidatedMethod({
         try {
             DesignComponentServices.addNewComponent(
                 designVersionId,
-                parentId,
+                parentRefId,
                 ComponentType.DESIGN_SECTION,
                 1,                          // All sections added to the design version are level 1
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
@@ -100,11 +100,11 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
         view:               {type: String},
         mode:               {type: String},
         designVersionId:    {type: String},
-        parentId:           {type: String},
+        parentRefId:        {type: String},
         parentLevel:        {type: Number}
     }).validator(),
 
-    run({view, mode, designVersionId, parentId, parentLevel}){
+    run({view, mode, designVersionId, parentRefId, parentLevel}){
 
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);
@@ -117,7 +117,7 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
         try {
             DesignComponentServices.addNewComponent(
                 designVersionId,
-                parentId,
+                parentRefId,
                 ComponentType.DESIGN_SECTION,
                 parentLevel + 1,
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
@@ -141,10 +141,10 @@ export const addFeatureToDesignSection = new ValidatedMethod({
         view:               {type: String},
         mode:               {type: String},
         designVersionId:    {type: String},
-        parentId:           {type: String}
+        parentRefId:        {type: String}
     }).validator(),
 
-    run({view, mode, designVersionId, parentId}){
+    run({view, mode, designVersionId, parentRefId}){
 
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE);
@@ -157,7 +157,7 @@ export const addFeatureToDesignSection = new ValidatedMethod({
         try {
             DesignComponentServices.addNewComponent(
                 designVersionId,
-                parentId,
+                parentRefId,
                 ComponentType.FEATURE,
                 0,
                 DefaultComponentNames.NEW_FEATURE_NAME,
@@ -181,10 +181,10 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
         view:               {type: String},
         mode:               {type: String},
         designVersionId:    {type: String},
-        parentId:           {type: String}
+        parentRefId:        {type: String}
     }).validator(),
 
-    run({view, mode, designVersionId, parentId}){
+    run({view, mode, designVersionId, parentRefId}){
 
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE_ASPECT);
@@ -197,7 +197,7 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
         try {
             DesignComponentServices.addNewComponent(
                 designVersionId,
-                parentId,
+                parentRefId,
                 ComponentType.FEATURE_ASPECT,
                 0,
                 DefaultComponentNames.NEW_FEATURE_ASPECT_NAME,
@@ -223,11 +223,11 @@ export const addScenario = new ValidatedMethod({
         view:               {type: String},
         mode:               {type: String},
         designVersionId:    {type: String},
-        parentId:           {type: String},
+        parentRefId:        {type: String},
         workPackageId:      {type: String, optional: true},
     }).validator(),
 
-    run({view, mode, designVersionId, parentId, workPackageId}){
+    run({view, mode, designVersionId, parentRefId, workPackageId}){
 
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.SCENARIO);
@@ -240,7 +240,7 @@ export const addScenario = new ValidatedMethod({
         try {
             DesignComponentServices.addNewComponent(
                 designVersionId,
-                parentId,
+                parentRefId,
                 ComponentType.SCENARIO,
                 0,
                 DefaultComponentNames.NEW_SCENARIO_NAME,
@@ -275,7 +275,7 @@ export const updateComponentName = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateUpdateComponentName(view, mode, designComponentId, newPlainText);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.updateComponentName.failValidation', result)
         }
 
@@ -329,22 +329,21 @@ export const removeDesignComponent = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         mode:               {type: String},
-        designComponentId:  {type: String},
-        parentId:           {type: String}
+        designComponentId:  {type: String}
     }).validator(),
 
-    run({view, mode, designComponentId, parentId}){
+    run({view, mode, designComponentId}){
 
         // Server validation
         const result = DesignComponentValidationApi.validateRemoveDesignComponent(view, mode, designComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.removeDesignComponent.failValidation', result)
         }
 
         // Server action
         try {
-            DesignComponentServices.removeDesignComponent(designComponentId, parentId);
+            DesignComponentServices.removeDesignComponent(designComponentId);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.code, e.stack)

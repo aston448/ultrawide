@@ -1,21 +1,21 @@
 
-// Ultrawide Collections
-import {DesignVersions}                 from '../../collections/design/design_versions.js';
-import {DesignVersionComponents}        from '../../collections/design/design_version_components.js';
-import {DesignUpdates}                  from '../../collections/design_update/design_updates.js';
-import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
-import {WorkPackages}                   from '../../collections/work/work_packages.js';
-import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
-import {UserWorkProgressSummary}        from '../../collections/summary/user_work_progress_summary.js';
-import {UserDevDesignSummaryData}       from '../../collections/summary/user_dev_design_summary_data.js';
-import {UserDesignVersionMashScenarios} from '../../collections/mash/user_dv_mash_scenarios.js';
-
 // Ultrawide Services
-import { DesignVersionStatus, WorkSummaryType, WorkPackageStatus, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, UpdateMergeStatus, LogLevel }      from '../../constants/constants.js';
+import { DesignVersionStatus, WorkSummaryType, MashTestStatus, LogLevel }      from '../../constants/constants.js';
 import { DefaultItemNames }         from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
 import DesignVersionModules         from '../../service_modules/design/design_version_service_modules.js';
+
+// Data Access
+import DesignVersionData            from '../../service_modules_db/design/design_version_db.js';
+import DesignUpdateData             from '../../service_modules_db/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
+import UserWorkProgressSummaryData  from '../../service_modules_db/summary/user_work_progress_summary_db.js';
+import UserDevDesignSummaryData     from '../../service_modules_db/summary/user_dev_design_summary_db';
+import WorkPackageData              from '../../service_modules_db/work/work_package_db.js';
+import WorkPackageComponentData     from '../../service_modules_db/work/work_package_component_db.js';
+import UserDvMashScenariosData      from '../../service_modules_db/mash/user_dv_mash_scenario_db.js';
+
 
 //======================================================================================================================
 //
@@ -30,93 +30,42 @@ class DesignVersionServices{
     addNewDesignVersion(designId, designVersionName, designVersionNumber, designVersionStatus) {
 
         if (Meteor.isServer) {
-            const designVersionId = DesignVersions.insert(
-                {
-                    designId: designId,
-                    designVersionName: designVersionName,
-                    designVersionNumber: designVersionNumber,
-                    designVersionStatus: designVersionStatus
-                }
-            );
 
-            return designVersionId;
-        }
-    }
-
-    importDesignVersion(designId, designVersion){
-
-        if(Meteor.isServer) {
-            let designVersionId = DesignVersions.insert(
-                {
-                    designId: designId,
-                    designVersionName: designVersion.designVersionName,
-                    designVersionNumber: designVersion.designVersionNumber,
-                    designVersionRawText: designVersion.designVersionRawText,
-                    designVersionStatus: designVersion.designVersionStatus,
-                    baseDesignVersionId: designVersion.baseDesignVersionId,
-                    designVersionIndex: designVersion.designVersionIndex
-                }
-            );
-
-            return designVersionId;
+            return DesignVersionData.insertNewDesignVersion(designId, designVersionName, designVersionNumber, designVersionStatus);
         }
     }
 
     updateDesignVersionName(designVersionId, newName){
 
         if(Meteor.isServer) {
-            DesignVersions.update(
-                {_id: designVersionId},
-                {
-                    $set: {
-                        designVersionName: newName
-                    }
-                }
-            );
+
+            const updated = DesignVersionData.updateDesignVersionName(designVersionId, newName);
         }
     };
 
     updateDesignVersionNumber(designVersionId, newNumber){
 
         if(Meteor.isServer) {
-            DesignVersions.update(
-                {_id: designVersionId},
-                {
-                    $set: {
-                        designVersionNumber: newNumber
-                    }
-                }
-            );
+
+            const updated = DesignVersionData.updateDesignVersionNumber(designVersionId, newNumber);
         }
     };
 
     publishDesignVersion(designVersionId){
 
         if(Meteor.isServer) {
-            DesignVersions.update(
-                {_id: designVersionId},
 
-                {
-                    $set: {
-                        designVersionStatus: DesignVersionStatus.VERSION_DRAFT
-                    }
-                }
-            );
+            // This means setting the status to draft - everyone can see and work on it
+            const updated = DesignVersionData.setDesignVersionStatus(designVersionId, DesignVersionStatus.VERSION_DRAFT);
         }
     };
 
     withdrawDesignVersion(designVersionId){
 
         if(Meteor.isServer) {
-            DesignVersions.update(
-                {_id: designVersionId},
 
-                {
-                    $set: {
-                        designVersionStatus: DesignVersionStatus.VERSION_NEW
-                    }
-                }
-            );
+            // This means setting the status back to new - only Designer can see and work on it
+            const updated = DesignVersionData.setDesignVersionStatus(designVersionId, DesignVersionStatus.VERSION_NEW);
         }
     };
 
@@ -133,19 +82,21 @@ class DesignVersionServices{
             // 6. Complete the old version - remove stuff that is removed and set merged updates to Merged
 
             // Get the current design version details - the version being completed
-            const currentDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
+            const currentDesignVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
+
+            log(msg => console.log(msg), LogLevel.INFO, "Create Next Design Version Starting...");
 
             // Now add a new Design Version to become the new current version
-            let nextDesignVersionId = DesignVersions.insert(
-                {
-                    designId: currentDesignVersion.designId,
-                    designVersionName: DefaultItemNames.NEXT_DESIGN_VERSION_NAME,
-                    designVersionNumber: DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER,
-                    designVersionStatus: DesignVersionStatus.VERSION_UPDATABLE,
-                    baseDesignVersionId: currentDesignVersionId,                            // Based on the previous DV
-                    designVersionIndex: currentDesignVersion.designVersionIndex + 1        // Increment index to create correct ordering
-                }
+            const nextDesignVersionId = DesignVersionData.insertNewDesignVersion(
+                currentDesignVersion.designId,
+                DefaultItemNames.NEXT_DESIGN_VERSION_NAME,
+                DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER,
+                DesignVersionStatus.VERSION_UPDATABLE,
+                currentDesignVersionId,                            // Based on the previous DV
+                currentDesignVersion.designVersionIndex + 1
             );
+
+            log(msg => console.log(msg), LogLevel.INFO, "  Inserted new DV");
 
             // If that was successful do the real work...
             if(nextDesignVersionId) {
@@ -153,19 +104,23 @@ class DesignVersionServices{
                 try {
                     // Populate new DV with a copy of the previous version
                     DesignVersionModules.copyPreviousDesignVersionToCurrent(currentDesignVersion._id, nextDesignVersionId);
+                    log(msg => console.log(msg), LogLevel.INFO, "  Previous DV Copied to New");
 
                     // If moving from an updatable DV deal with any non-merged updates
                     if(currentDesignVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE) {
 
                         // Process the updates to be Rolled Forward
                         DesignVersionModules.rollForwardUpdates(currentDesignVersionId, nextDesignVersionId);
+                        log(msg => console.log(msg), LogLevel.INFO, "  Updates Rolled Forward");
 
                         // Put to bed the ignored updates
                         DesignVersionModules.closeDownIgnoreUpdates(currentDesignVersionId);
+                        log(msg => console.log(msg), LogLevel.INFO, "  Ignored Updates Removed");
                     }
 
                     // Carry forward the Domain Dictionary
                     DesignVersionModules.rollForwardDomainDictionary(currentDesignVersionId, nextDesignVersionId);
+                    log(msg => console.log(msg), LogLevel.INFO, "  Domain Dictionary Carried Forward");
 
                 } catch(e) {
 
@@ -177,6 +132,7 @@ class DesignVersionServices{
 
                 // And finally update the old design version to complete
                 DesignVersionModules.completePreviousDesignVersion(currentDesignVersionId);
+                log(msg => console.log(msg), LogLevel.INFO, "Create Next Design Version Complete");
             }
         }
     };
@@ -195,19 +151,14 @@ class DesignVersionServices{
             log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Refreshing Work Progress Data...");
 
             // Remove data for DV for this user
-            UserWorkProgressSummary.remove({
-                userId: userContext.userId,
-                designVersionId: userContext.designVersionId
-            });
+            UserWorkProgressSummaryData.removeWorkProgressSummary(userContext);
+
 
             // And recalculate it
-            const dv = DesignVersions.findOne({_id: userContext.designVersionId});
+            const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
             // Get DV stats
-            const dvSummary = UserDevDesignSummaryData.findOne({
-                userId:             userContext.userId,
-                designVersionId:    userContext.designVersionId
-            });
+            const dvSummary = UserDevDesignSummaryData.getUserDesignVersionSummary(userContext);
 
             let dvTotalScenarios = 0;
             let dvPassingScenarios = 0;
@@ -225,11 +176,7 @@ class DesignVersionServices{
             } else {
 
                 // No test data yet - set all as no test
-                const totalScenarios = DesignVersionComponents.find({
-                    designVersionId:    userContext.designVersionId,
-                    componentType:      ComponentType.SCENARIO,
-                    updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-                }).count();
+                const totalScenarios = DesignVersionData.getNonRemovedScenarioCount(userContext.designVersionId);
 
                 dvTotalScenarios = totalScenarios;
                 dvNoTestScenarios = totalScenarios;
@@ -245,28 +192,16 @@ class DesignVersionServices{
                 case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
 
                     // Get any published WPs
-                    const baseWps = WorkPackages.find(
-                        {
-                            designVersionId:    userContext.designVersionId,
-                            workPackageStatus:  {$ne: WorkPackageStatus.WP_NEW}
-                        },
-                        {
-                            $sort: {workPackageName: 1}
-                        }
-                    ).fetch();
+                    const baseWps = DesignVersionData.getPublishedWorkPackages(userContext.designVersionId);
 
                     let dvWpScenarios = 0;
 
                     baseWps.forEach((wp) => {
 
-                        let wpScenarios = WorkPackageComponents.find({
-                            workPackageId: wp._id,
-                            componentType: ComponentType.SCENARIO,
-                            scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                        }).fetch();
-
+                        let wpScenarios = WorkPackageData.getActiveScenarios(wp._id);
 
                         let wpTotalScenarios = 0;
+
                         if(wpScenarios){
                             wpTotalScenarios = wpScenarios.length;
                             dvWpScenarios += wpTotalScenarios;
@@ -277,11 +212,7 @@ class DesignVersionServices{
 
                         wpScenarios.forEach((wpScenario) =>{
 
-                            let testResult = UserDesignVersionMashScenarios.findOne({
-                                userId:                     userContext.userId,
-                                designVersionId:            userContext.designVersionId,
-                                designScenarioReferenceId:  wpScenario.componentReferenceId
-                            });
+                            let testResult = UserDvMashScenariosData.getScenario(userContext, wpScenario.componentReferenceId);
 
                             if(testResult) {
                                 if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {
@@ -360,25 +291,11 @@ class DesignVersionServices{
                     let dvUpdateUntestedCount = 0;
 
                     // Here we need to know how many Scenarios are in Updates, then how may of those are in WPs
-                    const designUpdates = DesignUpdates.find(
-                        {
-                            designVersionId:            userContext.designVersionId,
-                            updateStatus:               {$in: [DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT, DesignUpdateStatus.UPDATE_MERGED]},
-                            updateMergeAction:          DesignUpdateMergeAction.MERGE_INCLUDE
-                        },
-                        {
-                            $sort: {updateReference: 1, updateName: 1}
-                        }
-                    );
+                    const designUpdates = DesignUpdateData.getMergeIncludeUpdates(userContext.designVersionId);
 
                     designUpdates.forEach((du) => {
 
-                        let duScenarios = DesignUpdateComponents.find({
-                            designUpdateId: du._id,
-                            componentType: ComponentType.SCENARIO,
-                            isRemoved: false,
-                            scopeType: UpdateScopeType.SCOPE_IN_SCOPE
-                        }).fetch();
+                        let duScenarios = DesignUpdateData.getInScopeScenarios(du._id);
 
                         let duWpScenarios = 0;
                         let duPassingScenarios = 0;
@@ -387,21 +304,13 @@ class DesignVersionServices{
 
                         duScenarios.forEach((duScenario) => {
 
-                            let wpScenario = WorkPackageComponents.findOne({
-                                designVersionId:            userContext.designVersionId,
-                                componentReferenceId:       duScenario.componentReferenceId,     // A Scenario can only occur in one WP for a Design Version
-                                scopeType:                  WorkPackageScopeType.SCOPE_ACTIVE
-                            });
+                            let wpScenario = WorkPackageComponentData.getDvScenarioWpComponentByReference(userContext.designVersionId, duScenario.componentReferenceId);
 
                             if(wpScenario){
                                 duWpScenarios++;
                             }
 
-                            let testResult = UserDesignVersionMashScenarios.findOne({
-                                userId:                     userContext.userId,
-                                designVersionId:            userContext.designVersionId,
-                                designScenarioReferenceId:  duScenario.componentReferenceId
-                            });
+                            let testResult = UserDvMashScenariosData.getScenario(userContext, duScenario.componentReferenceId);
 
                             if(testResult) {
                                 if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {
@@ -445,15 +354,7 @@ class DesignVersionServices{
                         });
 
                         // Get the published DU Work Packages
-                        let duWorkPackages = WorkPackages.find(
-                            {
-                                designUpdateId: du._id,
-                                workPackageStatus: {$ne: WorkPackageStatus.WP_NEW}
-                            },
-                            {
-                                $sort: {workPackageName: 1}
-                            }
-                        ).fetch();
+                        let duWorkPackages = DesignUpdateData.getPublishedWorkPackages(du._id);
 
                         duWorkPackages.forEach((wp) => {
 
@@ -462,28 +363,18 @@ class DesignVersionServices{
                             let wpFailingScenarios = 0;
                             let wpUntestedScenarios = 0;
 
-                            let wpScenarios = WorkPackageComponents.find({
-                                workPackageId:              wp._id,
-                                componentType:              ComponentType.SCENARIO,
-                                scopeType:                  WorkPackageScopeType.SCOPE_ACTIVE
-                            }).fetch();
+                            let wpScenarios = WorkPackageData.getActiveScenarios(wp._id);
 
                             wpScenarios.forEach((wpScenario) => {
 
                                 // Ignore removed update items
-                                let wpDuItem = DesignUpdateComponents.findOne({
-                                    _id: wpScenario.componentId
-                                });
+                                let wpDuItem = DesignUpdateComponentData.getUpdateComponentById(wpScenario.componentId);
 
                                 if(wpDuItem && ! wpDuItem.isRemoved) {
 
                                     wpTotalScenarios++;
 
-                                    let testResult = UserDesignVersionMashScenarios.findOne({
-                                        userId:                     userContext.userId,
-                                        designVersionId:            userContext.designVersionId,
-                                        designScenarioReferenceId:  wpScenario.componentReferenceId
-                                    });
+                                    let testResult = UserDvMashScenariosData.getScenario(userContext, wpScenario.componentReferenceId);
 
                                     if (testResult) {
                                         if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {
@@ -543,7 +434,7 @@ class DesignVersionServices{
             }
 
             if(batchData.length > 0) {
-                UserWorkProgressSummary.batchInsert(batchData);
+                UserWorkProgressSummaryData.bulkInsert(batchData);
             }
 
             log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Done Refreshing Work Progress Data...");

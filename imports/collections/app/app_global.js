@@ -1,7 +1,7 @@
 
 import { Mongo } from 'meteor/mongo';
 
-export const AppGlobalData = new Mongo.Collection('appGlobalData');
+export const AppGlobal = new Mongo.Collection('appGlobal');
 
 let Schema = new SimpleSchema({
     versionKey:         {type: String},
@@ -11,11 +11,11 @@ let Schema = new SimpleSchema({
     dataStore:          {type: String}      // Location of Ultrawide Server data
 });
 
-AppGlobalData.attachSchema(Schema);
+AppGlobal.attachSchema(Schema);
 
 // Publish
 if(Meteor.isServer){
-    Meteor.publish('appGlobalData', function appGlobalDataPublication(){
-        return AppGlobalData.find({});
+    Meteor.publish('appGlobal', function appGlobalDataPublication(){
+        return AppGlobal.find({});
     })
 }

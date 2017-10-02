@@ -3,7 +3,7 @@
 // Meteor / React Services
 
 // Ultrawide Collections
-import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
+import { UserContext }   from '../collections/context/user_context.js';
 import { UserCurrentViewOptions }   from '../collections/context/user_current_view_options.js';
 import { Designs }                  from '../collections/design/designs.js';
 import { DesignVersions }           from '../collections/design/design_versions.js';
@@ -49,7 +49,7 @@ class ClientUserContextServices {
 
     getUserContext(userId){
 
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const userContext = UserContext.findOne({userId: userId});
 
 
         if(userContext){
@@ -855,11 +855,11 @@ class ClientUserContextServices {
 
         // This prevents errors after re-login if a Design is removed that other people have accessed
 
-        const affectedUsers = UserCurrentEditContext.find({designId: removedDesignId}).fetch();
+        const affectedUsers = UserContext.find({designId: removedDesignId}).fetch();
 
         affectedUsers.forEach((user) => {
 
-            UserCurrentEditContext.update(
+            UserContext.update(
                 {_id: user._id},
                 {
                     $set:{
@@ -883,11 +883,11 @@ class ClientUserContextServices {
 
         // This prevents errors after re-login if a Design Component is removed that other people have accessed
 
-        const affectedUsers = UserCurrentEditContext.find({designComponentId: removedDesignComponentId}).fetch();
+        const affectedUsers = UserContext.find({designComponentId: removedDesignComponentId}).fetch();
 
         affectedUsers.forEach((user) => {
 
-            UserCurrentEditContext.update(
+            UserContext.update(
                 {_id: user._id},
                 {
                     $set:{

@@ -1,0 +1,234 @@
+import { DesignVersions }               from '../../collections/design/design_versions.js';
+import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
+import { DesignUpdates }                from '../../collections/design_update/design_updates.js';
+import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
+import { WorkPackages }                 from '../../collections/work/work_packages.js';
+import { WorkPackageComponents }        from '../../collections/work/work_package_components';
+import { DomainDictionary }             from '../../collections/design/domain_dictionary.js';
+import { UserDesignVersionMashScenarios } from "../../collections/mash/user_dv_mash_scenarios";
+import { UserDesignUpdateSummary }      from "../../collections/summary/user_design_update_summary";
+import { UserDevDesignSummary }         from "../../collections/summary/user_dev_design_summary";
+import { UserDevTestSummary }           from "../../collections/summary/user_dev_test_summary";
+import { UserWorkProgressSummary }      from "../../collections/summary/user_work_progress_summary";
+
+import { ComponentType, UpdateMergeStatus, WorkPackageStatus, DesignUpdateStatus, DesignUpdateMergeAction, WorkPackageType }                    from '../../constants/constants.js';
+
+class DesignVersionData {
+
+    // INSERT ==========================================================================================================
+
+    insertNewDesignVersion(designId, designVersionName, designVersionNumber, designVersionStatus, baseDesignVersionId = 'NONE', designVersionIndex = 0){
+
+        return DesignVersions.insert(
+            {
+                designId: designId,
+                designVersionName: designVersionName,
+                designVersionNumber: designVersionNumber,
+                designVersionStatus: designVersionStatus,
+                baseDesignVersionId: baseDesignVersionId,
+                designVersionIndex: designVersionIndex
+            }
+        );
+    }
+
+    importDesignVersion(designId, designVersion){
+
+        if(Meteor.isServer) {
+            return DesignVersions.insert(
+                {
+                    designId: designId,
+                    designVersionName: designVersion.designVersionName,
+                    designVersionNumber: designVersion.designVersionNumber,
+                    designVersionRawText: designVersion.designVersionRawText,
+                    designVersionStatus: designVersion.designVersionStatus,
+                    baseDesignVersionId: designVersion.baseDesignVersionId,
+                    designVersionIndex: designVersion.designVersionIndex
+                }
+            );
+        }
+    }
+
+    // SELECT ==========================================================================================================
+
+    // The DV ----------------------------------------------------------------------------------------------------------
+    getDesignVersionById(designVersionId){
+        return DesignVersions.findOne({_id: designVersionId});
+    }
+
+    // DV Components ---------------------------------------------------------------------------------------------------
+    getAllComponents(designVersionId){
+
+        return DesignVersionComponents.find({designVersionId: designVersionId}).fetch();
+    }
+
+    getAllUpdateComponents(designVersionId){
+
+        return DesignUpdateComponents.find({designVersionId: designVersionId}).fetch();
+    }
+
+    getComponentCount(designVersionId){
+
+        return DesignVersionComponents.find({designVersionId: designVersionId}).count();
+    }
+
+    getNonRemovedScenarioCount(designVersionId){
+
+        return DesignVersionComponents.find({
+            designVersionId:    designVersionId,
+            componentType:      ComponentType.SCENARIO,
+            updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+        }).count();
+    }
+
+    // DV Updates ------------------------------------------------------------------------------------------------------
+
+    getAllUpdates(designVersionId){
+
+        return DesignUpdates.find({designVersionId: designVersionId}).fetch();
+    }
+
+    // DV Updates Components -------------------------------------------------------------------------------------------
+
+    getUnchangedUpdateComponents(designUpdateId){
+
+        return DesignUpdateComponents.find(
+            {
+                designUpdateId: designUpdateId,
+                isNew: false,
+                isChanged: false,
+                isTextChanged: false,
+                isRemoved: false,
+                isMoved: false,
+                isRemovedElsewhere: false  // Or not anything that is removed in another update
+            }
+        );
+    }
+
+    // DV Work Packages ------------------------------------------------------------------------------------------------
+
+    getAllWorkPackages(designVersionId){
+
+        return WorkPackages.find({designVersionId: designVersionId}).fetch();
+    }
+
+    getPublishedWorkPackages(designVersionId){
+
+        return WorkPackages.find(
+            {
+                designVersionId:    designVersionId,
+                workPackageStatus:  {$ne: WorkPackageStatus.WP_NEW}
+            },
+            {
+                $sort: {workPackageName: 1}
+            }
+        ).fetch();
+    }
+
+    getNonCompleteBaseWorkPackages(designVersionId){
+
+        return WorkPackages.find({
+            designVersionId:    designVersionId,
+            designUpdateId:     'NONE',
+            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
+            workPackageType:    WorkPackageType.WP_BASE
+        }).fetch();
+    }
+
+    // DV Updates ------------------------------------------------------------------------------------------------------
+    getMergeIncludeUpdates(designVersionId){
+
+        return DesignUpdates.find(
+            {
+                designVersionId:            designVersionId,
+                updateStatus:               {$in: [DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT, DesignUpdateStatus.UPDATE_MERGED]},
+                updateMergeAction:          DesignUpdateMergeAction.MERGE_INCLUDE
+            },
+            {
+                $sort: {updateReference: 1, updateName: 1}
+            }
+        ).fetch();
+    }
+
+    getRollForwardUpdates(designVersionId){
+
+        return DesignUpdates.find(
+            {
+                designVersionId: designVersionId,
+                updateMergeAction: DesignUpdateMergeAction.MERGE_ROLL
+            },
+            {
+                $sort: {updateReference: 1, updateName: 1}
+            }
+        ).fetch();
+    }
+
+    // DV Dictionary ---------------------------------------------------------------------------------------------------
+    getDomainDictionaryEntries(designVersionId){
+
+        return DomainDictionary.find({
+            designVersionId: designVersionId
+        }).fetch();
+    }
+
+    // UPDATE ==========================================================================================================
+
+    updateDesignVersionName(designVersionId, newName){
+
+        return DesignVersions.update(
+            {_id: designVersionId},
+            {
+                $set: {
+                    designVersionName: newName
+                }
+            }
+        );
+    }
+
+    updateDesignVersionNumber(designVersionId, newNumber){
+
+        return DesignVersions.update(
+            {_id: designVersionId},
+            {
+                $set: {
+                    designVersionNumber: newNumber
+                }
+            }
+        );
+    }
+
+    setDesignVersionStatus(designVersionId, newStatus){
+
+        return DesignVersions.update(
+            {_id: designVersionId},
+
+            {
+                $set: {
+                    designVersionStatus: newStatus
+                }
+            }
+        );
+    }
+
+    // REMOVE ==========================================================================================================
+
+    removeDesignVersionData(designVersionId){
+
+        // Remove the restorable data
+        DesignUpdates.remove({designVersionId: designVersionId});
+        WorkPackages.remove({designVersionId: designVersionId});
+        DesignVersionComponents.remove({designVersionId: designVersionId});
+        DesignUpdateComponents.remove({designVersionId: designVersionId});
+        WorkPackageComponents.remove({designVersionId: designVersionId});
+        DomainDictionary.remove({designVersionId: designVersionId});
+
+        // Remove ephemeral data
+        UserDesignVersionMashScenarios.remove({designVersionId: designVersionId});
+        UserDesignUpdateSummary.remove({designVersionId: designVersionId});
+        UserDevDesignSummary.remove({designVersionId: designVersionId});
+        UserDevTestSummary.remove({designVersionId: designVersionId});
+        UserWorkProgressSummary.remove({designVersionId: designVersionId});
+    }
+}
+
+
+export default new DesignVersionData();

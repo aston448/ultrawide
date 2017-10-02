@@ -1,12 +1,12 @@
 
-// Ultrawide Collections
-import { WorkPackages }                 from '../../collections/work/work_packages.js';
-import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
-import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
-import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
-
 // Ultrawide Services
-import { WorkPackageType, ComponentType, WorkPackageScopeType, UpdateScopeType } from '../../constants/constants.js';
+import { WorkPackageType, ComponentType, WorkPackageScopeType } from '../../constants/constants.js';
+
+// Data Access
+import DesignComponentData          from '../../service_modules_db/design/design_component_db.js';
+import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
+import WorkPackageData              from '../../service_modules_db/work/work_package_db.js';
+import WorkPackageComponentData     from '../../service_modules_db/work/work_package_component_db.js';
 
 //======================================================================================================================
 //
@@ -21,10 +21,7 @@ class WorkPackageModules {
     addWorkPackageComponent(userContext, wpType, component, scopeType){
 
         // Check that this component is not already there...
-        const wpComponent = WorkPackageComponents.findOne({
-            workPackageId:          userContext.workPackageId,
-            componentReferenceId:   component.componentReferenceId,
-        });
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, component.componentReferenceId);
 
         if(!wpComponent) {
 
@@ -33,30 +30,19 @@ class WorkPackageModules {
             // If component is Scenario and already exists in other WP for this DV, don't add it
             if (component.componentType === ComponentType.SCENARIO) {
 
-                otherWp = WorkPackageComponents.findOne({
-                    designVersionId:        userContext.designVersionId,
-                    componentReferenceId:   component.componentReferenceId,
-                    workPackageId:          {$ne: userContext.workPackageId}
-                });
+                otherWp = WorkPackageComponentData.getOtherDvWpComponentInstance(userContext.designVersionId, component.componentReferenceId, userContext.workPackageId);
             }
 
             if (!otherWp) {
 
                 //console.log("Adding component " + component.componentNameNew + " to scope");
 
-                WorkPackageComponents.insert(
-                    {
-                        designVersionId:                userContext.designVersionId,
-                        workPackageId:                  userContext.workPackageId,
-                        workPackageType:                wpType,
-                        componentId:                    component._id,
-                        componentReferenceId:           component.componentReferenceId,
-                        componentType:                  component.componentType,
-                        componentParentReferenceId:     component.componentParentReferenceIdNew,
-                        componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
-                        componentIndex:                 component.componentIndexNew,
-                        scopeType:                      scopeType
-                    }
+                WorkPackageComponentData.insertNewWorkPackageComponent(
+                    userContext.designVersionId,
+                    userContext.workPackageId,
+                    wpType,
+                    component,
+                    scopeType
                 );
 
                 // And, if Scenario mark the design item as in the WP
@@ -70,19 +56,9 @@ class WorkPackageModules {
             //console.log("Updating component " + component.componentNameNew + " to scope " + scopeType);
 
             // Component was already there.  If we are trying to activate it update the scope
+
             // Could be that this item was previously added to an update, removed and then added again  So update other details to be sure all is correct
-            WorkPackageComponents.update(
-                {_id: wpComponent._id},
-                {
-                    $set:{
-                        componentId:                    component._id,
-                        componentParentReferenceId:     component.componentParentReferenceIdNew,
-                        componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
-                        componentIndex:                 component.componentIndexNew,
-                        scopeType:                      scopeType
-                    }
-                }
-            );
+            WorkPackageComponentData.updateExistingWpComponent(wpComponent._id, component, scopeType);
 
             // And, if Scenario mark the design item as in the WP
             if (component.componentType === ComponentType.SCENARIO && scopeType === WorkPackageScopeType.SCOPE_ACTIVE) {
@@ -95,74 +71,42 @@ class WorkPackageModules {
     markScenario(wpType, component, userContext){
 
         if(wpType === WorkPackageType.WP_BASE){
-            DesignVersionComponents.update(
-                {_id: component._id},
-                {
-                    $set: {workPackageId: userContext.workPackageId}
-                }
-            );
-        } else {
-            DesignUpdateComponents.update(
-                {_id: component._id},
-                {
-                    $set: {workPackageId: userContext.workPackageId}
-                }
-            );
 
-            // Also set the WP in the base design version
-            DesignVersionComponents.update(
-                {
-                    designVersionId: userContext.designVersionId,
-                    componentReferenceId: component.componentReferenceId
-                },
-                {
-                    $set: {workPackageId: userContext.workPackageId}
-                }
-            );
+            DesignComponentData.setWorkPackageId(component._id, userContext.workPackageId);
+
+        } else {
+            // Design Update Component
+
+            DesignUpdateComponentData.setWorkPackageId(component._id, userContext.workPackageId);
+
+            // Also set the WP in the base design version component
+            DesignComponentData.setDvComponentWorkPackageId(userContext.designVersionId, component.componentReferenceId, userContext.workPackageId);
         }
     }
 
     removeWorkPackageComponent(userContext, designComponentId){
 
-        const wpComponent = WorkPackageComponents.findOne({
-            workPackageId:              userContext.workPackageId,
-            componentId:                designComponentId
-        });
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentId(userContext.workPackageId, designComponentId);
 
         if(wpComponent) {
 
-            WorkPackageComponents.remove({_id: wpComponent._id});
+            WorkPackageComponentData.removeComponent(wpComponent._id);
 
             // And clear Design Item if Scenario
             if(wpComponent.componentType === ComponentType.SCENARIO) {
 
-                const wp = WorkPackages.findOne({_id: userContext.workPackageId});
+                const wp = WorkPackageData.getWorkPackageById(userContext.workPackageId);
 
                 if (wp.workPackageType === WorkPackageType.WP_BASE) {
-                    DesignVersionComponents.update(
-                        {_id: designComponentId},
-                        {
-                            $set: {workPackageId: 'NONE'}
-                        }
-                    );
+
+                    DesignComponentData.setWorkPackageId(designComponentId, 'NONE');
+
                 } else {
-                    DesignUpdateComponents.update(
-                        {_id: designComponentId},
-                        {
-                            $set: {workPackageId: 'NONE'}
-                        }
-                    );
+
+                    DesignUpdateComponentData.setWorkPackageId(designComponentId, 'NONE');
 
                     // Also clear the WP in the base design version
-                    DesignVersionComponents.update(
-                        {
-                            designVersionId: userContext.designVersionId,
-                            componentReferenceId: wpComponent.componentReferenceId
-                        },
-                        {
-                            $set: {workPackageId: 'NONE'}
-                        }
-                    );
+                    DesignComponentData.setDvComponentWorkPackageId(userContext.designVersionId, wpComponent.componentReferenceId, 'NONE');
                 }
             }
         }
@@ -170,7 +114,7 @@ class WorkPackageModules {
 
     addComponentChildrenToWp(userContext, wpType, parentComponent){
 
-        const children = this.getChildren(userContext, wpType, parentComponent._id);
+        const children = this.getChildren(userContext, wpType, parentComponent.componentReferenceId);
 
         if(children.length > 0){
 
@@ -188,7 +132,7 @@ class WorkPackageModules {
 
     removeComponentChildrenFromWp(userContext, wpType, parentComponent){
 
-        const children = this.getChildren(userContext, wpType, parentComponent._id);
+        const children = this.getChildren(userContext, wpType, parentComponent.componentReferenceId);
 
         if(children.length > 0){
 
@@ -226,17 +170,14 @@ class WorkPackageModules {
         if(parent){
 
             // See if this item has any other children that are still in scope or parents of in-scope
-            const children = this.getChildren(userContext, wpType, parent._id);
+            const children = this.getChildren(userContext, wpType, parent.componentReferenceId);
 
             let wpComponent = null;
             let wpChild = false;
 
             children.forEach((child) => {
 
-                wpComponent = WorkPackageComponents.findOne({
-                    workPackageId:  userContext.workPackageId,
-                    componentId:    child._id
-                });
+                wpComponent = WorkPackageComponentData.getWpComponentByComponentId(userContext.workPackageId, child._id);
 
                 if(wpComponent){
                     // The fact of finding a component means that there is valid stuff here
@@ -250,9 +191,7 @@ class WorkPackageModules {
                 // And carry on up
                 this.removeChildlessParentsFromWp(userContext, wpType, parent);
             }
-
         }
-
     }
 
     getParent(userContext, wpType, childComponent){
@@ -266,41 +205,32 @@ class WorkPackageModules {
 
         switch(wpType){
             case WorkPackageType.WP_BASE:
-                parent = DesignVersionComponents.findOne({
-                    designVersionId:    userContext.designVersionId,
-                    _id:                childComponent.componentParentIdNew
-                });
+
+                parent = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, childComponent.componentParentReferenceIdNew);
                 break;
+
             case WorkPackageType.WP_UPDATE:
-                parent = DesignUpdateComponents.findOne({
-                    designVersionId:    userContext.designVersionId,
-                    designUpdateId:     userContext.designUpdateId,
-                    _id:                childComponent.componentParentIdNew
-                });
+
+                parent = DesignUpdateComponentData.getUpdateComponentByRef(userContext.designVersionId, userContext.designUpdateId, childComponent.componentParentReferenceIdNew);
                 break;
         }
 
         return parent;
     }
 
-    getChildren(userContext, wpType, parentComponentId){
+    getChildren(userContext, wpType, parentComponentReferenceId){
 
         let children = [];
 
         switch(wpType){
             case WorkPackageType.WP_BASE:
-                children = DesignVersionComponents.find({
-                    designVersionId:        userContext.designVersionId,
-                    componentParentIdNew:   parentComponentId
-                }).fetch();
+
+                children = DesignComponentData.getChildComponents(userContext.designVersionId, parentComponentReferenceId);
                 break;
+
             case WorkPackageType.WP_UPDATE:
-                children = DesignUpdateComponents.find({
-                    designVersionId:        userContext.designVersionId,
-                    designUpdateId:         userContext.designUpdateId,
-                    componentParentIdNew:   parentComponentId,
-                    scopeType:              {$in:[UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}  // Ignore Peer Items
-                }).fetch();
+
+                children = DesignUpdateComponentData.getScopedChildComponents(userContext.designVersionId, userContext.designUpdateId, parentComponentReferenceId);
                 break;
         }
 
@@ -309,72 +239,28 @@ class WorkPackageModules {
 
     addNewDesignComponentToWorkPackage(workPackage, component, componentParentId, designVersionId){
 
-        let wpActiveParentComponent = WorkPackageComponents.findOne({
-            workPackageId: workPackage._id,
-            componentId: componentParentId,
-            scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-        });
+        let wpParentComponent = WorkPackageComponentData.getWpComponentByComponentId(workPackage._id, componentParentId);
 
-        if (wpActiveParentComponent){
+        // Can only add to an actively scoped component
+        if (wpParentComponent && wpParentComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
 
-            const wpComponent = WorkPackageComponents.findOne({
-                designVersionId:                designVersionId,
-                workPackageId:                  workPackage._id,
-                workPackageType:                workPackage.workPackageType,
-                componentId:                    component._id,
-                componentReferenceId:           component.componentReferenceId,
-                componentType:                  component.componentType,
-            });
+            const wpComponent = WorkPackageComponentData.getWpComponentByComponentId(workPackage._id, component._id);
 
             if(wpComponent){
 
-                WorkPackageComponents.update(
-                    {
-                        _id: wpComponent._id
-                    },
-                    {
-                        $set:{
-                            componentParentReferenceId:     component.componentParentReferenceIdNew,
-                            componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
-                            componentIndex:                 component.componentIndexNew,
-                            scopeType:                      WorkPackageScopeType.SCOPE_ACTIVE
-                        }
-                    }
-                );
+                // Update and set as Active Scope
+                WorkPackageComponentData.updateExistingWpComponent(wpComponent._id, component, WorkPackageScopeType.SCOPE_ACTIVE);
+
             } else {
 
-                WorkPackageComponents.insert(
-                    {
-                        designVersionId:                designVersionId,
-                        workPackageId:                  workPackage._id,
-                        workPackageType:                workPackage.workPackageType,
-                        componentId:                    component._id,
-                        componentReferenceId:           component.componentReferenceId,
-                        componentType:                  component.componentType,
-                        componentParentReferenceId:     component.componentParentReferenceIdNew,
-                        componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
-                        componentIndex:                 component.componentIndexNew,
-                        scopeType:                      WorkPackageScopeType.SCOPE_ACTIVE
-                    }
-                );
+                // Add new Active component
+                WorkPackageComponentData.insertNewWorkPackageComponent(designVersionId, workPackage._id, workPackage.workPackageType, component, WorkPackageScopeType.SCOPE_ACTIVE);
             }
 
+            // And make sure if a DU WP Scenario we update the DU Scenario WP ID
+            if(workPackage.workPackageType === WorkPackageType.WP_UPDATE && component.componentType === ComponentType.SCENARIO){
 
-
-            // And make sure if a Scenario we update the DU WP ID
-            if(component.componentType === ComponentType.SCENARIO){
-
-                DesignUpdateComponents.update(
-                    {
-                        designVersionId:                designVersionId,
-                        componentReferenceId:           component.componentReferenceId,
-                        scopeType:                      UpdateScopeType.SCOPE_IN_SCOPE,
-                        componentType:                  ComponentType.SCENARIO
-                    },
-                    {
-                        $set: {workPackageId: workPackage._id}
-                    }
-                );
+                DesignUpdateComponentData.setWorkPackageId(component._id, workPackage._id);
             }
 
         }
@@ -382,36 +268,26 @@ class WorkPackageModules {
 
     updateDesignComponentLocationInWorkPackage(reorder, workPackage, component, componentParent){
 
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentId(workPackage._id, component._id);
+
         if(reorder){
+
             // Just a reordering job so can keep the WP scope as it is
-            WorkPackageComponents.update(
-                {
-                    workPackageId:                  workPackage._id,
-                    componentId:                    component._id
-                },
-                {
-                    $set:{
-                        componentParentReferenceId:     component.componentParentReferenceIdNew,
-                        componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
-                        componentIndex:                 component.componentIndexNew,
-                    }
-                },
-                {multi: true}
-            );
+            if(wpComponent) {
+                WorkPackageComponentData.updateExistingWpComponent(wpComponent._id, component, wpComponent.scopeType);
+            }
+
         } else {
+
             // Moved to a new section so descope from WP if new parent not active
 
             let wpParent = null;
-            let isActive = false;
-            let isParent = false;
 
             let scopeType = WorkPackageScopeType.SCOPE_NONE;
 
             if(componentParent){
-                wpParent = WorkPackageComponents.findOne({
-                    workPackageId:  workPackage._id,
-                    componentId:    componentParent._id
-                });
+
+                wpParent = WorkPackageComponentData.getWpComponentByComponentId(workPackage._id, componentParent._id);
 
                 // Scope type follows parent
                 if(wpParent){
@@ -419,33 +295,19 @@ class WorkPackageModules {
                 }
             }
 
-            WorkPackageComponents.update(
-                {
-                    workPackageId:                  workPackage._id,
-                    componentId:                    component._id
-                },
-                {
-                    $set:{
-                        componentParentReferenceId:         component.componentParentReferenceId,
-                        componentFeatureReferenceId:        component.componentFeatureReferenceIdNew,
-                        componentLevel:                     component.componentLevel,
-                        componentIndex:                     component.componentIndexNew,
-                        scopeType:                          scopeType,      // Reset WP status
-                    }
-                },
-                {multi: true}
-            );
+            if(wpComponent){
+                WorkPackageComponentData.updateExistingWpComponent(wpComponent._id, component, scopeType);
+            }
         }
     };
 
     removeDesignComponentFromWorkPackage(workPackageId, designComponentId){
 
-        WorkPackageComponents.remove(
-            {
-                workPackageId:  workPackageId,
-                componentId:    designComponentId
-            }
-        );
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentId(workPackageId, designComponentId);
+
+        if(wpComponent){
+            WorkPackageComponentData.removeComponent(wpComponent._id);
+        }
     };
 }
 

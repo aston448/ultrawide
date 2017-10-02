@@ -34,14 +34,14 @@ class ServerDesignComponentApi {
         );
     }
 
-    addDesignSectionToApplication(view, mode, designVersionId, parentId, callback){
+    addDesignSectionToApplication(view, mode, designVersionId, parentRefId, callback){
 
         addDesignSectionToApplication.call(
             {
                 view: view,
                 mode: mode,
                 designVersionId: designVersionId,
-                parentId: parentId
+                parentRefId: parentRefId
             },
             (err, result) => {
                 callback(err, result);
@@ -49,14 +49,14 @@ class ServerDesignComponentApi {
         );
     }
 
-    addDesignSectionToDesignSection(view, mode, designVersionId, parentId, parentLevel, callback){
+    addDesignSectionToDesignSection(view, mode, designVersionId, parentRefId, parentLevel, callback){
 
         addDesignSectionToDesignSection.call(
             {
                 view: view,
                 mode: mode,
                 designVersionId: designVersionId,
-                parentId: parentId,
+                parentRefId: parentRefId,
                 parentLevel: parentLevel
             },
             (err, result) => {
@@ -65,14 +65,14 @@ class ServerDesignComponentApi {
         );
     }
 
-    addFeatureToDesignSection(view, mode, designVersionId, parentId, callback){
+    addFeatureToDesignSection(view, mode, designVersionId, parentRefId, callback){
 
         addFeatureToDesignSection.call(
             {
                 view: view,
                 mode: mode,
                 designVersionId: designVersionId,
-                parentId: parentId
+                parentRefId: parentRefId
             },
             (err, result) => {
                 callback(err, result);
@@ -80,14 +80,14 @@ class ServerDesignComponentApi {
         );
     }
 
-    addFeatureAspectToFeature(view, mode, designVersionId, parentId, callback){
+    addFeatureAspectToFeature(view, mode, designVersionId, parentRefId, callback){
 
         addFeatureAspectToFeature.call(
             {
                 view: view,
                 mode: mode,
                 designVersionId: designVersionId,
-                parentId: parentId
+                parentRefId: parentRefId
             },
             (err, result) => {
                 callback(err, result);
@@ -95,14 +95,14 @@ class ServerDesignComponentApi {
         );
     }
 
-    addScenario(view, mode, designVersionId, parentId, workPackageId, callback){
+    addScenario(view, mode, designVersionId, parentRefId, workPackageId, callback){
 
         addScenario.call(
             {
                 view: view,
                 mode: mode,
                 designVersionId: designVersionId,
-                parentId: parentId,
+                parentRefId: parentRefId,
                 workPackageId: workPackageId
             },
             (err, result) => {
@@ -143,14 +143,13 @@ class ServerDesignComponentApi {
         );
     };
 
-    removeDesignComponent(view, mode, designComponentId, parentId, callback){
+    removeDesignComponent(view, mode, designComponentId, callback){
 
         removeDesignComponent.call(
             {
                 view: view,
                 mode: mode,
-                designComponentId: designComponentId,
-                parentId: parentId,
+                designComponentId: designComponentId
             },
             (err, result) => {
                 callback(err, result);

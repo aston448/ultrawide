@@ -1,12 +1,13 @@
 import fs from 'fs';
 
-import {DesignVersionComponents}                from '../../collections/design/design_version_components.js';
-import {DesignUpdateComponents}                 from '../../collections/design_update/design_update_components.js';
-import {UserIntegrationTestResults}             from '../../collections/test_results/user_integration_test_results.js'
-
-
-import {ComponentType, TestType, MashTestStatus, TestDataStatus, LogLevel}   from '../../constants/constants.js';
+// Ultrawide Services
+import {ComponentType, LogLevel}   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js';
+
+// Data Access
+import DesignComponentData                      from '../../service_modules_db/design/design_component_db.js';
+import DesignUpdateComponentData                from '../../service_modules_db/design_update/design_update_component_db.js';
+
 
 // Plugin class to read test results from a screen scraped chimp mocha JSON reported file
 class ChimpMochaTestServices{
@@ -20,9 +21,9 @@ class ChimpMochaTestServices{
 
             // Are we working from an Initial Design or a Design Update?
             if(userContext.designUpdateId === 'NONE') {
-                feature = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+                feature = DesignComponentData.getDesignComponentById(userContext.designComponentId);
             } else {
-                feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+                feature = DesignUpdateComponentData.getUpdateComponentById(userContext.designComponentId);
             }
 
             if(!feature){
@@ -67,50 +68,18 @@ class ChimpMochaTestServices{
             let featureAspects = [];
 
             if(userContext.designUpdateId === 'NONE') {
-                featureAspects = DesignVersionComponents.find(
-                    {
-                        designVersionId:                userContext.designVersionId,
-                        componentType:                  ComponentType.FEATURE_ASPECT,
-                        componentFeatureReferenceIdNew: feature.componentReferenceId
-                    },
-                    {sort: {componentIndexNew: 1}}
-                ).fetch();
+                featureAspects = DesignComponentData.getFeatureAspects(userContext.designVersionId, feature.componentReferenceId);
             } else {
-                featureAspects = DesignUpdateComponents.find(
-                    {
-                        designUpdateId:                 userContext.designUpdateId,
-                        componentType:                  ComponentType.FEATURE_ASPECT,
-                        componentFeatureReferenceIdNew: feature.componentReferenceId,
-                        isRemoved:                      false
-                    },
-                    {sort: {componentIndexNew: 1}}
-                ).fetch();
+                featureAspects = DesignUpdateComponentData.getNonRemovedAspectsForFeature(userContext.designUpdateId, feature.componentReferenceId);
             }
-
-
 
             featureAspects.forEach((aspect) =>{
                 let scenarios = [];
 
                 if(userContext.designUpdateId === 'NONE') {
-                    scenarios = DesignVersionComponents.find(
-                        {
-                            designVersionId:                userContext.designVersionId,
-                            componentType:                  ComponentType.SCENARIO,
-                            componentParentReferenceIdNew: aspect.componentReferenceId
-                        },
-                        {sort: {componentIndexNew: 1}}
-                    ).fetch();
+                    scenarios = DesignComponentData.getChildComponentsOfType(userContext.designVersionId, ComponentType.SCENARIO, aspect.componentReferenceId)
                 } else {
-                    scenarios = DesignUpdateComponents.find(
-                        {
-                            designUpdateId:                 userContext.designUpdateId,
-                            componentType:                  ComponentType.SCENARIO,
-                            componentParentReferenceIdNew:  aspect.componentReferenceId,
-                            isRemoved:                      false
-                        },
-                        {sort: {componentIndexNew: 1}}
-                    ).fetch();
+                    scenarios = DesignUpdateComponentData.getNonRemovedChildComponentsOfType(userContext.designUpdateId, ComponentType.SCENARIO, aspect.componentReferenceId);
                 }
 
                 // Add Feature aspect comment and scenarios if there are any
@@ -138,141 +107,140 @@ class ChimpMochaTestServices{
 
     }
 
-    getJsonTestResults(resultsFile, userId){
-
-        if(Meteor.isServer) {
-
-            // Read ----------------------------------------------------------------------------------------------------
-            let resultsText = '';
-
-            try {
-                resultsText = fs.readFileSync(resultsFile);
-            } catch (e) {
-                log((msg) => console.log(msg), LogLevel.ERROR, "Failed to open mocha tests file: {}", e);
-                return [];
-            }
-
-            // Clean ---------------------------------------------------------------------------------------------------
-            // Cleaning no longer needed
-            let cleanText = resultsText;
-            // let cleanText = '';
-            // try {
-            //     cleanText = this.cleanResults(resultsText.toString());
-            // } catch (e) {
-            //     log((msg) => console.log(msg), LogLevel.ERROR, "Failed to clean mocha tests file: {}", e);
-            //     return [];
-            // }
-
-            //log((msg) => console.log(msg), LogLevel.TRACE, "Cleaned file text is:\n {}", cleanText);
-
-
-            // Parse ---------------------------------------------------------------------------------------------------
-            let resultsJson = {};
-
-            if(cleanText.length > 0) {
-                try {
-                    resultsJson = JSON.parse(cleanText);
-                } catch (e) {
-                    log((msg) => console.log(msg), LogLevel.ERROR, "Failed to parse mocha tests file: {}", e);
-                    return [];
-                }
-            } else {
-                log((msg) => console.log(msg), LogLevel.WARNING, "No integration test data found", e);
-                return [];
-            }
-
-            if(resultsJson && resultsJson.passes && resultsJson.failures && resultsJson.pending) {
-                // Return Standard Data ------------------------------------------------------------------------------------
-
-                // testFullName must always contain the Scenario as all of part of it.  May also contain test Suite Group and Name as well
-                // If it contains these it should be in the form 'Suite Group Name'
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Results: Passes {}, Fails {}, Pending {}", resultsJson.passes.length, resultsJson.failures.length, resultsJson.pending.length,);
-
-                let resultsBatch = [];
-
-                // Add latest results
-                resultsJson.passes.forEach((test) => {
-
-                    resultsBatch.push(
-                        {
-                            userId: userId,
-                            testFullName: test.fullTitle,
-                            testSuite: 'NONE',             // Not yet calculated
-                            testGroup: 'NONE',             // Not yet calculated
-                            testName: test.title,
-                            testResult: MashTestStatus.MASH_PASS,
-                            testError: '',
-                            testErrorReason: '',
-                            testDuration: test.duration,
-                            testStackTrace: ''
-                        }
-                    );
-                });
-
-                resultsJson.failures.forEach((test) => {
-
-                    resultsBatch.push(
-                        {
-                            userId: userId,
-                            testFullName: test.fullTitle,
-                            testSuite: 'NONE',             // Not yet calculated
-                            testGroup: 'NONE',             // Not yet calculated
-                            testName: test.title,
-
-                            testResult: MashTestStatus.MASH_FAIL,
-                            testError: test.err.message,       // This is the Reason plus the Error
-                            testErrorReason: test.err.reason,
-                            testDuration: test.duration,
-                            testStackTrace: test.err.stack
-                        }
-                    );
-                });
-
-                resultsJson.pending.forEach((test) => {
-
-                    resultsBatch.push(
-                        {
-                            userId: userId,
-                            testFullName: test.fullTitle,
-                            testSuite: 'NONE',             // Not yet calculated
-                            testGroup: 'NONE',             // Not yet calculated
-                            testName: test.title,
-                            testResult: MashTestStatus.MASH_PENDING,
-                            testError: '',
-                            testErrorReason: '',
-                            testDuration: 0,
-                            testStackTrace: ''
-                        }
-                    );
-                });
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
-
-                // Bulk insert the new data
-                if (resultsBatch.length > 0) {
-                    UserIntegrationTestResults.batchInsert(resultsBatch);
-                }
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
-
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Chimp Mocha results");
-            }
-
-        }
-
-    };
-
-    cleanResults(fileText){
-
-        // For this format, want everything from the first {
-
-        const jsonStart = fileText.indexOf('{');
-
-        return fileText.substring(jsonStart);
-
-    }
+    // getJsonTestResults(resultsFile, userId){
+    //
+    //     if(Meteor.isServer) {
+    //
+    //         // Read ----------------------------------------------------------------------------------------------------
+    //         let resultsText = '';
+    //
+    //         try {
+    //             resultsText = fs.readFileSync(resultsFile);
+    //         } catch (e) {
+    //             log((msg) => console.log(msg), LogLevel.ERROR, "Failed to open mocha tests file: {}", e);
+    //             return [];
+    //         }
+    //
+    //         // Clean ---------------------------------------------------------------------------------------------------
+    //         // Cleaning no longer needed
+    //         let cleanText = resultsText;
+    //         // let cleanText = '';
+    //         // try {
+    //         //     cleanText = this.cleanResults(resultsText.toString());
+    //         // } catch (e) {
+    //         //     log((msg) => console.log(msg), LogLevel.ERROR, "Failed to clean mocha tests file: {}", e);
+    //         //     return [];
+    //         // }
+    //
+    //         //log((msg) => console.log(msg), LogLevel.TRACE, "Cleaned file text is:\n {}", cleanText);
+    //
+    //
+    //         // Parse ---------------------------------------------------------------------------------------------------
+    //         let resultsJson = {};
+    //
+    //         if(cleanText.length > 0) {
+    //             try {
+    //                 resultsJson = JSON.parse(cleanText);
+    //             } catch (e) {
+    //                 log((msg) => console.log(msg), LogLevel.ERROR, "Failed to parse mocha tests file: {}", e);
+    //                 return [];
+    //             }
+    //         } else {
+    //             log((msg) => console.log(msg), LogLevel.WARNING, "No integration test data found", e);
+    //             return [];
+    //         }
+    //
+    //         if(resultsJson && resultsJson.passes && resultsJson.failures && resultsJson.pending) {
+    //             // Return Standard Data ------------------------------------------------------------------------------------
+    //
+    //             // testFullName must always contain the Scenario as all of part of it.  May also contain test Suite Group and Name as well
+    //             // If it contains these it should be in the form 'Suite Group Name'
+    //
+    //             log((msg) => console.log(msg), LogLevel.DEBUG, "Results: Passes {}, Fails {}, Pending {}", resultsJson.passes.length, resultsJson.failures.length, resultsJson.pending.length,);
+    //
+    //             let resultsBatch = [];
+    //
+    //             // Add latest results
+    //             resultsJson.passes.forEach((test) => {
+    //
+    //                 resultsBatch.push(
+    //                     {
+    //                         userId: userId,
+    //                         testFullName: test.fullTitle,
+    //                         testSuite: 'NONE',             // Not yet calculated
+    //                         testGroup: 'NONE',             // Not yet calculated
+    //                         testName: test.title,
+    //                         testResult: MashTestStatus.MASH_PASS,
+    //                         testError: '',
+    //                         testErrorReason: '',
+    //                         testDuration: test.duration,
+    //                         testStackTrace: ''
+    //                     }
+    //                 );
+    //             });
+    //
+    //             resultsJson.failures.forEach((test) => {
+    //
+    //                 resultsBatch.push(
+    //                     {
+    //                         userId: userId,
+    //                         testFullName: test.fullTitle,
+    //                         testSuite: 'NONE',             // Not yet calculated
+    //                         testGroup: 'NONE',             // Not yet calculated
+    //                         testName: test.title,
+    //                         testResult: MashTestStatus.MASH_FAIL,
+    //                         testError: test.err.message,       // This is the Reason plus the Error
+    //                         testErrorReason: test.err.reason,
+    //                         testDuration: test.duration,
+    //                         testStackTrace: test.err.stack
+    //                     }
+    //                 );
+    //             });
+    //
+    //             resultsJson.pending.forEach((test) => {
+    //
+    //                 resultsBatch.push(
+    //                     {
+    //                         userId: userId,
+    //                         testFullName: test.fullTitle,
+    //                         testSuite: 'NONE',             // Not yet calculated
+    //                         testGroup: 'NONE',             // Not yet calculated
+    //                         testName: test.title,
+    //                         testResult: MashTestStatus.MASH_PENDING,
+    //                         testError: '',
+    //                         testErrorReason: '',
+    //                         testDuration: 0,
+    //                         testStackTrace: ''
+    //                     }
+    //                 );
+    //             });
+    //
+    //             log((msg) => console.log(msg), LogLevel.DEBUG, "    New batches populated.");
+    //
+    //             // Bulk insert the new data
+    //             if (resultsBatch.length > 0) {
+    //                 UserIntegrationTestResults.batchInsert(resultsBatch);
+    //             }
+    //
+    //             log((msg) => console.log(msg), LogLevel.DEBUG, "    New data inserted.");
+    //
+    //
+    //             log((msg) => console.log(msg), LogLevel.DEBUG, "DONE Chimp Mocha results");
+    //         }
+    //
+    //     }
+    //
+    // };
+    //
+    // cleanResults(fileText){
+    //
+    //     // For this format, want everything from the first {
+    //
+    //     const jsonStart = fileText.indexOf('{');
+    //
+    //     return fileText.substring(jsonStart);
+    //
+    // }
 
 }
 

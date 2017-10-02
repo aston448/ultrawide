@@ -1,18 +1,15 @@
 import fs from 'fs';
 
-// Ultrawide Collections
-import { AppGlobalData }            from '../../collections/app/app_global_data.js';
-import { TestOutputLocations }      from '../../collections/configure/test_output_locations.js'
-import { TestOutputLocationFiles }  from '../../collections/configure/test_output_location_files.js'
-import { UserTestTypeLocations }    from '../../collections/configure/user_test_type_locations.js';
-
-
 // Ultrawide Services
-import { log, getDateTimeString} from '../../common/utils.js';
-import { TestLocationType, TestLocationFileStatus, UltrawideDirectory, LogLevel} from '../../constants/constants.js';
-import { DefaultLocationText } from '../../constants/default_names.js';
+import { log } from '../../common/utils.js';
+import { TestLocationFileStatus, UltrawideDirectory, LogLevel} from '../../constants/constants.js';
 
-import ImpexModules                 from '../../service_modules/administration/impex_service_modules.js';
+import ImpexModules                     from '../../service_modules/administration/impex_service_modules.js';
+
+// Data Access
+import UserTestTypeLocationData         from '../../service_modules_db/configure/user_test_type_location_db.js';
+import TestOutputLocationData           from '../../service_modules_db/configure/test_output_location_db.js';
+import TestOutputLocationFileData       from '../../service_modules_db/configure/test_output_location_file_db.js';
 
 //======================================================================================================================
 //
@@ -30,34 +27,10 @@ class TestOutputLocationServices {
         if (Meteor.isServer) {
 
             // Create a new default entry.  Mark as owned by the creating user so they can edit it.
-            TestOutputLocations.insert(
-                {
-                    locationName:           DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-                    locationUserId:         userId,
-                }
-            );
+            TestOutputLocationData.insertNewOutputLocation(userId);
         }
 
     };
-
-    importLocation(location, userId){
-
-        if (Meteor.isServer) {
-
-            const locationId =  TestOutputLocations.insert(
-                {
-                    locationName:           location.locationName,
-                    locationIsShared:       location.locationIsShared,
-                    locationUserId:         userId,
-                    locationPath:           location.locationPath,
-                    locationFullPath:       location.locationFullPath
-                }
-            );
-
-            return locationId;
-        }
-
-    }
 
     // Save details from the location edit form
     saveLocation(location) {
@@ -66,9 +39,7 @@ class TestOutputLocationServices {
 
 
             // See if the existing location directory exists
-            const currentLocation = TestOutputLocations.findOne({
-                _id: location._id
-            });
+            const currentLocation = TestOutputLocationData.getOutputLocationById(location._id);
 
             if(currentLocation){
 
@@ -142,18 +113,7 @@ class TestOutputLocationServices {
             }
 
 
-            TestOutputLocations.update(
-                {_id: location._id},
-                {
-                    $set: {
-                        locationName:           location.locationName,
-                        locationIsShared:       location.locationIsShared,
-                        locationUserId:         location.locationUserId,
-                        locationPath:           location.locationPath,
-                        locationFullPath:       location.locationFullPath
-                    }
-                }
-            );
+            TestOutputLocationData.updateOutputLocation(location._id, location);
         }
     };
 
@@ -223,18 +183,16 @@ class TestOutputLocationServices {
 
         if (Meteor.isServer) {
 
-            const location = TestOutputLocations.findOne({
-                _id: locationId
-            });
+            const location = TestOutputLocationData.getOutputLocationById(locationId);
 
-            const result = TestOutputLocations.remove({_id: locationId});
+            const result = TestOutputLocationData.removeOutputLocation(locationId);
 
             if(result > 0){
                 // Remove all the files related to this location
-                TestOutputLocationFiles.remove({locationId: locationId});
+                TestOutputLocationFileData.removeAllFilesForLocation(locationId);
 
                 // And any user config related to it as well
-                UserTestTypeLocations.remove({locationId: locationId});
+                UserTestTypeLocationData.removeUserTestTypeLocations(locationId);
             }
 
             // And remove the associated DIR on the server
@@ -248,57 +206,15 @@ class TestOutputLocationServices {
 
         if (Meteor.isServer) {
 
-            TestOutputLocationFiles.insert(
-                {
-                    locationId:             locationId,
-                    fileAlias:              DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS,
-                    fileName:               DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_NAME
-                }
-            )
+            TestOutputLocationFileData.addNewLocationFile(locationId);
         }
     };
-
-    importLocationFile(locationFile, locationId){
-
-        if (Meteor.isServer) {
-
-            const locationFileId = TestOutputLocationFiles.insert(
-                {
-                    locationId:             locationId,
-                    fileAlias:              locationFile.fileAlias,
-                    fileDescription:        locationFile.fileDescription,
-                    fileType:               locationFile.fileType,
-                    testRunner:             locationFile.testRunner,
-                    fileName:               locationFile.fileName,
-                    allFilesOfType:         locationFile.allFilesOfType,
-                    fileStatus:             locationFile.fileStatus,
-                    lastUpdated:            locationFile.lastUpdated
-                }
-            );
-
-            return locationFileId;
-        }
-    }
 
     saveLocationFile(locationFile){
 
         if (Meteor.isServer) {
 
-            TestOutputLocationFiles.update(
-                {_id: locationFile._id},
-                {
-                    $set:{
-                        fileAlias:              locationFile.fileAlias,
-                        fileDescription:        locationFile.fileDescription,
-                        fileType:               locationFile.fileType,
-                        testRunner:             locationFile.testRunner,
-                        fileName:               locationFile.fileName,
-                        allFilesOfType:         locationFile.allFilesOfType,
-                        fileStatus:             TestLocationFileStatus.FILE_NOT_UPLOADED
-                    }
-                }
-            )
-
+            TestOutputLocationFileData.saveLocationFileDetails(locationFile);
         }
     };
 
@@ -306,26 +222,7 @@ class TestOutputLocationServices {
 
         if (Meteor.isServer) {
 
-            TestOutputLocationFiles.remove({_id: locationFileId});
-        }
-    }
-
-    importUserConfiguration(userConfiguration, locationId, userId){
-
-        if (Meteor.isServer) {
-
-            const userTestTypeLocationId = UserTestTypeLocations.insert(
-                {
-                    locationId:             locationId,
-                    locationName:           userConfiguration.locationName,
-                    userId:                 userId,
-                    isUnitLocation:         userConfiguration.isUnitLocation,
-                    isIntLocation:          userConfiguration.isIntLocation,
-                    isAccLocation:          userConfiguration.isAccLocation
-                }
-            );
-
-            return userTestTypeLocationId;
+            TestOutputLocationFileData.removeLocationFile(locationFileId);
         }
     }
 
@@ -334,16 +231,7 @@ class TestOutputLocationServices {
 
         if (Meteor.isServer) {
 
-            UserTestTypeLocations.update(
-                {_id: userConfiguration._id},
-                {
-                    $set: {
-                        isUnitLocation:         userConfiguration.isUnitLocation,
-                        isIntLocation:          userConfiguration.isIntLocation,
-                        isAccLocation:          userConfiguration.isAccLocation
-                    }
-                }
-            );
+            UserTestTypeLocationData.saveUserTestTypeLocation(userConfiguration);
         }
     }
 
@@ -353,9 +241,7 @@ class TestOutputLocationServices {
 
         // Make sure config contains all the possible locations for this user
         // Either is is Shared or it belongs to the current user...
-        const testOutputLocations = TestOutputLocations.find({
-            $or:[{locationIsShared: true}, {locationUserId: userId}]
-        }).fetch();
+        const testOutputLocations = TestOutputLocationData.getAllUserLocations(userId)
 
         let userLocation = null;
 
@@ -363,42 +249,23 @@ class TestOutputLocationServices {
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Checking location {}", location.locationName);
 
-            userLocation = UserTestTypeLocations.findOne({
-                locationId: location._id,
-                userId: userId
-            });
+            userLocation = UserTestTypeLocationData.getUserLocationById(userId, location._id);
 
             // If not found add it in for the current user / role
             if(!userLocation){
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "Adding user location {}", location.locationName);
 
-                UserTestTypeLocations.insert({
-                    locationId:             location._id,
-                    locationName:           location.locationName,
-                    userId:                 userId
-                });
+                UserTestTypeLocationData.insertNewUserTestTypeLocation(location, userId);
             } else {
 
                 // Make sure the denormalised details are updated
-                UserTestTypeLocations.update(
-                    {
-                        locationId: location._id,
-                        userId: userId
-                    },
-                    {
-                        $set:{
-                            locationName: location.locationName,
-                        }
-                    }
-                );
+                UserTestTypeLocationData.updateUserTestTypeLocationName(location, userId);
             }
         });
 
         // And remove any locations that have been removed or changed to private
-        const userTestLocations = UserTestTypeLocations.find({
-            userId: userId
-        }).fetch();
+        const userTestLocations = UserTestTypeLocationData.getUserTestTypeLocations(userId);
 
         let testLocation = null;
         let locationsToRemove = [];
@@ -407,10 +274,7 @@ class TestOutputLocationServices {
         userTestLocations.forEach((userLocation) => {
 
             // Find locations that are shared or owned by current user
-            testLocation = TestOutputLocations.findOne({
-                _id:                userLocation.locationId,
-                $or:[{locationIsShared: true}, {locationUserId: userId}]
-            });
+            testLocation = TestOutputLocationData.getUserOutputLocationById(userLocation.locationId, userId);
 
             if(!testLocation){
                 log((msg) => console.log(msg), LogLevel.TRACE, "Removing user location {}", userLocation._id);
@@ -419,9 +283,7 @@ class TestOutputLocationServices {
         });
 
         locationsToRemove.forEach((userLocationId) => {
-            UserTestTypeLocations.remove({
-                _id: userLocationId
-            });
+            UserTestTypeLocationData.removeUserTestTypeLocations(userLocationId);
         });
     };
 
@@ -429,9 +291,7 @@ class TestOutputLocationServices {
 
         if(Meteor.isServer){
 
-            const location = TestOutputLocations.findOne({
-                locationName:   locationName
-            });
+            const location = TestOutputLocationData.getOutputLocationByName(locationName);
 
             if(!location){
                 throw new Meteor.Error('TEST_UPLOAD_FAIL', 'Invalid location name: ' + locationName);
@@ -454,16 +314,7 @@ class TestOutputLocationServices {
     updateResultsFileStatuses(location){
 
         // Set all location files as not uploaded
-        TestOutputLocationFiles.update(
-            {locationId: location._id},
-            {
-                $set: {
-                    fileStatus:     TestLocationFileStatus.FILE_NOT_UPLOADED,
-                    lastUpdated:    ''
-                }
-            },
-            {multi: true}
-        );
+        TestOutputLocationFileData.resetAllLocationFilesStatus(location._id);
 
         // Get a list of files at the location
         const files = fs.readdirSync(location.locationFullPath);
@@ -476,18 +327,7 @@ class TestOutputLocationServices {
             const modifiedDate = new Date(stats.mtime);
 
 
-            TestOutputLocationFiles.update(
-                {
-                    locationId: location._id,
-                    fileName:   file
-                },
-                {
-                    $set: {
-                        fileStatus:     TestLocationFileStatus.FILE_UPLOADED,
-                        lastUpdated:    modifiedDate
-                    }
-                }
-            );
+            TestOutputLocationFileData.setLocationFileStatus(location._id, file, TestLocationFileStatus.FILE_UPLOADED, modifiedDate);
         });
 
     }

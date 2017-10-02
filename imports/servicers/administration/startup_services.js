@@ -1,12 +1,12 @@
 
-// Ultrawide Collections
-import { UserRoles }                    from '../../collections/users/user_roles.js';
-
 // Ultrawide Services
 import { UltrawideDirectory, LogLevel } from '../../constants/constants.js';
 
 import ImpexServices                    from '../../servicers/administration/impex_services.js';
 import StartupModules                   from '../../service_modules/administration/startup_service_modules.js';
+
+// Data Access
+import UserRoleData                     from '../../service_modules_db/users/user_role_db.js';
 
 //======================================================================================================================
 //
@@ -25,9 +25,7 @@ class StartupServices{
             // Determine if this is a brand new instance (new prod or dev reset)
             // This is done by seeing if the Admin user exists
 
-            const adminUser = UserRoles.findOne({
-                userName: 'admin'
-            });
+            const adminUser = UserRoleData.getRoleByUserName('admin');
 
             if(!adminUser){
                 console.log("NEW ULTRAWIDE INSTANCE");
