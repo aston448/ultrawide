@@ -34,6 +34,11 @@ class UserRoleData{
 
     // SELECT ==========================================================================================================
 
+    getRoleByUserId(userId){
+
+        return UserRoles.findOne({userId: userId});
+    }
+
     getRoleByUserName(userName){
 
         return UserRoles.findOne({userName: userName});
@@ -42,6 +47,48 @@ class UserRoleData{
     getAllUserRoles(){
 
         return UserRoles.find({}).fetch();
+    }
+
+    // UPDATE ==========================================================================================================
+
+    saveUserDetails(newUser){
+
+        return UserRoles.update(
+            {userId: newUser.userId},
+            {
+                $set: {
+                    userName:       newUser.userName,
+                    displayName:    newUser.displayName,
+                    isDesigner:     newUser.isDesigner,
+                    isDeveloper:    newUser.isDeveloper,
+                    isManager:      newUser.isManager,
+                }
+            }
+        );
+    }
+
+    setActiveFlag(userId, isActive){
+
+        return UserRoles.update(
+            {userId: userId},
+            {
+                $set: {
+                    isActive: isActive
+                }
+            }
+        );
+    }
+
+    setApiKey(userId, apiKey){
+
+        return UserRoles.update(
+            {userId: userId},
+            {
+                $set:{
+                    apiKey: apiKey
+                }
+            }
+        );
     }
 }
 

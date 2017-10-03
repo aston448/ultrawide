@@ -3,8 +3,8 @@
 import DesignUpdateComponentModules         from '../../service_modules/design_update/design_update_component_service_modules.js';
 
 // Data Access
-import DesignComponentData                  from '../../service_modules_db/design/design_component_db.js';
-import DesignUpdateComponentData            from '../../service_modules_db/design_update/design_update_component_db.js';
+import DesignComponentData                  from '../../data/design/design_component_db.js';
+import DesignUpdateComponentData            from '../../data/design_update/design_update_component_db.js';
 
 //======================================================================================================================
 //

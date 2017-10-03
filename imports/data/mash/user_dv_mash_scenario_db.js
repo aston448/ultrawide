@@ -19,6 +19,15 @@ class UserDvMashScenarioData {
         });
     }
 
+    getFeatureScenarios(userId, designVersionId, featureRef){
+
+        return UserDesignVersionMashScenarios.find({
+            userId:                     userId,
+            designVersionId:            designVersionId,
+            designFeatureReferenceId:   featureRef,
+        }).fetch();
+    }
+
     // REMOVE ==========================================================================================================
 
     removeAllDvScenariosForUser(userId, designVersionId){

@@ -10,10 +10,10 @@ import WorkPackageModules               from '../../service_modules/work/work_pa
 import { log }                          from '../../common/utils.js'
 
 // Data Access
-import DesignComponentData          from '../../service_modules_db/design/design_component_db.js';
-import DesignUpdateData             from '../../service_modules_db/design_update/design_update_db.js';
-import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
-import WorkPackageData              from '../../service_modules_db/work/work_package_db.js';
+import DesignComponentData          from '../../data/design/design_component_db.js';
+import DesignUpdateData             from '../../data/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
+import WorkPackageData              from '../../data/work/work_package_db.js';
 
 //======================================================================================================================
 //

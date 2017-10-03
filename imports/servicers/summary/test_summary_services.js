@@ -1,16 +1,15 @@
 
-// Ultrawide Collections
-import { UserDevTestSummary }       from '../../collections/summary/user_dev_test_summary.js';
-import { UserDevDesignSummary }     from '../../collections/summary/user_dev_design_summary.js';
-import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
-import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
-import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
-import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
-
-
 // Ultrawide services
-import { ComponentType, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
+import { MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
+
+// Data Access
+import DesignVersionData                from '../../data/design/design_version_db.js';
+import UserDevTestSummaryData           from '../../data/summary/user_dev_test_summary_db.js';
+import UserDevDesignSummaryData         from '../../data/summary/user_dev_design_summary_db.js';
+import DesignUpdateComponentData        from '../../data/design_update/design_update_component_db.js';
+import WorkPackageComponentData         from '../../data/work/work_package_component_db.js';
+import UserDvMashScenarioData           from '../../data/mash/user_dv_mash_scenario_db.js'
 
 //======================================================================================================================
 //
@@ -45,23 +44,13 @@ class TestSummaryServices {
 
         // Delete data for current user context.
         // Its MUCH faster to remove everything, recalc and then do a bulk insert than to do updates one by one
-        UserDevTestSummary.remove({
-            userId: userContext.userId,
-        });
-
-        UserDevDesignSummary.remove({
-            userId:             userContext.userId,
-        });
+        UserDevTestSummaryData.removeAllUserData(userContext.userId);
+        UserDevDesignSummaryData.removeAllUserData(userContext.userId);
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Data removed");
 
         // Populate the Feature summary data
-        const designFeatures = DesignVersionComponents.find({
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                componentType: ComponentType.FEATURE,
-                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-            }).fetch();
+        const designFeatures = DesignVersionData.getNonRemovedFeatures(userContext.designId, userContext.designVersionId);
 
         const totalFeatureCount = designFeatures.length;
 
@@ -71,11 +60,11 @@ class TestSummaryServices {
 
             log((msg) => console.log(msg), LogLevel.TRACE, "FEATURE {}", designFeature.componentNameNew);
 
-            let featureScenarios = UserDesignVersionMashScenarios.find({
-                userId:                     userContext.userId,
-                designVersionId:            userContext.designVersionId,
-                designFeatureReferenceId:   designFeature.componentReferenceId,
-            }).fetch();
+            let featureScenarios = UserDvMashScenarioData.getFeatureScenarios(
+                userContext.userId,
+                userContext.designVersionId,
+                designFeature.componentReferenceId
+            );
 
             let featureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
             let featurePassingTests = 0;
@@ -169,13 +158,13 @@ class TestSummaryServices {
                 // Get stats for DU if this feature scenario in DU
                 if(userContext.designUpdateId !== 'NONE') {
 
-                    duComponent = DesignUpdateComponents.findOne({
-                        designUpdateId: userContext.designUpdateId,
-                        componentReferenceId: featureScenario.designScenarioReferenceId,
-                        scopeType: UpdateScopeType.SCOPE_IN_SCOPE
-                    });
+                    duComponent = DesignUpdateComponentData.getUpdateComponentByRef(
+                        userContext.designVersionId,
+                        userContext.designUpdateId,
+                        featureScenario.designScenarioReferenceId
+                    );
 
-                    if (duComponent) {
+                    if (duComponent && duComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
 
                         log((msg) => console.log(msg), LogLevel.TRACE, "Adding DU scenario {}", duComponent.componentNameNew);
 
@@ -227,11 +216,10 @@ class TestSummaryServices {
                 // Get stats for WP if this feature scenario in WP
                 if(userContext.workPackageId !== 'NONE') {
 
-                    wpComponent = WorkPackageComponents.findOne({
-                        workPackageId: userContext.workPackageId,
-                        componentReferenceId: featureScenario.designScenarioReferenceId,
-                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                    });
+                    wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(
+                        userContext.workPackageId,
+                        featureScenario.designScenarioReferenceId
+                    );
 
                     let nonRemovedComponent = true;
 
@@ -239,7 +227,7 @@ class TestSummaryServices {
                         nonRemovedComponent = false;
                     }
 
-                    if (wpComponent && nonRemovedComponent) {
+                    if (wpComponent && wpComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE && nonRemovedComponent) {
 
                         if (featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL) {
                             wpFailingTests++;
@@ -327,27 +315,27 @@ class TestSummaryServices {
 
         // Bulk insert new feature summary data
         if(batchData.length > 0) {
-            UserDevTestSummary.batchInsert(batchData);
+            UserDevTestSummaryData.bulkInsertData(batchData);
         }
 
-        UserDevDesignSummary.insert({
-            userId: userContext.userId,
-            designVersionId: userContext.designVersionId,
-            featureCount: totalFeatureCount,
-            scenarioCount: totalScenarioCount,
-            untestedScenarioCount: totalScenariosWithoutTests,
-            passingScenarioCount: totalPassingScenarioCount,
-            failingScenarioCount: totalFailingScenarioCount,
-            unitTestPassCount: totalUnitTestsPassing,
-            unitTestFailCount: totalUnitTestsFailing,
-            unitTestPendingCount: totalUnitTestsPending,
-            intTestPassCount: totalIntTestsPassing,
-            intTestFailCount: totalIntTestsFailing,
-            intTestPendingCount: totalIntTestsPending,
-            accTestPassCount: totalAccTestsPassing,
-            accTestFailCount: totalAccTestsFailing,
-            accTestPendingCount: totalAccTestsPending
-        });
+        UserDevDesignSummaryData.insertNewDesignVersionSummary(
+            userContext.userId,
+            userContext.designVersionId,
+            totalFeatureCount,
+            totalScenarioCount,
+            totalScenariosWithoutTests,
+            totalPassingScenarioCount,
+            totalFailingScenarioCount,
+            totalUnitTestsPassing,
+            totalUnitTestsFailing,
+            totalUnitTestsPending,
+            totalIntTestsPassing,
+            totalIntTestsFailing,
+            totalIntTestsPending,
+            totalAccTestsPassing,
+            totalAccTestsFailing,
+            totalAccTestsPending
+        );
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Refreshing test summary data complete");
     }

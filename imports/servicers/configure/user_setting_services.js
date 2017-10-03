@@ -4,7 +4,7 @@ import { log } from '../../common/utils.js';
 import { LogLevel} from '../../constants/constants.js';
 
 // Data Access
-import UserSettingData from '../../service_modules_db/configure/user_setting_db.js';
+import UserSettingData from '../../data/configure/user_setting_db.js';
 
 //======================================================================================================================
 //

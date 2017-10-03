@@ -4,11 +4,11 @@ import { DesignVersionStatus, UpdateMergeStatus, ComponentType, LogLevel } from 
 import { log } from '../../common/utils.js';
 
 // Data Access
-import DesignVersionData            from '../../service_modules_db/design/design_version_db.js';
-import DesignComponentData          from '../../service_modules_db/design/design_component_db.js';
-import DesignUpdateData             from '../../service_modules_db/design_update/design_update_db.js';
-import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
-import DomainDictionaryData         from '../../service_modules_db/design/domain_dictionry_db.js';
+import DesignVersionData            from '../../data/design/design_version_db.js';
+import DesignComponentData          from '../../data/design/design_component_db.js';
+import DesignUpdateData             from '../../data/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
+import DomainDictionaryData         from '../../data/design/domain_dictionry_db.js';
 
 //======================================================================================================================
 //

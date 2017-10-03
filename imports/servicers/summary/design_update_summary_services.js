@@ -1,14 +1,14 @@
 
-// Ultrawide Collections
-import { Designs }                          from '../../collections/design/designs.js';
-import { DesignUpdates }                    from '../../collections/design_update/design_updates.js';
-import { UserDesignUpdateSummary }          from '../../collections/summary/user_design_update_summary.js';
-import { DesignUpdateComponents }           from '../../collections/design_update/design_update_components.js';
-import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
-
 // Ultrawide Services
 import { ComponentType, DesignUpdateSummaryCategory, DesignUpdateSummaryType, UpdateScopeType, MashTestStatus, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
+
+// Data Access
+import DesignData                   from '../../data/design/design_db.js';
+import DesignUpdateData             from '../../data/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
+import UserDvMashScenarioData       from '../../data/mash/user_dv_mash_scenario_db.js'
+import UserUpdateSummaryData        from '../../data/summary/user_design_update_summary_db.js';
 
 //======================================================================================================================
 //
@@ -26,7 +26,7 @@ class DesignUpdateSummaryServices {
 
             log((message) => console.log(message), LogLevel.DEBUG, 'In recreate design update summary for update id {} and force update = {}', userContext.designUpdateId, forceUpdate);
 
-            const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
+            const designUpdate = DesignUpdateData.getDesignUpdateById(userContext.designUpdateId);
 
             // If a DU has just been deleted there is nothing to refresh
             if(!designUpdate){
@@ -36,10 +36,7 @@ class DesignUpdateSummaryServices {
 
             log((message) => console.log(message), LogLevel.DEBUG, 'Data stale is {}', designUpdate.summaryDataStale);
 
-            const summaryData = UserDesignUpdateSummary.find({
-                userId:         userContext.userId,
-                designUpdateId: userContext.designUpdateId
-            }).fetch();
+            const summaryData = UserUpdateSummaryData.getUserUpdateSummary(userContext.userId, userContext.designUpdateId);
 
             log((message) => console.log(message), LogLevel.DEBUG, 'Data length is {}', summaryData.length);
 
@@ -47,16 +44,10 @@ class DesignUpdateSummaryServices {
             if(forceUpdate || designUpdate.summaryDataStale || summaryData.length === 0){
 
                 // Clear the data for this user update
-                UserDesignUpdateSummary.remove({
-                    userId:         userContext.userId,
-                    designUpdateId: userContext.designUpdateId
-                });
+                UserUpdateSummaryData.clearUserUpdateSummary(userContext.userId, userContext.designUpdateId);
 
                 // Get all significant items in the update.  Anything added, removed or changed must be in scope.
-                const updateItems = DesignUpdateComponents.find({
-                    designUpdateId: userContext.designUpdateId,
-                    scopeType: UpdateScopeType.SCOPE_IN_SCOPE
-                });
+                const updateItems = DesignUpdateData.getInScopeComponents(userContext.designUpdateId);
 
                 let batchData = [];
 
@@ -87,10 +78,11 @@ class DesignUpdateSummaryServices {
                     }
 
                     // Get its parent
-                    parentItem = DesignUpdateComponents.findOne({
-                        designUpdateId: item.designUpdateId,
-                        _id: item.componentParentIdNew
-                    });
+                    parentItem = DesignUpdateComponentData.getUpdateComponentByRef(
+                        userContext.designVersionId,
+                        item.designUpdateId,
+                        item.componentParentReferenceIdNew
+                    );
 
                     log((message) => console.log(message), LogLevel.DEBUG, 'Parent item is {}', item.componentNameNew);
 
@@ -102,7 +94,7 @@ class DesignUpdateSummaryServices {
                             // Its likely that two updates have both triggered a refresh of the data
                             ignoreItem = true;
                         } else {
-                            const design = Designs.findOne({_id: item.designId});
+                            const design = DesignData.getDesignById(item.designId);
 
                             //console.log("Item " + item.componentType + " - " + item.componentNameNew + "has no parent. Design is " + design);
                             parentItem = {
@@ -118,10 +110,11 @@ class DesignUpdateSummaryServices {
 
                     if(!ignoreItem) {
 
-                        featureItem = DesignUpdateComponents.findOne({
-                            designUpdateId: userContext.designUpdateId,
-                            componentReferenceId: item.componentFeatureReferenceIdNew
-                        });
+                        featureItem = DesignUpdateComponentData.getUpdateComponentByRef(
+                            userContext.designVersionId,
+                            userContext.designUpdateId,
+                            item.componentFeatureReferenceIdNew
+                        );
 
                         if (featureItem) {
                             featureName = featureItem.componentNameNew;
@@ -185,11 +178,7 @@ class DesignUpdateSummaryServices {
                         // If the item is a Scenario - get its test status
                         if (item.componentType === ComponentType.SCENARIO) {
 
-                            const mashScenario = UserDesignVersionMashScenarios.findOne({
-                                userId:                     userContext.userId,
-                                designVersionId:            item.designVersionId,
-                                designScenarioReferenceId:  item.componentReferenceId
-                            });
+                            const mashScenario = UserDvMashScenarioData.getScenario(userContext, item.componentReferenceId);
 
                             if (mashScenario) {
 
@@ -218,16 +207,20 @@ class DesignUpdateSummaryServices {
                         // Populate ----------------------------------------------------------------------------------------
 
                         // If we want to add this item
-                        if (recordChange) {
+                        if (recordChange ) {
 
                             // Add the action header item if not already existing
-                            const actionHeader = UserDesignUpdateSummary.findOne({
-                                userId:             userContext.userId,
-                                designUpdateId:     item.designUpdateId,
-                                summaryType:        headerSummaryType,
-                                headerComponentId:  item.componentParentIdNew
-                            });
+                            let actionHeader = null;
 
+                            if(parentItem) {
+
+                                actionHeader = UserUpdateSummaryData.getHeaderItem(
+                                    userContext.userId,
+                                    item.designUpdateId,
+                                    headerSummaryType,
+                                    parentItem._id
+                                );
+                            }
 
                             if (!actionHeader) {
 
@@ -237,21 +230,19 @@ class DesignUpdateSummaryServices {
                                 if (parentItem.componentType === ComponentType.FEATURE_ASPECT) {
                                     itemHeaderName = featureName;
                                 }
-                                headerId = UserDesignUpdateSummary.insert({
-                                    userId:                     userContext.userId,
-                                    designVersionId:            item.designVersionId,
-                                    designUpdateId:             item.designUpdateId,
-                                    summaryCategory:            summaryCategory,
-                                    summaryType:                headerSummaryType,
-                                    itemType:                   parentItem.componentType,
-                                    itemComponentReferenceId:   parentItem.componentReferenceId,
-                                    itemName:                   parentItem.componentNameNew,
-                                    itemFeatureName:            featureName,
-                                    itemIndex:                  parentItem.componentIndexNew,
-                                    headerComponentId:          item.componentParentIdNew,
-                                    itemHeaderName:             itemHeaderName
-                                });
+
+                                headerId = UserUpdateSummaryData.insertNewSummary(
+                                    userContext.userId,
+                                    item,
+                                    summaryCategory,
+                                    headerSummaryType,
+                                    parentItem,
+                                    featureName,
+                                    itemHeaderName
+                                );
+
                             } else {
+
                                 headerId = actionHeader._id;
                             }
 
@@ -287,11 +278,11 @@ class DesignUpdateSummaryServices {
 
                 // Bulk insert the body data for efficiency
                 if(batchData.length > 0) {
-                    UserDesignUpdateSummary.batchInsert(batchData);
+                    UserUpdateSummaryData.bulkInsertData(batchData);
                 }
 
                 // No longer stale
-                DesignUpdates.update({_id: userContext.designUpdateId}, {$set: {summaryDataStale: false}});
+                DesignUpdateData.setSummaryDataStale(userContext.designUpdateId, false);
             }
         }
     }

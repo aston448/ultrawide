@@ -5,8 +5,8 @@ import {ComponentType, LogLevel}   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js';
 
 // Data Access
-import DesignComponentData                      from '../../service_modules_db/design/design_component_db.js';
-import DesignUpdateComponentData                from '../../service_modules_db/design_update/design_update_component_db.js';
+import DesignComponentData                      from '../../data/design/design_component_db.js';
+import DesignUpdateComponentData                from '../../data/design_update/design_update_component_db.js';
 
 
 // Plugin class to read test results from a screen scraped chimp mocha JSON reported file

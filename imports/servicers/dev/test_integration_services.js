@@ -11,7 +11,7 @@ import TestSummaryServices              from '../summary/test_summary_services.j
 import ChimpMochaTestServices           from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
 // Data Access
-import DesignUpdateData                 from '../../service_modules_db/design_update/design_update_db.js';
+import DesignUpdateData                 from '../../data/design_update/design_update_db.js';
 //======================================================================================================================
 //
 // Server Code for Test Mash Processing.

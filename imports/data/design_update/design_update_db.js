@@ -54,6 +54,13 @@ class DesignUpdateData{
     }
     // DU Components ---------------------------------------------------------------------------------------------------
 
+    getInScopeComponents(designUpdateId){
+
+        DesignUpdateComponents.find({
+            designUpdateId: designUpdateId,
+            scopeType: UpdateScopeType.SCOPE_IN_SCOPE
+        });
+    }
 
     getInScopeScenarios(designUpdateId){
 

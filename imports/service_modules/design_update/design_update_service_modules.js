@@ -5,8 +5,8 @@ import { ComponentType, DesignUpdateMergeAction, LogLevel } from '../../constant
 import DesignVersionModules         from '../../service_modules/design/design_version_service_modules.js';
 
 // Data Access
-import DesignUpdateData             from '../../service_modules_db/design_update/design_update_db.js';
-import DesignUpdateComponentData    from '../../service_modules_db/design_update/design_update_component_db.js';
+import DesignUpdateData             from '../../data/design_update/design_update_db.js';
+import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
 //======================================================================================================================
 //
 // Server Modules for Design Update Items.

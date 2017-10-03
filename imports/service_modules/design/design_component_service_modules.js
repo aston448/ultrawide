@@ -7,8 +7,8 @@ import DesignComponentServices      from '../../servicers/design/design_componen
 import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
 
 // Data Access
-import DesignVersionData            from '../../service_modules_db/design/design_version_db.js';
-import DesignComponentData          from '../../service_modules_db/design/design_component_db.js';
+import DesignVersionData            from '../../data/design/design_version_db.js';
+import DesignComponentData          from '../../data/design/design_component_db.js';
 
 //======================================================================================================================
 //

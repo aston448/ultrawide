@@ -10,7 +10,7 @@ import {DomainDictionary}           from '../../collections/design/domain_dictio
 import { ComponentType } from '../../constants/constants.js';
 import { DefaultItemNames } from '../../constants/default_names.js';
 
-import DesignVersionData            from '../../service_modules_db/design/design_version_db.js';
+import DesignVersionData            from '..//design/design_version_db.js';
 
 class DesignData {
 

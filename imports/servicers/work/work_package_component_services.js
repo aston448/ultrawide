@@ -1,12 +1,12 @@
 
-// Ultrawide Collections
-import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
-import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
-import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 // Ultrawide Services
-import { ComponentType, ViewType, WorkPackageType, WorkPackageScopeType }            from '../../constants/constants.js';
+import { ViewType, WorkPackageType, WorkPackageScopeType }            from '../../constants/constants.js';
 
 import  WorkPackageModules          from '../../service_modules/work/work_package_service_modules.js';
+
+// Data Access
+import DesignComponentData          from '../../data/design/design_component_db.js';
+import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
 
 //======================================================================================================================
 //
@@ -29,11 +29,11 @@ class WorkPackageComponentServices{
 
             switch(view){
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
-                    designComponent = DesignVersionComponents.findOne({_id: designComponentId});
+                    designComponent = DesignComponentData.getDesignComponentById(designComponentId);
                     wpType = WorkPackageType.WP_BASE;
                     break;
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                    designComponent = DesignUpdateComponents.findOne({_id: designComponentId});
+                    designComponent = DesignUpdateComponentData.getUpdateComponentById(designComponentId);
                     wpType = WorkPackageType.WP_UPDATE;
                     break;
             }

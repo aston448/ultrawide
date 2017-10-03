@@ -8,8 +8,8 @@ import DesignServices           from './design_services.js';
 import DesignComponentModules   from '../../service_modules/design/design_component_service_modules.js';
 
 // DB services
-import DesignVersionData         from '../../service_modules_db/design/design_version_db.js';
-import DesignComponentData       from '../../service_modules_db/design/design_component_db.js';
+import DesignVersionData         from '../../data/design/design_version_db.js';
+import DesignComponentData       from '../../data/design/design_component_db.js';
 
 //======================================================================================================================
 //

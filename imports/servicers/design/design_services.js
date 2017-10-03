@@ -5,7 +5,7 @@ import { DefaultItemNames }         from '../../constants/default_names.js';
 
 import DesignVersionServices        from './design_version_services.js';
 
-import DesignData                     from '../../../imports/service_modules_db/design/design_db.js';
+import DesignData                     from '../../data/design/design_db.js';
 
 //======================================================================================================================
 //

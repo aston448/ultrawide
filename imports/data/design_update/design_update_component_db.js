@@ -149,7 +149,6 @@ class DesignUpdateComponentData{
         });
     }
 
-    getUpdateComponentByDvComponentId
 
     getUpdateComponentByRef(designVersionId, designUpdateId, componentReferenceId){
 
@@ -159,6 +158,7 @@ class DesignUpdateComponentData{
             componentReferenceId:   componentReferenceId
         });
     }
+
 
     // Related Components ----------------------------------------------------------------------------------------------
     getExistingAspectsForFeature(designUpdateId, featureReferenceId){
@@ -330,6 +330,19 @@ class DesignUpdateComponentData{
             {
                 $set: {workPackageId: workPackageId}
             }
+        );
+    }
+
+    removeWorkPackageIds(workPackageId){
+
+        return DesignUpdateComponents.update(
+            {
+                workPackageId: workPackageId
+            },
+            {
+                $set: {workPackageId: 'NONE'}
+            },
+            {multi: true}
         );
     }
 

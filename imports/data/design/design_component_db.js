@@ -245,6 +245,7 @@ class DesignComponentData {
         ).count();
     }
 
+
     // UPDATE ==========================================================================================================
 
     setComponentReference(designComponentId, componentReference){
@@ -297,6 +298,19 @@ class DesignComponentData {
             {
                 $set: {workPackageId: workPackageId}
             }
+        );
+    }
+
+    removeWorkPackageIds(workPackageId){
+
+        return DesignVersionComponents.update(
+            {
+                workPackageId: workPackageId
+            },
+            {
+                $set: {workPackageId: 'NONE'}
+            },
+            {multi: true}
         );
     }
 

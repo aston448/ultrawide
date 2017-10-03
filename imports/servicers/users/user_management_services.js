@@ -1,12 +1,11 @@
 
-// Ultrawide Collections
-import { UserRoles }      from '../../collections/users/user_roles.js'
-
 // Ultrawide Services
 import { log }                      from '../../common/utils.js';
 import { LogLevel}                  from '../../constants/constants.js';
 import { DefaultUserDetails }       from '../../constants/default_names.js'
 
+// Data Access
+import UserRoleData                 from '../../data/users/user_role_db.js';
 
 //======================================================================================================================
 //
@@ -36,18 +35,21 @@ class UserManagementServices {
             );
 
             // Create a new default entry.  Has no access until edited.
-            UserRoles.insert(
-                {
-                    userId:             userId,
-                    userName:           DefaultUserDetails.NEW_USER_NAME,
-                    displayName:        DefaultUserDetails.NEW_USER_DISPLAY_NAME,
-                    isDesigner:         false,
-                    isDeveloper:        false,
-                    isManager:          false,
-                    isAdmin:            false,
-                    isActive:           true
-                }
+            const user = {
+                userName:           DefaultUserDetails.NEW_USER_NAME,
+                displayName:        DefaultUserDetails.NEW_USER_DISPLAY_NAME,
+                isDesigner:         false,
+                isDeveloper:        false,
+                isManager:          false,
+                isAdmin:            false,
+                isActive:           true
+            };
+
+            UserRoleData.insertNewUserRole(
+                userId,
+                user
             );
+
         }
     };
 
@@ -55,25 +57,14 @@ class UserManagementServices {
 
         if (Meteor.isServer) {
             // Get existing details - userId cannot change
-            const existingUser = UserRoles.findOne({userId: newUser.userId});
+            const existingUser = UserRoleData.getRoleByUserId(newUser.userId);
 
             // If username changed update it
             if (existingUser.userName !== newUser.userName) {
                 Accounts.setUsername(newUser.userId, newUser.userName);
             }
 
-            UserRoles.update(
-                {userId: newUser.userId},
-                {
-                    $set: {
-                        userName:       newUser.userName,
-                        displayName:    newUser.displayName,
-                        isDesigner:     newUser.isDesigner,
-                        isDeveloper:    newUser.isDeveloper,
-                        isManager:      newUser.isManager,
-                    }
-                }
-            );
+            UserRoleData.saveUserDetails(newUser);
         }
     };
 
@@ -89,49 +80,28 @@ class UserManagementServices {
     setUserActive(userId){
 
         if (Meteor.isServer) {
-            UserRoles.update(
-                {userId: userId},
-                {
-                    $set: {
-                        isActive: true
-                    }
-                }
-            );
+
+            UserRoleData.setActiveFlag(userId, true);
         }
     };
 
     setUserInactive(userId){
 
         if (Meteor.isServer) {
-            UserRoles.update(
-                {userId: userId},
-                {
-                    $set: {
-                        isActive: false
-                    }
-                }
-            );
+
+            UserRoleData.setActiveFlag(userId, false);
         }
     };
 
     saveUserApiKey(userId, apiKey){
 
-        UserRoles.update(
-            {userId: userId},
-            {
-                $set:{
-                    apiKey: apiKey
-                }
-            }
-        );
+        UserRoleData.setApiKey(userId, apiKey);
     }
 
     verifyApiKey(apiKey){
 
         // The api key should be that provided to the admin user
-        const userData = UserRoles.findOne({
-            userName: 'admin'
-        });
+        const userData = UserRoleData.getRoleByUserName('admin');
 
         if(userData){
             // And a key must have been deliberately generated

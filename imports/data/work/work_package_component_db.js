@@ -26,6 +26,29 @@ class WorkPackageComponentData {
         );
     }
 
+    importComponent(designVersionId, workPackageId, designComponentId, wpComponent){
+
+        if(Meteor.isServer) {
+            return WorkPackageComponents.insert(
+                {
+                    // Identity
+                    designVersionId: designVersionId,
+                    workPackageId: workPackageId,
+                    workPackageType: wpComponent.workPackageType,
+                    componentId: designComponentId,
+                    componentReferenceId: wpComponent.componentReferenceId,
+                    componentParentReferenceId: wpComponent.componentParentReferenceId,
+                    componentFeatureReferenceId: wpComponent.componentFeatureReferenceId,
+                    componentType: wpComponent.componentType,
+                    componentIndex: wpComponent.componentIndex,
+
+                    // Status
+                    scopeType: wpComponent.scopeType
+                }
+            );
+        }
+    }
+
     // SELECT ==========================================================================================================
 
     getWpComponentByComponentId(workPackageId, designComponentId){
