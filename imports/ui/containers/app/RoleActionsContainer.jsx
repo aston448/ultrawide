@@ -12,7 +12,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RoleAction                from '../../components/app/RoleAction.jsx';
 
 // Ultrawide Services
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

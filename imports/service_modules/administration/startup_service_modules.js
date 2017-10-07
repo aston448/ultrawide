@@ -1,14 +1,12 @@
 
 import fs from 'fs';
 
-// Ultrawide Collections
-import { AppGlobal }                from '../../collections/app/app_global.js';
-
-
 // Ultrawide Services
 import { UltrawideDirectory, LogLevel } from '../../constants/constants.js';
 import { log }              from '../../common/utils.js';
 
+// Data Access
+import AppGlobalData        from '../../data/app/app_global_db.js';
 
 //======================================================================================================================
 //
@@ -37,9 +35,7 @@ class StartupModules{
             dataStore = dataStore + '/';
         }
 
-        const appData = AppGlobal.findOne({
-            versionKey: 'CURRENT_VERSION'
-        });
+        const appData = AppGlobalData.getDataByVersionKey('CURRENT_VERSION');
 
         // MODIFY THIS CODE FOR EACH NEW RELEASE
         const appVersion = 1;                   // Version of Ultrawide
@@ -48,27 +44,23 @@ class StartupModules{
 
         if(!appData){
 
-            AppGlobal.insert({
-                versionKey:         'CURRENT_VERSION',
-                appVersion:         appVersion,
-                dataVersion:        dataVersion,
-                versionDate:        versionDate,
-                dataStore:          dataStore
-            });
+            AppGlobalData.insertNewGlobalData(
+                'CURRENT_VERSION',
+                appVersion,
+                dataVersion,
+                versionDate,
+                dataStore
+            );
 
         } else {
 
-            AppGlobal.update(
-                {versionKey: 'CURRENT_VERSION'},
-                {
-                    $set:{
-                        appVersion:         appVersion,
-                        dataVersion:        dataVersion,
-                        versionDate:        versionDate,
-                        dataStore:          dataStore
-                    }
-                }
-            )
+            AppGlobalData.updateGlobalDataForVersionKey(
+                'CURRENT_VERSION',
+                appVersion,
+                dataVersion,
+                versionDate,
+                dataStore
+            );
         }
 
         return dataStore;

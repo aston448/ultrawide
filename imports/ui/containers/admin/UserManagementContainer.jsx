@@ -13,7 +13,7 @@ import ItemContainer        from '../../components/common/ItemContainer.jsx';
 import UserDetails          from '../../components/admin/UserDetails.jsx';
 
 // Ultrawide Services
-import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientUserManagementServices         from '../../../apiClient/apiClientUserManagement.js';
 
 // Bootstrap

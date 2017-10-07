@@ -71,6 +71,17 @@ class WorkPackageData {
         return WorkPackageComponents.find({workPackageId: workPackageId}).fetch();
     }
 
+    getWorkPackageComponentsOfType(workPackageId, componentType){
+
+        return WorkPackageComponents.find(
+            {
+                workPackageId: workPackageId,
+                componentType: componentType
+            },
+            {sort: {componentIndex: 1}}
+        ).fetch();
+    }
+
     // UPDATE ==========================================================================================================
 
     setWorkPackageName(workPackageId, newName){

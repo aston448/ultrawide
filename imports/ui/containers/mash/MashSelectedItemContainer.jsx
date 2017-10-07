@@ -17,7 +17,7 @@ import {DetailsViewType, ViewType, DisplayContext, ComponentType, LogLevel}    f
 import {log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js';
 
-import ClientContainerServices          from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices          from '../../../apiClient/apiClientDataServices.js';
 import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
 import ClientMashDataServices           from '../../../apiClient/apiClientMashData.js';
 import ClientUserSettingsServices       from '../../../apiClient/apiClientUserSettings.js';

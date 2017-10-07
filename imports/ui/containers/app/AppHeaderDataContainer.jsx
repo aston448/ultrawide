@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Services
 import {ViewType} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

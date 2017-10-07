@@ -5,7 +5,7 @@ import { DesignVersionComponents }         from '../../imports/collections/desig
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
-import ClientContainerServices          from '../../imports/apiClient/apiClientContainerServices.js';
+import ClientContainerServices          from '../../imports/apiClient/apiClientDataServices.js';
 import ClientTextEditorServices         from '../../imports/apiClient/apiClientTextEditor.js';
 import DesignComponentModules           from '../../imports/service_modules/design/design_component_service_modules.js';
 import TestDataHelpers                  from '../test_modules/test_data_helpers.js'

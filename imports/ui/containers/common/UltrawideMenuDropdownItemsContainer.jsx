@@ -12,7 +12,7 @@ import UltrawideMenuDropdownItem from '../../components/common/UltrawideMenuDrop
 
 // Ultrawide Services
 import { RoleType } from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

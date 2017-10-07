@@ -4,51 +4,39 @@
 // Meteor / React Services
 import { Meteor } from 'meteor/meteor';
 
-// Ultrawide Collections
-import { AppGlobal }                    from '../collections/app/app_global.js';
-import { UserRoles }                        from '../collections/users/user_roles.js';
-import { DesignBackups }                    from '../collections/backups/design_backups.js';
-import { UserContext }           from '../collections/context/user_context.js';
-import { Designs }                          from '../collections/design/designs.js';
-import { DesignVersions }                   from '../collections/design/design_versions.js';
-import { DesignUpdates }                    from '../collections/design_update/design_updates.js';
-import { WorkPackages }                     from '../collections/work/work_packages.js';
-import { WorkPackageComponents }            from '../collections/work/work_package_components.js';
-import { DesignVersionComponents }          from '../collections/design/design_version_components.js';
-import { DesignUpdateComponents }           from '../collections/design_update/design_update_components.js';
-import { FeatureBackgroundSteps }           from '../collections/design/feature_background_steps.js';
-import { ScenarioSteps }                    from '../collections/design/scenario_steps.js';
-import { DomainDictionary }                 from '../collections/design/domain_dictionary.js';
-import { UserDevFeatures }                  from '../collections/dev/user_dev_features.js';
-import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
-import { UserDevTestSummary }           from '../collections/summary/user_dev_test_summary.js';
-import { UserDevDesignSummary }         from '../collections/summary/user_dev_design_summary.js';
-import { UserMashScenarioTests }            from '../collections/mash/user_mash_scenario_tests.js';
-import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
-import { TestOutputLocationFiles }          from '../collections/configure/test_output_location_files.js';
-import { UserTestTypeLocations }            from '../collections/configure/user_test_type_locations.js';
-import { UserDesignVersionMashScenarios }   from '../collections/mash/user_dv_mash_scenarios.js';
-import { UserWorkProgressSummary }          from '../collections/summary/user_work_progress_summary.js';
-
-// Ultrawide GUI Components
-
-
 // Ultrawide Services
-import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignVersionStatus, DesignUpdateStatus,
-    StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel,
-    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType,
-    UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, DesignUpdateMergeAction, WorkSummaryType } from '../constants/constants.js';
+import { RoleType, ComponentType, ViewType, ViewOptionType, DisplayContext, DesignVersionStatus, DesignUpdateStatus,
+     WorkPackageType, WorkPackageStatus, LogLevel,
+     UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, WorkSummaryType } from '../constants/constants.js';
 
-import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
-import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 
 import { log } from '../common/utils.js';
 import TextLookups from '../common/lookups.js';
 
+// Data Access
+import AppGlobalData                    from '../data/app/app_global_db.js';
+import UserRoleData                     from '../data/users/user_role_db.js';
+import DesignData                       from '../data/design/design_db.js';
+import DesignVersionData                from '../data/design/design_version_db.js';
+import DesignUpdateData                 from '../data/design_update/design_update_db.js';
+import WorkPackageData                  from '../data/work/work_package_db.js';
+import WorkPackageComponentData         from '../data/work/work_package_component_db.js';
+import DesignComponentData              from '../data/design/design_component_db.js';
+import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
+import UserTestTypeLocationData         from '../data/configure/user_test_type_location_db.js';
+import TestOutputLocationData           from '../data/configure/test_output_location_db.js';
+import DesignBackupData                 from '../data/backups/design_backup_db.js';
+import UserDevDesignSummaryData         from '../data/summary/user_dev_design_summary_db.js';
+import DomainDictionaryData             from '../data/design/domain_dictionary_db.js';
+import UserDvMashScenarioData           from '../data/mash/user_dv_mash_scenario_db.js';
+import UserMashScenarioTestData         from '../data/mash/user_mash_scenario_test_db.js';
+import UserDevTestSummaryData           from '../data/summary/user_dev_test_summary_db.js';
+import UserWorkProgressSummaryData      from '../data/summary/user_work_progress_summary_db.js';
+
 // REDUX services
 import store from '../redux/store'
-import { setDesignVersionDataLoadedTo, setWorkPackageDataLoadedTo, setTestIntegrationDataLoadedTo, updateUserMessage } from '../redux/actions'
+import { setDesignVersionDataLoadedTo, updateUserMessage } from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -59,7 +47,7 @@ import { setDesignVersionDataLoadedTo, setWorkPackageDataLoadedTo, setTestIntegr
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientContainerServices{
+class ClientDataServices{
 
     getApplicationData(){
 
@@ -87,19 +75,6 @@ class ClientContainerServices{
             return {isLoading: loading};
         }
     }
-
-    getUserData(userContext){
-
-        if(Meteor.isClient) {
-
-            const currentUser = UserRoles.findOne({userId: userContext.userId});
-
-            return {
-                user: currentUser
-            }
-        }
-
-    };
 
     getDesignVersionData(userContext, callback){
 
@@ -174,58 +149,58 @@ class ClientContainerServices{
         }
     }
 
-    getWorkPackageData(userContext, callback){
-
-        if(Meteor.isClient) {
-
-            console.log("In getWorkPackageData with callback " + callback);
-
-            if (store.getState().workPackageDataLoaded) {
-
-                if (callback) {
-                    callback()
-                }
-            } else {
-
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.WARNING,
-                    messageText: 'FETCHING WORK PACKAGE DATA FROM SERVER...'
-                }));
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Work Package Data for DV {}, WP {}", userContext.designVersionId, userContext.workPackageId);
-
-                let wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId, userContext.workPackageId);
-
-                Tracker.autorun((loader) => {
-
-                    let loading = !wcHandle.ready();
-
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "loading WP = {}", loading);
-
-                    if (!loading) {
-                        // Mark data as loaded
-                        store.dispatch(setWorkPackageDataLoadedTo(true));
-
-                        store.dispatch(updateUserMessage({
-                            messageType: MessageType.INFO,
-                            messageText: 'Work Package data loaded'
-                        }));
-
-                        // Set open items now that data is loaded
-                        ClientUserContextServices.setOpenWorkPackageItems(userContext);
-
-                        // If an action wanted after loading call it...
-                        if (callback) {
-                            callback();
-                        }
-
-                        // Stop this checking once we are done or there will be random chaos
-                        loader.stop();
-                    }
-                });
-            }
-        }
-    }
+    // getWorkPackageData(userContext, callback){
+    //
+    //     if(Meteor.isClient) {
+    //
+    //         console.log("In getWorkPackageData with callback " + callback);
+    //
+    //         if (store.getState().workPackageDataLoaded) {
+    //
+    //             if (callback) {
+    //                 callback()
+    //             }
+    //         } else {
+    //
+    //             store.dispatch(updateUserMessage({
+    //                 messageType: MessageType.WARNING,
+    //                 messageText: 'FETCHING WORK PACKAGE DATA FROM SERVER...'
+    //             }));
+    //
+    //             log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Work Package Data for DV {}, WP {}", userContext.designVersionId, userContext.workPackageId);
+    //
+    //             let wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId, userContext.workPackageId);
+    //
+    //             Tracker.autorun((loader) => {
+    //
+    //                 let loading = !wcHandle.ready();
+    //
+    //                 log((msg) => console.log(msg), LogLevel.DEBUG, "loading WP = {}", loading);
+    //
+    //                 if (!loading) {
+    //                     // Mark data as loaded
+    //                     store.dispatch(setWorkPackageDataLoadedTo(true));
+    //
+    //                     store.dispatch(updateUserMessage({
+    //                         messageType: MessageType.INFO,
+    //                         messageText: 'Work Package data loaded'
+    //                     }));
+    //
+    //                     // Set open items now that data is loaded
+    //                     ClientUserContextServices.setOpenWorkPackageItems(userContext);
+    //
+    //                     // If an action wanted after loading call it...
+    //                     if (callback) {
+    //                         callback();
+    //                     }
+    //
+    //                     // Stop this checking once we are done or there will be random chaos
+    //                     loader.stop();
+    //                 }
+    //             });
+    //         }
+    //     }
+    // }
 
     // getTestIntegrationData(userId, callback){
     //
@@ -291,23 +266,19 @@ class ClientContainerServices{
     getUltrawideUsers(){
 
         // Return everything except the admin user
-        return UserRoles.find({
-            isAdmin: false
-        }).fetch();
+        return UserRoleData.getNonAdminUsers();
     }
 
     // Design Backups
     getDesignBackups(){
 
-        return DesignBackups.find({}).fetch();
+        return DesignBackupData.getAllBackups();
     }
 
     // Global Data store
     getDataStore(){
 
-        const appData = AppGlobal.findOne({
-            versionKey: 'CURRENT_VERSION'
-        });
+        const appData = AppGlobalData.getDataByVersionKey('CURRENT_VERSION');
 
         if(!appData){
             throw new Meteor.Error('DATA_STORE_ERROR', 'Ultrawide global data is not defined');
@@ -329,16 +300,13 @@ class ClientContainerServices{
     getTestOutputLocationData(userId){
 
         // You can see either shared locations or private ones made by you
-        return TestOutputLocations.find({
-           $or:[{locationIsShared: true}, {locationUserId: userId}]
-        }).fetch();
-
+        TestOutputLocationData.getAllUserLocations(userId);
     }
 
     // Files for a Test Output Location
     getTestOutputLocationFiles(locationId){
 
-        return TestOutputLocationFiles.find({locationId: locationId}).fetch();
+        TestOutputLocationData.getAllLocationFiles(locationId);
     }
 
     // User configuration of Test Outputs
@@ -347,9 +315,7 @@ class ClientContainerServices{
         // Updates the user data with the latest locations
         ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId);
 
-        return UserTestTypeLocations.find({
-            userId: userContext.userId
-        }).fetch();
+        return UserTestTypeLocationData.getUserTestTypeLocations(userContext.userId);
     }
 
 
@@ -367,38 +333,43 @@ class ClientContainerServices{
 
             switch (view) {
                 case ViewType.DESIGNS:
-                    currentDesign = Designs.findOne({_id: userContext.designId});
+                    currentDesign = DesignData.getDesignById(userContext.designId);
                     break;
+
                 case ViewType.SELECT:
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
                 case ViewType.DESIGN_UPDATABLE_VIEW:
                     // Get the current design version which should be set for these views
-                    currentDesign = Designs.findOne({_id: userContext.designId});
-                    currentDesignVersion = DesignVersions.findOne({_id: userContext.designVersionId});
+                    currentDesign = DesignData.getDesignById(userContext.designId);
+                    currentDesignVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
                     break;
+
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.DESIGN_UPDATE_VIEW:
                     // Get the current design version + update which should be set for these views
-                    currentDesign = Designs.findOne({_id: userContext.designId});
-                    currentDesignVersion = DesignVersions.findOne({_id: userContext.designVersionId});
-                    currentDesignUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
+                    currentDesign = DesignData.getDesignById(userContext.designId);
+                    currentDesignVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+                    currentDesignUpdate = DesignUpdateData.getDesignUpdateById(userContext.designUpdateId);
                     break;
+
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
-                    currentDesign = Designs.findOne({_id: userContext.designId});
-                    currentDesignVersion = DesignVersions.findOne({_id: userContext.designVersionId});
-                    currentWorkPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+                    currentDesign = DesignData.getDesignById(userContext.designId);
+                    currentDesignVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+                    currentWorkPackage = WorkPackageData.getWorkPackageById(userContext.workPackageId);
                     break;
+
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.DEVELOP_UPDATE_WP:
-                    currentDesign = Designs.findOne({_id: userContext.designId});
-                    currentDesignVersion = DesignVersions.findOne({_id: userContext.designVersionId});
-                    currentDesignUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
-                    currentWorkPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+                    currentDesign = DesignData.getDesignById(userContext.designId);
+                    currentDesignVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+                    currentDesignUpdate = DesignUpdateData.getDesignUpdateById(userContext.designUpdateId);
+                    currentWorkPackage = WorkPackageData.getWorkPackageById(userContext.workPackageId);
                     break;
+
                 default:
                     // No data required
             }
@@ -425,7 +396,7 @@ class ClientContainerServices{
     getUserRoles(userId){
 
         let userRoles = [];
-        const user = UserRoles.findOne({userId: userId});
+        const user = UserRoleData.getRoleByUserId(userId);
 
         if(user){
             if(user.isDesigner){
@@ -475,27 +446,20 @@ class ClientContainerServices{
     getUltrawideDesigns(){
 
         // Get all the designs available
-        const currentDesigns = Designs.find({}, {sort: {designName: 1}});
-
-        return {
-            designs: currentDesigns.fetch(),
-        };
-
+        return DesignData.getAllDesigns();
     }
 
     // Get a list of known Design Versions for the current Design
     getDesignVersionsForCurrentDesign(currentDesignId){
 
         // No action if design not yet set
-        if (currentDesignId != 'NONE') {
-            // Get all the designs versions available
-            const currentDesignVersions = DesignVersions.find(
-                {designId: currentDesignId},
-                {sort: {designVersionIndex: 1}}
-            );
+        if (currentDesignId !== 'NONE') {
+
+            // Get all the design versions available
+            const currentDesignVersions = DesignData.getDesignVersionsOrderByVersion(currentDesignId);
 
             return {
-                designVersions: currentDesignVersions.fetch(),
+                designVersions: currentDesignVersions,
             };
 
         } else {
@@ -507,40 +471,19 @@ class ClientContainerServices{
     getWorkPackagesForCurrentDesignVersion(currentDesignVersionId){
 
         // No action if design version not yet set
-        if (currentDesignVersionId != 'NONE') {
+        if (currentDesignVersionId !== 'NONE') {
 
             // Get New WPS
-            const newWorkPackages = WorkPackages.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    workPackageType: WorkPackageType.WP_BASE,
-                    workPackageStatus: WorkPackageStatus.WP_NEW
-                },
-                {sort: {workPackageName: 1}}
-            ).fetch();
+            const newWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_NEW);
 
             // Get Available WPS
-            const availableWorkPackages = WorkPackages.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    workPackageType: WorkPackageType.WP_BASE,
-                    workPackageStatus: WorkPackageStatus.WP_AVAILABLE
-                },
-                {sort: {workPackageName: 1}}
-            ).fetch();
+            const availableWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_AVAILABLE);
 
             // Get Adopted WPS
-            const adoptedWorkPackages = WorkPackages.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    workPackageType: WorkPackageType.WP_BASE,
-                    workPackageStatus: WorkPackageStatus.WP_ADOPTED
-                },
-                {sort: {workPackageName: 1}}
-            ).fetch();
+            const adoptedWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
 
             // Get the status of the current design version
-            const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
+            const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
 
             //console.log("Base WPs found found: " + currentWorkPackages.count());
 
@@ -549,7 +492,7 @@ class ClientContainerServices{
                 newWorkPackages: newWorkPackages,
                 availableWorkPackages: availableWorkPackages,
                 adoptedWorkPackages: adoptedWorkPackages,
-                designVersionStatus: designVersionStatus
+                designVersionStatus: designVersion.designVersionStatus
             };
 
         } else {
@@ -568,55 +511,32 @@ class ClientContainerServices{
 
         //console.log("Looking for Update WPs for DV: " + currentDesignVersionId + " and DU: " + currentDesignUpdateId);
 
-        if(currentDesignVersionId != 'NONE') {
+        if(currentDesignVersionId !=='NONE') {
+
             // Get the status of the current design version
-            const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
+            const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
 
-            if (currentDesignUpdateId != 'NONE') {
+            if (currentDesignUpdateId !== 'NONE') {
 
-                const designUpdate = DesignUpdates.findOne({_id: currentDesignUpdateId});
+                const designUpdate = DesignUpdateData.getDesignUpdateById(currentDesignUpdateId);
 
                 if(designUpdate) {
 
                     // Get New WPS
-                    const newWorkPackages = WorkPackages.find(
-                        {
-                            designVersionId: currentDesignVersionId,
-                            designUpdateId: currentDesignUpdateId,
-                            workPackageType: WorkPackageType.WP_UPDATE,
-                            workPackageStatus: WorkPackageStatus.WP_NEW
-                        },
-                        {sort: {workPackageName: 1}}
-                    ).fetch();
+                    const newWorkPackages = DesignUpdateData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, currentDesignUpdateId, WorkPackageStatus.WP_NEW);
 
                     // Get Available WPS
-                    const availableWorkPackages = WorkPackages.find(
-                        {
-                            designVersionId: currentDesignVersionId,
-                            designUpdateId: currentDesignUpdateId,
-                            workPackageType: WorkPackageType.WP_UPDATE,
-                            workPackageStatus: WorkPackageStatus.WP_AVAILABLE
-                        },
-                        {sort: {workPackageName: 1}}
-                    ).fetch();
+                    const availableWorkPackages = DesignUpdateData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, currentDesignUpdateId, WorkPackageStatus.WP_AVAILABLE);
 
                     // Get Adopted WPS
-                    const adoptedWorkPackages = WorkPackages.find(
-                        {
-                            designVersionId: currentDesignVersionId,
-                            designUpdateId: currentDesignUpdateId,
-                            workPackageType: WorkPackageType.WP_UPDATE,
-                            workPackageStatus: WorkPackageStatus.WP_ADOPTED
-                        },
-                        {sort: {workPackageName: 1}}
-                    ).fetch();
+                    const adoptedWorkPackages = DesignUpdateData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, currentDesignUpdateId, WorkPackageStatus.WP_ADOPTED);
 
                     return {
                         wpType: WorkPackageType.WP_UPDATE,
                         newWorkPackages: newWorkPackages,
                         availableWorkPackages: availableWorkPackages,
                         adoptedWorkPackages: adoptedWorkPackages,
-                        designVersionStatus: designVersionStatus,
+                        designVersionStatus: designVersion.designVersionStatus,
                         designUpdateStatus: designUpdate.updateStatus
                     };
                 } else {
@@ -626,7 +546,7 @@ class ClientContainerServices{
                         newWorkPackages: [],
                         availableWorkPackages: [],
                         adoptedWorkPackages: [],
-                        designVersionStatus: designVersionStatus,
+                        designVersionStatus: designVersion.designVersionStatus,
                         designUpdateStatus: null
                     };
                 }
@@ -637,7 +557,7 @@ class ClientContainerServices{
                     newWorkPackages: [],
                     availableWorkPackages: [],
                     adoptedWorkPackages: [],
-                    designVersionStatus: designVersionStatus,
+                    designVersionStatus: designVersion.designVersionStatus,
                     designUpdateStatus: null
                 };
             }
@@ -659,53 +579,27 @@ class ClientContainerServices{
     getDesignUpdatesForCurrentDesignVersion(currentDesignVersionId){
 
         // No action if design version not yet set
-        if (currentDesignVersionId != 'NONE') {
+        if (currentDesignVersionId !== 'NONE') {
 
             // Get all the design updates available for the selected version sorted by type and name
 
-            const newUpdates = DesignUpdates.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    updateStatus: DesignUpdateStatus.UPDATE_NEW
-                },
-                {sort: {updateReference:1, updateName: 1}}
-            ).fetch();
+            const newUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_NEW);
 
-            const draftUpdates = DesignUpdates.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    updateStatus: DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT
-                },
-                {sort: {updateReference:1, updateName: 1}}
-            ).fetch();
+            const draftUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT);
 
-            const mergedUpdates = DesignUpdates.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    updateStatus: DesignUpdateStatus.UPDATE_MERGED
-                },
-                {sort: {updateReference:1, updateName: 1}}
-            ).fetch();
+            const mergedUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_MERGED);
 
-            const ignoredUpdates = DesignUpdates.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    updateStatus: DesignUpdateStatus.UPDATE_IGNORED
-                },
-                {sort: {updateReference:1, updateName: 1}}
-            ).fetch();
+            const ignoredUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_IGNORED);
 
             // Get the status of the current design version
-            const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
-
-            //console.log("Design Updates found: " + currentDesignUpdates.count());
+            const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
 
             return {
                 newUpdates: newUpdates,
                 draftUpdates: draftUpdates,
                 mergedUpdates: mergedUpdates,
                 ignoredUpdates: ignoredUpdates,
-                designVersionStatus: designVersionStatus
+                designVersionStatus: designVersion.designVersionStatus
             };
 
         } else {
@@ -724,43 +618,23 @@ class ClientContainerServices{
 
         //console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
 
-        const designVersion = DesignVersions.findOne({_id: userContext.designVersionId});
+        const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
         // Just get the original base items, not any new stuff
-        const baseApplications = DesignVersionComponents.find(
-            {
-                designVersionId: userContext.designVersionId,
-                componentType: ComponentType.APPLICATION,
-                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_ADDED}
-            },
-            {sort: {componentIndexNew: 1}}
-        );
+        const baseApplicationsArr = DesignVersionData.getExistingApplications(userContext.designVersionId);
 
         // All the existing and new stuff in the Design version - but for completed updatable versions leave out deleted
-        let workingApplications  = null;
+        let workingApplicationsArr  = null;
 
         if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
-            workingApplications = DesignVersionComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    componentType: ComponentType.APPLICATION,
-                    updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-                },
-                {sort: {componentIndexNew: 1}}
-            );
+
+            workingApplicationsArr = DesignVersionData.getWorkingApplications(userContext.designVersionId);
 
         } else {
-            workingApplications = DesignVersionComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    componentType: ComponentType.APPLICATION
-                },
-                {sort: {componentIndexNew: 1}}
-            );
-        }
 
-        let baseApplicationsArr = baseApplications.fetch();
-        let workingApplicationsArr = workingApplications.fetch();
+            workingApplicationsArr = DesignVersionData.getAllApplications(userContext.designVersionId);
+
+        }
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} base applications.", baseApplicationsArr.length);
         log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} working applications.", workingApplicationsArr.length);
@@ -770,16 +644,7 @@ class ClientContainerServices{
 
         if(userContext.designUpdateId !== 'NONE'){
 
-            const updateApplications = DesignUpdateComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    designUpdateId: userContext.designUpdateId,
-                    componentType: ComponentType.APPLICATION
-                },
-                {sort: {componentIndexNew: 1}}
-            );
-
-            updateApplicationsArr = updateApplications.fetch();
+            updateApplicationsArr = DesignUpdateData.getUpdateComponentsOfType(userContext.designUpdateId, ComponentType.APPLICATION);
         }
 
         // Get WP Data if WP Id provided
@@ -788,13 +653,7 @@ class ClientContainerServices{
         if(userContext.workPackageId !== 'NONE'){
 
             // Which applications are in the WP?
-            const wpAppComponents = WorkPackageComponents.find(
-                {
-                    workPackageId: userContext.workPackageId,
-                    componentType: ComponentType.APPLICATION,
-                },
-                {sort: {componentIndex: 1}}
-            ).fetch();
+            const wpAppComponents = WorkPackageData.getWorkPackageComponentsOfType(userContext.workPackageId, ComponentType.APPLICATION);
 
             wpAppComponents.forEach((wpApp) => {
 
@@ -804,10 +663,8 @@ class ClientContainerServices{
                     case ViewType.DEVELOP_BASE_WP:
 
                         // The app data is the Design Version data
-                        let appDvComponent = DesignVersionComponents.findOne({
-                            designVersionId:        wpApp.designVersionId,
-                            componentReferenceId:   wpApp.componentReferenceId
-                        });
+                        let appDvComponent = DesignComponentData.getDesignComponentByRef(wpApp.designVersionId, wpApp.componentReferenceId);
+
                         if(appDvComponent) {
                             wpApplicationsArr.push(appDvComponent);
                         }
@@ -818,10 +675,8 @@ class ClientContainerServices{
                     case ViewType.DEVELOP_UPDATE_WP:
 
                         // The app data is the Design Update data
-                        let appDuComponent = DesignUpdateComponents.findOne({
-                            designUpdateId:         userContext.designUpdateId,
-                            componentReferenceId:   wpApp.componentReferenceId
-                        });
+                        let appDuComponent = DesignUpdateComponentData.getUpdateComponentByRef(userContext.designVersionId, userContext.designUpdateId, wpApp.componentReferenceId);
+
                         if(appDuComponent) {
                             wpApplicationsArr.push(appDuComponent);
                         }
@@ -837,11 +692,8 @@ class ClientContainerServices{
         let designSummaryData = null;
 
         if(userContext) {
-            designSummaryData = UserDevDesignSummary.findOne({
-                userId:             userContext.userId,
-                designVersionId:    userContext.designVersionId,
-                designUpdateId:     userContext.designUpdateId
-            });
+
+            designSummaryData = UserDevDesignSummaryData.getUserDesignSummary(userContext);
         }
 
         switch(view){
@@ -894,11 +746,15 @@ class ClientContainerServices{
     }
 
     // Get data for all nested design components inside the specified parent
-    getComponentDataForParentComponent(childComponentType, view, designVersionId, designUpdateId, workPackageId, parentId, displayContext){
+    getComponentDataForParentComponent(childComponentType, view, designVersionId, designUpdateId, workPackageId, parentRefId, displayContext){
         let currentComponents = [];
         let wpComponents = [];
 
         //console.log("Looking for " + childComponentType + " data for view " + view + " and context " + displayContext);
+
+        const parentComponent = null;
+
+
 
         switch(view)
         {
@@ -906,19 +762,10 @@ class ClientContainerServices{
             case ViewType.DESIGN_PUBLISHED_VIEW:
 
                 // Don't include removed components in this view if a completed updatable version
-                currentComponents = DesignVersionComponents.find(
-                    {
-                        designVersionId:        designVersionId,
-                        componentType:          childComponentType,
-                        componentParentIdNew:   parentId,
-                        updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-                    },
-                    {sort:{componentIndexNew: 1}}
-                ).fetch();
+                currentComponents = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, childComponentType, parentRefId);
 
                 return currentComponents;
 
-                break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
 
                 switch(displayContext) {
@@ -926,34 +773,15 @@ class ClientContainerServices{
                     case DisplayContext.MASH_INT_TESTS:
 
                         // Don't include removed components in this view for test results
-                        currentComponents = DesignVersionComponents.find(
-                            {
-                                designVersionId:        designVersionId,
-                                componentType:          childComponentType,
-                                componentParentIdNew:   parentId,
-                                updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-                            },
-                            {sort:{componentIndexNew: 1}}
-                        ).fetch();
-
+                        currentComponents = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, childComponentType, parentRefId);
                         break;
 
                     default:
 
-                    // Do include removed components in the current updates view
-                    currentComponents = DesignVersionComponents.find(
-                        {
-                            designVersionId: designVersionId,
-                            componentType: childComponentType,
-                            componentParentIdNew: parentId
-                        },
-                        {sort: {componentIndexNew: 1}}
-                    ).fetch();
-
+                        // Do include removed components in the current updates view
+                        currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
                 }
                 return  currentComponents;
-
-                break;
 
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
@@ -965,68 +793,33 @@ class ClientContainerServices{
                     case DisplayContext.UPDATE_EDIT:
 
                         // Display all DU components.  Only in-scope components exist.
-                        currentComponents = DesignUpdateComponents.find(
-                            {
-                                designVersionId:        designVersionId,
-                                designUpdateId:         designUpdateId,
-                                componentType:          childComponentType,
-                                componentParentIdNew:   parentId,
-                            },
-                            {sort:{componentIndexNew: 1}}
-                        ).fetch();
-
+                        currentComponents = DesignUpdateComponentData.getChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
                         break;
 
                     case DisplayContext.UPDATE_VIEW:
 
                         // Display all DU components.  Don't include peer scope.
-                        currentComponents = DesignUpdateComponents.find(
-                            {
-                                designVersionId:        designVersionId,
-                                designUpdateId:         designUpdateId,
-                                componentType:          childComponentType,
-                                componentParentIdNew:   parentId,
-                                scopeType:              {$ne: UpdateScopeType.SCOPE_PEER_SCOPE}
-                            },
-                            {sort:{componentIndexNew: 1}}
-                        ).fetch();
-
+                        currentComponents = DesignUpdateComponentData.getNonPeerScopeChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
                         break;
 
                     case DisplayContext.UPDATE_SCOPE:
 
                         // Display all design components in the base design so scope can be chosen
-                        currentComponents = DesignVersionComponents.find(
-                            {
-                                designVersionId:        designVersionId,
-                                componentType:          childComponentType,
-                                componentParentIdOld:   parentId,
-                                updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_ADDED}
-                            },
-                            {sort:{componentIndexOld: 1}}
-                        ).fetch();
+                        currentComponents = DesignComponentData.getExistingChildComponentsOfType(designVersionId, childComponentType, parentRefId);
                         break;
 
                     case DisplayContext.WORKING_VIEW:
 
                         // Display latest components in the working view
-                        currentComponents = DesignVersionComponents.find(
-                            {
-                                designVersionId:        designVersionId,
-                                componentType:          childComponentType,
-                                componentParentIdNew:   parentId
-                            },
-                            {sort:{componentIndexNew: 1}}
-                        ).fetch();
-
+                        currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
                         break;
+
                     //TODO - test data for Design Updates?
                 }
 
                 //console.log("Design update components found: " + currentComponents.length);
 
                 return currentComponents;
-                break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
@@ -1035,14 +828,7 @@ class ClientContainerServices{
                     case DisplayContext.WP_SCOPE:
 
                         // Get all Design Components for the scope
-                        currentComponents = DesignVersionComponents.find(
-                            {
-                                designVersionId: designVersionId,
-                                componentParentIdNew: parentId,
-                                componentType: childComponentType
-                            },
-                            {sort: {componentIndexNew: 1}}
-                        ).fetch();
+                        currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
                         break;
 
                     case DisplayContext.WP_VIEW:
@@ -1053,22 +839,15 @@ class ClientContainerServices{
                         // Get only the Design Components that are in the WP
 
                         // Get the parent component
-                        const parent = DesignVersionComponents.findOne({_id: parentId});
+                        const parent = DesignComponentData.getDesignComponentByRef(designVersionId, parentRefId);
 
                         // Get the possible WP components
                         if(parent) {
-                            wpComponents = WorkPackageComponents.find(
-                                {
-                                    workPackageId: workPackageId,
-                                    componentParentReferenceId: parent.componentReferenceId,
-                                    componentType: childComponentType
-                                },
-                                {sort: {componentIndex: 1}}
-                            ).fetch();
+                            wpComponents = WorkPackageComponentData.getChildComponentsOfType(workPackageId, childComponentType, parent.componentReferenceId);
 
                             wpComponents.forEach((wpComponent) => {
 
-                                let dvComponent = DesignVersionComponents.findOne({componentReferenceId: wpComponent.componentReferenceId});
+                                let dvComponent = DesignComponentData.getDesignComponentByRef(designVersionId, wpComponent.componentReferenceId);
 
                                 if(dvComponent) {
                                     currentComponents.push(dvComponent);
@@ -1096,16 +875,7 @@ class ClientContainerServices{
                     case DisplayContext.WP_SCOPE:
 
                         // Get all Update Components for the scope.  Ignore Peer scope for Update WPs
-                        currentComponents = DesignUpdateComponents.find(
-                            {
-                                designVersionId: designVersionId,
-                                designUpdateId: designUpdateId,
-                                componentParentIdNew: parentId,
-                                componentType: childComponentType,
-                                scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
-                            },
-                            {sort: {componentIndexNew: 1}}
-                        ).fetch();
+                        currentComponents = DesignUpdateComponentData.getScopedChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
                         break;
 
                     case DisplayContext.WP_VIEW:
@@ -1117,22 +887,15 @@ class ClientContainerServices{
 
                         // TODO - parent id may be out of date when DU items are recreated...
                         // Get the parent component
-                        const parent = DesignUpdateComponents.findOne({_id: parentId});
+                        const parent = DesignUpdateComponentData.getUpdateComponentByRef(designVersionId, designUpdateId, parentRefId);
 
                         // Get the possible WP components
                         if (parent) {
-                            wpComponents = WorkPackageComponents.find(
-                                {
-                                    workPackageId: workPackageId,
-                                    componentParentReferenceId: parent.componentReferenceId,
-                                    componentType: childComponentType
-                                },
-                                {sort: {componentIndex: 1}}
-                            ).fetch();
+                            wpComponents = WorkPackageComponentData.getChildComponentsOfType(workPackageId, childComponentType, parent.componentReferenceId);
 
                             wpComponents.forEach((wpComponent) => {
 
-                                let duComponent = DesignUpdateComponents.findOne({componentReferenceId: wpComponent.componentReferenceId});
+                                let duComponent = DesignUpdateComponentData.getUpdateComponentByRef(designVersionId, designUpdateId, wpComponent.componentReferenceId);
 
                                 if(duComponent) {
                                     currentComponents.push(duComponent);
@@ -1154,215 +917,215 @@ class ClientContainerServices{
         }
     }
 
-    getBackgroundStepsInFeature(view, displayContext, stepContext, designId, designVersionId, updateId, featureReferenceId){
-        let backgroundSteps = null;
+    // getBackgroundStepsInFeature(view, displayContext, stepContext, designId, designVersionId, updateId, featureReferenceId){
+    //     let backgroundSteps = null;
+    //
+    //     //log((msg) => console.log(msg), LogLevel.TRACE, "Looking for feature background steps in feature: {}", featureReferenceId);
+    //
+    //     // Assume feature is in scope unless we find it isn't for an Update
+    //     let featureInScope = true;
+    //
+    //     switch(view){
+    //         case ViewType.DESIGN_NEW_EDIT:
+    //         case ViewType.DESIGN_PUBLISHED_VIEW:
+    //         case ViewType.DESIGN_UPDATABLE_VIEW:
+    //         case ViewType.WORK_PACKAGE_BASE_EDIT:
+    //         case ViewType.WORK_PACKAGE_BASE_VIEW:
+    //         case ViewType.DEVELOP_BASE_WP:
+    //
+    //             backgroundSteps = FeatureBackgroundSteps.find(
+    //                 {
+    //                     designId: designId,
+    //                     designVersionId: designVersionId,
+    //                     designUpdateId: 'NONE',
+    //                     featureReferenceId: featureReferenceId
+    //                 },
+    //                 {sort:{stepIndex: 1}}
+    //             );
+    //
+    //             log((msg) => console.log(msg), LogLevel.TRACE, "Feature Background Steps found: {}", backgroundSteps.count());
+    //
+    //             return {
+    //                 steps: backgroundSteps.fetch(),
+    //                 displayContext: displayContext,
+    //                 stepContext: stepContext,
+    //                 parentReferenceId: featureReferenceId,
+    //                 parentInScope: featureInScope
+    //             };
+    //
+    //         case ViewType.DESIGN_UPDATE_EDIT:
+    //         case ViewType.DESIGN_UPDATE_VIEW:
+    //         case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+    //         case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+    //         case ViewType.DEVELOP_UPDATE_WP:
+    //
+    //             switch(displayContext){
+    //                 case DisplayContext.UPDATE_EDIT:
+    //                 case DisplayContext.UPDATE_VIEW:
+    //                 case DisplayContext.WP_VIEW:
+    //                     // Update data wanted
+    //                     backgroundSteps = FeatureBackgroundSteps.find(
+    //                         {
+    //                             designId: designId,
+    //                             designVersionId: designVersionId,
+    //                             designUpdateId: updateId,
+    //                             featureReferenceId: featureReferenceId
+    //                         },
+    //                         {sort:{stepIndex: 1}}
+    //                     );
+    //
+    //                     log((msg) => console.log(msg), LogLevel.TRACE, "Update Feature Background Steps found: {}", backgroundSteps.count());
+    //
+    //                     // For updates, check if feature is REALLY in scope
+    //                     const feature = DesignUpdateComponents.findOne(
+    //                         {
+    //                             designId: designId,
+    //                             designVersionId: designVersionId,
+    //                             designUpdateId: updateId,
+    //                             componentType: ComponentType.FEATURE,
+    //                             componentReferenceId: featureReferenceId
+    //                         }
+    //                     );
+    //
+    //                     if(feature){
+    //                         featureInScope = (feature.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
+    //                     }
+    //
+    //                     break;
+    //
+    //                 case DisplayContext.BASE_VIEW:
+    //                     // Base design version data wanted
+    //                     backgroundSteps = FeatureBackgroundSteps.find(
+    //                         {
+    //                             designId: designId,
+    //                             designVersionId: designVersionId,
+    //                             designUpdateId: 'NONE',
+    //                             featureReferenceId: featureReferenceId
+    //                         },
+    //                         {sort:{stepIndex: 1}}
+    //                     );
+    //
+    //                     log((msg) => console.log(msg), LogLevel.TRACE, "Update Base Background Steps found: {}", backgroundSteps.count());
+    //
+    //                     break;
+    //             }
+    //
+    //             return {
+    //                 steps: backgroundSteps.fetch(),
+    //                 displayContext: displayContext,
+    //                 stepContext: stepContext,
+    //                 parentReferenceId: featureReferenceId,
+    //                 parentInScope: featureInScope
+    //             };
+    //
+    //         default:
+    //             log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
+    //     }
+    //
+    // }
 
-        //log((msg) => console.log(msg), LogLevel.TRACE, "Looking for feature background steps in feature: {}", featureReferenceId);
-
-        // Assume feature is in scope unless we find it isn't for an Update
-        let featureInScope = true;
-
-        switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.DEVELOP_BASE_WP:
-
-                backgroundSteps = FeatureBackgroundSteps.find(
-                    {
-                        designId: designId,
-                        designVersionId: designVersionId,
-                        designUpdateId: 'NONE',
-                        featureReferenceId: featureReferenceId
-                    },
-                    {sort:{stepIndex: 1}}
-                );
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Feature Background Steps found: {}", backgroundSteps.count());
-
-                return {
-                    steps: backgroundSteps.fetch(),
-                    displayContext: displayContext,
-                    stepContext: stepContext,
-                    parentReferenceId: featureReferenceId,
-                    parentInScope: featureInScope
-                };
-
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.DEVELOP_UPDATE_WP:
-
-                switch(displayContext){
-                    case DisplayContext.UPDATE_EDIT:
-                    case DisplayContext.UPDATE_VIEW:
-                    case DisplayContext.WP_VIEW:
-                        // Update data wanted
-                        backgroundSteps = FeatureBackgroundSteps.find(
-                            {
-                                designId: designId,
-                                designVersionId: designVersionId,
-                                designUpdateId: updateId,
-                                featureReferenceId: featureReferenceId
-                            },
-                            {sort:{stepIndex: 1}}
-                        );
-
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Update Feature Background Steps found: {}", backgroundSteps.count());
-
-                        // For updates, check if feature is REALLY in scope
-                        const feature = DesignUpdateComponents.findOne(
-                            {
-                                designId: designId,
-                                designVersionId: designVersionId,
-                                designUpdateId: updateId,
-                                componentType: ComponentType.FEATURE,
-                                componentReferenceId: featureReferenceId
-                            }
-                        );
-
-                        if(feature){
-                            featureInScope = (feature.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
-                        }
-
-                        break;
-
-                    case DisplayContext.BASE_VIEW:
-                        // Base design version data wanted
-                        backgroundSteps = FeatureBackgroundSteps.find(
-                            {
-                                designId: designId,
-                                designVersionId: designVersionId,
-                                designUpdateId: 'NONE',
-                                featureReferenceId: featureReferenceId
-                            },
-                            {sort:{stepIndex: 1}}
-                        );
-
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Update Base Background Steps found: {}", backgroundSteps.count());
-
-                        break;
-                }
-
-                return {
-                    steps: backgroundSteps.fetch(),
-                    displayContext: displayContext,
-                    stepContext: stepContext,
-                    parentReferenceId: featureReferenceId,
-                    parentInScope: featureInScope
-                };
-
-            default:
-                log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
-        }
-
-    }
-
-    getScenarioStepsInScenario(view, displayContext, stepContext, designId, designVersionId, updateId, scenarioReferenceId){
-        let scenarioSteps = null;
-
-        // Assume all scenarios are in scope - will check update scenarios to see if they actually are
-        let scenarioInScope = true;
-
-        switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.DEVELOP_BASE_WP:
-
-                scenarioSteps = ScenarioSteps.find(
-                    {
-                        designId: designId,
-                        designVersionId: designVersionId,
-                        designUpdateId: 'NONE',
-                        scenarioReferenceId: scenarioReferenceId,
-                        isRemoved: false
-                    },
-                    {sort:{stepIndex: 1}}
-                );
-
-                return {
-                    steps: scenarioSteps.fetch(),
-                    displayContext: displayContext,
-                    stepContext: stepContext,
-                    parentReferenceId: scenarioReferenceId,
-                    parentInScope: scenarioInScope
-                };
-
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.DEVELOP_UPDATE_WP:
-
-                switch(displayContext){
-                    case DisplayContext.UPDATE_EDIT:
-                    case DisplayContext.UPDATE_VIEW:
-                        // Update data wanted
-                        scenarioSteps = ScenarioSteps.find(
-                            {
-                                designId: designId,
-                                designVersionId: designVersionId,
-                                designUpdateId: updateId,
-                                scenarioReferenceId: scenarioReferenceId
-                            },
-                            {sort:{stepIndex: 1}}
-                        );
-
-                        // For updates, check if scenario is REALLY in scope
-                        const scenario = DesignUpdateComponents.findOne(
-                            {
-                                designId: designId,
-                                designVersionId: designVersionId,
-                                designUpdateId: updateId,
-                                componentType: ComponentType.SCENARIO,
-                                componentReferenceId: scenarioReferenceId
-                            }
-                        );
-
-                        if(scenario){
-                            scenarioInScope = (scenario.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
-                        }
-
-                        break;
-
-                    case DisplayContext.BASE_VIEW:
-                        // Base design version data wanted
-                        scenarioSteps = ScenarioSteps.find(
-                            {
-                                designId: designId,
-                                designVersionId: designVersionId,
-                                designUpdateId: 'NONE',
-                                scenarioReferenceId: scenarioReferenceId,
-                                isRemoved: false
-                            },
-                            {sort:{stepIndex: 1}}
-                        );
-
-                        break;
-
-                    default:
-                        log((msg) => console.log(msg), LogLevel.ERROR, "INVALID DISPLAY CONTEXT TYPE!: {}", displayContext);
-                }
-
-                return {
-                    steps: scenarioSteps.fetch(),
-                    displayContext: displayContext,
-                    stepContext: stepContext,
-                    parentReferenceId: scenarioReferenceId,
-                    parentInScope: scenarioInScope
-                };
-
-                break;
-            default:
-                log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
-        }
-    }
+    // getScenarioStepsInScenario(view, displayContext, stepContext, designId, designVersionId, updateId, scenarioReferenceId){
+    //     let scenarioSteps = null;
+    //
+    //     // Assume all scenarios are in scope - will check update scenarios to see if they actually are
+    //     let scenarioInScope = true;
+    //
+    //     switch(view){
+    //         case ViewType.DESIGN_NEW_EDIT:
+    //         case ViewType.DESIGN_PUBLISHED_VIEW:
+    //         case ViewType.DESIGN_UPDATABLE_VIEW:
+    //         case ViewType.WORK_PACKAGE_BASE_EDIT:
+    //         case ViewType.WORK_PACKAGE_BASE_VIEW:
+    //         case ViewType.DEVELOP_BASE_WP:
+    //
+    //             scenarioSteps = ScenarioSteps.find(
+    //                 {
+    //                     designId: designId,
+    //                     designVersionId: designVersionId,
+    //                     designUpdateId: 'NONE',
+    //                     scenarioReferenceId: scenarioReferenceId,
+    //                     isRemoved: false
+    //                 },
+    //                 {sort:{stepIndex: 1}}
+    //             );
+    //
+    //             return {
+    //                 steps: scenarioSteps.fetch(),
+    //                 displayContext: displayContext,
+    //                 stepContext: stepContext,
+    //                 parentReferenceId: scenarioReferenceId,
+    //                 parentInScope: scenarioInScope
+    //             };
+    //
+    //         case ViewType.DESIGN_UPDATE_EDIT:
+    //         case ViewType.DESIGN_UPDATE_VIEW:
+    //         case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+    //         case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+    //         case ViewType.DEVELOP_UPDATE_WP:
+    //
+    //             switch(displayContext){
+    //                 case DisplayContext.UPDATE_EDIT:
+    //                 case DisplayContext.UPDATE_VIEW:
+    //                     // Update data wanted
+    //                     scenarioSteps = ScenarioSteps.find(
+    //                         {
+    //                             designId: designId,
+    //                             designVersionId: designVersionId,
+    //                             designUpdateId: updateId,
+    //                             scenarioReferenceId: scenarioReferenceId
+    //                         },
+    //                         {sort:{stepIndex: 1}}
+    //                     );
+    //
+    //                     // For updates, check if scenario is REALLY in scope
+    //                     const scenario = DesignUpdateComponents.findOne(
+    //                         {
+    //                             designId: designId,
+    //                             designVersionId: designVersionId,
+    //                             designUpdateId: updateId,
+    //                             componentType: ComponentType.SCENARIO,
+    //                             componentReferenceId: scenarioReferenceId
+    //                         }
+    //                     );
+    //
+    //                     if(scenario){
+    //                         scenarioInScope = (scenario.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
+    //                     }
+    //
+    //                     break;
+    //
+    //                 case DisplayContext.BASE_VIEW:
+    //                     // Base design version data wanted
+    //                     scenarioSteps = ScenarioSteps.find(
+    //                         {
+    //                             designId: designId,
+    //                             designVersionId: designVersionId,
+    //                             designUpdateId: 'NONE',
+    //                             scenarioReferenceId: scenarioReferenceId,
+    //                             isRemoved: false
+    //                         },
+    //                         {sort:{stepIndex: 1}}
+    //                     );
+    //
+    //                     break;
+    //
+    //                 default:
+    //                     log((msg) => console.log(msg), LogLevel.ERROR, "INVALID DISPLAY CONTEXT TYPE!: {}", displayContext);
+    //             }
+    //
+    //             return {
+    //                 steps: scenarioSteps.fetch(),
+    //                 displayContext: displayContext,
+    //                 stepContext: stepContext,
+    //                 parentReferenceId: scenarioReferenceId,
+    //                 parentInScope: scenarioInScope
+    //             };
+    //
+    //             break;
+    //         default:
+    //             log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
+    //     }
+    // }
 
     getTextDataForDesignComponent(userContext, view, displayContext){
 
@@ -1381,7 +1144,7 @@ class ClientContainerServices{
                 case ViewType.DEVELOP_BASE_WP:
                 case ViewType.DESIGN_UPDATABLE_VIEW:
 
-                    selectedDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+                    selectedDesignComponent = DesignComponentData.getDesignComponentById(userContext.designComponentId);
 
                     break;
 
@@ -1391,10 +1154,11 @@ class ClientContainerServices{
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.DEVELOP_UPDATE_WP:
 
-                    selectedDesignComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+                    selectedDesignComponent = DesignUpdateComponentData.getUpdateComponentById(userContext.designComponentId);
+
                     if(!selectedDesignComponent){
                         // Must be selecting from the DU scope...
-                        selectedDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+                        selectedDesignComponent = DesignComponentData.getDesignComponentById(userContext.designComponentId);
                         newDisplayContext = DisplayContext.UPDATE_SCOPE;
                     }
 
@@ -1423,18 +1187,12 @@ class ClientContainerServices{
         // Just want all terms relevant to this design / design version
         //console.log ("Looking for Domain Dictionary terms for Design: " + designId + " and Design Version: " + designVersionId);
 
-        const domainDictionaryItems = DomainDictionary.find(
-            {
-                designId: designId,
-                designVersionId: designVersionId
-            },
-            {sort:{sortingName: 1}}     // The sorting name is the term name except when term is first created
-        );
+        const domainDictionaryItems = DomainDictionaryData.getAllTerms(designId, designVersionId);
 
         //console.log ("Domain Dictionary terms found: " + domainDictionaryItems.count());
 
         return {
-            dictionaryTerms: domainDictionaryItems.fetch()
+            dictionaryTerms: domainDictionaryItems
         }
     };
 
@@ -1449,24 +1207,13 @@ class ClientContainerServices{
             // Get all scenarios
 
             if (scenarioReferenceId === 'NONE') {
-                return UserDesignVersionMashScenarios.find(
-                    {
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designFeatureAspectReferenceId: featureAspectReferenceId
-                    },
-                    {sort: {mashItemIndex: 1}}
-                ).fetch();
+
+                return UserDvMashScenarioData.getFeatureAspectScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId);
+
             } else {
-                return UserDesignVersionMashScenarios.find(
-                    {
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designFeatureAspectReferenceId: featureAspectReferenceId,
-                        designScenarioReferenceId: scenarioReferenceId
-                    },
-                    {sort: {mashItemIndex: 1}}
-                ).fetch();
+
+                return UserDvMashScenarioData.getScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId, scenarioReferenceId);
+
             }
         } else {
 
@@ -1477,35 +1224,18 @@ class ClientContainerServices{
             let wpComponents = [];
 
             if(scenarioReferenceId === 'NONE') {
-                wpComponents = WorkPackageComponents.find(
-                    {
-                        workPackageId: userContext.workPackageId,
-                        componentType: ComponentType.SCENARIO,
-                        componentParentReferenceId: featureAspectReferenceId,
-                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                    },
-                    {sort: {componentIndex: 1}}
-                ).fetch();
+
+                wpComponents = WorkPackageComponentData.getActiveFeatureAspectScenarios(userContext.workPackageId, featureAspectReferenceId);
+
             } else {
-                wpComponents = WorkPackageComponents.find(
-                    {
-                        workPackageId: userContext.workPackageId,
-                        componentType: ComponentType.SCENARIO,
-                        componentReferenceId: scenarioReferenceId,
-                        componentParentReferenceId: featureAspectReferenceId,
-                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                    },
-                    {sort: {componentIndex: 1}}
-                ).fetch();
+
+                wpComponents = WorkPackageComponentData.getActiveFeatureAspectScenario(userContext.workPackageId, featureAspectReferenceId, scenarioReferenceId);
+
             }
 
             wpComponents.forEach((wpComponent) => {
 
-                let mashScenario = UserDesignVersionMashScenarios.findOne({
-                    userId: userContext.userId,
-                    designVersionId: userContext.designVersionId,
-                    designScenarioReferenceId: wpComponent.componentReferenceId
-                });
+                let mashScenario = UserDvMashScenarioData.getScenario(userContext, wpComponent.componentReferenceId);
 
                 scenarios.push(mashScenario);
             });
@@ -1516,119 +1246,113 @@ class ClientContainerServices{
 
     getMashScenarioTestResults(userContext, mashScenario, testType){
 
-        return UserMashScenarioTests.find({
-            userId:                         userContext.userId,
-            designVersionId:                userContext.designVersionId,
-            designScenarioReferenceId:      mashScenario.designScenarioReferenceId,
-            testType:                       testType
-        }).fetch();
+        return UserMashScenarioTestData.getScenarioTestsByType(userContext.userId, userContext.designVersionId, mashScenario.designScenarioReferenceId, testType);
     }
 
     // To be used when there is one test only of the given type for a Scenario
     getMashScenarioTestResult(userId, designVersionId, scenarioRef, testType){
 
-        return UserMashScenarioTests.findOne({
-            userId:                         userId,
-            designVersionId:                designVersionId,
-            designScenarioReferenceId:      scenarioRef,
-            testType:                       testType
-        });
+        return UserMashScenarioTestData.getScenarioTestByType(userId, designVersionId, scenarioRef, testType);
     }
 
 
-    getMashScenarioSteps(userContext){
-        // Returns steps for the current scenario that are:
-        // 1. In Design Only
-        // 2. Linked across Design - Dev
-        // 3. In Dev Only (but with Scenario that is in Design)
+    // getMashScenarioSteps(userContext){
+    //     // Returns steps for the current scenario that are:
+    //     // 1. In Design Only
+    //     // 2. Linked across Design - Dev
+    //     // 3. In Dev Only (but with Scenario that is in Design)
+    //
+    //     log((msg) => console.log(msg), LogLevel.DEBUG, "Getting mash Scenario Steps for Scenario {}", userContext.scenarioReferenceId);
+    //
+    //     const designSteps = UserWorkPackageFeatureStepData.find(
+    //         {
+    //             userId:                         userContext.userId,
+    //             designVersionId:                userContext.designVersionId,
+    //             designUpdateId:                 userContext.designUpdateId,
+    //             workPackageId:                  userContext.workPackageId,
+    //             designScenarioReferenceId:      userContext.scenarioReferenceId,
+    //             mashComponentType:              ComponentType.SCENARIO_STEP,
+    //             accMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED
+    //         },
+    //         {sort: {mashItemIndex: 1}}
+    //     ).fetch();
+    //
+    //     const linkedSteps = UserWorkPackageFeatureStepData.find(
+    //         {
+    //             userId:                         userContext.userId,
+    //             designVersionId:                userContext.designVersionId,
+    //             designUpdateId:                 userContext.designUpdateId,
+    //             workPackageId:                  userContext.workPackageId,
+    //             designScenarioReferenceId:      userContext.scenarioReferenceId,
+    //             mashComponentType:              ComponentType.SCENARIO_STEP,
+    //             accMashStatus:                  MashStatus.MASH_LINKED
+    //         },
+    //         {sort: {mashItemIndex: 1}}
+    //     ).fetch();
+    //
+    //     const devSteps = UserWorkPackageFeatureStepData.find(
+    //         {
+    //             userId:                         userContext.userId,
+    //             designVersionId:                userContext.designVersionId,
+    //             designUpdateId:                 userContext.designUpdateId,
+    //             workPackageId:                  userContext.workPackageId,
+    //             designScenarioReferenceId:      userContext.scenarioReferenceId,
+    //             mashComponentType:              ComponentType.SCENARIO_STEP,
+    //             accMashStatus:                  MashStatus.MASH_NOT_DESIGNED
+    //         },
+    //         {sort: {mashItemIndex: 1}}
+    //     ).fetch();
+    //
+    //     return({
+    //         designSteps: designSteps,
+    //         linkedSteps: linkedSteps,
+    //         devSteps: devSteps,
+    //     });
+    // }
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting mash Scenario Steps for Scenario {}", userContext.scenarioReferenceId);
-
-        const designSteps = UserWorkPackageFeatureStepData.find(
-            {
-                userId:                         userContext.userId,
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                workPackageId:                  userContext.workPackageId,
-                designScenarioReferenceId:      userContext.scenarioReferenceId,
-                mashComponentType:              ComponentType.SCENARIO_STEP,
-                accMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED
-            },
-            {sort: {mashItemIndex: 1}}
-        ).fetch();
-
-        const linkedSteps = UserWorkPackageFeatureStepData.find(
-            {
-                userId:                         userContext.userId,
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                workPackageId:                  userContext.workPackageId,
-                designScenarioReferenceId:      userContext.scenarioReferenceId,
-                mashComponentType:              ComponentType.SCENARIO_STEP,
-                accMashStatus:                  MashStatus.MASH_LINKED
-            },
-            {sort: {mashItemIndex: 1}}
-        ).fetch();
-
-        const devSteps = UserWorkPackageFeatureStepData.find(
-            {
-                userId:                         userContext.userId,
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                workPackageId:                  userContext.workPackageId,
-                designScenarioReferenceId:      userContext.scenarioReferenceId,
-                mashComponentType:              ComponentType.SCENARIO_STEP,
-                accMashStatus:                  MashStatus.MASH_NOT_DESIGNED
-            },
-            {sort: {mashItemIndex: 1}}
-        ).fetch();
-
-        return({
-            designSteps: designSteps,
-            linkedSteps: linkedSteps,
-            devSteps: devSteps,
-        });
-    }
-
-    getDevFilesData(userContext){
-
-        // Get the data on feature files in the user's build area, split into:
-        // - Relevant to current WP
-        // - Relevant to wider design
-        // - Unknown in Design
-
-        const wpFiles = UserDevFeatures.find({
-            userId: userContext.userId,
-            featureStatus: UserDevFeatureStatus.FEATURE_IN_WP
-        }).fetch();
-
-        const designFiles = UserDevFeatures.find({
-            userId: userContext.userId,
-            featureStatus: UserDevFeatureStatus.FEATURE_IN_DESIGN
-        }).fetch();
-
-        const unknownFiles = UserDevFeatures.find({
-            userId: userContext.userId,
-            featureStatus: UserDevFeatureStatus.FEATURE_UNKNOWN
-        }).fetch();
-
-        return{
-            wpFiles: wpFiles,
-            designFiles: designFiles,
-            unknownFiles: unknownFiles
-        }
-
-    };
+    // getDevFilesData(userContext){
+    //
+    //     // Get the data on feature files in the user's build area, split into:
+    //     // - Relevant to current WP
+    //     // - Relevant to wider design
+    //     // - Unknown in Design
+    //
+    //     const wpFiles = UserDevFeatures.find({
+    //         userId: userContext.userId,
+    //         featureStatus: UserDevFeatureStatus.FEATURE_IN_WP
+    //     }).fetch();
+    //
+    //     const designFiles = UserDevFeatures.find({
+    //         userId: userContext.userId,
+    //         featureStatus: UserDevFeatureStatus.FEATURE_IN_DESIGN
+    //     }).fetch();
+    //
+    //     const unknownFiles = UserDevFeatures.find({
+    //         userId: userContext.userId,
+    //         featureStatus: UserDevFeatureStatus.FEATURE_UNKNOWN
+    //     }).fetch();
+    //
+    //     return{
+    //         wpFiles: wpFiles,
+    //         designFiles: designFiles,
+    //         unknownFiles: unknownFiles
+    //     }
+    //
+    // };
 
     getTestSummaryData(scenario){
 
         const userContext = store.getState().currentUserItemContext;
 
-        return UserDesignVersionMashScenarios.findOne({
-            userId:                     userContext.userId,
-            designVersionId:            scenario.designVersionId,
-            designScenarioReferenceId:  scenario.componentReferenceId
-        });
+        return UserDevTestSummaryData.getTestSummaryForScenario(userContext.userId, userContext.designVersionId, scenario.componentReferenceId, scenario.featureReferenceId);
+
+        // NOTE: previously this was called - seems wrong but may have worked and may have set up incorrect expectations...
+
+        // return UserDesignVersionMashScenarios.findOne({
+        //     userId:                     userContext.userId,
+        //     designVersionId:            scenario.designVersionId,
+        //     designScenarioReferenceId:  scenario.componentReferenceId
+        // });
 
     }
 
@@ -1636,12 +1360,7 @@ class ClientContainerServices{
 
         const userContext = store.getState().currentUserItemContext;
 
-        return UserDevTestSummary.findOne({
-            userId:                 userContext.userId,
-            designVersionId:        feature.designVersionId,
-            scenarioReferenceId:    'NONE',
-            featureReferenceId:     feature.componentReferenceId
-        });
+        return UserDevTestSummaryData.getTestSummaryForFeature(userContext.userId, feature.designVersionId, feature.componentReferenceId);
 
     }
 
@@ -2158,9 +1877,7 @@ class ClientContainerServices{
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Progress Data for DV {}", userContext.designVersionId);
 
-        const userRoles = UserRoles.findOne({
-            userId: userContext.userId
-        });
+        const userRoles = UserRoleData.getRoleByUserId(userContext.userId);
 
         if(userContext.designVersionId === 'NONE'){
             return{
@@ -2172,63 +1889,50 @@ class ClientContainerServices{
             }
         }
 
-        const dv = DesignVersions.findOne({_id: userContext.designVersionId});
+        const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
         switch(dv.designVersionStatus){
             case DesignVersionStatus.VERSION_NEW:
             case DesignVersionStatus.VERSION_DRAFT:
             case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
 
-                // Get item
-                dvItem = UserWorkProgressSummary.findOne(
-                    {
-                        userId:                 userContext.userId,
-                        designVersionId:        userContext.designVersionId,
-                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_BASE_DV
-                    }
+                // Get summary for base Design Version
+                dvItem = UserWorkProgressSummaryData.getHeaderSummaryItem(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    WorkSummaryType.WORK_SUMMARY_BASE_DV
                 );
 
-                // Get WPs
-                dvWorkPackages = UserWorkProgressSummary.find(
-                    {
-                        userId:                 userContext.userId,
-                        designVersionId:        userContext.designVersionId,
-                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_BASE_WP
-                    },
-                    {sort: {name: 1}}
-                ).fetch();
-
+                // Get Base WP summaries
+                dvWorkPackages = UserWorkProgressSummaryData.getSummaryListItems(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    WorkSummaryType.WORK_SUMMARY_BASE_WP
+                );
                 break;
 
             default:
 
                 // Get All scenarios item
-                dvAllItem = UserWorkProgressSummary.findOne(
-                    {
-                        userId:                 userContext.userId,
-                        designVersionId:        userContext.designVersionId,
-                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL
-                    }
+                dvAllItem = UserWorkProgressSummaryData.getHeaderSummaryItem(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL
                 );
 
                 // Get update scenarios item
-                dvItem = UserWorkProgressSummary.findOne(
-                    {
-                        userId:                 userContext.userId,
-                        designVersionId:        userContext.designVersionId,
-                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE_DV
-                    }
+                dvItem = UserWorkProgressSummaryData.getHeaderSummaryItem(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    WorkSummaryType.WORK_SUMMARY_UPDATE_DV
                 );
 
-                // Get DUs
-                dvDesignUpdates = UserWorkProgressSummary.find(
-                    {
-                        userId:                 userContext.userId,
-                        designVersionId:        userContext.designVersionId,
-                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE
-                    },
-                    {sort: {name: 1}}
-                ).fetch()
+                // Get DU summaries
+                dvDesignUpdates = UserWorkProgressSummaryData.getSummaryListItems(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    WorkSummaryType.WORK_SUMMARY_UPDATE
+                );
         }
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Returning WPs {}  DUs: {}", dvWorkPackages.length, dvDesignUpdates.length);
@@ -2246,9 +1950,7 @@ class ClientContainerServices{
 
         let duWorkPackages = [];
 
-        const userRoles = UserRoles.findOne({
-            userId: userContext.userId
-        });
+        const userRoles = UserRoleData.getRoleByUserId(userContext.userId);
 
         if(designUpdateId === 'NONE'){
             return{
@@ -2257,15 +1959,12 @@ class ClientContainerServices{
             }
         }
 
-        duWorkPackages = UserWorkProgressSummary.find(
-            {
-                userId:             userContext.userId,
-                designVersionId:    userContext.designVersionId,
-                designUpdateId:     designUpdateId,
-                workSummaryType:    WorkSummaryType.WORK_SUMMARY_UPDATE_WP
-            },
-            {sort: {name: 1}}
-        ).fetch();
+        duWorkPackages = UserWorkProgressSummaryData.getUpdateSummaryListItems(
+            userContext.userId,
+            userContext.designVersionId,
+            designUpdateId,
+            WorkSummaryType.WORK_SUMMARY_UPDATE_WP
+        );
 
         return{
             duWorkPackages:     duWorkPackages,
@@ -2281,11 +1980,7 @@ class ClientContainerServices{
         let searchRegex = new RegExp(searchString);
         let results = [];
 
-        const matchingScenarios = DesignVersionComponents.find({
-            designVersionId:    userContext.designVersionId,
-            componentType:      ComponentType.SCENARIO,
-            componentNameNew:   {$regex: searchRegex}
-        }).fetch();
+        const matchingScenarios = DesignComponentData.getRegexMatchingScenarios(userContext.designVersionId, searchRegex);
 
         // Don't start displaying until there is a reasonable filter
         if(matchingScenarios.length > 50){
@@ -2300,10 +1995,7 @@ class ClientContainerServices{
 
             matchingScenarios.forEach((scenario) => {
                 // Get feature name
-                let feature = DesignVersionComponents.findOne({
-                    designVersionId: userContext.designVersionId,
-                    componentReferenceId: scenario.componentFeatureReferenceIdNew
-                });
+                let feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, scenario.componentFeatureReferenceIdNew);
 
                 let featureName = 'Unknown';
 
@@ -2326,4 +2018,4 @@ class ClientContainerServices{
 
 }
 
-export default new ClientContainerServices();
+export default new ClientDataServices();

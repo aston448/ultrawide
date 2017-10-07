@@ -35,6 +35,16 @@ class DomainDictionaryData{
         return DomainDictionary.findOne({_id: termId});
     }
 
+    getAllTerms(designId, designVersionId){
+
+        return DomainDictionary.find(
+            {
+                designId: designId,
+                designVersionId: designVersionId
+            },
+            {sort:{sortingName: 1}}     // The sorting name is the term name except when term is first created
+        ).fetch();
+    }
 
 
     // UPDATE ==========================================================================================================

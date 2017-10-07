@@ -3,7 +3,7 @@ import {DesignUpdates}                  from '../../collections/design_update/de
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 import {WorkPackages}                   from '../../collections/work/work_packages.js';
 
-import { DesignUpdateStatus, DesignUpdateMergeAction, ComponentType, UpdateScopeType, WorkPackageStatus }  from '../../constants/constants.js';
+import { DesignUpdateStatus, DesignUpdateMergeAction, ComponentType, UpdateScopeType, WorkPackageStatus, WorkPackageType }  from '../../constants/constants.js';
 import { DefaultItemNames} from "../../constants/default_names";
 
 class DesignUpdateData{
@@ -130,6 +130,16 @@ class DesignUpdateData{
         }).fetch();
     }
 
+    getUpdateComponentsOfType(designUpdateId, componentType){
+
+        return DesignUpdateComponents.find(
+            {
+                designUpdateId: designUpdateId,
+                componentType: componentType
+            },
+            {sort: {componentIndexNew: 1}}
+        ).fetch();
+    }
 
     // DU Work Packages ------------------------------------------------------------------------------------------------
     getPublishedWorkPackages(designUpdateId){
@@ -142,6 +152,19 @@ class DesignUpdateData{
             {
                 $sort: {workPackageName: 1}
             }
+        ).fetch();
+    }
+
+    getUpdateWorkPackagesAtStatus(designVersionId, designUpdateId, status){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                designUpdateId: designUpdateId,
+                workPackageType: WorkPackageType.WP_UPDATE,
+                workPackageStatus: status
+            },
+            {sort: {workPackageName: 1}}
         ).fetch();
     }
 

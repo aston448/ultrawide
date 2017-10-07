@@ -533,14 +533,14 @@ export class DesignComponent extends Component{
                 inScope = (currentItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
             }
 
-            // Determine the correct parent id
-            let parentId = currentItem._id;
+            // Determine the correct parent reference
+            let parentRefId = currentItem.componentParentReferenceIdNew;
 
             // Common components used:
             let designSectionsContainer =
                 <DesignSectionsContainer params={{
                     designVersionId: userContext.designVersionId,
-                    parentId: parentId,
+                    parentRefId: parentRefId,
                     displayContext: displayContext,
                     view: view,
                     updateId: userContext.designUpdateId,
@@ -551,7 +551,7 @@ export class DesignComponent extends Component{
             let featuresContainer =
                 <FeaturesContainer params={{
                     designVersionId: userContext.designVersionId,
-                    parentId: parentId,
+                    parentRefId: parentRefId,
                     displayContext: displayContext,
                     view: view,
                     updateId: userContext.designUpdateId,
@@ -576,7 +576,7 @@ export class DesignComponent extends Component{
             let scenariosContainer =
                 <ScenariosContainer params={{
                     designVersionId: userContext.designVersionId,
-                    parentId: parentId,
+                    parentRefId: parentRefId,
                     displayContext: displayContext,
                     view: view,
                     updateId: userContext.designUpdateId,
@@ -587,7 +587,7 @@ export class DesignComponent extends Component{
             let featureAspectsContainer =
                 <FeatureAspectsContainer params={{
                     designVersionId: userContext.designVersionId,
-                    parentId: parentId,
+                    parentRefId: parentRefId,
                     displayContext: displayContext,
                     view: view,
                     updateId: userContext.designUpdateId,

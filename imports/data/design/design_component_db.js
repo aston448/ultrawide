@@ -233,6 +233,41 @@ class DesignComponentData {
         ).fetch();
     }
 
+    getNonRemovedChildComponentsOfType(designVersionId, childComponentType, componentParentReferenceId,){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:                designVersionId,
+                componentType:                  childComponentType,
+                componentParentReferenceIdNew:  componentParentReferenceId,
+                updateMergeStatus:              {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+            },
+            {sort:{componentIndexNew: 1}}
+        ).fetch();
+    }
+
+    getExistingChildComponentsOfType(designVersionId, childComponentType, parentRefId){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:                designVersionId,
+                componentType:                  childComponentType,
+                componentParentreferenceIdOld:  parentRefId,
+                updateMergeStatus:              {$ne: UpdateMergeStatus.COMPONENT_ADDED}
+            },
+            {sort:{componentIndexOld: 1}}
+        ).fetch();
+    }
+
+    getRegexMatchingScenarios(designVersionId, searchRegex){
+
+        return DesignVersionComponents.find({
+            designVersionId:    designVersionId,
+            componentType:      ComponentType.SCENARIO,
+            componentNameNew:   {$regex: searchRegex}
+        }).fetch();
+    }
+
     getChildCount(designVersionId, componentReferenceId){
 
         return DesignVersionComponents.find(

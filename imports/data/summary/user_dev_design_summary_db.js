@@ -4,9 +4,10 @@ class UserDevDesignSummaryData{
 
     // INSERT ==========================================================================================================
 
-    insertNewDesignVersionSummary(
+    insertNewDesignSummary(
         userId,
         designVersionId,
+        designUpdateId,
         totalFeatureCount,
         totalScenarioCount,
         totalScenariosWithoutTests,
@@ -26,6 +27,7 @@ class UserDevDesignSummaryData{
         return UserDevDesignSummary.insert({
             userId: userId,
             designVersionId: designVersionId,
+            designUpdateId: designUpdateId,
             featureCount: totalFeatureCount,
             scenarioCount: totalScenarioCount,
             untestedScenarioCount: totalScenariosWithoutTests,
@@ -45,13 +47,16 @@ class UserDevDesignSummaryData{
 
     // SELECT ==========================================================================================================
 
-    getUserDesignVersionSummary(userContext){
+    // Note - this may be a summary of an update only if designUpdateId is not NONE
+    getUserDesignSummary(userContext){
 
         return UserDevDesignSummaryData.findOne({
             userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId
+            designVersionId:    userContext.designVersionId,
+            designUpdateId:     userContext.designUpdateId
         });
     }
+
 
     // REMOVE ==========================================================================================================
 

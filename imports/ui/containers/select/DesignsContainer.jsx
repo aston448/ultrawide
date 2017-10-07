@@ -14,7 +14,7 @@ import ItemContainer        from '../../components/common/ItemContainer.jsx';
 // Ultrawide Services
 import {RoleType} from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignServices         from  '../../../apiClient/apiClientDesign.js';
 
 // Bootstrap

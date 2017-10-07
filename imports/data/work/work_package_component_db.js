@@ -99,6 +99,45 @@ class WorkPackageComponentData {
         });
     }
 
+    getChildComponentsOfType(workPackageId, childComponentType, parentRefId){
+
+        return WorkPackageComponents.find(
+            {
+                workPackageId: workPackageId,
+                componentParentReferenceId: parentRefId,
+                componentType: childComponentType
+            },
+            {sort: {componentIndex: 1}}
+        ).fetch();
+    }
+
+    getActiveFeatureAspectScenarios(workPackageId, featureAspectReferenceId){
+
+        return WorkPackageComponents.find(
+            {
+                workPackageId:              workPackageId,
+                componentType:              ComponentType.SCENARIO,
+                componentParentReferenceId: featureAspectReferenceId,
+                scopeType:                  WorkPackageScopeType.SCOPE_ACTIVE
+            },
+            {sort: {componentIndex: 1}}
+        ).fetch();
+    }
+
+    getActiveFeatureAspectScenario(workPackageId, featureAspectReferenceId, scenarioReferenceId){
+
+        return WorkPackageComponents.find(
+            {
+                workPackageId: workPackageId,
+                componentType: ComponentType.SCENARIO,
+                componentReferenceId: scenarioReferenceId,
+                componentParentReferenceId: featureAspectReferenceId,
+                scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+            },
+            {sort: {componentIndex: 1}}
+        ).fetch();
+    }
+
     // UPDATE ==========================================================================================================
 
     updateExistingWpComponent(wpComponentId, designComponent, scopeType){

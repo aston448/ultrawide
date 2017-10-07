@@ -1,5 +1,6 @@
 
 import { TestOutputLocations }              from '../../collections/configure/test_output_locations.js';
+import { TestOutputLocationFiles}           from "../../collections/configure/test_output_location_files";
 
 import { DefaultLocationText }              from "../../constants/default_names";
 
@@ -70,6 +71,10 @@ class TestOutputLocationData{
 
     }
 
+    getAllLocationFiles(locationId){
+
+        return TestOutputLocationFiles.find({locationId: locationId}).fetch();
+    }
 
 
     // UPDATE ==========================================================================================================

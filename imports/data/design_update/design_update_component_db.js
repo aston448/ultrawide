@@ -213,6 +213,19 @@ class DesignUpdateComponentData{
 
     }
 
+    getScopedChildComponentsOfType(designUpdateId, childComponentType, parentRefId){
+
+        return DesignUpdateComponents.find(
+            {
+                designUpdateId:                 designUpdateId,
+                componentParentReferenceIdNew:  parentRefId,
+                componentType:                  childComponentType,
+                scopeType:                      {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
+            },
+            {sort: {componentIndexNew: 1}}
+        ).fetch();
+    }
+
     getPeerComponents(designUpdateId, componentReferenceId, componentType, componentParentReferenceId){
 
         return DesignUpdateComponents.find(
@@ -252,9 +265,22 @@ class DesignUpdateComponentData{
         ).fetch();
     }
 
+    getNonPeerScopeChildComponentsOfType(designUpdateId, childComponentType, parentRefId){
+
+        return DesignUpdateComponents.find(
+            {
+                designUpdateId:                 designUpdateId,
+                componentType:                  childComponentType,
+                componentParentReferenceIdNew:  parentRefId,
+                scopeType:                      {$ne: UpdateScopeType.SCOPE_PEER_SCOPE}
+            },
+            {sort:{componentIndexNew: 1}}
+        ).fetch();
+    }
+
     getNonRemovedChildComponentsOfType(designUpdateId, componentType, componentParentReferenceId){
 
-        DesignUpdateComponents.find(
+        return DesignUpdateComponents.find(
             {
                 designUpdateId:                 designUpdateId,
                 componentType:                  componentType,

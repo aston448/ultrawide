@@ -12,7 +12,7 @@ import ItemContainer                from '../../components/common/ItemContainer.
 
 // Ultrawide Services
 import {DesignVersionStatus}        from '../../../constants/constants.js';
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 
 // Bootstrap

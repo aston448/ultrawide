@@ -21,7 +21,7 @@ import ScenarioFinder                   from '../../components/search/ScenarioFi
 import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType } from '../../../constants/constants.js';
 
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
-import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';

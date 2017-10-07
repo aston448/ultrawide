@@ -17,7 +17,7 @@ import { ViewType, ComponentType, DetailsViewType, DisplayContext, UpdateMergeSt
 import TextLookups from '../../../common/lookups.js';
 import { log } from '../../../common/utils.js'
 
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

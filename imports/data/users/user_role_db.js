@@ -49,6 +49,13 @@ class UserRoleData{
         return UserRoles.find({}).fetch();
     }
 
+    getNonAdminUsers(){
+
+        return UserRoles.find({
+            isAdmin: false
+        }).fetch();
+    }
+
     // UPDATE ==========================================================================================================
 
     saveUserDetails(newUser){

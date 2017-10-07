@@ -90,11 +90,60 @@ class DesignVersionData {
         }).count();
     }
 
+    getAllApplications(designVersionId){
+
+        DesignVersionComponents.find(
+            {
+                designVersionId: designVersionId,
+                componentType: ComponentType.APPLICATION
+            },
+            {sort: {componentIndexNew: 1}}
+        ).fetch();
+    }
+
+    getExistingApplications(designVersionId, ){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId: designVersionId,
+                componentType: ComponentType.APPLICATION,
+                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_ADDED}
+            },
+            {sort: {componentIndexNew: 1}}
+        ).fetch();
+    }
+
+    getWorkingApplications(designVersionId){
+
+        DesignVersionComponents.find(
+            {
+                designVersionId: designVersionId,
+                componentType: ComponentType.APPLICATION,
+                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+            },
+            {sort: {componentIndexNew: 1}}
+        ).fetch();
+    }
+
+
+
+
     // DV Updates ------------------------------------------------------------------------------------------------------
 
     getAllUpdates(designVersionId){
 
         return DesignUpdates.find({designVersionId: designVersionId}).fetch();
+    }
+
+    getUpdatesAtStatus(designVersionId, status){
+
+        return DesignUpdates.find(
+            {
+                designVersionId: designVersionId,
+                updateStatus: status
+            },
+            {sort: {updateReference: 1, updateName: 1}}
+        ).fetch();
     }
 
     // DV Updates Components -------------------------------------------------------------------------------------------
@@ -119,6 +168,18 @@ class DesignVersionData {
     getAllWorkPackages(designVersionId){
 
         return WorkPackages.find({designVersionId: designVersionId}).fetch();
+    }
+
+    getBaseWorkPackagesAtStatus(designVersionId, status){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_BASE,
+                workPackageStatus: status
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
     }
 
     getPublishedWorkPackages(designVersionId){

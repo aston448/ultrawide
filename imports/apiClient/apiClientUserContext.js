@@ -18,7 +18,7 @@ import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentT
 import { log } from '../common/utils.js';
 import TextLookups from '../common/lookups.js'
 
-import ClientContainerServices              from '../apiClient/apiClientContainerServices.js';
+import ClientContainerServices              from './apiClientDataServices.js';
 import ClientDesignVersionServices          from '../apiClient/apiClientDesignVersion.js';
 import ClientDesignComponentServices        from '../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdate.js';

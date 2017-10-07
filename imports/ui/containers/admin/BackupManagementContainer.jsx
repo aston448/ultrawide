@@ -14,7 +14,7 @@ import DesignBackup         from '../../components/admin/DesignBackup.jsx';
 import DesignsContainer     from '../../containers/select/DesignsContainer.jsx';
 
 // Ultrawide Services
-import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

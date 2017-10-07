@@ -13,7 +13,7 @@ import FinderResult         from '../../components/search/FinderResult.jsx';
 // Ultrawide Services
 import {} from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap

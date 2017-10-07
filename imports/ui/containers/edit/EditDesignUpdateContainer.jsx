@@ -23,7 +23,7 @@ import { log }        from '../../../common/utils.js';
 
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap

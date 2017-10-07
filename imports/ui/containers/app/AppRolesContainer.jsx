@@ -12,7 +12,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import UserRole                from '../../components/app/UserRole.jsx';
 
 // Ultrawide Services
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';

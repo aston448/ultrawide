@@ -15,7 +15,7 @@ import {DisplayContext} from '../../../constants/constants.js';
 
 import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

@@ -11,7 +11,7 @@ import TestResultDetails from './TestResultDetails.jsx';
 import TextLookups  from '../../../common/lookups.js';
 import {TestType, DisplayContext}   from '../../../constants/constants.js'
 
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';

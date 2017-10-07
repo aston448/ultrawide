@@ -15,7 +15,7 @@ import ItemContainer                from '../../components/common/ItemContainer.
 import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackage.js';
 
 // Bootstrap

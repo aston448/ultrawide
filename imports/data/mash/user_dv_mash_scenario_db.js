@@ -26,6 +26,32 @@ class UserDvMashScenarioData {
             designVersionId:            designVersionId,
             designFeatureReferenceId:   featureRef,
         }).fetch();
+
+    }
+
+    getFeatureAspectScenarios(userId, designVersionId, featureAspectReferenceId){
+
+        return UserDesignVersionMashScenarios.find(
+            {
+                userId:                         userId,
+                designVersionId:                designVersionId,
+                designFeatureAspectReferenceId: featureAspectReferenceId
+            },
+            {sort: {mashItemIndex: 1}}
+        ).fetch();
+    }
+
+    getScenarios(userId, designVersionId, featureAspectReferenceId, scenarioReferenceId){
+
+        return UserDesignVersionMashScenarios.find(
+            {
+                userId:                         userId,
+                designVersionId:                designVersionId,
+                designFeatureAspectReferenceId: featureAspectReferenceId,
+                designScenarioReferenceId:      scenarioReferenceId
+            },
+            {sort: {mashItemIndex: 1}}
+        ).fetch();
     }
 
     // REMOVE ==========================================================================================================

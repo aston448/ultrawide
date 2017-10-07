@@ -18,6 +18,11 @@ class DesignBackupData{
     }
     // SELECT ==========================================================================================================
 
+    getAllBackups(){
+
+        return DesignBackups.find({}).fetch();
+    }
+
     getBackupByFileName(fileName){
 
         return DesignBackups.findOne({backupFileName: fileName});

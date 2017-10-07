@@ -15,7 +15,7 @@ import DetailsViewFooter        from '../../components/common/DetailsViewFooter.
 // Ultrawide Services
 import { DetailsViewType } from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 // Bootstrap
 

@@ -53,6 +53,19 @@ class DesignData {
         return DesignVersions.find({designId: designId}).fetch();
     }
 
+    getDesignVersionsOrderByVersion(designId){
+
+        DesignVersions.find(
+            {designId: designId},
+            {sort: {designVersionIndex: 1}}
+        ).fetch();
+    }
+
+    getAllDesigns(){
+
+        return Designs.find({}, {sort: {designName: 1}}).fetch();
+    }
+
     checkForFeatures(designId){
 
         const features = DesignVersionComponents.find({designId: designId, componentType: ComponentType.FEATURE});

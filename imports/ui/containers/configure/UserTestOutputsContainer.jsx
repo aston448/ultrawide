@@ -14,7 +14,7 @@ import ItemContainer                        from '../../components/common/ItemCo
 import ConfigurationSettings                from '../../components/configure/ConfigurationSettings.jsx';
 
 // Ultrawide Services
-import ClientContainerServices  from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices  from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';

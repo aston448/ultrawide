@@ -158,7 +158,7 @@ class DesignVersionServices{
             const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
             // Get DV stats
-            const dvSummary = UserDevDesignSummaryData.getUserDesignVersionSummary(userContext);
+            const dvSummary = UserDevDesignSummaryData.getUserDesignSummary(userContext);
 
             let dvTotalScenarios = 0;
             let dvPassingScenarios = 0;

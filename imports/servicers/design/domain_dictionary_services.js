@@ -6,7 +6,7 @@ import { DomainDictionary } from '../../collections/design/domain_dictionary.js'
 import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js'
 import DesignComponentServices  from '../../service_modules/design/design_component_service_modules.js';
 
-import DomainDictionaryData     from '../../data/design/domain_dictionry_db.js';
+import DomainDictionaryData     from '../../data/design/domain_dictionary_db.js';
 
 //======================================================================================================================
 //

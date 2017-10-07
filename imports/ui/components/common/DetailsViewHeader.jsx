@@ -13,7 +13,7 @@ import {DisplayContext, ViewType} from '../../../constants/constants.js';
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Col, Row} from 'react-bootstrap';

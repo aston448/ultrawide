@@ -318,9 +318,10 @@ class TestSummaryServices {
             UserDevTestSummaryData.bulkInsertData(batchData);
         }
 
-        UserDevDesignSummaryData.insertNewDesignVersionSummary(
+        UserDevDesignSummaryData.insertNewDesignSummary(
             userContext.userId,
             userContext.designVersionId,
+            userContext.designUpdateId,
             totalFeatureCount,
             totalScenarioCount,
             totalScenariosWithoutTests,
