@@ -1,9 +1,11 @@
 
-// Ultrawide Collections
-import { DomainDictionary } from '../collections/design/domain_dictionary.js';
-
 // Ultrawide Services
-import DomainDictionaryValidationServices from '../service_modules/validation/domain_dictionary_validation_services.js';
+import DomainDictionaryValidationServices   from '../service_modules/validation/domain_dictionary_validation_services.js';
+
+// Data Access
+import DesignVersionData                    from '../data/design/design_version_db.js';
+import DomainDictionaryData                 from '../data/design/domain_dictionary_db.js';
+
 
 //======================================================================================================================
 //
@@ -21,13 +23,13 @@ class DomainDictionaryValidationApi{
     validateUpdateTermName(userRole, view, mode, termId, newTermName){
 
         // Get other terms that should not have the same name
-        const thisTerm = DomainDictionary.findOne({_id: termId});
+        const thisTerm = DomainDictionaryData.getTermById(termId);
 
-        const existingTerms = DomainDictionary.find({
-            _id:                {$ne: termId},
-            designId:           thisTerm.designId,
-            designVersionId:    thisTerm.designVersionId,
-        }).fetch();
+        const existingTerms = DesignVersionData.getOtherDomainDictionaryEntries(
+            termId,
+            thisTerm.designId,
+            thisTerm.designVersionId
+        );
 
         return DomainDictionaryValidationServices.validateUpdateTermName(userRole, view, mode, newTermName, existingTerms);
     };

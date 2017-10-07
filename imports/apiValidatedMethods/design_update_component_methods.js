@@ -61,15 +61,13 @@ export const addDesignSectionToApplication = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         mode:               {type: String},
-        designVersionId:    {type: String},
-        designUpdateId:     {type: String},
-        parentRefId:        {type: String}
+        parentComponent:    {type: Object, blackbox: true}
     }).validator(),
 
-    run({view, mode, designVersionId, designUpdateId, parentRefId}){
+    run({view, mode, parentComponent}){
 
         // Server validation
-        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentRefId, ComponentType.DESIGN_SECTION);
+        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.DESIGN_SECTION);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addDesignSectionToApplication.failValidation', result)
@@ -78,9 +76,9 @@ export const addDesignSectionToApplication = new ValidatedMethod({
         // Server action
         try {
             DesignUpdateComponentServices.addNewComponent(
-                designVersionId,
-                designUpdateId,
-                parentRefId,
+                parentComponent.designVersionId,
+                parentComponent.designUpdateId,
+                parentComponent.componentReferenceId,
                 ComponentType.DESIGN_SECTION,
                 1,
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
@@ -103,16 +101,13 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         mode:               {type: String},
-        designVersionId:    {type: String},
-        designUpdateId:     {type: String},
-        parentRefId:        {type: String},
-        parentLevel:        {type: Number}
+        parentComponent:    {type: Object, blackbox: true}
     }).validator(),
 
-    run({view, mode, designVersionId, designUpdateId, parentRefId, parentLevel}){
+    run({view, mode, parentComponent}){
 
         // Server validation
-        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentRefId, ComponentType.DESIGN_SECTION);
+        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.DESIGN_SECTION);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addDesignSectionToDesignSection.failValidation', result)
@@ -121,11 +116,11 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
         // Server action
         try {
             DesignUpdateComponentServices.addNewComponent(
-                designVersionId,
-                designUpdateId,
-                parentRefId,
+                parentComponent.designVersionId,
+                parentComponent.designUpdateId,
+                parentComponent.componentReferenceId,
                 ComponentType.DESIGN_SECTION,
-                parentLevel + 1,
+                parentComponent.parentLevel + 1,
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_DESIGN_SECTION_NAME),
                 DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS),
@@ -146,15 +141,13 @@ export const addFeatureToDesignSection = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         mode:               {type: String},
-        designVersionId:    {type: String},
-        designUpdateId:     {type: String},
-        parentRefId:        {type: String}
+        parentComponent:    {type: Object, blackbox: true}
     }).validator(),
 
-    run({view, mode, designVersionId, designUpdateId, parentRefId}){
+    run({view, mode, parentComponent}){
 
         // Server validation
-        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentRefId, ComponentType.FEATURE);
+        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.FEATURE);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addFeatureToDesignSection.failValidation', result)
@@ -163,9 +156,9 @@ export const addFeatureToDesignSection = new ValidatedMethod({
         // Server action
         try {
             DesignUpdateComponentServices.addNewComponent(
-                designVersionId,
-                designUpdateId,
-                parentRefId,
+                parentComponent.designVersionId,
+                parentComponent.designUpdateId,
+                parentComponent.componentReferenceId,
                 ComponentType.FEATURE,
                 0,
                 DefaultComponentNames.NEW_FEATURE_NAME,
@@ -188,15 +181,13 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         mode:               {type: String},
-        designVersionId:    {type: String},
-        designUpdateId:     {type: String},
-        parentRefId:        {type: String}
+        parentComponent:    {type: Object, blackbox: true}
     }).validator(),
 
-    run({view, mode, designVersionId, designUpdateId, parentRefId}){
+    run({view, mode, parentComponent}){
 
         // Server validation
-        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentRefId, ComponentType.FEATURE_ASPECT);
+        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.FEATURE_ASPECT);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addFeatureAspectToFeature.failValidation', result)
@@ -205,9 +196,9 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
         // Server action
         try {
             DesignUpdateComponentServices.addNewComponent(
-                designVersionId,
-                designUpdateId,
-                parentRefId,
+                parentComponent.designVersionId,
+                parentComponent.designUpdateId,
+                parentComponent.componentReferenceId,
                 ComponentType.FEATURE_ASPECT,
                 0,
                 DefaultComponentNames.NEW_FEATURE_ASPECT_NAME,
@@ -232,15 +223,13 @@ export const addScenario = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         mode:               {type: String},
-        designVersionId:    {type: String},
-        designUpdateId:     {type: String},
-        parentRefId:        {type: String}
+        parentComponent:    {type: Object, blackbox: true}
     }).validator(),
 
-    run({view, mode, designVersionId, designUpdateId, parentRefId}){
+    run({view, mode, parentComponent}){
 
         // Server validation
-        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentRefId, ComponentType.SCENARIO);
+        const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.SCENARIO);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addScenario.failValidation', result)
@@ -249,9 +238,9 @@ export const addScenario = new ValidatedMethod({
         // Server action
         try {
             DesignUpdateComponentServices.addNewComponent(
-                designVersionId,
-                designUpdateId,
-                parentRefId,
+                parentComponent.designVersionId,
+                parentComponent.designUpdateId,
+                parentComponent.componentReferenceId,
                 ComponentType.SCENARIO,
                 0,
                 DefaultComponentNames.NEW_SCENARIO_NAME,

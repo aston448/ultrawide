@@ -65,7 +65,7 @@ class DesignComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateUpdateComponentName(view, mode, componentType, isDevAdded, newName, existingComponents, componentParentId){
+    validateUpdateComponentName(view, mode, componentType, isDevAdded, newName, existingComponents, componentParentRefId){
 
         // Updates only allowed in design edit when in edit mode or for Base WP editing
         if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DEVELOP_BASE_WP)){
@@ -95,12 +95,13 @@ class DesignComponentValidationServices{
 
         // Name must be unique for component type - for functional components only
         if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT){
+
             // For non-functional components must be unique under the same parent only
             let duplicate = false;
 
             existingComponents.forEach((component) => {
 
-                if(component.componentNameNew === newName  && component.componentParentIdNew === componentParentId){
+                if(component.componentNameNew === newName  && component.componentParentReferenceIdNew === componentParentRefId){
                     duplicate = true;
                 }
             });

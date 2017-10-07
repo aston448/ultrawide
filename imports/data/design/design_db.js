@@ -53,9 +53,14 @@ class DesignData {
         return DesignVersions.find({designId: designId}).fetch();
     }
 
+    getOtherDesignVersions(designId, designVersionId){
+
+        DesignVersions.find({_id: {$ne: designVersionId}, designId: designId}).fetch();
+    }
+
     getDesignVersionsOrderByVersion(designId){
 
-        DesignVersions.find(
+        return DesignVersions.find(
             {designId: designId},
             {sort: {designVersionIndex: 1}}
         ).fetch();
@@ -64,6 +69,11 @@ class DesignData {
     getAllDesigns(){
 
         return Designs.find({}, {sort: {designName: 1}}).fetch();
+    }
+
+    getOtherDesigns(designId){
+
+        return Designs.find({_id: {$ne: designId}}).fetch();
     }
 
     checkForFeatures(designId){

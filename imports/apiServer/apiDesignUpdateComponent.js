@@ -38,15 +38,13 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addDesignSectionToApplication(view, mode, designVersionId, designUpdateId, parentRefId, callback){
+    addDesignSectionToApplication(view, mode, parentComponent, callback){
 
         addDesignSectionToApplication.call(
             {
                 view: view,
                 mode: mode,
-                designVersionId: designVersionId,
-                designUpdateId: designUpdateId,
-                parentRefId: parentRefId
+                parentComponent: parentComponent
             },
             (err, result) => {
                 callback(err, result);
@@ -54,16 +52,13 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addDesignSectionToDesignSection(view, mode, designVersionId, designUpdateId, parentRefId, parentLevel, callback){
+    addDesignSectionToDesignSection(view, mode, parentComponent, callback){
 
         addDesignSectionToDesignSection.call(
             {
                 view: view,
                 mode: mode,
-                designVersionId: designVersionId,
-                designUpdateId: designUpdateId,
-                parentRefId: parentRefId,
-                parentLevel: parentLevel
+                parentComponent: parentComponent
             },
             (err, result) => {
                 callback(err, result);
@@ -71,15 +66,13 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addFeatureToDesignSection(view, mode, designVersionId, designUpdateId, parentRefId, callback){
+    addFeatureToDesignSection(view, mode, parentComponent, callback){
 
         addFeatureToDesignSection.call(
             {
                 view: view,
                 mode: mode,
-                designVersionId: designVersionId,
-                designUpdateId: designUpdateId,
-                parentRefId: parentRefId
+                parentComponent: parentComponent
             },
             (err, result) => {
                 callback(err, result);
@@ -87,15 +80,13 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addFeatureAspectToFeature(view, mode, designVersionId, designUpdateId, parentRefId, callback){
+    addFeatureAspectToFeature(view, mode, parentComponent, callback){
 
         addFeatureAspectToFeature.call(
             {
                 view: view,
                 mode: mode,
-                designVersionId: designVersionId,
-                designUpdateId: designUpdateId,
-                parentRefId: parentRefId
+                parentComponent: parentComponent
             },
             (err, result) => {
                 callback(err, result);
@@ -103,15 +94,13 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addScenario(view, mode, designVersionId, designUpdateId, parentRefId, callback){
+    addScenario(view, mode, parentComponent, callback){
 
         addScenario.call(
             {
                 view: view,
                 mode: mode,
-                designVersionId: designVersionId,
-                designUpdateId: designUpdateId,
-                parentRefId: parentRefId
+                parentComponent: parentComponent
             },
             (err, result) => {
                 callback(err, result);

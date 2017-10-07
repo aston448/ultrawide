@@ -1,12 +1,12 @@
-// Ultrawide Collections
-import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
-import { DesignVersionComponents }      from '../collections/design/design_version_components.js';
-import { DesignUpdateComponents }       from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ComponentType, ViewType } from '../constants/constants.js';
-import { WorkPackageComponentValidationErrors } from '../constants/validation_errors.js';
-import WorkPackageComponentValidationServices from '../service_modules/validation/work_package_component_validation_services.js';
+import { ViewType } from '../constants/constants.js';
+
+import WorkPackageComponentValidationServices   from '../service_modules/validation/work_package_component_validation_services.js';
+
+// Data Access
+import DesignComponentData                      from '../data/design/design_component_db.js';
+import DesignUpdateComponentData                from '../data/design_update/design_update_component_db.js';
 
 //======================================================================================================================
 //
@@ -24,10 +24,13 @@ class WorkPackageComponentValidationApi {
 
         switch(view){
             case ViewType.WORK_PACKAGE_BASE_EDIT:
-                designComponent = DesignVersionComponents.findOne({_id: designComponentId});
+
+                designComponent = DesignComponentData.getDesignComponentById(designComponentId);
                 break;
+
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                designComponent = DesignUpdateComponents.findOne({_id: designComponentId});
+
+                designComponent = DesignUpdateComponentData.getUpdateComponentById(designComponentId);
                 break;
         }
 

@@ -1,10 +1,10 @@
 
-// Ultrawide Collections
-import { DesignVersionComponents }         from '../collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-
 // Ultrawide Services
-import TestIntegrationValidationServices from '../service_modules/validation/test_integration_validation_services.js';
+import TestIntegrationValidationServices    from '../service_modules/validation/test_integration_validation_services.js';
+
+// Data Access
+import DesignComponentData                  from '../data/design/design_component_db.js';
+import DesignUpdateComponentData            from '../data/design_update/design_update_component_db.js';
 
 //======================================================================================================================
 //
@@ -19,14 +19,16 @@ class TestIntegrationValidationApi{
         let designComponent = null;
 
         if(userContext.designUpdateId === 'NONE'){
-            designComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+
+            designComponent = DesignComponentData.getDesignComponentById(userContext.designComponentId);
+
         } else {
-            designComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+            designComponent = DesignUpdateComponentData.getUpdateComponentById(userContext.designComponentId);
+
         }
 
         return TestIntegrationValidationServices.validateExportIntegrationTests(userRole, designComponent);
     };
-
-
 }
 export default new TestIntegrationValidationApi();

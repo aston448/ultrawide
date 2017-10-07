@@ -63,6 +63,11 @@ class TestOutputLocationData{
         return TestOutputLocations.find({}).fetch();
     }
 
+    getOtherLocations(locationId){
+
+        return TestOutputLocations.find({_id: {$ne: locationId}}).fetch();
+    }
+
     getAllUserLocations(userId){
 
         return TestOutputLocations.find({
@@ -76,6 +81,13 @@ class TestOutputLocationData{
         return TestOutputLocationFiles.find({locationId: locationId}).fetch();
     }
 
+    getOtherLocationFiles(locationId, locationFileId){
+
+        return TestOutputLocationFiles.find({
+            _id: {$ne: locationFileId},
+            locationId: locationId
+        }).fetch();
+    }
 
     // UPDATE ==========================================================================================================
 

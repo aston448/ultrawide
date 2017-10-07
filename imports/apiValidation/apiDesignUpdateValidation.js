@@ -1,11 +1,11 @@
 
-// Ultrawide Collections
-import { DesignUpdates }    from '../collections/design_update/design_updates.js';
-import { DesignVersions }   from '../collections/design/design_versions.js';
-import { WorkPackages }     from '../collections/work/work_packages.js';
-
 // Ultrawide Services
-import DesignUpdateValidationServices from '../service_modules/validation/design_update_validation_services.js';
+import DesignUpdateValidationServices   from '../service_modules/validation/design_update_validation_services.js';
+
+// Data Access
+import DesignVersionData                from '../data/design/design_version_db.js';
+import DesignUpdateData                 from '../data/design_update/design_update_db.js';
+
 
 //======================================================================================================================
 //
@@ -17,7 +17,7 @@ class DesignUpdateValidationApi{
 
     validateAddDesignUpdate(userRole, designVersionId){
 
-        const designVersion = DesignVersions.findOne({_id: designVersionId});
+        const designVersion = DesignVersionData.getDesignVersionById(designVersionId);
 
         return DesignUpdateValidationServices.validateAddDesignUpdate(userRole, designVersion.designVersionStatus);
 
@@ -26,11 +26,11 @@ class DesignUpdateValidationApi{
     validateUpdateDesignUpdateName(userRole, designUpdateId, newName){
 
         // Get all other designs apart from this one
-        const thisDesignUpdate = DesignUpdates.findOne({_id: designUpdateId});
-        const otherDesignUpdates = DesignUpdates.find({_id: {$ne: designUpdateId}, designVersionId: thisDesignUpdate.designVersionId}).fetch();
+        const thisDesignUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);
+
+        const otherDesignUpdates = DesignVersionData.getOtherUpdates(designUpdateId, thisDesignUpdate.designVersionId);
 
         return DesignUpdateValidationServices.validateUpdateDesignUpdateName(userRole, newName, otherDesignUpdates);
-
     };
 
     validateUpdateDesignUpdateReference(userRole, designUpdateId, newRef){
@@ -43,24 +43,22 @@ class DesignUpdateValidationApi{
 
     validateEditDesignUpdate(userRole, designUpdateId){
 
-        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+        const designUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);
 
         return DesignUpdateValidationServices.validateEditDesignUpdate(userRole, designUpdate.updateStatus)
     };
 
     validatePublishDesignUpdate(userRole, designUpdateId){
 
-        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+        const designUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);
 
         return DesignUpdateValidationServices.validatePublishDesignUpdate(userRole, designUpdate.updateStatus)
     };
 
     validateWithdrawDesignUpdate(userRole, designUpdateId){
 
-        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
-        const workPackageCount = WorkPackages.find({
-            designUpdateId: designUpdateId
-        }).count();
+        const designUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);
+        const workPackageCount = DesignUpdateData.getWorkPackageCount(designUpdateId);
 
         return DesignUpdateValidationServices.validateWithdrawDesignUpdate(userRole, designUpdate.updateStatus, workPackageCount);
 
@@ -68,14 +66,14 @@ class DesignUpdateValidationApi{
 
     validateViewDesignUpdate(userRole, designUpdateId){
 
-        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+        const designUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);
 
         return DesignUpdateValidationServices.validateViewDesignUpdate(userRole, designUpdate.updateStatus)
     };
 
     validateRemoveDesignUpdate(userRole, designUpdateId){
 
-        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+        const designUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);
 
         return DesignUpdateValidationServices.validateRemoveDesignUpdate(userRole, designUpdate.updateStatus);
 
@@ -83,7 +81,7 @@ class DesignUpdateValidationApi{
 
     validateUpdateMergeAction(userRole, designUpdateId){
 
-        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+        const designUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);
 
         return DesignUpdateValidationServices.validateMergeActions(userRole, designUpdate);
     }

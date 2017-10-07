@@ -68,6 +68,15 @@ class DesignUpdateData{
         return DesignUpdateComponents.find({designUpdateId: designUpdateId}).fetch();
     }
 
+    getComponentInOtherUpdates(component){
+
+        return DesignUpdateComponents.find({
+            componentReferenceId:   component.componentReferenceId,
+            designVersionId:        component.designVersionId,
+            designUpdateId:         {$ne: component.designUpdateId},
+        }).fetch();
+    }
+
     getAllComponentsIdAndScope(designUpdateId){
 
         return DesignUpdateComponents.find(
@@ -216,6 +225,13 @@ class DesignUpdateData{
             },
             {sort: {workPackageName: 1}}
         ).fetch();
+    }
+
+    getWorkPackageCount(designUpdateId){
+
+        return WorkPackages.find({
+            designUpdateId: designUpdateId
+        }).count();
     }
 
     // UPDATE ==========================================================================================================

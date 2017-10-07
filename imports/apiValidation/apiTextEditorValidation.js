@@ -1,6 +1,4 @@
 
-// Ultrawide Collections
-
 // Ultrawide Services
 import TextEditorValidationServices from '../service_modules/validation/text_editor_validation_services.js';
 

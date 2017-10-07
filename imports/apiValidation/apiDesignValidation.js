@@ -1,9 +1,10 @@
 
-// Ultrawide Collections
-import { Designs } from '../collections/design/designs.js';
-
 // Ultrawide Services
-import DesignValidationServices from '../service_modules/validation/design_validation_services.js';
+import DesignValidationServices         from '../service_modules/validation/design_validation_services.js';
+
+// Data Access
+import DesignData                       from '../data/design/design_db.js';
+
 
 //======================================================================================================================
 //
@@ -21,14 +22,14 @@ class DesignValidationApi{
     validateUpdateDesignName(userRole, newName, designId){
 
         // Get all other designs apart from this one
-        const otherDesigns = Designs.find({_id: {$ne: designId}}).fetch();
+        const otherDesigns = DesignData.getOtherDesigns(designId);
 
         return DesignValidationServices.validateUpdateDesignName(userRole, newName, otherDesigns);
     }
 
     validateRemoveDesign(userRole, designId){
 
-        const design = Designs.findOne({_id: designId});
+        const design = DesignData.getDesignById(designId);
 
         return DesignValidationServices.validateRemoveDesign(userRole, design);
     };

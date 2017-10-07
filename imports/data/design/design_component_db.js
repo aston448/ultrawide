@@ -259,6 +259,7 @@ class DesignComponentData {
         ).fetch();
     }
 
+
     getRegexMatchingScenarios(designVersionId, searchRegex){
 
         return DesignVersionComponents.find({

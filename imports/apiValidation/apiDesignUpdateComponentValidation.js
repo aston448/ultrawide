@@ -1,14 +1,16 @@
 
-// Ultrawide Collections
-import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-import { DesignVersionComponents }         from '../collections/design/design_version_components.js';
-
 // Ultrawide Services
 import {ComponentType} from '../constants/constants.js';
 import { DesignUpdateComponentValidationErrors } from '../constants/validation_errors.js';
 
 import DesignUpdateComponentValidationServices  from '../service_modules/validation/design_update_component_validation_services.js';
 import DesignUpdateComponentModules             from '../service_modules/design_update/design_update_component_service_modules.js';
+
+// Data Access
+import DesignVersionData                        from '../data/design/design_version_db.js';
+import DesignUpdateData                         from '../data/design_update/design_update_db.js';
+import DesignComponentData                      from '../data/design/design_component_db.js';
+import DesignUpdateComponentData                from '../data/design_update/design_update_component_db.js';
 
 //======================================================================================================================
 //
@@ -18,15 +20,12 @@ import DesignUpdateComponentModules             from '../service_modules/design_
 
 class DesignUpdateComponentValidationApi{
 
-    validateAddDesignUpdateComponent(view, mode, parentComponentRefId, componentType){
+    validateAddDesignUpdateComponent(view, mode, parentComponent, componentType){
 
-        if(parentComponentId) {
-            const parentComponent = DesignUpdateComponents.findOne({_id: parentComponentId});
-            const parentInOtherUpdates = DesignUpdateComponents.find({
-                componentReferenceId:   parentComponent.componentReferenceId,
-                designVersionId:        parentComponent.designVersionId,
-                designUpdateId:         {$ne: parentComponent.designUpdateId},
-            }).fetch();
+        if(parentComponent) {
+
+            const parentInOtherUpdates = DesignUpdateData.getComponentInOtherUpdates(parentComponent);
+
             return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, componentType, parentComponent, parentInOtherUpdates);
         } else{
             // Means this is an application being added so no need to check target
@@ -38,12 +37,18 @@ class DesignUpdateComponentValidationApi{
 
     validateRemoveDesignUpdateComponent(view, mode, designUpdateComponentId){
 
-        let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+        let designUpdateComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
+
         let newDefaultAspect = false;
 
         // When a new Feature is added, new default Aspects are not flagged as New items - only aspects deliberately added by user
         if(designUpdateComponent.componentType === ComponentType.FEATURE_ASPECT){
-            const feature = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentIdNew});
+
+            const feature = DesignUpdateComponentData.getUpdateComponentByRef(
+                designUpdateComponent.designVersionId,
+                designUpdateComponent.designUpdateId,
+                designUpdateComponent.componentParentReferenceIdNew
+            );
 
             if(feature.isNew && !designUpdateComponent.isNew){
                 newDefaultAspect = true;
@@ -87,10 +92,14 @@ class DesignUpdateComponentValidationApi{
 
     validateRestoreDesignUpdateComponent(view, mode, designUpdateComponentId){
 
-        let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+        let designUpdateComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
         // Cannot restore a component if its parent is removed
-        const parentComponent = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentIdNew});
+        const parentComponent = DesignUpdateComponentData.getUpdateComponentByRef(
+            designUpdateComponent.designVersionId,
+            designUpdateComponent.designUpdateId,
+            designUpdateComponent.componentParentReferenceIdNew
+        );
 
         return DesignUpdateComponentValidationServices.validateRestoreDesignUpdateComponent(view, mode, designUpdateComponent, parentComponent);
     }
@@ -98,55 +107,49 @@ class DesignUpdateComponentValidationApi{
     validateUpdateDesignUpdateComponentName(view, mode, designUpdateComponentId, newName){
 
         // Get other components of the same type that should not have the same name
-        const thisUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+        const thisUpdateComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
-        // This is components in any update for the current design version
-        const existingUpdateComponents = DesignUpdateComponents.find({
-            _id:                {$ne: designUpdateComponentId},
-            designVersionId:    thisUpdateComponent.designVersionId,
-            componentType:      thisUpdateComponent.componentType
-        }).fetch();
+        // Design Update components in this DV that re not this component
+        const existingUpdateComponents = DesignVersionData.getOtherExistingUpdateComponentsOfTypeInDv(thisUpdateComponent);
 
-        const existingDesignVersionComponents = DesignVersionComponents.find({
-            componentReferenceId:   {$ne: thisUpdateComponent.componentReferenceId},
-            designVersionId:        thisUpdateComponent.designVersionId,
-            componentType:          thisUpdateComponent.componentType
-        });
+        // Design Version components in this DV that are not the same as this component
+        const existingDesignVersionComponents = DesignVersionData.getOtherComponentsOfTypeInDvForDu(thisUpdateComponent);
 
-        const thisDesignVersionComponent = DesignVersionComponents.findOne({
-            designVersionId:        thisUpdateComponent.designVersionId,
-            componentReferenceId:   thisUpdateComponent.componentReferenceId
-        });
+        // The update component as it exists in the DV
+        const thisDesignVersionComponent = DesignComponentData.getDesignComponentByRef(
+            thisUpdateComponent.designVersionId,
+            thisUpdateComponent.componentReferenceId
+        );
 
         return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateComponentName(view, mode, thisUpdateComponent, newName, existingUpdateComponents, existingDesignVersionComponents, thisDesignVersionComponent);
     };
 
     validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId){
 
-        const thisUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+        const thisUpdateComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
         return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateFeatureNarrative(view, mode, thisUpdateComponent);
     };
 
     validateMoveDesignUpdateComponent(view, mode, displayContext, movingComponentId, targetComponentId){
 
-        const movingComponent = DesignUpdateComponents.findOne({_id: movingComponentId});
-        const targetComponent = DesignUpdateComponents.findOne({_id: targetComponentId});
+        const movingComponent = DesignUpdateComponentData.getUpdateComponentById(movingComponentId);
+        const targetComponent = DesignUpdateComponentData.getUpdateComponentById(targetComponentId);
 
         return DesignUpdateComponentValidationServices.validateMoveDesignUpdateComponent(view, mode, displayContext, movingComponent, targetComponent)
     };
 
     validateReorderDesignUpdateComponent(view, mode, displayContext, movingComponentId, targetComponentId){
 
-        const movingComponent = DesignUpdateComponents.findOne({_id: movingComponentId});
-        const targetComponent = DesignUpdateComponents.findOne({_id: targetComponentId});
+        const movingComponent = DesignUpdateComponentData.getUpdateComponentById(movingComponentId);
+        const targetComponent = DesignUpdateComponentData.getUpdateComponentById(targetComponentId);
 
         return DesignUpdateComponentValidationServices.validateReorderDesignUpdateComponent(view, mode, displayContext, movingComponent, targetComponent)
     };
 
     validateToggleDesignUpdateComponentScope(view, mode, displayContext, baseComponentId, designUpdateId, updateComponent, newScope){
 
-        const designComponent = DesignVersionComponents.findOne({_id: baseComponentId});
+        const designComponent = DesignComponentData.getDesignComponentById(baseComponentId);
 
         let hasNoNewChildren = true;
         let hasNoRemovedChildren = true;
@@ -157,11 +160,7 @@ class DesignUpdateComponentValidationApi{
         }
 
         // A list of this component in other updates for the same design version.  Used to stop stuff being changed in two parallel updates at once
-        const componentInOtherDesignUpdates = DesignUpdateComponents.find({
-            componentReferenceId:   designComponent.componentReferenceId,
-            designVersionId:        designComponent.designVersionId,
-            designUpdateId:         {$ne: designUpdateId},
-        }).fetch();
+        const componentInOtherDesignUpdates = DesignVersionData.getComponentInOtherDvUpdates(designComponent, designUpdateId);
 
         return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designComponent, updateComponent, componentInOtherDesignUpdates, hasNoNewChildren, newScope);
     }

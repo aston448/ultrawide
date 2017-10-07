@@ -66,6 +66,15 @@ class WorkPackageData {
         }).fetch();
     }
 
+    getOtherWorkPackagesForContext(workPackageId, designVersionId, designUpdateId){
+
+        return WorkPackages.find({
+            _id:                {$ne: workPackageId},
+            designVersionId:    designVersionId,
+            designUpdateId:     designUpdateId
+        }).fetch();
+    }
+
     getActiveScenarios(workPackageId){
 
         return WorkPackageComponents.find({

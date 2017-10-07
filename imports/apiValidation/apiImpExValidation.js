@@ -1,8 +1,9 @@
-// Ultrawide Collections
-import { UserRoles }            from '../collections/users/user_roles.js';
 
 // Ultrawide Services
-import ImpExValidationServices  from '../service_modules/validation/impex_validation_services.js';
+import ImpExValidationServices          from '../service_modules/validation/impex_validation_services.js';
+
+// Data Access
+import UserRoleData                     from '../data/users/user_role_db.js';
 
 //======================================================================================================================
 //
@@ -20,7 +21,7 @@ class ImpExValidationApi{
 
     validateRestoreDesign(userId){
 
-        const user = UserRoles.findOne({userId: userId});
+        const user = UserRoleData.getRoleByUserId(userId);
 
         return ImpExValidationServices.validateRestoreDesign(user);
 
@@ -28,7 +29,7 @@ class ImpExValidationApi{
 
     validateArchiveDesign(userId){
 
-        const user = UserRoles.findOne({userId: userId});
+        const user = UserRoleData.getRoleByUserId(userId);
 
         return ImpExValidationServices.validateArchiveDesign(user);
     }

@@ -61,6 +61,24 @@ class DesignVersionData {
         return DesignVersionComponents.find({designVersionId: designVersionId}).fetch();
     }
 
+    getOtherComponentsOfType(designComponentId, designVersionId, componentType){
+
+        return DesignVersionComponents.find({
+            _id:                {$ne: designComponentId},
+            designVersionId:    designVersionId,
+            componentType:      componentType
+        }).fetch();
+    }
+
+    getOtherComponentsOfTypeInDvForDu(updateComponent){
+
+        return DesignVersionComponents.find({
+            componentReferenceId:   {$ne: updateComponent.componentReferenceId},
+            designVersionId:        updateComponent.designVersionId,
+            componentType:          updateComponent.componentType
+        }).fetch();
+    }
+
     getNonRemovedFeatures(designId, designVersionId){
 
         return DesignVersionComponents.find({
@@ -171,6 +189,22 @@ class DesignVersionData {
         ).fetch();
     }
 
+    getOtherUpdates(designUpdateId, designVersionId){
+
+        return DesignUpdates.find({
+            _id: {$ne: designUpdateId},
+            designVersionId: designVersionId
+        }).fetch();
+    }
+
+    getMergeIncludeUpdatesCount(designVersionId){
+
+        return DesignUpdates.find({
+            designVersionId: designVersionId,
+            updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE
+        }).count();
+    }
+
     // DV Updates Components -------------------------------------------------------------------------------------------
 
     getUnchangedUpdateComponents(designUpdateId){
@@ -190,11 +224,29 @@ class DesignVersionData {
 
     getChangedUpdateComponentsByRef(designVersionId, componentReferenceId){
 
-        DesignUpdateComponents.find({
+        return DesignUpdateComponents.find({
             designVersionId:        designVersionId,
             componentReferenceId:   componentReferenceId,
             isNew:                  false,
             $or:[{isChanged: true}, {isTextChanged: true}],
+        }).fetch();
+    }
+
+    getOtherExistingUpdateComponentsOfTypeInDv(updateComponent){
+
+        return DesignUpdateComponents.find({
+            _id:                {$ne: updateComponent._id},
+            designVersionId:    updateComponent.designVersionId,
+            componentType:      updateComponent.componentType
+        }).fetch();
+    }
+
+    getComponentInOtherDvUpdates(designComponent, designUpdateId){
+
+        return DesignUpdateComponents.find({
+            componentReferenceId:   designComponent.componentReferenceId,
+            designVersionId:        designComponent.designVersionId,
+            designUpdateId:         {$ne: designUpdateId},
         }).fetch();
     }
 
@@ -273,6 +325,15 @@ class DesignVersionData {
 
         return DomainDictionary.find({
             designVersionId: designVersionId
+        }).fetch();
+    }
+
+    getOtherDomainDictionaryEntries(termId, designId, designVersionId){
+
+        return DomainDictionary.find({
+            _id:                {$ne: termId},
+            designId:           designId,
+            designVersionId:    designVersionId,
         }).fetch();
     }
 

@@ -1,10 +1,9 @@
 
-// Ultrawide Collections
-import { TestOutputLocations }          from '../collections/configure/test_output_locations.js';
-import { TestOutputLocationFiles }      from '../collections/configure/test_output_location_files.js';
-
 // Ultrawide Services
 import TestOutputLocationValidationServices from '../service_modules/validation/test_output_location_validation_services.js';
+
+// Data Access
+import TestOutputLocationData               from '../data/configure/test_output_location_db.js';
 
 //======================================================================================================================
 //
@@ -21,7 +20,7 @@ class TestOutputLocationValidationApi{
 
     validateSaveLocation(userRole, location){
 
-        const otherLocations = TestOutputLocations.find({_id: {$ne: location._id}}).fetch();
+        const otherLocations = TestOutputLocationData.getOtherLocations(location._id);
 
         return TestOutputLocationValidationServices.validateSaveLocation(userRole, location, otherLocations);
     };
@@ -39,10 +38,7 @@ class TestOutputLocationValidationApi{
     validateSaveLocationFile(userRole, locationFile){
 
         // Get other files for this location
-        const otherLocationFiles = TestOutputLocationFiles.find({
-            _id: {$ne: locationFile._id},
-            locationId: locationFile.locationId
-        }).fetch();
+        const otherLocationFiles = TestOutputLocationData.getOtherLocationFiles(locationFile.locationId, locationFile._id);
 
         return TestOutputLocationValidationServices.validateSaveLocationFile(userRole, locationFile, otherLocationFiles);
     }
