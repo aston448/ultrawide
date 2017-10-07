@@ -14,7 +14,7 @@ import ItemContainer        from '../../components/common/ItemContainer.jsx';
 // Ultrawide Services
 import {RoleType} from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignServices         from  '../../../apiClient/apiClientDesign.js';
 
 // Bootstrap
@@ -118,7 +118,7 @@ let DesignsListRedux = connect(mapStateToProps)(DesignsList);
 export default DesignsContainer = createContainer(({params}) => {
 
     // Gets the currently saved user context and a list of known Designs
-    return ClientContainerServices.getUltrawideDesigns();
+    return ClientDataServices.getUltrawideDesigns();
 
 
 }, DesignsListRedux);

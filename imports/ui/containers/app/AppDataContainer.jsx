@@ -12,7 +12,7 @@ import AppHeader from '../../components/app/AppHeader.jsx';
 import AppBody from '../../components/app/AppBody.jsx';
 
 // Ultrawide Services
-import ClientContainerServices from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid} from 'react-bootstrap';
@@ -70,7 +70,7 @@ AppData.propTypes = {
 export default AppDataContainer = createContainer(({params}) => {
 
     // Get the basic list of supported users and their settings ready for the login
-    return ClientContainerServices.getApplicationData();
+    return ClientDataServices.getApplicationData();
 
 }, AppData);
 

@@ -14,7 +14,7 @@ import ItemContainer                        from '../../components/common/ItemCo
 import ConfigurationSettings                from '../../components/configure/ConfigurationSettings.jsx';
 
 // Ultrawide Services
-import ClientContainerServices  from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices  from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
@@ -92,6 +92,6 @@ function mapStateToProps(state) {
 // Connect the Redux store to this component ensuring that its required state is mapped to props
 export default UserTestOutputsContainer = createContainer(({params}) => {
 
-    return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext)};
+    return {userLocations: ClientDataServices.getUserTestOutputLocationData(params.userContext)};
 
 }, connect(mapStateToProps)(UserTestOutputConfiguration));

@@ -14,7 +14,7 @@ import DesignBackup         from '../../components/admin/DesignBackup.jsx';
 import DesignsContainer     from '../../containers/select/DesignsContainer.jsx';
 
 // Ultrawide Services
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
@@ -118,7 +118,7 @@ BackupManagementScreen = connect(mapStateToProps)(BackupManagementScreen);
 
 export default BackupManagementContainer = createContainer(({params}) => {
 
-    const backupData = ClientContainerServices.getDesignBackups();
+    const backupData = ClientDataServices.getDesignBackups();
 
     return {backupData: backupData};
 

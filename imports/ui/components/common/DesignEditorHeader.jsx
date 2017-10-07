@@ -14,7 +14,7 @@ import {MenuType, RoleType, ViewType, ViewMode, DisplayContext, DetailsViewType}
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Col, Row} from 'react-bootstrap';
@@ -41,7 +41,7 @@ export class DesignEditorHeader extends Component {
 
         let viewOptionType = '';
 
-        const currentOption = ClientContainerServices.getCurrentOptionForDetailsView(view, userViewOptions, detailsType);
+        const currentOption = ClientDataServices.getCurrentOptionForDetailsView(view, userViewOptions, detailsType);
 
         console.log("Closing " + currentOption.option);
 

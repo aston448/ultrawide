@@ -17,7 +17,7 @@ import { ViewType, ComponentType, DetailsViewType, DisplayContext, UpdateMergeSt
 import TextLookups from '../../../common/lookups.js';
 import { log } from '../../../common/utils.js'
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
@@ -297,7 +297,7 @@ DesignComponentText = connect(mapStateToProps)(DesignComponentText);
 export default DesignComponentTextContainer = createContainer(({params}) => {
 
     // Get the various bits of text we need for the design component context.  Will include Scenario Steps for Scenarios
-    return ClientContainerServices.getTextDataForDesignComponent(params.currentContext, params.view, params.displayContext);
+    return ClientDataServices.getTextDataForDesignComponent(params.currentContext, params.view, params.displayContext);
 
 
 }, DesignComponentText);

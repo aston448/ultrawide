@@ -18,7 +18,7 @@ import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentT
 import { log } from '../common/utils.js';
 import TextLookups from '../common/lookups.js'
 
-import ClientContainerServices              from './apiClientDataServices.js';
+import ClientDataServices              from './apiClientDataServices.js';
 import ClientDesignVersionServices          from '../apiClient/apiClientDesignVersion.js';
 import ClientDesignComponentServices        from '../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdate.js';
@@ -164,7 +164,7 @@ class ClientUserContextServices {
                 store.dispatch(setCurrentView(ViewType.WAIT));
 
                 // Also gets WP data if a WP is current
-                ClientContainerServices.getDesignVersionData(userContext, this.onAllDataLoaded);
+                ClientDataServices.getDesignVersionData(userContext, this.onAllDataLoaded);
 
             } else {
 

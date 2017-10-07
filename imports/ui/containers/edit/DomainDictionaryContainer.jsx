@@ -15,7 +15,7 @@ import DetailsViewFooter        from '../../components/common/DetailsViewFooter.
 // Ultrawide Services
 import { DetailsViewType } from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 // Bootstrap
 
@@ -100,7 +100,7 @@ DomainDictionary = connect(mapStateToProps)(DomainDictionary);
 
 export default DomainDictionaryContainer = createContainer(({params}) => {
 
-    return ClientContainerServices.getDomainDictionaryTerms(
+    return ClientDataServices.getDomainDictionaryTerms(
         params.designId,
         params.designVersionId
     );

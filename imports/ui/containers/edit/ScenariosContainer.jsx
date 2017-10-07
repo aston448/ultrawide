@@ -12,7 +12,7 @@ import DesignComponentTarget from '../../components/edit/DesignComponentTarget.j
 
 // Ultrawide Services
 import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
@@ -71,7 +71,7 @@ class ScenariosList extends Component {
                 let testSummaryData = null;
 
                 if(testSummary) {
-                    testSummaryData = ClientContainerServices.getTestSummaryData(scenario);
+                    testSummaryData = ClientDataServices.getTestSummaryData(scenario);
                 }
 
                 return (
@@ -123,7 +123,7 @@ ScenariosList = connect(mapStateToProps)(ScenariosList);
 
 export default ScenariosContainer = createContainer(({params}) => {
 
-    const components =  ClientContainerServices.getComponentDataForParentComponent(
+    const components =  ClientDataServices.getComponentDataForParentComponent(
         ComponentType.SCENARIO,
         params.view,
         params.designVersionId,

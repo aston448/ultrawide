@@ -12,7 +12,7 @@ import DesignComponentTarget from '../../components/edit/DesignComponentTarget.j
 
 // Ultrawide Services
 import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
@@ -116,7 +116,7 @@ FeatureAspectsList = connect(mapStateToProps)(FeatureAspectsList);
 
 export default FeatureAspectsContainer = createContainer(({params}) => {
 
-    const components =  ClientContainerServices.getComponentDataForParentComponent(
+    const components =  ClientDataServices.getComponentDataForParentComponent(
         ComponentType.FEATURE_ASPECT,
         params.view,
         params.designVersionId,

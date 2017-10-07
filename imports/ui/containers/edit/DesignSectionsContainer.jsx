@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 
 // Ultrawide Services
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
@@ -123,7 +123,7 @@ DesignSectionsList = connect(mapStateToProps)(DesignSectionsList);
 export default DesignSectionsContainer = createContainer(({params}) => {
 
     // Get all the Design Sections under this Application or Design Section
-    const components =  ClientContainerServices.getComponentDataForParentComponent(
+    const components =  ClientDataServices.getComponentDataForParentComponent(
         ComponentType.DESIGN_SECTION,
         params.view,
         params.designVersionId,

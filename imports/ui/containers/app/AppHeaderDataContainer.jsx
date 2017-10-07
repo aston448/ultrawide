@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Services
 import {ViewType} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
@@ -161,7 +161,7 @@ AppHeaderData.propTypes = {
 
 export default AppHeaderDataContainer = createContainer(({params}) => {
 
-    return ClientContainerServices.getApplicationHeaderData(
+    return ClientDataServices.getApplicationHeaderData(
         params.userContext,
         params.view
     );

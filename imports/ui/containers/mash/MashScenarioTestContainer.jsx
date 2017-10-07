@@ -13,7 +13,7 @@ import ScenarioTestResult           from '../../components/mash/ScenarioTestResu
 // Ultrawide Services
 import {DisplayContext, TestType} from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
@@ -93,11 +93,11 @@ export default MashScenarioTestContainer = createContainer(({params}) => {
 
     switch(params.displayContext){
         case DisplayContext.MASH_UNIT_TESTS:
-            testResults = ClientContainerServices.getMashScenarioTestResults(params.userContext, params.scenario, TestType.UNIT);
+            testResults = ClientDataServices.getMashScenarioTestResults(params.userContext, params.scenario, TestType.UNIT);
             break;
 
         case DisplayContext.MASH_INT_TESTS:
-            testResults = ClientContainerServices.getMashScenarioTestResults(params.userContext, params.scenario, TestType.INTEGRATION);
+            testResults = ClientDataServices.getMashScenarioTestResults(params.userContext, params.scenario, TestType.INTEGRATION);
             break;
 
     }

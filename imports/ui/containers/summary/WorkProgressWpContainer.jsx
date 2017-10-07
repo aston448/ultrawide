@@ -15,7 +15,7 @@ import {DisplayContext} from '../../../constants/constants.js';
 
 import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
@@ -94,6 +94,6 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default WorkProgressWpContainer = createContainer(({params}) => {
 
-    return ClientContainerServices.getWorkProgressDuWorkPackages(params.userContext, params.designUpdateId);
+    return ClientDataServices.getWorkProgressDuWorkPackages(params.userContext, params.designUpdateId);
 
 }, connect(mapStateToProps)(WorkProgressWpList));

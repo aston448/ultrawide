@@ -16,7 +16,7 @@ import UnitTestScenarioMashItem             from '../../components/mash/MultiTes
 // Ultrawide Services
 import { DisplayContext }    from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
@@ -167,7 +167,7 @@ export default ScenarioTestResultsContainer = createContainer(({params}) => {
 
         // Otherwise we are gathering scenarios for a feature aspect so get the mash data
         //console.log("Getting scenario mash data");
-        scenarioMashData = ClientContainerServices.getScenarioMashData(params.userContext, params.featureAspectReferenceId);
+        scenarioMashData = ClientDataServices.getScenarioMashData(params.userContext, params.featureAspectReferenceId);
     }
 
 

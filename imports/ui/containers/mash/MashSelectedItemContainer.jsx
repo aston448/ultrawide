@@ -17,7 +17,7 @@ import {DetailsViewType, ViewType, DisplayContext, ComponentType, LogLevel}    f
 import {log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js';
 
-import ClientContainerServices          from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices          from '../../../apiClient/apiClientDataServices.js';
 import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
 import ClientMashDataServices           from '../../../apiClient/apiClientMashData.js';
 import ClientUserSettingsServices       from '../../../apiClient/apiClientUserSettings.js';
@@ -265,7 +265,7 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
 
             // For both of these we want to get Scenario Mash data rather than more design items
 
-            designItems = ClientContainerServices.getScenarioMashData(
+            designItems = ClientDataServices.getScenarioMashData(
                 params.userContext,
                 featureAspectReferenceId,
                 scenarioReferenceId,
@@ -276,7 +276,7 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
         default:
 
             // Anything else we get the actual design items, not the scenario mash
-            designItems = ClientContainerServices.getComponentDataForParentComponent(
+            designItems = ClientDataServices.getComponentDataForParentComponent(
                 params.childComponentType,
                 params.view,
                 params.userContext.designVersionId,

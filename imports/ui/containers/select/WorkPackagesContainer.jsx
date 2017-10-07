@@ -15,7 +15,7 @@ import ItemContainer                from '../../components/common/ItemContainer.
 import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackage.js';
 
 // Bootstrap
@@ -223,11 +223,11 @@ export default WorkPackagesContainer = createContainer(({params}) => {
 
     switch(params.wpType){
         case WorkPackageType.WP_BASE:
-            return ClientContainerServices.getWorkPackagesForCurrentDesignVersion(
+            return ClientDataServices.getWorkPackagesForCurrentDesignVersion(
                 params.designVersionId
             );
         case WorkPackageType.WP_UPDATE:
-            return ClientContainerServices.getWorkPackagesForCurrentDesignUpdate(
+            return ClientDataServices.getWorkPackagesForCurrentDesignUpdate(
                 params.designVersionId,
                 params.designUpdateId
             );

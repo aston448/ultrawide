@@ -17,7 +17,7 @@ import WorkProgressSummaryContainer from '../../containers/summary/WorkProgressS
 // Ultrawide Services
 import {DesignVersionStatus, RoleType, WorkPackageType, LogLevel} from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
 import { log } from '../../../common/utils.js';
 
@@ -262,6 +262,6 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default DesignUpdatesContainer = createContainer(({params}) => {
 
-    return ClientContainerServices.getDesignUpdatesForCurrentDesignVersion(params.currentDesignVersionId);
+    return ClientDataServices.getDesignUpdatesForCurrentDesignVersion(params.currentDesignVersionId);
 
 }, connect(mapStateToProps)(DesignUpdatesList));

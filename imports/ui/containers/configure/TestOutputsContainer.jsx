@@ -14,7 +14,7 @@ import TestOutputFilesContainer from '../../containers/configure/TestOutputFiles
 import ItemContainer            from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js'
 
 // Bootstrap
@@ -114,8 +114,8 @@ function mapStateToProps(state) {
 // Connect the Redux store to this component ensuring that its required state is mapped to props
 export default TestOutputsContainer = createContainer(({params}) => {
 
-    const locationData =  ClientContainerServices.getTestOutputLocationData(params.userContext.userId);
-    const dataStore = ClientContainerServices.getDataStore();
+    const locationData =  ClientDataServices.getTestOutputLocationData(params.userContext.userId);
+    const dataStore = ClientDataServices.getDataStore();
 
     return {locationData: locationData, dataStore: dataStore};
 

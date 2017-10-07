@@ -15,7 +15,7 @@ import DesignEditorFooter           from '../../components/common/DesignEditorFo
 // Ultrawide Services
 import {DisplayContext} from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
@@ -163,6 +163,6 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default WorkProgressSummaryContainer = createContainer(({params}) => {
 
-   return ClientContainerServices.getWorkProgressDvItems(params.userContext);
+   return ClientDataServices.getWorkProgressDvItems(params.userContext);
 
 }, connect(mapStateToProps)(WorkProgressSummaryList));

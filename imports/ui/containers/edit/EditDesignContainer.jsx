@@ -21,7 +21,7 @@ import ScenarioFinder                   from '../../components/search/ScenarioFi
 import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType } from '../../../constants/constants.js';
 
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
@@ -597,7 +597,7 @@ function mapStateToProps(state) {
 export default EditDesignContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the design
-    return ClientContainerServices.getEditorApplicationData(
+    return ClientDataServices.getEditorApplicationData(
         params.userContext,
         params.view,
     );

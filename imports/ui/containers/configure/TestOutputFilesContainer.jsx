@@ -13,7 +13,7 @@ import TestOutputFile           from '../../components/configure/TestOutputFile.
 import ItemContainer            from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js'
 
 // Bootstrap
@@ -129,7 +129,7 @@ TestOutputFilesScreen = connect(mapStateToProps)(TestOutputFilesScreen);
 
 export default TestOutputFilesContainer = createContainer(({params}) => {
 
-    const locationFiles =  ClientContainerServices.getTestOutputLocationFiles(params.locationId);
+    const locationFiles =  ClientDataServices.getTestOutputLocationFiles(params.locationId);
     return {locationFiles: locationFiles};
 
 }, TestOutputFilesScreen);

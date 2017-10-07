@@ -15,7 +15,7 @@ import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
 
 import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegration.js';
-import ClientContainerServices          from './apiClientDataServices.js';
+import ClientDataServices          from './apiClientDataServices.js';
 import DesignVersionValidationApi       from '../apiValidation/apiDesignVersionValidation.js';
 import ServerDesignVersionApi           from '../apiServer/apiDesignVersion.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
@@ -298,7 +298,7 @@ class ClientDesignVersionServices{
                 // store.dispatch(setMashDataStaleTo(true));
                 // store.dispatch(setTestDataStaleTo(true));
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Loading new DV data...");
-                ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
+                ClientDataServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
 
         }

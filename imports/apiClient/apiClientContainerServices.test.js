@@ -4,7 +4,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { ViewMode, ViewType, RoleType, MenuDropdown, MenuAction} from '../constants/constants.js'
 
-import ClientContainerServices from './apiClientDataServices.js';
+import ClientDataServices from './apiClientDataServices.js';
 
 describe('API: ClientContainer', () => {
 
@@ -22,7 +22,7 @@ describe('API: ClientContainer', () => {
             devDomainDictVisible:       false
         };
 
-        return ClientContainerServices.getDropdownMenuItems(menuType, view, mode, userRole, userViewOptions);
+        return ClientDataServices.getDropdownMenuItems(menuType, view, mode, userRole, userViewOptions);
     }
 
     function menuContains(menu, key){

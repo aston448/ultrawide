@@ -367,7 +367,7 @@ class ClientWorkPackageServices {
 
             // Subscribe to the appropriate data for the new WP if WP changing
             //store.dispatch(setWorkPackageDataLoadedTo(false));
-            //ClientContainerServices.getWorkPackageData(newContext);
+            //ClientDataServices.getWorkPackageData(newContext);
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
 

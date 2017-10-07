@@ -12,7 +12,7 @@ import UltrawideMenuDropdownItem from '../../components/common/UltrawideMenuDrop
 
 // Ultrawide Services
 import { RoleType } from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
@@ -101,7 +101,7 @@ function mapStateToProps(state) {
 
 export default DropdownItemsContainer = createContainer(({params}) => {
 
-    const itemsList = ClientContainerServices.getDropdownMenuItems(
+    const itemsList = ClientDataServices.getDropdownMenuItems(
         params.menuType,
         params.view,
         params.mode,

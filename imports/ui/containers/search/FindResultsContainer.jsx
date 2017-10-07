@@ -13,7 +13,7 @@ import FinderResult         from '../../components/search/FinderResult.jsx';
 // Ultrawide Services
 import {} from '../../../constants/constants.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
@@ -93,7 +93,7 @@ export default FindResultsContainer = createContainer(({params}) => {
 
     if(params.searchString && params.searchString.length > 0) {
 
-        results = ClientContainerServices.getMatchingScenarios(params.searchString, params.userContext);
+        results = ClientDataServices.getMatchingScenarios(params.searchString, params.userContext);
     }
 
     return (

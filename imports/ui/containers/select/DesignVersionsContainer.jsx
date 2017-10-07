@@ -12,7 +12,7 @@ import ItemContainer                from '../../components/common/ItemContainer.
 
 // Ultrawide Services
 import {DesignVersionStatus}        from '../../../constants/constants.js';
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 
 // Bootstrap
@@ -121,6 +121,6 @@ let DesignVersionsListRedux = connect(mapStateToProps)(DesignVersionsList);
 
 export default DesignVersionsContainer = createContainer(({params}) => {
 
-    return ClientContainerServices.getDesignVersionsForCurrentDesign(params.currentDesignId);
+    return ClientDataServices.getDesignVersionsForCurrentDesign(params.currentDesignId);
 
 }, DesignVersionsListRedux);

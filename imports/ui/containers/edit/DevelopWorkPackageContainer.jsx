@@ -20,7 +20,7 @@ import MashSelectedItemContainer            from '../mash/MashSelectedItemContai
 import { ComponentType, ViewType, DisplayContext } from '../../../constants/constants.js';
 
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
@@ -749,7 +749,7 @@ DevApplicationsList = connect(mapStateToProps)(DevApplicationsList);
 export default DevelopWorkPackageContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the relevant work package
-    return ClientContainerServices.getEditorApplicationData(
+    return ClientDataServices.getEditorApplicationData(
         params.userContext,
         params.view
     );

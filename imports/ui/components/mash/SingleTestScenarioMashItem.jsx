@@ -11,7 +11,7 @@ import TestResultDetails from './TestResultDetails.jsx';
 import TextLookups  from '../../../common/lookups.js';
 import {TestType, DisplayContext}   from '../../../constants/constants.js'
 
-import ClientContainerServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
@@ -45,7 +45,7 @@ export default class SingleTestScenarioMashItem extends Component {
 
     getTestResultDetails(userId, designVersionId, scenarioRef, testType){
 
-        return ClientContainerServices.getMashScenarioTestResult(userId, designVersionId, scenarioRef, testType)
+        return ClientDataServices.getMashScenarioTestResult(userId, designVersionId, scenarioRef, testType)
     }
 
     render(){

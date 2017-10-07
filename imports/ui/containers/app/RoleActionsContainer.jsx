@@ -12,7 +12,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import RoleAction                from '../../components/app/RoleAction.jsx';
 
 // Ultrawide Services
-import ClientContainerServices from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
@@ -87,7 +87,7 @@ RoleActionsList = connect(mapStateToProps)(RoleActionsList);
 export default RoleActionsContainer = createContainer(({params}) => {
 
     return {
-        roleActions: ClientContainerServices.getRoleActions(params.roleType),
+        roleActions: ClientDataServices.getRoleActions(params.roleType),
         roleType: params.roleType
     }
 

@@ -13,7 +13,7 @@ import ItemContainer        from '../../components/common/ItemContainer.jsx';
 import UserDetails          from '../../components/admin/UserDetails.jsx';
 
 // Ultrawide Services
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientUserManagementServices         from '../../../apiClient/apiClientUserManagement.js';
 
 // Bootstrap
@@ -169,7 +169,7 @@ UserManagementScreen = connect(mapStateToProps)(UserManagementScreen);
 
 export default UserManagementContainer = createContainer(({params}) => {
 
-    const userData =  ClientContainerServices.getUltrawideUsers();
+    const userData =  ClientDataServices.getUltrawideUsers();
 
     return {userData: userData};
 

@@ -23,7 +23,7 @@ import { log }        from '../../../common/utils.js';
 
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-import ClientContainerServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
@@ -846,7 +846,7 @@ function mapStateToProps(state) {
 export default EditDesignUpdateContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the Design Update
-    return ClientContainerServices.getEditorApplicationData(
+    return ClientDataServices.getEditorApplicationData(
         params.userContext,
         params.view
     );
