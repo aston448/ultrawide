@@ -1,12 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-import { WorkPackages }             from '../collections/work/work_packages.js';
-import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
-import { UserRoles }                from '../collections/users/user_roles.js';
-import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
-import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
-
 // Ultrawide Services
 import { RoleType, ViewType, ViewMode, ComponentType, WorkPackageType, WorkPackageStatus, MessageType} from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
@@ -18,9 +11,15 @@ import ClientTestIntegrationServices    from './apiClientTestIntegration';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
 
+// Data Access
+import UserRoleData                     from '../data/users/user_role_db.js';
+import WorkPackageData                  from '../data/work/work_package_db.js';
+import DesignComponentData              from '../data/design/design_component_db.js';
+import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
+
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setWorkPackageScopeItems, setMashDataStaleTo, setTestDataStaleTo, setWorkPackageDataLoadedTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setWorkPackageScopeItems } from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Items
@@ -56,10 +55,10 @@ class ClientWorkPackageServices {
                 // Client actions:
 
                 // Set Applications in the WP as Open - actually setting all New WP App Components to open - but they should be
-                let wps = WorkPackages.find({workPackageStatus: WorkPackageStatus.WP_NEW}).fetch();
+                let wps = WorkPackageData.getAllNewWorkPackagesForContext(userContext);
 
                 wps.forEach((wp) => {
-                    let wpApps = WorkPackageComponents.find({workPackageId: wp._id, componentType: ComponentType.APPLICATION}).fetch();
+                    let wpApps = WorkPackageData.getWorkPackageComponentsOfType(wp._id, ComponentType.APPLICATION);
 
                     wpApps.forEach((wpApp) => {
                         if(!openWpItems.includes(wpApp._id)){
@@ -416,23 +415,21 @@ class ClientWorkPackageServices {
         }
 
         // Set up the scope items as the current in scope items
-        const workPackage = WorkPackages.findOne({_id: workPackageToEditId});
-        const wpItems = WorkPackageComponents.find({workPackageId: workPackageToEditId}).fetch();
+        const workPackage = WorkPackageData.getWorkPackageById(workPackageToEditId);
+        const wpItems = WorkPackageData.getAllWorkPackageComponents(workPackageToEditId);
 
         let wpItemsArr = [];
         let designItem = null;
 
         wpItems.forEach((item) => {
             if(wpType === WorkPackageType.WP_BASE) {
-                designItem = DesignVersionComponents.findOne({
-                    designVersionId: workPackage.designVersionId,
-                    componentReferenceId: item.componentReferenceId
-                });
+
+                designItem = DesignComponentData.getDesignComponentByRef(workPackage.designVersionId, item.componentReferenceId);
+
             } else {
-                designItem = DesignUpdateComponents.findOne({
-                    designUpdateId: workPackage.designUpdateId,
-                    componentReferenceId: item.componentReferenceId
-                });
+
+                designItem = DesignUpdateComponentData.getUpdateComponentByRef(workPackage.designVersionId, workPackage.designUpdateId, item.componentReferenceId);
+
             }
             if(designItem) {
                 wpItemsArr.push(designItem._id);
@@ -517,7 +514,7 @@ class ClientWorkPackageServices {
     // Return the adopter for a WP -------------------------------------------------------------------------------------
     getAdopterName(userId){
 
-        const user = UserRoles.findOne({userId: userId});
+        const user = UserRoleData.getRoleByUserId(userId);
 
         if(user){
             return user.displayName;
@@ -528,7 +525,7 @@ class ClientWorkPackageServices {
 
     getWorkPackageStatus(wpId){
 
-        const wp = WorkPackages.findOne({_id: wpId});
+        const wp = WorkPackageData.getWorkPackageById(wpId);
 
         if(wp){
             return {

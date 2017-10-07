@@ -1,8 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-import {DomainDictionary}               from '../collections/design/domain_dictionary.js';
-
 // Ultrawide Services
 import { MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
@@ -11,6 +8,9 @@ import { DomainDictionaryMessages } from '../constants/message_texts.js';
 import ClientDomainDictionaryServices   from '../service_modules/design/client_domain_dictionary.js';
 import DomainDictionaryValidationApi    from '../apiValidation/apiDomainDictionaryValidation.js';
 import ServerDomainDictionaryApi        from '../apiServer/apiDomainDictionary.js';
+
+// Data Access
+import DesignVersionData                from '../data/design/design_version_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -32,7 +32,7 @@ class ClientDomainDictionaryApi {
         // Client validation
         let result = DomainDictionaryValidationApi.validateAddNewTerm(userRole, view, mode);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -67,7 +67,7 @@ class ClientDomainDictionaryApi {
         // Client validation
         let result = DomainDictionaryValidationApi.validateUpdateTermName(userRole, view, mode, termId, termTextNew);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -102,7 +102,7 @@ class ClientDomainDictionaryApi {
         // Client validation
         let result = DomainDictionaryValidationApi.validateUpdateTermDefinition(userRole, view, mode);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -137,7 +137,7 @@ class ClientDomainDictionaryApi {
         // Client validation
         let result = DomainDictionaryValidationApi.validateRemoveTerm(userRole, view, mode);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -179,7 +179,7 @@ class ClientDomainDictionaryApi {
     getDomainTermDecoratorFunction(designVersionId) {
 
         // Get the current list of Domain Terms
-        const domainTerms = DomainDictionary.find({designVersionId: designVersionId}).fetch();
+        const domainTerms = DesignVersionData.getDomainDictionaryEntries(designVersionId);
 
         return ClientDomainDictionaryServices.getDomainTermDecoratorFunction(domainTerms)
 

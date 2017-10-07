@@ -1,8 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-import { UserRoles }                        from '../collections/users/user_roles.js';
-
 // Ultrawide Services
 import { ViewType, MessageType }            from '../constants/constants.js';
 import { Validation }                       from '../constants/validation_errors.js';
@@ -12,6 +9,8 @@ import ServerUserManagementApi              from '../apiServer/apiUserManagement
 import UserManagementValidationApi          from '../apiValidation/apiUserManagementValidation.js';
 import ClientAppHeaderServices              from '../apiClient/apiClientAppHeader.js';
 
+// Data Access
+import UserRoleData                         from '../data/users/user_role_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -309,9 +308,7 @@ class ClientUserManagementServices{
 
         const userId = store.getState().currentUserItemContext.userId;
 
-        const userData = UserRoles.findOne(
-            {userId: userId}
-        );
+        const userData = UserRoleData.getRoleByUserId(userId);
 
         if(userData){
             return userData.apiKey;

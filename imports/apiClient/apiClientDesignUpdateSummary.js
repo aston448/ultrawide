@@ -1,21 +1,15 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-import { Meteor } from 'meteor/meteor';
-
-// Ultrawide Collections
-import { DesignUpdates }            from '../collections/design_update/design_updates.js';
-import { UserDesignUpdateSummary }      from '../collections/summary/user_design_update_summary.js';
-import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
-
-// Ultrawide GUI Components
 
 // Ultrawide Services
-import { DesignUpdateSummaryCategory, WorkPackageScopeType, DesignUpdateSummaryType, ViewType, LogLevel} from '../constants/constants.js';
+import { DesignUpdateSummaryCategory, DesignUpdateSummaryType, ViewType, LogLevel} from '../constants/constants.js';
 import { log }        from '../common/utils.js';
 
 import DesignUpdateSummaryServices from '../apiServer/apiDesignUpdateSummary.js';
 
+// Data Access
+import WorkPackageComponentData         from '../data/work/work_package_component_db.js';
+import UserDesignUpdateSummaryData      from '../data/summary/user_design_update_summary_db.js';
 
 // =====================================================================================================================
 
@@ -72,39 +66,39 @@ class ClientDesignUpdateSummary{
             };
         }
 
-        const addOrgHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryCategory:    DesignUpdateSummaryCategory.SUMMARY_UPDATE_ORGANISATIONAL,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_ADD_TO
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const addOrgHeaders = UserDesignUpdateSummaryData.getHeadersOfCategoryType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryCategory.SUMMARY_UPDATE_ORGANISATIONAL,
+            DesignUpdateSummaryType.SUMMARY_ADD_TO
+        );
 
-        const addFncHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryCategory:    DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_ADD_TO
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const addFncHeaders = UserDesignUpdateSummaryData.getHeadersOfCategoryType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL,
+            DesignUpdateSummaryType.SUMMARY_ADD_TO
+        );
 
-        const removeHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const removeHeaders = UserDesignUpdateSummaryData.getHeadersOfType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
+        );
 
-        const changeHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_CHANGE_IN
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const changeHeaders = UserDesignUpdateSummaryData.getHeadersOfType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryType.SUMMARY_CHANGE_IN
+        );
 
         const moveHeaders = [];
 
-        const queryHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_QUERY_IN
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const queryHeaders = UserDesignUpdateSummaryData.getHeadersOfType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryType.SUMMARY_QUERY_IN
+        );
 
         return {
             addOrgHeaders:  addOrgHeaders,
@@ -134,21 +128,18 @@ class ClientDesignUpdateSummary{
         // Add in any headers if their design item features in the WP
 
         // Organisational Additions
-        const addOrgHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryCategory:    DesignUpdateSummaryCategory.SUMMARY_UPDATE_ORGANISATIONAL,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_ADD_TO
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const addOrgHeaders = UserDesignUpdateSummaryData.getHeadersOfCategoryType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryCategory.SUMMARY_UPDATE_ORGANISATIONAL,
+            DesignUpdateSummaryType.SUMMARY_ADD_TO
+        );
 
         let wpAddOrgHeaders = [];
 
         addOrgHeaders.forEach((updateAddHeader) => {
 
-            const wpItem = WorkPackageComponents.findOne({
-                workPackageId: userContext.workPackageId,
-                componentReferenceId: updateAddHeader.itemComponentReferenceId
-            });
+            const wpItem = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, updateAddHeader.itemComponentReferenceId);
 
             // See if there is anything to go under this header
             const children = this.getDesignUpdateSummaryHeaderActionsForWp(updateAddHeader._id, userContext.workPackageId);
@@ -162,21 +153,18 @@ class ClientDesignUpdateSummary{
         });
 
         // Functional Additions
-        const addFncHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryCategory:    DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_ADD_TO
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const addFncHeaders = UserDesignUpdateSummaryData.getHeadersOfCategoryType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL,
+            DesignUpdateSummaryType.SUMMARY_ADD_TO
+        );
 
         let wpAddFncHeaders = [];
 
         addFncHeaders.forEach((updateAddHeader) => {
 
-            const wpItem = WorkPackageComponents.findOne({
-                workPackageId: userContext.workPackageId,
-                componentReferenceId: updateAddHeader.itemComponentReferenceId
-            });
+            const wpItem = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, updateAddHeader.itemComponentReferenceId);
 
             // See if there is anything to go under this header
             const children = this.getDesignUpdateSummaryHeaderActionsForWp(updateAddHeader._id, userContext.workPackageId);
@@ -190,20 +178,17 @@ class ClientDesignUpdateSummary{
         });
 
         // Removals
-        const removeHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const removeHeaders = UserDesignUpdateSummaryData.getHeadersOfType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
+        );
 
         let wpRemoveHeaders = [];
 
         removeHeaders.forEach((updateRemoveHeader) => {
 
-            const wpItem = WorkPackageComponents.findOne({
-                workPackageId: userContext.workPackageId,
-                componentReferenceId: updateRemoveHeader.itemComponentReferenceId
-            });
+            const wpItem = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, updateRemoveHeader.itemComponentReferenceId);
 
             // See if there is anything to go under this header
             const hasChildren = this.getDesignUpdateSummaryHeaderActionsForWp(updateRemoveHeader._id, userContext.workPackageId).length > 0;
@@ -214,20 +199,17 @@ class ClientDesignUpdateSummary{
         });
 
         // Changes
-        const changeHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_CHANGE_IN
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const changeHeaders = UserDesignUpdateSummaryData.getHeadersOfType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryType.SUMMARY_CHANGE_IN
+        );
 
         let wpChangeHeaders = [];
 
         changeHeaders.forEach((updateChangeHeader) => {
 
-            const wpItem = WorkPackageComponents.findOne({
-                workPackageId: userContext.workPackageId,
-                componentReferenceId: updateChangeHeader.itemComponentReferenceId
-            });
+            const wpItem = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, updateChangeHeader.itemComponentReferenceId);
 
             // See if there is anything to go under this header
             const hasChildren = this.getDesignUpdateSummaryHeaderActionsForWp(updateChangeHeader._id, userContext.workPackageId).length > 0;
@@ -238,20 +220,17 @@ class ClientDesignUpdateSummary{
         });
 
         // Queries
-        const queryHeaders = UserDesignUpdateSummary.find({
-            userId:             userContext.userId,
-            designUpdateId:     userContext.designUpdateId,
-            summaryType:        DesignUpdateSummaryType.SUMMARY_QUERY_IN
-        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+        const queryHeaders = UserDesignUpdateSummaryData.getHeadersOfType(
+            userContext.userId,
+            userContext.designUpdateId,
+            DesignUpdateSummaryType.SUMMARY_QUERY_IN
+        );
 
         let wpQueryHeaders = [];
 
         queryHeaders.forEach((updateQueryHeader) => {
 
-            const wpItem = WorkPackageComponents.findOne({
-                workPackageId: userContext.workPackageId,
-                componentReferenceId: updateQueryHeader.itemComponentReferenceId
-            });
+            const wpItem = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, updateQueryHeader.itemComponentReferenceId);
 
             // See if there is anything to go under this header
             const hasChildren = this.getDesignUpdateSummaryHeaderActionsForWp(updateQueryHeader._id, userContext.workPackageId).length > 0;
@@ -274,17 +253,13 @@ class ClientDesignUpdateSummary{
 
     getDesignUpdateSummaryHeaderActions(headerId){
 
-        return UserDesignUpdateSummary.find({
-            itemHeaderId:       headerId
-        }, {sort: {itemIndex: 1}}).fetch();
+        return UserDesignUpdateSummaryData.getHeaderActions(headerId);
     }
 
     getDesignUpdateSummaryHeaderActionsForWp(headerId, workPackageId){
         //console.log("Getting items for header with headerId " + headerId + " and wpId: " + workPackageId);
 
-        const headerItems = UserDesignUpdateSummary.find({
-            itemHeaderId: headerId
-        }, {sort: {itemIndex: 1}}).fetch();
+        const headerItems = UserDesignUpdateSummaryData.getHeaderActions(headerId);
 
         // Only include if active in WP scope or has active children
         let wpHeaderItems = [];
@@ -293,27 +268,13 @@ class ClientDesignUpdateSummary{
 
             //console.log("Header item " + headerItem.itemName + " with ref " + headerItem.itemComponentReferenceId);
 
-            let wpItem = WorkPackageComponents.find({
-                workPackageId: workPackageId,
-                componentReferenceId: headerItem.itemComponentReferenceId,
-                scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-            }).fetch();
+            let wpItems = WorkPackageComponentData.getActiveWpComponentsByComponentRef(workPackageId, headerItem.itemComponentReferenceId);
 
-            let wpChildItem = WorkPackageComponents.find({
-                workPackageId: workPackageId,
-                componentParentReferenceId: headerItem.itemComponentReferenceId,
-                scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-            }).fetch();
+            let wpChildItems = WorkPackageComponentData.getActiveChildWpComponents(workPackageId, headerItem.itemComponentReferenceId);
 
-            let wpFeatureChildItem = WorkPackageComponents.find({
-                workPackageId: workPackageId,
-                componentFeatureReferenceId: headerItem.itemComponentReferenceId,
-                scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-            }).fetch();
+            let wpFeatureChildItems = WorkPackageComponentData.getActiveFeatureWpComponents(workPackageId, headerItem.itemComponentReferenceId);
 
-
-
-            if(wpItem.length > 0 || wpChildItem.length > 0 || wpFeatureChildItem.length > 0){
+            if(wpItems.length > 0 || wpChildItems.length > 0 || wpFeatureChildItems.length > 0){
                 //console.log("Adding...")
                 wpHeaderItems.push(headerItem);
             }

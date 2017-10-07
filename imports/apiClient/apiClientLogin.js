@@ -1,14 +1,12 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
-// Ultrawide Collections
-import {UserRoles}    from '../collections/users/user_roles.js';
-
 // Ultrawide Services
 import {RoleType, ViewType, MessageType} from '../constants/constants.js'
 import {LoginMessages} from '../constants/message_texts.js';
 import ClientUserContextServices from './apiClientUserContext.js'
+
+// Data Access
+import UserRoleData                     from '../data/users/user_role_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -50,9 +48,8 @@ class ClientLoginServices{
                     //console.log("LOGGED IN AS METEOR USER: " + userId);
 
                     // User must be active to log in
-                    const user = UserRoles.findOne({
-                        userId: userId,
-                    });
+                    const user = UserRoleData.getRoleByUserId(userId);
+
                     if (user) {
                         if(user.isActive) {
                             if (user.isAdmin) {

@@ -67,6 +67,33 @@ class WorkPackageComponentData {
         });
     }
 
+    getActiveWpComponentsByComponentRef(workPackageId, designComponentReferenceId){
+
+        return WorkPackageComponents.find({
+            workPackageId:          workPackageId,
+            componentReferenceId:   designComponentReferenceId,
+            scopeType:              WorkPackageScopeType.SCOPE_ACTIVE
+        }).fetch();
+    }
+
+    getActiveChildWpComponents(workPackageId, designComponentReferenceId){
+
+        return WorkPackageComponents.find({
+            workPackageId:              workPackageId,
+            componentParentReferenceId: designComponentReferenceId,
+            scopeType:                  WorkPackageScopeType.SCOPE_ACTIVE
+        }).fetch();
+    }
+
+    getActiveFeatureWpComponents(workPackageId, featureRefId){
+
+        return WorkPackageComponents.find({
+            workPackageId:                  workPackageId,
+            componentFeatureReferenceId:    featureRefId,
+            scopeType:                      WorkPackageScopeType.SCOPE_ACTIVE
+        }).fetch();
+    }
+
     getWorkPackageFeatureByRef(workPackageId, featureReferenceId){
 
         return WorkPackageComponents.findOne(
@@ -136,6 +163,24 @@ class WorkPackageComponentData {
             },
             {sort: {componentIndex: 1}}
         ).fetch();
+    }
+
+    getChildFeatureCount(workPackageId, componentReferenceId){
+
+        return WorkPackageComponents.find({
+            workPackageId:                workPackageId,
+            componentParentReferenceId:   componentReferenceId,
+            componentType:                ComponentType.FEATURE
+        }).count()
+    }
+
+    getNonScenarioChildComponents(workPackageId, parentRefId){
+
+        return WorkPackageComponents.find({
+            workPackageId:                  workPackageId,
+            componentParentReferenceId:     parentRefId,
+            componentType:                  {$ne:(ComponentType.SCENARIO)}
+        }).fetch();
     }
 
     // UPDATE ==========================================================================================================

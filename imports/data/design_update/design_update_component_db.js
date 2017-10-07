@@ -308,6 +308,40 @@ class DesignUpdateComponentData{
         }).fetch();
     }
 
+    getChildFeatureCount(designVersionId, designUpdateId, componentReferenceId){
+
+        return DesignUpdateComponents.find({
+            designVersionId:                designVersionId,
+            designUpdateId:                 designUpdateId,
+            componentParentReferenceIdNew:  componentReferenceId,
+            componentType:                  ComponentType.FEATURE
+        }).count();
+    }
+
+    getNonScenarioFeatureComponents(designVersionId, designUpdateId, featureRefId){
+
+        return DesignUpdateComponents.find(
+            {
+                designVersionId:                designVersionId,
+                designUpdateId:                 designUpdateId,
+                componentFeatureReferenceIdNew: featureRefId,
+                componentType:                  {$ne:(ComponentType.SCENARIO)}
+            }
+        ).fetch();
+    }
+
+    getNonScenarioChildComponents(designVersionId, designUpdateId, componentReferenceId){
+
+        return DesignUpdateComponents.find(
+            {
+                designVersionId:                designVersionId,
+                designUpdateId:                 designUpdateId,
+                componentParentReferenceIdNew:  componentReferenceId,
+                componentType:                  {$ne:(ComponentType.SCENARIO)}
+            }
+        ).fetch();
+    }
+
     // CHECKS ==========================================================================================================
     hasOtherRemovedInstancesInDesignVersion(designVersionId, designUpdateId, componentReferenceId){
 

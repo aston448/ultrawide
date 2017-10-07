@@ -1,15 +1,8 @@
 
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-import {DesignVersions}             from '../collections/design/design_versions.js';
-import {DesignUpdates}              from '../collections/design_update/design_updates.js';
-import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
-import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
-import {UserRoles}                  from '../collections/users/user_roles.js';
-
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, DesignUpdateStatus, UpdateScopeType, MessageType, WorkSummaryType, LogLevel } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType, WorkSummaryType, LogLevel } from '../constants/constants.js';
 import { Validation, UserRolesValidationErrors} from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
@@ -22,9 +15,16 @@ import ClientUserContextServices        from '../apiClient/apiClientUserContext.
 import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
 import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
 
+// Data Access
+
+import UserRoleData                     from '../data/users/user_role_db.js';
+import DesignVersionData                from '../data/design/design_version_db.js';
+import DesignUpdateData                 from '../data/design_update/design_update_db.js';
+import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
+
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentRole, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo, updateOpenItemsFlag, setMashDataStaleTo, setTestDataStaleTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentRole, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -383,7 +383,7 @@ class ClientDesignVersionServices{
 
         let view = ViewType.SELECT;
 
-        const designVersion = DesignVersions.findOne({_id: designVersionId});
+        const designVersion = DesignVersionData.getDesignVersionById(designVersionId);
 
         switch(userRole){
             case RoleType.DESIGNER:
@@ -427,11 +427,11 @@ class ClientDesignVersionServices{
     // Get Design Update item for a Design Update Scope - if there is one.  If not then the item is not in scope
     getDesignUpdateItemForUpdate(currentComponent, designUpdateId){
 
-        const updateComponent = DesignUpdateComponents.findOne({
-            designVersionId:        currentComponent.designVersionId,
-            designUpdateId:         designUpdateId,
-            componentReferenceId:   currentComponent.componentReferenceId,
-        });
+        const updateComponent = DesignUpdateComponentData.getUpdateComponentByRef(
+            currentComponent.designVersionId,
+            designUpdateId,
+            currentComponent.componentReferenceId
+        );
 
         //console.log("getting update component returning " + updateComponent);
 
@@ -452,12 +452,10 @@ class ClientDesignVersionServices{
         // But in any case it does not matter as what we want is the OLD data that has been blatted over when we merged the updates.
         // Therefore we can pick any of the DU components and it wil have the base version in it.
 
-        const updateComponents = DesignUpdateComponents.find({
-            designVersionId:        designComponent.designVersionId,
-            componentReferenceId:   designComponent.componentReferenceId,
-            isNew:                  false,
-            $or:[{isChanged: true}, {isTextChanged: true}],
-        }).fetch();
+        const updateComponents = DesignVersionData.getChangedUpdateComponentsByRef(
+            designComponent.designVersionId,
+            designComponent.componentReferenceId
+        );
 
         // This should only return one component unless there is the circumstance that the component was changed in one DU
         // and its text in another...
@@ -476,16 +474,12 @@ class ClientDesignVersionServices{
     // Get a list of updates to INCLUDE / CARRY FORWARD / IGNORE for the next Design Version ---------------------------
     getDesignUpdatesForVersion(designVersionId, updateMergeAction){
 
-        return DesignUpdates.find({
-            designVersionId:    designVersionId,
-            updateStatus:       DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
-            updateMergeAction:  updateMergeAction
-        }).fetch();
+        return DesignUpdateData.getPublishedUpdatesForMergeAction(designVersionId, updateMergeAction);
     }
 
     getDesignVersionStatus(designVersionId){
 
-        const designVersion = DesignVersions.findOne({_id: designVersionId});
+        const designVersion = DesignVersionData.getDesignVersionById(designVersionId);
 
         if(designVersion){
             return designVersion.designVersionStatus;
@@ -502,7 +496,7 @@ class ClientDesignVersionServices{
 
 
         // Validate that user has this role...
-        const userRole = UserRoles.findOne({userId: userContext.userId});
+        const userRole = UserRoleData.getRoleByUserId(userContext.userId);
         let newContext = {};
 
         if(role === RoleType.DESIGNER && userRole.isDesigner || role === RoleType.DEVELOPER && userRole.isDeveloper || role === RoleType.MANAGER && userRole.isManager){

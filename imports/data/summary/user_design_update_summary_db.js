@@ -1,7 +1,7 @@
 
 import { UserDesignUpdateSummary }          from '../../collections/summary/user_design_update_summary.js';
 
-class UserDesignUpdateSummary{
+class UserDesignUpdateSummaryData{
 
     // INSERT ==========================================================================================================
 
@@ -48,6 +48,32 @@ class UserDesignUpdateSummary{
         });
     }
 
+    getHeadersOfCategoryType(userId, designUpdateId, category, type){
+
+        return UserDesignUpdateSummary.find({
+            userId:             userId,
+            designUpdateId:     designUpdateId,
+            summaryCategory:    category,
+            summaryType:        type
+        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+    }
+
+    getHeadersOfType(userId, designUpdateId, type){
+
+        return UserDesignUpdateSummary.find({
+            userId:             userId,
+            designUpdateId:     designUpdateId,
+            summaryType:        type
+        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+    }
+
+    getHeaderActions(headerId){
+
+        return UserDesignUpdateSummary.find({
+            itemHeaderId:       headerId
+        }, {sort: {itemIndex: 1}}).fetch();
+    }
+
     // UPDATE ==========================================================================================================
 
     // REMOVE ==========================================================================================================
@@ -61,4 +87,4 @@ class UserDesignUpdateSummary{
     }
 }
 
-export default new UserDesignUpdateSummary();
+export default new UserDesignUpdateSummaryData();

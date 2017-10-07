@@ -81,6 +81,11 @@ class DesignVersionData {
         return DesignVersionComponents.find({designVersionId: designVersionId}).count();
     }
 
+    checkForComponents(){
+
+        return DesignVersionComponents.find({}).count() > 0;
+    }
+
     getNonRemovedScenarioCount(designVersionId){
 
         return DesignVersionComponents.find({
@@ -92,7 +97,7 @@ class DesignVersionData {
 
     getAllApplications(designVersionId){
 
-        DesignVersionComponents.find(
+        return DesignVersionComponents.find(
             {
                 designVersionId: designVersionId,
                 componentType: ComponentType.APPLICATION
@@ -115,7 +120,7 @@ class DesignVersionData {
 
     getWorkingApplications(designVersionId){
 
-        DesignVersionComponents.find(
+        return DesignVersionComponents.find(
             {
                 designVersionId: designVersionId,
                 componentType: ComponentType.APPLICATION,
@@ -125,7 +130,27 @@ class DesignVersionData {
         ).fetch();
     }
 
+    getApplicationAndSectionIds(designVersionId){
 
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                componentType:      {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+            },
+            {fields: {_id: 1}}
+        );
+    }
+
+    getApplicationAndSectionIdsAndRefs(designVersionId){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                componentType:      {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+            },
+            {fields: {_id: 1, componentReferenceId: 1}}
+        ).fetch();
+    }
 
 
     // DV Updates ------------------------------------------------------------------------------------------------------
@@ -161,6 +186,16 @@ class DesignVersionData {
                 isRemovedElsewhere: false  // Or not anything that is removed in another update
             }
         );
+    }
+
+    getChangedUpdateComponentsByRef(designVersionId, componentReferenceId){
+
+        DesignUpdateComponents.find({
+            designVersionId:        designVersionId,
+            componentReferenceId:   componentReferenceId,
+            isNew:                  false,
+            $or:[{isChanged: true}, {isTextChanged: true}],
+        }).fetch();
     }
 
     // DV Work Packages ------------------------------------------------------------------------------------------------

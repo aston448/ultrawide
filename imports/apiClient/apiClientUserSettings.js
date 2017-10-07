@@ -1,15 +1,13 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-import { UserSettings }                     from '../collections/configure/user_settings.js';
-
 // Ultrawide Services
-import { UserSettingValue, MessageType }            from '../constants/constants.js';
-import { Validation }                       from '../constants/validation_errors.js';
+import { UserSettingValue, MessageType }    from '../constants/constants.js';
 import { UserSettingMessages }              from '../constants/message_texts.js'
 
 import ServerUserSettingsApi                from '../apiServer/apiUserSettings';
 
+// Data Access
+import UserSettingsData                     from '../data/configure/user_setting_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -59,10 +57,7 @@ class ClientUserSettingServices {
 
         const userContext = store.getState().currentUserItemContext;
 
-        const setting = UserSettings.findOne({
-            userId:         userContext.userId,
-            settingName:    settingName
-        });
+        const setting = UserSettingsData.getUserSettingByName(userContext.userId, settingName);
 
         if(setting){
             return setting.settingValue;

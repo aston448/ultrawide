@@ -1,9 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-import { DesignVersionComponents }  from '../collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-
 // Ultrawide Services
 import { ViewType, MessageType, TestRunner, RoleType, ComponentType, LogLevel } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
@@ -15,6 +11,10 @@ import ServerTestIntegrationApi         from '../apiServer/apiTestIntegration.js
 import TestIntegrationValidationApi     from '../apiValidation/apiTestIntegrationValidation.js';
 import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
 import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
+
+// Data Access
+import DesignComponentData              from '../data/design/design_component_db.js';
+import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -193,19 +193,20 @@ class ClientTestIntegrationServices {
 
         if(userContext.designUpdateId === 'NONE') {
 
-            scenarioCount = DesignVersionComponents.find({
-                designVersionId: featureAspect.designVersionId,
-                componentType: ComponentType.SCENARIO,
-                componentParentIdNew: featureAspect._id
-            }).count();
+            scenarioCount = DesignComponentData.getChildComponentsOfType(
+                featureAspect.designVersionId,
+                ComponentType.SCENARIO,
+                featureAspect.componentReferenceId
+            ).length;
 
         } else {
 
-            scenarioCount = DesignUpdateComponents.find({
-                designUpdateId: featureAspect.designUpdateId,
-                componentType: ComponentType.SCENARIO,
-                componentParentIdNew: featureAspect._id
-            }).count();
+            scenarioCount = DesignUpdateComponentData.getChildComponentsOfType(
+                featureAspect.designUpdateId,
+                ComponentType.SCENARIO,
+                featureAspect.componentReferenceId
+            ).length;
+
         }
 
         return(scenarioCount > 0);

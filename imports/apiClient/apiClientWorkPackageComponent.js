@@ -1,22 +1,22 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
-import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js'
-import { WorkPackages }             from '../collections/work/work_packages.js';
-import {WorkPackageComponents}      from '../collections/work/work_package_components.js'
-
 // Ultrawide Services
 import { WorkPackageType, ComponentType, MessageType } from '../constants/constants.js';
-import { Validation } from '../constants/validation_errors.js';
-import { WorkPackageComponentMessages } from '../constants/message_texts.js';
+import { Validation }                       from '../constants/validation_errors.js';
+import { WorkPackageComponentMessages }     from '../constants/message_texts.js';
 
-import WorkPackageComponentValidationApi from '../apiValidation/apiWorkPackageComponentValidation.js';
-import ServerWorkPackageComponentApi     from '../apiServer/apiWorkPackageComponent.js';
+import WorkPackageComponentValidationApi    from '../apiValidation/apiWorkPackageComponentValidation.js';
+import ServerWorkPackageComponentApi        from '../apiServer/apiWorkPackageComponent.js';
+
+// Data Access
+import WorkPackageData                      from '../data/work/work_package_db.js';
+import WorkPackageComponentData             from '../data/work/work_package_component_db.js';
+import DesignComponentData                  from '../data/design/design_component_db.js';
+import DesignUpdateComponentData            from '../data/design_update/design_update_component_db.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, setWorkPackageScopeItems, setWorkPackageScopeFlag, updateTestDataFlag} from '../redux/actions';
+import {setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, setWorkPackageScopeItems, setWorkPackageScopeFlag } from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Components
@@ -52,8 +52,8 @@ class ClientWorkPackageComponentServices {
                 // Client actions:
 
                 // Calculate data used for managing scope rendering efficiently
-                const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
-                const wpItems = WorkPackageComponents.find({workPackageId: userContext.workPackageId});
+                const workPackage = WorkPackageData.getWorkPackageById(userContext.workPackageId);
+                const wpItems = WorkPackageData.getAllWorkPackageComponents(userContext.workPackageId);
 
                 let addedItems = [];
                 let removedItems = [];
@@ -62,15 +62,13 @@ class ClientWorkPackageComponentServices {
 
                 wpItems.forEach((item) => {
                     if(workPackage.workPackageType === WorkPackageType.WP_BASE) {
-                        designItem = DesignVersionComponents.findOne({
-                            designVersionId: workPackage.designVersionId,
-                            componentReferenceId: item.componentReferenceId
-                        });
+
+                        designItem = DesignComponentData.getDesignComponentByRef(workPackage.designVersionId, item.componentReferenceId);
+
                     } else {
-                        designItem = DesignUpdateComponents.findOne({
-                            designUpdateId: workPackage.designUpdateId,
-                            componentReferenceId: item.componentReferenceId
-                        });
+
+                        designItem = DesignUpdateComponentData.getUpdateComponentByRef(workPackage.designVersionId, workPackage.designUpdateId, item.componentReferenceId);
+
                     }
                     if(designItem) {
                         currentItems.push(designItem.componentReferenceId);
@@ -128,9 +126,11 @@ class ClientWorkPackageComponentServices {
 
         switch(wpType){
             case WorkPackageType.WP_BASE:
-                return DesignVersionComponents.findOne({_id: componentId});
+                return DesignComponentData.getDesignComponentById(componentId);
+
             case WorkPackageType.WP_UPDATE:
-                return DesignUpdateComponents.findOne({_id: componentId});
+                return DesignUpdateComponentData.getUpdateComponentById(componentId);
+
             default:
                 // Does not apply for non WP views as the current item IS the Design item.
                 return null;
@@ -141,7 +141,8 @@ class ClientWorkPackageComponentServices {
 
         //console.log("looking for wp component for WP " + workPackageId + " and component " + componentId);
 
-        return WorkPackageComponents.findOne({workPackageId: workPackageId, componentReferenceId: componentReferenceId});
+        return WorkPackageComponentData.getWpComponentByComponentRef(workPackageId, componentReferenceId);
+
     }
 
     // User opened or closed a WP component
@@ -165,10 +166,7 @@ class ClientWorkPackageComponentServices {
                 ));
 
                 // And its child Aspects
-                let featureComponents = WorkPackageComponents.find({
-                    workPackageId:              wpComponent.workPackageId,
-                    componentParentReferenceId: wpComponent.componentReferenceId
-                });
+                let featureComponents = WorkPackageComponentData.getChildComponentsOfType(wpComponent.workPackageId, ComponentType.FEATURE_ASPECT, wpComponent.componentReferenceId);
 
                 featureComponents.forEach((component) => {
 
@@ -221,12 +219,7 @@ class ClientWorkPackageComponentServices {
         ));
 
         // Get children in WP - no need to close scenarios
-        let childComponents = WorkPackageComponents.find({
-            workPackageId:                  userContext.workPackageId,
-            componentParentReferenceId:     wpComponent.componentReferenceId,
-            componentType:                  {$ne:(ComponentType.SCENARIO)}
-        }).fetch();
-
+        let childComponents = WorkPackageComponentData.getNonScenarioChildComponents(userContext.workPackageId, wpComponent.componentReferenceId);
 
         if(childComponents.length > 0){
 

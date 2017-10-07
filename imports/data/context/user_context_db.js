@@ -40,6 +40,22 @@ class UserContextData{
         });
     }
 
+    // SELECT ==========================================================================================================
+
+    getUserContext(userId){
+
+        return UserContext.findOne({userId: userId});
+    }
+
+    getAllUserContextsForDesign(designId){
+
+        return UserContext.find({designId: designId}).fetch();
+    }
+
+    getAllUserContextsForComponent(componentId){
+
+        return UserContext.find({designComponentId: componentId}).fetch();
+    }
     // UPDATE ==========================================================================================================
 
     clearUserContext(userId){
@@ -58,6 +74,23 @@ class UserContextData{
                     featureAspectReferenceId: 'NONE',
                     scenarioReferenceId: 'NONE',
                     scenarioStepId: 'NONE'
+                }
+            }
+        );
+    }
+
+    clearComponentContext(userId){
+
+        UserContext.update(
+            {userId: userId},
+            {
+                $set:{
+                    designComponentId:              'NONE',
+                    designComponentType:            'NONE',
+                    featureReferenceId:             'NONE',
+                    featureAspectReferenceId:       'NONE',
+                    scenarioReferenceId:            'NONE',
+                    scenarioStepId:                 'NONE',
                 }
             }
         );

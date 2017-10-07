@@ -1,14 +1,7 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-import {DesignUpdates}              from '../collections/design_update/design_updates.js';
-import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
-import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
-import {WorkPackageComponents}      from '../collections/work/work_package_components.js';
-import {UserDesignVersionMashScenarios} from '../collections/mash/user_dv_mash_scenarios.js';
-
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, ComponentType, MessageType, DesignUpdateWpStatus, DesignUpdateTestStatus, MashTestStatus, LogLevel } from '../constants/constants.js';
+import { ViewType, ViewMode, MessageType, LogLevel } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignUpdateMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
@@ -20,9 +13,13 @@ import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegrat
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
 
+// Data Access
+import DesignUpdateData                 from '../data/design_update/design_update_db.js';
+import DesignComponentData              from '../data/design/design_component_db.js';
+
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage, setCurrentUserViewOptions, setUpdateScopeItems} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setUpdateScopeItems} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Update Items
@@ -391,16 +388,14 @@ class ClientDesignUpdateServices {
 
 
         // Set up the scope items as the current in scope items
-        const updateItems = DesignUpdateComponents.find({designUpdateId: designUpdateToEditId}).fetch();
+        const updateItems = DesignUpdateData.getAllComponents(designUpdateToEditId);
 
         let updateItemsArr = [];
         let designItem = null;
 
         updateItems.forEach((item) => {
-            designItem = DesignVersionComponents.findOne({
-                designVersionId:        item.designVersionId,
-                componentReferenceId:   item.componentReferenceId
-            });
+
+            designItem = DesignComponentData.getDesignComponentByRef(item.designVersionId, item.componentReferenceId);
 
             // The design item won't exist if a new item in a non-merged update
             if(designItem) {

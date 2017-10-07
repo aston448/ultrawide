@@ -1,9 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide collections
-import {DesignUpdateComponents}             from '../collections/design_update/design_update_components.js';
-import {DesignVersionComponents}            from '../collections/design/design_version_components.js';
-
 // Ultrawide Services
 import { ComponentType, MessageType, UpdateScopeType, LogLevel}        from '../constants/constants.js';
 import { DesignUpdateComponentMessages }    from '../constants/message_texts.js';
@@ -14,6 +10,11 @@ import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpda
 import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdateSummary.js';
 
 import { log }        from '../common/utils.js';
+
+// Data Access
+import DesignUpdateData                 from '../data/design_update/design_update_db.js';
+import DesignComponentData              from '../data/design/design_component_db.js';
+import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -495,7 +496,7 @@ class ClientDesignUpdateComponentServices{
                 this.openInScopeItems(designUpdateId);
 
                 // Calculate data used for managing scope rendering efficiently
-                const updateItems = DesignUpdateComponents.find({designUpdateId: designUpdateId});
+                const updateItems = DesignUpdateData.getAllComponents(designUpdateId);
 
                 let addedItems = [];
                 let removedItems = [];
@@ -503,10 +504,8 @@ class ClientDesignUpdateComponentServices{
                 let designItem = null;
 
                 updateItems.forEach((item) => {
-                    designItem = DesignVersionComponents.findOne({
-                        designVersionId:        item.designVersionId,
-                        componentReferenceId:   item.componentReferenceId
-                    });
+
+                    designItem = DesignComponentData.getDesignComponentByRef(item.designVersionId, item.componentReferenceId);
 
                     // The design item won't exist if a new item in a non-merged update
                     if(designItem) {
@@ -656,13 +655,11 @@ class ClientDesignUpdateComponentServices{
 
             // Open or close the whole feature
             if(setOpen) {
-                const featureComponents = DesignUpdateComponents.find(
-                    {
-                        designVersionId: designComponent.designVersionId,
-                        designUpdateId: designComponent.designUpdateId,
-                        componentFeatureReferenceIdNew: designComponent.componentReferenceId,
-                        componentType: {$ne:(ComponentType.SCENARIO)}
-                    }
+
+                const featureComponents = DesignUpdateComponentData.getNonScenarioFeatureComponents(
+                    designComponent.designVersionId,
+                    designComponent.designUpdateId,
+                    designComponent.componentReferenceId
                 );
 
                 featureComponents.forEach((component) => {
@@ -718,16 +715,13 @@ class ClientDesignUpdateComponentServices{
             false
         ));
 
-        let childComponents = DesignUpdateComponents.find(
-            {
-                designVersionId: designComponent.designVersionId,
-                designUpdateId: designComponent.designUpdateId,
-                componentParentReferenceIdNew: designComponent.componentReferenceId,
-                componentType: {$ne:(ComponentType.SCENARIO)}
-            }
+        let childComponents = DesignUpdateComponentData.getNonScenarioChildComponents(
+            designComponent.designVersionId,
+            designComponent.designUpdateId,
+            designComponent.componentReferenceId
         );
 
-        if(childComponents.count() > 0){
+        if(childComponents.length > 0){
             childComponents.forEach((child) => {
 
                 // Recursively call for these children
@@ -745,12 +739,7 @@ class ClientDesignUpdateComponentServices{
 
         //console.log("SETTING in scope DU items to open for DU " + designUpdateId);
 
-        const designUpdateOpenComponents = DesignUpdateComponents.find(
-            {
-                designUpdateId: designUpdateId,
-            },
-            {fields: {_id: 1, scopeType: 1}}
-        ).fetch();
+        const designUpdateOpenComponents = DesignUpdateData.getAllComponentsIdAndScope(designUpdateId);
 
         //console.log("Got " + designUpdateOpenComponents.length + " DU components");
 

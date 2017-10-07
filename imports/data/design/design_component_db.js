@@ -268,16 +268,45 @@ class DesignComponentData {
         }).fetch();
     }
 
+
+
     getChildCount(designVersionId, componentReferenceId){
+
+        return DesignVersionComponents.find({
+                componentParentReferenceIdNew: componentReferenceId,
+                designVersionId: designVersionId
+        }).count();
+    }
+
+    getChildFeatureCount(designVersionId, componentReferenceId){
+
+        return DesignVersionComponents.find({
+            designVersionId:                designVersionId,
+            componentParentReferenceIdNew:  componentReferenceId,
+            componentType:                  ComponentType.FEATURE
+        }).count()
+    }
+
+    getNonScenarioFeatureComponents(designVersionId, featureRefId){
 
         return DesignVersionComponents.find(
             {
-                componentParentReferenceIdNew: componentReferenceId,
-                designVersionId: designVersionId
-            },
-            {sort: {componentIndexNew: 1}}
+                designVersionId:                designVersionId,
+                componentFeatureReferenceIdNew: featureRefId,
+                componentType:                  {$ne:(ComponentType.SCENARIO)}
+            }
+        ).fetch();
+    }
 
-        ).count();
+    getNonScenarioChildComponents(designVersionId, componentReferenceId){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:                designVersionId,
+                componentParentReferenceIdNew:  componentReferenceId,
+                componentType: {$ne: (ComponentType.SCENARIO)}
+            }
+        ).fetch();
     }
 
 

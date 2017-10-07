@@ -1,19 +1,17 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
-// Ultrawide Collections
-import { Designs }                  from '../collections/design/designs.js';
-import { DesignVersionComponents }  from '../collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
-
 // Ultrawide Services
-import { ViewType, ViewMode, ViewOptionType, ComponentType, RoleType, DisplayContext, UpdateScopeType } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, DisplayContext } from '../constants/constants.js';
 import ClientDesignUpdateServices   from '../apiClient/apiClientDesignUpdate.js';
-import ClientDesignVersionServices  from '../apiClient/apiClientDesignVersion.js';
-import ClientImpExServices          from '../apiClient/apiClientImpEx.js';
 
+// Data Access
+import DesignData                       from '../data/design/design_db.js';
+import DesignVersionData                from '../data/design/design_version_db.js';
+import DesignUpdateData                 from '../data/design_update/design_update_db.js';
+import WorkPackageData                  from '../data/work/work_package_db.js';
+import WorkPackageComponentData         from '../data/work/work_package_component_db.js';
+import DesignComponentData              from '../data/design/design_component_db.js';
+import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -43,7 +41,7 @@ class ClientAppHeaderServices{
         if(userContext.designId === 'NONE'){
             return 'No Design';
         } else {
-            const design = Designs.findOne({_id: userContext.designId});
+            const design = DesignData.getDesignById(userContext.designId);
 
             if(design){
                 return design.designName;
@@ -257,13 +255,7 @@ class ClientAppHeaderServices{
 
         const componentArray = [];
 
-        const designVersionOpenComponents = DesignVersionComponents.find(
-            {
-                designVersionId: userContext.designVersionId,
-                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-            },
-            {fields: {_id: 1}}
-        );
+        const designVersionOpenComponents = DesignVersionData.getApplicationAndSectionIds(userContext.designVersionId);
 
         designVersionOpenComponents.forEach((component) => {
             componentArray.push(component._id);
@@ -277,15 +269,7 @@ class ClientAppHeaderServices{
         const componentArray = [];
 
         // Only open scoped items
-        const designUpdateOpenComponents = DesignUpdateComponents.find(
-            {
-                designVersionId: userContext.designVersionId,
-                designUpdateId: userContext.designUpdateId,
-                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
-                scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
-            },
-            {fields: {_id: 1}}
-        );
+        const designUpdateOpenComponents = DesignUpdateData.getScopedApplicationAndSectionIds(userContext.designVersionId, userContext.designUpdateId);
 
         designUpdateOpenComponents.forEach((component) => {
             componentArray.push(component._id);
@@ -299,13 +283,7 @@ class ClientAppHeaderServices{
         const componentArray = [];
 
         // Only open scoped items
-        const workPackageOpenComponents = WorkPackageComponents.find(
-            {
-                workPackageId: userContext.workPackageId,
-                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
-            },
-            {fields: {_id: 1}}
-        );
+        const workPackageOpenComponents = WorkPackageData.getApplicationAndSectionIds(userContext.workPackageId);
 
         workPackageOpenComponents.forEach((component) => {
             componentArray.push(component._id);
@@ -318,13 +296,7 @@ class ClientAppHeaderServices{
 
         const componentArray = [];
 
-        const designVersionOpenComponents = DesignVersionComponents.find(
-            {
-                designVersionId: userContext.designVersionId,
-                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-            },
-            {fields: {_id: 1, componentReferenceId: 1}}
-        ).fetch();
+        const designVersionOpenComponents = DesignVersionData.getApplicationAndSectionIdsAndRefs(userContext.designVersionId);
 
         designVersionOpenComponents.forEach((component) => {
             if(this.hasNoFeaturesDc(userContext, component)) {
@@ -340,15 +312,7 @@ class ClientAppHeaderServices{
         const componentArray = [];
 
         // Only open scoped items
-        const designUpdateOpenComponents = DesignUpdateComponents.find(
-            {
-                designVersionId: userContext.designVersionId,
-                designUpdateId: userContext.designUpdateId,
-                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
-                scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
-            },
-            {fields: {_id: 1, componentReferenceId: 1}}
-        ).fetch();
+        const designUpdateOpenComponents = DesignUpdateData.getScopedApplicationAndSectionIdsAndRefs(userContext.designVersionId, userContext.designUpdateId);
 
         // Add only sections that have no Features in Design Update
         designUpdateOpenComponents.forEach((component) => {
@@ -366,13 +330,7 @@ class ClientAppHeaderServices{
         const componentArray = [];
 
         // Only open scoped items
-        const workPackageOpenComponents = WorkPackageComponents.find(
-            {
-                workPackageId: userContext.workPackageId,
-                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
-            },
-            {fields: {_id: 1, componentReferenceId: 1}}
-        );
+        const workPackageOpenComponents = WorkPackageData.getApplicationAndSectionIdsAndRefs(userContext.workPackageId);
 
         // Add only sections that have no Features in Design Update
         workPackageOpenComponents.forEach((component) => {
@@ -388,32 +346,24 @@ class ClientAppHeaderServices{
     hasNoFeaturesDc(userContext, component){
 
         // Returns true if there are no features that are children of the component
-        return DesignVersionComponents.find({
-                designVersionId:                userContext.designVersionId,
-                componentParentReferenceIdNew:  component.componentReferenceId,
-                componentType:                  ComponentType.FEATURE
-            }).count() === 0;
+        return (DesignComponentData.getChildFeatureCount(userContext.designVersionId, component.componentReferenceId) === 0);
+
     }
 
     hasNoFeaturesDu(userContext, component){
 
         // Returns true if there are no features that are children of the component
-        return DesignUpdateComponents.find({
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                componentParentReferenceIdNew:  component.componentReferenceId,
-                componentType:                  ComponentType.FEATURE
-            }).count() === 0;
+        return (DesignUpdateComponentData.getChildFeatureCount(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            component.componentReferenceId
+        ) === 0);
     }
 
     hasNoFeaturesWp(userContext, component){
 
         // Returns true if there are no features that are children of the component
-        return WorkPackageComponents.find({
-                workPackageId:                userContext.workPackageId,
-                componentParentReferenceId:   component.componentReferenceId,
-                componentType:                ComponentType.FEATURE
-            }).count() === 0;
+        return (WorkPackageComponentData.getChildFeatureCount(userContext.workPackageId, component.componentReferenceId) === 0);
     }
 
     setViewDesigns() {

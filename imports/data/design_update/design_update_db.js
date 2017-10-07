@@ -52,11 +52,35 @@ class DesignUpdateData{
 
         return DesignUpdates.findOne({_id: designUpdateId});
     }
+
+    getPublishedUpdatesForMergeAction(designVersionId, updateMergeAction){
+
+        return DesignUpdates.find({
+            designVersionId:    designVersionId,
+            updateStatus:       DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+            updateMergeAction:  updateMergeAction
+        }).fetch();
+    }
     // DU Components ---------------------------------------------------------------------------------------------------
+
+    getAllComponents(designUpdateId){
+
+        return DesignUpdateComponents.find({designUpdateId: designUpdateId}).fetch();
+    }
+
+    getAllComponentsIdAndScope(designUpdateId){
+
+        return DesignUpdateComponents.find(
+            {
+                designUpdateId: designUpdateId,
+            },
+            {fields: {_id: 1, scopeType: 1}}
+        ).fetch();
+    }
 
     getInScopeComponents(designUpdateId){
 
-        DesignUpdateComponents.find({
+        return DesignUpdateComponents.find({
             designUpdateId: designUpdateId,
             scopeType: UpdateScopeType.SCOPE_IN_SCOPE
         });
@@ -138,6 +162,32 @@ class DesignUpdateData{
                 componentType: componentType
             },
             {sort: {componentIndexNew: 1}}
+        ).fetch();
+    }
+
+    getScopedApplicationAndSectionIds(designVersionId, designUpdateId){
+
+        return DesignUpdateComponents.find(
+            {
+                designVersionId: designVersionId,
+                designUpdateId: designUpdateId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+                scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
+            },
+            {fields: {_id: 1}}
+        );
+    }
+
+    getScopedApplicationAndSectionIdsAndRefs(designVersionId, designUpdateId){
+
+        return DesignUpdateComponents.find(
+            {
+                designVersionId: designVersionId,
+                designUpdateId: designUpdateId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+                scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
+            },
+            {fields: {_id: 1, componentReferenceId: 1}}
         ).fetch();
     }
 

@@ -1,33 +1,26 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
-// Ultrawide Collections
-import { UserContext }   from '../collections/context/user_context.js';
-import { UserCurrentViewOptions }   from '../collections/context/user_current_view_options.js';
-import { Designs }                  from '../collections/design/designs.js';
-import { DesignVersions }           from '../collections/design/design_versions.js';
-import { DesignUpdates }            from '../collections/design_update/design_updates.js';
-import { WorkPackages }             from '../collections/work/work_packages.js';
-import { DesignVersionComponents }  from '../collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
-
 // Ultrawide Services
-import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, UserSetting, UserSettingValue, DisplayContext, UpdateScopeType } from '../constants/constants.js';
-import { log } from '../common/utils.js';
-import TextLookups from '../common/lookups.js'
+import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, UserSetting, DisplayContext } from '../constants/constants.js';
+import { log }                          from '../common/utils.js';
+import TextLookups                      from '../common/lookups.js'
 
-import ClientDataServices              from './apiClientDataServices.js';
-import ClientDesignVersionServices          from '../apiClient/apiClientDesignVersion.js';
-import ClientDesignComponentServices        from '../apiClient/apiClientDesignComponent.js';
-import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdate.js';
-import ClientDesignUpdateComponentServices  from '../apiClient/apiClientDesignUpdateComponent.js';
-import ClientWorkPackageServices            from '../apiClient/apiClientWorkPackage.js';
-import ClientWorkPackageComponentServices   from '../apiClient/apiClientWorkPackageComponent.js';
-import ClientAppHeaderServices              from '../apiClient/apiClientAppHeader.js';
-import ClientTestIntegrationServices        from '../apiClient/apiClientTestIntegration.js';
-import ClientUserSettingsServices           from '../apiClient/apiClientUserSettings.js';
+import ClientDataServices               from './apiClientDataServices.js';
+import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
+import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
+import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
+import ClientAppHeaderServices          from '../apiClient/apiClientAppHeader.js';
+import ClientUserSettingsServices       from '../apiClient/apiClientUserSettings.js';
+
+// Data Access
+import DesignData                       from '../data/design/design_db.js';
+import DesignVersionData                from '../data/design/design_version_db.js';
+import DesignUpdateData                 from '../data/design_update/design_update_db.js';
+import WorkPackageData                  from '../data/work/work_package_db.js';
+import DesignComponentData              from '../data/design/design_component_db.js';
+import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
+import UserViewOptionData               from '../data/context/user_view_option_db.js';
+import UserContextData                  from '../data/context/user_context_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -49,8 +42,7 @@ class ClientUserContextServices {
 
     getUserContext(userId){
 
-        const userContext = UserContext.findOne({userId: userId});
-
+        const userContext = UserContextData.getUserContext(userId);
 
         if(userContext){
 
@@ -97,7 +89,7 @@ class ClientUserContextServices {
 
     getUserViewOptions(userId){
 
-        const userViewOptions = UserCurrentViewOptions.findOne({userId: userId});
+        const userViewOptions = UserViewOptionData.getUserViewOptions(userId);
 
         if(userViewOptions){
 
@@ -148,9 +140,9 @@ class ClientUserContextServices {
     loadMainData(userContext){
         log((msg) => console.log(msg), LogLevel.TRACE, "Loading main data...");
 
-        const dvCount = DesignVersionComponents.find({}).count();
+        const componentsExist = DesignVersionData.checkForComponents();
 
-        if(dvCount > 0){
+        if(componentsExist){
             log((msg) => console.log(msg), LogLevel.TRACE, "Data already loaded...");
 
             this.onAllDataLoaded();
@@ -462,7 +454,7 @@ class ClientUserContextServices {
 
     setViewFromUserContext(userContext, userRole, testIntegrationDataContext, testDataFlag){
 
-        const userViewOptions = UserCurrentViewOptions.findOne({userId: userContext.userId});
+        const userViewOptions = UserViewOptionData.getUserViewOptions(userContext.userId);
 
         // If no design / design version selected go to Designs screen
         if(userContext.designId === 'NONE' || userContext.designVersionId === 'NONE'){
@@ -479,7 +471,7 @@ class ClientUserContextServices {
                 // If final go to view
 
                 // See what status the design version has
-                const designVersion = DesignVersions.findOne({_id: userContext.designVersionId});
+                const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
                 // Just in case stored data is out of date for some reason, back to Designs if not found
                 if (designVersion) {
@@ -501,7 +493,7 @@ class ClientUserContextServices {
                             if (userContext.designUpdateId !== 'NONE') {
 
                                 // See what the status of this update is - is it editable?
-                                const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
+                                const designUpdate = DesignUpdateData.getDesignUpdateById(userContext.designUpdateId);
 
                                 // Just in case stored data is out of date for some reason, back to select if not found
                                 if (designUpdate) {
@@ -561,7 +553,7 @@ class ClientUserContextServices {
 
                 if(userContext.workPackageId !== 'NONE'){
 
-                    const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+                    const workPackage = WorkPackageData.getWorkPackageById(userContext.workPackageId);
 
                     // If bad data return to Designs
                     if(workPackage){
@@ -601,7 +593,7 @@ class ClientUserContextServices {
                 // If a manager go to a WP if being edited
                 if(userContext.workPackageId !== 'NONE'){
 
-                    const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+                    const workPackage = WorkPackageData.getWorkPackageById(userContext.workPackageId);
 
                     // If bad data return to Selection
                     if(workPackage){
@@ -687,7 +679,7 @@ class ClientUserContextServices {
 
         if(userContext.designId !== 'NONE'){
 
-            const design = Designs.findOne({_id: userContext.designId});
+            const design = DesignData.getDesignById(userContext.designId);
 
             if(design){
                 contextNameData.design = design.designName;
@@ -696,7 +688,7 @@ class ClientUserContextServices {
 
         if(userContext.designVersionId !== 'NONE'){
 
-            const designVersion = DesignVersions.findOne({_id: userContext.designVersionId});
+            const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
             if(designVersion) {
                 contextNameData.designVersion = designVersion.designVersionName;
@@ -705,7 +697,7 @@ class ClientUserContextServices {
 
         if(userContext.designUpdateId !== 'NONE'){
 
-            const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
+            const designUpdate = DesignUpdateData.getDesignUpdateById(userContext.designUpdateId);
 
             if(designUpdate) {
                 contextNameData.designUpdate = designUpdate.updateName;
@@ -715,7 +707,7 @@ class ClientUserContextServices {
 
         if(userContext.workPackageId !== 'NONE'){
 
-            const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+            const workPackage = WorkPackageData.getWorkPackageById(userContext.workPackageId);
 
             if(workPackage) {
                 contextNameData.workPackage = workPackage.workPackageName;
@@ -731,12 +723,14 @@ class ClientUserContextServices {
                 let componentName = '';
 
                 if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
-                    component = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+                    component = DesignComponentData.getDesignComponentById(userContext.designComponentId);
+
                     if(component){
                         componentName = component.componentNameNew;
                     }
                 } else {
-                    component = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+                    component = DesignUpdateComponentData.getUpdateComponentById(userContext.designComponentId);
+
                     if(component){
                         componentName = component.componentNameNew;
                     }
@@ -800,17 +794,16 @@ class ClientUserContextServices {
 
             if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
 
-                let currentItem = DesignVersionComponents.findOne({_id: currentItemId});
+                let currentItem = DesignComponentData.getDesignComponentById(currentItemId);
 
                 if(currentItem) {
-                    let parentItem = DesignVersionComponents.findOne({_id: currentItem.componentParentIdNew});
-
+                    let parentItem = DesignComponentData.getDesignComponentByRef(currentItem.designVersionId, currentItem.componentParentReferenceIdNew);
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
 
                     while (parentItem && (parentItem.componentType !== parentType) && (currentItem.componentParentIdNew !== 'NONE')) {
                         currentItem = parentItem;
-                        parentItem = DesignVersionComponents.findOne({_id: currentItem.componentParentIdNew});
+                        parentItem = DesignComponentData.getDesignComponentByRef(currentItem.designVersionId, currentItem.componentParentReferenceIdNew);
 
                         if (parentItem) {
                             log((msg) => console.log(msg), LogLevel.TRACE, "Next parent is type {}", parentItem.componentType);
@@ -831,13 +824,22 @@ class ClientUserContextServices {
                 }
 
             } else {
-                let currentUpdateItem = DesignUpdateComponents.findOne({_id: currentItemId});
+                let currentUpdateItem = DesignUpdateComponentData.getUpdateComponentById(currentItemId);
+
                 if(currentUpdateItem) {
-                    let parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+                    let parentUpdateItem = DesignUpdateComponentData.getUpdateComponentByRef(
+                        currentUpdateItem.designVersionId,
+                        currentUpdateItem.designUpdateId,
+                        currentUpdateItem.componentParentReferenceIdNew
+                    );
 
                     while ((parentUpdateItem.componentType !== parentType) && (currentUpdateItem.componentParentIdNew !== 'NONE')) {
                         currentUpdateItem = parentUpdateItem;
-                        parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+                        parentUpdateItem = DesignUpdateComponentData.getUpdateComponentByRef(
+                            currentUpdateItem.designVersionId,
+                            currentUpdateItem.designUpdateId,
+                            currentUpdateItem.componentParentReferenceIdNew
+                        );
                     }
 
                     return parentUpdateItem.componentNameNew;
@@ -854,53 +856,25 @@ class ClientUserContextServices {
     resetContextsOnDesignRemoval(removedDesignId){
 
         // This prevents errors after re-login if a Design is removed that other people have accessed
+        const affectedContexts = UserContextData.getAllUserContextsForDesign(removedDesignId);
 
-        const affectedUsers = UserContext.find({designId: removedDesignId}).fetch();
+        affectedContexts.forEach((context) => {
 
-        affectedUsers.forEach((user) => {
+            UserContextData.clearUserContext(context.userId);
 
-            UserContext.update(
-                {_id: user._id},
-                {
-                    $set:{
-                        designId:                       'NONE',
-                        designVersionId:                'NONE',
-                        designUpdateId:                 'NONE',
-                        workPackageId:                  'NONE',
-                        designComponentId:              'NONE',
-                        designComponentType:            'NONE',
-                        featureReferenceId:             'NONE',
-                        featureAspectReferenceId:       'NONE',
-                        scenarioReferenceId:            'NONE',
-                        scenarioStepId:                 'NONE',
-                    }
-                }
-            );
-        })
+        });
     };
 
     resetContextsOnDesignComponentRemoval(removedDesignComponentId){
 
         // This prevents errors after re-login if a Design Component is removed that other people have accessed
+        const affectedContexts = UserContextData.getAllUserContextsForComponent(removedDesignComponentId);
 
-        const affectedUsers = UserContext.find({designComponentId: removedDesignComponentId}).fetch();
+        affectedContexts.forEach((context) => {
 
-        affectedUsers.forEach((user) => {
+            UserContextData.clearComponentContext(context.userId);
 
-            UserContext.update(
-                {_id: user._id},
-                {
-                    $set:{
-                        designComponentId:              'NONE',
-                        designComponentType:            'NONE',
-                        featureReferenceId:             'NONE',
-                        featureAspectReferenceId:       'NONE',
-                        scenarioReferenceId:            'NONE',
-                        scenarioStepId:                 'NONE',
-                    }
-                }
-            );
-        })
+        });
     };
 }
 

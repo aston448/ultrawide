@@ -1,16 +1,15 @@
 // == IMPORTS ==========================================================================================================
-import fs from 'fs';
-
-// Ultrawide Collections
-import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
 
 // Ultrawide Services
-import { ViewType, MessageType }            from '../constants/constants.js';
+import { MessageType }                      from '../constants/constants.js';
 import { Validation }                       from '../constants/validation_errors.js';
 import { TestOutputLocationMessages }       from '../constants/message_texts.js'
 
 import ServerTestOutputLocationApi          from '../apiServer/apiTestOutputLocations';
 import TestOutputLocationValidationApi      from '../apiValidation/apiTestOutputLocationValidation.js';
+
+// Data Access
+import TestOutputLocationData               from '../data/configure/test_output_location_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -367,7 +366,7 @@ class ClientTestOutputLocationServices{
 
     getLocationName(locationId){
 
-        const location =  TestOutputLocations.findOne({_id: locationId});
+        const location =  TestOutputLocationData.getOutputLocationById(locationId);
 
         if(location){
             return location.locationName;

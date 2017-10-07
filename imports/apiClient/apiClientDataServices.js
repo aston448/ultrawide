@@ -787,7 +787,7 @@ class ClientDataServices{
             case ViewType.DESIGN_UPDATE_VIEW:
                 // DESIGN UPDATE:  Need to provide data in the context of SCOPE, EDIT, VIEW and BASE Design Version
 
-                //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + designUpdateId + " with parent " + parentId);
+                //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + designUpdateId + " with parent " + parentRefId);
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:

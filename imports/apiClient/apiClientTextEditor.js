@@ -1,7 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide Collections
-
 // Ultrawide Services
 import { MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
@@ -29,7 +27,7 @@ class ClientTextEditorServices{
         // Client validation
         let result = TextEditorValidationApi.validateSaveDesignComponentDetails(userRole);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -64,7 +62,7 @@ class ClientTextEditorServices{
         // Client validation
         let result = TextEditorValidationApi.validateSaveDesignUpdateComponentDetails(userRole);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};

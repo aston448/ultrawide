@@ -43,11 +43,6 @@ class MashSelectedItemList extends Component {
 
     }
 
-    onExportFeatureFile(userContext){
-        ClientMashDataServices.exportFeature(userContext);
-    }
-
-
     getEditorClass(){
         return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }

@@ -6,7 +6,7 @@ import { ViewMode, ViewType, RoleType, MenuDropdown, MenuAction} from '../consta
 
 import ClientDataServices from './apiClientDataServices.js';
 
-describe('API: ClientContainer', () => {
+describe('API: ClientData', () => {
 
     function testGetDropdownMenuItems(menuType, view, mode, userRole=RoleType.DESIGNER){
 

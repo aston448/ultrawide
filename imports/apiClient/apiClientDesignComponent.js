@@ -1,10 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Ultrawide collections
-import {DesignVersionComponents}        from '../collections/design/design_version_components.js';
-import {DesignUpdateComponents}         from '../collections/design_update/design_update_components.js';
-import {WorkPackages}                   from '../collections/work/work_packages.js';
-
 // Ultrawide Services
 import { ComponentType, DisplayContext, ViewType, LogLevel, MessageType} from '../constants/constants.js';
 import { DesignComponentMessages } from '../constants/message_texts.js';
@@ -16,6 +11,11 @@ import ClientUserContextServices     from '../apiClient/apiClientUserContext.js'
 import ClientWorkPackageServices     from '../apiClient/apiClientWorkPackage.js';
 
 import {log} from '../common/utils.js';
+
+// Data Access
+import WorkPackageData                  from '../data/work/work_package_db.js';
+import DesignComponentData              from '../data/design/design_component_db.js';
+import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -33,7 +33,7 @@ class ClientDesignComponentServices{
     // User saved a change to design component name --------------------------------------------------------------------
     updateComponentName(view, mode, designComponentId, newPlainText, newRawText){
 
-        const designVersionComponent = DesignVersionComponents.findOne({_id: designComponentId});
+        const designVersionComponent = DesignComponentData.getDesignComponentById(designComponentId);
         const wasNew = designVersionComponent.isNew;
 
         // Client validation
@@ -511,11 +511,11 @@ class ClientDesignComponentServices{
                 displayContext === DisplayContext.WORKING_VIEW ||
                 displayContext === DisplayContext.BASE_EDIT
             ){
-                component = DesignVersionComponents.findOne({_id: newDesignComponentId});
+                component = DesignComponentData.getDesignComponentById(newDesignComponentId);
                 componentFeatureRef = component.componentFeatureReferenceIdNew;
                 componentParentRef = component.componentParentReferenceIdNew;
             } else {
-                component = DesignUpdateComponents.findOne({_id: newDesignComponentId});
+                component = DesignUpdateComponentData.getUpdateComponentById(newDesignComponentId);
                 componentFeatureRef = component.componentFeatureReferenceIdNew;
                 componentParentRef = component.componentParentReferenceIdNew;
             }
@@ -575,7 +575,7 @@ class ClientDesignComponentServices{
     // User has clicked on the WP icon for a Scenario in the DV working view
     gotoWorkPackage(workPackageId){
 
-        const wp = WorkPackages.findOne({_id: workPackageId});
+        const wp = WorkPackageData.getWorkPackageById(workPackageId);
 
         const currentUserContext = store.getState().currentUserItemContext;
 
@@ -611,13 +611,8 @@ class ClientDesignComponentServices{
 
             // Open or close the whole feature
             if(setOpen) {
-                const featureComponents = DesignVersionComponents.find(
-                    {
-                        designVersionId: designComponent.designVersionId,
-                        componentFeatureReferenceIdNew: designComponent.componentReferenceId,
-                        componentType: {$ne:(ComponentType.SCENARIO)}
-                    }
-                );
+                // No need to get scenarios as they can't be opened
+                const featureComponents = DesignComponentData.getNonScenarioFeatureComponents(designComponent.designVersionId, designComponent.componentReferenceId);
 
                 featureComponents.forEach((component) => {
                     store.dispatch(setCurrentUserOpenDesignItems(
@@ -678,15 +673,9 @@ class ClientDesignComponentServices{
     closeChildren(designComponent, currentList){
 
         // If component is open close it and move down to children
-        let childComponents = DesignVersionComponents.find(
-            {
-                designVersionId: designComponent.designVersionId,
-                componentParentReferenceIdNew: designComponent.componentReferenceId,
-                componentType: {$ne: (ComponentType.SCENARIO)}
-            }
-        );
+        let childComponents = DesignComponentData.getNonScenarioChildComponents(designComponent.designVersionId, designComponent.componentReferenceId);
 
-        if (childComponents.count() > 0) {
+        if (childComponents.length > 0) {
             childComponents.forEach((child) => {
 
                 if (currentList.includes(child._id)) {
@@ -741,7 +730,7 @@ class ClientDesignComponentServices{
 
     openParent(componentId, currentList){
 
-        const component = DesignVersionComponents.findOne({_id: componentId});
+        const component = DesignComponentData.getDesignComponentById(componentId);
 
         if(component.componentParentIdNew !== 'NONE'){
 
@@ -761,33 +750,10 @@ class ClientDesignComponentServices{
 
     getCurrentItem(userContext){
 
-        return DesignVersionComponents.findOne({
-            _id: userContext.designComponentId
-        });
+        return DesignComponentData.getDesignComponentById(userContext.designComponentId);
     }
 
     getNewAndOldRawText(newText, oldText){
-
-        // let plainText = 'NEW: ' + newText + '\n' + 'OLD: ' + oldText;
-        //
-        // return {
-        //     "entityMap" : {  },
-        //     "blocks" : [
-        //         { "key" : "5efv7", "text" : plainText,
-        //             "type" : "unstyled",
-        //             "depth" : 0,
-        //             "inlineStyleRanges" : [
-        //                 {
-        //                     "offset" : 0,
-        //                     "length" : 4,
-        //                     "style" : "ITALIC"
-        //                 }
-        //             ],
-        //             "entityRanges" : [ ],
-        //             "data" : {  }
-        //         }
-        //     ]
-        // };
 
         let newDisplayText = 'NEW: ' + newText;
         let oldDisplayText = 'OLD: ' + oldText;

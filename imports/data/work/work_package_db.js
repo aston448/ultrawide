@@ -57,6 +57,15 @@ class WorkPackageData {
         }).fetch();
     }
 
+    getAllNewWorkPackagesForContext(userContext){
+
+        return WorkPackages.find({
+            designVersionId:    userContext.designVersionId,
+            designUpdateId:     userContext.designUpdateId,
+            workPackageStatus:  WorkPackageStatus.WP_NEW
+        }).fetch();
+    }
+
     getActiveScenarios(workPackageId){
 
         return WorkPackageComponents.find({
@@ -80,6 +89,28 @@ class WorkPackageData {
             },
             {sort: {componentIndex: 1}}
         ).fetch();
+    }
+
+    getApplicationAndSectionIds(workPackageId){
+
+        return WorkPackageComponents.find(
+            {
+                workPackageId: workPackageId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+            },
+            {fields: {_id: 1}}
+        );
+    }
+
+    getApplicationAndSectionIdsAndRefs(workPackageId){
+
+        return WorkPackageComponents.find(
+            {
+                workPackageId: workPackageId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+            },
+            {fields: {_id: 1, componentReferenceId: 1}}
+        );
     }
 
     // UPDATE ==========================================================================================================
