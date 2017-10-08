@@ -294,9 +294,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designComponents.forEach((component) => {
 
-                parentComponent = DesignVersionComponents.findOne({
-                    _id: component.componentParentIdNew
-                });
+                parentComponent = DesignVersionComponents.findOne({designVersionId: designComponent.designVersionId, componentReferenceId: designComponent.componentParentReferenceIdNew});
 
                 if (parentComponent.componentNameNew === componentParentName) {
                     designComponent = component;
@@ -334,9 +332,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designComponents.forEach((component) => {
 
-                parentComponent = DesignVersionComponents.findOne({
-                    _id: component.componentParentIdOld
-                });
+                parentComponent = DesignVersionComponents.findOne({designVersionId: designComponent.designVersionId, componentReferenceId: designComponent.componentParentReferenceIdOld});
 
                 if (parentComponent.componentNameOld === componentParentName) {
                     designComponent = component;
@@ -374,9 +370,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designComponents.forEach((component) => {
 
-                parentComponent = DesignVersionComponents.findOne({
-                    _id: component.componentParentIdOld
-                });
+                parentComponent = DesignVersionComponents.findOne({designVersionId: designComponent.designVersionId, componentReferenceId: designComponent.componentParentReferenceIdOld});
 
                 if (parentComponent.componentNameOld === componentParentName) {
                     designComponent = component;
@@ -413,9 +407,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designUpdateComponents.forEach((component) => {
 
-                parentComponent = DesignUpdateComponents.findOne({
-                    _id: component.componentParentIdNew
-                });
+                parentComponent = DesignUpdateComponents.findOne({designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdNew});
 
                 if (parentComponent.componentNameNew === componentParentName) {
                     designUpdateComponent = component;
@@ -455,9 +447,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designUpdateComponents.forEach((component) => {
 
-                parentComponent = DesignUpdateComponents.findOne({
-                    _id: component.componentParentIdNew
-                });
+                parentComponent = DesignUpdateComponents.findOne({designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdNew});
 
                 if (parentComponent.componentNameOld === componentParentName) {
                     designUpdateComponent = component;
@@ -501,10 +491,7 @@ class TestDataHelpers {
             if(componentType !== ComponentType.APPLICATION) {
                 designComponents.forEach((component) => {
 
-                    parentComponent = DesignVersionComponents.findOne({
-                        _id: component.componentParentIdNew
-                    });
-
+                    parentComponent = DesignVersionComponents.findOne({designVersionId: component.designVersionId, componentReferenceId: component.componentParentReferenceIdNew});
 
                     if (parentComponent.componentNameNew === componentParentName) {
                         designComponent = component;
@@ -528,9 +515,7 @@ class TestDataHelpers {
             if(componentType !== ComponentType.APPLICATION) {
                 designComponents.forEach((component) => {
 
-                    let parentComponent = DesignUpdateComponents.findOne({
-                        _id: component.componentParentIdNew
-                    });
+                    let parentComponent = DesignUpdateComponents.findOne({designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdNew});
 
                     if (parentComponent.componentNameNew === componentParentName) {
                         designComponent = component;

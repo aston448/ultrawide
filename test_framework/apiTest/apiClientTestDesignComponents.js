@@ -122,7 +122,7 @@ Meteor.methods({
 
         // As Feature Aspects don't have to have unique names - and very likely won't - double check by getting the Feature too
         const featureComponent = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE, componentNameNew: featureName});
-        const featureAspectComponent = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentNameNew: featureAspectName, componentParentIdNew: featureComponent._id});
+        const featureAspectComponent = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentNameNew: featureAspectName, componentParentReferenceIdNew: featureComponent.componentReferenceId, designVersionId: featureComponent.designVersionId});
 
         const outcome = ClientDesignComponentServices.addScenario(view, mode, featureAspectComponent, 'NONE');
 

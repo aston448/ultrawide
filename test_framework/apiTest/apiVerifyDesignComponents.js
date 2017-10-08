@@ -83,14 +83,14 @@ Meteor.methods({
     'verifyDesignComponents.componentParentIs'(componentType, componentName, componentParentName){
 
         const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
-        const parentComponent = DesignVersionComponents.findOne({_id: designComponent.componentParentIdNew});
+        const parentComponent = DesignVersionComponents.findOne({designVersionId: designComponent.designVersionId, componentReferenceId: designComponent.componentParentReferenceIdNew});
 
         let parentName = 'NONE';
         if(parentComponent){
             parentName = parentComponent.componentNameNew;
         }
 
-        if(parentName != componentParentName){
+        if(parentName !== componentParentName){
             throw new Meteor.Error("FAIL", "Expected parent to be " + componentParentName + " but got " + parentName);
         } else {
             return true;
@@ -107,14 +107,14 @@ Meteor.methods({
         if(!designComponent){
             throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersionName);
         }
-        const parentComponent = DesignVersionComponents.findOne({_id: designComponent.componentParentIdNew});
+        const parentComponent = DesignVersionComponents.findOne({designVersionId: designComponent.designVersionId, componentReferenceId: designComponent.componentParentReferenceIdNew});
 
         let parentName = 'NONE';
         if(parentComponent){
             parentName = parentComponent.componentNameNew;
         }
 
-        if(parentName != componentParentName){
+        if(parentName !== componentParentName){
             throw new Meteor.Error("FAIL", "Expected parent to be " + componentParentName + " but got " + parentName);
         } else {
             return true;

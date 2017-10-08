@@ -384,6 +384,18 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent._id);
 
+        let parent = DesignUpdateComponentData.getUpdateComponentByRef(
+            designUpdateComponent.designVersionId,
+            designUpdateComponent.designUpdateId,
+            designUpdateComponent.componentParentReferenceIdNew
+        );
+
+        let parentId = 'NONE';
+
+        if(parent){
+            parentId = parent._id;
+        }
+
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -395,7 +407,7 @@ class ClientDesignUpdateComponentServices{
             view,
             mode,
             designUpdateComponent._id,
-            designUpdateComponent.componentParentIdNew,
+            parentId,
             (err, result) => {
 
 

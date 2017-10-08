@@ -199,7 +199,7 @@ class WorkPackageModules {
         let parent = null;
 
         // Nothing to do if already at top of tree
-        if(childComponent.componentParentIdNew === 'NONE'){
+        if(childComponent.componentParentReferenceIdNew === 'NONE'){
             return null;
         }
 

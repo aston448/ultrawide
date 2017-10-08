@@ -18,7 +18,7 @@ class UserDesignUpdateSummaryData{
             itemName:                   parentItem.componentNameNew,
             itemFeatureName:            featureName,
             itemIndex:                  parentItem.componentIndexNew,
-            headerComponentId:          item.componentParentIdNew,
+            headerComponentId:          parentItem._id,
             itemHeaderName:             itemHeaderName
         });
     }

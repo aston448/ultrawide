@@ -331,13 +331,13 @@ export function reorderDropAllowed(item, target) {
             // Make sure we are not dragging to some other random component
             log((msg) => console.log(msg), LogLevel.TRACE, "Drop allowed for Scenario Step.  Item ref: {} Target ref: {}", item.scenarioReferenceId, target.scenarioReferenceId);
 
-            if (target.componentType != ComponentType.SCENARIO_STEP) {
+            if (target.componentType !== ComponentType.SCENARIO_STEP) {
                 log((msg) => console.log(msg), LogLevel.TRACE, "Target not a scenario step!");
                 return false;
             }
 
             // Can move steps within the same scenario
-            return ((item.scenarioReferenceId === target.scenarioReferenceId) && (target._id != item._id));
+            return ((item.scenarioReferenceId === target.scenarioReferenceId) && (target._id !== item._id));
             break;
 
         default:
@@ -345,13 +345,14 @@ export function reorderDropAllowed(item, target) {
             log((msg) => console.log(msg), LogLevel.TRACE, "Target type: {}  Moving type: {} Target parent: {} Moving parent: {}",
                 target.componentType,
                 item.componentType,
-                item.componentParentIdNew,
-                target.componentParentIdNew
+                item.componentParentReferenceIdNew,
+                target.componentParentReferenceIdNew
             );
             return (
                 (item.componentType === target.componentType) &&
-                (item.componentParentIdNew === target.componentParentIdNew) &&
-                (item._id != target._id)
+                (item.designVersionId === target.designVersionId) &&
+                (item.componentParentReferenceIdNew === target.componentParentReferenceIdNew) &&
+                (item._id !== target._id)
             );
     }
 }

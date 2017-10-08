@@ -147,7 +147,7 @@ Meteor.methods({
             let parentComponent = null;
             let parentName = 'NONE';
             if(componentType !== ComponentType.APPLICATION) {
-                parentComponent = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentIdNew});
+                parentComponent = DesignUpdateComponents.findOne({designUpdateId: designUpdateComponent.designUpdateId, componentReferenceId: designUpdateComponent.componentParentReferenceIdNew});
                 if(parentComponent){
                     parentName = parentComponent.componentNameNew;
                 }

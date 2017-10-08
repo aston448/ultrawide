@@ -732,19 +732,21 @@ class ClientDesignComponentServices{
 
         const component = DesignComponentData.getDesignComponentById(componentId);
 
-        if(component.componentParentIdNew !== 'NONE'){
+        if(component.componentParentReferenceIdNew !== 'NONE'){
 
+            // Get Parent
+            const parent = DesignComponentData.getDesignComponentByRef(component.designVersionId, component.componentParentReferenceIdNew);
             // Open the parent
             store.dispatch(setCurrentUserOpenDesignItems(
                 currentList,
-                component.componentParentIdNew,
+                parent._id,
                 true
             ));
 
             const newList = store.getState().currentUserOpenDesignItems;
 
             // And move on up
-            this.openParent(component.componentParentIdNew, newList);
+            this.openParent(parent._id, newList);
         }
     }
 

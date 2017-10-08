@@ -801,7 +801,7 @@ class ClientUserContextServices {
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
 
-                    while (parentItem && (parentItem.componentType !== parentType) && (currentItem.componentParentIdNew !== 'NONE')) {
+                    while (parentItem && (parentItem.componentType !== parentType) && (currentItem.componentParentReferenceIdNew !== 'NONE')) {
                         currentItem = parentItem;
                         parentItem = DesignComponentData.getDesignComponentByRef(currentItem.designVersionId, currentItem.componentParentReferenceIdNew);
 
@@ -833,7 +833,7 @@ class ClientUserContextServices {
                         currentUpdateItem.componentParentReferenceIdNew
                     );
 
-                    while ((parentUpdateItem.componentType !== parentType) && (currentUpdateItem.componentParentIdNew !== 'NONE')) {
+                    while ((parentUpdateItem.componentType !== parentType) && (currentUpdateItem.componentParentReferenceIdNew !== 'NONE')) {
                         currentUpdateItem = parentUpdateItem;
                         parentUpdateItem = DesignUpdateComponentData.getUpdateComponentByRef(
                             currentUpdateItem.designVersionId,
