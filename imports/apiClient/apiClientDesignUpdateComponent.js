@@ -167,9 +167,7 @@ class ClientDesignUpdateComponentServices{
         ServerDesignUpdateComponentApi.addDesignSectionToApplication(
             view,
             mode,
-            parentComponent.designVersionId,
-            parentComponent.designUpdateId,
-            parentComponent.componentReferenceId,
+            parentComponent,
             (err, result) => {
 
                 if(err){
@@ -214,10 +212,7 @@ class ClientDesignUpdateComponentServices{
         ServerDesignUpdateComponentApi.addDesignSectionToDesignSection(
             view,
             mode,
-            parentComponent.designVersionId,
-            parentComponent.designUpdateId,
-            parentComponent.componentReferenceId,
-            parentComponent.componentLevel,
+            parentComponent,
             (err, result) => {
 
                 if(err){
@@ -258,9 +253,7 @@ class ClientDesignUpdateComponentServices{
         ServerDesignUpdateComponentApi.addFeatureToDesignSection(
             view,
             mode,
-            parentComponent.designVersionId,
-            parentComponent.designUpdateId,
-            parentComponent.componentReferenceId,
+            parentComponent,
             (err, result) => {
 
                 if(err){
@@ -301,9 +294,7 @@ class ClientDesignUpdateComponentServices{
         ServerDesignUpdateComponentApi.addFeatureAspectToFeature(
             view,
             mode,
-            parentComponent.designVersionId,
-            parentComponent.designUpdateId,
-            parentComponent.componentReferenceId,
+            parentComponent,
             (err, result) => {
 
                 if(err){
@@ -348,9 +339,7 @@ class ClientDesignUpdateComponentServices{
         ServerDesignUpdateComponentApi.addScenario(
             view,
             mode,
-            parentComponent.designVersionId,
-            parentComponent.designUpdateId,
-            parentComponent.componentReferenceId,
+            parentComponent,
             (err, result) => {
 
                 if(err){

@@ -291,7 +291,7 @@ class DesignVersionServices{
                     let dvUpdateUntestedCount = 0;
 
                     // Here we need to know how many Scenarios are in Updates, then how may of those are in WPs
-                    const designUpdates = DesignUpdateData.getMergeIncludeUpdates(userContext.designVersionId);
+                    const designUpdates = DesignVersionData.getMergeIncludeUpdates(userContext.designVersionId);
 
                     designUpdates.forEach((du) => {
 

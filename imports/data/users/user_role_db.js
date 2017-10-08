@@ -51,7 +51,7 @@ class UserRoleData{
 
     getOtherUsers(userId){
 
-        UserRoles.find({_id: {$ne: userId}}).fetch();
+        return UserRoles.find({_id: {$ne: userId}}).fetch();
     }
 
     getNonAdminUsers(){

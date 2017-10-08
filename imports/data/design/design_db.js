@@ -55,7 +55,7 @@ class DesignData {
 
     getOtherDesignVersions(designId, designVersionId){
 
-        DesignVersions.find({_id: {$ne: designVersionId}, designId: designId}).fetch();
+        return DesignVersions.find({_id: {$ne: designVersionId}, designId: designId}).fetch();
     }
 
     getDesignVersionsOrderByVersion(designId){

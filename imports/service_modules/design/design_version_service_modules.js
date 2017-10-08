@@ -861,7 +861,9 @@ class DesignVersionModules{
             );
         });
 
-        DomainDictionaryData.bulkInsertEntries(newDomainDictionaryBatch);
+        if(newDomainDictionaryBatch.length > 0) {
+            DomainDictionaryData.bulkInsertEntries(newDomainDictionaryBatch);
+        }
     }
 
     completePreviousDesignVersion(previousDesignVersionId){

@@ -120,7 +120,7 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
                 parentComponent.designUpdateId,
                 parentComponent.componentReferenceId,
                 ComponentType.DESIGN_SECTION,
-                parentComponent.parentLevel + 1,
+                parentComponent.componentLevel + 1,
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_DESIGN_SECTION_NAME),
                 DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS),

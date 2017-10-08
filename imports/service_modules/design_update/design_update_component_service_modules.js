@@ -539,7 +539,7 @@ class DesignUpdateComponentModules{
             return !inScopeChild;
         } else {
             // Are any in scope?
-            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
+            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.length);
 
             children.forEach((child) => {
                 if(child.scopeType === UpdateScopeType.SCOPE_IN_SCOPE){
@@ -571,7 +571,7 @@ class DesignUpdateComponentModules{
             return !newChild;
         } else {
             // Are any new?
-            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
+            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.length);
 
             children.forEach((child) => {
                 if(child.isNew){
@@ -604,7 +604,7 @@ class DesignUpdateComponentModules{
             return true
         } else {
             // Are any new?
-            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
+            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.length);
 
             children.forEach((child) => {
                 if(child.isNew){
@@ -631,7 +631,7 @@ class DesignUpdateComponentModules{
             return !removedChild;
         } else {
             // Are any removed?
-            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
+            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.length);
 
             children.forEach((child) => {
                 if(child.isRemoved){

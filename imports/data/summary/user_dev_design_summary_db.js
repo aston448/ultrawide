@@ -50,7 +50,7 @@ class UserDevDesignSummaryData{
     // Note - this may be a summary of an update only if designUpdateId is not NONE
     getUserDesignSummary(userContext){
 
-        return UserDevDesignSummaryData.findOne({
+        return UserDevDesignSummary.findOne({
             userId:             userContext.userId,
             designVersionId:    userContext.designVersionId,
             designUpdateId:     userContext.designUpdateId

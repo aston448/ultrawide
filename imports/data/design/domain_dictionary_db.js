@@ -9,6 +9,8 @@ class DomainDictionaryData{
 
     insertNewDictionaryTerm(designId, designVersionId, defaultRawText){
 
+        const now = new Date();
+
         DomainDictionary.insert(
             {
                 designId: designId,

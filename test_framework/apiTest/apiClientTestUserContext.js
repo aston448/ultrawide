@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 
-import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
+import { UserContext }   from '../../imports/collections/context/user_context.js';
 
 import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
 
@@ -12,7 +12,7 @@ Meteor.methods({
         // Sets a dummy user context for test purposes
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        UserCurrentEditContext.update(
+        UserContext.update(
             {_id: userContext._id},
             {
                 $set:{

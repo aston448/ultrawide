@@ -3,10 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import fs from 'fs';
 
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
-import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
+import { UserContext }              from '../../imports/collections/context/user_context.js';
 import { UserCurrentViewOptions}    from '../../imports/collections/context/user_current_view_options.js';
 import { Designs }                  from '../../imports/collections/design/designs.js';
-import { DesignBackups }            from '../../imports/collections/backup/design_backups.js';
+import { DesignBackups }            from '../../imports/collections/backups/design_backups.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
 import { UserDesignUpdateSummary }  from '../../imports/collections/summary/user_design_update_summary.js';
@@ -22,9 +22,9 @@ import { TestOutputLocationFiles }  from '../../imports/collections/configure/te
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserDesignVersionMashScenarios } from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
-import { UserIntegrationTestResults } from '../../imports/collections/test_results/user_integration_test_results.js';
-import { UserUnitTestResults }      from '../../imports/collections/test_results/user_unit_test_results.js';
-import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
+import { UserIntegrationTestResults } from '../../imports/collections/test_results/user_ultrawide_test_results.js';
+import { UserUnitTestResults }      from '../../imports/collections/test_results/user_ultrawide_test_results.js';
+import { UserDevTestSummary }   from '../../imports/collections/summary/user_dev_test_summary.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
 import { RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
@@ -54,7 +54,7 @@ Meteor.methods({
         //console.log('Test Fixtures: CLEAR DB!');
 
         // Abort reset if not the test instance of Ultrawide
-        if(ClientIdentityServices.getApplicationName() !== 'ULTRAWIDE'){
+        if(ClientIdentityServices.getApplicationName() !== 'ULTRAWIDE_TEST'){
 
             console.log('Test Fixtures: NOT TEST INSTANCE!!!');
 
@@ -83,10 +83,10 @@ Meteor.methods({
 
             UserUnitTestResults.remove({});
             UserIntegrationTestResults.remove({});
-            UserDevTestSummaryData.remove({});
+            UserDevTestSummary.remove({});
             UserWorkProgressSummary.remove({});
 
-            UserCurrentEditContext.remove({});
+            UserContext.remove({});
             UserCurrentViewOptions.remove({});
             UserRoles.remove({});
 
@@ -236,19 +236,19 @@ Meteor.methods({
 
 
             // Start new users with default context
-            UserCurrentEditContext.insert({
+            UserContext.insert({
                 userId: designerUserId
             });
 
-            UserCurrentEditContext.insert({
+            UserContext.insert({
                 userId: developerUserId
             });
 
-            UserCurrentEditContext.insert({
+            UserContext.insert({
                 userId: anotherDeveloperUserId
             });
 
-            UserCurrentEditContext.insert({
+            UserContext.insert({
                 userId: managerUserId
             });
 

@@ -14,7 +14,7 @@ class UserIntegrationTestResultData {
 
     getUserMatchingTestResults(userId, searchRegex){
 
-        UserIntegrationTestResults.find({
+        return UserIntegrationTestResults.find({
             userId:         userId,
             testFullName:   {$regex: searchRegex}
         }).fetch();
@@ -24,7 +24,7 @@ class UserIntegrationTestResultData {
 
     removeAllDataForUser(userId){
 
-        UserIntegrationTestResults.remove({
+        return UserIntegrationTestResults.remove({
             userId:     userId
         });
     }

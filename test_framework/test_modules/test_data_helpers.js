@@ -2,7 +2,7 @@
  * Created by aston on 05/12/2016.
  */
 
-import { AppGlobalData }            from '../../imports/collections/app/app_global_data.js';
+import { AppGlobal }                from '../../imports/collections/app/app_global.js';
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
@@ -11,7 +11,7 @@ import { DomainDictionary }         from '../../imports/collections/design/domai
 import { DesignVersionComponents }  from '../../imports/collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
-import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
+import { UserContext }              from '../../imports/collections/context/user_context.js';
 import { UserCurrentViewOptions }   from '../../imports/collections/context/user_current_view_options.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
@@ -19,7 +19,7 @@ import { TestOutputLocationFiles }  from '../../imports/collections/configure/te
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
-import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
+import { UserDevTestSummary }       from '../../imports/collections/summary/user_dev_test_summary.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
 import ClientAppHeaderServices      from '../../imports/apiClient/apiClientAppHeader.js';
@@ -78,7 +78,7 @@ class TestDataHelpers {
 
     getDataDir(){
 
-        const globalData = AppGlobalData.findOne({
+        const globalData = AppGlobal.findOne({
             versionKey: 'CURRENT_VERSION'
         });
 
@@ -112,7 +112,7 @@ class TestDataHelpers {
             throw new Meteor.Error("FAIL", "User " + userName + " not found.");
         }
 
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = UserContext.findOne({userId: user.userId});
         if(!userContext){
             throw new Meteor.Error("FAIL", "User Context not found for " + userName);
         }
@@ -294,7 +294,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designComponents.forEach((component) => {
 
-                parentComponent = DesignVersionComponents.findOne({designVersionId: designComponent.designVersionId, componentReferenceId: designComponent.componentParentReferenceIdNew});
+                parentComponent = DesignVersionComponents.findOne({designVersionId: component.designVersionId, componentReferenceId: component.componentParentReferenceIdNew});
 
                 if (parentComponent.componentNameNew === componentParentName) {
                     designComponent = component;
@@ -332,7 +332,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designComponents.forEach((component) => {
 
-                parentComponent = DesignVersionComponents.findOne({designVersionId: designComponent.designVersionId, componentReferenceId: designComponent.componentParentReferenceIdOld});
+                parentComponent = DesignVersionComponents.findOne({designVersionId: component.designVersionId, componentReferenceId: component.componentParentReferenceIdOld});
 
                 if (parentComponent.componentNameOld === componentParentName) {
                     designComponent = component;
@@ -370,7 +370,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designComponents.forEach((component) => {
 
-                parentComponent = DesignVersionComponents.findOne({designVersionId: designComponent.designVersionId, componentReferenceId: designComponent.componentParentReferenceIdOld});
+                parentComponent = DesignVersionComponents.findOne({designVersionId: component.designVersionId, componentReferenceId: component.componentParentReferenceIdOld});
 
                 if (parentComponent.componentNameOld === componentParentName) {
                     designComponent = component;
@@ -407,7 +407,9 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designUpdateComponents.forEach((component) => {
 
-                parentComponent = DesignUpdateComponents.findOne({designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdNew});
+                console.log("  Component " + component.componentNameNew + " DU: " + component.designUpdateId + " PAR REF: " + component.componentParentReferenceIdNew);
+
+                parentComponent = DesignUpdateComponents.findOne({designVersionId: component.designVersionId, designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdNew});
 
                 if (parentComponent.componentNameNew === componentParentName) {
                     designUpdateComponent = component;
@@ -423,7 +425,7 @@ class TestDataHelpers {
 
         if(!designUpdateComponent){
             //console.log("Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName)
-            throw new Meteor.Error("FAIL", "Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+            throw new Meteor.Error("FAIL", "Design Update Component " + componentType + " : " + componentName + " not found with new parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
         }
 
         return designUpdateComponent;
@@ -447,7 +449,9 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designUpdateComponents.forEach((component) => {
 
-                parentComponent = DesignUpdateComponents.findOne({designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdNew});
+                console.log("  Component " + component.componentNameNew + " DU: " + component.designUpdateId + " PAR REF: " + component.componentParentReferenceIdNew);
+
+                parentComponent = DesignUpdateComponents.findOne({designVersionId: component.designVersionId, designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdOld});
 
                 if (parentComponent.componentNameOld === componentParentName) {
                     designUpdateComponent = component;
@@ -463,7 +467,7 @@ class TestDataHelpers {
 
         if(!designUpdateComponent){
             //console.log("Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName)
-            throw new Meteor.Error("FAIL", "Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+            throw new Meteor.Error("FAIL", "Design Update Component " + componentType + " : " + componentName + " not found with old parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
         }
 
         return designUpdateComponent;
@@ -779,7 +783,7 @@ class TestDataHelpers {
 
     getTestSummaryFeatureData(userId, designVersionId, featureReferenceId, featureName){
 
-        const summaryData = UserDevTestSummaryData.findOne({
+        const summaryData = UserDevTestSummary.findOne({
             userId:                 userId,
             designVersionId:        designVersionId,
             featureReferenceId:     featureReferenceId,

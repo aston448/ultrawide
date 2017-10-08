@@ -1,9 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersionComponents }         from '../../imports/collections/design/design_version_components.js';
-import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
-import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
 import ClientDesignComponentServices    from '../../imports/apiClient/apiClientDesignComponent.js';
 import ClientTextEditorServices         from '../../imports/apiClient/apiClientTextEditor.js';

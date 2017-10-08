@@ -31,7 +31,7 @@ class DesignComponentData {
 
                 isNew:                              isNew,
                 workPackageId:                      workPackageId,  // For Scenarios only if added from a WP
-                isDevAdded:                         devAdded
+                isDevAdded:                         isDevAdded
             },
 
         );

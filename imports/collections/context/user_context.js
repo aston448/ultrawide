@@ -27,7 +27,7 @@ UserContext.attachSchema(Schema);
 
 // Publish
 if(Meteor.isServer){
-    Meteor.publish('userContext', function userCurrentEditContextPublication(){
+    Meteor.publish('userContext', function userContextPublication(){
         return UserContext.find({});
     })
 }

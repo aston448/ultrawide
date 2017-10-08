@@ -14,7 +14,7 @@ class UserUnitTestResultData {
 
     getUserMatchingTestResults(userId, searchRegex){
 
-        UserUnitTestResults.find({
+        return UserUnitTestResults.find({
             userId:         userId,
             testFullName:   {$regex: searchRegex}
         }).fetch();
@@ -24,7 +24,7 @@ class UserUnitTestResultData {
 
     removeAllDataForUser(userId){
 
-        UserUnitTestResults.remove({
+        return UserUnitTestResults.remove({
             userId:     userId
         });
     }

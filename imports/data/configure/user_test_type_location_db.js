@@ -35,7 +35,7 @@ class UserTestTypeLocationData {
 
     getUserLocationById(userId, locationId){
 
-        UserTestTypeLocations.findOne({
+        return UserTestTypeLocations.findOne({
             userId: userId,
             locationId: locationId,
         });
@@ -59,7 +59,7 @@ class UserTestTypeLocationData {
 
     getUserTestTypeLocations(userId){
 
-        UserTestTypeLocations.find({
+        return UserTestTypeLocations.find({
             userId: userId
         }).fetch();
     }
