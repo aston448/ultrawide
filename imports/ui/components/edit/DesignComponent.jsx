@@ -534,7 +534,7 @@ export class DesignComponent extends Component{
             }
 
             // Determine the correct parent reference
-            let parentRefId = currentItem.componentParentReferenceIdNew;
+            let parentRefId = currentItem.componentReferenceId;
 
             // Common components used:
             let designSectionsContainer =

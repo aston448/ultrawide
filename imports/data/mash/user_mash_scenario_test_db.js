@@ -38,7 +38,7 @@ class UserMashScenarioTestData{
 
     removeAllDvTestsForUser(userId, designVersionId){
 
-        UserMashScenarioTests.remove({
+        return UserMashScenarioTests.remove({
             userId:             userId,
             designVersionId:    designVersionId
         });

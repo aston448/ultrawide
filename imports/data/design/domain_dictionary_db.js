@@ -11,7 +11,7 @@ class DomainDictionaryData{
 
         const now = new Date();
 
-        DomainDictionary.insert(
+        return DomainDictionary.insert(
             {
                 designId: designId,
                 designVersionId: designVersionId,
@@ -113,7 +113,7 @@ class DomainDictionaryData{
 
     removeTerm(termId){
 
-        DomainDictionary.remove({_id: termId});
+        return DomainDictionary.remove({_id: termId});
     }
 }
 

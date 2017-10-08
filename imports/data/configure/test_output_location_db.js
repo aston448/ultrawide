@@ -10,7 +10,7 @@ class TestOutputLocationData{
 
     insertNewOutputLocation(userId){
 
-        TestOutputLocations.insert(
+        return TestOutputLocations.insert(
             {
                 locationName:           DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
                 locationUserId:         userId,
@@ -93,7 +93,7 @@ class TestOutputLocationData{
 
     updateOutputLocation(locationId, location){
 
-        TestOutputLocations.update(
+        return TestOutputLocations.update(
             {_id: locationId},
             {
                 $set: {

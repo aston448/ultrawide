@@ -300,13 +300,13 @@ class ClientDataServices{
     getTestOutputLocationData(userId){
 
         // You can see either shared locations or private ones made by you
-        TestOutputLocationData.getAllUserLocations(userId);
+        return TestOutputLocationData.getAllUserLocations(userId);
     }
 
     // Files for a Test Output Location
     getTestOutputLocationFiles(locationId){
 
-        TestOutputLocationData.getAllLocationFiles(locationId);
+        return TestOutputLocationData.getAllLocationFiles(locationId);
     }
 
     // User configuration of Test Outputs
@@ -446,7 +446,9 @@ class ClientDataServices{
     getUltrawideDesigns(){
 
         // Get all the designs available
-        return DesignData.getAllDesigns();
+        return {
+            designs: DesignData.getAllDesigns()
+        }
     }
 
     // Get a list of known Design Versions for the current Design

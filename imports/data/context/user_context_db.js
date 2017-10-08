@@ -7,7 +7,7 @@ class UserContextData{
 
     insertNewUserContext(context){
 
-        UserContext.insert(
+        return UserContext.insert(
             {
                 userId:                         context.userId,
                 designId:                       context.designId,
@@ -81,7 +81,7 @@ class UserContextData{
 
     clearComponentContext(userId){
 
-        UserContext.update(
+        return UserContext.update(
             {userId: userId},
             {
                 $set:{

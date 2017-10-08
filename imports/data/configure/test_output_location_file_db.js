@@ -67,7 +67,7 @@ class TestOutputLocationFileData{
 
     getAllLocationFiles(){
 
-        TestOutputLocationFiles.find({}).fetch();
+        return TestOutputLocationFiles.find({}).fetch();
     }
 
     // UPDATE ==========================================================================================================
@@ -92,7 +92,7 @@ class TestOutputLocationFileData{
 
     resetAllLocationFilesStatus(locationId){
 
-        TestOutputLocationFiles.update(
+        return TestOutputLocationFiles.update(
             {locationId: locationId},
             {
                 $set: {
@@ -106,7 +106,7 @@ class TestOutputLocationFileData{
 
     setLocationFileStatus(locationId, fileName, fileStatus, modifiedDate){
 
-        TestOutputLocationFiles.update(
+        return TestOutputLocationFiles.update(
             {
                 locationId: locationId,
                 fileName:   fileName
