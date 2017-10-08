@@ -54,7 +54,7 @@ Meteor.methods({
         //console.log('Test Fixtures: CLEAR DB!');
 
         // Abort reset if not the test instance of Ultrawide
-        if(ClientIdentityServices.getApplicationName() !== 'ULTRAWIDE_TEST'){
+        if(ClientIdentityServices.getApplicationName() !== 'ULTRAWIDE'){
 
             console.log('Test Fixtures: NOT TEST INSTANCE!!!');
 
