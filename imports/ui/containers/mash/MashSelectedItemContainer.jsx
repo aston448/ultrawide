@@ -26,6 +26,7 @@ import ClientUserSettingsServices       from '../../../apiClient/apiClientUserSe
 
 // REDUX services
 import {connect} from 'react-redux';
+import user_context_db from "../../../data/context/user_context_db";
 
 // =====================================================================================================================
 
@@ -270,6 +271,8 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
 
         default:
 
+            const currentDesignItem = ClientDataServices.getComponent(designItemId, params.userContext);
+
             // Anything else we get the actual design items, not the scenario mash
             designItems = ClientDataServices.getComponentDataForParentComponent(
                 params.childComponentType,
@@ -277,13 +280,13 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
                 params.userContext.designVersionId,
                 params.userContext.designUpdateId,
                 params.userContext.workPackageId,
-                designItemId,
+                currentDesignItem.componentReferenceId,
                 params.displayContext
             );
 
     }
 
-    //console.log("Found " + designItems.length + " items of type " + params.childComponentType + " for item type " + itemType);
+    console.log("Found " + designItems.length + " items of type " + params.childComponentType + " for item type " + itemType);
 
     return{
         designItems:    designItems,

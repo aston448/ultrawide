@@ -9,18 +9,18 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
-import DesignComponentTextContainer         from '../edit/DesignComponentTextContainer.jsx';
-import DevFilesContainer                    from '../dev/DevFilesContainer.jsx';
-import DomainDictionaryContainer            from './DomainDictionaryContainer.jsx';
+import DesignComponentTextContainer         from '../../containers/edit/DesignComponentTextContainer.jsx';
+//import DevFilesContainer                    from '../../containers/dev/DevFilesContainer.jsx';
+import DomainDictionaryContainer            from '../../containers/edit/DomainDictionaryContainer.jsx';
 import DesignEditorHeader                   from '../../components/common/DesignEditorHeader.jsx';
 import DesignEditorFooter                   from '../../components/common/DesignEditorFooter.jsx';
-import MashSelectedItemContainer            from '../mash/MashSelectedItemContainer.jsx';
+import MashSelectedItemContainer            from '../../containers/mash/MashSelectedItemContainer.jsx';
 
 // Ultrawide Services
 import { ComponentType, ViewType, DisplayContext } from '../../../constants/constants.js';
 
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
@@ -153,9 +153,9 @@ class DevApplicationsList extends Component {
                 <Grid>
                     <Row>
                         <Col md={12} className="close-col">
-                            <DevFilesContainer params={{
-                                userContext: userContext
-                            }}/>
+                            {/*<DevFilesContainer params={{*/}
+                                {/*userContext: userContext*/}
+                            {/*}}/>*/}
                         </Col>
                     </Row>
                 </Grid>
@@ -713,7 +713,6 @@ class DevApplicationsList extends Component {
             );
 
         } else {
-
             return (
                 <div>
                     No Data

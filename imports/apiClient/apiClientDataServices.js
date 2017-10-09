@@ -618,7 +618,7 @@ class ClientDataServices{
     // Get top level editor data (i.e Applications)
     getEditorApplicationData(userContext, view){
 
-        //console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
+        console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
 
         const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
@@ -747,12 +747,21 @@ class ClientDataServices{
         }
     }
 
+    getComponent(componentId, userContext){
+
+        if(userContext.designUpdateId === 'NONE'){
+            return DesignComponentData.getDesignComponentById(componentId);
+        } else {
+            return DesignUpdateComponentData.getUpdateComponentById(componentId);
+        }
+    }
+
     // Get data for all nested design components inside the specified parent
     getComponentDataForParentComponent(childComponentType, view, designVersionId, designUpdateId, workPackageId, parentRefId, displayContext){
         let currentComponents = [];
         let wpComponents = [];
 
-        //console.log("Looking for " + childComponentType + " data for view " + view + " and context " + displayContext);
+        console.log("Looking for " + childComponentType + " data for view " + view + " and context " + displayContext);
 
         const parentComponent = null;
 

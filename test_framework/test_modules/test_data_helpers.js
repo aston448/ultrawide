@@ -113,6 +113,7 @@ class TestDataHelpers {
         }
 
         const userContext = UserContext.findOne({userId: user.userId});
+
         if(!userContext){
             throw new Meteor.Error("FAIL", "User Context not found for " + userName);
         }

@@ -174,7 +174,7 @@ class DesignUpdateComponentData{
 
     getNonRemovedAspectsForFeature(designUpdateId, featureReferenceId){
 
-        DesignUpdateComponents.find(
+        return DesignUpdateComponents.find(
             {
                 designUpdateId:                 designUpdateId,
                 componentType:                  ComponentType.FEATURE_ASPECT,
