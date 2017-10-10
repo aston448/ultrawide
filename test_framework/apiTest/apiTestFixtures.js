@@ -61,7 +61,7 @@ Meteor.methods({
         } else {
 
             // For testing we clear the DB and start from scratch
-
+            console.log('Clearing down DB Data...');
             DomainDictionary.remove({});
             ScenarioSteps.remove({});
             FeatureBackgroundSteps.remove({});
@@ -127,6 +127,8 @@ Meteor.methods({
                 isManager: false,
                 isAdmin: true
             });
+
+            console.log('Admin user id is ' + adminUserId);
 
             // NORMAL USERS ============================================================================================
 
@@ -278,6 +280,49 @@ Meteor.methods({
 
 
     },
+
+    'testFixtures.clearAllDesignData'(){
+
+        //console.log('Test Fixtures: CLEAR DB!');
+
+        // Abort reset if not the test instance of Ultrawide
+        if(ClientIdentityServices.getApplicationName() !== 'ULTRAWIDE'){
+
+            console.log('Test Fixtures: NOT TEST INSTANCE!!!');
+
+        } else {
+
+            // Clear all design data - used for test restore after disaster
+
+            DomainDictionary.remove({});
+            ScenarioSteps.remove({});
+            FeatureBackgroundSteps.remove({});
+            DesignUpdateComponents.remove({});
+            DesignVersionComponents.remove({});
+            WorkPackageComponents.remove({});
+            WorkPackages.remove({});
+            UserDesignUpdateSummary.remove({});
+            DesignUpdates.remove({});
+            DesignVersions.remove({});
+            Designs.remove({});
+            DesignBackups.remove({});
+            UserTestTypeLocations.remove({});
+            TestOutputLocationFiles.remove({});
+            TestOutputLocations.remove({});
+
+            UserDesignVersionMashScenarios.remove({});
+            UserMashScenarioTests.remove({});
+
+            UserUnitTestResults.remove({});
+            UserIntegrationTestResults.remove({});
+            UserDevTestSummary.remove({});
+            UserWorkProgressSummary.remove({});
+
+            UserContext.remove({});
+            UserCurrentViewOptions.remove({});
+        }
+    },
+
 
     'testFixtures.clearDesignUpdates'(){
         DesignUpdateComponents.remove({});

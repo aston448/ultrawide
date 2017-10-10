@@ -761,170 +761,172 @@ class ClientDataServices{
         let currentComponents = [];
         let wpComponents = [];
 
-        console.log("Looking for " + childComponentType + " data for view " + view + " and context " + displayContext);
+        //console.log("Looking for " + childComponentType + " data for view " + view + " and context " + displayContext + " with parent ref " + parentRefId);
 
-        const parentComponent = null;
+        //const parentComponent = null;
 
+        if(childComponentType === 'NONE'){
+            return [];
+        } else {
 
+            switch (view) {
+                case ViewType.DESIGN_NEW_EDIT:
+                case ViewType.DESIGN_PUBLISHED_VIEW:
 
-        switch(view)
-        {
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
+                    // Don't include removed components in this view if a completed updatable version
+                    currentComponents = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, childComponentType, parentRefId);
 
-                // Don't include removed components in this view if a completed updatable version
-                currentComponents = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, childComponentType, parentRefId);
-
-                return currentComponents;
-
-            case ViewType.DESIGN_UPDATABLE_VIEW:
-
-                switch(displayContext) {
-                    case DisplayContext.MASH_UNIT_TESTS:
-                    case DisplayContext.MASH_INT_TESTS:
-
-                        // Don't include removed components in this view for test results
-                        currentComponents = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, childComponentType, parentRefId);
-                        break;
-
-                    default:
-
-                        // Do include removed components in the current updates view
-                        currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
-                }
-                return  currentComponents;
-
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-                // DESIGN UPDATE:  Need to provide data in the context of SCOPE, EDIT, VIEW and BASE Design Version
-
-                //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + designUpdateId + " with parent " + parentRefId);
-
-                switch(displayContext){
-                    case DisplayContext.UPDATE_EDIT:
-
-                        // Display all DU components.  Only in-scope components exist.
-                        currentComponents = DesignUpdateComponentData.getChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
-                        break;
-
-                    case DisplayContext.UPDATE_VIEW:
-
-                        // Display all DU components.  Don't include peer scope.
-                        currentComponents = DesignUpdateComponentData.getNonPeerScopeChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
-                        break;
-
-                    case DisplayContext.UPDATE_SCOPE:
-
-                        // Display all design components in the base design so scope can be chosen
-                        currentComponents = DesignComponentData.getExistingChildComponentsOfType(designVersionId, childComponentType, parentRefId);
-                        break;
-
-                    case DisplayContext.WORKING_VIEW:
-
-                        // Display latest components in the working view
-                        currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
-                        break;
-
-                    //TODO - test data for Design Updates?
-                }
-
-                //console.log("Design update components found: " + currentComponents.length);
-
-                return currentComponents;
-
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.DEVELOP_BASE_WP:
-                switch(displayContext) {
-                    case DisplayContext.WP_SCOPE:
-
-                        // Get all Design Components for the scope
-                        currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
-                        break;
-
-                    case DisplayContext.WP_VIEW:
-                    case DisplayContext.DEV_DESIGN:
-                    case DisplayContext.MASH_UNIT_TESTS:
-                    case DisplayContext.MASH_INT_TESTS:
-
-                        // Get only the Design Components that are in the WP
-
-                        // Get the parent component
-                        const parent = DesignComponentData.getDesignComponentByRef(designVersionId, parentRefId);
-
-                        // Get the possible WP components
-                        if(parent) {
-                            wpComponents = WorkPackageComponentData.getChildComponentsOfType(workPackageId, childComponentType, parent.componentReferenceId);
-
-                            wpComponents.forEach((wpComponent) => {
-
-                                let dvComponent = DesignComponentData.getDesignComponentByRef(designVersionId, wpComponent.componentReferenceId);
-
-                                if(dvComponent) {
-                                    currentComponents.push(dvComponent);
-                                }
-                            });
-                        }
-                        break;
-                }
-
-                //console.log("Found " + currentComponents.length + " components of type " + componentType + " for display context " + displayContext);
-
-                if(currentComponents.length > 0){
                     return currentComponents;
-                } else {
-                    return  [];
-                }
 
-                break;
+                case ViewType.DESIGN_UPDATABLE_VIEW:
 
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.DEVELOP_UPDATE_WP:
+                    switch (displayContext) {
+                        case DisplayContext.MASH_UNIT_TESTS:
+                        case DisplayContext.MASH_INT_TESTS:
 
-                switch(displayContext) {
-                    case DisplayContext.WP_SCOPE:
+                            // Don't include removed components in this view for test results
+                            currentComponents = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, childComponentType, parentRefId);
+                            break;
 
-                        // Get all Update Components for the scope.  Ignore Peer scope for Update WPs
-                        currentComponents = DesignUpdateComponentData.getScopedChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
-                        break;
+                        default:
 
-                    case DisplayContext.WP_VIEW:
-                    case DisplayContext.DEV_DESIGN:
-                    case DisplayContext.MASH_UNIT_TESTS:
-                    case DisplayContext.MASH_INT_TESTS:
-
-                        // Get only the Update Components that are in the WP
-
-                        // TODO - parent id may be out of date when DU items are recreated...
-                        // Get the parent component
-                        const parent = DesignUpdateComponentData.getUpdateComponentByRef(designVersionId, designUpdateId, parentRefId);
-
-                        // Get the possible WP components
-                        if (parent) {
-                            wpComponents = WorkPackageComponentData.getChildComponentsOfType(workPackageId, childComponentType, parent.componentReferenceId);
-
-                            wpComponents.forEach((wpComponent) => {
-
-                                let duComponent = DesignUpdateComponentData.getUpdateComponentByRef(designVersionId, designUpdateId, wpComponent.componentReferenceId);
-
-                                if(duComponent) {
-                                    currentComponents.push(duComponent);
-                                }
-                            });
-                        }
-
-                        break;
-                }
-
-                if(currentComponents.length > 0){
+                            // Do include removed components in the current updates view
+                            currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
+                    }
                     return currentComponents;
-                } else {
-                    return [];
-                }
 
-                break;
+                case ViewType.DESIGN_UPDATE_EDIT:
+                case ViewType.DESIGN_UPDATE_VIEW:
+                    // DESIGN UPDATE:  Need to provide data in the context of SCOPE, EDIT, VIEW and BASE Design Version
 
+                    //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + designUpdateId + " with parent " + parentRefId);
+
+                    switch (displayContext) {
+                        case DisplayContext.UPDATE_EDIT:
+
+                            // Display all DU components.  Only in-scope components exist.
+                            currentComponents = DesignUpdateComponentData.getChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
+                            break;
+
+                        case DisplayContext.UPDATE_VIEW:
+
+                            // Display all DU components.  Don't include peer scope.
+                            currentComponents = DesignUpdateComponentData.getNonPeerScopeChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
+                            break;
+
+                        case DisplayContext.UPDATE_SCOPE:
+
+                            // Display all design components in the base design so scope can be chosen
+                            currentComponents = DesignComponentData.getExistingChildComponentsOfType(designVersionId, childComponentType, parentRefId);
+                            break;
+
+                        case DisplayContext.WORKING_VIEW:
+
+                            // Display latest components in the working view
+                            currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
+                            break;
+
+                        //TODO - test data for Design Updates?
+                    }
+
+                    //console.log("Design update components found: " + currentComponents.length);
+
+                    return currentComponents;
+
+                case ViewType.WORK_PACKAGE_BASE_EDIT:
+                case ViewType.WORK_PACKAGE_BASE_VIEW:
+                case ViewType.DEVELOP_BASE_WP:
+                    switch (displayContext) {
+                        case DisplayContext.WP_SCOPE:
+
+                            // Get all Design Components for the scope
+                            currentComponents = DesignComponentData.getChildComponentsOfType(designVersionId, childComponentType, parentRefId);
+                            break;
+
+                        case DisplayContext.WP_VIEW:
+                        case DisplayContext.DEV_DESIGN:
+                        case DisplayContext.MASH_UNIT_TESTS:
+                        case DisplayContext.MASH_INT_TESTS:
+
+                            // Get only the Design Components that are in the WP
+
+                            // Get the parent component
+                            const parent = DesignComponentData.getDesignComponentByRef(designVersionId, parentRefId);
+
+                            // Get the possible WP components
+                            if (parent) {
+                                wpComponents = WorkPackageComponentData.getChildComponentsOfType(workPackageId, childComponentType, parent.componentReferenceId);
+
+                                wpComponents.forEach((wpComponent) => {
+
+                                    let dvComponent = DesignComponentData.getDesignComponentByRef(designVersionId, wpComponent.componentReferenceId);
+
+                                    if (dvComponent) {
+                                        currentComponents.push(dvComponent);
+                                    }
+                                });
+                            }
+                            break;
+                    }
+
+                    //console.log("Found " + currentComponents.length + " components of type " + componentType + " for display context " + displayContext);
+
+                    if (currentComponents.length > 0) {
+                        return currentComponents;
+                    } else {
+                        return [];
+                    }
+
+                    break;
+
+                case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                case ViewType.DEVELOP_UPDATE_WP:
+
+                    switch (displayContext) {
+                        case DisplayContext.WP_SCOPE:
+
+                            // Get all Update Components for the scope.  Ignore Peer scope for Update WPs
+                            currentComponents = DesignUpdateComponentData.getScopedChildComponentsOfType(designUpdateId, childComponentType, parentRefId);
+                            break;
+
+                        case DisplayContext.WP_VIEW:
+                        case DisplayContext.DEV_DESIGN:
+                        case DisplayContext.MASH_UNIT_TESTS:
+                        case DisplayContext.MASH_INT_TESTS:
+
+                            // Get only the Update Components that are in the WP
+
+                            // TODO - parent id may be out of date when DU items are recreated...
+                            // Get the parent component
+                            const parent = DesignUpdateComponentData.getUpdateComponentByRef(designVersionId, designUpdateId, parentRefId);
+
+                            // Get the possible WP components
+                            if (parent) {
+                                wpComponents = WorkPackageComponentData.getChildComponentsOfType(workPackageId, childComponentType, parent.componentReferenceId);
+
+                                wpComponents.forEach((wpComponent) => {
+
+                                    let duComponent = DesignUpdateComponentData.getUpdateComponentByRef(designVersionId, designUpdateId, wpComponent.componentReferenceId);
+
+                                    if (duComponent) {
+                                        currentComponents.push(duComponent);
+                                    }
+                                });
+                            }
+
+                            break;
+                    }
+
+                    if (currentComponents.length > 0) {
+                        return currentComponents;
+                    } else {
+                        return [];
+                    }
+
+                    break;
+
+            }
         }
     }
 

@@ -32,6 +32,10 @@ class TestFixtures{
         server.call('testFixtures.clearAllData');
     };
 
+    clearAllDesignData(){
+        server.call('testFixtures.clearAllDesignData');
+    }
+
     removeAllMeteorUsers(){
         server.call('testFixtures.removeMeteorUsers');
     }

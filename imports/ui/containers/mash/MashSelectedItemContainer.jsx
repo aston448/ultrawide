@@ -255,7 +255,7 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
 
     //console.log("Selected item type is " + itemType);
 
-    switch(itemType){
+    switch(itemType) {
         case ComponentType.FEATURE_ASPECT:
         case ComponentType.SCENARIO:
 
@@ -271,7 +271,16 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
 
         default:
 
-            const currentDesignItem = ClientDataServices.getComponent(designItemId, params.userContext);
+            let componentRefId = 'NONE';
+
+            if (designItemId !== 'NONE') {
+
+                const currentDesignItem = ClientDataServices.getComponent(designItemId, params.userContext);
+
+                if (currentDesignItem) {
+                    componentRefId = currentDesignItem.componentReferenceId;
+                }
+            }
 
             // Anything else we get the actual design items, not the scenario mash
             designItems = ClientDataServices.getComponentDataForParentComponent(
@@ -280,13 +289,13 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
                 params.userContext.designVersionId,
                 params.userContext.designUpdateId,
                 params.userContext.workPackageId,
-                currentDesignItem.componentReferenceId,
+                componentRefId,
                 params.displayContext
             );
 
     }
 
-    console.log("Found " + designItems.length + " items of type " + params.childComponentType + " for item type " + itemType);
+    //console.log("Found " + designItems.length + " items of type " + params.childComponentType + " for item type " + itemType);
 
     return{
         designItems:    designItems,

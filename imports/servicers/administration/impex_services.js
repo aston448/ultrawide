@@ -274,19 +274,29 @@ class ImpExServices{
                     // Data to MERGE ---------------------------------------------------------------------------------------
 
                     // Merge user data.  Make sure all the users associated with this design exist and create a map of any new users created
-                    usersMapping = ImpexModules.restoreDesignUsers(backupData.userRoles, backupDataVersion, currentDataVersion);
+                    if(backupData.userRoles) {
+                        usersMapping = ImpexModules.restoreDesignUsers(backupData.userRoles, backupDataVersion, currentDataVersion);
+                    }
 
                     // Merge test output location data
-                    locationsMapping = ImpexModules.restoreTestOutputLocationData(backupData.testOutputLocations, backupDataVersion, currentDataVersion, usersMapping);
+                    if(backupData.testOutputLocations) {
+                        locationsMapping = ImpexModules.restoreTestOutputLocationData(backupData.testOutputLocations, backupDataVersion, currentDataVersion, usersMapping);
+                    }
 
                     // Merge test output location files data
-                    ImpexModules.restoreTestOutputLocationFileData(backupData.testOutputLocationFiles, backupDataVersion, currentDataVersion, locationsMapping);
+                    if(backupData.testOutputLocationFiles) {
+                        ImpexModules.restoreTestOutputLocationFileData(backupData.testOutputLocationFiles, backupDataVersion, currentDataVersion, locationsMapping);
+                    }
 
                     // Merge user test type locations data
-                    ImpexModules.restoreUserTestTypeLocationsData(backupData.userTestTypeLocations, backupDataVersion, currentDataVersion, usersMapping, locationsMapping);
+                    if(backupData.userTestTypeLocations) {
+                        ImpexModules.restoreUserTestTypeLocationsData(backupData.userTestTypeLocations, backupDataVersion, currentDataVersion, usersMapping, locationsMapping);
+                    }
 
                     // Merge user settings
-                    ImpexModules.restoreUserSettingsData(backupData.userSettings, backupDataVersion, currentDataVersion, usersMapping);
+                    if(backupData.userSettings) {
+                        ImpexModules.restoreUserSettingsData(backupData.userSettings, backupDataVersion, currentDataVersion, usersMapping);
+                    }
 
                     // Data to REPLACE -------------------------------------------------------------------------------------
 
