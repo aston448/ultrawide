@@ -31,6 +31,9 @@ dependencies:
     # Download & cache Chimp's dependencies
     - sh scripts/download-chimp-dependencies.sh
 
+    npm install phantomjs --phantomjs_cdnurl=https://bitbucket.org/ariya/phantomjs/downloads
+
+
 checkout:
   post:
     - git submodule update --init
