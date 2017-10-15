@@ -29,6 +29,22 @@ class DesignComponentVerifications{
         );
     }
 
+    featureAspect_ExistsInFeature_InDesign_Version_(aspectName, featureName, designName, designVersionName){
+        server.call('verifyDesignComponents.featureAspectExistsCalled_InFeature_InDesign_DesignVersion_', aspectName, featureName, designName, designVersionName,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    scenario_ExistsInFeatureAspect_InDesign_Version_(scenarioName, aspectName, designName, designVersionName){
+        server.call('verifyDesignComponents.scenarioExistsCalled_InFeatureAspect_InDesign_DesignVersion_', scenarioName, aspectName, designName, designVersionName,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     componentOfType_Called_InDesign_Version_ParentIs_(type, name, designName, designVersionName, parentName){
         server.call('verifyDesignComponents.componentInDesignVersionParentIs', designName, designVersionName, type, name, parentName,
           (function(error, result){

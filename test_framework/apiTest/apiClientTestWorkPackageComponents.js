@@ -151,7 +151,7 @@ Meteor.methods({
             case WorkPackageType.WP_BASE:
                 view = ViewType.DEVELOP_BASE_WP;
                 const designComponent = TestDataHelpers.getContextDesignComponent(userContext.designComponentId);
-                if(designComponent.componentType != ComponentType.FEATURE_ASPECT){
+                if(designComponent.componentType !== ComponentType.FEATURE_ASPECT){
                     throw new Meteor.Error("FAIL", "Can only add Scenarios to Feature Aspects.  This is a " + designComponent.componentType);
                 }
                 outcome = ClientDesignComponentServices.addScenario(view, mode, designComponent, workPackage._id);
@@ -159,10 +159,10 @@ Meteor.methods({
             case WorkPackageType.WP_UPDATE:
                 view = ViewType.DEVELOP_UPDATE_WP;
                 const designUpdateComponent = TestDataHelpers.getContextDesignUpdateComponent(userContext.designComponentId);
-                if(designUpdateComponent.componentType != ComponentType.FEATURE_ASPECT){
+                if(designUpdateComponent.componentType !== ComponentType.FEATURE_ASPECT){
                     throw new Meteor.Error("FAIL", "Can only add Scenarios to Feature Aspects.  This is a " + designUpdateComponent.componentType);
                 }
-                outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, designUpdateComponent);
+                outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, designUpdateComponent, workPackage._id);
                 break;
         }
 
@@ -184,18 +184,18 @@ Meteor.methods({
             case WorkPackageType.WP_BASE:
                 view = ViewType.DEVELOP_BASE_WP;
                 const designComponent = TestDataHelpers.getContextDesignComponent(userContext.designComponentId);
-                if(designComponent.componentType != ComponentType.FEATURE){
+                if(designComponent.componentType !== ComponentType.FEATURE){
                     throw new Meteor.Error("FAIL", "Can only add Feature Aspects to Features.  This is a " + designComponent.componentType);
                 }
-                outcome = ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, designComponent);
+                outcome = ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, designComponent, workPackage._id);
                 break;
             case WorkPackageType.WP_UPDATE:
                 view = ViewType.DEVELOP_UPDATE_WP;
                 const designUpdateComponent = TestDataHelpers.getContextDesignUpdateComponent(userContext.designComponentId);
-                if(designUpdateComponent.componentType != ComponentType.FEATURE){
+                if(designUpdateComponent.componentType !== ComponentType.FEATURE){
                     throw new Meteor.Error("FAIL", "Can only add Feature Aspects to Features.  This is a " + designUpdateComponent.componentType);
                 }
-                outcome = ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, designUpdateComponent);
+                outcome = ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, designUpdateComponent, workPackage._id);
                 break;
         }
 

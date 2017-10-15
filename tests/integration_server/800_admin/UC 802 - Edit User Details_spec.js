@@ -244,38 +244,38 @@ describe('UC 802 - Edit User Details', function(){
         expect(UserManagementVerifications.userDetailsAre(defaultUser));
     });
 
-    it('A user may not be saved with no password', function(){
-
-        // Setup - add a new user
-        UserManagementActions.adminAddsNewUser();
-
-        // Execute - try to save with no user name
-        const newUserDetails = {
-            userName:       'wilma',
-            displayName:    'No Password',
-            isDesigner:     false,
-            isDeveloper:    false,
-            isManager:      true,
-            isAdmin:        false,
-            isActive:       true
-        };
-
-        const expectation = {success: false, message: UserManagementValidationErrors.USER_MANAGEMENT_INVALID_PASSWORD_BLANK};
-        UserManagementActions.adminSavesUserDetails(DefaultUserDetails.NEW_USER_NAME, newUserDetails, expectation);
-
-        // Verify new user still exists
-        const defaultUser = {
-            userName:       DefaultUserDetails.NEW_USER_NAME,
-            displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
-            isDesigner:     false,
-            isDeveloper:    false,
-            isManager:      false,
-            isAdmin:        false,
-            isActive:       true
-        };
-
-        expect(UserManagementVerifications.userDetailsAre(defaultUser));
-    });
+    // it('A user may not be saved with no password', function(){
+    //
+    //     // Setup - add a new user
+    //     UserManagementActions.adminAddsNewUser();
+    //
+    //     // Execute - try to save with no user name
+    //     const newUserDetails = {
+    //         userName:       'wilma',
+    //         displayName:    'No Password',
+    //         isDesigner:     false,
+    //         isDeveloper:    false,
+    //         isManager:      true,
+    //         isAdmin:        false,
+    //         isActive:       true
+    //     };
+    //
+    //     const expectation = {success: false, message: UserManagementValidationErrors.USER_MANAGEMENT_INVALID_PASSWORD_BLANK};
+    //     UserManagementActions.adminSavesUserDetails(DefaultUserDetails.NEW_USER_NAME, newUserDetails, expectation);
+    //
+    //     // Verify new user still exists
+    //     const defaultUser = {
+    //         userName:       DefaultUserDetails.NEW_USER_NAME,
+    //         displayName:    DefaultUserDetails.NEW_USER_DISPLAY_NAME,
+    //         isDesigner:     false,
+    //         isDeveloper:    false,
+    //         isManager:      false,
+    //         isAdmin:        false,
+    //         isActive:       true
+    //     };
+    //
+    //     expect(UserManagementVerifications.userDetailsAre(defaultUser));
+    // });
 
     it('Only the admin user can save changes to users', function(){
 

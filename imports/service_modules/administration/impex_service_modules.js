@@ -169,8 +169,14 @@ class ImpexModules{
                     // Don't need to create but map backup userId to actual so backup user-data can be corrected
                     usersMapping.push({oldId: user.userId, newId: existingUser.userId});
 
-                    // But do need to reset the user context as ids may be out of date
-                    UserContextData.clearUserContext(existingUser.userId);
+                    // But do need to reset or default the user context as ids may be out of date
+                    const userContext = UserContextData.getUserContext(existingUser.userId);
+
+                    if(userContext){
+                        UserContextData.clearUserContext(existingUser.userId);
+                    } else {
+                        UserContextData.insertEmptyUserContext(existingUser.userId);
+                    }
 
                 } else {
 

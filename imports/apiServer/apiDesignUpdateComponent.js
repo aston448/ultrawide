@@ -80,13 +80,14 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addFeatureAspectToFeature(view, mode, parentComponent, callback){
+    addFeatureAspectToFeature(view, mode, parentComponent, workPackageId, callback){
 
         addFeatureAspectToFeature.call(
             {
                 view: view,
                 mode: mode,
-                parentComponent: parentComponent
+                parentComponent: parentComponent,
+                workPackageId:  workPackageId
             },
             (err, result) => {
                 callback(err, result);
@@ -94,13 +95,14 @@ class ServerDesignUpdateComponentApi {
         );
     }
 
-    addScenario(view, mode, parentComponent, callback){
+    addScenario(view, mode, parentComponent, workPackageId, callback){
 
         addScenario.call(
             {
                 view: view,
                 mode: mode,
-                parentComponent: parentComponent
+                parentComponent: parentComponent,
+                workPackageId
             },
             (err, result) => {
                 callback(err, result);

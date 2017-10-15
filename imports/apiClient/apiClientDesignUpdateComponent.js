@@ -279,7 +279,7 @@ class ClientDesignUpdateComponentServices{
     };
 
     // User clicked Add Feature Aspect inside a Feature ----------------------------------------------------------------
-    addFeatureAspectToFeature(view, mode, parentComponent){
+    addFeatureAspectToFeature(view, mode, parentComponent, workPackageId){
 
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.FEATURE_ASPECT);
@@ -295,6 +295,7 @@ class ClientDesignUpdateComponentServices{
             view,
             mode,
             parentComponent,
+            workPackageId,
             (err, result) => {
 
                 if(err){
@@ -320,7 +321,7 @@ class ClientDesignUpdateComponentServices{
     };
 
     // User clicked Add Scenario in either a Feature or Feature Aspect -------------------------------------------------
-    addScenario(view, mode, parentComponent){
+    addScenario(view, mode, parentComponent, workPackageId){
 
         log((msg) => console.log(msg), LogLevel.DEBUG, 'CLIENT: Add Scenaro...');
 
@@ -340,6 +341,7 @@ class ClientDesignUpdateComponentServices{
             view,
             mode,
             parentComponent,
+            workPackageId,
             (err, result) => {
 
                 if(err){

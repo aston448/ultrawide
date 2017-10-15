@@ -452,7 +452,7 @@ Meteor.methods({
         ClientDesignComponentServices.updateComponentName(view, mode, feature1Component._id, 'Feature1', rawName);
 
         // Add ExtraAspect to Feature1
-        ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, feature1Component);
+        ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, feature1Component, 'NONE');
         const extraAspectComponent = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE_ASPECT, componentNameNew: DefaultComponentNames.NEW_FEATURE_ASPECT_NAME});
         rawName = DesignComponentModules.getRawTextFor('ExtraAspect');
         ClientDesignComponentServices.updateComponentName(view, mode, extraAspectComponent._id, 'ExtraAspect', rawName);

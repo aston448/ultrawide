@@ -31,7 +31,7 @@ Meteor.methods({
         }
 
 
-        const data = ClientDataServices.getComponentDataForParentComponent(componentType, view, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId, component._id, displayContext);
+        const data = ClientDataServices.getComponentDataForParentComponent(componentType, view, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId, component.componentReferenceId, displayContext);
 
         if(data) {
             switch (testCase) {

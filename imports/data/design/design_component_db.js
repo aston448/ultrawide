@@ -252,7 +252,7 @@ class DesignComponentData {
             {
                 designVersionId:                designVersionId,
                 componentType:                  childComponentType,
-                componentParentreferenceIdOld:  parentRefId,
+                componentParentReferenceIdOld:  parentRefId,
                 updateMergeStatus:              {$ne: UpdateMergeStatus.COMPONENT_ADDED}
             },
             {sort:{componentIndexOld: 1}}

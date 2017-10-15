@@ -26,10 +26,10 @@ import WorkPackageData              from '../../data/work/work_package_db.js';
 class DesignUpdateComponentModules{
 
     addDefaultFeatureAspects(designVersionId, designUpdateId, featureId, defaultRawText, view){
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', DesignComponentModules.getRawTextFor('Interface'), defaultRawText, false, view);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', DesignComponentModules.getRawTextFor('Actions'), defaultRawText, false, view);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', DesignComponentModules.getRawTextFor('Conditions'), defaultRawText, false, view);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, false, view);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, 'NONE', featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', DesignComponentModules.getRawTextFor('Interface'), defaultRawText, false, view);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, 'NONE', featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', DesignComponentModules.getRawTextFor('Actions'), defaultRawText, false, view);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, 'NONE', featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', DesignComponentModules.getRawTextFor('Conditions'), defaultRawText, false, view);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, 'NONE', featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, false, view);
     }
 
     // updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId){

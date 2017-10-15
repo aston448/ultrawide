@@ -7,7 +7,7 @@ class DesignUpdateComponentData{
 
     // INSERT ==========================================================================================================
 
-    insertNewUpdateComponent(designId, designVersionId, designUpdateId, componentType, componentLevel, parentRefId, featureRefId, defaultName, defaultRawName, defaultRawText, isNew, isChanged, devAdded, isScopable){
+    insertNewUpdateComponent(designId, designVersionId, designUpdateId, componentType, componentLevel, parentRefId, featureRefId, defaultName, defaultRawName, defaultRawText, isNew, isChanged, devAdded, workPackageId, isScopable){
 
         return DesignUpdateComponents.insert(
             {
@@ -39,6 +39,7 @@ class DesignUpdateComponentData{
                 isMoved:                        false,
                 isRemoved:                      false,
                 isDevAdded:                     devAdded,
+                workPackageId:                  workPackageId,
 
                 scopeType:                      UpdateScopeType.SCOPE_IN_SCOPE,                         // All new items are automatically in scope
                 isScopable:                     isScopable                                              // A Scopable item can be picked as part of a change

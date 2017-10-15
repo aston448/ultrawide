@@ -165,7 +165,7 @@ Meteor.methods({
             targetComponentName
         );
 
-        const outcome = ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, parentComponent, userContext.workPackageId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Aspect');
     },
@@ -187,7 +187,7 @@ Meteor.methods({
             targetComponentName
         );
 
-        const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent, userContext.workPackageId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Scenario to Feature');
     },
@@ -209,7 +209,7 @@ Meteor.methods({
             targetComponentName
         );
 
-        const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent, userContext.workPackageId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Scenario to Aspect');
     },

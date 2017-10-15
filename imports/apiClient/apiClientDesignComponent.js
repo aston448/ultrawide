@@ -267,7 +267,7 @@ class ClientDesignComponentServices{
     };
 
     // User clicked Add Feature Aspect inside a Feature ----------------------------------------------------------------
-    addFeatureAspectToFeature(view, mode, parentComponent){
+    addFeatureAspectToFeature(view, mode, parentComponent, workPackageId){
 
         // Client validation
         let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE_ASPECT);
@@ -284,6 +284,7 @@ class ClientDesignComponentServices{
             mode,
             parentComponent.designVersionId,
             parentComponent.componentReferenceId,
+            workPackageId,
             (err, result) => {
 
                 if(err){

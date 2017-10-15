@@ -504,7 +504,7 @@ class ClientWorkPackageServices {
         } else {
             view = ViewType.DEVELOP_UPDATE_WP;
         }
-
+console.log("Setting view to " + view);
         store.dispatch(setCurrentView(view));
 
         return {success: true, message: ''};

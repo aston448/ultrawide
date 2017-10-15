@@ -61,6 +61,29 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignComponents.featureAspectExistsCalled_InFeature_InDesign_DesignVersion_'(aspectName, featureName, designName, designVersionName){
+
+        const design = TestDataHelpers.getDesign(designName);
+        const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+
+        // This will error if not found
+        const aspect = TestDataHelpers.getDesignComponentWithParent(designVersion._id, ComponentType.FEATURE_ASPECT, featureName, aspectName);
+
+        return true;
+    },
+
+    'verifyDesignComponents.scenarioExistsCalled_InFeatureAspect_InDesign_DesignVersion_'(scenarioName, aspectName, designName, designVersionName){
+
+        const design = TestDataHelpers.getDesign(designName);
+        const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+
+        // This will error if not found
+        const aspect = TestDataHelpers.getDesignComponentWithParent(designVersion._id, ComponentType.SCENARIO, aspectName, scenarioName);
+
+        return true;
+    },
+
+
     'verifyDesignComponents.componentCountCalledIs'(componentType, componentName, designName, designVersionName, componentCount){
 
         const design = TestDataHelpers.getDesign(designName);
@@ -146,7 +169,7 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "Feature Component " + featureName + " not found for Design Version " + designVersionName);
         }
 
-        if(designComponent.componentFeatureReferenceIdNew != featureRef){
+        if(designComponent.componentFeatureReferenceIdNew !== featureRef){
             throw new Meteor.Error("FAIL", "Expected feature reference to be " + featureRef + " but got " + designComponent.componentFeatureReferenceIdNew + " for component " + componentName);
         } else {
             return true;
@@ -159,7 +182,7 @@ Meteor.methods({
 
         const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
 
-        if(designComponent.componentLevel != componentLevel){
+        if(designComponent.componentLevel !== componentLevel){
             throw new Meteor.Error("FAIL", "Expected level to be " + componentLevel + " but got " + designComponent.componentLevel);
         } else {
             return true;

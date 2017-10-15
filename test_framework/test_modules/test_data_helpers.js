@@ -115,7 +115,7 @@ class TestDataHelpers {
         const userContext = UserContext.findOne({userId: user.userId});
 
         if(!userContext){
-            throw new Meteor.Error("FAIL", "User Context not found for " + userName);
+            throw new Meteor.Error("FAIL", "User Context not found for " + userName + " with id " + user.userId);
         }
 
         return userContext;
@@ -426,7 +426,7 @@ class TestDataHelpers {
 
         if(!designUpdateComponent){
             //console.log("Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName)
-            throw new Meteor.Error("FAIL", "Design Update Component " + componentType + " : " + componentName + " not found with new parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+            throw new Meteor.Error("FAIL DU", "Design Update Component " + componentType + " : " + componentName + " not found with new parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
         }
 
         return designUpdateComponent;
@@ -541,7 +541,7 @@ class TestDataHelpers {
                 // There should not be a Design Component if there is no WP component as the name comes from the base Design, not the WP
                 return true;
             } else {
-                throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+                throw new Meteor.Error("FAIL WP", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
             }
         }
 

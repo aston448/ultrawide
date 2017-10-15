@@ -104,7 +104,7 @@ Meteor.methods({
         // And the parent component
         const featureComponent = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE, componentNameNew: featureName});
 
-        const outcome = ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureComponent);
+        const outcome = ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureComponent, 'NONE');
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Aspect to Feature');
     },
@@ -138,7 +138,7 @@ Meteor.methods({
         const component = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: oldName});
         const rawName = DesignComponentModules.getRawTextFor(newName);
 
-        const outcome = ClientDesignComponentServices.updateComponentName(view, mode, component._id, newName, rawName)
+        const outcome = ClientDesignComponentServices.updateComponentName(view, mode, component._id, newName, rawName);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Component Name');
     },

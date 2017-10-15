@@ -80,14 +80,15 @@ class ServerDesignComponentApi {
         );
     }
 
-    addFeatureAspectToFeature(view, mode, designVersionId, parentRefId, callback){
+    addFeatureAspectToFeature(view, mode, designVersionId, parentRefId, workPackageId, callback){
 
         addFeatureAspectToFeature.call(
             {
                 view: view,
                 mode: mode,
                 designVersionId: designVersionId,
-                parentRefId: parentRefId
+                parentRefId: parentRefId,
+                workPackageId
             },
             (err, result) => {
                 callback(err, result);

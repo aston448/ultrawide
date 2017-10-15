@@ -181,10 +181,11 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
         view:               {type: String},
         mode:               {type: String},
         designVersionId:    {type: String},
-        parentRefId:        {type: String}
+        parentRefId:        {type: String},
+        workPackageId:      {type: String}
     }).validator(),
 
-    run({view, mode, designVersionId, parentRefId}){
+    run({view, mode, designVersionId, parentRefId, workPackageId}){
 
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE_ASPECT);
@@ -204,7 +205,8 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_FEATURE_ASPECT_NAME),
                 DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_FEATURE_ASPECT_DETAILS),
                 true,
-                view
+                view,
+                workPackageId
             );
         } catch (e) {
             console.log(e.stack);

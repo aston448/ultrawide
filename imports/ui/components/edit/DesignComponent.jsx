@@ -447,15 +447,16 @@ export class DesignComponent extends Component{
     }
 
     // Add a new Feature Aspect to a Feature
-    addFeatureAspectToFeature(view, mode, featureItem){
+    addFeatureAspectToFeature(view, mode, featureItem, userContext){
 
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DEVELOP_BASE_WP:
-                ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureItem);
+                ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureItem, userContext.workPackageId);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
-                ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, featureItem);
+            case ViewType.DEVELOP_UPDATE_WP:
+                ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, featureItem, userContext.workPackageId);
                 break;
         }
     }
@@ -469,10 +470,8 @@ export class DesignComponent extends Component{
                 ClientDesignComponentServices.addScenario(view, mode, parentItem, userContext.workPackageId);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
-                ClientDesignUpdateComponentServices.addScenario(view, mode, parentItem);
-                break;
             case ViewType.DEVELOP_UPDATE_WP:
-                // TODO
+                ClientDesignUpdateComponentServices.addScenario(view, mode, parentItem, userContext.workPackageId);
                 break;
         }
     }
@@ -743,7 +742,7 @@ export class DesignComponent extends Component{
                                             <td id="addFeatureAspect" className="control-table-data-feature-aspect">
                                                 <DesignComponentAdd
                                                     addText="Add feature aspect"
-                                                    onClick={ () => this.addFeatureAspectToFeature(view, mode, currentItem)}
+                                                    onClick={ () => this.addFeatureAspectToFeature(view, mode, currentItem, userContext)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>

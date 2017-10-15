@@ -73,8 +73,8 @@ describe('UC 381 - Add New Component To Work Package - Base Design', function(){
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
         WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
 
-        // Verify - can select new Feature Aspect
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        // Verify - new FA in WP
+        expect(WpComponentVerifications.componentIsInDeveloperCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
     });
 
     it('A Developer can add a new Scenario to a Base Design Version Work Package Feature Aspect', function(){
@@ -90,8 +90,8 @@ describe('UC 381 - Add New Component To Work Package - Base Design', function(){
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
 
-        // Verify - can select new Scenario
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+        // Verify - new Scenario in WP
+        expect(WpComponentVerifications.componentIsInDeveloperCurrentWp(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME));
     });
 
 
@@ -258,8 +258,8 @@ describe('UC 381 - Add New Component To Work Package - Design Update', function(
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
         WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
 
-        // Verify - can select new Feature Aspect
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        // Verify - new FA in WP
+        expect(WpComponentVerifications.componentIsInDeveloperCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
     });
 
     it('A Developer can add a new Scenario to a Design Update Work Package Feature Aspect', function(){
@@ -276,8 +276,8 @@ describe('UC 381 - Add New Component To Work Package - Design Update', function(
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
         WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
 
-        // Verify - can select new Scenario
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+        // Verify - new Scenario in WP
+        expect(WpComponentVerifications.componentIsInDeveloperCurrentWp(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME));
     });
 
 

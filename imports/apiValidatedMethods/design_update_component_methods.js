@@ -39,6 +39,7 @@ export const addApplicationToDesignVersion = new ValidatedMethod({
                 designVersionId,
                 designUpdateId,
                 'NONE',
+                'NONE',
                 ComponentType.APPLICATION,
                 0,                          // Apps are at level 0
                 DefaultComponentNames.NEW_APPLICATION_NAME,
@@ -78,6 +79,7 @@ export const addDesignSectionToApplication = new ValidatedMethod({
             DesignUpdateComponentServices.addNewComponent(
                 parentComponent.designVersionId,
                 parentComponent.designUpdateId,
+                'NONE',
                 parentComponent.componentReferenceId,
                 ComponentType.DESIGN_SECTION,
                 1,
@@ -118,6 +120,7 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
             DesignUpdateComponentServices.addNewComponent(
                 parentComponent.designVersionId,
                 parentComponent.designUpdateId,
+                'NONE',
                 parentComponent.componentReferenceId,
                 ComponentType.DESIGN_SECTION,
                 parentComponent.componentLevel + 1,
@@ -158,6 +161,7 @@ export const addFeatureToDesignSection = new ValidatedMethod({
             DesignUpdateComponentServices.addNewComponent(
                 parentComponent.designVersionId,
                 parentComponent.designUpdateId,
+                'NONE',
                 parentComponent.componentReferenceId,
                 ComponentType.FEATURE,
                 0,
@@ -181,10 +185,11 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         mode:               {type: String},
-        parentComponent:    {type: Object, blackbox: true}
+        parentComponent:    {type: Object, blackbox: true},
+        workPackageId:      {type: String}
     }).validator(),
 
-    run({view, mode, parentComponent}){
+    run({view, mode, parentComponent, workPackageId}){
 
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.FEATURE_ASPECT);
@@ -198,6 +203,7 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
             DesignUpdateComponentServices.addNewComponent(
                 parentComponent.designVersionId,
                 parentComponent.designUpdateId,
+                workPackageId,
                 parentComponent.componentReferenceId,
                 ComponentType.FEATURE_ASPECT,
                 0,
@@ -223,10 +229,11 @@ export const addScenario = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         mode:               {type: String},
-        parentComponent:    {type: Object, blackbox: true}
+        parentComponent:    {type: Object, blackbox: true},
+        workPackageId:      {type: String}
     }).validator(),
 
-    run({view, mode, parentComponent}){
+    run({view, mode, parentComponent, workPackageId}){
 
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.SCENARIO);
@@ -240,6 +247,7 @@ export const addScenario = new ValidatedMethod({
             DesignUpdateComponentServices.addNewComponent(
                 parentComponent.designVersionId,
                 parentComponent.designUpdateId,
+                workPackageId,
                 parentComponent.componentReferenceId,
                 ComponentType.SCENARIO,
                 0,

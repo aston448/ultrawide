@@ -8,12 +8,14 @@ import DesignServices               from '../design/design_services.js';
 import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
 import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
+import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
 
 // Data Access
 import DesignVersionData            from '../../data/design/design_version_db.js';
 import DesignComponentData          from '../../data/design/design_component_db.js';
 import DesignUpdateData             from '../../data/design_update/design_update_db.js';
 import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
+import WorkPackageData              from '../../data/work/work_package_db.js';
 
 //======================================================================================================================
 //
@@ -26,11 +28,11 @@ import DesignUpdateComponentData    from '../../data/design_update/design_update
 class DesignUpdateComponentServices{
 
     // Add a new design update component to design update
-    addNewComponent(designVersionId, designUpdateId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false){
+    addNewComponent(designVersionId, designUpdateId, workPackageId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false){
 
         if(Meteor.isServer) {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, 'Adding Update {} Component', componentType);
+            log((msg) => console.log(msg), LogLevel.INFO, 'Adding Update {} Component in view {}', componentType, view);
 
             // Get the parent reference id (if there is a parent)
             let featureRefId = 'NONE';
@@ -64,6 +66,7 @@ class DesignUpdateComponentServices{
                 isNew,
                 isChanged,
                 devAdded,
+                workPackageId,
                 DesignUpdateModules.isScopable(componentType)
             );
 
@@ -111,6 +114,19 @@ class DesignUpdateComponentServices{
                     // Update the Working Design Version if update is for Merging
                     log((msg) => console.log(msg), LogLevel.DEBUG, '  Updating DV...');
                     DesignUpdateComponentModules.updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId);
+                }
+
+                // Add Dev Added Aspects and Scenarios to WP
+                log((msg) => console.log(msg), LogLevel.INFO, '  DEV ADDED {} and WP is {}', devAdded, workPackageId);
+
+                if(devAdded && workPackageId !== 'NONE' && (componentType === ComponentType.FEATURE_ASPECT || componentType === ComponentType.SCENARIO)){
+
+                    const wp = WorkPackageData.getWorkPackageById(workPackageId);
+                    const component = DesignUpdateComponentData.getUpdateComponentById(newUpdateComponentId);
+                    const parent = DesignUpdateComponentData.getUpdateComponentByRef(component.designVersionId, component.designUpdateId, component.componentParentReferenceIdNew);
+
+                    WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, parent._id, designVersionId);
+                    log((msg) => console.log(msg), LogLevel.INFO, '  Added component {} to WP {}', component.componentNameNew, wp.workPackageName);
                 }
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting parent removability...');
