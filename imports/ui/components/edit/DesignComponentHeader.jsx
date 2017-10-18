@@ -135,9 +135,9 @@ export class DesignComponentHeader extends Component{
 
 
         switch (this.props.view) {
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
                 return !(
@@ -215,7 +215,7 @@ export class DesignComponentHeader extends Component{
 
         // New untouched items are editable by default as they need to be changed
         switch (this.props.view) {
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DEVELOP_UPDATE_WP:
@@ -242,9 +242,9 @@ export class DesignComponentHeader extends Component{
     componentWillReceiveProps(newProps){
 
         switch (newProps.view) {
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
                 if (newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew) {
                     this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                 }
@@ -373,12 +373,12 @@ export class DesignComponentHeader extends Component{
             let existingRawText = null;
 
             switch (props.view) {
-                case ViewType.DESIGN_NEW_EDIT:
-                case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_NEW:
+                case ViewType.DESIGN_PUBLISHED:
 
                     existingRawText = props.currentItem.componentNameRawNew;
                     break;
-                case ViewType.DESIGN_UPDATABLE_VIEW:
+                case ViewType.DESIGN_UPDATABLE:
                     // If there is an item whose name has changed then create a new editor entry showing both
                     if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
                         existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
@@ -557,7 +557,7 @@ export class DesignComponentHeader extends Component{
 
         // What is saved depends on the context
         switch (view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
             case ViewType.DEVELOP_BASE_WP:
                 // Updates to the base design
                 result = ClientDesignComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
@@ -582,7 +582,7 @@ export class DesignComponentHeader extends Component{
     deleteRestoreComponent(view, mode, item, userContext){
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
             case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.removeDesignComponent(view, mode, item, userContext);
                 break;
@@ -1447,8 +1447,8 @@ export class DesignComponentHeader extends Component{
 
                     if(testSummaryData) {
                         switch(view){
-                            case ViewType.DESIGN_PUBLISHED_VIEW:
-                            case ViewType.DESIGN_UPDATABLE_VIEW:
+                            case ViewType.DESIGN_PUBLISHED:
+                            case ViewType.DESIGN_UPDATABLE:
                             case ViewType.DESIGN_UPDATE_EDIT:           // Scope pane
                             case ViewType.WORK_PACKAGE_BASE_EDIT:       // Scope pane
                                 // Whole DV
@@ -1627,7 +1627,7 @@ const componentSource = {
                 log((msg) => console.log(msg), LogLevel.TRACE, "DROP - MOVE");
 
                 switch (props.view) {
-                    case ViewType.DESIGN_NEW_EDIT:
+                    case ViewType.DESIGN_NEW:
                         // Validates drop allowed and then moves component
                         ClientDesignComponentServices.moveDesignComponent(props.view, props.mode, props.displayContext, item.component._id, dropResult.targetItem._id);
                         break;
@@ -1640,7 +1640,7 @@ const componentSource = {
                 log((msg) => console.log(msg), LogLevel.TRACE, "DROP - REORDER");
 
                 switch (props.view) {
-                    case ViewType.DESIGN_NEW_EDIT:
+                    case ViewType.DESIGN_NEW:
                         ClientDesignComponentServices.reorderDesignComponent(props.view, props.mode, props.displayContext, item.component._id, dropResult.targetItem._id);
                         break;
                     case ViewType.DESIGN_UPDATE_EDIT:

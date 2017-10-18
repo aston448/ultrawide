@@ -117,13 +117,13 @@ export class DesignApplicationsList extends Component {
         // Get the correct display context
         let displayContext = DisplayContext.BASE_VIEW;
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
                 displayContext = DisplayContext.BASE_EDIT;
                 break;
-            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_PUBLISHED:
                 displayContext = DisplayContext.BASE_VIEW;
                 break;
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_UPDATABLE:
                 displayContext = DisplayContext.WORKING_VIEW;
                 break;
         }
@@ -152,7 +152,7 @@ export class DesignApplicationsList extends Component {
         let applications = [];
 
         // Display working version if in the updatable version view
-        if(view === ViewType.DESIGN_UPDATABLE_VIEW){
+        if(view === ViewType.DESIGN_UPDATABLE){
             applications = workingApplications;
         } else {
            applications = baseApplications;
@@ -483,9 +483,9 @@ export class DesignApplicationsList extends Component {
 
                 let col2 = '';
                 switch(view){
-                    case ViewType.DESIGN_NEW_EDIT:
-                    case ViewType.DESIGN_PUBLISHED_VIEW:
-                    case ViewType.DESIGN_UPDATABLE_VIEW:
+                    case ViewType.DESIGN_NEW:
+                    case ViewType.DESIGN_PUBLISHED:
+                    case ViewType.DESIGN_UPDATABLE:
                         col2 =
                             <Col id="column2" md={col2width} className="close-col">
                                 <Tabs defaultActiveKey={1} id="updatable-view_tabs">

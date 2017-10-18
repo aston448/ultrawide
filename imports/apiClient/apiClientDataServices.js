@@ -337,9 +337,9 @@ class ClientDataServices{
                     break;
 
                 case ViewType.SELECT:
-                case ViewType.DESIGN_NEW_EDIT:
-                case ViewType.DESIGN_PUBLISHED_VIEW:
-                case ViewType.DESIGN_UPDATABLE_VIEW:
+                case ViewType.DESIGN_NEW:
+                case ViewType.DESIGN_PUBLISHED:
+                case ViewType.DESIGN_UPDATABLE:
                     // Get the current design version which should be set for these views
                     currentDesign = DesignData.getDesignById(userContext.designId);
                     currentDesignVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
@@ -699,9 +699,9 @@ class ClientDataServices{
         }
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
                 // Just need base design version applications
                 return{
                     baseApplications:       baseApplicationsArr,
@@ -770,15 +770,15 @@ class ClientDataServices{
         } else {
 
             switch (view) {
-                case ViewType.DESIGN_NEW_EDIT:
-                case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_NEW:
+                case ViewType.DESIGN_PUBLISHED:
 
                     // Don't include removed components in this view if a completed updatable version
                     currentComponents = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, childComponentType, parentRefId);
 
                     return currentComponents;
 
-                case ViewType.DESIGN_UPDATABLE_VIEW:
+                case ViewType.DESIGN_UPDATABLE:
 
                     switch (displayContext) {
                         case DisplayContext.MASH_UNIT_TESTS:
@@ -939,9 +939,9 @@ class ClientDataServices{
     //     let featureInScope = true;
     //
     //     switch(view){
-    //         case ViewType.DESIGN_NEW_EDIT:
-    //         case ViewType.DESIGN_PUBLISHED_VIEW:
-    //         case ViewType.DESIGN_UPDATABLE_VIEW:
+    //         case ViewType.DESIGN_NEW:
+    //         case ViewType.DESIGN_PUBLISHED:
+    //         case ViewType.DESIGN_UPDATABLE:
     //         case ViewType.WORK_PACKAGE_BASE_EDIT:
     //         case ViewType.WORK_PACKAGE_BASE_VIEW:
     //         case ViewType.DEVELOP_BASE_WP:
@@ -1044,9 +1044,9 @@ class ClientDataServices{
     //     let scenarioInScope = true;
     //
     //     switch(view){
-    //         case ViewType.DESIGN_NEW_EDIT:
-    //         case ViewType.DESIGN_PUBLISHED_VIEW:
-    //         case ViewType.DESIGN_UPDATABLE_VIEW:
+    //         case ViewType.DESIGN_NEW:
+    //         case ViewType.DESIGN_PUBLISHED:
+    //         case ViewType.DESIGN_UPDATABLE:
     //         case ViewType.WORK_PACKAGE_BASE_EDIT:
     //         case ViewType.WORK_PACKAGE_BASE_VIEW:
     //         case ViewType.DEVELOP_BASE_WP:
@@ -1150,12 +1150,12 @@ class ClientDataServices{
         if(userContext && userContext.designComponentId !== 'NONE') {
 
             switch(view){
-                case ViewType.DESIGN_NEW_EDIT:
-                case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_NEW:
+                case ViewType.DESIGN_PUBLISHED:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
-                case ViewType.DESIGN_UPDATABLE_VIEW:
+                case ViewType.DESIGN_UPDATABLE:
 
                     selectedDesignComponent = DesignComponentData.getDesignComponentById(userContext.designComponentId);
 
@@ -1404,8 +1404,8 @@ class ClientDataServices{
 
         // Get the correct user view options for the view context
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
                 detailsValue = userViewOptions.designDetailsVisible;
                 dictOption = ViewOptionType.DESIGN_DICT;
@@ -1419,7 +1419,7 @@ class ClientDataServices{
                 allAsTabsOption = ViewOptionType.DESIGN_ALL_AS_TABS;
                 allAsTabsValue = userViewOptions.designShowAllAsTabs;
                 break;
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_UPDATABLE:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
                 detailsValue = userViewOptions.designDetailsVisible;
                 dictOption = ViewOptionType.DESIGN_DICT;
@@ -1732,9 +1732,9 @@ class ClientDataServices{
                 }
                 break;
 
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
                         return  [

@@ -125,9 +125,9 @@ export class DesignEditorHeader extends Component {
                 }
                 break;
 
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
 
                 description = nameData.designVersion;
                 break;
@@ -190,7 +190,7 @@ export class DesignEditorHeader extends Component {
                 options = '';
                 break;
 
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
 
                 options =
                     <div className="details-menu-bar">
@@ -277,8 +277,8 @@ export class DesignEditorHeader extends Component {
                 }
                 break;
 
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
 
                 options =
                     <div className="details-menu-bar">

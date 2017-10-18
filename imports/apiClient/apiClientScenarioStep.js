@@ -31,7 +31,7 @@
 //         // Validate - can only add if design is editable and for in-scope update features
 //         log((msg)=> console.log(msg), LogLevel.TRACE, "Adding feature step with view: {} and mode: {} and in scope: {}", view, mode , featureInScope);
 //
-//         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && featureInScope){
+//         if((view === ViewType.DESIGN_NEW  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && featureInScope){
 //             Meteor.call('scenario.addNewFeatureBackgroundStep', featureReferenceId, userItemContext, featureInScope);
 //             return true;
 //         } else {
@@ -45,7 +45,7 @@
 //         // Validate - can only add if design is editable and for in-scope update scenarios
 //         log((msg)=> console.log(msg), LogLevel.TRACE, "Adding scenario step with view: {} and mode: {} and in scope: {}", view, mode , scenarioInScope);
 //
-//         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && scenarioInScope){
+//         if((view === ViewType.DESIGN_NEW  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && scenarioInScope){
 //             Meteor.call('scenario.addNewScenarioStep', scenarioReferenceId, userContext, scenarioInScope);
 //             return true;
 //         } else {
@@ -66,7 +66,7 @@
 //         // Validate - can only remove if design is editable and for in-scope update scenarios
 //         log((msg)=> console.log(msg), LogLevel.TRACE, "Removing scenario step with view: {} and mode: {} and in scope: {}", view, mode , parentInScope);
 //
-//         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope) {
+//         if((view === ViewType.DESIGN_NEW  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope) {
 //             Meteor.call('scenario.removeScenarioStep', stepId, stepContext);
 //         } else {
 //             return false;
@@ -90,7 +90,7 @@
 //
 //         log((msg)=> console.log(msg), LogLevel.TRACE, "Saving scenario step {} text with view: {} and mode: {} and in scope: {}", stepId, view, mode , parentInScope);
 //         // Validate - can only update if design is editable and for in-scope update scenarios
-//         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope){
+//         if((view === ViewType.DESIGN_NEW  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope){
 //             log((msg)=> console.log(msg), LogLevel.TRACE, "Saving scenario step text {} with context {}", newRawText.blocks[0].text, stepContext);
 //
 //             Meteor.call('scenario.updateScenarioStepText', stepId, stepType, newPlainText, newRawText, stepContext);
@@ -107,7 +107,7 @@
 //         log((msg) => console.log(msg), LogLevel.TRACE, "Moving scenario step.  View: {} Mode: {} Context: {}", view, mode, context);
 //
 //         // Validation - must be editing new design in edit mode and component must be allowed to drop...
-//         if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT && context === DisplayContext.BASE_EDIT &&
+//         if(view === ViewType.DESIGN_NEW && mode === ViewMode.MODE_EDIT && context === DisplayContext.BASE_EDIT &&
 //             reorderDropAllowed(
 //                 movingComponent,
 //                 targetComponent)

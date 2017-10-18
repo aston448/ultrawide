@@ -287,7 +287,7 @@ class TestOutputLocationServices {
         });
     };
 
-    uploadTestResultsFile(blob, name, locationName, encoding){
+    uploadTestResultsFile(blob, name, locationName) {
 
         if(Meteor.isServer){
 
@@ -301,11 +301,18 @@ class TestOutputLocationServices {
                 throw new Meteor.Error('TEST_UPLOAD_FAIL', 'Invalid location path: ' + location.locationFullPath);
             }
 
+            let fileText = '';
+
+            // This is a string if uploaded locally and a json object if remote from CI
+            if(typeof blob === "string"){
+                fileText = blob;
+            } else {
+                fileText = JSON.stringify(blob, null, 2);
+            }
+
             console.log("Writing file: " + location.locationFullPath + name);
 
-            let text = JSON.stringify(blob, null, 2);
-
-            fs.writeFileSync(location.locationFullPath + name, text, 'utf8');
+            fs.writeFileSync(location.locationFullPath + name, fileText, 'utf8');
 
             this.updateResultsFileStatuses(location);
         }

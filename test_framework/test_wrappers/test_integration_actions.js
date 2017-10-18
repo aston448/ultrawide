@@ -13,7 +13,7 @@ class TestIntegrationActions {
 
     designerRefreshesTestResultsForBaseDesignVersion(expectation){
 
-        server.call('testIntegration.refreshTestResults', ViewType.DESIGN_PUBLISHED_VIEW, RoleType.DESIGNER, 'gloria', expectation);
+        server.call('testIntegration.refreshTestResults', ViewType.DESIGN_PUBLISHED, RoleType.DESIGNER, 'gloria', expectation);
     };
 
     designerRefreshesTestResultsForDesignUpdateView(expectation){

@@ -165,9 +165,9 @@ export default class Narrative extends React.Component {
 
         // // The design component passed in is the original Design component for WPs
         // switch(props.view){
-        //     case ViewType.DESIGN_NEW_EDIT:
-        //     case ViewType.DESIGN_PUBLISHED_VIEW:
-        //     case ViewType.DESIGN_UPDATABLE_VIEW:
+        //     case ViewType.DESIGN_NEW:
+        //     case ViewType.DESIGN_PUBLISHED:
+        //     case ViewType.DESIGN_UPDATABLE:
         //     case ViewType.WORK_PACKAGE_BASE_VIEW:
         //     case ViewType.WORK_PACKAGE_BASE_EDIT:
         //     case ViewType.DEVELOP_BASE_WP:
@@ -271,7 +271,7 @@ export default class Narrative extends React.Component {
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
                 ClientDesignComponentServices.updateFeatureNarrative(view, mode, this.props.designComponent._id, plainText, rawText);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:

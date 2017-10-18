@@ -32,9 +32,9 @@ export const ViewType = {
     CONFIGURE:                  'CONFIGURE',                // Change user settings
     DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
     SELECT:                     'SELECT',                   // Home Selection Screen once in a Design
-    DESIGN_NEW_EDIT:            'DESIGN_NEW_EDIT',          // Edit an unpublished design version
-    DESIGN_PUBLISHED_VIEW:      'DESIGN_PUBLISHED_VIEW',    // View a published Initial Design Version
-    DESIGN_UPDATABLE_VIEW:      'DESIGN_UPDATABLE_VIEW',    // View progress on an Updatable Design Version
+    DESIGN_NEW:                 'DESIGN_NEW',               // An unpublished design version
+    DESIGN_PUBLISHED:           'DESIGN_PUBLISHED',         // A published Initial Design Version
+    DESIGN_UPDATABLE:           'DESIGN_UPDATABLE',         // An Updatable Design Version - not directly editable
     DESIGN_UPDATE_EDIT:         'DESIGN_UPDATE_EDIT',       // Edit a Design Update
     DESIGN_UPDATE_VIEW:         'DESIGN_UPDATE_VIEW',       // View a Design Update
     WORK_PACKAGE_BASE_EDIT:     'WORK_PACKAGE_BASE_EDIT',   // Edit a Work Package content for a Design Version

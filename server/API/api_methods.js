@@ -40,7 +40,7 @@ Meteor.methods({
 
         try{
             UserManagementServices.verifyApiKey(key);
-            TestOutputLocationServices.uploadTestResultsFile(locationFile, name, location, 'binary');
+            TestOutputLocationServices.uploadTestResultsFile(locationFile, name, location);
         } catch (e) {
             throw new Meteor.Error('API_UPLOAD_FILE_ERR', e.reason)
         }

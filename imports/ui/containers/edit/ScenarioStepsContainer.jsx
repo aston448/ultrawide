@@ -94,7 +94,7 @@
 //         // Adding new steps is allowed if in an editing context or work package development and not looking at background steps in a scenario
 //
 //         switch(view){
-//             case ViewType.DESIGN_NEW_EDIT:
+//             case ViewType.DESIGN_NEW:
 //             case ViewType.DESIGN_UPDATE_EDIT:
 //                 if(mode === ViewMode.MODE_EDIT && parentInScope && stepContext != StepContext.STEP_FEATURE_SCENARIO && displayContext != DisplayContext.BASE_VIEW){
 //                     addOn = addScenarioStep;

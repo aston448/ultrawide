@@ -15,7 +15,7 @@ describe('VAL: Design Component', () => {
 
         it('an application cannot be added when view mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.APPLICATION;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_ADD;
@@ -27,7 +27,7 @@ describe('VAL: Design Component', () => {
 
         it('an application cannot be added when viewing', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.APPLICATION;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_ADD;
@@ -39,7 +39,7 @@ describe('VAL: Design Component', () => {
 
         it('a design section cannot be added when view mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.DESIGN_SECTION;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_ADD;
@@ -51,7 +51,7 @@ describe('VAL: Design Component', () => {
 
         it('a design section cannot be added when viewing', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.DESIGN_SECTION;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_ADD;
@@ -63,7 +63,7 @@ describe('VAL: Design Component', () => {
 
         it('a feature aspect cannot be added when view mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.FEATURE_ASPECT;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_ADD;
@@ -75,7 +75,7 @@ describe('VAL: Design Component', () => {
 
         it('a feature aspect cannot be added when viewing', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.FEATURE_ASPECT;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_ADD;
@@ -90,7 +90,7 @@ describe('VAL: Design Component', () => {
 
         it('a feature cannot be added when view mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.FEATURE;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_ADD;
@@ -102,7 +102,7 @@ describe('VAL: Design Component', () => {
 
         it('a feature cannot be added when viewing', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.FEATURE;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_ADD;
@@ -114,7 +114,7 @@ describe('VAL: Design Component', () => {
 
         it('a scenario cannot be added when view mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.SCENARIO;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_ADD;
@@ -126,7 +126,7 @@ describe('VAL: Design Component', () => {
 
         it('a scenario cannot be added when viewing', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.SCENARIO;
             const expectation = DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_ADD;
@@ -141,7 +141,7 @@ describe('VAL: Design Component', () => {
 
         it('an application cannot be removed in view only mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const component = {
                 componentType:  ComponentType.APPLICATION,
@@ -157,7 +157,7 @@ describe('VAL: Design Component', () => {
 
         it('a design section cannot be removed in view only mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const component = {
                 componentType:  ComponentType.DESIGN_SECTION,
@@ -173,7 +173,7 @@ describe('VAL: Design Component', () => {
 
         it('a feature cannot be removed in view only mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const component = {
                 componentType:  ComponentType.FEATURE,
@@ -189,7 +189,7 @@ describe('VAL: Design Component', () => {
 
         it('a feature aspect cannot be removed in view only mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const component = {
                 componentType:  ComponentType.FEATURE_ASPECT,
@@ -205,7 +205,7 @@ describe('VAL: Design Component', () => {
 
         it('a scenario cannot be removed in view only mode', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const component = {
                 componentType:  ComponentType.SCENARIO,

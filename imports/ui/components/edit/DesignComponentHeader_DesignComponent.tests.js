@@ -56,7 +56,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -69,7 +69,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -82,7 +82,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -99,7 +99,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -112,7 +112,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -125,7 +125,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -142,7 +142,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -156,7 +156,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -170,7 +170,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -184,7 +184,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -198,7 +198,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -212,7 +212,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -226,7 +226,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -240,7 +240,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -258,7 +258,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -271,7 +271,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -287,7 +287,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -300,7 +300,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -313,7 +313,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -326,7 +326,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -339,7 +339,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -356,7 +356,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -372,7 +372,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -388,7 +388,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -404,7 +404,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -420,7 +420,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -439,7 +439,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -455,7 +455,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -471,7 +471,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -487,7 +487,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -503,7 +503,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -523,7 +523,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -536,7 +536,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -549,7 +549,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -562,7 +562,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -575,7 +575,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -591,7 +591,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -604,7 +604,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -617,7 +617,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -630,7 +630,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -643,7 +643,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -661,7 +661,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -674,7 +674,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -687,7 +687,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -700,7 +700,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -713,7 +713,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -729,7 +729,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -742,7 +742,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -755,7 +755,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -768,7 +768,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -781,7 +781,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -799,7 +799,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -812,7 +812,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -825,7 +825,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -838,7 +838,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -851,7 +851,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -867,7 +867,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -880,7 +880,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -893,7 +893,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -906,7 +906,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -919,7 +919,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -935,7 +935,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -948,7 +948,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -961,7 +961,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -974,7 +974,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -987,7 +987,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
@@ -1004,7 +1004,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
@@ -1017,7 +1017,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
@@ -1030,7 +1030,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
@@ -1042,7 +1042,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
@@ -1055,7 +1055,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
@@ -1068,7 +1068,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
@@ -1083,7 +1083,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
@@ -1096,7 +1096,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
@@ -1109,7 +1109,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
@@ -1121,7 +1121,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
@@ -1134,7 +1134,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
@@ -1147,7 +1147,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
 
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
@@ -1183,7 +1183,7 @@ describe('JSX: DesignComponentHeader', () => {
                 onToggleOpen={onToggleOpen}
                 onSelectItem={onSelectItem}
                 mode={ViewMode.MODE_VIEW}
-                view={ViewType.DESIGN_UPDATABLE_VIEW}
+                view={ViewType.DESIGN_UPDATABLE}
                 displayContext={DisplayContext.WORKING_VIEW}
                 userContext={userContext}
                 testSummary={testSummary}

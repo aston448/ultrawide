@@ -70,9 +70,9 @@ export class DetailsViewHeader extends Component {
         let tabs = false;
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
                 tabs = userViewOptions.designShowAllAsTabs;
                 break;
             case ViewType.DESIGN_UPDATE_VIEW:

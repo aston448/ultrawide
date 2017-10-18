@@ -56,8 +56,8 @@ export class TestSummary extends Component {
             let noTestCount = 0;
 
             switch(view){
-                case ViewType.DESIGN_PUBLISHED_VIEW:
-                case ViewType.DESIGN_UPDATABLE_VIEW:
+                case ViewType.DESIGN_PUBLISHED:
+                case ViewType.DESIGN_UPDATABLE:
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:       // Scope pane
                     // Whole DV

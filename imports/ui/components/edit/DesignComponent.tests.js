@@ -52,7 +52,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};  // Context has current item id
 
@@ -69,7 +69,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'anotherComponentId'};  // Context has different item id
 
@@ -90,7 +90,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'component1Id'}; // Item 1 is in user context
 
@@ -110,7 +110,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -132,7 +132,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -153,7 +153,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -174,7 +174,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -195,7 +195,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -216,7 +216,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -234,7 +234,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -252,7 +252,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -273,7 +273,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -291,7 +291,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -312,7 +312,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -331,7 +331,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -353,7 +353,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -372,7 +372,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -393,7 +393,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -412,7 +412,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -431,7 +431,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 
@@ -450,7 +450,7 @@ describe('JSX: DesignComponent', () => {
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
 

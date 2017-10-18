@@ -189,7 +189,7 @@ export class TextEditor extends Component {
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
                 ClientTextEditorServices.saveDesignComponentText(role, designComponent._id, rawText);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -267,7 +267,7 @@ export class TextEditor extends Component {
                         detailsEditable = true;
                     }
                     break;
-                case ViewType.DESIGN_NEW_EDIT:
+                case ViewType.DESIGN_NEW:
                     detailsEditable = true;
                     break;
             }

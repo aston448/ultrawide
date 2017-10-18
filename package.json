@@ -7,6 +7,7 @@
     "start-test": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_test/\" meteor -p 3030 run",
     "start-branch": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_branch/\" meteor -p 3040 run",
     "test": "meteor test --once  --driver-package dispatch:mocha",
+    "test:unit-local": "SERVER_TEST_REPORTER=/Users/aston/WebstormProjects/ultrawide-mocha-reporter OUTPUT_FILE=test_results/unit_results.json CONSOLE=ON meteor test --once  --driver-package dispatch:mocha",
     "test:unit": "SERVER_TEST_REPORTER=$PWD/node_modules/ultrawide-mocha-reporter OUTPUT_FILE=/.test_results/unit_results.json CONSOLE=ON meteor test --once  --driver-package dispatch:mocha",
     "test:unit:3030": "SERVER_TEST_REPORTER=/usr/local/lib/node_modules/ultrawide-mocha-reporter OUTPUT_FILE=.test_results/unit_results.json CONSOLE=ON meteor -p 3030 test --once  --driver-package dispatch:mocha",
     "chimp:int_server_des": "chimp .config/chimp_des.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/100_designs",
@@ -19,30 +20,30 @@
     "chimp:int_client": "chimp .config/chimp_client.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_client"
   },
   "dependencies": {
-    "babel-runtime": "^6.25.0",
+    "babel-runtime": "^6.26.0",
     "bcrypt": "^0.8.7",
     "classnames": "^2.2.5",
     "draft-js": "^0.8.1",
     "meteor-node-stubs": "^0.2.11",
     "node-jsdom": "^3.1.5",
-    "prop-types": "^15.5.10",
-    "react": "^15.6.1",
-    "react-addons-pure-render-mixin": "^15.6.0",
-    "react-addons-transition-group": "^15.6.0",
+    "prop-types": "^15.6.0",
+    "react": "^15.6.2",
+    "react-addons-pure-render-mixin": "^15.6.2",
+    "react-addons-transition-group": "^15.6.2",
     "react-bootstrap": "^0.30.7",
-    "react-dnd": "^2.4.0",
-    "react-dnd-html5-backend": "^2.4.1",
+    "react-dnd": "^2.5.4",
+    "react-dnd-html5-backend": "^2.5.4",
     "react-redux": "^4.4.6",
-    "react-test-renderer": "^15.6.1",
+    "react-test-renderer": "^15.6.2",
     "redux": "^3.7.2",
-    "redux-test-utils": "^0.1.2",
+    "redux-test-utils": "^0.1.3",
     "redux-thunk": "^2.2.0",
     "ultrawide-mocha-reporter": "^1.0.5"
   },
   "devDependencies": {
     "enzyme": "^2.9.1",
-    "enzyme-redux": "^0.1.6",
-    "react-addons-test-utils": "^15.6.0",
-    "react-dom": "^15.6.1"
+    "enzyme-redux": "^0.1.7",
+    "react-addons-test-utils": "^15.6.2",
+    "react-dom": "^15.6.2"
   }
 }

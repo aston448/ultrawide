@@ -20,7 +20,7 @@ class DomainDictionaryValidationServices{
         }
 
         // View must be a Design Edit
-        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT)){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_ADD;
         }
 
@@ -40,7 +40,7 @@ class DomainDictionaryValidationServices{
         }
 
         // View must be a Design Edit
-        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT)){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
         }
 
@@ -73,7 +73,7 @@ class DomainDictionaryValidationServices{
         }
 
         // View must be a Design Edit
-        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT)){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
         }
 
@@ -93,7 +93,7 @@ class DomainDictionaryValidationServices{
         }
 
         // View must be a Design Edit
-        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT)){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
         }
 

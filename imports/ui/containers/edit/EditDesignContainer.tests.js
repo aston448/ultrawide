@@ -38,7 +38,7 @@ describe('JSX: EditDesignContainer', () => {
         it('is shown when Details selected', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // No extra stuff selected
             const viewOptions = {
@@ -59,7 +59,7 @@ describe('JSX: EditDesignContainer', () => {
         it('is not shown when Details not selected', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // No extra stuff selected
             const viewOptions = {
@@ -80,7 +80,7 @@ describe('JSX: EditDesignContainer', () => {
         it('is shown when Dictionary selected', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // No extra stuff selected
             const viewOptions = {
@@ -101,7 +101,7 @@ describe('JSX: EditDesignContainer', () => {
         it('is not shown when Dictionary not selected', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // No extra stuff selected
             const viewOptions = {
@@ -122,7 +122,7 @@ describe('JSX: EditDesignContainer', () => {
         it('when Design only pane fills half the screen', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // No extra stuff selected
             const viewOptions = {
@@ -143,7 +143,7 @@ describe('JSX: EditDesignContainer', () => {
         it('when Design only and Test Summary, Design+Summary fills whole screen', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // No extra stuff selected but test summary on
             const viewOptions = {
@@ -164,7 +164,7 @@ describe('JSX: EditDesignContainer', () => {
         it('when Design and Details each fills half the screen', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // Details selected
             const viewOptions = {
@@ -186,7 +186,7 @@ describe('JSX: EditDesignContainer', () => {
         it('when Design, Details and Dictionary each fills a third of the screen', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // Details and Dictionaryselected
             const viewOptions = {
@@ -209,7 +209,7 @@ describe('JSX: EditDesignContainer', () => {
         it('when Design, Details and Test Summary, Design+Summary is two thirds', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // Details selected, test summary showing
             const viewOptions = {
@@ -231,7 +231,7 @@ describe('JSX: EditDesignContainer', () => {
         it('when Design, Dictionary and Test Summary, Design+Summary is two thirds', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // Dictionary selected, test summary showing
             const viewOptions = {
@@ -253,7 +253,7 @@ describe('JSX: EditDesignContainer', () => {
         it('when Design, Details, Dictionary and Test Summary, Design+Summary is half and others a quarter each', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
 
             // Details, Dict and Test Summary selected
             const viewOptions = {
@@ -279,7 +279,7 @@ describe('JSX: EditDesignContainer', () => {
         it('add application visible in edit mode', () => {
 
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
 
             // No extra stuff selected
             const viewOptions = {
@@ -296,7 +296,7 @@ describe('JSX: EditDesignContainer', () => {
         it('add application not visible in view mode', () => {
 
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
 
             // No extra stuff selected
             const viewOptions = {

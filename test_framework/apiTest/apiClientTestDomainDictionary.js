@@ -11,7 +11,7 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
         const userRole = RoleType.DESIGNER;
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -27,7 +27,7 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
         const userRole = RoleType.DESIGNER;
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -42,7 +42,7 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
         const userRole = RoleType.DESIGNER;
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -60,7 +60,7 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
         const userRole = RoleType.DESIGNER;
         const userContext = TestDataHelpers.getUserContext(userName);

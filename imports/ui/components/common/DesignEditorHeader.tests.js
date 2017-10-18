@@ -39,7 +39,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has a view button not highlighted when editing', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userRole = RoleType.DESIGNER;
@@ -54,7 +54,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has a view button highlighted when view only', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userRole = RoleType.DESIGNER;
@@ -72,7 +72,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has an edit button not highlighted when view only', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userRole = RoleType.DESIGNER;
@@ -87,7 +87,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has an edit button highlighted when editing', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userRole = RoleType.DESIGNER;
@@ -106,7 +106,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('a view only design has no edit button', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userRole = RoleType.DESIGNER;
@@ -123,7 +123,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has a view button', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userRole = RoleType.DESIGNER;
@@ -136,7 +136,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has a highlighted edit button', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userRole = RoleType.DESIGNER;
@@ -153,7 +153,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has no view button', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userRole = RoleType.DESIGNER;
@@ -165,7 +165,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has no edit button', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userRole = RoleType.DESIGNER;
@@ -181,7 +181,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has a highlighted view button', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userRole = RoleType.DESIGNER;
@@ -194,7 +194,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has an edit button not highlighted', () => {
 
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const userRole = RoleType.DESIGNER;
@@ -211,7 +211,7 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('View Only design has no view button', () => {
 
-            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userRole = RoleType.DESIGNER;

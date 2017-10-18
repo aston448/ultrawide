@@ -33,8 +33,7 @@ import '../imports/collections/summary/user_work_progress_summary.js';
 import '../imports/collections/dev/user_work_package_feature_step_data.js';
 
 import '../imports/collections/test_results/user_acc_test_results.js';
-import '../imports/collections/test_results/user_integration_test_results.js';
-import '../imports/collections/test_results/user_unit_test_results.js';
+import '../imports/collections/test_results/user_ultrawide_test_results.js';
 
 import '../imports/collections/mash/user_dv_mash_scenarios.js';
 

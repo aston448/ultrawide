@@ -33,7 +33,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         // Get user's Design Version Id as the one being worked on
@@ -50,7 +50,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         // And the parent component
@@ -66,7 +66,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         // And the parent component
@@ -82,7 +82,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         // And the parent component
@@ -98,7 +98,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         // And the parent component
@@ -114,7 +114,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         // As Feature Aspects don't have to have unique names - and very likely won't - double check by getting the Feature too
@@ -132,7 +132,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         const component = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: oldName});
@@ -148,7 +148,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -168,7 +168,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -184,7 +184,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
 
         const featureComponent = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE, componentNameNew: featureName});
         const newRawText = DesignComponentModules.getRawTextFor(newText);
@@ -199,7 +199,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -220,7 +220,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, parentName, componentName);
@@ -235,7 +235,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designComponent =  DesignVersionComponents.findOne({_id: userContext.designComponentId});
@@ -251,7 +251,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view and context is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const displayContext = DisplayContext.BASE_EDIT;
         // Component MUST be selected first
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -269,7 +269,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view and context is correct
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const displayContext = DisplayContext.BASE_EDIT;
         // Component MUST be selected first
         const userContext = TestDataHelpers.getUserContext(userName);

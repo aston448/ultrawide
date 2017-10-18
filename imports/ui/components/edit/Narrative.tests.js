@@ -16,7 +16,7 @@ describe('JSX: Narrative', () => {
             const designComponent = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const testSummary = false;
 
@@ -42,7 +42,7 @@ describe('JSX: Narrative', () => {
             const designComponent = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const testSummary = false;
 
@@ -70,7 +70,7 @@ describe('JSX: Narrative', () => {
             const designComponent = {};
             const wpItem = {};
             const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const testSummary = false;
 
@@ -98,7 +98,7 @@ describe('JSX: Narrative', () => {
             const designComponent = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW_EDIT;
+            const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const testSummary = false;
 

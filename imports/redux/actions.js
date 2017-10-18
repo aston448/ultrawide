@@ -113,13 +113,13 @@ export function setCurrentView(view) {
             case ViewType.SELECT:
                 message = 'Select the item you want to work on...';
                 break;
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
                 message = 'Initial Design Version';
                 break;
-            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_PUBLISHED:
                 message = 'View Design Version';
                 break;
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_UPDATABLE:
                 message = 'View Design Version Progress';
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:

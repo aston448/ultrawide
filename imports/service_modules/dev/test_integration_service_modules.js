@@ -27,12 +27,7 @@ class TestIntegrationModules{
 
     getIntegrationTestResults(userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration test results...");
-
-        // Clear data for current user
-        UserIntegrationTestResultData.removeAllDataForUser(userContext.userId);
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Integration test results...");
 
         // Get a list of the expected test files for integration
 
@@ -59,7 +54,7 @@ class TestIntegrationModules{
 
                 const testFile = outputLocation.locationFullPath + file.fileName;
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Results from {}", testFile);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Integration Results from {}", testFile);
 
                 // Call the appropriate file parser
                 switch (file.testRunner) {
@@ -76,12 +71,8 @@ class TestIntegrationModules{
 
     getUnitTestResults(userContext){
 
-        // Clear data for current user
-        UserUnitTestResultData.removeAllDataForUser(userContext.userId);
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
-
         // Get a list of the expected test files for unit tests
+        log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Unit test results...");
 
         // See which locations the user has marked as containing unit test files for the current role
         const userLocations = UserTestTypeLocationData.getUserUnitTestsLocations(userContext.userId);
@@ -98,7 +89,7 @@ class TestIntegrationModules{
 
                 const testFile = outputLocation.locationFullPath + file.fileName;
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Results from {}", testFile);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Unit Results from {}", testFile);
 
                 // Call the appropriate file parser
                 switch (file.testRunner) {
@@ -115,23 +106,25 @@ class TestIntegrationModules{
 
     recreateUserScenarioTestMashData(userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios... {}", userContext.userId);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "    Recreating user mash scenarios... {}", userContext.userId);
 
         // Clear all data for user-designVersion
         UserDvMashScenarioData.removeAllDvScenariosForUser(userContext.userId, userContext.designVersionId);
         UserMashScenarioTestData.removeAllDvTestsForUser(userContext.userId, userContext.designVersionId);
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Old data removed...");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed...");
 
         // Get all non-removed Scenarios for current DV
         const dvScenarios = DesignComponentData.getNonRemovedDvScenarios(userContext.designVersionId);
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Scenarios loaded...");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "    Scenarios loaded...");
 
         let scenarioBatchData = [];
         let scenarioTestBatchData = [];
 
         dvScenarios.forEach((scenario) => {
+
+            //log((msg) => console.log(msg), LogLevel.DEBUG, "Scenario = {}", scenario.componentNameNew);
 
             // See which updated test results relate to this scenario
             // Note that all test-results plugins must ensure that the Scenario is within testFullName
@@ -140,6 +133,8 @@ class TestIntegrationModules{
 
             // Unit Tests
             const unitTests = UserUnitTestResultData.getUserMatchingTestResults(userContext.userId, searchRegex);
+
+            //log((msg) => console.log(msg), LogLevel.DEBUG, "    Matched {} unit tests", unitTests.length);
 
             // Integration Tests
             const intTests = UserIntegrationTestResultData.getUserMatchingTestResults(userContext.userId, searchRegex);
@@ -198,6 +193,8 @@ class TestIntegrationModules{
 
             });
 
+
+
             intTests.forEach((intTest) => {
 
                 intTestCount++;
@@ -236,6 +233,8 @@ class TestIntegrationModules{
                     }
                 );
             });
+
+
 
             // Get the overall Scenario status based on tests
             if(unitTestFails > 0){
@@ -302,10 +301,12 @@ class TestIntegrationModules{
 
         // Bulk insert the data
         if(scenarioBatchData.length > 0) {
+            log((msg) => console.log(msg), LogLevel.DEBUG, "    Inserting {} summary records...", scenarioBatchData.length);
             UserDvMashScenarioData.bulkInsertData(scenarioBatchData);
         }
 
         if(scenarioTestBatchData.length > 0) {
+            log((msg) => console.log(msg), LogLevel.DEBUG, "    Inserting {} mash records...", scenarioTestBatchData.length);
             UserMashScenarioTestData.bulkInsertData(scenarioTestBatchData);
         }
     }

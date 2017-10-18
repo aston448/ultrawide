@@ -349,7 +349,7 @@ class ClientDesignVersionServices{
         // Ensure that the current version is the version we chose to edit.  Reset User Context
         let updatedContext = this.setDesignVersion(userContext, userRole, designVersionToEditId, true);
 
-        store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
+        store.dispatch(setCurrentView(ViewType.DESIGN_NEW));
 
         // Put the view in edit mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
@@ -391,15 +391,15 @@ class ClientDesignVersionServices{
                     case DesignVersionStatus.VERSION_NEW:
                     case DesignVersionStatus.VERSION_DRAFT:
                         // For new / draft design versions, viewing does not preclude switching to editing
-                        view = ViewType.DESIGN_NEW_EDIT;
+                        view = ViewType.DESIGN_NEW;
                         break;
                     case DesignVersionStatus.VERSION_UPDATABLE:
-                        view = ViewType.DESIGN_UPDATABLE_VIEW;
+                        view = ViewType.DESIGN_UPDATABLE;
                         break;
                     case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
                     case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
                         // For final design versions view is all you can do
-                        view = ViewType.DESIGN_PUBLISHED_VIEW;
+                        view = ViewType.DESIGN_PUBLISHED;
                         break;
                 }
                 break;
@@ -407,11 +407,11 @@ class ClientDesignVersionServices{
                 switch(designVersion.designVersionStatus){
                     case DesignVersionStatus.VERSION_UPDATABLE:
                         // Developers and Managers can see progress on an updatable Design Version
-                        view = ViewType.DESIGN_UPDATABLE_VIEW;
+                        view = ViewType.DESIGN_UPDATABLE;
                         break;
                     default:
                         // Anything else is View only
-                        view = ViewType.DESIGN_PUBLISHED_VIEW;
+                        view = ViewType.DESIGN_PUBLISHED;
                         break;
                 }
                 break;

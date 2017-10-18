@@ -230,14 +230,13 @@ class ClientTestOutputLocationServices{
     uploadTestFile(locationFile, locationName){
 
         let fileReader = new FileReader();
-        let encoding = "binary";
         let name = locationFile.name;
 
         fileReader.onload = () => {
 
             if(fileReader.readAsBinaryString) {
 
-                ServerTestOutputLocationApi.uploadTestResultsFile(fileReader.result, name, locationName, encoding, (err, result) => {
+                ServerTestOutputLocationApi.uploadTestResultsFile(fileReader.result, name, locationName, (err, result) => {
 
                     if (err) {
                         // Unexpected error as all expected errors already handled - show alert.
@@ -262,7 +261,7 @@ class ClientTestOutputLocationServices{
                     binary += String.fromCharCode(bytes[i]);
                 }
 
-                ServerTestOutputLocationApi.uploadTestResultsFile(binary, name, locationName, encoding, (err, result) => {
+                ServerTestOutputLocationApi.uploadTestResultsFile(binary, name, locationName, (err, result) => {
 
                     if (err) {
                         // Unexpected error as all expected errors already handled - show alert.

@@ -227,14 +227,13 @@ export const uploadTestResultsFile = new ValidatedMethod({
     validate: new SimpleSchema({
         blob: {type: String},
         name: {type: String},
-        location: {type: String},
-        encoding: {type: String}
+        location: {type: String}
     }).validator(),
 
-    run({blob, name, location, encoding}){
+    run({blob, name, location}){
 
         try {
-            TestOutputLocationServices.uploadTestResultsFile(blob, name, location, encoding);
+            TestOutputLocationServices.uploadTestResultsFile(blob, name, location);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.code, e.stack)

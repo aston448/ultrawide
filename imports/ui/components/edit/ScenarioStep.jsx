@@ -86,7 +86,7 @@
 //
 //         // New untouched items are editable...
 //         switch (this.props.view) {
-//             case ViewType.DESIGN_NEW_EDIT:
+//             case ViewType.DESIGN_NEW:
 //             case ViewType.DESIGN_UPDATE_EDIT:
 //                 // A new component not yet changed is automatically editable
 //                 if (this.props.scenarioStep.isNew && ! this.props.scenarioStep.isChanged) {

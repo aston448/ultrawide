@@ -118,9 +118,9 @@ export class DesignComponent extends Component{
         let shouldComponentUpdate = false;
 
         switch (nextProps.view) {
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
                 shouldComponentUpdate =!(
@@ -185,9 +185,9 @@ export class DesignComponent extends Component{
         if(newProps.openItemsFlag.flag !== this.props.openItemsFlag.flag  || newProps.openItemsFlag.item === this.props.currentItem._id) {
 
             switch (newProps.view) {
-                case ViewType.DESIGN_NEW_EDIT:
-                case ViewType.DESIGN_PUBLISHED_VIEW:
-                case ViewType.DESIGN_UPDATABLE_VIEW:
+                case ViewType.DESIGN_NEW:
+                case ViewType.DESIGN_PUBLISHED:
+                case ViewType.DESIGN_UPDATABLE:
 
                     this.setOpenStateIfDesignItemChanging(newProps);
                     break;
@@ -283,9 +283,9 @@ export class DesignComponent extends Component{
         // });
 
         switch(props.view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
                 this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -336,9 +336,9 @@ export class DesignComponent extends Component{
     toggleOpen(){
 
         switch(this.props.view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
 
                 ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, !this.state.open);
                 break;
@@ -405,7 +405,7 @@ export class DesignComponent extends Component{
     addDesignSectionToApplication(view, mode, appItem){
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
                 // Adding to the design itself
                 ClientDesignComponentServices.addDesignSectionToApplication(view, mode, appItem);
                 break;
@@ -420,7 +420,7 @@ export class DesignComponent extends Component{
     addSectionToDesignSection(view, mode, sectionItem){
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
                 // Adding to the design itself
                 ClientDesignComponentServices.addSectionToDesignSection(view, mode, sectionItem);
                 break;
@@ -435,7 +435,7 @@ export class DesignComponent extends Component{
     addFeatureToDesignSection(view, mode, sectionItem){
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
                 // Adding to the design itself
                 ClientDesignComponentServices.addFeatureToDesignSection(view, mode, sectionItem);
                 break;
@@ -450,7 +450,7 @@ export class DesignComponent extends Component{
     addFeatureAspectToFeature(view, mode, featureItem, userContext){
 
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
             case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureItem, userContext.workPackageId);
                 break;
@@ -465,7 +465,7 @@ export class DesignComponent extends Component{
     addScenario(view, mode, parentItem, userContext){
 
         switch(this.props.view){
-            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_NEW:
             case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.addScenario(view, mode, parentItem, userContext.workPackageId);
                 break;

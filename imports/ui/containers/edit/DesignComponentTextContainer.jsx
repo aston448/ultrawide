@@ -101,8 +101,8 @@ class DesignComponentText extends Component {
 
             switch(view)
             {
-                case ViewType.DESIGN_NEW_EDIT:
-                case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_NEW:
+                case ViewType.DESIGN_PUBLISHED:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
@@ -188,7 +188,7 @@ class DesignComponentText extends Component {
                         }
                     }
                     break;
-                case ViewType.DESIGN_UPDATABLE_VIEW:
+                case ViewType.DESIGN_UPDATABLE:
 
                     if(designItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED){
                             details =

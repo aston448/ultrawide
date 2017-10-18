@@ -184,9 +184,9 @@ export class AppHeader extends Component {
                     </div>;
                 break;
 
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DESIGN_UPDATE_EDIT:

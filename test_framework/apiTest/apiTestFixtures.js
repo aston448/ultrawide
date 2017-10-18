@@ -355,7 +355,7 @@ Meteor.methods({
     'testFixtures.AddBasicDesignData'(designName, designVersionName){
 
         // Add an Application, Design Sections, Features and Scenarios as basic data for a Design
-        const view = ViewType.DESIGN_NEW_EDIT;
+        const view = ViewType.DESIGN_NEW;
         const mode = ViewMode.MODE_EDIT;
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);

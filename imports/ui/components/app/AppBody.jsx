@@ -92,9 +92,9 @@ class AppBody extends Component {
                         currentDesignId: userContext.designId
                     }}/>;
                 break;
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
                 bodyHtml =
                     <EditDesignContainer params={{
                         userContext: userContext,

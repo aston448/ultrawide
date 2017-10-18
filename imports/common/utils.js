@@ -94,10 +94,10 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
 
         // Get modifiers
         switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
                 break;
-            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_UPDATABLE:
                 // If a removal has been updated in to the main version show it here
                 if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
                     deleted = ' removed-item';
@@ -309,7 +309,7 @@ export function locationMoveDropAllowed(itemType, targetType, viewType, inScope)
         case ComponentType.SCENARIO:
             // Scenarios can only be moved to Feature Aspects
             switch(viewType){
-                case ViewType.DESIGN_NEW_EDIT:
+                case ViewType.DESIGN_NEW:
                     return (targetType === ComponentType.FEATURE_ASPECT);
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
@@ -400,8 +400,8 @@ export function log(callback, level, message, ...vars){
 
     // Change these to change the output
     // const logLevel = LogLevel.TRACE;
-    // const logLevel = LogLevel.DEBUG;
-     const logLevel = LogLevel.INFO;
+     const logLevel = LogLevel.DEBUG;
+    // const logLevel = LogLevel.INFO;
     // const logLevel = LogLevel.NONE;
 
 

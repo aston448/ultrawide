@@ -120,14 +120,13 @@ class ServerTestOutputLocationApi {
         );
     };
 
-    uploadTestResultsFile(blob, name, location, encoding, callback){
+    uploadTestResultsFile(blob, name, location, callback){
 
         uploadTestResultsFile.call(
             {
                 blob: blob,
                 name: name,
-                location: location,
-                encoding: encoding
+                location: location
             },
             (err, result) => {
                 callback(err, result);

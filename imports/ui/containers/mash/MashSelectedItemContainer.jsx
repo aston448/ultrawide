@@ -161,12 +161,12 @@ class MashSelectedItemList extends Component {
         } else {
             if(
                 userContext.designComponentId === 'NONE' ||
-                (userContext.designComponentType === ComponentType.APPLICATION && view === ViewType.DESIGN_UPDATABLE_VIEW)||
-                (userContext.designComponentType === ComponentType.DESIGN_SECTION && view === ViewType.DESIGN_UPDATABLE_VIEW)
+                (userContext.designComponentType === ComponentType.APPLICATION && view === ViewType.DESIGN_UPDATABLE)||
+                (userContext.designComponentType === ComponentType.DESIGN_SECTION && view === ViewType.DESIGN_UPDATABLE)
             ) {
 
                 // No data because no item or non-display item selected
-                if(view === ViewType.DESIGN_UPDATABLE_VIEW){
+                if(view === ViewType.DESIGN_UPDATABLE){
                     mainPanel = <div className="design-item-note">Select a Feature or Feature item to see test results</div>;
                 } else {
                     mainPanel = <div className="design-item-note">Select a Design item to see test results</div>;
