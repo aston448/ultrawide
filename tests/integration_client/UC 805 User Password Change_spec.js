@@ -21,7 +21,7 @@ describe('UC 805 User Password Change', function(){
         // Login as old password user
         browser.url('http://localhost:3030/');
 
-        browser.waitForExist('#loginUserName');
+        browser.waitForExist('#loginUserName', 5000);
 
         browser.setValue('#loginUserName', 'gloria');
         browser.setValue('#loginPassword', 'gloria123');

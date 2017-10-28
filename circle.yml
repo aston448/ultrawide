@@ -31,8 +31,6 @@ dependencies:
     # Download & cache Chimp's dependencies
     - sh scripts/download-chimp-dependencies.sh
 
-    # - npm install phantomjs --phantomjs_cdnurl=https://bitbucket.org/ariya/phantomjs/downloads
-
 
 checkout:
   post:
@@ -56,19 +54,19 @@ test:
     - sleep 50
 
     # Designs
-    - npm run chimp:int_server_des
+    #- npm run chimp:int_server_des
     # Work Packages
-    - npm run chimp:int_server_wp
+    #- npm run chimp:int_server_wp
     # Developer Testing
-    - npm run chimp:int_server_dev
+    #- npm run chimp:int_server_dev
     # Summary Data
-    - npm run chimp:int_server_sum
+    #- npm run chimp:int_server_sum
     # Design Updates
-    - npm run chimp:int_server_du
+    #- npm run chimp:int_server_du
     # Domain Dictionary
-    - npm run chimp:int_server_dom
+    #- npm run chimp:int_server_dom
     # Administration
-    - npm run chimp:int_server_adm
+    #- npm run chimp:int_server_adm
     # Client UI Tests
     - npm run chimp:int_client
 
