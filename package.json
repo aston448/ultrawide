@@ -17,7 +17,7 @@
     "chimp:int_server_du": "chimp .config/chimp_du.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/500_design_updates",
     "chimp:int_server_dom": "chimp .config/chimp_dom.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/700_domain",
     "chimp:int_server_adm": "chimp .config/chimp_adm.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/800_admin",
-    "chimp:int_client": "chimp .config/chimp_client.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_client"
+    "chimp:int_client": "chimp .config/chimp_client.js --ddp=http://localhost:3000 --path=tests/integration_client"
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",

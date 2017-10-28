@@ -2,6 +2,10 @@ machine:
   node:
     version: 6.10.2
 
+  java:
+      # This is needed by Chimp to run Selenium so we can start Chrome and Firefox
+      version: oraclejdk8
+
 dependencies:
   pre:
     # Get latest Chrome so chimp tests will work...
@@ -21,15 +25,15 @@ dependencies:
     # Install & cache Meteor
     - sh scripts/install-meteor.sh
 
-    # Install and cache NPM dependencies
-    - npm install
-
     # Install chimp
     - npm install -g chimp
     - npm install -g selenium-standalone
 
     # Download & cache Chimp's dependencies
     - sh scripts/download-chimp-dependencies.sh
+
+    # Install and cache NPM dependencies
+    - npm install
 
 checkout:
   post:
@@ -67,11 +71,6 @@ test:
     # Administration
     #- npm run chimp:int_server_adm
     # Client UI Tests
-    - npm run webdriver:
-        background: true
-
-    - sleep 10
-
     - npm run chimp:int_client
 
   post:
