@@ -31,7 +31,6 @@ dependencies:
     # Download & cache Chimp's dependencies
     - sh scripts/download-chimp-dependencies.sh
 
-
 checkout:
   post:
     - git submodule update --init
@@ -68,6 +67,11 @@ test:
     # Administration
     #- npm run chimp:int_server_adm
     # Client UI Tests
+    - npm run webdriver:
+        background: true
+
+    - sleep 10
+
     - npm run chimp:int_client
 
   post:
