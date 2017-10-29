@@ -22,6 +22,10 @@ jobs:
           command: sh scripts/install-meteor.sh
 
       - run:
+          name: install-bcrypt
+          command: meteor npm install --save bcrypt
+
+      - run:
           name: install-chimp
           command: sudo npm install -g chimp
 
@@ -60,6 +64,10 @@ jobs:
       - run:
           name: int-test-designs
           command: npm run chimp:int_server_des
+
+      - run:
+          name: client-tests
+          command: npm run chimp:int_client
 
       - store_artifacts:
           path: test-results.xml
