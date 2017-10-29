@@ -618,7 +618,7 @@ class ClientDataServices{
     // Get top level editor data (i.e Applications)
     getEditorApplicationData(userContext, view){
 
-        console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
+        //console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
 
         const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 

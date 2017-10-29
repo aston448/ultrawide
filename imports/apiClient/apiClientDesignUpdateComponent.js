@@ -666,7 +666,7 @@ class ClientDesignUpdateComponentServices{
                 );
 
                 featureComponents.forEach((component) => {
-                    console.log("Setting component " + component.componentNameNew + " open to " + setOpen);
+                    //console.log("Setting component " + component.componentNameNew + " open to " + setOpen);
                     store.dispatch(setCurrentUserOpenDesignUpdateItems(
                         currentList,
                         component._id,

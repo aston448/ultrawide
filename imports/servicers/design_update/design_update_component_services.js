@@ -32,7 +32,7 @@ class DesignUpdateComponentServices{
 
         if(Meteor.isServer) {
 
-            log((msg) => console.log(msg), LogLevel.INFO, 'Adding Update {} Component in view {}', componentType, view);
+            log((msg) => console.log(msg), LogLevel.DEBUG, 'Adding Update {} Component in view {}', componentType, view);
 
             // Get the parent reference id (if there is a parent)
             let featureRefId = 'NONE';
@@ -117,7 +117,7 @@ class DesignUpdateComponentServices{
                 }
 
                 // Add Dev Added Aspects and Scenarios to WP
-                log((msg) => console.log(msg), LogLevel.INFO, '  DEV ADDED {} and WP is {}', devAdded, workPackageId);
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  DEV ADDED {} and WP is {}', devAdded, workPackageId);
 
                 if(devAdded && workPackageId !== 'NONE' && (componentType === ComponentType.FEATURE_ASPECT || componentType === ComponentType.SCENARIO)){
 
@@ -126,7 +126,7 @@ class DesignUpdateComponentServices{
                     const parent = DesignUpdateComponentData.getUpdateComponentByRef(component.designVersionId, component.designUpdateId, component.componentParentReferenceIdNew);
 
                     WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, parent._id, designVersionId);
-                    log((msg) => console.log(msg), LogLevel.INFO, '  Added component {} to WP {}', component.componentNameNew, wp.workPackageName);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Added component {} to WP {}', component.componentNameNew, wp.workPackageName);
                 }
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, '  Setting parent removability...');

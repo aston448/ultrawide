@@ -19,7 +19,7 @@ Meteor.methods({
 
         const outcome = ClientBackupServices.backupDesign(design._id, role);
 
-        console.log("Called backup Design");
+        //console.log("Called backup Design");
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Backup Design');
     },

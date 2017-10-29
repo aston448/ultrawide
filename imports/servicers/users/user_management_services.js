@@ -106,7 +106,7 @@ class UserManagementServices {
         if(userData){
             // And a key must have been deliberately generated
             if(userData.apiKey !== 'NONE'){
-                console.log("Key: " + apiKey + "  User Key: " + userData.apiKey);
+                //console.log("Key: " + apiKey + "  User Key: " + userData.apiKey);
                 if(userData.apiKey !== apiKey){
                     throw new Meteor.Error('API', 'Invalid Access Key');
                 }

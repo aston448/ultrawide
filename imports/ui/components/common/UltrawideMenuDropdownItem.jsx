@@ -56,7 +56,7 @@ export class UltrawideMenuDropdownItem extends Component {
     action(action, viewOptionType, view, userContext, userRole, userViewOptions, currentViewDataValue, testDataFlag){
         event.preventDefault();
 
-        console.log("Dropdown item action " + action + " with dev int tests set to " + userViewOptions.devIntTestsVisible);
+        //console.log("Dropdown item action " + action + " with dev int tests set to " + userViewOptions.devIntTestsVisible);
 
         if(this.props.hasCheckbox) {
             this.setState({checkboxChecked: !this.state.checkboxChecked})

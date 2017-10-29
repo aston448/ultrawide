@@ -41,7 +41,7 @@ export class TestSummary extends Component {
 
         const {testSummaryData, view} = this.props;
 
-        console.log("Rendering Feature Test Summary data with view = " + view + " and summary data = " + testSummaryData);
+        //console.log("Rendering Feature Test Summary data with view = " + view + " and summary data = " + testSummaryData);
 
         if(testSummaryData){
 
@@ -71,7 +71,7 @@ export class TestSummary extends Component {
                     passCount = testSummaryData.duFeatureTestPassCount;
                     failCount = testSummaryData.duFeatureTestFailCount;
                     noTestCount = testSummaryData.duFeatureNoTestCount;
-                    console.log("  Pass count: " + passCount);
+                    //console.log("  Pass count: " + passCount);
                     break;
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:

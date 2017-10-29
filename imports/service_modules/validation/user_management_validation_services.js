@@ -64,7 +64,7 @@ class UserManagementValidationServices {
 
     validateResetUserPassword(actionUser){
 
-        console.log("Action user: " + actionUser.userName);
+        //console.log("Action user: " + actionUser.userName);
 
         // Action user must be Admin
         if (!(actionUser.isAdmin)) {

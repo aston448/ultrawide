@@ -61,7 +61,7 @@ Meteor.methods({
         } else {
 
             // For testing we clear the DB and start from scratch
-            console.log('Clearing down DB Data...');
+            //console.log('Clearing down DB Data...');
             DomainDictionary.remove({});
             ScenarioSteps.remove({});
             FeatureBackgroundSteps.remove({});
@@ -128,7 +128,7 @@ Meteor.methods({
                 isAdmin: true
             });
 
-            console.log('Admin user id is ' + adminUserId);
+            //console.log('Admin user id is ' + adminUserId);
 
             // NORMAL USERS ============================================================================================
 

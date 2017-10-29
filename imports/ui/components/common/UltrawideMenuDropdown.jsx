@@ -55,7 +55,7 @@ export class UltrawideMenuDropdown extends Component {
     }
 
     action(){
-        console.log("CLICKED");
+        //console.log("CLICKED");
         this.props.actionFunction();
     }
 

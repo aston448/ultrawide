@@ -565,7 +565,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DEVELOP_UPDATE_WP:
                 // Updates to a design update
-                console.log("Updating component name to " + plainText);
+                //console.log("Updating component name to " + plainText);
                 result = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item, plainText, rawText);
                 break;
         }

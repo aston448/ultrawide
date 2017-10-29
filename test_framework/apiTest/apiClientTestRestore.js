@@ -33,7 +33,7 @@ Meteor.methods({
 
             const outcome = ClientBackupServices.restoreDesign(backupFile, user.userId);
 
-            console.log("Called restore Design with backup file " + backupFile);
+            //console.log("Called restore Design with backup file " + backupFile);
 
             TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Restore Design');
         }

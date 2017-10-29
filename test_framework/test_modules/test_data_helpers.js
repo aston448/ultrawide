@@ -408,7 +408,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designUpdateComponents.forEach((component) => {
 
-                console.log("  Component " + component.componentNameNew + " DU: " + component.designUpdateId + " PAR REF: " + component.componentParentReferenceIdNew);
+                //console.log("  Component " + component.componentNameNew + " DU: " + component.designUpdateId + " PAR REF: " + component.componentParentReferenceIdNew);
 
                 parentComponent = DesignUpdateComponents.findOne({designVersionId: component.designVersionId, designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdNew});
 
@@ -450,7 +450,7 @@ class TestDataHelpers {
         if(componentType !== ComponentType.APPLICATION) {
             designUpdateComponents.forEach((component) => {
 
-                console.log("  Component " + component.componentNameNew + " DU: " + component.designUpdateId + " PAR REF: " + component.componentParentReferenceIdNew);
+                //console.log("  Component " + component.componentNameNew + " DU: " + component.designUpdateId + " PAR REF: " + component.componentParentReferenceIdNew);
 
                 parentComponent = DesignUpdateComponents.findOne({designVersionId: component.designVersionId, designUpdateId: component.designUpdateId, componentReferenceId: component.componentParentReferenceIdOld});
 

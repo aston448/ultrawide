@@ -120,7 +120,7 @@ class DesignVersionModules{
             DesignComponentData.bulkInsert(newDesignVersionBatch);
         }
 
-        log(msg => console.log(msg), LogLevel.INFO, "  Populated new DV with copy of previous");
+        log(msg => console.log(msg), LogLevel.DEBUG, "  Populated new DV with copy of previous");
 
     };
 
@@ -823,7 +823,7 @@ class DesignVersionModules{
         // Move all roll forward updates to the new design version.  Status remains same.  Action goes back to default
         const rolled = DesignUpdateData.bulkMoveRollForwardUpdatesToNewDesignVersion(currentDesignVersionId, newDesignVersionId);
 
-        log(msg => console.log(msg), LogLevel.INFO, "  {} updates were rolled forward", rolled);
+        log(msg => console.log(msg), LogLevel.DEBUG, "  {} updates were rolled forward", rolled);
 
     }
 
@@ -832,7 +832,7 @@ class DesignVersionModules{
         // Just mark them all as IGNORED
         const ignored = DesignUpdateData.bulkSetDesignUpdatesAsIgnore(currentDesignVersionId);
 
-        log(msg => console.log(msg), LogLevel.INFO, "  {} updates were ignored", ignored);
+        log(msg => console.log(msg), LogLevel.DEBUG, "  {} updates were ignored", ignored);
 
     }
 
@@ -878,7 +878,7 @@ class DesignVersionModules{
             // Complete the merged updates
             const completed = DesignUpdateData.bulkCompleteMergedUpdates(previousDesignVersionId);
 
-            log(msg => console.log(msg), LogLevel.INFO, "  {} updates were completed in previous design version", completed);
+            log(msg => console.log(msg), LogLevel.DEBUG, "  {} updates were completed in previous design version", completed);
 
             newDvStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
         }

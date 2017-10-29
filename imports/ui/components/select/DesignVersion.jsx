@@ -80,7 +80,7 @@ export class DesignVersion extends Component {
 
         this.setState({ showModal: false });
 
-        console.log('Creating next design version from dv ' + dv._id);
+        //console.log('Creating next design version from dv ' + dv._id);
 
         ClientDesignVersionServices.createNextDesignVersion(
             userRole,

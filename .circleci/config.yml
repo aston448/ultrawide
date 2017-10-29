@@ -61,9 +61,9 @@ jobs:
           name: wait-for-app
           command: sleep 50
 
-      - run:
-          name: int-test-designs
-          command: npm run chimp:int_server_des
+#      - run:
+#          name: int-test-designs
+#          command: npm run chimp:int_server_des
 
       - run:
           name: client-tests

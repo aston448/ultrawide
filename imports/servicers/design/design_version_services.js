@@ -84,7 +84,7 @@ class DesignVersionServices{
             // Get the current design version details - the version being completed
             const currentDesignVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
 
-            log(msg => console.log(msg), LogLevel.INFO, "Create Next Design Version Starting...");
+            log(msg => console.log(msg), LogLevel.DEBUG, "Create Next Design Version Starting...");
 
             // Now add a new Design Version to become the new current version
             const nextDesignVersionId = DesignVersionData.insertNewDesignVersion(
@@ -96,7 +96,7 @@ class DesignVersionServices{
                 currentDesignVersion.designVersionIndex + 1
             );
 
-            log(msg => console.log(msg), LogLevel.INFO, "  Inserted new DV");
+            log(msg => console.log(msg), LogLevel.DEBUG, "  Inserted new DV");
 
             // If that was successful do the real work...
             if(nextDesignVersionId) {
@@ -104,23 +104,23 @@ class DesignVersionServices{
                 try {
                     // Populate new DV with a copy of the previous version
                     DesignVersionModules.copyPreviousDesignVersionToCurrent(currentDesignVersion._id, nextDesignVersionId);
-                    log(msg => console.log(msg), LogLevel.INFO, "  Previous DV Copied to New");
+                    log(msg => console.log(msg), LogLevel.DEBUG, "  Previous DV Copied to New");
 
                     // If moving from an updatable DV deal with any non-merged updates
                     if(currentDesignVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE) {
 
                         // Process the updates to be Rolled Forward
                         DesignVersionModules.rollForwardUpdates(currentDesignVersionId, nextDesignVersionId);
-                        log(msg => console.log(msg), LogLevel.INFO, "  Updates Rolled Forward");
+                        log(msg => console.log(msg), LogLevel.DEBUG, "  Updates Rolled Forward");
 
                         // Put to bed the ignored updates
                         DesignVersionModules.closeDownIgnoreUpdates(currentDesignVersionId);
-                        log(msg => console.log(msg), LogLevel.INFO, "  Ignored Updates Removed");
+                        log(msg => console.log(msg), LogLevel.DEBUG, "  Ignored Updates Removed");
                     }
 
                     // Carry forward the Domain Dictionary
                     DesignVersionModules.rollForwardDomainDictionary(currentDesignVersionId, nextDesignVersionId);
-                    log(msg => console.log(msg), LogLevel.INFO, "  Domain Dictionary Carried Forward");
+                    log(msg => console.log(msg), LogLevel.DEBUG, "  Domain Dictionary Carried Forward");
 
                 } catch(e) {
 
@@ -132,7 +132,7 @@ class DesignVersionServices{
 
                 // And finally update the old design version to complete
                 DesignVersionModules.completePreviousDesignVersion(currentDesignVersionId);
-                log(msg => console.log(msg), LogLevel.INFO, "Create Next Design Version Complete");
+                log(msg => console.log(msg), LogLevel.DEBUG, "Create Next Design Version Complete");
             }
         }
     };
