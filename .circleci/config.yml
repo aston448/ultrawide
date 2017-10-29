@@ -50,7 +50,7 @@ jobs:
 
       - run:
           name: start-meteor-app
-          command: npm run start-ci:
+          command: npm run start-ci
           background: true
 
       - run:
