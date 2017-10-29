@@ -48,6 +48,18 @@ jobs:
           name: meteor-unit-tests
           command: npm run test:unit
 
+      - run:
+          name: start-meteor
+          command: npm run start-ci:
+              background: true
+
+      - run:
+          name: wait-for-app
+          command: sleep 50
+
+      - run:
+          name: int-test-designs
+          command: npm run chimp:int_server_des
 
       - store_artifacts:
           path: test-results.xml
