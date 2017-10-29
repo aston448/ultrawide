@@ -51,7 +51,7 @@ jobs:
       - run:
           name: start-meteor
           command: npm run start-ci:
-              background: true
+          background: true
 
       - run:
           name: wait-for-app
