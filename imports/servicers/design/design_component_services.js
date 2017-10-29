@@ -238,8 +238,10 @@ class DesignComponentServices{
                 if (removed > 0) {
 
                     // When removing a design component its parent may become removable
-                    if (DesignComponentModules.hasNoChildren(parentId)) {
-                        DesignComponentData.setRemovable(parentId, true);
+                    if(parentId !== 'NONE') {
+                        if (DesignComponentModules.hasNoChildren(parentId)) {
+                            DesignComponentData.setRemovable(parentId, true);
+                        }
                     }
 
                     // Remove component from any related work packages

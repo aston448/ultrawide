@@ -48,6 +48,13 @@ jobs:
             - ~/.npm
             - ~/.meteor
 
+  test:
+    docker:
+      - image: circleci/node:6.10-browsers
+      - image: mongo:3.2.13
+
+    steps:
+      - checkout
       - run:
           name: meteor-unit-tests
           command: npm run test:unit
@@ -93,6 +100,13 @@ jobs:
           name: client-tests
           command: npm run chimp:int_client
 
+  upload:
+    docker:
+      - image: circleci/node:6.10-browsers
+
+    steps:
+      - checkout
+
       - run:
           name: upload-results - unit
           command: sh scripts/upload-test-results.sh unit_results.json
@@ -131,6 +145,12 @@ jobs:
 
 workflows:
   version: 2
-  build_test_all:
+  build_test_upload:
     jobs:
       - build
+      - test:
+          requires:
+            - build
+      - upload:
+          requires:
+            - test

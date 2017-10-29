@@ -88,7 +88,12 @@ class DesignComponentModules{
     hasNoChildren(designComponentId){
 
         const component = DesignComponentData.getDesignComponentById(designComponentId);
-        const count = DesignComponentData.getChildCount(component.designVersionId, component.componentReferenceId);
+
+        let count = 0;
+
+        if(component){
+            count = DesignComponentData.getChildCount(component.designVersionId, component.componentReferenceId);
+        }
 
         return count === 0;
     };
