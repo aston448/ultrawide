@@ -1,0 +1,60 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:6.10.2-browser
+
+    steps:
+      - checkout
+      - run: git submodule update --init
+
+      - restore_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+
+      - run:
+        name: install-meteor
+        command: sh scripts/install-meteor.sh
+
+      - run:
+        name: install-chimp
+        command: npm install -g chimp
+
+      - run:
+        name: install-selenium
+        command: npm install -g selenium-standalone
+
+      - run:
+        name: install-chimp-dependencies
+        command: sh scripts/download-chimp-dependencies.sh
+
+      - run:
+        name: install-npm-dependencies
+        command: npm install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+            - ~/.npm
+            - ~/.meteor
+
+      - run:
+        name: meteor-unit-tests
+        command: npm run test:unit
+
+
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+      - store_test_results:
+          path: test-results.xml
+
+workflows:
+  version: 2
+  build_test_all:
+    jobs:
+      - build
