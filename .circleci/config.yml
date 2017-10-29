@@ -41,6 +41,10 @@ jobs:
             - ~/.meteor
 
       - run:
+          name: set-locale
+          command: sudo apt-get install locales
+
+      - run:
           name: meteor-unit-tests
           command: npm run test:unit
 
