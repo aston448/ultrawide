@@ -3,7 +3,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:6.10.2-browser
+      - image: circleci/node:4.8.2-browser
+      - image: mongo:3.4.4
 
     steps:
       - checkout
