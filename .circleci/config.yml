@@ -19,11 +19,11 @@ jobs:
 
       - run:
           name: install-chimp
-          command: npm install -g chimp
+          command: sudo npm install -g chimp
 
       - run:
           name: install-selenium
-          command: npm install -g selenium-standalone
+          command: sudo npm install -g selenium-standalone
 
       - run:
           name: install-chimp-dependencies
