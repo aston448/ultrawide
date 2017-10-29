@@ -7,7 +7,7 @@
     "start-test": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_test/\" meteor -p 3030 run",
     "start-branch": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_branch/\" meteor -p 3040 run",
     "test": "meteor test --once  --driver-package dispatch:mocha",
-    "test:unit-local": "SERVER_TEST_REPORTER=/Users/aston/WebstormProjects/ultrawide-mocha-reporter OUTPUT_FILE=test_results/unit_results.json CONSOLE=ON meteor test --once  --driver-package dispatch:mocha",
+    "test:unit-local": "SERVER_TEST_REPORTER=/Users/aston/WebstormProjects/ultrawide-mocha-reporter OUTPUT_FILE=test_results/unit_results.json CONSOLE=ON MONGO_URL=mongodb://localhost:27017 meteor test --once  --driver-package dispatch:mocha",
     "test:unit": "SERVER_TEST_REPORTER=$PWD/node_modules/ultrawide-mocha-reporter OUTPUT_FILE=/.test_results/unit_results.json CONSOLE=ON meteor test --once  --driver-package dispatch:mocha",
     "test:unit:3030": "SERVER_TEST_REPORTER=/usr/local/lib/node_modules/ultrawide-mocha-reporter OUTPUT_FILE=.test_results/unit_results.json CONSOLE=ON meteor -p 3030 test --once  --driver-package dispatch:mocha",
     "chimp:int_server_des": "chimp .config/chimp_des.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/100_designs",
