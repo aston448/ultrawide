@@ -28,7 +28,7 @@ describe('UC 902 - User Logout', function(){
     it('A user may log out of Ultrawide', function(){
 
         // Setup - Login
-        browser.url('http://localhost:3030/');
+        browser.url('http://localhost:3000/');
 
         browser.waitForVisible('#loginUserName');
 
@@ -57,7 +57,7 @@ describe('UC 902 - User Logout', function(){
     it('When a user logs out the login screen is shown', function(){
 
         // Setup - Login
-        browser.url('http://localhost:3030/');
+        browser.url('http://localhost:3000/');
 
         browser.waitForVisible('#loginUserName');
 

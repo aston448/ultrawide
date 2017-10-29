@@ -29,7 +29,7 @@ describe('UC 901 - User Login', function(){
     it('A user may log in with the correct username and password', function(){
 
         // Execute
-        browser.url('http://localhost:3030/');
+        browser.url('http://localhost:3000/');
 
         browser.waitForVisible('#loginUserName');
 
@@ -50,7 +50,7 @@ describe('UC 901 - User Login', function(){
     it('An error is shown if an unknown username is entered', function(){
 
         // Execute
-        browser.url('http://localhost:3030/');
+        browser.url('http://localhost:3000/');
 
         browser.waitForVisible('#loginUserName');
 
@@ -68,7 +68,7 @@ describe('UC 901 - User Login', function(){
     it('An error is shown if a password that is not correct for the username is entered', function(){
 
         // Execute
-        browser.url('http://localhost:3030/');
+        browser.url('http://localhost:3000/');
 
         browser.waitForVisible('#loginUserName');
 
@@ -88,7 +88,7 @@ describe('UC 901 - User Login', function(){
     it('When successfully logged in the role selection screen is shown', function(){
 
         // Execute
-        browser.url('http://localhost:3030/');
+        browser.url('http://localhost:3000/');
 
         browser.waitForVisible('#loginUserName');
 

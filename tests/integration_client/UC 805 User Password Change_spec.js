@@ -19,9 +19,9 @@ describe('UC 805 User Password Change', function(){
         TestFixtures.clearAllData();
 
         // Login as old password user
-        browser.url('http://localhost:3030/');
+        browser.url('http://localhost:3000/');
 
-        browser.waitForExist('#loginUserName', 5000);
+        browser.waitForExist('#loginUserName');
 
         browser.setValue('#loginUserName', 'gloria');
         browser.setValue('#loginPassword', 'gloria123');
