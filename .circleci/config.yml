@@ -93,13 +93,6 @@ jobs:
           name: client-tests
           command: npm run chimp:int_client
 
-  upload:
-    docker:
-      - image: circleci/node:6.10-browsers
-
-    steps:
-      - checkout
-
       - run:
           name: upload-results - unit
           command: sh scripts/upload-test-results.sh unit_results.json
@@ -141,6 +134,3 @@ workflows:
   build_test_upload:
     jobs:
       - test
-      - upload:
-          requires:
-            - test

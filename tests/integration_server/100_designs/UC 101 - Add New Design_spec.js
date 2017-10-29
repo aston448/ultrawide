@@ -28,57 +28,65 @@ describe('UC 101 - Add New Design', function() {
 
 
     // Actions
-    it('A Designer can add a new Design to Ultrawide', function() {
+    describe('Actions', function(){
 
-        // Setup -------------------------------------------------------------------------------------------------------
+        it('A Designer can add a new Design to Ultrawide', function() {
 
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
+            // Setup -------------------------------------------------------------------------------------------------------
 
-        // Verify ------------------------------------------------------------------------------------------------------
-        // Created a new Design
-        expect(DesignVerifications.defaultNewDesignExists());
+            // Execute -----------------------------------------------------------------------------------------------------
+            DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
 
-    });
+            // Verify ------------------------------------------------------------------------------------------------------
+            // Created a new Design
+            expect(DesignVerifications.defaultNewDesignExists());
 
-    describe('A new Design can only be added by a Designer', function(){
-
-        it('cannot be added by Developer', function(){
-
-            // Expect failure with error
-            const expectation = {success: false, message: DesignValidationErrors.DESIGN_INVALID_ROLE_ADD};
-
-            DesignActions.addNewDesignAsRole(RoleType.DEVELOPER, expectation);
-
-            expect(DesignVerifications.defaultNewDesignDoesNotExist());
         });
 
-        it('cannot be added by Manager', function(){
+        describe('A new Design can only be added by a Designer', function(){
 
-            // Expect failure with error
-            const expectation = {success: false, message: DesignValidationErrors.DESIGN_INVALID_ROLE_ADD};
+            it(' - cannot be added by Developer', function(){
 
-            DesignActions.addNewDesignAsRole(RoleType.MANAGER, expectation);
+                // Expect failure with error
+                const expectation = {success: false, message: DesignValidationErrors.DESIGN_INVALID_ROLE_ADD};
 
-            expect(DesignVerifications.defaultNewDesignDoesNotExist());
+                DesignActions.addNewDesignAsRole(RoleType.DEVELOPER, expectation);
+
+                expect(DesignVerifications.defaultNewDesignDoesNotExist());
+            });
+
+            it(' - cannot be added by Manager', function(){
+
+                // Expect failure with error
+                const expectation = {success: false, message: DesignValidationErrors.DESIGN_INVALID_ROLE_ADD};
+
+                DesignActions.addNewDesignAsRole(RoleType.MANAGER, expectation);
+
+                expect(DesignVerifications.defaultNewDesignDoesNotExist());
+            });
+
         });
-
     });
+
 
     // Consequences
-    it('When a new Design is added an initial Design Version is created for it', function() {
+    describe('Consequences', function(){
 
-        // Setup -------------------------------------------------------------------------------------------------------
+        it('When a new Design is added an initial Design Version is created for it', function() {
 
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
+            // Setup -------------------------------------------------------------------------------------------------------
 
-        // Verify ------------------------------------------------------------------------------------------------------
-        // Created a new Design and a new Design Version linked to it
-        expect(DesignVerifications.defaultNewDesignExists());
-        expect(DesignVersionVerifications.defaultNewDesignVersionExistsForDesign(DefaultItemNames.NEW_DESIGN_NAME));
+            // Execute -----------------------------------------------------------------------------------------------------
+            DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
 
-    })
+            // Verify ------------------------------------------------------------------------------------------------------
+            // Created a new Design and a new Design Version linked to it
+            expect(DesignVerifications.defaultNewDesignExists());
+            expect(DesignVersionVerifications.defaultNewDesignVersionExistsForDesign(DefaultItemNames.NEW_DESIGN_NAME));
+
+        });
+    });
+
 });
 
 
