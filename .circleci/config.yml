@@ -10,27 +10,27 @@ jobs:
       - run: git submodule update --init
 
       - restore_cache:
-        key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package.json" }}
 
       - run:
-        name: install-meteor
-        command: sh scripts/install-meteor.sh
+          name: install-meteor
+          command: sh scripts/install-meteor.sh
 
       - run:
-        name: install-chimp
-        command: npm install -g chimp
+          name: install-chimp
+          command: npm install -g chimp
 
       - run:
-        name: install-selenium
-        command: npm install -g selenium-standalone
+          name: install-selenium
+          command: npm install -g selenium-standalone
 
       - run:
-        name: install-chimp-dependencies
-        command: sh scripts/download-chimp-dependencies.sh
+          name: install-chimp-dependencies
+          command: sh scripts/download-chimp-dependencies.sh
 
       - run:
-        name: install-npm-dependencies
-        command: npm install
+          name: install-npm-dependencies
+          command: npm install
 
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -40,8 +40,8 @@ jobs:
             - ~/.meteor
 
       - run:
-        name: meteor-unit-tests
-        command: npm run test:unit
+          name: meteor-unit-tests
+          command: npm run test:unit
 
 
       - store_artifacts:
