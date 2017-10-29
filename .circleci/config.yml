@@ -52,31 +52,27 @@ jobs:
           name: meteor-unit-tests
           command: npm run test:unit
 
-      - run:
-          name: start-meteor-app
-          command: npm run start-ci
-          background: true
-
-      - run:
-          name: wait-for-app
-          command: sleep 50
+#      - run:
+#          name: start-meteor-app
+#          command: npm run start-ci
+#          background: true
+#
+#      - run:
+#          name: wait-for-app
+#          command: sleep 50
 
 #      - run:
 #          name: int-test-designs
 #          command: npm run chimp:int_server_des
 
-      - run:
-          name: client-tests
-          command: npm run chimp:int_client
+#      - run:
+#          name: client-tests
+#          command: npm run chimp:int_client
 
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
-      - store_test_results:
-          path: test-results.xml
+      - run:
+          name: upload-results - unit
+          command: sh scripts/upload-test-results.sh unit_results.json
+
 
 workflows:
   version: 2
