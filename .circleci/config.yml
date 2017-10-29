@@ -49,7 +49,7 @@ jobs:
           command: npm run test:unit
 
       - run:
-          name: start-meteor
+          name: start-meteor-app
           command: npm run start-ci:
           background: true
 
