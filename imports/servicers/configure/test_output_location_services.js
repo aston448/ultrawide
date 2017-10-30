@@ -305,12 +305,14 @@ class TestOutputLocationServices {
 
             // This is a string if uploaded locally and a json object if remote from CI
             if(typeof blob === "string"){
+                console.log("Writing file as string... " );
                 fileText = blob;
             } else {
+                console.log("Stringify blob... " );
                 fileText = JSON.stringify(blob, null, 2);
             }
 
-            console.log("Writing file: " + location.locationFullPath + name);
+            console.log("Writing file: " + location.locationFullPath + name + "\n" + fileText.substring(1,100));
 
             fs.writeFileSync(location.locationFullPath + name, fileText, 'utf8');
 
