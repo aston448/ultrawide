@@ -50,7 +50,7 @@ class UltrawideMochaTestServices{
             // testFullName must always contain the Scenario as all of part of it.  May also contain test Suite Group and Name as well
             // If it contains these it should be in the form 'Suite Group Name'
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "  JSON Passes Count = {}", resultsJson.passes.length);
+            //log((msg) => console.log(msg), LogLevel.DEBUG, "  JSON Passes Count = {}", resultsJson.passes.length);
 
             if(resultsJson) {
 
