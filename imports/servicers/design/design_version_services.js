@@ -368,7 +368,7 @@ class DesignVersionServices{
                             wpScenarios.forEach((wpScenario) => {
 
                                 // Ignore removed update items
-                                let wpDuItem = DesignUpdateComponentData.getUpdateComponentById(wpScenario.componentId);
+                                let wpDuItem = DesignUpdateComponentData.getUpdateComponentByRef(wpScenario.designVersionId, du._id, wpScenario.componentReferenceId);
 
                                 if(wpDuItem && ! wpDuItem.isRemoved) {
 

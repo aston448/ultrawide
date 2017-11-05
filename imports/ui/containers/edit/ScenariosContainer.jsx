@@ -72,6 +72,7 @@ class ScenariosList extends Component {
 
                 if(testSummary) {
                     testSummaryData = ClientDataServices.getTestSummaryData(scenario);
+                    //console.log('Test summary data: ' + testSummaryData + ' for scenario ' + scenario.componentReferenceId)
                 }
 
                 return (

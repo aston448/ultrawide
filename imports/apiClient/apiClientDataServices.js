@@ -33,6 +33,8 @@ import UserDvMashScenarioData           from '../data/mash/user_dv_mash_scenario
 import UserMashScenarioTestData         from '../data/mash/user_mash_scenario_test_db.js';
 import UserDevTestSummaryData           from '../data/summary/user_dev_test_summary_db.js';
 import UserWorkProgressSummaryData      from '../data/summary/user_work_progress_summary_db.js';
+import UserDesignVersionMashScenariosData from '../data/mash/user_dv_mash_scenario_db.js';
+
 
 // REDUX services
 import store from '../redux/store'
@@ -1357,16 +1359,7 @@ class ClientDataServices{
 
         const userContext = store.getState().currentUserItemContext;
 
-        return UserDevTestSummaryData.getTestSummaryForScenario(userContext.userId, userContext.designVersionId, scenario.componentReferenceId, scenario.featureReferenceId);
-
-        // NOTE: previously this was called - seems wrong but may have worked and may have set up incorrect expectations...
-
-        // return UserDesignVersionMashScenarios.findOne({
-        //     userId:                     userContext.userId,
-        //     designVersionId:            scenario.designVersionId,
-        //     designScenarioReferenceId:  scenario.componentReferenceId
-        // });
-
+        return UserDesignVersionMashScenariosData.getScenario(userContext, scenario.componentReferenceId);
     }
 
     getTestSummaryFeatureData(feature){
