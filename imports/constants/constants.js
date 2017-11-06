@@ -488,3 +488,18 @@ export const TestLocationFileStatus = {
 
 // Array for Display lists
 export const TestLocationFileTypes = [TestLocationFileType.NONE, TestLocationFileType.UNIT, TestLocationFileType.INTEGRATION, TestLocationFileType.ACCEPTANCE]
+
+export const WordFonts = {
+    MAIN_TITLE:     {font: 'Arial', size: 30},
+    SUB_TITLE:      {font: 'Arial', size: 14},
+    APPLICATION:    {font: 'Arial', size: 24},
+    SECTION_1:      {font: 'Arial', size: 20, colour: '5F9EA0'},
+    SECTION_N:      {font: 'Arial', size: 18, colour: '8FBC8F'},
+    FEATURE:        {font: 'Arial', size: 16, colour: '990000'},
+    NARRATIVE:      {font: 'Arial', size: 11, colour: '000000'},
+    ASPECT:         {font: 'Arial', size: 12, colour: '5F9EA0'},
+    SCENARIO:       {font: 'Arial', size: 11, colour: '000000'},
+    DICT_TERM:      {font: 'Arial', size: 14, colour: '000000'},
+    DICT_DEF:       {font: 'Arial', size: 11, colour: '000000'},
+    DETAILS:        {font: 'Garamond', size: 12, colour: '000000'}
+};

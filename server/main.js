@@ -58,6 +58,8 @@ import '../imports/apiServer/apiFixtures.js';
 import '../imports/apiServer/apiTestOutputLocations.js';
 import '../imports/apiServer/apiUserManagement.js';
 
+import '../imports/apiServer/server/apiDocument.js';
+
 // Meteor Validated Methods
 import '../imports/apiValidatedMethods/design_methods.js';
 import '../imports/apiValidatedMethods/design_version_methods.js';

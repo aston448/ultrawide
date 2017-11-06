@@ -12,6 +12,7 @@ import UserTestOutputsContainer                 from '../../containers/configure
 // Ultrawide Services
 import ClientUserSettingsServices               from '../../../apiClient/apiClientUserSettings.js';
 import ClientUserManagementServices             from '../../../apiClient/apiClientUserManagement.js';
+import ClientDocumentServices                   from '../../../apiClient/apiClientDocument.js';
 
 import {UserSettingValue, UserSetting} from '../../../constants/constants.js';
 
@@ -87,6 +88,10 @@ export class ConfigurationSettings extends Component {
         e.preventDefault();
 
         ClientUserManagementServices.changeUserPassword(this.state.oldPassword, this.state.newPassword1, this.state.newPassword2);
+    }
+
+    exportWordDoc(designId, designVersionId){
+        ClientDocumentServices.exportWordDocument(designId, designVersionId);
     }
 
     render() {
@@ -169,6 +174,13 @@ export class ConfigurationSettings extends Component {
                             <Row>
                                 <Col md={12}>
                                     {intTestOutputPath}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={12}>
+                                    <Button id="exportWordDoc" onClick={() => this.exportWordDoc(userContext.designId, userContext.designVersionId)}>
+                                        Export Word Doc
+                                    </Button>
                                 </Col>
                             </Row>
                         </Grid>
