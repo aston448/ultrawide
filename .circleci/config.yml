@@ -21,9 +21,9 @@ jobs:
           name: install-meteor
           command: sh scripts/install-meteor.sh
 
-      - run:
-          name: install-bcrypt
-          command: meteor npm install --save bcrypt
+#      - run:
+#          name: install-bcrypt
+#          command: meteor npm install --save bcrypt
 
       - run:
           name: install-chimp
