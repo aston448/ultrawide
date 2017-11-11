@@ -13,6 +13,7 @@ import ChimpMochaTestServices           from '../../service_modules/dev/test_pro
 // Data Access
 import DesignUpdateData                 from '../../data/design_update/design_update_db.js';
 import UserIntegrationTestResultData    from '../../data/test_results/user_integration_test_result_db.js';
+import UserUnitTestResultData           from '../../data/test_results/user_unit_test_result_db.js';
 
 //======================================================================================================================
 //
@@ -30,11 +31,13 @@ class TestIntegrationServices{
 
         if(Meteor.isServer){
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH MASH DATA...");
+            log((msg) => console.log(msg), LogLevel.PERF, "REFRESH MASH DATA...");
 
             // Clear data for current user
+            UserUnitTestResultData.removeAllDataForUser(userContext.userId);
             UserIntegrationTestResultData.removeAllDataForUser(userContext.userId);
-            log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed.");
+
+            log((msg) => console.log(msg), LogLevel.PERF, "    Old data removed.");
 
             // Get latest results
             MashDataModules.getIntegrationTestResults(userContext);
@@ -65,7 +68,7 @@ class TestIntegrationServices{
                 }
             }
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH MASH DATA - DONE");
+            log((msg) => console.log(msg), LogLevel.PERF, "REFRESH MASH DATA - DONE");
         }
     }
 

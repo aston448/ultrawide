@@ -400,8 +400,9 @@ export function log(callback, level, message, ...vars){
 
     // Change these to change the output
     // const logLevel = LogLevel.TRACE;
+     const logLevel = LogLevel.PERF;
     // const logLevel = LogLevel.DEBUG;
-    const logLevel = LogLevel.INFO;
+    // const logLevel = LogLevel.INFO;
     // const logLevel = LogLevel.NONE;
 
 
@@ -412,6 +413,10 @@ export function log(callback, level, message, ...vars){
         case LogLevel.TRACE:
             // Only log when on TRACE
             log = logLevel === LogLevel.TRACE;
+            break;
+        case LogLevel.PERF:
+            // Only log when on PERF
+            log = logLevel === LogLevel.PERF;
             break;
         case LogLevel.DEBUG:
             // Log if DEBUG or TRACE

@@ -27,7 +27,7 @@ class TestIntegrationModules{
 
     getIntegrationTestResults(userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Integration test results...");
+        log((msg) => console.log(msg), LogLevel.PERF, "    Getting Integration test results...");
 
         // Get a list of the expected test files for integration
 
@@ -72,7 +72,7 @@ class TestIntegrationModules{
     getUnitTestResults(userContext){
 
         // Get a list of the expected test files for unit tests
-        log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Unit test results...");
+        log((msg) => console.log(msg), LogLevel.PERF, "    Getting Unit test results...");
 
         // See which locations the user has marked as containing unit test files for the current role
         const userLocations = UserTestTypeLocationData.getUserUnitTestsLocations(userContext.userId);
@@ -106,25 +106,25 @@ class TestIntegrationModules{
 
     recreateUserScenarioTestMashData(userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "    Recreating user mash scenarios... {}", userContext.userId);
+        log((msg) => console.log(msg), LogLevel.PERF, "    Recreating user mash scenarios... {}", userContext.userId);
 
         // Clear all data for user-designVersion
         UserDvMashScenarioData.removeAllDvScenariosForUser(userContext.userId, userContext.designVersionId);
         UserMashScenarioTestData.removeAllDvTestsForUser(userContext.userId, userContext.designVersionId);
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "    Old data removed...");
+        log((msg) => console.log(msg), LogLevel.PERF, "    Old data removed...");
 
         // Get all non-removed Scenarios for current DV
         const dvScenarios = DesignComponentData.getNonRemovedDvScenarios(userContext.designVersionId);
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "    Scenarios loaded...");
+        log((msg) => console.log(msg), LogLevel.PERF, "    {} Scenarios loaded...", dvScenarios.length);
 
         let scenarioBatchData = [];
         let scenarioTestBatchData = [];
 
         dvScenarios.forEach((scenario) => {
 
-            //log((msg) => console.log(msg), LogLevel.DEBUG, "Scenario = {}", scenario.componentNameNew);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Scenario = {}", scenario.componentNameNew.substring(1,20));
 
             // See which updated test results relate to this scenario
             // Note that all test-results plugins must ensure that the Scenario is within testFullName
@@ -134,10 +134,12 @@ class TestIntegrationModules{
             // Unit Tests
             const unitTests = UserUnitTestResultData.getUserMatchingTestResults(userContext.userId, searchRegex);
 
-            //log((msg) => console.log(msg), LogLevel.DEBUG, "    Matched {} unit tests", unitTests.length);
+            log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} unit tests", unitTests.length);
 
             // Integration Tests
             const intTests = UserIntegrationTestResultData.getUserMatchingTestResults(userContext.userId, searchRegex);
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} int tests", intTests.length);
 
             // Create the basic Scenario Mash
             let unitTestCount = 0;
@@ -297,16 +299,18 @@ class TestIntegrationModules{
                 }
             );
 
+            log((msg) => console.log(msg), LogLevel.TRACE, "    Logged Tests.");
+
         });
 
         // Bulk insert the data
         if(scenarioBatchData.length > 0) {
-            log((msg) => console.log(msg), LogLevel.DEBUG, "    Inserting {} summary records...", scenarioBatchData.length);
+            log((msg) => console.log(msg), LogLevel.PERF, "    Inserting {} summary records...", scenarioBatchData.length);
             UserDvMashScenarioData.bulkInsertData(scenarioBatchData);
         }
 
         if(scenarioTestBatchData.length > 0) {
-            log((msg) => console.log(msg), LogLevel.DEBUG, "    Inserting {} mash records...", scenarioTestBatchData.length);
+            log((msg) => console.log(msg), LogLevel.PERF, "    Inserting {} mash records...", scenarioTestBatchData.length);
             UserMashScenarioTestData.bulkInsertData(scenarioTestBatchData);
         }
     }
