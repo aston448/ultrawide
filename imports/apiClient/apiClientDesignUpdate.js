@@ -263,6 +263,8 @@ class ClientDesignUpdateServices {
     // User changed the merge action on the Design Update --------------------------------------------------------------
     updateMergeAction(userRole, designUpdateId, newAction){
 
+        const userContext = store.getState().currentUserItemContext;
+
         // Client validation
         let result = DesignUpdateValidationApi.validateUpdateMergeAction(userRole, designUpdateId);
 
