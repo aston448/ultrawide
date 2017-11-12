@@ -160,6 +160,13 @@ class DesignUpdateComponentData{
         });
     }
 
+    getCurrentContextComponents(designVersionId, designUpdateId){
+
+        return DesignUpdateComponents.find({
+            designVersionId:        designVersionId,
+            designUpdateId:         designUpdateId
+        }).fetch();
+    }
 
     // Related Components ----------------------------------------------------------------------------------------------
     getExistingAspectsForFeature(designUpdateId, featureReferenceId){

@@ -131,11 +131,11 @@ class TestIntegrationModules{
         myIntegrationTestResults.batchInsert(userIntResults);
 
         const userUnitResults = UserUnitTestResultData.getUserTestResults(userContext.userId);
-        myUnitTestResults.batchInsert(userIntResults);
+        myUnitTestResults.batchInsert(userUnitResults);
 
         dvScenarios.forEach((scenario) => {
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Scenario = {}", scenario.componentNameNew.substring(1,20));
+            //log((msg) => console.log(msg), LogLevel.TRACE, "Scenario = {}", scenario.componentNameNew.substring(1,20));
 
             // See which updated test results relate to this scenario
             // Note that all test-results plugins must ensure that the Scenario is within testFullName
@@ -144,19 +144,17 @@ class TestIntegrationModules{
 
             // Unit Tests
             const unitTests = myUnitTestResults.find({
-                userId:         userContext.userId,
                 testFullName:   {$regex: searchRegex}
             }).fetch();
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} unit tests", unitTests.length);
+            //log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} unit tests", unitTests.length);
 
             // Integration Tests
             const intTests = myIntegrationTestResults.find({
-                userId:         userContext.userId,
                 testFullName:   {$regex: searchRegex}
             }).fetch();
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} int tests", intTests.length);
+            //log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} int tests", intTests.length);
 
             // Create the basic Scenario Mash
             let unitTestCount = 0;
@@ -316,7 +314,7 @@ class TestIntegrationModules{
                 }
             );
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "    Logged Tests.");
+            //log((msg) => console.log(msg), LogLevel.TRACE, "    Logged Tests.");
 
         });
 

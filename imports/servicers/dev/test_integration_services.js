@@ -52,18 +52,22 @@ class TestIntegrationServices{
             // // Recalculate the Design Mash Scenarios
             // MashDataModules.updateUserMashScenariosForDesignVersion(userContext);
 
-
+            log((msg) => console.log(msg), LogLevel.PERF, "    Updating test summary...");
             // And update the test summary data
             this.updateTestSummaryData(userContext);
+
+            log((msg) => console.log(msg), LogLevel.PERF, "    Test summary updated...");
 
             // Update DU Summary if a DU selected
             if(userContext.designVersionId !== 'NONE') {
 
+                log((msg) => console.log(msg), LogLevel.PERF, "    Setting update summary data stale...");
                 // Mark ALL design update summary data as stale so that results are updated when update is accessed
                 DesignUpdateData.bulkSetUpdatesStale(userContext.designVersionId);
 
                 // And update the current update now in needed
                 if(userContext.designUpdateId !== 'NONE') {
+                    log((msg) => console.log(msg), LogLevel.PERF, "    Recreating DU Summary data...");
                     DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext, true);
                 }
             }

@@ -11,7 +11,7 @@ let Schema = new SimpleSchema({
     scenarioName:                   {type: String},                         // For Scenarios is the match for the test name
     designFeatureReferenceId:       {type: String, defaultValue: 'NONE'},   // Set if known in Design
     designFeatureAspectReferenceId: {type: String, defaultValue: 'NONE'},   // Set if known in Design and relevant
-    designScenarioReferenceId:      {type: String, defaultValue: 'NONE'},   // Set if known in Design and relevant
+    designScenarioReferenceId:      {type: String, defaultValue: 'NONE', index: 1},   // Set if known in Design and relevant
     mashItemIndex:                  {type: Number, decimal: true, defaultValue: 100000},  // Used for ordering - follows ordering in Design
     // Test Results summary
     // Acceptance
@@ -41,7 +41,7 @@ UserDesignVersionMashScenarios.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userDesignVersionMashScenarios', function userDesignVersionMashScenariosPublication(userId){
-        return UserDesignVersionMashScenarios.find({userId: userId});
+    Meteor.publish('userDesignVersionMashScenarios', function userDesignVersionMashScenariosPublication(userId, designVersionId){
+        return UserDesignVersionMashScenarios.find({userId: userId, designVersionId: designVersionId});
     })
 }

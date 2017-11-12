@@ -78,6 +78,55 @@ class ClientDataServices{
         }
     }
 
+    getUserData(userContext, callback){
+
+        if(Meteor.isClient){
+
+            store.dispatch(updateUserMessage({
+                messageType: MessageType.WARNING,
+                messageText: 'FETCHING USER DATA FROM SERVER...'
+            }));
+
+            // User specific data
+            const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
+            const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
+            const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
+            const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
+            const tsHandle = Meteor.subscribe('userDevTestSummary', userContext.userId);
+            const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
+            const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
+            const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
+
+            Tracker.autorun((loader) => {
+
+                let loading = (
+                    !dusHandle.ready() || !dvmHandle.ready() ||
+                    !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
+                    !dsHandle.ready() || !psHandle.ready()
+                );
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "loading User Data = {}", loading);
+
+                if (!loading) {
+
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: 'User data loaded'
+                    }));
+
+                    // If an action wanted after loading call it...
+                    if (callback) {
+                        callback();
+                    }
+
+                    // Stop this checking once we are done or there will be random chaos
+                    loader.stop();
+                }
+
+            });
+        }
+    }
+
     getDesignVersionData(userContext, callback){
 
         if(Meteor.isClient) {
@@ -107,7 +156,7 @@ class ClientDataServices{
                 const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
 
                 // User specific data
-                const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId);
+                const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
                 const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
                 const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
                 const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
@@ -1216,6 +1265,7 @@ class ClientDataServices{
         // Return all scenario mash data for the current Feature Aspect or Scenario
 
         //console.log("looking for scenarios with FA: " + featureAspectReferenceId + " and SC: " + scenarioReferenceId);
+        //log((msg) => console.log(msg), LogLevel.PERF, 'Getting Scenario Mash Data...');
 
         if(userContext.workPackageId === 'NONE') {
 
@@ -1223,10 +1273,12 @@ class ClientDataServices{
 
             if (scenarioReferenceId === 'NONE') {
 
+                //log((msg) => console.log(msg), LogLevel.PERF, 'Returning FA Scenarios');
                 return UserDvMashScenarioData.getFeatureAspectScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId);
 
             } else {
 
+                //log((msg) => console.log(msg), LogLevel.PERF, 'Returning Scenarios');
                 return UserDvMashScenarioData.getScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId, scenarioReferenceId);
 
             }
@@ -1255,6 +1307,7 @@ class ClientDataServices{
                 scenarios.push(mashScenario);
             });
 
+            //log((msg) => console.log(msg), LogLevel.PERF, 'Returning WP Scenarios');
             return scenarios;
         }
     }

@@ -21,6 +21,7 @@ import DesignComponentData              from '../data/design/design_component_db
 import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
 import UserViewOptionData               from '../data/context/user_view_option_db.js';
 import UserContextData                  from '../data/context/user_context_db.js';
+import UserDvMashScenarioData           from '../data/mash/user_dv_mash_scenario_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -141,11 +142,19 @@ class ClientUserContextServices {
         log((msg) => console.log(msg), LogLevel.TRACE, "Loading main data...");
 
         const componentsExist = DesignVersionData.checkForComponents();
+        const mashExists = UserDvMashScenarioData.hasUserDvData(userContext);
 
         if(componentsExist){
             log((msg) => console.log(msg), LogLevel.TRACE, "Data already loaded...");
 
-            this.onAllDataLoaded();
+            if(!mashExists){
+                log((msg) => console.log(msg), LogLevel.TRACE, "Getting User Data...");
+                ClientDataServices.getUserData(userContext, this.onAllDataLoaded);
+            } else {
+                this.onAllDataLoaded();
+            }
+
+
         } else {
 
             // Need to load data

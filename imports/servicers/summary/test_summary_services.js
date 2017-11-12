@@ -52,6 +52,42 @@ class TestSummaryServices {
         // Populate the Feature summary data
         const designFeatures = DesignVersionData.getNonRemovedFeatures(userContext.designId, userContext.designVersionId);
 
+
+        // Get a local copy of just the mash data relevant to this user and the current DV.
+        // This optimises processing when there are lots of users / design versions.
+        let myMashScenarioData = new Mongo.Collection(null);
+
+        const userMashScenarios = UserDvMashScenarioData.getUserDesignVersionData(userContext);
+
+        if(userMashScenarios.length > 0) {
+            myMashScenarioData.batchInsert(userMashScenarios);
+        } else {
+            // No data yet so no work to do
+            return;
+        }
+
+        // Get a local copy of the in context DU / WP components if relevant so we can search from just those
+        let contextDuData = new Mongo.Collection(null);
+        let contextWpData = new Mongo.Collection(null);
+
+        if(userContext.designUpdateId !== 'NONE'){
+
+            const currentContextDuComponents = DesignUpdateComponentData.getCurrentContextComponents(userContext.designVersionId, userContext.designUpdateId);
+
+            if(currentContextDuComponents.length > 0) {
+                contextDuData.batchInsert(currentContextDuComponents);
+            }
+        }
+
+        if(userContext.workPackageId !== 'NONE'){
+
+            const currentContextWpComponents = WorkPackageComponentData.getCurrentWpComponents(userContext.workPackageId);
+
+            if(currentContextWpComponents.length > 0) {
+                contextWpData.batchInsert(currentContextWpComponents);
+            }
+        }
+
         const totalFeatureCount = designFeatures.length;
 
         let batchData = [];
@@ -60,11 +96,7 @@ class TestSummaryServices {
 
             log((msg) => console.log(msg), LogLevel.TRACE, "FEATURE {}", designFeature.componentNameNew);
 
-            let featureScenarios = UserDvMashScenarioData.getFeatureScenarios(
-                userContext.userId,
-                userContext.designVersionId,
-                designFeature.componentReferenceId
-            );
+            let featureScenarios = myMashScenarioData.find({designFeatureReferenceId:   designFeature.componentReferenceId}).fetch();
 
             let featureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
             let featurePassingTests = 0;
@@ -158,11 +190,9 @@ class TestSummaryServices {
                 // Get stats for DU if this feature scenario in DU
                 if(userContext.designUpdateId !== 'NONE') {
 
-                    duComponent = DesignUpdateComponentData.getUpdateComponentByRef(
-                        userContext.designVersionId,
-                        userContext.designUpdateId,
-                        featureScenario.designScenarioReferenceId
-                    );
+                    duComponent = contextDuData.findOne({
+                        componentReferenceId: featureScenario.designScenarioReferenceId
+                    });
 
                     if (duComponent && duComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
 
@@ -216,10 +246,7 @@ class TestSummaryServices {
                 // Get stats for WP if this feature scenario in WP
                 if(userContext.workPackageId !== 'NONE') {
 
-                    wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(
-                        userContext.workPackageId,
-                        featureScenario.designScenarioReferenceId
-                    );
+                    wpComponent = contextWpData.findOne({componentReferenceId: featureScenario.designScenarioReferenceId});
 
                     let nonRemovedComponent = true;
 

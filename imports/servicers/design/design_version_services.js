@@ -14,7 +14,7 @@ import UserWorkProgressSummaryData  from '../../data/summary/user_work_progress_
 import UserDevDesignSummaryData     from '../../data/summary/user_dev_design_summary_db';
 import WorkPackageData              from '../../data/work/work_package_db.js';
 import WorkPackageComponentData     from '../../data/work/work_package_component_db.js';
-import UserDvMashScenariosData      from '../../data/mash/user_dv_mash_scenario_db.js';
+import UserDvMashScenarioData       from '../../data/mash/user_dv_mash_scenario_db.js';
 
 
 //======================================================================================================================
@@ -186,6 +186,20 @@ class DesignVersionServices{
 
             let batchData = [];
 
+            // Get a local copy of just the data relevant to this user and the current DV.
+            // This optimises processing when there are lots of users / design versions.
+            let myMashScenarioData = new Mongo.Collection(null);
+
+            const userMashScenarios = UserDvMashScenarioData.getUserDesignVersionData(userContext);
+
+            if(userMashScenarios.length > 0) {
+                myMashScenarioData.batchInsert(userMashScenarios);
+            } else {
+                // No data yet so no work to do
+                return;
+            }
+
+
             switch(dv.designVersionStatus){
                 case DesignVersionStatus.VERSION_NEW:
                 case DesignVersionStatus.VERSION_DRAFT:
@@ -212,7 +226,7 @@ class DesignVersionServices{
 
                         wpScenarios.forEach((wpScenario) =>{
 
-                            let testResult = UserDvMashScenariosData.getScenario(userContext, wpScenario.componentReferenceId);
+                            let testResult = myMashScenarioData.findOne({designScenarioReferenceId:  wpScenario.componentReferenceId})//UserDvMashScenariosData.getScenario(userContext, wpScenario.componentReferenceId);
 
                             if(testResult) {
                                 if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {
@@ -310,7 +324,7 @@ class DesignVersionServices{
                                 duWpScenarios++;
                             }
 
-                            let testResult = UserDvMashScenariosData.getScenario(userContext, duScenario.componentReferenceId);
+                            let testResult = myMashScenarioData.findOne({designScenarioReferenceId: duScenario.componentReferenceId}) //UserDvMashScenariosData.getScenario(userContext, duScenario.componentReferenceId);
 
                             if(testResult) {
                                 if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {
@@ -374,7 +388,7 @@ class DesignVersionServices{
 
                                     wpTotalScenarios++;
 
-                                    let testResult = UserDvMashScenariosData.getScenario(userContext, wpScenario.componentReferenceId);
+                                    let testResult = myMashScenarioData.findOne({designScenarioReferenceId: wpScenario.componentReferenceId}) //UserDvMashScenariosData.getScenario(userContext, wpScenario.componentReferenceId);
 
                                     if (testResult) {
                                         if (testResult.accMashTestStatus === MashTestStatus.MASH_FAIL || testResult.intMashTestStatus === MashTestStatus.MASH_FAIL || testResult.unitFailCount > 0) {

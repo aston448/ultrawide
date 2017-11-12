@@ -10,6 +10,15 @@ class UserDvMashScenarioData {
         UserDesignVersionMashScenarios.batchInsert(scenarioBatchData);
     }
     // SELECT ==========================================================================================================
+
+    getUserDesignVersionData(userContext){
+
+        return UserDesignVersionMashScenarios.find({
+            userId:                     userContext.userId,
+            designVersionId:            userContext.designVersionId
+        }).fetch();
+    }
+
     getScenario(userContext, scenarioRefId){
 
         return UserDesignVersionMashScenarios.findOne({
@@ -52,6 +61,14 @@ class UserDvMashScenarioData {
             },
             {sort: {mashItemIndex: 1}}
         ).fetch();
+    }
+
+    hasUserDvData(userContext){
+
+        return UserDesignVersionMashScenarios.find({
+            userId:                     userContext.userId,
+            designVersionId:            userContext.designVersionId
+        }). count() > 0;
     }
 
     // REMOVE ==========================================================================================================

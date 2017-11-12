@@ -67,6 +67,13 @@ class WorkPackageComponentData {
         });
     }
 
+    getCurrentWpComponents(workPackageId){
+
+        return WorkPackageComponents.find({
+            workPackageId:          workPackageId
+        }).fetch();
+    }
+
     getActiveWpComponentsByComponentRef(workPackageId, designComponentReferenceId){
 
         return WorkPackageComponents.find({
