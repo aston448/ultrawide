@@ -6,8 +6,8 @@ export const UserIntegrationTestResults = new Mongo.Collection('userIntegrationT
 // All test results have the same structure so there can be a common way of reporting them
 
 let Schema = new SimpleSchema({
-    userId:             {type: String, index: 1},                 // This user's results
-    testFullName:       {type: String, index: 1},                 // for results where suite / group not separated
+    userId:             {type: String, index: -1},                // This user's results
+    testFullName:       {type: String, index: 1},       // for results where suite / group not separated
     testSuite:          {type: String},                 // e.g a Module
     testGroup:          {type: String},                 // Scenario if multiple tests
     testName:           {type: String},                 // Test if multiple tests or Scenario if just one test

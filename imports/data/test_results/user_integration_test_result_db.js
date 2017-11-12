@@ -12,6 +12,13 @@ class UserIntegrationTestResultData {
 
     // SELECT ==========================================================================================================
 
+    getUserTestResults(userId){
+
+        return UserIntegrationTestResults.find({
+            userId:         userId
+        }).fetch();
+    }
+
     getUserMatchingTestResults(userId, searchRegex){
 
         return UserIntegrationTestResults.find({

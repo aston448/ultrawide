@@ -122,6 +122,17 @@ class TestIntegrationModules{
         let scenarioBatchData = [];
         let scenarioTestBatchData = [];
 
+        // Extract out just the user's test results so that when there are many users this does not
+        // slow down
+        let myIntegrationTestResults = new Mongo.Collection(null);
+        let myUnitTestResults = new Mongo.Collection(null);
+
+        const userIntResults = UserIntegrationTestResultData.getUserTestResults(userContext.userId);
+        myIntegrationTestResults.batchInsert(userIntResults);
+
+        const userUnitResults = UserUnitTestResultData.getUserTestResults(userContext.userId);
+        myUnitTestResults.batchInsert(userIntResults);
+
         dvScenarios.forEach((scenario) => {
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Scenario = {}", scenario.componentNameNew.substring(1,20));
@@ -132,12 +143,18 @@ class TestIntegrationModules{
             let searchRegex = new RegExp(scenario.componentNameNew);
 
             // Unit Tests
-            const unitTests = UserUnitTestResultData.getUserMatchingTestResults(userContext.userId, searchRegex);
+            const unitTests = myUnitTestResults.find({
+                userId:         userContext.userId,
+                testFullName:   {$regex: searchRegex}
+            }).fetch();
 
             log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} unit tests", unitTests.length);
 
             // Integration Tests
-            const intTests = UserIntegrationTestResultData.getUserMatchingTestResults(userContext.userId, searchRegex);
+            const intTests = myIntegrationTestResults.find({
+                userId:         userContext.userId,
+                testFullName:   {$regex: searchRegex}
+            }).fetch();
 
             log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} int tests", intTests.length);
 
