@@ -17,7 +17,15 @@
     "chimp:int_server_du": "chimp .config/chimp_du.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/500_design_updates",
     "chimp:int_server_dom": "chimp .config/chimp_dom.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/700_domain",
     "chimp:int_server_adm": "chimp .config/chimp_adm.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/800_admin",
-    "chimp:int_client": "chimp .config/chimp_client.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_client"
+    "chimp:int_client": "chimp .config/chimp_client.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_client",
+    "local_int_des": "chimp .config/chimp_des.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/100_designs",
+    "local_int_wp": "chimp .config/chimp_wp.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/200_work_packages",
+    "local_int_dev": "chimp .config/chimp_dev.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/300_development",
+    "local_int_sum": "chimp .config/chimp_sum.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/400_summaries",
+    "local_int_du": "chimp .config/chimp_du.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/500_design_updates",
+    "local_int_dom": "chimp .config/chimp_dom.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/700_domain",
+    "local_int_adm": "chimp .config/chimp_adm.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/800_admin",
+    "local_int_client": "chimp .config/chimp_client.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_client"
   },
   "dependencies": {
     "async": "^2.5.0",

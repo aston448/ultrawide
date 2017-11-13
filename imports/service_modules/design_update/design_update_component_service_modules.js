@@ -471,14 +471,24 @@ class DesignUpdateComponentModules{
 
         let duComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
-        return DesignUpdateComponentData.hasNoChildren(duComponent.designUpdateId, duComponent.componentReferenceId);
+        // If the component does not exist because it has been removed then it must have had no children
+        if(duComponent) {
+            return DesignUpdateComponentData.hasNoChildren(duComponent.designUpdateId, duComponent.componentReferenceId);
+        } else {
+            return true;
+        }
     }
 
     hasNoNonRemovedChildren(designUpdateComponentId){
         // For use when could be logically removed if all children are removed
         let duComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
 
-        return DesignUpdateComponentData.hasNoNonRemovedChildren(duComponent.designUpdateId, duComponent.componentReferenceId);
+        // If the component does not exist because it has been removed then it must have had no children
+        if(duComponent) {
+            return DesignUpdateComponentData.hasNoNonRemovedChildren(duComponent.designUpdateId, duComponent.componentReferenceId);
+        } else {
+            return true;
+        }
     };
 
     hasNoInScopeChildrenInOtherUpdates(designUpdateComponentId){
