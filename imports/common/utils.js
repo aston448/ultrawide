@@ -400,9 +400,9 @@ export function log(callback, level, message, ...vars){
 
     // Change these to change the output
     // const logLevel = LogLevel.TRACE;
-     const logLevel = LogLevel.PERF;
+    // const logLevel = LogLevel.PERF;
     // const logLevel = LogLevel.DEBUG;
-    // const logLevel = LogLevel.INFO;
+     const logLevel = LogLevel.INFO;
     // const logLevel = LogLevel.NONE;
 
 
