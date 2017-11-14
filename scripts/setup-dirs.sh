@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if [ -f ~/.ultrawide_data ]
+if [ -f /home/circleci/data ]
 then
     echo Data Dir Exists
 
 else
     echo Creating Ultrawide Data Dir
 
-    mkdir ~/.ultrawide_data
+    mkdir /home/circleci/data
 
 fi

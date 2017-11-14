@@ -21,6 +21,10 @@ jobs:
           name: install-meteor
           command: sh scripts/install-meteor.sh
 
+      - run:
+          name: create-dirs
+          command: sh scripts/setup-dirs.sh
+
 #      - run:
 #          name: install-bcrypt
 #          command: meteor npm install --save bcrypt
