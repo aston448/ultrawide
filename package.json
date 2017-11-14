@@ -48,7 +48,7 @@
     "redux": "^3.7.2",
     "redux-test-utils": "^0.1.3",
     "redux-thunk": "^2.2.0",
-    "ultrawide-mocha-reporter": "^1.0.5"
+    "ultrawide-mocha-reporter": "^1.0.6"
   },
   "devDependencies": {
     "enzyme": "^2.9.1",

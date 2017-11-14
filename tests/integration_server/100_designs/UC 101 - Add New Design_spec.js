@@ -43,6 +43,11 @@ describe('UC 101 - Add New Design', function() {
 
         });
 
+    });
+
+    // Conditions
+    describe('Conditions', function(){
+
         describe('A new Design can only be added by a Designer', function(){
 
             it(' - cannot be added by Developer', function(){
@@ -67,7 +72,6 @@ describe('UC 101 - Add New Design', function() {
 
         });
     });
-
 
     // Consequences
     describe('Consequences', function(){
