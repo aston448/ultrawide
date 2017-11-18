@@ -15,6 +15,10 @@ export const TOGGLE_DOMAIN_DICTIONARY = 'TOGGLE_DOMAIN_DICTIONARY';
 export const SET_CURRENT_USER_VIEW_OPTIONS = 'SET_CURRENT_USER_VIEW_OPTIONS';
 export const SET_WINDOW_SIZE = 'SET_WINDOW_SIZE';
 export const SET_INT_TEST_OUTPUT_DIR = 'SET_INT_TEST_OUTPUT_DIR';
+export const SET_DOC_SECTION_TEXT_OPTION = 'SET_DOC_SECTION_TEXT_OPTION';
+export const SET_DOC_FEATURE_TEXT_OPTION = 'SET_DOC_FEATURE_TEXT_OPTION';
+export const SET_DOC_NARRATIVE_TEXT_OPTION = 'SET_DOC_NARRATIVE_TEXT_OPTION';
+export const SET_DOC_SCENARIO_TEXT_OPTION = 'SET_DOC_SCENARIO_TEXT_OPTION';
 
 // the currently selected user in the User Management screen - NOT the currently logged in user
 export const SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID';
@@ -171,6 +175,7 @@ export function toggleDomainDictionary(isVisible) {
     };
 }
 
+// USER SETTINGS -------------------------------------------------------------------------------------------------------
 export function setCurrentUserViewOptions(viewOptions, userId, saveToDb){
 
      return function (dispatch) {
@@ -199,6 +204,36 @@ export function setIntTestOutputDir(newDir) {
         dispatch({type: SET_INT_TEST_OUTPUT_DIR, newDir: newDir});
     };
 }
+
+export function setDocSectionTextOption(newOption) {
+
+    return function (dispatch) {
+        dispatch({type: SET_DOC_SECTION_TEXT_OPTION, newOption: newOption});
+    };
+}
+
+export function setDocFeatureTextOption(newOption) {
+
+    return function (dispatch) {
+        dispatch({type: SET_DOC_FEATURE_TEXT_OPTION, newOption: newOption});
+    };
+}
+
+export function setDocNarrativeTextOption(newOption) {
+
+    return function (dispatch) {
+        dispatch({type: SET_DOC_NARRATIVE_TEXT_OPTION, newOption: newOption});
+    };
+}
+
+export function setDocScenarioTextOption(newOption) {
+
+    return function (dispatch) {
+        dispatch({type: SET_DOC_SCENARIO_TEXT_OPTION, newOption: newOption});
+    };
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 // What any user is looking at or designer is working on or a developer is developing
 

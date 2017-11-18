@@ -3,16 +3,11 @@
 // Ultrawide Collections
 
 // Ultrawide Services
-import { ViewType, MessageType } from '../constants/constants.js';
-import { Validation } from '../constants/validation_errors.js';
-import { DesignMessages } from '../constants/message_texts.js'
-
-//import ServerDocumentApi      from '../apiServer/server/apiDocument.js';
-
+import { UserSettingValue} from '../constants/constants.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, updateUserMessage} from '../redux/actions'
+import {setDocSectionTextOption, setDocFeatureTextOption, setDocNarrativeTextOption, setDocScenarioTextOption} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for Design Items
@@ -24,7 +19,7 @@ class ClientDocumentServices {
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // User exports Design Version as word doc -------------------------------------------------------------------------
-    exportWordDocument(designId, designVersionId){
+    exportWordDocument(designId, designVersionId, options){
 
         // // Client validation
         // let result = DesignValidationApi.validateAddDesign(userRole);
@@ -35,8 +30,33 @@ class ClientDocumentServices {
         //     return {success: false, message: result};
         // }
 
+        // Update store with latest user options
+        if(options.includeSectionText){
+            store.dispatch(setDocSectionTextOption(UserSettingValue.DOC_INCLUDE_TEXT))
+        } else {
+            store.dispatch(setDocSectionTextOption(UserSettingValue.DOC_EXCLUDE_TEXT))
+        }
+
+        if(options.includeFeatureText){
+            store.dispatch(setDocFeatureTextOption(UserSettingValue.DOC_INCLUDE_TEXT))
+        } else {
+            store.dispatch(setDocFeatureTextOption(UserSettingValue.DOC_EXCLUDE_TEXT))
+        }
+
+        if(options.includeNarrativeText){
+            store.dispatch(setDocNarrativeTextOption(UserSettingValue.DOC_INCLUDE_TEXT))
+        } else {
+            store.dispatch(setDocNarrativeTextOption(UserSettingValue.DOC_EXCLUDE_TEXT))
+        }
+
+        if(options.includeScenarioText){
+            store.dispatch(setDocScenarioTextOption(UserSettingValue.DOC_INCLUDE_TEXT))
+        } else {
+            store.dispatch(setDocScenarioTextOption(UserSettingValue.DOC_EXCLUDE_TEXT))
+        }
+
         // Real action call - server actions
-        Meteor.call('document.exportWordDocument', designId, designVersionId, (err, result) => {
+        Meteor.call('document.exportWordDocument', designId, designVersionId, options, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.

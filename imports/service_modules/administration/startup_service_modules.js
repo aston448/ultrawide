@@ -77,6 +77,11 @@ class StartupModules{
             if (!fs.existsSync(dataStore + UltrawideDirectory.TEST_OUTPUT_DIR)) {
                 fs.mkdirSync(dataStore + UltrawideDirectory.TEST_OUTPUT_DIR);
             }
+
+            if (!fs.existsSync(dataStore + UltrawideDirectory.EXPORT_DIR)) {
+                fs.mkdirSync(dataStore + UltrawideDirectory.EXPORT_DIR);
+            }
+
         } catch (e) {
             log((msg) => console.log(msg), LogLevel.ERROR, 'Failed to create basic Ultrawide directories: {}', e.stack);
             throw new Meteor.Error(e.code, e.stack);

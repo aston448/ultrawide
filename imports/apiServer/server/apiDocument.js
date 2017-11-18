@@ -6,10 +6,10 @@ import DocumentExportServices   from '../../server/doc/document_export_services.
 // Meteor methods
 Meteor.methods({
 
-    'document.exportWordDocument'(designId, designVersionId) {
+    'document.exportWordDocument'(designId, designVersionId, options) {
 
         //console.log('Adding new Feature Background Step');
-        DocumentExportServices.exportWordDocument(designId, designVersionId);
+        DocumentExportServices.exportWordDocument(designId, designVersionId, options);
 
     }
 

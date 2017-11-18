@@ -8,6 +8,12 @@ class WordExportModules {
         document.putPageBreak();
     }
 
+    newLine(document){
+
+        const p = document.createP ();
+        p.addLineBreak ();
+    }
+
     mainTitle(p, titleText){
         p.addText(titleText, {font_face: WordFonts.MAIN_TITLE.font, font_size: WordFonts.MAIN_TITLE.size})
     }
@@ -17,7 +23,7 @@ class WordExportModules {
     }
 
     application(p, applicationName){
-        p.addText(applicationName, {font_face: WordFonts.APPLICATION.font, font_size: WordFonts.APPLICATION.size, style: 'Heading 1'})
+        p.addText(applicationName, {font_face: WordFonts.APPLICATION.font, font_size: WordFonts.APPLICATION.size})
     }
 
     designSection(p, sectionName, sectionLevel){

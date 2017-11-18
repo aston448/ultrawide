@@ -13,6 +13,10 @@ const initialState = {
     currentAppView:                     ViewType.AUTHORISE,
     currentViewMode:                    ViewMode.MODE_VIEW,
     currentWindowSize:                  UserSettingValue.SCREEN_SIZE_LARGE,
+    docSectionTextOption:               UserSettingValue.DOC_INCLUDE_TEXT,
+    docFeatureTextOption:               UserSettingValue.DOC_INCLUDE_TEXT,
+    docNarrativeTextOption:             UserSettingValue.DOC_INCLUDE_TEXT,
+    docScenarioTextOption:              UserSettingValue.DOC_INCLUDE_TEXT,
     intTestOutputDir:                   '',
     domainDictionaryVisible:            false,
     currentUserViewOptions:             {
@@ -102,6 +106,22 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_INT_TEST_OUTPUT_DIR:
             return Object.assign({}, state, {
                 intTestOutputDir: action.newDir
+            });
+        case Actions.SET_DOC_SECTION_TEXT_OPTION:
+            return Object.assign({}, state, {
+                docSectionTextOption: action.newOption
+            });
+        case Actions.SET_DOC_FEATURE_TEXT_OPTION:
+            return Object.assign({}, state, {
+                docFeatureTextOption: action.newOption
+            });
+        case Actions.SET_DOC_NARRATIVE_TEXT_OPTION:
+            return Object.assign({}, state, {
+                docNarrativeTextOption: action.newOption
+            });
+        case Actions.SET_DOC_SCENARIO_TEXT_OPTION:
+            return Object.assign({}, state, {
+                docScenarioTextOption: action.newOption
             });
         case Actions.SET_CURRENT_USER_ITEM_CONTEXT:
             //console.log("Updated User Item Context: " + action.newUserItemContext);

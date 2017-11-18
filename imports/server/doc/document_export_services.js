@@ -12,21 +12,26 @@ import DesignVersionData    from '../../../imports/data/design/design_version_db
 import DesignComponentData  from '../../../imports/data/design/design_component_db.js';
 import DomainDictionaryData from '../../../imports/data/design/domain_dictionary_db.js';
 
-import { ComponentType, UpdateMergeStatus } from "../../constants/constants";
+import { log } from '../../../imports/common/utils.js';
+
+import { ComponentType, UpdateMergeStatus, LogLevel, UltrawideDirectory } from "../../constants/constants";
 import { DefaultDetailsText } from "../../constants/default_names";
 
 class DocumentExportServices{
 
-    exportWordDocument(designId, designVersionId){
+    exportWordDocument(designId, designVersionId, options){
+
+        log((msg) => console.log(msg), LogLevel.INFO, 'Exporting DV as Word Doc with options: Section {}, Feature {}, Narrative: {}, Scenario {}',
+            options.includeSectionText, options.includeFeatureText, options.includeNarrativeText, options.includeScenarioText);
 
         let docx = officegen ( {
             type: 'docx',
             orientation: 'portrait',
-            pageMargins: { top: 200, left: 200, bottom: 200, right: 200 }
+            pageMargins: { top: 100, left: 100, bottom: 100, right: 100 }
         } );
 
         docx.on ( 'error', ( err ) => {
-            console.log ( err );
+            log((msg) => console.log(msg), LogLevel.ERROR, 'Error generating document: {}', err);
         });
 
 
@@ -39,7 +44,7 @@ class DocumentExportServices{
         // Front Page
         WordExportModules.mainTitle(paragraph, designVersionData.designName);
         paragraph = docx.createP();
-        WordExportModules.subTitle(paragraph, designVersionData.designVersionName + ' version: ' + designVersionData.designVersionNumber)
+        WordExportModules.subTitle(paragraph, designVersionData.designVersionName + ' version: ' + designVersionData.designVersionNumber);
 
 
 
@@ -56,15 +61,17 @@ class DocumentExportServices{
                 WordExportModules.application(paragraph, application.componentNameNew);
 
                 // Details
-                let details = convertFromRaw(application.componentTextRawNew).getPlainText();
+                if (options.includeSectionText){
+                    let details = convertFromRaw(application.componentTextRawNew).getPlainText();
 
-                if (details !== DefaultDetailsText.NEW_APPLICATION_DETAILS) {
-                    paragraph = docx.createP();
-                    WordExportModules.details(paragraph, details);
+                    if (details !== DefaultDetailsText.NEW_APPLICATION_DETAILS) {
+                        paragraph = docx.createP();
+                        WordExportModules.details(paragraph, details);
+                    }
                 }
 
                 // Recursively get sections
-                this.getChildDesignSections(docx, designVersionId, application.componentReferenceId);
+                this.getChildDesignSections(docx, designVersionId, application.componentReferenceId, options);
             }
 
         });
@@ -98,25 +105,29 @@ class DocumentExportServices{
 
         // Write File --------------------------------------------------------------------------------------------------
 
-        let out = fs.createWriteStream ( '/Users/aston/ultrawide.docx' );
+        const dataStore = process.env.ULTRAWIDE_DATA_STORE;
+        const exportDir = dataStore + UltrawideDirectory.EXPORT_DIR;
+        const fileName = designVersionData.designVersionName.trim().replace(/ /g, '_', ) + '.docx';
+
+        let out = fs.createWriteStream ( exportDir + fileName );
 
         out.on ( 'error', function ( err ) {
-            console.log ( err );
+            log((msg) => console.log(msg), LogLevel.ERROR, 'Error creating file stream: {}', err);
         });
 
         async.parallel ([
             function ( done ) {
                 out.on ( 'close', function () {
-                    console.log ( 'Word Document FS Exported' );
-                    done ( null );
+                    log((msg) => console.log(msg), LogLevel.INFO, 'Exported {} to {}', fileName, exportDir);
+                        done ( null );
                 });
                 docx.generate ( out );
             }
 
         ], function ( err ) {
             if ( err ) {
-                console.log ( 'error: ' + err );
-            } // Endif.
+                log((msg) => console.log(msg), LogLevel.ERROR, 'Error creating file: {}', err);
+            }
         });
     }
 
@@ -137,7 +148,7 @@ class DocumentExportServices{
         return DesignVersionData.getAllApplications(designVersionId);
     }
 
-    getChildDesignSections(docx, designVersionId, parentReferenceId){
+    getChildDesignSections(docx, designVersionId, parentReferenceId, options){
 
         const childComponents = DesignComponentData.getChildComponents(designVersionId, parentReferenceId);
 
@@ -150,20 +161,27 @@ class DocumentExportServices{
 
                 if (component.componentType === ComponentType.DESIGN_SECTION) {
 
-                    WordExportModules.newPage(docx);
+                    // Start new sections on new pages if we are including section text
+                    if (options.includeSectionText) {
+                        WordExportModules.newPage(docx);
+                    } else {
+                        WordExportModules.newLine(docx);
+                    }
 
                     paragraph = docx.createP();
                     WordExportModules.designSection(paragraph, component.componentNameNew, component.componentLevel);
 
                     // Details
-                    let details = convertFromRaw(component.componentTextRawNew).getPlainText();
+                    if (options.includeSectionText) {
+                        let details = convertFromRaw(component.componentTextRawNew).getPlainText();
 
-                    if (details !== DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS) {
-                        paragraph = docx.createP();
-                        WordExportModules.details(paragraph, details);
+                        if (details !== DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS) {
+                            paragraph = docx.createP();
+                            WordExportModules.details(paragraph, details);
+                        }
                     }
 
-                    this.getChildDesignSections(docx, designVersionId, component.componentReferenceId)
+                    this.getChildDesignSections(docx, designVersionId, component.componentReferenceId, options)
 
                 } else {
 
@@ -174,7 +192,7 @@ class DocumentExportServices{
                     //     WordExportModules.newPage(docx);
                     // }
 
-                    this.writeFeature(docx, designVersionId, component.componentReferenceId);
+                    this.writeFeature(docx, designVersionId, component.componentReferenceId, options);
 
                     featureCount++;
                 }
@@ -183,7 +201,7 @@ class DocumentExportServices{
         });
     }
 
-    writeFeature(docx, designVersionId, featureRefId){
+    writeFeature(docx, designVersionId, featureRefId, options){
 
         let  paragraph = docx.createP ();
         paragraph.addHorizontalLine ();
@@ -193,24 +211,28 @@ class DocumentExportServices{
         paragraph = docx.createP();
         WordExportModules.feature(paragraph, feature.componentNameNew);
 
-        let narrativeText = feature.componentNarrativeNew.replace('So', 'so');
+        if(options.includeNarrativeText) {
+            let narrativeText = feature.componentNarrativeNew.replace('So', 'so');
 
-        paragraph = docx.createP();
-
-        WordExportModules.narrative(paragraph, narrativeText);
-
-        // Details
-        let details = convertFromRaw(feature.componentTextRawNew).getPlainText();
-
-        if(details !== DefaultDetailsText.NEW_FEATURE_DETAILS) {
             paragraph = docx.createP();
-            WordExportModules.details(paragraph, details);
+
+            WordExportModules.narrative(paragraph, narrativeText);
         }
 
-        this.writeFeatureAspects(docx, designVersionId, featureRefId)
+        // Details
+        if (options.includeFeatureText) {
+            let details = convertFromRaw(feature.componentTextRawNew).getPlainText();
+
+            if (details !== DefaultDetailsText.NEW_FEATURE_DETAILS) {
+                paragraph = docx.createP();
+                WordExportModules.details(paragraph, details);
+            }
+        }
+
+        this.writeFeatureAspects(docx, designVersionId, featureRefId, options)
     }
 
-    writeFeatureAspects(docx, designVersionId, featureRefId){
+    writeFeatureAspects(docx, designVersionId, featureRefId, options){
 
         const aspects = DesignComponentData.getFeatureAspects(designVersionId, featureRefId);
 
@@ -225,14 +247,14 @@ class DocumentExportServices{
 
                     WordExportModules.aspect(paragraph, aspect.componentNameNew);
 
-                    this.writeScenarios(docx, designVersionId, aspect.componentReferenceId);
+                    this.writeScenarios(docx, designVersionId, aspect.componentReferenceId, options);
                 }
             }
         });
 
     }
 
-    writeScenarios(docx, designVersionId, aspectRefId){
+    writeScenarios(docx, designVersionId, aspectRefId, options){
 
         const scenarios = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, ComponentType.SCENARIO, aspectRefId);
 
@@ -242,11 +264,13 @@ class DocumentExportServices{
             WordExportModules.scenario(paragraph, scenario.componentNameNew);
 
             // Details
-            let details = convertFromRaw(scenario.componentTextRawNew).getPlainText();
+            if(options.includeScenarioText) {
+                let details = convertFromRaw(scenario.componentTextRawNew).getPlainText();
 
-            if(details !== DefaultDetailsText.NEW_SCENARIO_DETAILS) {
-                paragraph = docx.createP();
-                WordExportModules.details(paragraph, details);
+                if (details !== DefaultDetailsText.NEW_SCENARIO_DETAILS) {
+                    paragraph = docx.createP();
+                    WordExportModules.details(paragraph, details);
+                }
             }
         });
     }

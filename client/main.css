@@ -1620,10 +1620,12 @@ input {
 }
 
 .scenario{
-    font-family: 'Baskervile', 'Palatino Linotype', Times, serif;
+    font-family: Arial, sans-serif;
     font-size:  14px;
     padding-top: 2px;
+    padding-left: 2px;
     color: black;
+    background-color: #F8F8F8;
 }
 
 .open-status-open{
@@ -1808,6 +1810,7 @@ input {
 
 .ghosted{
     color: lavender;
+    background: transparent;
 }
 
 .removed-item{
@@ -2431,7 +2434,6 @@ input {
     padding: 3px 0 0 3px;
 }
 
-
 .subtleButton {
     color: grey;
     background-color: lightgrey ;
@@ -2445,7 +2447,34 @@ input {
   background-color: #EEEEEE;
 }
 
+/* User Settings ---------------------------------------------------------------------------------------------------- */
 
+.user-settings-header1{
+    margin: 0;
+    padding: 10px 10px 0 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    font-weight: bold;
+    color: black;
+}
+
+.user-settings-header2{
+    margin: 0;
+    padding: 10px 10px 0 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+    color: darkblue;
+}
+
+.user-settings-header3{
+    margin: 0;
+    padding: 0 0 10px 0;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+    color: darkblue;
+}
 
 /* DRAFT JS */
 

@@ -25,7 +25,13 @@ import UserDvMashScenarioData           from '../data/mash/user_dv_mash_scenario
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentWindowSize, setIntTestOutputDir, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag} from '../redux/actions'
+import {
+    setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentWindowSize,
+    setIntTestOutputDir, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems,
+    setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag, setDocSectionTextOption, setDocFeatureTextOption,
+    setDocNarrativeTextOption, setDocScenarioTextOption
+} from '../redux/actions'
+import {UserSettingValue} from "../constants/constants";
 
 // =====================================================================================================================
 
@@ -199,7 +205,40 @@ class ClientUserContextServices {
         const intTestOutputDir = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_INT_OUTPUT_LOCATION);
         store.dispatch(setIntTestOutputDir(intTestOutputDir));
 
-        // Go to Home screen
+        // Doc export settings - default if not yet set
+        const docSectionTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION);
+        if(docSectionTextSetting) {
+            store.dispatch(setDocSectionTextOption(docSectionTextSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION, UserSettingValue.DOC_INCLUDE_TEXT);
+            store.dispatch(setDocSectionTextOption(UserSettingValue.DOC_INCLUDE_TEXT));
+        }
+
+        const docFeatureTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE);
+        if(docFeatureTextSetting) {
+            store.dispatch(setDocFeatureTextOption(docFeatureTextSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE, UserSettingValue.DOC_INCLUDE_TEXT);
+            store.dispatch(setDocFeatureTextOption(UserSettingValue.DOC_INCLUDE_TEXT));
+        }
+
+        const docNarrativeTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE);
+        if(docNarrativeTextSetting) {
+            store.dispatch(setDocNarrativeTextOption(docNarrativeTextSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE, UserSettingValue.DOC_INCLUDE_TEXT);
+            store.dispatch(setDocNarrativeTextOption(UserSettingValue.DOC_INCLUDE_TEXT));
+        }
+
+        const docScenarioTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO);
+        if(docScenarioTextSetting) {
+            store.dispatch(setDocScenarioTextOption(docScenarioTextSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO, UserSettingValue.DOC_INCLUDE_TEXT);
+            store.dispatch(setDocScenarioTextOption(UserSettingValue.DOC_INCLUDE_TEXT));
+        }
+
+        // Go to Role choice screen
         store.dispatch(setCurrentView(ViewType.ROLES));
     }
 
