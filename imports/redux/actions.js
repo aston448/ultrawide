@@ -19,6 +19,7 @@ export const SET_DOC_SECTION_TEXT_OPTION = 'SET_DOC_SECTION_TEXT_OPTION';
 export const SET_DOC_FEATURE_TEXT_OPTION = 'SET_DOC_FEATURE_TEXT_OPTION';
 export const SET_DOC_NARRATIVE_TEXT_OPTION = 'SET_DOC_NARRATIVE_TEXT_OPTION';
 export const SET_DOC_SCENARIO_TEXT_OPTION = 'SET_DOC_SCENARIO_TEXT_OPTION';
+export const SET_DOMAIN_TERMS_ON_OFF = 'SET_DOMAIN_TERMS_ON_OFF';
 
 // the currently selected user in the User Management screen - NOT the currently logged in user
 export const SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID';
@@ -230,6 +231,15 @@ export function setDocScenarioTextOption(newOption) {
 
     return function (dispatch) {
         dispatch({type: SET_DOC_SCENARIO_TEXT_OPTION, newOption: newOption});
+    };
+}
+
+export function setDomainTermsOnOff(currentSetting) {
+
+    const newSetting = !currentSetting;
+
+    return function (dispatch) {
+        dispatch({type: SET_DOMAIN_TERMS_ON_OFF, newSetting: newSetting});
     };
 }
 

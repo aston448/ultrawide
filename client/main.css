@@ -1509,13 +1509,17 @@ input {
 
 .editableItem{
     padding-left: 5px;
-    background-color: lightyellow;
     border-top: 1px solid lightgrey;
     border-right: 1px solid ghostwhite;
     border-bottom: 1px solid ghostwhite;
     border-left: 1px solid lightgrey;
     min-height: 24px;
 }
+
+.editBackground{
+    background-color: lightyellow;
+}
+
 
 .readOnlyItem{
     background-color: transparent;
@@ -1539,14 +1543,14 @@ input {
 
 .section2{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  16px;
+    font-size:  18px;
     width: 100%;
     color: darkseagreen;
 }
 
 .section3{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  14px;
+    font-size:  16px;
     color: darkseagreen;
 }
 
@@ -1577,17 +1581,17 @@ input {
 }
 
 .add-item-context-section{
-    padding: 0 0px 0 35px;
+    padding: 0 0 0 35px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  11px;
     color: darkgrey;
 }
 
 .feature {
-    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     padding-top: 3px;
-    font-size:  15px;
-    font-weight: bold;
+    font-size:  18px;
+    font-weight: 500;
     color: black;
 }
 
@@ -1601,7 +1605,7 @@ input {
 
 .narrative {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  13px;
+    font-size:  14px;
     padding: 0 0 0 60px;
     color: black;
     background-color: transparent;
@@ -1609,7 +1613,7 @@ input {
 
 .narrative-edit {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  13px;
+    font-size:  14px;
     padding: 0 0 0 60px;
     color: black;
     background-color: lightyellow;
@@ -1620,12 +1624,16 @@ input {
 }
 
 .scenario{
-    font-family: Arial, sans-serif;
-    font-size:  14px;
-    padding-top: 2px;
+    font-family: 'Gill Sans', Arial, sans-serif;
+    font-size:  17px;
+    font-weight: 300;
+    padding-top: 1px;
     padding-left: 2px;
     color: black;
-    background-color: #F8F8F8;
+}
+
+.scenario-background{
+    background-color: #F2FDFD;
 }
 
 .open-status-open{

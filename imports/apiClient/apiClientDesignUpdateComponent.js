@@ -34,6 +34,11 @@ class ClientDesignUpdateComponentServices{
 
         const wasNew = designUpdateComponent.isNew && !designUpdateComponent.isChanged;
 
+        // See if it really did change
+        if(designUpdateComponent.componentNameNew === newPlainText){
+            return {success: true, message: ''};
+        }
+
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateComponentName(view, mode, designUpdateComponent._id, newPlainText);
 

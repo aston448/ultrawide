@@ -61,12 +61,12 @@ class DesignVersionData {
         return DesignVersionComponents.find({designVersionId: designVersionId}).fetch();
     }
 
-    getOtherComponentsOfType(designComponentId, designVersionId, componentType){
+    getOtherComponentsOfType(designComponentRef, designVersionId, componentType){
 
         return DesignVersionComponents.find({
-            _id:                {$ne: designComponentId},
-            designVersionId:    designVersionId,
-            componentType:      componentType
+            componentReferenceId:   {$ne: designComponentRef},
+            designVersionId:        designVersionId,
+            componentType:          componentType
         }).fetch();
     }
 
@@ -235,9 +235,9 @@ class DesignVersionData {
     getOtherExistingUpdateComponentsOfTypeInDv(updateComponent){
 
         return DesignUpdateComponents.find({
-            _id:                {$ne: updateComponent._id},
-            designVersionId:    updateComponent.designVersionId,
-            componentType:      updateComponent.componentType
+            componentReferenceId:   {$ne: updateComponent.componentReferenceId},
+            designVersionId:        updateComponent.designVersionId,
+            componentType:          updateComponent.componentType
         }).fetch();
     }
 

@@ -58,6 +58,12 @@ export class DesignComponent extends Component{
 
         // Optimisation.  No need to re-render this component if stuff that changes its look not changed
 
+        // Redraw if domain terms toggled on / off
+        //console.log('DTV New: ' + nextProps.domainTermsVisible + ' DTV old: ' + this.props.domainTermsVisible);
+        if(nextProps.domainTermsVisible !== this.props.domainTermsVisible){
+            return true;
+        }
+
         // Do refresh if this specific component is gaining or losing focus
         let currentItemId = this.props.currentItem._id;
         let openItemId = this.props.currentItem._id;
@@ -481,7 +487,8 @@ export class DesignComponent extends Component{
 
 
         const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext,
-            testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag, workPackageScopeItems, workPackageScopeFlag} = this.props;
+            testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag,
+            workPackageScopeItems, workPackageScopeFlag, domainTermsVisible} = this.props;
 
         //console.log("Render " + currentItem.componentType + "  Design Component in context " + displayContext + " with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem + " and wpItem " + wpItem + " and test Summary " + testSummary);
 
@@ -511,6 +518,7 @@ export class DesignComponent extends Component{
                     updateScopeFlag={updateScopeFlag}
                     workPackageScopeItems={workPackageScopeItems}
                     workPackageScopeFlag={workPackageScopeFlag}
+                    domainTermsVisible={domainTermsVisible}
 
                     //currentViewDataValue={currentViewDataValue}
                 />
@@ -570,6 +578,7 @@ export class DesignComponent extends Component{
                     displayContext={displayContext}
                     view={view}
                     testSummary={testSummary}
+                    domainTermsVisible={domainTermsVisible}
                 />;
 
             let scenariosContainer =
@@ -854,7 +863,8 @@ function mapStateToProps(state) {
         updateScopeItems:           state.currentUpdateScopeItems,
         updateScopeFlag:            state.currentUpdateScopeFlag,
         workPackageScopeItems:      state.currentWorkPackageScopeItems,
-        workPackageScopeFlag:       state.currentWorkPackageScopeFlag
+        workPackageScopeFlag:       state.currentWorkPackageScopeFlag,
+        domainTermsVisible:         state.domainTermsVisible
     }
 }
 

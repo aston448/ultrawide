@@ -46,7 +46,7 @@ class DesignComponentValidationApi{
         const thisComponent = DesignComponentData.getDesignComponentById(designComponentId);
 
         const existingComponents = DesignVersionData.getOtherComponentsOfType(
-            designComponentId,
+            thisComponent.componentReferenceId,
             thisComponent.designVersionId,
             thisComponent.componentType
         );

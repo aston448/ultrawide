@@ -15,7 +15,9 @@ import DesignUpdateComponentData        from '../data/design_update/design_updat
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurrentViewMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurrentViewMode, setCurrentView, setCurrentUserViewOptions,
+    updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems,
+    updateUserMessage, updateOpenItemsFlag, setDomainTermsOnOff} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -249,6 +251,13 @@ class ClientAppHeaderServices{
 
             }
         }
+    }
+
+    toggleDomainTerms(userContext, displayContext){
+
+        const currentSetting = store.getState().domainTermsVisible;
+
+        store.dispatch(setDomainTermsOnOff(currentSetting));
     }
 
     getDesignVersionFeatures(userContext){

@@ -50,9 +50,9 @@ const {hasCommandModifier} = KeyBindingUtil;
 
 const styles = {
     domainTerm: {
-        color: 'rgba(0, 0, 255, 1.0)',
+        color: 'rgba(96, 96, 255, 1.0)',
         //backgroundColor: 'rgba(240, 255, 240, 1.0)',
-        fontWeight: 'normal',
+        fontWeight: 300,
         //textDecoration: 'underline'
     }
 };
@@ -96,6 +96,11 @@ export class DesignComponentHeader extends Component{
     shouldComponentUpdate(nextProps, nextState){
 
         // Optimisation.  No need to re-render this component if no change to what is seen
+
+        // Redraw if domain terms toggled on / off
+        if(nextProps.domainTermsVisible !== this.props.domainTermsVisible){
+            return true;
+        }
 
         // Check for scope updates in Update Editor
         if(this.props.view === ViewType.DESIGN_UPDATE_EDIT) {
@@ -241,6 +246,15 @@ export class DesignComponentHeader extends Component{
     // If the name of an item has been updated it could be in another view of it so we need to update the local editor
     componentWillReceiveProps(newProps){
 
+        // If Domain Text highlighting has changed redraw the text for non-scope items
+        if(
+            (this.props.displayContext !== DisplayContext.UPDATE_SCOPE) &&
+            (this.props.displayContext !== DisplayContext.WP_SCOPE) &&
+            (newProps.domainTermsVisible !== this.props.domainTermsVisible)
+        ){
+            this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew)
+        }
+
         switch (newProps.view) {
             case ViewType.DESIGN_NEW:
             case ViewType.DESIGN_PUBLISHED:
@@ -305,6 +319,8 @@ export class DesignComponentHeader extends Component{
         }
     }
 
+
+
     getNewAndOldRawText(newText, oldText){
         return ClientDesignComponentServices.getNewAndOldRawText(newText, oldText);
     }
@@ -334,7 +350,7 @@ export class DesignComponentHeader extends Component{
                     ]);
                 }
 
-                if((props.displayContext === DisplayContext.UPDATE_SCOPE) && (props.currentItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
+                if(props.domainTermsVisible && (props.displayContext === DisplayContext.UPDATE_SCOPE) && (props.currentItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
                     // The Update Scenario is active
                     compositeDecorator = new CompositeDecorator([
                         {
@@ -346,7 +362,7 @@ export class DesignComponentHeader extends Component{
 
             } else {
                 // We are not in WP scope context so OK for all Scenarios as long as not inserted as peers in an update
-                if(!(this.props.updateItem && this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE)) {
+                if(props.domainTermsVisible && !(this.props.updateItem && this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE)) {
                     compositeDecorator = new CompositeDecorator([
                         {
                             strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
@@ -783,6 +799,10 @@ export class DesignComponentHeader extends Component{
             itemStyle = itemStyle + ' dragging-item';
         }
 
+        if (!this.state.editable && currentItem.componentType === ComponentType.SCENARIO){
+            itemStyle = itemStyle + ' scenario-background';
+        }
+
         // Open / Closed --------------------------------------------
         let openGlyph = isOpen ? 'minus' : 'plus';
 
@@ -1006,7 +1026,7 @@ export class DesignComponentHeader extends Component{
             </InputGroup.Addon>;
 
         let editableEditor =
-            <div id="editorEdit" className={'editableItem ' + itemStyle} onClick={ () => this.setCurrentComponent()}>
+            <div id="editorEdit" className={itemStyle + ' editableItem' + ' editBackground'} onClick={ () => this.setCurrentComponent()}>
                 <Editor
                     editorState={this.state.editorState}
                     handleKeyCommand={this.handleTitleKeyCommand}
@@ -1593,6 +1613,7 @@ DesignComponentHeader.propTypes = {
     updateScopeFlag: PropTypes.number.isRequired,
     workPackageScopeItems: PropTypes.object.isRequired,
     workPackageScopeFlag: PropTypes.number.isRequired,
+    domainTermsVisible: PropTypes.bool.isRequired
 };
 
 // React DnD ===========================================================================================================

@@ -65,6 +65,10 @@ export class DesignEditorHeader extends Component {
         ClientAppHeaderServices.setViewLevelSections(userContext, displayContext);
     }
 
+    onToggleDomainTerms(userContext, displayContext){
+        ClientAppHeaderServices.toggleDomainTerms(userContext, displayContext);
+    }
+
     getNameData(userContext, displayContext){
         return ClientUserContextServices.getContextNameData(userContext, displayContext);
     }
@@ -72,12 +76,13 @@ export class DesignEditorHeader extends Component {
 
     render() {
 
-        const {displayContext, view, mode, userContext, userRole, userViewOptions, currentViewDataValue} = this.props;
+        const {displayContext, view, mode, userContext, userRole, userViewOptions, currentViewDataValue, domainTermsVisible} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
         const viewView = (mode === ViewMode.MODE_VIEW) ? 'view-toggle-active' : 'view-toggle-inactive';
         const viewEdit = (mode === ViewMode.MODE_EDIT) ? 'view-toggle-active' : 'view-toggle-inactive';
+        const domainClass = domainTermsVisible ? 'view-toggle-active' : 'view-toggle-inactive';
 
         const viewModeViewOption =
             <div id="optionView" className={viewView}>
@@ -98,6 +103,12 @@ export class DesignEditorHeader extends Component {
             <div id="optionZoomSections" className="editor-menu-item-holder">
                 <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="SSS" actionFunction={ () => this.onZoomToSections(userContext, displayContext)}/>
             </div>;
+
+        const domainTermsOption =
+            <div id="optionDomainTerms" className={domainClass}>
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="DDD" actionFunction={ () => this.onToggleDomainTerms(userContext, displayContext)}/>
+            </div>;
+
 
         const nameData = this.getNameData(userContext, displayContext);
 
@@ -198,6 +209,7 @@ export class DesignEditorHeader extends Component {
                         {zoomSectionsOption}
                         {viewModeViewOption}
                         {viewModeEditOption}
+                        {domainTermsOption}
                     </div>;
                 break;
 
@@ -211,6 +223,7 @@ export class DesignEditorHeader extends Component {
                                 {zoomSectionsOption}
                                 {viewModeViewOption}
                                 {viewModeEditOption}
+                                {domainTermsOption}
                             </div>;
                         break;
 
@@ -225,6 +238,7 @@ export class DesignEditorHeader extends Component {
                             <div className="details-menu-bar">
                                 {zoomFeaturesOption}
                                 {zoomSectionsOption}
+                                {domainTermsOption}
                             </div>;
                         closable = true;
                         detailsType = DetailsViewType.VIEW_VERSION_PROGRESS;
@@ -237,12 +251,14 @@ export class DesignEditorHeader extends Component {
                                     {zoomSectionsOption}
                                     {viewModeViewOption}
                                     {viewModeEditOption}
+                                    {domainTermsOption}
                                 </div>;
                         } else {
                             options =
                                 <div className="details-menu-bar">
                                     {zoomFeaturesOption}
                                     {zoomSectionsOption}
+                                    {domainTermsOption}
                                 </div>;
                         }
                 }
@@ -256,6 +272,7 @@ export class DesignEditorHeader extends Component {
                             <div className="details-menu-bar">
                                 {zoomFeaturesOption}
                                 {zoomSectionsOption}
+                                {domainTermsOption}
                             </div>;
                         break;
 
@@ -270,6 +287,7 @@ export class DesignEditorHeader extends Component {
                             <div className="details-menu-bar">
                                 {zoomFeaturesOption}
                                 {zoomSectionsOption}
+                                {domainTermsOption}
                             </div>;
                         closable = true;
                         detailsType = DetailsViewType.VIEW_VERSION_PROGRESS;
@@ -284,6 +302,7 @@ export class DesignEditorHeader extends Component {
                     <div className="details-menu-bar">
                         {zoomFeaturesOption}
                         {zoomSectionsOption}
+                        {domainTermsOption}
                     </div>;
                 break;
 
@@ -296,6 +315,7 @@ export class DesignEditorHeader extends Component {
                         {zoomSectionsOption}
                         {viewModeViewOption}
                         {viewModeEditOption}
+                        {domainTermsOption}
                     </div>;
                 break;
 
@@ -309,6 +329,7 @@ export class DesignEditorHeader extends Component {
                         <div className="details-menu-bar">
                             {zoomFeaturesOption}
                             {zoomSectionsOption}
+                            {domainTermsOption}
                         </div>;
                 //}
                 break;
@@ -400,7 +421,8 @@ function mapStateToProps(state) {
         userContext:            state.currentUserItemContext,
         userRole:               state.currentUserRole,
         userViewOptions:        state.currentUserViewOptions,
-        currentViewDataValue:   state.currentViewOptionsDataValue
+        currentViewDataValue:   state.currentViewOptionsDataValue,
+        domainTermsVisible:     state.domainTermsVisible
     }
 }
 

@@ -13,6 +13,7 @@ import {MenuType, RoleType} from '../../../constants/constants.js'
 
 // Bootstrap
 import {Glyphicon}  from 'react-bootstrap';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -76,23 +77,40 @@ export class UltrawideMenuItem extends Component {
         }
 
         let menuGlyph = 'star';
+        let menuItemToolTip = '';
+        let tooltipDelay = 100;
 
         switch(itemName){
             case 'FFF':
                 menuGlyph = 'th';
+                menuItemToolTip = 'Zoom to Features';
                 break;
             case 'SSS':
                 menuGlyph = 'th-large';
+                menuItemToolTip = 'Zoom to Sections';
+                break;
+            case 'DDD':
+                menuGlyph = 'book';
+                menuItemToolTip = 'Show or Hide Domain Terms';
                 break;
             case 'VIEW':
                 menuGlyph = 'eye-open';
+                menuItemToolTip = 'View Mode';
                 break;
             case 'EDIT':
                 menuGlyph = 'edit';
+                menuItemToolTip = 'Edit Mode';
                 break;
             case 'Export':
                 menuGlyph = 'upload';
+                menuItemToolTip = 'Export';
         }
+
+        const tooltipIcon = (
+            <Tooltip id="modal-tooltip">
+                {menuItemToolTip}
+            </Tooltip>
+        );
 
         if(menuType === MenuType.MENU_TOP){
             return(
@@ -100,7 +118,10 @@ export class UltrawideMenuItem extends Component {
             )
         } else {
             return(
-                <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+                <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipIcon}>
+                    <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+                </OverlayTrigger>
+
             )
         }
 
@@ -116,7 +137,7 @@ UltrawideMenuItem.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole:   state.currentUserRole,
+        userRole:           state.currentUserRole
     }
 }
 

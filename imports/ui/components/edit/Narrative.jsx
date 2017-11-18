@@ -40,7 +40,7 @@ const {hasCommandModifier} = KeyBindingUtil;
 
 const styles = {
     domainTerm: {
-        color: 'rgba(0, 0, 255, 1.0)',
+        color: 'rgba(96, 96, 255, 1.0)',
         fontWeight: 'normal'
     },
 
@@ -112,9 +112,27 @@ export default class Narrative extends React.Component {
         //this.updateNarrativeText(this.props);
     }
 
+    narrativeIsGreyedOut(props){
+
+        return(
+            ((props.displayContext === DisplayContext.WP_SCOPE) && (!props.wpComponent || (props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
+            ((props.displayContext === DisplayContext.UPDATE_SCOPE) && (!props.updateComponent || props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+            ((props.displayContext === DisplayContext.WP_VIEW) && props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
+            ((props.displayContext === DisplayContext.UPDATE_EDIT && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+            ((props.displayContext === DisplayContext.UPDATE_VIEW && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+            ((props.displayContext === DisplayContext.DEV_DESIGN && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE))
+        );
+    }
+
     componentWillReceiveProps(newProps){
 
-        //this.updateNarrativeText(newProps);
+        // Update if toggling Domain Highlighting
+        if(
+            (newProps.domainTermsVisible !== this.props.domainTermsVisible) &&
+            (!this.narrativeIsGreyedOut(newProps))
+        ){
+            this.updateNarrativeText(newProps);
+        }
     }
 
     // Set the text editor content - this has to change when the design component item changes
@@ -126,14 +144,8 @@ export default class Narrative extends React.Component {
 
         if(props.designComponent) {
 
-            if(
-                ((props.displayContext === DisplayContext.WP_SCOPE) && (!props.wpComponent || (props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
-                ((props.displayContext === DisplayContext.UPDATE_SCOPE) && (!props.updateComponent || props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
-                ((props.displayContext === DisplayContext.WP_VIEW) && props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
-                ((props.displayContext === DisplayContext.UPDATE_EDIT && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
-                ((props.displayContext === DisplayContext.UPDATE_VIEW && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
-                ((props.displayContext === DisplayContext.DEV_DESIGN && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE))
-            ) {
+            if(this.narrativeIsGreyedOut(props)){
+
                 // The narrative will be decorated as greyed out and no syntax highlighting...
                 compositeDecorator = new CompositeDecorator([
                     {
@@ -142,17 +154,27 @@ export default class Narrative extends React.Component {
                     }
                 ]);
             } else {
-                compositeDecorator = new CompositeDecorator([
-                    {
-                        strategy: ClientDomainDictionaryApi.getDomainTermDecoratorFunction(props.designComponent.designVersionId),
-                        component: DomainSpan
-                    },
+                if(props.domainTermsVisible){
+                    compositeDecorator = new CompositeDecorator([
+                        {
+                            strategy: ClientDomainDictionaryApi.getDomainTermDecoratorFunction(props.designComponent.designVersionId),
+                            component: DomainSpan
+                        },
 
-                    {
-                        strategy: ClientDomainDictionaryApi.getNarrativeDecoratorFunction(),
-                        component: NarrativeSpan
-                    }
-                ]);
+                        {
+                            strategy: ClientDomainDictionaryApi.getNarrativeDecoratorFunction(),
+                            component: NarrativeSpan
+                        }
+                    ]);
+                } else {
+                    compositeDecorator = new CompositeDecorator([
+                        {
+                            strategy: ClientDomainDictionaryApi.getNarrativeDecoratorFunction(),
+                            component: NarrativeSpan
+                        }
+                    ]);
+                }
+
             }
 
             EditorState.set(this.state.editorState, {decorator: compositeDecorator});
@@ -408,5 +430,6 @@ Narrative.propTypes = {
     displayContext: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,
     testSummary: PropTypes.bool.isRequired,
-    displayOldValue: PropTypes.bool
+    displayOldValue: PropTypes.bool,
+    domainTermsVisible: PropTypes.bool.isRequired
 };
