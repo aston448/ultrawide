@@ -40,7 +40,7 @@ import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap
 
 const styles = {
     domainTerm: {
-        color: 'rgba(0, 0, 255, 1.0)',
+        color: 'rgba(96, 96, 255, 1.0)',
         fontWeight: 'normal'
     }
 };
@@ -77,7 +77,7 @@ export class TextEditor extends Component {
     updateComponentText(props){
         let compositeDecorator = null;
 
-        if(props.userContext) {
+        if(props.userContext && props.domainTermsVisible) {
             compositeDecorator = new CompositeDecorator([
                 {
                     strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(props.userContext.designVersionId),
@@ -142,8 +142,9 @@ export class TextEditor extends Component {
 
     // When the design component related to the text editor changes we need to update the editor state to the new text
     componentWillReceiveProps(newProps){
-        // Only if the design component changes...
-        if (this.props.designComponent._id !== newProps.designComponent._id){
+
+        // Only if the design component changes or we are changing term highlighting
+        if ((this.props.designComponent._id !== newProps.designComponent._id) || (this.props.domainTermsVisible !== newProps.domainTermsVisible)){
             this.updateComponentText(newProps);
         }
     }
@@ -399,7 +400,7 @@ export class TextEditor extends Component {
 //  This is a redux updated property that changes when we change the focus on design components
 TextEditor.propTypes = {
     designComponent: PropTypes.object.isRequired,
-    detailsType: PropTypes.string.isRequired
+    detailsType: PropTypes.string.isRequired,
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -408,7 +409,8 @@ function mapStateToProps(state) {
         view:                   state.currentAppView,
         mode:                   state.currentViewMode,
         userContext:            state.currentUserItemContext,
-        userRole:               state.currentUserRole
+        userRole:               state.currentUserRole,
+        domainTermsVisible:     state.domainTermsVisible
     }
 }
 

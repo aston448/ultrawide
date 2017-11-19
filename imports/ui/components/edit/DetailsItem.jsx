@@ -35,7 +35,7 @@ export class DetailsItem extends Component {
 
 
     render() {
-        const {itemType, item, displayContext, view} = this.props;
+        const {itemType, item, displayContext, view, domainTermsVisible} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
         const nameItem =
@@ -68,6 +68,7 @@ export class DetailsItem extends Component {
                     view={view}
                     testSummary={false}
                     displayOldValue={false}
+                    domainTermsVisible={domainTermsVisible}
                 />
                 <InputGroup.Addon>
                     <div></div>
@@ -105,6 +106,7 @@ export class DetailsItem extends Component {
                     view={view}
                     testSummary={false}
                     displayOldValue={false}
+                    domainTermsVisible={domainTermsVisible}
                 />
                 <InputGroup.Addon>
                     <div></div>
@@ -141,6 +143,7 @@ export class DetailsItem extends Component {
                     view={view}
                     testSummary={false}
                     displayOldValue={true}
+                    domainTermsVisible={domainTermsVisible}
                 />
                 <InputGroup.Addon>
                     <div></div>
@@ -266,9 +269,10 @@ DetailsItem.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userContext:    state.currentUserItemContext,
-        userRole:       state.currentUserRole,
-        view:           state.currentAppView
+        userContext:        state.currentUserItemContext,
+        userRole:           state.currentUserRole,
+        view:               state.currentAppView,
+        domainTermsVisible: state.domainTermsVisible
     }
 }
 

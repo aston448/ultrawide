@@ -74,14 +74,14 @@ class DesignComponentModules{
         });
     }
 
-    removeWorkPackageItems(designComponentId, designVersionId){
+    removeWorkPackageItems(designComponentRef, designVersionId){
 
         // See if any base WPs affected by this update
         const workPackages = DesignVersionData.getNonCompleteBaseWorkPackages(designVersionId);
 
         workPackages.forEach((wp) => {
 
-            WorkPackageModules.removeDesignComponentFromWorkPackage(wp, designComponentId);
+            WorkPackageModules.removeDesignComponentFromWorkPackage(wp, designComponentRef);
         });
     };
 

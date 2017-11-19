@@ -49,6 +49,7 @@ class DesignUpdateComponentValidationServices{
                 // FAIL can't update any other components
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_ADDABLE;
             }
+
         }
 
         return Validation.VALID;

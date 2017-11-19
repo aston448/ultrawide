@@ -245,7 +245,7 @@ class DesignComponentServices{
                     }
 
                     // Remove component from any related work packages
-                    DesignComponentModules.removeWorkPackageItems(designComponent._id, designComponent.designVersionId);
+                    DesignComponentModules.removeWorkPackageItems(designComponent.componentReferenceId, designComponent.designVersionId);
 
                     // If this happened to be the last Feature, Design is now removable
                     if (designComponent.componentType === ComponentType.FEATURE) {

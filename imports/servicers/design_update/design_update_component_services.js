@@ -501,7 +501,7 @@ class DesignUpdateComponentServices{
                     DesignUpdateComponentModules.removeUnwantedPeers(duComponent);
 
                     // Remove component from any related work packages
-                    DesignUpdateComponentModules.removeWorkPackageItems(duComponent._id, duComponent.designVersionId, duComponent.designUpdateId);
+                    DesignUpdateComponentModules.removeWorkPackageItems(duComponent.componentReferenceId, duComponent.designVersionId, duComponent.designUpdateId);
 
 
                     // If this happened to be the last Feature, Design is now removable

@@ -129,14 +129,14 @@ class DesignUpdateComponentModules{
         }
     }
 
-    removeWorkPackageItems(designUpdateComponentId, designVersionId, designUpdateId){
+    removeWorkPackageItems(designUpdateComponentRef, designVersionId, designUpdateId){
 
         // See if any update WPs affected by this update
         const workPackages = WorkPackageData.getActiveWorkPackagesForDesignUpdate(designVersionId, designUpdateId);
 
         workPackages.forEach((wp) => {
 
-            WorkPackageModules.removeDesignComponentFromWorkPackage(wp, designUpdateComponentId);
+            WorkPackageModules.removeDesignComponentFromWorkPackage(wp, designUpdateComponentRef);
 
         });
     };
@@ -381,7 +381,7 @@ class DesignUpdateComponentModules{
             this.updateCurrentDesignVersionWithUnscopedScenario(duComponent);
 
             // And remove from any WP where in scope
-            this.removeWorkPackageItems(designUpdateComponentId, duComponent.designVersionId, duComponent.designUpdateId);
+            this.removeWorkPackageItems(duComponent.componentReferenceId, duComponent.designVersionId, duComponent.designUpdateId);
         }
     }
 

@@ -1,6 +1,7 @@
 
 // Ultrawide Services
-import { WorkPackageType, ComponentType, WorkPackageScopeType } from '../../constants/constants.js';
+import { WorkPackageType, ComponentType, WorkPackageScopeType, LogLevel } from '../../constants/constants.js';
+import { log }        from '../../common/utils.js';
 
 // Data Access
 import DesignComponentData          from '../../data/design/design_component_db.js';
@@ -251,24 +252,32 @@ class WorkPackageModules {
 
         let wpParentComponent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, parentComponent.componentReferenceId);
 
-        // Can only add to an actively scoped component
-        if (wpParentComponent && wpParentComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
+        log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding component to WP with parent {} with scope {}', wpParentComponent.componentNameNew, wpParentComponent.scopeType);
+
+        // Can only add to a scoped component
+        if (wpParentComponent && (wpParentComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE || wpParentComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)){
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, '  Scope OK...');
 
             const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, component.componentReferenceId);
 
             if(wpComponent){
 
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Update existing');
                 // Update and set as Active Scope
                 WorkPackageComponentData.updateExistingWpComponent(wpComponent._id, component, WorkPackageScopeType.SCOPE_ACTIVE);
 
             } else {
 
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Add new');
                 // Add new Active component
                 WorkPackageComponentData.insertNewWorkPackageComponent(designVersionId, designUpdateId, workPackage._id, workPackage.workPackageType, component, WorkPackageScopeType.SCOPE_ACTIVE);
             }
 
             // And make sure if a DU WP Scenario we update the DU Scenario WP ID
             if(workPackage.workPackageType === WorkPackageType.WP_UPDATE && component.componentType === ComponentType.SCENARIO){
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, '  Set WP Id {}', workPackage._id);
 
                 DesignUpdateComponentData.setWorkPackageId(component._id, workPackage._id);
             }
@@ -311,17 +320,9 @@ class WorkPackageModules {
         }
     };
 
-    removeDesignComponentFromWorkPackage(workPackage, designComponentId){
+    removeDesignComponentFromWorkPackage(workPackage, designComponentRef){
 
-        let designComponent = null;
-
-        if(workPackage.workPackageType === WorkPackageType.WP_BASE){
-            designComponent = DesignComponentData.getDesignComponentById(designComponentId);
-        } else {
-            designComponent = DesignUpdateComponentData.getUpdateComponentById(designComponentId);
-        }
-
-        const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, designComponent.componentReferenceId);
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, designComponentRef);
 
         if(wpComponent){
             WorkPackageComponentData.removeComponent(wpComponent._id);

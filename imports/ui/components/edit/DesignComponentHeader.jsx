@@ -611,6 +611,9 @@ export class DesignComponentHeader extends Component{
                     ClientDesignUpdateComponentServices.removeComponent(view, mode, item);
                 }
                 break;
+            case ViewType.DEVELOP_UPDATE_WP:
+                ClientDesignUpdateComponentServices.removeComponent(view, mode, item);
+                break;
         }
 
     };

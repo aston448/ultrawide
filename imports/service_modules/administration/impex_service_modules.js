@@ -533,18 +533,6 @@ class ImpexModules{
                 }
             );
 
-            // let designComponentId = DesignComponentData.importComponent(
-            //     designId,
-            //     designVersionId,
-            //     workPackageId,
-            //     component
-            // );
-
-            // if (designComponentId) {
-            //     // Map old component ids to new
-            //     designComponentsMapping.push({oldId: component._id, newId: designComponentId});
-            // }
-
             componentCount++;
         });
 
@@ -552,11 +540,6 @@ class ImpexModules{
         if(designComponentBatch.length > 0) {
             DesignComponentData.bulkInsert(designComponentBatch);
         }
-
-        // Update Design Component parents for the new design components
-        // designComponentsMapping.forEach((component) => {
-        //     DesignComponentServices.importRestoreParent(component.newId, designComponentsMapping)
-        // });
 
         // Make sure any Designs affected are no longer removable
         designsMapping.forEach((designMap) => {
@@ -636,22 +619,6 @@ class ImpexModules{
                     }
                 );
 
-                //let designUpdateComponentId = DesignUpdateComponentData.importComponent(
-                //     designId,
-                //     designVersionId,
-                //     designUpdateId,
-                //     workPackageId,
-                //     updateComponent
-                // );
-
-                // if (designUpdateComponentId) {
-                //     // Map old component ids to new
-                //     designUpdateComponentsMapping.push({
-                //         oldId: updateComponent._id,
-                //         newId: designUpdateComponentId
-                //     });
-                // }
-
                 componentCount++;
 
             });
@@ -659,11 +626,6 @@ class ImpexModules{
             if(designUpdateComponentBatch.length > 0) {
                 DesignUpdateComponentData.bulkInsert(designUpdateComponentBatch);
             }
-
-            // Update Design Update Component parents for the new design update components
-            // designUpdateComponentsMapping.forEach((updateComponent) => {
-            //     DesignUpdateComponentServices.importRestoreParent(updateComponent.newId, designUpdateComponentsMapping)
-            // });
 
             // Make sure Design is no longer removable
             designsMapping.forEach((designMap) => {
@@ -701,31 +663,11 @@ class ImpexModules{
 
             let designVersionId = workPackage.designVersionId;
 
-            // switch (workPackage.workPackageType) {
-            //     case WorkPackageType.WP_BASE:
-            //         if(hasDesignVersionComponents) {
-            //             wpDesignComponentId = getIdFromMap(designVersionComponentsMapping, wpComponent.componentId);
-            //         } else {
-            //             log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design components...");
-            //             skip = true;
-            //         }
-            //         break;
-            //     case WorkPackageType.WP_UPDATE:
-            //         if(hasDesignUpdateComponents) {
-            //             wpDesignComponentId = getIdFromMap(designUpdateComponentsMapping, wpComponent.componentId);
-            //         } else {
-            //             log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design update components...");
-            //             skip = true;
-            //         }
-            //         break;
-            // }
-
             if(!skip) {
                 let workPackageComponentId = WorkPackageComponentData.importComponent(
                     workPackage.designVersionId,
                     workPackage.designUpdateId,
                     workPackageId,
-                    //wpDesignComponentId,
                     wpComponent
                 );
 
