@@ -101,11 +101,11 @@ class WorkPackageModules {
 
                 if (wp.workPackageType === WorkPackageType.WP_BASE) {
 
-                    DesignComponentData.setWorkPackageId(designComponentId, 'NONE');
+                    DesignComponentData.setWorkPackageId(designComponent._id, 'NONE');
 
                 } else {
 
-                    DesignUpdateComponentData.setWorkPackageId(designComponentId, 'NONE');
+                    DesignUpdateComponentData.setWorkPackageId(designComponent._id, 'NONE');
 
                     // Also clear the WP in the base design version
                     DesignComponentData.setDvComponentWorkPackageId(userContext.designVersionId, wpComponent.componentReferenceId, 'NONE');
