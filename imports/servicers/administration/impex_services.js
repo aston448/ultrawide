@@ -304,8 +304,10 @@ class ImpExServices{
                     // Get this BEFORE we create the replacement Design
                     const oldDesign = DesignData.getDesignByName(backupData.metadata.designName);
 
-                    // Mark old design as going
-                    DesignServices.updateDesignName(oldDesign._id, oldDesign.designName + ' - TO REMOVE');
+                    // Mark old design as going if there is one
+                    if(oldDesign) {
+                        DesignServices.updateDesignName(oldDesign._id, oldDesign.designName + ' - TO REMOVE');
+                    }
 
                     // Restore Data - this creates new data with new IDs in parallel to any existing data ++++++++++++++++++
 
