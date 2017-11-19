@@ -65,7 +65,7 @@ class WorkPackageComponentServices{
                     // All children are taken out of scope.
                     // Any parent that no longer has children goes
 
-                    WorkPackageModules.removeWorkPackageComponent(userContext, designComponentId);
+                    WorkPackageModules.removeWorkPackageComponent(userContext, designComponent);
 
                     // And then all of its children
                     WorkPackageModules.removeComponentChildrenFromWp(userContext, wpType, designComponent);

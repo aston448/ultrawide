@@ -86,9 +86,8 @@ class WorkPackageModules {
         }
     }
 
-    removeWorkPackageComponent(userContext, designComponentId){
+    removeWorkPackageComponent(userContext, designComponent){
 
-        const designComponent = DesignComponentData.getDesignComponentById(designComponentId);
         const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, designComponent.componentReferenceId);
 
         if(wpComponent) {
@@ -142,7 +141,7 @@ class WorkPackageModules {
             children.forEach((child) => {
 
                 // Remove
-                this.removeWorkPackageComponent(userContext, child._id);
+                this.removeWorkPackageComponent(userContext, child);
 
                 // And carry on down
                 this.removeComponentChildrenFromWp(userContext, wpType, child);
@@ -189,7 +188,7 @@ class WorkPackageModules {
             });
 
             if(!wpChild){
-                this.removeWorkPackageComponent(userContext, parent._id);
+                this.removeWorkPackageComponent(userContext, parent);
 
                 // And carry on up
                 this.removeChildlessParentsFromWp(userContext, wpType, parent);
