@@ -6,6 +6,7 @@ import { padDigits, log }               from '../../common/utils.js';
 import { LogLevel }                     from '../../constants/constants.js';
 
 import ImpexModules                     from '../../service_modules/administration/impex_service_modules.js';
+import DesignServices                   from '../../servicers/design/design_services.js';
 
 // Data Access
 import DesignBackupData                 from '../../data/backups/design_backup_db.js';
@@ -302,6 +303,9 @@ class ImpExServices{
 
                     // Get this BEFORE we create the replacement Design
                     const oldDesign = DesignData.getDesignByName(backupData.metadata.designName);
+
+                    // Mark old design as going
+                    DesignServices.updateDesignName(oldDesign._id, oldDesign.designName + ' - TO REMOVE');
 
                     // Restore Data - this creates new data with new IDs in parallel to any existing data ++++++++++++++++++
 

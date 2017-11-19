@@ -618,6 +618,10 @@ class DesignUpdateComponentData{
         );
     }
 
+    bulkInsert(batchData){
+        DesignUpdateComponents.batchInsert(batchData);
+    }
+
     // REMOVE ==========================================================================================================
 
     removeComponent(designUpdateComponentId){

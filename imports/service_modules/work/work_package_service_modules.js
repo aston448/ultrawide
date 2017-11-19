@@ -39,6 +39,7 @@ class WorkPackageModules {
 
                 WorkPackageComponentData.insertNewWorkPackageComponent(
                     userContext.designVersionId,
+                    userContext.designUpdateId,
                     userContext.workPackageId,
                     wpType,
                     component,
@@ -86,7 +87,8 @@ class WorkPackageModules {
 
     removeWorkPackageComponent(userContext, designComponentId){
 
-        const wpComponent = WorkPackageComponentData.getWpComponentByComponentId(userContext.workPackageId, designComponentId);
+        const designComponent = DesignComponentData.getDesignComponentById(designComponentId);
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, designComponent.componentReferenceId);
 
         if(wpComponent) {
 
@@ -177,7 +179,7 @@ class WorkPackageModules {
 
             children.forEach((child) => {
 
-                wpComponent = WorkPackageComponentData.getWpComponentByComponentId(userContext.workPackageId, child._id);
+                wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, child.componentReferenceId);
 
                 if(wpComponent){
                     // The fact of finding a component means that there is valid stuff here
@@ -237,14 +239,22 @@ class WorkPackageModules {
         return children;
     }
 
-    addNewDesignComponentToWorkPackage(workPackage, component, componentParentId, designVersionId){
+    addNewDesignComponentToWorkPackage(workPackage, component, componentParentId, designVersionId, designUpdateId){
 
-        let wpParentComponent = WorkPackageComponentData.getWpComponentByComponentId(workPackage._id, componentParentId);
+        let parentComponent = null;
+
+        if(workPackage.workPackageType === WorkPackageType.WP_BASE){
+            parentComponent = DesignComponentData.getDesignComponentById(componentParentId);
+        } else {
+            parentComponent = DesignUpdateComponentData.getUpdateComponentById(componentParentId);
+        }
+
+        let wpParentComponent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, parentComponent.componentReferenceId);
 
         // Can only add to an actively scoped component
         if (wpParentComponent && wpParentComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
 
-            const wpComponent = WorkPackageComponentData.getWpComponentByComponentId(workPackage._id, component._id);
+            const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, component.componentReferenceId);
 
             if(wpComponent){
 
@@ -254,7 +264,7 @@ class WorkPackageModules {
             } else {
 
                 // Add new Active component
-                WorkPackageComponentData.insertNewWorkPackageComponent(designVersionId, workPackage._id, workPackage.workPackageType, component, WorkPackageScopeType.SCOPE_ACTIVE);
+                WorkPackageComponentData.insertNewWorkPackageComponent(designVersionId, designUpdateId, workPackage._id, workPackage.workPackageType, component, WorkPackageScopeType.SCOPE_ACTIVE);
             }
 
             // And make sure if a DU WP Scenario we update the DU Scenario WP ID
@@ -268,7 +278,7 @@ class WorkPackageModules {
 
     updateDesignComponentLocationInWorkPackage(reorder, workPackage, component, componentParent){
 
-        const wpComponent = WorkPackageComponentData.getWpComponentByComponentId(workPackage._id, component._id);
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, component.componentReferenceId);
 
         if(reorder){
 
@@ -287,7 +297,7 @@ class WorkPackageModules {
 
             if(componentParent){
 
-                wpParent = WorkPackageComponentData.getWpComponentByComponentId(workPackage._id, componentParent._id);
+                wpParent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, componentParent.componentReferenceId);
 
                 // Scope type follows parent
                 if(wpParent){
@@ -301,9 +311,17 @@ class WorkPackageModules {
         }
     };
 
-    removeDesignComponentFromWorkPackage(workPackageId, designComponentId){
+    removeDesignComponentFromWorkPackage(workPackage, designComponentId){
 
-        const wpComponent = WorkPackageComponentData.getWpComponentByComponentId(workPackageId, designComponentId);
+        let designComponent = null;
+
+        if(workPackage.workPackageType === WorkPackageType.WP_BASE){
+            designComponent = DesignComponentData.getDesignComponentById(designComponentId);
+        } else {
+            designComponent = DesignUpdateComponentData.getUpdateComponentById(designComponentId);
+        }
+
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(workPackage._id, designComponent.componentReferenceId);
 
         if(wpComponent){
             WorkPackageComponentData.removeComponent(wpComponent._id);

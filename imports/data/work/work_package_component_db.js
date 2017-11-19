@@ -8,14 +8,14 @@ class WorkPackageComponentData {
 
     // INSERT ==========================================================================================================
 
-    insertNewWorkPackageComponent(designVersionId, workPackageId, wpType, component, scopeType){
+    insertNewWorkPackageComponent(designVersionId, designUpdateId, workPackageId, wpType, component, scopeType){
 
         WorkPackageComponents.insert(
             {
                 designVersionId:                designVersionId,
+                designUpdateId:                 designUpdateId,
                 workPackageId:                  workPackageId,
                 workPackageType:                wpType,
-                componentId:                    component._id,
                 componentReferenceId:           component.componentReferenceId,
                 componentType:                  component.componentType,
                 componentParentReferenceId:     component.componentParentReferenceIdNew,
@@ -26,16 +26,16 @@ class WorkPackageComponentData {
         );
     }
 
-    importComponent(designVersionId, workPackageId, designComponentId, wpComponent){
+    importComponent(designVersionId, designUpdateId, workPackageId, wpComponent){
 
         if(Meteor.isServer) {
             return WorkPackageComponents.insert(
                 {
                     // Identity
                     designVersionId: designVersionId,
+                    designUpdateId: designUpdateId,
                     workPackageId: workPackageId,
                     workPackageType: wpComponent.workPackageType,
-                    componentId: designComponentId,
                     componentReferenceId: wpComponent.componentReferenceId,
                     componentParentReferenceId: wpComponent.componentParentReferenceId,
                     componentFeatureReferenceId: wpComponent.componentFeatureReferenceId,
@@ -50,14 +50,6 @@ class WorkPackageComponentData {
     }
 
     // SELECT ==========================================================================================================
-
-    getWpComponentByComponentId(workPackageId, designComponentId){
-
-        return WorkPackageComponents.findOne({
-            workPackageId:          workPackageId,
-            componentId:            designComponentId
-        });
-    }
 
     getWpComponentByComponentRef(workPackageId, designComponentReferenceId){
 
@@ -198,7 +190,7 @@ class WorkPackageComponentData {
             {_id: wpComponentId},
             {
                 $set:{
-                    componentId:                    designComponent._id,
+                    componentReferenceId:           designComponent.componentReferenceId,
                     componentParentReferenceId:     designComponent.componentParentReferenceIdNew,
                     componentFeatureReferenceId:    designComponent.componentFeatureReferenceIdNew,
                     componentIndex:                 designComponent.componentIndexNew,

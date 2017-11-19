@@ -31,6 +31,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {WorkPackageType} from "../../../constants/constants";
 
 
 // =====================================================================================================================
@@ -56,10 +57,14 @@ export class DesignApplicationsList extends Component {
 
     }
 
-    getDesignItem(application, displayContext){
+    getDesignItem(application, displayContext, userContext){
         // Design Item needed only in WP context (otherwise we already have it as the current item)
         if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
-            return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType);
+            if(userContext.designUpdateId === 'NONE'){
+                return ClientWorkPackageComponentServices.getDesignItem(application._id, WorkPackageType.WP_BASE);
+            } else {
+                return ClientWorkPackageComponentServices.getDesignItem(application._id, WorkPackageType.WP_UPDATE);
+            }
         } else {
             return application;
         }
@@ -82,13 +87,13 @@ export class DesignApplicationsList extends Component {
     }
 
     // A list of top level applications in the design / design update
-    renderApplications(applications, displayContext, view, mode, testSummary) {
+    renderApplications(applications, displayContext, userContext, view, mode, testSummary) {
         return applications.map((application) => {
             return (
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    designItem={this.getDesignItem(application, displayContext)}
+                    designItem={this.getDesignItem(application, displayContext, userContext)}
                     updateItem={this.getDesignUpdateItem(application, displayContext)}
                     displayContext={displayContext}
                     view={view}
@@ -164,7 +169,7 @@ export class DesignApplicationsList extends Component {
                     displayContext={displayContext}
                 />
                 <div className={editorClass}>
-                    {this.renderApplications(applications, displayContext, view, mode, viewOptions.testSummaryVisible)}
+                    {this.renderApplications(applications, displayContext, userContext, view, mode, viewOptions.testSummaryVisible)}
                     {addComponent}
                 </div>
                 <DesignEditorFooter

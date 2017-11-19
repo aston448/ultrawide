@@ -268,7 +268,13 @@ Meteor.methods({
         let designUpdateComponent = null;
 
         if(workPackageComponent){
-            designUpdateComponent = DesignUpdateComponents.findOne({_id: workPackageComponent.componentId});
+
+            designUpdateComponent = DesignUpdateComponents.findOne({
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                componentReferenceId: workPackageComponent.componentReferenceId
+            });
+
             if(designUpdateComponent.isRemoved){
                 return true;
             } else {
@@ -285,7 +291,13 @@ Meteor.methods({
         let designUpdateComponent = null;
 
         if(workPackageComponent){
-            designUpdateComponent = DesignUpdateComponents.findOne({_id: workPackageComponent.componentId});
+
+            designUpdateComponent = DesignUpdateComponents.findOne({
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                componentReferenceId: workPackageComponent.componentReferenceId
+            });
+
             if(designUpdateComponent.isRemoved){
                 throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is removed");
             } else {

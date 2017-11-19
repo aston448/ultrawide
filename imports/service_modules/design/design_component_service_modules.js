@@ -55,7 +55,7 @@ class DesignComponentModules{
         // If the parent is in the WP actual scope, add in this component too
         workPackages.forEach((wp) => {
 
-            WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParent._id, designVersionId);
+            WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParent._id, designVersionId, 'NONE');
         });
     };
 
@@ -81,7 +81,7 @@ class DesignComponentModules{
 
         workPackages.forEach((wp) => {
 
-            WorkPackageModules.removeDesignComponentFromWorkPackage(wp._id, designComponentId);
+            WorkPackageModules.removeDesignComponentFromWorkPackage(wp, designComponentId);
         });
     };
 

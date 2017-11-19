@@ -485,6 +485,8 @@ class ImpexModules{
 
         const newDesignComponentData = this.migrateDesignComponentData(designComponentData, backupDataVersion, currentDataVersion);
 
+        let designComponentBatch = [];
+
         newDesignComponentData.forEach((component) => {
             log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Component {} - {}", component.componentType, component.componentNameNew);
 
@@ -492,20 +494,64 @@ class ImpexModules{
             let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
             let workPackageId = getIdFromMap(workPackagesMapping, component.workPackageId);
 
-            let designComponentId = DesignComponentData.importComponent(
-                designId,
-                designVersionId,
-                workPackageId,
-                component
+            designComponentBatch.push(
+                {
+                    // Identity
+                    componentReferenceId:           component.componentReferenceId,
+                    designId:                       designId,                               // Will be a new id for the restored data
+                    designVersionId:                designVersionId,                        // Ditto
+                    componentType:                  component.componentType,
+                    componentLevel:                 component.componentLevel,
+
+                    componentParentReferenceIdOld:  component.componentParentReferenceIdOld,
+                    componentParentReferenceIdNew:  component.componentParentReferenceIdNew,
+                    componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
+                    componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
+                    componentIndexOld:              component.componentIndexNew,
+                    componentIndexNew:              component.componentIndexNew,
+
+                    // Data
+                    componentNameOld:               component.componentNameOld,
+                    componentNameNew:               component.componentNameNew,
+                    componentNameRawOld:            component.componentNameRawOld,
+                    componentNameRawNew:            component.componentNameRawNew,
+                    componentNarrativeOld:          component.componentNarrativeOld,
+                    componentNarrativeNew:          component.componentNarrativeNew,
+                    componentNarrativeRawOld:       component.componentNarrativeRawOld,
+                    componentNarrativeRawNew:       component.componentNarrativeRawNew,
+                    componentTextRawOld:            component.componentTextRawOld,
+                    componentTextRawNew:            component.componentTextRawNew,
+
+                    // State (shared and persistent only)
+                    isNew:                          component.isNew,
+                    workPackageId:                  workPackageId,
+                    updateMergeStatus:              component.updateMergeStatus,
+                    isDevUpdated:                   component.isDevUpdated,
+                    isDevAdded:                     component.isDevAdded,
+
+                    isRemovable:                    component.isRemovable,
+                }
             );
 
-            if (designComponentId) {
-                // Map old component ids to new
-                designComponentsMapping.push({oldId: component._id, newId: designComponentId});
-            }
+            // let designComponentId = DesignComponentData.importComponent(
+            //     designId,
+            //     designVersionId,
+            //     workPackageId,
+            //     component
+            // );
+
+            // if (designComponentId) {
+            //     // Map old component ids to new
+            //     designComponentsMapping.push({oldId: component._id, newId: designComponentId});
+            // }
 
             componentCount++;
         });
+
+        // Bulk insert the lot for efficiency
+        if(designComponentBatch.length > 0) {
+            DesignComponentData.bulkInsert(designComponentBatch);
+        }
 
         // Update Design Component parents for the new design components
         // designComponentsMapping.forEach((component) => {
@@ -533,33 +579,86 @@ class ImpexModules{
 
         if(designsMapping && designVersionsMapping && designUpdatesMapping && workPackagesMapping) {
 
-            newDesignUpdateComponentData.forEach((updateComponent) => {
-                log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Update Component {} - {}", updateComponent.componentType, updateComponent.componentNameNew);
+            let designUpdateComponentBatch = [];
 
-                let designId = getIdFromMap(designsMapping, updateComponent.designId);
-                let designVersionId = getIdFromMap(designVersionsMapping, updateComponent.designVersionId);
-                let designUpdateId = getIdFromMap(designUpdatesMapping, updateComponent.designUpdateId);
-                let workPackageId = getIdFromMap(workPackagesMapping, updateComponent.workPackageId);
+            newDesignUpdateComponentData.forEach((component) => {
+                log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Update Component {} - {}", component.componentType, component.componentNameNew);
 
-                let designUpdateComponentId = DesignUpdateComponentData.importComponent(
-                    designId,
-                    designVersionId,
-                    designUpdateId,
-                    workPackageId,
-                    updateComponent
+                let designId = getIdFromMap(designsMapping, component.designId);
+                let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
+                let designUpdateId = getIdFromMap(designUpdatesMapping, component.designUpdateId);
+                let workPackageId = getIdFromMap(workPackagesMapping, component.workPackageId);
+
+                designUpdateComponentBatch.push(
+                    {
+                        // Identity
+                        componentReferenceId:           component.componentReferenceId,
+                        designId:                       designId,                                           // Restored Design Id
+                        designVersionId:                designVersionId,                                    // Restored Design Version Id
+                        designUpdateId:                 designUpdateId,                                     // Restored Design Update Id
+                        componentType:                  component.componentType,
+                        componentLevel:                 component.componentLevel,
+                        componentParentReferenceIdOld:  component.componentParentReferenceIdOld,
+                        componentParentReferenceIdNew:  component.componentParentReferenceIdNew,
+                        componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
+                        componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
+                        componentIndexOld:              component.componentIndexOld,
+                        componentIndexNew:              component.componentIndexNew,
+
+                        // Data
+                        componentNameOld:               component.componentNameOld,
+                        componentNameNew:               component.componentNameNew,
+                        componentNameRawOld:            component.componentNameRawOld,
+                        componentNameRawNew:            component.componentNameRawNew,
+                        componentNarrativeOld:          component.componentNarrativeOld,
+                        componentNarrativeNew:          component.componentNarrativeNew,
+                        componentNarrativeRawOld:       component.componentNarrativeRawOld,
+                        componentNarrativeRawNew:       component.componentNarrativeRawNew,
+                        componentTextRawOld:            component.componentTextRawOld,
+                        componentTextRawNew:            component.componentTextRawNew,
+
+                        // Update State
+                        isNew:                          component.isNew,
+                        isChanged:                      component.isChanged,
+                        isTextChanged:                  component.isTextChanged,
+                        isMoved:                        component.isMoved,
+                        isRemoved:                      component.isRemoved,
+                        isRemovedElsewhere:             component.isRemovedElsewhere,
+                        isDevUpdated:                   component.isDevUpdated,
+                        isDevAdded:                     component.isDevAdded,
+                        workPackageId:                  workPackageId,
+
+                        // Editing state (shared and persistent)
+                        isRemovable:                    component.isRemovable,
+                        isScopable:                     component.isScopable,
+                        scopeType:                      component.scopeType,
+                        lockingUser:                    component.lockingUser
+                    }
                 );
 
-                if (designUpdateComponentId) {
-                    // Map old component ids to new
-                    designUpdateComponentsMapping.push({
-                        oldId: updateComponent._id,
-                        newId: designUpdateComponentId
-                    });
-                }
+                //let designUpdateComponentId = DesignUpdateComponentData.importComponent(
+                //     designId,
+                //     designVersionId,
+                //     designUpdateId,
+                //     workPackageId,
+                //     updateComponent
+                // );
+
+                // if (designUpdateComponentId) {
+                //     // Map old component ids to new
+                //     designUpdateComponentsMapping.push({
+                //         oldId: updateComponent._id,
+                //         newId: designUpdateComponentId
+                //     });
+                // }
 
                 componentCount++;
 
             });
+
+            if(designUpdateComponentBatch.length > 0) {
+                DesignUpdateComponentData.bulkInsert(designUpdateComponentBatch);
+            }
 
             // Update Design Update Component parents for the new design update components
             // designUpdateComponentsMapping.forEach((updateComponent) => {
@@ -602,30 +701,31 @@ class ImpexModules{
 
             let designVersionId = workPackage.designVersionId;
 
-            switch (workPackage.workPackageType) {
-                case WorkPackageType.WP_BASE:
-                    if(hasDesignVersionComponents) {
-                        wpDesignComponentId = getIdFromMap(designVersionComponentsMapping, wpComponent.componentId);
-                    } else {
-                        log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design components...");
-                        skip = true;
-                    }
-                    break;
-                case WorkPackageType.WP_UPDATE:
-                    if(hasDesignUpdateComponents) {
-                        wpDesignComponentId = getIdFromMap(designUpdateComponentsMapping, wpComponent.componentId);
-                    } else {
-                        log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design update components...");
-                        skip = true;
-                    }
-                    break;
-            }
+            // switch (workPackage.workPackageType) {
+            //     case WorkPackageType.WP_BASE:
+            //         if(hasDesignVersionComponents) {
+            //             wpDesignComponentId = getIdFromMap(designVersionComponentsMapping, wpComponent.componentId);
+            //         } else {
+            //             log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design components...");
+            //             skip = true;
+            //         }
+            //         break;
+            //     case WorkPackageType.WP_UPDATE:
+            //         if(hasDesignUpdateComponents) {
+            //             wpDesignComponentId = getIdFromMap(designUpdateComponentsMapping, wpComponent.componentId);
+            //         } else {
+            //             log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design update components...");
+            //             skip = true;
+            //         }
+            //         break;
+            // }
 
             if(!skip) {
                 let workPackageComponentId = WorkPackageComponentData.importComponent(
-                    designVersionId,
+                    workPackage.designVersionId,
+                    workPackage.designUpdateId,
                     workPackageId,
-                    wpDesignComponentId,
+                    //wpDesignComponentId,
                     wpComponent
                 );
 

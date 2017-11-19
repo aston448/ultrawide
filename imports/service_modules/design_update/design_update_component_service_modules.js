@@ -136,7 +136,7 @@ class DesignUpdateComponentModules{
 
         workPackages.forEach((wp) => {
 
-            WorkPackageModules.removeDesignComponentFromWorkPackage(wp._id, designUpdateComponentId);
+            WorkPackageModules.removeDesignComponentFromWorkPackage(wp, designUpdateComponentId);
 
         });
     };

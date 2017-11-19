@@ -125,7 +125,7 @@ class DesignUpdateComponentServices{
                     const component = DesignUpdateComponentData.getUpdateComponentById(newUpdateComponentId);
                     const parent = DesignUpdateComponentData.getUpdateComponentByRef(component.designVersionId, component.designUpdateId, component.componentParentReferenceIdNew);
 
-                    WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, parent._id, designVersionId);
+                    WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, parent._id, designVersionId, designUpdateId);
                     log((msg) => console.log(msg), LogLevel.DEBUG, '  Added component {} to WP {}', component.componentNameNew, wp.workPackageName);
                 }
 

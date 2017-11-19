@@ -44,9 +44,6 @@ class WorkPackageApplicationsList extends Component {
 
     }
 
-    // getDesignItem(application){
-    //     return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType)
-    // }
 
     getWpItem(currentItem, workPackageId){
         return ClientWorkPackageComponentServices.getWorkPackageComponent(currentItem.componentReferenceId, workPackageId);
