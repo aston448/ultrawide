@@ -281,7 +281,7 @@ export const DesignUpdateSummaryCategory = {
 };
 
 export const WorkSummaryType = {
-    WORK_SUMMARY_BASE_DV:           'WORK_SUMMARY_DV',
+    WORK_SUMMARY_BASE_DV:           'WORK_SUMMARY_BASE_DV',
     WORK_SUMMARY_UPDATE_DV:         'WORK_SUMMARY_UPDATE_DV',
     WORK_SUMMARY_UPDATE_DV_ALL:     'WORK_SUMMARY_UPDATE_DV_ALL',
     WORK_SUMMARY_BASE_WP:           'WORK_SUMMARY_BASE_WP',

@@ -1530,7 +1530,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderVersionUpdateViewTest(currentItem, updateItem);
 
             // Check that strike through has been added to item class
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Update status not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Update status not struck through');
         });
 
         it('removed design section is struck through', () => {
@@ -1541,7 +1541,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderVersionUpdateViewTest(currentItem, updateItem);
 
             // Check that strike through has been added to item class
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Update status not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Update status not struck through');
         });
 
         it('removed feature is struck through', () => {
@@ -1552,7 +1552,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderVersionUpdateViewTest(currentItem, updateItem);
 
             // Check that strike through has been added to item class
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Update status not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Update status not struck through');
         });
 
         it('removed feature aspect is struck through', () => {
@@ -1563,7 +1563,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderVersionUpdateViewTest(currentItem, updateItem);
 
             // Check that strike through has been added to item class
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Update status not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Update status not struck through');
         });
 
         it('removed scenario is struck through', () => {
@@ -1574,7 +1574,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderVersionUpdateViewTest(currentItem, updateItem);
 
             // Check that strike through has been added to item class
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Update status not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Update status not struck through');
         });
     });
 });
