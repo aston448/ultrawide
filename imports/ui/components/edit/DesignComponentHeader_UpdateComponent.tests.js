@@ -894,7 +894,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed application is struck through when viewing', () => {
@@ -908,7 +908,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed design section is struck through', () => {
@@ -922,7 +922,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed design section is struck through when viewing', () => {
@@ -936,7 +936,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed feature is struck through', () => {
@@ -950,7 +950,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed feature is struck through when viewing', () => {
@@ -964,7 +964,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed feature aspect is struck through', () => {
@@ -978,7 +978,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed feature aspect is struck through when viewing', () => {
@@ -992,7 +992,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed scenario is struck through', () => {
@@ -1006,7 +1006,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
 
         it('removed scenario is struck through when viewing', () => {
@@ -1020,7 +1020,7 @@ describe('JSX: DesignComponentHeader', () => {
             const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
-            chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
+            chai.assert(item.find('#editorReadOnly').props().className.includes('removed-item'), 'Item not struck through');
         });
     });
 
