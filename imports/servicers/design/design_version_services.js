@@ -194,11 +194,7 @@ class DesignVersionServices{
 
             if(userMashScenarios.length > 0) {
                 myMashScenarioData.batchInsert(userMashScenarios);
-            } else {
-                // No data yet so no work to do
-                return;
             }
-
 
             switch(dv.designVersionStatus){
                 case DesignVersionStatus.VERSION_NEW:
