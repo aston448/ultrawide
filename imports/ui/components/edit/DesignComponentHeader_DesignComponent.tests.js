@@ -24,6 +24,7 @@ describe('JSX: DesignComponentHeader', () => {
         const testDataFlag = 0;
         const updateScopeItems = {};
         const workPackageScopeItems = {};
+        const domainTermsVisible = true;
 
         return shallow(
             <DesignComponentHeader
@@ -45,6 +46,7 @@ describe('JSX: DesignComponentHeader', () => {
                 updateScopeItems={updateScopeItems}
                 workPackageScopeFlag={1}
                 workPackageScopeItems={workPackageScopeItems}
+                domainTermsVisible={domainTermsVisible}
             />
         );
 
@@ -1172,6 +1174,7 @@ describe('JSX: DesignComponentHeader', () => {
         const viewOptions = {};
         const updateScopeItems = {};
         const workPackageScopeItems = {};
+        const domainTermsVisible = true;
 
 
         return shallow(
@@ -1194,6 +1197,7 @@ describe('JSX: DesignComponentHeader', () => {
                 updateScopeItems={updateScopeItems}
                 workPackageScopeFlag={1}
                 workPackageScopeItems={workPackageScopeItems}
+                domainTermsVisible={domainTermsVisible}
             />
         );
 

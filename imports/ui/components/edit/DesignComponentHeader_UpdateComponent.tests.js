@@ -24,6 +24,7 @@ describe('JSX: DesignComponentHeader', () => {
         const testDataFlag = 0;
         const updateScopeItems = {};
         const workPackageScopeItems = {};
+        const domainTermsVisible = true;
 
         return shallow(
             <DesignComponentHeader
@@ -45,6 +46,7 @@ describe('JSX: DesignComponentHeader', () => {
                 updateScopeItems={updateScopeItems}
                 workPackageScopeFlag={1}
                 workPackageScopeItems={workPackageScopeItems}
+                domainTermsVisible={domainTermsVisible}
             />
         );
 
@@ -620,6 +622,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Edit
             item.setState({editable: true});
+
 
             // Has undo option
             chai.assert(item.find('#actionUndo').length === 1, 'Undo option not found!');

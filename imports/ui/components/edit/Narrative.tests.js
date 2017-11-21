@@ -19,6 +19,7 @@ describe('JSX: Narrative', () => {
             const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const testSummary = false;
+            const domainTermsVisible = true;
 
             const item = shallow(
                 <Narrative
@@ -28,6 +29,7 @@ describe('JSX: Narrative', () => {
                     view={view}
                     displayContext={displayContext}
                     testSummary={testSummary}
+                    domainTermsVisible={domainTermsVisible}
                 />
             );
 
@@ -45,6 +47,7 @@ describe('JSX: Narrative', () => {
             const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const testSummary = false;
+            const domainTermsVisible = true;
 
             const item = shallow(
                 <Narrative
@@ -54,6 +57,7 @@ describe('JSX: Narrative', () => {
                     view={view}
                     displayContext={displayContext}
                     testSummary={testSummary}
+                    domainTermsVisible={domainTermsVisible}
                 />
             );
 
@@ -73,6 +77,7 @@ describe('JSX: Narrative', () => {
             const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const testSummary = false;
+            const domainTermsVisible = true;
 
             const item = shallow(
                 <Narrative
@@ -82,6 +87,7 @@ describe('JSX: Narrative', () => {
                     view={view}
                     displayContext={displayContext}
                     testSummary={testSummary}
+                    domainTermsVisible={domainTermsVisible}
                 />
             );
 
@@ -101,6 +107,7 @@ describe('JSX: Narrative', () => {
             const view = ViewType.DESIGN_NEW;
             const displayContext = DisplayContext.BASE_EDIT;
             const testSummary = false;
+            const domainTermsVisible = true;
 
             const item = shallow(
                 <Narrative
@@ -110,6 +117,7 @@ describe('JSX: Narrative', () => {
                     view={view}
                     displayContext={displayContext}
                     testSummary={testSummary}
+                    domainTermsVisible={domainTermsVisible}
                 />
             );
 
