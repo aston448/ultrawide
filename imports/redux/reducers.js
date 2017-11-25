@@ -13,10 +13,11 @@ const initialState = {
     currentAppView:                     ViewType.AUTHORISE,
     currentViewMode:                    ViewMode.MODE_VIEW,
     currentWindowSize:                  UserSettingValue.SCREEN_SIZE_LARGE,
-    docSectionTextOption:               UserSettingValue.DOC_INCLUDE_TEXT,
-    docFeatureTextOption:               UserSettingValue.DOC_INCLUDE_TEXT,
-    docNarrativeTextOption:             UserSettingValue.DOC_INCLUDE_TEXT,
-    docScenarioTextOption:              UserSettingValue.DOC_INCLUDE_TEXT,
+    includeNarratives:                  UserSettingValue.SETTING_INCLUDE,
+    docSectionTextOption:               UserSettingValue.SETTING_INCLUDE,
+    docFeatureTextOption:               UserSettingValue.SETTING_INCLUDE,
+    docNarrativeTextOption:             UserSettingValue.SETTING_INCLUDE,
+    docScenarioTextOption:              UserSettingValue.SETTING_INCLUDE,
     domainTermsVisible:                 true,
     intTestOutputDir:                   '',
     domainDictionaryVisible:            false,
@@ -103,6 +104,10 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_WINDOW_SIZE:
             return Object.assign({}, state, {
                 currentWindowSize: action.newSize
+            });
+        case Actions.SET_INCLUDE_NARRATIVES_OPTION:
+            return Object.assign({}, state, {
+                includeNarratives: action.newOption
             });
         case Actions.SET_INT_TEST_OUTPUT_DIR:
             return Object.assign({}, state, {

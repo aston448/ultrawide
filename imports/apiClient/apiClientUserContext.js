@@ -29,7 +29,7 @@ import {
     setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentWindowSize,
     setIntTestOutputDir, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems,
     setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag, setDocSectionTextOption, setDocFeatureTextOption,
-    setDocNarrativeTextOption, setDocScenarioTextOption
+    setDocNarrativeTextOption, setDocScenarioTextOption, setIncludeNarratives
 } from '../redux/actions'
 import {UserSettingValue} from "../constants/constants";
 
@@ -205,37 +205,46 @@ class ClientUserContextServices {
         const intTestOutputDir = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_INT_OUTPUT_LOCATION);
         store.dispatch(setIntTestOutputDir(intTestOutputDir));
 
+        // Include narratives setting.  Default to ON if not yet set
+        const includeNarrativesSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_INCLUDE_NARRATIVES);
+        if(includeNarrativesSetting){
+            store.dispatch(setIncludeNarratives(includeNarrativesSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_INCLUDE_NARRATIVES, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setIncludeNarratives(UserSettingValue.SETTING_INCLUDE));
+        }
+
         // Doc export settings - default if not yet set
         const docSectionTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION);
         if(docSectionTextSetting) {
             store.dispatch(setDocSectionTextOption(docSectionTextSetting));
         } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION, UserSettingValue.DOC_INCLUDE_TEXT);
-            store.dispatch(setDocSectionTextOption(UserSettingValue.DOC_INCLUDE_TEXT));
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setDocSectionTextOption(UserSettingValue.SETTING_INCLUDE));
         }
 
         const docFeatureTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE);
         if(docFeatureTextSetting) {
             store.dispatch(setDocFeatureTextOption(docFeatureTextSetting));
         } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE, UserSettingValue.DOC_INCLUDE_TEXT);
-            store.dispatch(setDocFeatureTextOption(UserSettingValue.DOC_INCLUDE_TEXT));
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setDocFeatureTextOption(UserSettingValue.SETTING_INCLUDE));
         }
 
         const docNarrativeTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE);
         if(docNarrativeTextSetting) {
             store.dispatch(setDocNarrativeTextOption(docNarrativeTextSetting));
         } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE, UserSettingValue.DOC_INCLUDE_TEXT);
-            store.dispatch(setDocNarrativeTextOption(UserSettingValue.DOC_INCLUDE_TEXT));
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setDocNarrativeTextOption(UserSettingValue.SETTING_INCLUDE));
         }
 
         const docScenarioTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO);
         if(docScenarioTextSetting) {
             store.dispatch(setDocScenarioTextOption(docScenarioTextSetting));
         } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO, UserSettingValue.DOC_INCLUDE_TEXT);
-            store.dispatch(setDocScenarioTextOption(UserSettingValue.DOC_INCLUDE_TEXT));
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setDocScenarioTextOption(UserSettingValue.SETTING_INCLUDE));
         }
 
         // Go to Role choice screen

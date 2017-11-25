@@ -31,6 +31,7 @@ import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {UserSettingValue} from "../../../constants/constants";
 
 // React DnD
 
@@ -490,7 +491,7 @@ export class DesignComponent extends Component{
 
         const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext,
             testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag,
-            workPackageScopeItems, workPackageScopeFlag, domainTermsVisible} = this.props;
+            workPackageScopeItems, workPackageScopeFlag, domainTermsVisible, includeNarratives} = this.props;
 
         //console.log("Render " + currentItem.componentType + "  Design Component in context " + displayContext + " with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem + " and wpItem " + wpItem + " and test Summary " + testSummary);
 
@@ -571,8 +572,12 @@ export class DesignComponent extends Component{
 
             let currentItemText = currentItem.componentNameNew;
 
-            let narrative =
-                <Narrative
+            console.log('Include narratives = ' + includeNarratives);
+            // Narrative is an optional item...
+            let narrative = <div></div>;
+
+            if(includeNarratives === UserSettingValue.SETTING_INCLUDE){
+                narrative =  <Narrative
                     designComponent={currentItem}
                     updateComponent={updateItem}
                     wpComponent={wpItem}
@@ -582,6 +587,8 @@ export class DesignComponent extends Component{
                     testSummary={testSummary}
                     domainTermsVisible={domainTermsVisible}
                 />;
+            }
+
 
             let scenariosContainer =
                 <ScenariosContainer params={{
@@ -866,7 +873,8 @@ function mapStateToProps(state) {
         updateScopeFlag:            state.currentUpdateScopeFlag,
         workPackageScopeItems:      state.currentWorkPackageScopeItems,
         workPackageScopeFlag:       state.currentWorkPackageScopeFlag,
-        domainTermsVisible:         state.domainTermsVisible
+        domainTermsVisible:         state.domainTermsVisible,
+        includeNarratives:          state.includeNarratives
     }
 }
 

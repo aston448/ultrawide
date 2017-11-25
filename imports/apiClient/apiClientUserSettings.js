@@ -11,7 +11,7 @@ import UserSettingsData                     from '../data/configure/user_setting
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentWindowSize, setIntTestOutputDir, updateUserMessage} from '../redux/actions'
+import {setCurrentWindowSize, setIntTestOutputDir, setIncludeNarratives, updateUserMessage} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for User Management
@@ -102,6 +102,10 @@ class ClientUserSettingServices {
 
     setIntTestOutputDir(newPath){
         store.dispatch(setIntTestOutputDir(newPath));
+    }
+
+    setIncludeNarratives(newSetting){
+        store.dispatch(setIncludeNarratives(newSetting));
     }
 }
 

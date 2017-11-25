@@ -42,13 +42,14 @@ export class ConfigurationSettings extends Component {
         this.state = {
             currentWindowSize: this.props.currentWindowSize,
             currentIntOutputPath: this.props.intTestOutputDir,
+            includeNarratives: this.props.includeNarratives === UserSettingValue.SETTING_INCLUDE,
             oldPassword: '',
             newPassword1: '',
             newPassword2: '',
-            includeSectionDetails: (this.props.includeSectionDetails === UserSettingValue.DOC_INCLUDE_TEXT),
-            includeNarrativeDetails: (this.props.includeNarrativeDetails === UserSettingValue.DOC_INCLUDE_TEXT),
-            includeFeatureDetails: (this.props.includeFeatureDetails === UserSettingValue.DOC_INCLUDE_TEXT),
-            includeScenarioDetails: (this.props.includeScenarioDetails === UserSettingValue.DOC_INCLUDE_TEXT)
+            includeSectionDetails: (this.props.includeSectionDetails === UserSettingValue.SETTING_INCLUDE),
+            includeNarrativeDetails: (this.props.includeNarrativeDetails === UserSettingValue.SETTING_INCLUDE),
+            includeFeatureDetails: (this.props.includeFeatureDetails === UserSettingValue.SETTING_INCLUDE),
+            includeScenarioDetails: (this.props.includeScenarioDetails === UserSettingValue.SETTING_INCLUDE)
         };
 
     }
@@ -61,6 +62,26 @@ export class ConfigurationSettings extends Component {
 
         // And save to DB
         ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_SCREEN_SIZE, newSize);
+    }
+
+    onNarrativeOptionsChange(){
+
+        let newValue = UserSettingValue.SETTING_INCLUDE;
+        let wasInclude = false;
+
+        // Toggle
+        wasInclude = this.state.includeNarratives;
+        this.setState({includeNarratives: !this.state.includeNarratives});
+
+        if(wasInclude){
+            newValue = UserSettingValue.SETTING_EXCLUDE;
+        }
+
+        // Update Redux
+        ClientUserSettingsServices.setIncludeNarratives(newValue);
+
+        // Save to DB
+        ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_INCLUDE_NARRATIVES, newValue);
     }
 
     onUpdateIntOutputPath(e){
@@ -100,7 +121,7 @@ export class ConfigurationSettings extends Component {
     updateDocumentOptions(settingType){
 
         // Assume new value is include until we find it not to be
-        let newValue = UserSettingValue.DOC_INCLUDE_TEXT;
+        let newValue = UserSettingValue.SETTING_INCLUDE;
         let wasInclude = false;
 
         switch (settingType){
@@ -111,7 +132,7 @@ export class ConfigurationSettings extends Component {
                 this.setState({includeSectionDetails: !this.state.includeSectionDetails});
 
                 if(wasInclude){
-                    newValue = UserSettingValue.DOC_EXCLUDE_TEXT;
+                    newValue = UserSettingValue.SETTING_EXCLUDE;
                 }
                 break;
 
@@ -122,7 +143,7 @@ export class ConfigurationSettings extends Component {
                 this.setState({includeFeatureDetails: !this.state.includeFeatureDetails});
 
                 if(wasInclude){
-                    newValue = UserSettingValue.DOC_EXCLUDE_TEXT;
+                    newValue = UserSettingValue.SETTING_EXCLUDE;
                 }
                 break;
 
@@ -133,7 +154,7 @@ export class ConfigurationSettings extends Component {
                 this.setState({includeNarrativeDetails: !this.state.includeNarrativeDetails});
 
                 if(wasInclude){
-                    newValue = UserSettingValue.DOC_EXCLUDE_TEXT;
+                    newValue = UserSettingValue.SETTING_EXCLUDE;
                 }
                 break;
 
@@ -144,7 +165,7 @@ export class ConfigurationSettings extends Component {
                 this.setState({includeScenarioDetails: !this.state.includeScenarioDetails});
 
                 if(wasInclude){
-                    newValue = UserSettingValue.DOC_EXCLUDE_TEXT;
+                    newValue = UserSettingValue.SETTING_EXCLUDE;
                 }
                 break;
         }
@@ -190,6 +211,16 @@ export class ConfigurationSettings extends Component {
                            onChange={() => this.onWindowSizeChange(UserSettingValue.SCREEN_SIZE_SMALL)}>
                         View Height Small (900px)
                     </Radio>
+                </FormGroup>
+            </Well>;
+
+        const narrativeSetting =
+            <Well className="settings-well">
+                <FormGroup id="narrativeOptions">
+                    <Checkbox id="optionIncludeNarratives" checked={this.state.includeNarratives}
+                              onChange={() => this.onNarrativeOptionsChange(UserSetting.SETTING_INCLUDE_NARRATIVES)}>
+                        Include Narratives in Features
+                    </Checkbox>
                 </FormGroup>
             </Well>;
 
@@ -248,6 +279,11 @@ export class ConfigurationSettings extends Component {
                             <Row>
                                 <Col md={12}>
                                     {screenSizeSettings}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={12}>
+                                    {narrativeSetting}
                                 </Col>
                             </Row>
                             <Row>
@@ -358,6 +394,7 @@ ConfigurationSettings.propTypes = {
 function mapStateToProps(state) {
     return {
         currentWindowSize:          state.currentWindowSize,
+        includeNarratives:          state.includeNarratives,
         intTestOutputDir:           state.intTestOutputDir,
         includeSectionDetails:      state.docSectionTextOption,
         includeFeatureDetails:      state.docFeatureTextOption,

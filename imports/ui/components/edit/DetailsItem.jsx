@@ -18,6 +18,7 @@ import {InputGroup} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {UserSettingValue} from "../../../constants/constants";
 
 // =====================================================================================================================
 
@@ -35,9 +36,25 @@ export class DetailsItem extends Component {
 
 
     render() {
-        const {itemType, item, displayContext, view, domainTermsVisible} = this.props;
+        const {itemType, item, displayContext, view, domainTermsVisible, includeNarratives} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
+
+        // Narrative is optional...
+        let narrative = <div></div>;
+
+        if(includeNarratives === UserSettingValue.SETTING_INCLUDE){
+            narrative = <Narrative
+                designComponent={item}
+                mode={ViewMode.MODE_VIEW}
+                displayContext={DisplayContext.BASE_VIEW}
+                view={view}
+                testSummary={false}
+                displayOldValue={false}
+                domainTermsVisible={domainTermsVisible}
+            />
+        }
+
         const nameItem =
             <InputGroup>
                 <InputGroup.Addon>
@@ -61,15 +78,7 @@ export class DetailsItem extends Component {
                     designComponent={item}
                     detailsType={itemType}
                 />
-                <Narrative
-                    designComponent={item}
-                    mode={ViewMode.MODE_VIEW}
-                    displayContext={DisplayContext.BASE_VIEW}
-                    view={view}
-                    testSummary={false}
-                    displayOldValue={false}
-                    domainTermsVisible={domainTermsVisible}
-                />
+                {narrative}
                 <InputGroup.Addon>
                     <div></div>
                 </InputGroup.Addon>
@@ -99,15 +108,7 @@ export class DetailsItem extends Component {
                     designComponent={item}
                     detailsType={itemType}
                 />
-                <Narrative
-                    designComponent={item}
-                    mode={ViewMode.MODE_VIEW}
-                    displayContext={DisplayContext.BASE_VIEW}
-                    view={view}
-                    testSummary={false}
-                    displayOldValue={false}
-                    domainTermsVisible={domainTermsVisible}
-                />
+                {narrative}
                 <InputGroup.Addon>
                     <div></div>
                 </InputGroup.Addon>
@@ -136,15 +137,7 @@ export class DetailsItem extends Component {
                     designComponent={item}
                     detailsType={itemType}
                 />
-                <Narrative
-                    designComponent={item}
-                    mode={ViewMode.MODE_VIEW}
-                    displayContext={DisplayContext.BASE_VIEW}
-                    view={view}
-                    testSummary={false}
-                    displayOldValue={true}
-                    domainTermsVisible={domainTermsVisible}
-                />
+                {narrative}
                 <InputGroup.Addon>
                     <div></div>
                 </InputGroup.Addon>
@@ -272,7 +265,8 @@ function mapStateToProps(state) {
         userContext:        state.currentUserItemContext,
         userRole:           state.currentUserRole,
         view:               state.currentAppView,
-        domainTermsVisible: state.domainTermsVisible
+        domainTermsVisible: state.domainTermsVisible,
+        includeNarratives:  state.includeNarratives
     }
 }
 

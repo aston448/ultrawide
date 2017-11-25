@@ -32,27 +32,27 @@ class ClientDocumentServices {
 
         // Update store with latest user options
         if(options.includeSectionText){
-            store.dispatch(setDocSectionTextOption(UserSettingValue.DOC_INCLUDE_TEXT))
+            store.dispatch(setDocSectionTextOption(UserSettingValue.SETTING_INCLUDE))
         } else {
-            store.dispatch(setDocSectionTextOption(UserSettingValue.DOC_EXCLUDE_TEXT))
+            store.dispatch(setDocSectionTextOption(UserSettingValue.SETTING_EXCLUDE))
         }
 
         if(options.includeFeatureText){
-            store.dispatch(setDocFeatureTextOption(UserSettingValue.DOC_INCLUDE_TEXT))
+            store.dispatch(setDocFeatureTextOption(UserSettingValue.SETTING_INCLUDE))
         } else {
-            store.dispatch(setDocFeatureTextOption(UserSettingValue.DOC_EXCLUDE_TEXT))
+            store.dispatch(setDocFeatureTextOption(UserSettingValue.SETTING_EXCLUDE))
         }
 
         if(options.includeNarrativeText){
-            store.dispatch(setDocNarrativeTextOption(UserSettingValue.DOC_INCLUDE_TEXT))
+            store.dispatch(setDocNarrativeTextOption(UserSettingValue.SETTING_INCLUDE))
         } else {
-            store.dispatch(setDocNarrativeTextOption(UserSettingValue.DOC_EXCLUDE_TEXT))
+            store.dispatch(setDocNarrativeTextOption(UserSettingValue.SETTING_EXCLUDE))
         }
 
         if(options.includeScenarioText){
-            store.dispatch(setDocScenarioTextOption(UserSettingValue.DOC_INCLUDE_TEXT))
+            store.dispatch(setDocScenarioTextOption(UserSettingValue.SETTING_INCLUDE))
         } else {
-            store.dispatch(setDocScenarioTextOption(UserSettingValue.DOC_EXCLUDE_TEXT))
+            store.dispatch(setDocScenarioTextOption(UserSettingValue.SETTING_EXCLUDE))
         }
 
         // Real action call - server actions
