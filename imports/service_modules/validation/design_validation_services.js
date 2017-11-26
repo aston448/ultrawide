@@ -59,5 +59,37 @@ class DesignValidationServices{
         return Validation.VALID;
     };
 
+    validateUpdateDefaultAspectName(userRole, newName, otherDefaults){
+
+        // Role must be Designer
+        if(!(userRole === RoleType.DESIGNER)){
+            return DesignValidationErrors.DEFAULT_INVALID_ROLE_UPDATE;
+        }
+
+        // New name cannot be same as another default
+        let duplicate = false;
+        otherDefaults.forEach((defaultAspect) => {
+            if(defaultAspect.defaultAspectName === newName){
+                duplicate = true;
+            }
+        });
+
+        if(duplicate){
+            return DesignValidationErrors.DEFAULT_INVALID_NAME_DUPLICATE;
+        } else {
+            return Validation.VALID;
+        }
+    };
+
+    validateUpdateDefaultAspectIncluded(userRole){
+
+        // Role must be Designer
+        if(!(userRole === RoleType.DESIGNER)){
+            return DesignValidationErrors.DEFAULT_INVALID_ROLE_INCLUDE;
+        }
+
+        return Validation.VALID;
+    }
+
 }
 export default new DesignValidationServices();

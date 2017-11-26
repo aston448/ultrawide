@@ -33,7 +33,10 @@ export const DesignMessages = {
 
     MSG_DESIGN_ADDED:               'New Design added',
     MSG_DESIGN_REMOVED:             'Design removed',
-    MSG_DESIGN_NAME_UPDATED:        'Design name updated'
+    MSG_DESIGN_NAME_UPDATED:        'Design name updated',
+    MSG_DEFAULT_ASPECT_UPDATED:     'Default aspect name updated',
+    MSG_DEFAULT_ASPECT_INCLUDED:    'Default aspect now included',
+    MSG_DEFAULT_ASPECT_EXCLUDED:    'Default aspect now excluded',
 };
 
 export const DesignVersionMessages = {

@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 import TestOutputsContainer                     from '../../containers/configure/TestOutputsContainer.jsx';
 import UserTestOutputsContainer                 from '../../containers/configure/UserTestOutputsContainer.jsx';
+import DefaultAspectsListContainer              from '../../containers/edit/DefaultFeatureAspectsContainer.jsx';
 
 // Ultrawide Services
 import ClientUserSettingsServices               from '../../../apiClient/apiClientUserSettings.js';
@@ -177,31 +178,46 @@ export class ConfigurationSettings extends Component {
 
     getDesignVersionName(userContext){
 
-        const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
-        return dv.designVersionName;
+        if(userContext.designVersionId !== 'NONE') {
+            const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+            return dv.designVersionName;
+        } else {
+            return 'No Design Version currently selected';
+        }
 
     }
 
     exportWordDoc(designId, designVersionId){
 
-        let options = {
-            includeSectionText: (this.state.includeSectionDetails),
-            includeFeatureText: (this.state.includeFeatureDetails),
-            includeNarrativeText: (this.state.includeNarrativeDetails),
-            includeScenarioText: (this.state.includeScenarioDetails)
-        };
+        if(designId !== 'NONE' && designVersionId !== 'NONE') {
 
-        ClientDocumentServices.exportWordDocument(designId, designVersionId, options);
+            let options = {
+                includeSectionText: (this.state.includeSectionDetails),
+                includeFeatureText: (this.state.includeFeatureDetails),
+                includeNarrativeText: (this.state.includeNarrativeDetails),
+                includeScenarioText: (this.state.includeScenarioDetails)
+            };
+
+            ClientDocumentServices.exportWordDocument(designId, designVersionId, options);
+        }
     }
 
     render() {
 
-        const {userContext} = this.props;
+        const {userContext, currentWindowSize} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
+        let scrollClass = 'scroll-col-large';
+
+        if(currentWindowSize === UserSettingValue.SCREEN_SIZE_SMALL){
+            scrollClass = 'scroll-col-small';
+        }
+
         const screenSizeSettings =
             <Well className="settings-well">
+                <div className="design-item-header">Set Screen Height</div>
+                <div className="design-item-note">On small or low resolution monitors, setting small size may prevent the whole window needing to be scrolled</div>
                 <FormGroup id="sizeOptions">
                     <Radio id="optionLarge" checked={this.state.currentWindowSize === UserSettingValue.SCREEN_SIZE_LARGE}
                            onChange={() => this.onWindowSizeChange(UserSettingValue.SCREEN_SIZE_LARGE)}>
@@ -216,12 +232,23 @@ export class ConfigurationSettings extends Component {
 
         const narrativeSetting =
             <Well className="settings-well">
+                <div className="design-item-header">Display Narrative Text</div>
+                <div className="design-item-note">Sets whether or not Feature Narratives are visible to you</div>
                 <FormGroup id="narrativeOptions">
                     <Checkbox id="optionIncludeNarratives" checked={this.state.includeNarratives}
                               onChange={() => this.onNarrativeOptionsChange(UserSetting.SETTING_INCLUDE_NARRATIVES)}>
                         Include Narratives in Features
                     </Checkbox>
                 </FormGroup>
+            </Well>;
+
+        const defaultFeatureAspects =
+            <Well className="settings-well">
+                <div className="design-item-header">Default Feature Aspects</div>
+                <div className="design-item-note">New Features created in this Design will have the default aspects ticked below.  A Designer can edit the aspect names and include / exclude aspects.</div>
+                <DefaultAspectsListContainer params={{
+                    designId: userContext.designId
+                }}/>
             </Well>;
 
         let pathValue = this.state.currentIntOutputPath;
@@ -267,35 +294,53 @@ export class ConfigurationSettings extends Component {
             </Well>;
 
         const settingsGrid = (
-            <Grid>
-                <Row>
-                    <Col md={12}>
-                        <div className="user-settings-header1">Local User Settings</div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={6}>
-                        <Grid>
-                            <Row>
-                                <Col md={12}>
-                                    {screenSizeSettings}
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={12}>
-                                    {narrativeSetting}
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={12}>
-                                    {intTestOutputPath}
-                                </Col>
-                            </Row>
+            <Grid className="close-grid">
+                <Row className={scrollClass}>
+                    <Col md={12}  className="close-col">
+                        <Row>
+                            <Col md={12}>
+                                <div className="user-settings-header1">Local User Settings</div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={6} className="close-col">
+                                <Grid>
+                                    <Row>
+                                        <Col md={12}>
+                                            {screenSizeSettings}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={12}>
+                                            {narrativeSetting}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={12}>
+                                            {intTestOutputPath}
+                                        </Col>
+                                    </Row>
 
-                        </Grid>
-                    </Col>
-                    <Col md={6}>
-                        {changeUserPassword}
+                                </Grid>
+                            </Col>
+                            <Col md={6} className="close-col">
+                                {changeUserPassword}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={12}>
+                                <div className="user-settings-header1">Design Settings</div>
+                            </Col>
+                            <Col md={6}>
+                                <Grid>
+                                    <Row>
+                                        <Col md={12}>
+                                            {defaultFeatureAspects}
+                                        </Col>
+                                    </Row>
+                                </Grid>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
             </Grid>

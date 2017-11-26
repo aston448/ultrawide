@@ -88,7 +88,7 @@ class DesignComponentServices{
 
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
-                    DesignComponentModules.addDefaultFeatureAspects(designVersionId, designComponentId, defaultRawText, view);
+                    DesignComponentModules.addDefaultFeatureAspects(designId, designVersionId, designComponentId, defaultRawText, view);
 
                 } else {
                     // Check for any WPs in this design version and add the components to them too

@@ -295,7 +295,7 @@ export class TextEditor extends Component {
         } else {
             // EDIT MODE
 
-            if(this.state.editable){
+            if(this.state.editing){
                 // The text is being edited
                 editorClass = editorClass + ' editor-panel-edit';
 

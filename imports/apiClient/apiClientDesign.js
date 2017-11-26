@@ -149,6 +149,83 @@ class ClientDesignServices{
         return {success: true, message: ''};
     }
 
+    updateDefaultFeatureAspectName(defaultAspect, userContext, userRole, newNamePlain, newNameRaw){
+
+        // See if it really did change
+        if(defaultAspect.defaultAspectName === newNamePlain){
+            return {success: true, message: ''};
+        }
+
+        // Client validation
+        let result = DesignValidationApi.validateUpdateDefaultAspectName(userContext, userRole, defaultAspect._id, newNamePlain);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call
+        ServerDesignApi.updateDefaultAspectName(userContext, userRole, defaultAspect._id, newNamePlain, newNameRaw, (err, result) => {
+
+            if(err){
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.SUCCESS,
+                    messageText: DesignMessages.MSG_DEFAULT_ASPECT_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    }
+
+    updateDefaultFeatureAspectIncluded(defaultAspect, userRole, included){
+
+        // Client validation
+        let result = DesignValidationApi.validateUpdateDefaultAspectIncluded(userRole);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call
+        ServerDesignApi.updateDefaultAspectIncluded(userRole, defaultAspect._id, included, (err, result) => {
+
+            if(err){
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Show action success on screen
+                if(included){
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.SUCCESS,
+                        messageText: DesignMessages.MSG_DEFAULT_ASPECT_INCLUDED
+                    }));
+                } else {
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.SUCCESS,
+                        messageText: DesignMessages.MSG_DEFAULT_ASPECT_EXCLUDED
+                    }));
+                }
+
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    }
+
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     setDesign(userContext, newDesignId){

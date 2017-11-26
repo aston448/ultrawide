@@ -14,6 +14,7 @@ import DesignComponentData          from '../../data/design/design_component_db.
 import DesignUpdateData             from '../../data/design_update/design_update_db.js';
 import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
 import WorkPackageData              from '../../data/work/work_package_db.js';
+import DefaultFeatureAspectData     from '../../data/design/default_feature_aspect_db.js';
 
 //======================================================================================================================
 //
@@ -25,11 +26,27 @@ import WorkPackageData              from '../../data/work/work_package_db.js';
 
 class DesignUpdateComponentModules{
 
-    addDefaultFeatureAspects(designVersionId, designUpdateId, featureId, defaultRawText, view){
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, 'NONE', featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', DesignComponentModules.getRawTextFor('Interface'), defaultRawText, false, view);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, 'NONE', featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', DesignComponentModules.getRawTextFor('Actions'), defaultRawText, false, view);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, 'NONE', featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', DesignComponentModules.getRawTextFor('Conditions'), defaultRawText, false, view);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, 'NONE', featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, false, view);
+    addDefaultFeatureAspects(designId, designVersionId, designUpdateId, featureId, defaultRawText, view){
+
+        const defaultAspects = DefaultFeatureAspectData.getIncludedDefaultAspectsForDesign(designId);
+
+        defaultAspects.forEach((defaultAspect) => {
+
+            DesignUpdateComponentServices.addNewComponent(
+                designVersionId,
+                designUpdateId,
+                'NONE',
+                featureId,
+                ComponentType.FEATURE_ASPECT,
+                0,
+                defaultAspect.defaultAspectName,
+                defaultAspect.defaultAspectNameRaw,
+                defaultRawText,
+                false,
+                view
+            );
+
+        });
     }
 
     // updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId){

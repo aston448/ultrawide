@@ -82,6 +82,8 @@ class ClientDesignComponentServices{
         return {success: true, message: ''};
     };
 
+
+
     // User saved changes to Narrative in a Feature --------------------------------------------------------------------
     updateFeatureNarrative(view, mode, designComponentId, newPlainText, newRawText){
 

@@ -147,7 +147,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.WORK_PACKAGE_BASE_VIEW:
                 return !(
                     nextState.highlighted === this.state.highlighted &&
-                    nextState.editable === this.state.editable &&
+                    nextState.editing === this.state.editing &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.isOpen === this.props.isOpen &&
@@ -165,7 +165,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 return !(
                     nextState.highlighted === this.state.highlighted &&
-                    nextState.editable === this.state.editable &&
+                    nextState.editing === this.state.editing &&
                     nextState.inScope === this.state.inScope &&
                     nextState.parentScope === this.state.parentScope &&
                     nextState.editorState === this.state.editorState &&
@@ -184,7 +184,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.DEVELOP_UPDATE_WP:
                 return !(
                     nextState.highlighted === this.state.highlighted &&
-                    nextState.editable === this.state.editable &&
+                    nextState.editing === this.state.editing &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.mode === this.props.mode &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
@@ -513,7 +513,7 @@ export class DesignComponentHeader extends Component{
 
         if(command === 'editor-edit'){
             // Go into Edit mode on cmd-E
-            if(this.state.editable === false) {
+            if(this.state.editing === false) {
                 this.editComponentName();
             }
             return true;
@@ -802,7 +802,7 @@ export class DesignComponentHeader extends Component{
             itemStyle = itemStyle + ' dragging-item';
         }
 
-        if (!this.state.editable && currentItem.componentType === ComponentType.SCENARIO){
+        if (!this.state.editing && currentItem.componentType === ComponentType.SCENARIO){
             itemStyle = itemStyle + ' scenario-background';
         }
 
@@ -1369,7 +1369,7 @@ export class DesignComponentHeader extends Component{
                             // Only editable if in scope for an update.  For new design all is in scope.
                             if (inScope) {
                                 // Editable component
-                                if (this.state.editable) {
+                                if (this.state.editing) {
                                     // Being edited now...
                                     designComponentElement = updateEditingHeader;
 
@@ -1405,7 +1405,7 @@ export class DesignComponentHeader extends Component{
                     case ViewMode.MODE_EDIT:
 
                         // Editable component
-                        if (this.state.editable) {
+                        if (this.state.editing) {
                             // Being edited now...
                             designComponentElement = editingHeader;
 
@@ -1433,7 +1433,7 @@ export class DesignComponentHeader extends Component{
                         // Scenarios and new Feature Aspects are editable.
                         if(currentItem.componentType === ComponentType.SCENARIO || (currentItem.componentType === ComponentType.FEATURE_ASPECT && currentItem.isDevAdded)) {
                             // Editable component
-                            if (this.state.editable) {
+                            if (this.state.editing) {
                                 // Being edited now...
                                 designComponentElement = editingHeader;
 

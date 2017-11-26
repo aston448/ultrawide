@@ -4,6 +4,7 @@ import DesignValidationServices         from '../service_modules/validation/desi
 
 // Data Access
 import DesignData                       from '../data/design/design_db.js';
+import DefaultFeatureAspectData         from '../data/design/default_feature_aspect_db.js';
 
 
 //======================================================================================================================
@@ -33,6 +34,18 @@ class DesignValidationApi{
 
         return DesignValidationServices.validateRemoveDesign(userRole, design);
     };
+
+    validateUpdateDefaultAspectName(userContext, userRole, defaultFeatureAspectId, newNamePlain){
+
+        const otherDefaults = DefaultFeatureAspectData.getOtherDefaultAspectsForDesign(userContext.designId, defaultFeatureAspectId);
+
+        return DesignValidationServices.validateUpdateDefaultAspectName(userRole, newNamePlain, otherDefaults)
+    }
+
+    validateUpdateDefaultAspectIncluded(userRole){
+
+        return DesignValidationServices.validateUpdateDefaultAspectIncluded(userRole)
+    }
 
 }
 export default new DesignValidationApi();

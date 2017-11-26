@@ -1,5 +1,11 @@
 
-import { addDesign, updateDesignName, removeDesign } from '../apiValidatedMethods/design_methods.js'
+import {
+    addDesign,
+    updateDesignName,
+    removeDesign,
+    updateDefaultAspectName,
+    updateDefaultAspectIncluded
+} from '../apiValidatedMethods/design_methods.js'
 
 // =====================================================================================================================
 // Server API for Design Items
@@ -45,6 +51,36 @@ class ServerDesignApi {
                 callback(err, result);
             }
         );
+    };
+
+    updateDefaultAspectName(userContext, userRole, defaultAspectId, newNamePlain, newNameRaw, callback){
+
+        updateDefaultAspectName.call(
+            {
+                userContext: userContext,
+                userRole: userRole,
+                defaultAspectId: defaultAspectId,
+                newNamePlain: newNamePlain,
+                newNameRaw: newNameRaw
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        )
+    };
+
+    updateDefaultAspectIncluded(userRole, defaultAspectId, included, callback){
+
+        updateDefaultAspectIncluded.call(
+            {
+                userRole: userRole,
+                defaultAspectId: defaultAspectId,
+                included: included
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        )
     };
 
 }

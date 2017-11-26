@@ -11,14 +11,14 @@ import TextEditor           from '../../components/edit/TextEditor.jsx';
 import Narrative            from '../../components/edit/Narrative.jsx';
 
 // Ultrawide Services
-import { DetailsType, ViewMode, DisplayContext, ComponentType }      from  '../../../constants/constants.js';
+import { DetailsType, ViewMode, DisplayContext, ComponentType, UserSettingValue }      from  '../../../constants/constants.js';
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {UserSettingValue} from "../../../constants/constants";
+
 
 // =====================================================================================================================
 

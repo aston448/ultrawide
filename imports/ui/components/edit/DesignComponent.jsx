@@ -133,7 +133,7 @@ export class DesignComponent extends Component{
                 shouldComponentUpdate =!(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
-                    nextState.editable === this.state.editable &&
+                    nextState.editing === this.state.editing &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
@@ -149,7 +149,7 @@ export class DesignComponent extends Component{
                 shouldComponentUpdate =!(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
-                    nextState.editable === this.state.editable &&
+                    nextState.editing === this.state.editing &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&

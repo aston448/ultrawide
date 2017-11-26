@@ -351,7 +351,7 @@ export default class Narrative extends React.Component {
 
         } else {
             // EDIT MODE
-            if (this.state.editable) {
+            if (this.state.editing) {
                 narrativeHtml =
                     <div className="narrative-edit">
                         <InputGroup>

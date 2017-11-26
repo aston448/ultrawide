@@ -364,7 +364,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has save option
             chai.assert(item.find('#actionSave').length === 1, 'Save option not found!');
@@ -380,7 +380,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has save option
             chai.assert(item.find('#actionSave').length === 1, 'Save option not found!');
@@ -396,7 +396,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has save option
             chai.assert(item.find('#actionSave').length === 1, 'Save option not found!');
@@ -412,7 +412,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has save option
             chai.assert(item.find('#actionSave').length === 1, 'Save option not found!');
@@ -428,7 +428,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has save option
             chai.assert(item.find('#actionSave').length === 1, 'Save option not found!');
@@ -447,7 +447,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has undo option
             chai.assert(item.find('#actionUndo').length === 1, 'Undo option not found!');
@@ -463,7 +463,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has undo option
             chai.assert(item.find('#actionUndo').length === 1, 'Undo option not found!');
@@ -479,7 +479,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has undo option
             chai.assert(item.find('#actionUndo').length === 1, 'Undo option not found!');
@@ -495,7 +495,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has undo option
             chai.assert(item.find('#actionUndo').length === 1, 'Undo option not found!');
@@ -511,7 +511,7 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Edit
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             // Has undo option
             chai.assert(item.find('#actionUndo').length === 1, 'Undo option not found!');

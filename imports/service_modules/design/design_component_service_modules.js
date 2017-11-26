@@ -9,6 +9,7 @@ import WorkPackageModules           from '../../service_modules/work/work_packag
 // Data Access
 import DesignVersionData            from '../../data/design/design_version_db.js';
 import DesignComponentData          from '../../data/design/design_component_db.js';
+import DefaultFeatureAspectData     from '../../data/design/default_feature_aspect_db.js';
 
 //======================================================================================================================
 //
@@ -20,13 +21,24 @@ import DesignComponentData          from '../../data/design/design_component_db.
 
 class DesignComponentModules{
 
+    addDefaultFeatureAspects(designId, designVersionId, featureReferenceId, defaultRawText, view){
 
+        const defaultAspects = DefaultFeatureAspectData.getIncludedDefaultAspectsForDesign(designId);
 
-    addDefaultFeatureAspects(designVersionId, featureReferenceId, defaultRawText, view){
-        DesignComponentServices.addNewComponent(designVersionId, featureReferenceId, ComponentType.FEATURE_ASPECT, 0, 'Interface', this.getRawTextFor('Interface'), defaultRawText, false, view);
-        DesignComponentServices.addNewComponent(designVersionId, featureReferenceId, ComponentType.FEATURE_ASPECT, 0, 'Actions', this.getRawTextFor('Actions'), defaultRawText, false, view);
-        DesignComponentServices.addNewComponent(designVersionId, featureReferenceId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', this.getRawTextFor('Conditions'), defaultRawText, false, view);
-        DesignComponentServices.addNewComponent(designVersionId, featureReferenceId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', this.getRawTextFor('Consequences'), defaultRawText, false, view);
+        defaultAspects.forEach((defaultAspect) => {
+
+            DesignComponentServices.addNewComponent(
+                designVersionId,
+                featureReferenceId,
+                ComponentType.FEATURE_ASPECT,
+                0,
+                defaultAspect.defaultAspectName,
+                defaultAspect.defaultAspectNameRaw,
+                defaultRawText,
+                false,
+                view);
+
+        });
     }
 
     getRawTextFor(plainText){

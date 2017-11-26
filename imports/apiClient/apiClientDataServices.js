@@ -34,6 +34,7 @@ import UserMashScenarioTestData         from '../data/mash/user_mash_scenario_te
 import UserDevTestSummaryData           from '../data/summary/user_dev_test_summary_db.js';
 import UserWorkProgressSummaryData      from '../data/summary/user_work_progress_summary_db.js';
 import UserDesignVersionMashScenariosData from '../data/mash/user_dv_mash_scenario_db.js';
+import DefaultFeatureAspectData         from '../data/design/default_feature_aspect_db.js';
 
 
 // REDUX services
@@ -66,6 +67,7 @@ class ClientDataServices{
             const tfHandle = Meteor.subscribe('testOutputLocationFiles');
             const utHandle = Meteor.subscribe('userTestTypeLocations');
             const dHandle = Meteor.subscribe('designs');
+            const dfaHandle = Meteor.subscribe('defaultFeatureAspects');
             const dvHandle = Meteor.subscribe('designVersions');
             const duHandle = Meteor.subscribe('designUpdates');
             const wpHandle = Meteor.subscribe('workPackages');
@@ -2073,6 +2075,11 @@ class ClientDataServices{
 
             return results;
         }
+    }
+
+    getDefaultFeatureAspects(designId){
+
+        return DefaultFeatureAspectData.getDefaultAspectsForDesign(designId);
     }
 
 }

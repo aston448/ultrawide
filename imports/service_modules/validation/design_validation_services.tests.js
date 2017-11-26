@@ -23,6 +23,22 @@ describe('VAL: Design', function () {
         designStatus:           DesignStatus.DESIGN_LIVE
     };
 
+    const existingDefaultAspect = {
+        _id:                    'DA1',
+        designId:               'DDD',
+        defaultAspectName:      'Aspect1',
+        defaultAspectIncluded:  true,
+        defaultAspectIndex:     1
+    };
+
+    const updatedDefaultAspect = {
+        _id:                    'DA2',
+        designId:               'DDD',
+        defaultAspectName:      'Aspect2',
+        defaultAspectIncluded:  true,
+        defaultAspectIndex:     1
+    };
+
 
     describe('A new Design can only be added by a Designer', function () {
 
@@ -146,31 +162,78 @@ describe('VAL: Design', function () {
         });
     });
 
-    describe('A Design can only be removed by a Designer', function () {
+    describe('Only a Designer can edit a default Feature Aspect text', function () {
 
-        it('returns INVALID for a Manager if the Design is removable', function () {
+        it('returns INVALID for a Manager', function () {
 
-            const design = newDesign;
+            const otherDefaults = [existingDefaultAspect];
             const role = RoleType.MANAGER;
-            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_REMOVE;
+            const expectation = DesignValidationErrors.DEFAULT_INVALID_ROLE_UPDATE;
 
-            const result = DesignValidationServices.validateRemoveDesign(role, design);
+            const result = DesignValidationServices.validateUpdateDefaultAspectName(role, 'New Name', otherDefaults);
 
             chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID for a Developer if the Design is removable', function () {
+        it('returns INVALID for a Developer', function () {
 
-            const design = newDesign;
+            const otherDefaults = [existingDefaultAspect];
             const role = RoleType.DEVELOPER;
-            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_REMOVE;
+            const expectation = DesignValidationErrors.DEFAULT_INVALID_ROLE_UPDATE;
 
-            const result = DesignValidationServices.validateRemoveDesign(role, design);
+            const result = DesignValidationServices.validateUpdateDefaultAspectName(role, 'New Name', otherDefaults);
 
             chai.assert.equal(result, expectation);
         });
     });
 
+    describe('Only a Designer can include or exclude a default Feature Aspect', function () {
+
+        it('returns INVALID for a Manager', function () {
+
+            const role = RoleType.MANAGER;
+            const expectation = DesignValidationErrors.DEFAULT_INVALID_ROLE_INCLUDE;
+
+            const result = DesignValidationServices.validateUpdateDefaultAspectIncluded(role);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID for a Developer', function () {
+
+            const role = RoleType.DEVELOPER;
+            const expectation = DesignValidationErrors.DEFAULT_INVALID_ROLE_INCLUDE;
+
+            const result = DesignValidationServices.validateUpdateDefaultAspectIncluded(role);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('A default Feature Aspect may not be given the same name as another default Feature Aspect in the Design', function () {
+
+        it('returns INVALID when name already exists', function () {
+
+            const otherDefaults = [existingDefaultAspect];
+            const role = RoleType.DESIGNER;
+            const expectation = DesignValidationErrors.DEFAULT_INVALID_NAME_DUPLICATE;
+
+            const result = DesignValidationServices.validateUpdateDefaultAspectName(role, 'Aspect1', otherDefaults);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns VALID when name is not existing', function () {
+
+            const otherDefaults = [existingDefaultAspect];
+            const role = RoleType.DESIGNER;
+            const expectation = Validation.VALID;
+
+            const result = DesignValidationServices.validateUpdateDefaultAspectName(role, 'Aspect2', otherDefaults);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
 });
 
 

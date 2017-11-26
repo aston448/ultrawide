@@ -7,10 +7,10 @@ import {WorkPackages}               from '../../collections/work/work_packages.j
 import {WorkPackageComponents}      from '../../collections/work/work_package_components.js';
 import {DomainDictionary}           from '../../collections/design/domain_dictionary';
 
-import { ComponentType } from '../../constants/constants.js';
-import { DefaultItemNames } from '../../constants/default_names.js';
+import { ComponentType }            from '../../constants/constants.js';
+import { DefaultItemNames }         from '../../constants/default_names.js';
 
-import DesignVersionData            from '..//design/design_version_db.js';
+import DesignVersionData            from '../design/design_version_db.js';
 
 class DesignData {
 

@@ -39,7 +39,10 @@ export const DesignValidationErrors = {
     DESIGN_INVALID_ROLE_ADD:        'Only a Designer can add Designs',
     DESIGN_INVALID_ROLE_UPDATE:     'Only a Designer can update Design details',
     DESIGN_INVALID_NAME_DUPLICATE:  'Design name already exists for another Design',
-    DESIGN_NOT_REMOVABLE:           'A Design containing Features is not removable'
+    DESIGN_NOT_REMOVABLE:           'A Design containing Features is not removable',
+    DEFAULT_INVALID_ROLE_UPDATE:    'Only a Designer can update Default Feature Aspects',
+    DEFAULT_INVALID_NAME_DUPLICATE: 'Name already exists for another Default Feature Aspect',
+    DEFAULT_INVALID_ROLE_INCLUDE:   'Only a Designer can include or exclude Default Feature Aspects'
 };
 
 export const DesignVersionValidationErrors = {

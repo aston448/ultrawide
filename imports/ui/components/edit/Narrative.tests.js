@@ -61,7 +61,7 @@ describe('JSX: Narrative', () => {
                 />
             );
 
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             chai.assert(item.find('#actionSaveNarrative').length === 1, 'Save option not found!');
         });
@@ -91,7 +91,7 @@ describe('JSX: Narrative', () => {
                 />
             );
 
-            item.setState({editable: true});
+            item.setState({editing: true});
 
             chai.assert(item.find('#actionUndoEditNarrative').length === 1, 'Undo option not found!');
         });

@@ -8,6 +8,7 @@ import { getIdFromMap, log }            from '../../common/utils.js';
 
 import DesignServices                   from '../../servicers/design/design_services.js';
 import DomainDictionaryServices         from '../../servicers/design/domain_dictionary_services.js';
+import DesignComponentModules           from '../../service_modules/design/design_component_service_modules.js';
 
 // Data Access
 import AppGlobalData                    from '../../data/app/app_global_db.js';
@@ -25,6 +26,7 @@ import DesignBackupData                 from '../../data/backups/design_backup_d
 import UserTestTypeLocationData         from '../../data/configure/user_test_type_location_db.js';
 import TestOutputLocationData           from '../../data/configure/test_output_location_db.js';
 import TestOutputLocationFileData       from '../../data/configure/test_output_location_file_db.js';
+import DefaultFeatureAspectData         from '../../data/design/default_feature_aspect_db.js';
 
 //======================================================================================================================
 //
@@ -345,6 +347,27 @@ class ImpexModules{
         return designsMapping;
 
     };
+
+    restoreDefaultFeatureAspects(defaultFeatureAspectData, backupDataVersion, currentDataVersion, designsMapping){
+
+        // There is only ever 1 design in backup so we know the new ID will be first in the mapping list.
+        const newDefaultFeatureAspectData = this.migrateDefaultFeatureAspectData(defaultFeatureAspectData, designsMapping[0].oldId, backupDataVersion, currentDataVersion);
+
+        newDefaultFeatureAspectData.forEach((defaultFeatureAspect) => {
+
+            let designId = getIdFromMap(designsMapping, defaultFeatureAspect.designId);
+
+            if (designId) {
+
+                log((msg) => console.log(msg), LogLevel.INFO, "Adding Default Feature Aspect: {} to Design {}", defaultFeatureAspect.defaultAspectName, designId);
+
+                DefaultFeatureAspectData.insertDefaultAspect(
+                    designId,
+                    defaultFeatureAspect
+                );
+            }
+        });
+    }
 
     restoreDesignVersionData(designVersionData, backupDataVersion, currentDataVersion, designsMapping){
 
@@ -790,6 +813,107 @@ class ImpexModules{
 
         return newDesignData;
     };
+
+    migrateDefaultFeatureAspectData(defaultFeatureAspectData, designId, backupVersion, currentVersion){
+
+
+        // Add to this function for each release
+        let newDefaultFeatureAspectData = defaultFeatureAspectData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 1:
+
+                        // Create Ultrawide standard default data if needed...
+                        if(!newDefaultFeatureAspectData){
+                            newDefaultFeatureAspectData = [];
+                        }
+
+                        if(newDefaultFeatureAspectData.length === 0){
+
+                            // Create 8 default aspects
+                            const aspect1 = {
+                                designId:               designId,
+                                defaultAspectName:      'Interface',
+                                defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Interface'),
+                                defaultAspectIncluded:  true,
+                                defaultAspectIndex:     1
+                            };
+
+                            const aspect2 = {
+                                designId:               designId,
+                                defaultAspectName:      'Actions',
+                                defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Actions'),
+                                defaultAspectIncluded:  true,
+                                defaultAspectIndex:     2
+                            };
+
+                            const aspect3 = {
+                                designId:               designId,
+                                defaultAspectName:      'Conditions',
+                                defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Conditions'),
+                                defaultAspectIncluded:  true,
+                                defaultAspectIndex:     3
+                            };
+
+                            const aspect4 = {
+                                designId:               designId,
+                                defaultAspectName:      'Consequences',
+                                defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Consequences'),
+                                defaultAspectIncluded:  true,
+                                defaultAspectIndex:     4
+                            };
+
+                            const aspect5 = {
+                                designId:               designId,
+                                defaultAspectName:      'Unused 1',
+                                defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 1'),
+                                defaultAspectIncluded:  false,
+                                defaultAspectIndex:     5
+                            };
+
+                            const aspect6 = {
+                                designId:               designId,
+                                defaultAspectName:      'Unused 2',
+                                defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 2'),
+                                defaultAspectIncluded:  false,
+                                defaultAspectIndex:     6
+                            };
+
+                            const aspect7 = {
+                                designId:               designId,
+                                defaultAspectName:      'Unused 3',
+                                defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 3'),
+                                defaultAspectIncluded:  false,
+                                defaultAspectIndex:     7
+                            };
+
+                            const aspect8 = {
+                                designId:               designId,
+                                defaultAspectName:      'Unused 4',
+                                defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 4'),
+                                defaultAspectIncluded:  false,
+                                defaultAspectIndex:     8
+                            };
+
+                            newDefaultFeatureAspectData.push(aspect1);
+                            newDefaultFeatureAspectData.push(aspect2);
+                            newDefaultFeatureAspectData.push(aspect3);
+                            newDefaultFeatureAspectData.push(aspect4);
+                            newDefaultFeatureAspectData.push(aspect5);
+                            newDefaultFeatureAspectData.push(aspect6);
+                            newDefaultFeatureAspectData.push(aspect7);
+                            newDefaultFeatureAspectData.push(aspect8);
+
+                        } else {
+                            newDefaultFeatureAspectData = defaultFeatureAspectData;
+                        }
+                }
+        }
+
+        return newDefaultFeatureAspectData;
+    }
 
     migrateDesignVersionData(designVersionData, backupVersion, currentVersion){
 

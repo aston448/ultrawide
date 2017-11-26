@@ -18,6 +18,7 @@ import UserSettingData                  from '../../data/configure/user_setting_
 import UserTestTypeLocationData         from '../../data/configure/user_test_type_location_db.js';
 import TestOutputLocationData           from '../../data/configure/test_output_location_db.js';
 import TestOutputLocationFileData       from '../../data/configure/test_output_location_file_db.js';
+import DefaultFeatureAspectData         from '../../data/design/default_feature_aspect_db.js';
 
 //======================================================================================================================
 //
@@ -157,6 +158,8 @@ class ImpExServices{
 
             // Data stored for this Design -----------------------------------------------------------------------------
 
+            const defaultFeatureAspects = DefaultFeatureAspectData.getDefaultAspectsForDesign(designId);
+
             const designVersionData = DesignData.getDesignVersions(designId);
 
             designVersionData.forEach((designVersion) => {
@@ -214,6 +217,7 @@ class ImpExServices{
                     userTestTypeLocations: userTestTypeLocations,
                     userSettings: userSettings,
                     designs: designData,
+                    defaultFeatureAspects: defaultFeatureAspects,
                     designVersions: designVersions,
                     designUpdates: designUpdates,
                     workPackages: workPackages,
@@ -313,6 +317,9 @@ class ImpExServices{
 
                     // Restore Designs
                     designsMapping = ImpexModules.restoreDesignData(backupData.designs, backupDataVersion, currentDataVersion);
+
+                    // Restore Default Feature Aspects
+                    ImpexModules.restoreDefaultFeatureAspects(backupData.defaultFeatureAspects, backupDataVersion, currentDataVersion, designsMapping);
 
                     // Restore Design Versions
                     designVersionsMapping = ImpexModules.restoreDesignVersionData(backupData.designVersions, backupDataVersion, currentDataVersion, designsMapping);

@@ -6,6 +6,7 @@ import { UserRoles }                from '../../imports/collections/users/user_r
 import { UserContext }              from '../../imports/collections/context/user_context.js';
 import { UserCurrentViewOptions}    from '../../imports/collections/context/user_current_view_options.js';
 import { Designs }                  from '../../imports/collections/design/designs.js';
+import { DefaultFeatureAspects}     from '../../imports/collections/design/default_feature_aspects.js';
 import { DesignBackups }            from '../../imports/collections/backups/design_backups.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
@@ -24,8 +25,10 @@ import { UserDesignVersionMashScenarios } from '../../imports/collections/mash/u
 import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
 import { UserIntegrationTestResults } from '../../imports/collections/test_results/user_ultrawide_test_results.js';
 import { UserUnitTestResults }      from '../../imports/collections/test_results/user_ultrawide_test_results.js';
-import { UserDevTestSummary }   from '../../imports/collections/summary/user_dev_test_summary.js';
+import { UserDevTestSummary }       from '../../imports/collections/summary/user_dev_test_summary.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
+
+import DefaultFeatureAspectData     from '../../imports/data/design/default_feature_aspect_db.js';
 
 import { RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
@@ -72,6 +75,8 @@ Meteor.methods({
             UserDesignUpdateSummary.remove({});
             DesignUpdates.remove({});
             DesignVersions.remove({});
+            DefaultFeatureAspects.remove({});
+
             Designs.remove({});
             DesignBackups.remove({});
             UserTestTypeLocations.remove({});
@@ -304,6 +309,7 @@ Meteor.methods({
             UserDesignUpdateSummary.remove({});
             DesignUpdates.remove({});
             DesignVersions.remove({});
+            DefaultFeatureAspects.remove({});
             Designs.remove({});
             DesignBackups.remove({});
             UserTestTypeLocations.remove({});
@@ -373,6 +379,73 @@ Meteor.methods({
             scenarioStepId:                 'NONE'
         };
         let rawName = null;
+
+        // Set Default Default Feature Aspects
+        // Create 8 default aspects
+        const aspect1 = {
+            defaultAspectName:      'Interface',
+            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Interface'),
+            defaultAspectIncluded:  true,
+            defaultAspectIndex:     1
+        };
+
+        const aspect2 = {
+            defaultAspectName:      'Actions',
+            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Actions'),
+            defaultAspectIncluded:  true,
+            defaultAspectIndex:     2
+        };
+
+        const aspect3 = {
+            defaultAspectName:      'Conditions',
+            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Conditions'),
+            defaultAspectIncluded:  true,
+            defaultAspectIndex:     3
+        };
+
+        const aspect4 = {
+            defaultAspectName:      'Consequences',
+            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Consequences'),
+            defaultAspectIncluded:  true,
+            defaultAspectIndex:     4
+        };
+
+        const aspect5 = {
+            defaultAspectName:      'Unused 1',
+            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 1'),
+            defaultAspectIncluded:  false,
+            defaultAspectIndex:     5
+        };
+
+        const aspect6 = {
+            defaultAspectName:      'Unused 2',
+            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 2'),
+            defaultAspectIncluded:  false,
+            defaultAspectIndex:     6
+        };
+
+        const aspect7 = {
+            defaultAspectName:      'Unused 3',
+            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 3'),
+            defaultAspectIncluded:  false,
+            defaultAspectIndex:     7
+        };
+
+        const aspect8 = {
+            defaultAspectName:      'Unused 4',
+            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 4'),
+            defaultAspectIncluded:  false,
+            defaultAspectIndex:     8
+        };
+
+        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect1);
+        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect2);
+        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect3);
+        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect4);
+        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect5);
+        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect6);
+        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect7);
+        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect8);
 
         // Data Available:
         //

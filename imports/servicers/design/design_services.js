@@ -5,7 +5,8 @@ import { DefaultItemNames }         from '../../constants/default_names.js';
 
 import DesignVersionServices        from './design_version_services.js';
 
-import DesignData                     from '../../data/design/design_db.js';
+import DesignData                   from '../../data/design/design_db.js';
+import DefaultFeatureAspectData     from '../../data/design/default_feature_aspect_db.js'
 
 //======================================================================================================================
 //
@@ -78,6 +79,22 @@ class DesignServices{
             const designVersions = DesignData.getDesignVersions(designId);
 
             DesignData.removeDesignAndAllData(designId, designVersions);
+        }
+    }
+
+    updateDefaultFeatureAspectName(defaultAspectId, newNamePlain, newNameRaw){
+
+        if(Meteor.isServer){
+
+            DefaultFeatureAspectData.updateAspectName(defaultAspectId, newNamePlain, newNameRaw);
+        }
+    }
+
+    updateDefaultFeatureAspectIncluded(defaultAspectId, included){
+
+        if(Meteor.isServer){
+
+            DefaultFeatureAspectData.updateAspectIncluded(defaultAspectId, included);
         }
     }
 

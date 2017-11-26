@@ -107,7 +107,7 @@ class DesignUpdateComponentServices{
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
                     log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding Default Aspects...');
-                    DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '', view);
+                    DesignUpdateComponentModules.addDefaultFeatureAspects(dv.designId, designVersionId, designUpdateId, newUpdateComponentId, '', view);
 
                 } else {
 
