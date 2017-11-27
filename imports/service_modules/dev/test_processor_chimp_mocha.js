@@ -85,13 +85,16 @@ class ChimpMochaTestServices{
                 // Add Feature aspect comment and scenarios if there are any
                 if(scenarios.length > 0) {
 
-                    fileText += "\n    // " + aspect.componentNameNew + "\n";
+                    fileText += "\n    describe('" + aspect.componentNameNew + "', function(){\n";
 
                     scenarios.forEach((scenario) => {
 
-                        fileText += "    it('" + scenario.componentNameNew + "');\n\n";
+                        fileText += "        it('" + scenario.componentNameNew + "');\n\n";
 
                     });
+
+                    // End aspect describe
+                    fileText += "    });\n"
                 }
 
             });
