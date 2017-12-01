@@ -174,7 +174,7 @@ export class DesignUpdate extends Component {
         let options = '';
         let statusClass = 'design-item-status';
 
-        console.log("Render DU Item.  Status = " + designUpdate.updateStatus)
+        //console.log("Render DU Item.  Status = " + designUpdate.updateStatus)
 
         switch(designUpdate.updateStatus){
             case DesignUpdateStatus.UPDATE_NEW:

@@ -10,21 +10,23 @@ import { DesignStatus, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMerg
 
 import { Designs } from '../../../collections/design/designs.js'
 import { DesignVersions } from '../../../collections/design/design_versions.js'
+import {WorkPackageType} from "../../../constants/constants";
+import PropTypes from "prop-types";
 
 
 
 describe('JSX: DesignUpdatesList', () => {
 
 
-    function testDesignUpdatesContainer(designVersionStatus, userRole, userContext){
+    function testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext){
 
 
         // Design Version 1 --------------------------------------------------------------------------------------------
 
-        const dv1newUpdates = [];
-        const dv1draftUpdates = [];
+        const dv1incompleteUpdates = [];
+        const dv1assignedUpdates = [];
 
-        const dv1mergedUpdates = [
+        const dv1completeUpdates = [
             {
                 _id:                        '1',
                 designVersionId:            'DV1',
@@ -43,9 +45,6 @@ describe('JSX: DesignUpdatesList', () => {
                 updateMergeAction:          DesignUpdateMergeAction.MERGE_INCLUDE,
                 summaryDataStale:           false
             },
-        ];
-
-        const dv1ignoredUpdates = [
             {
                 _id:                        '3',
                 designVersionId:            'DV1',
@@ -59,7 +58,7 @@ describe('JSX: DesignUpdatesList', () => {
 
         // Design Version 2 --------------------------------------------------------------------------------------------
 
-        const dv2newUpdates = [
+        const dv2incompleteUpdates = [
             {
                 _id:                        '4',
                 designVersionId:            'DV2',
@@ -77,11 +76,7 @@ describe('JSX: DesignUpdatesList', () => {
                 updateStatus:               DesignUpdateStatus.UPDATE_NEW,
                 updateMergeAction:          DesignUpdateMergeAction.MERGE_IGNORE,
                 summaryDataStale:           false
-            }
-        ];
-
-        const dv2draftUpdates = [
-
+            },
             {
                 _id:                        '6',
                 designVersionId:            'DV2',
@@ -91,6 +86,10 @@ describe('JSX: DesignUpdatesList', () => {
                 updateMergeAction:          DesignUpdateMergeAction.MERGE_IGNORE,
                 summaryDataStale:           false
             },
+        ];
+
+        const dv2assignedUpdates = [
+
             {
                 _id:                        '7',
                 designVersionId:            'DV2',
@@ -102,36 +101,42 @@ describe('JSX: DesignUpdatesList', () => {
             }
         ];
 
-        const dv2mergedUpdates = [];
-        const dv2ignoredUpdates = [];
+        const dv2completedUpdates = [];
+        const dv2updateWorkPackages = [
+            {
+                _id:                        '8',
+                designVersionId:            'DV2',
+                designUpdateId:             '7',
+                workPackageName:            'UpdateWP1'
+            }
+        ];
 
+        let incompleteUpdates = [];
+        let assignedUpdates = [];
+        let completedUpdates = [];
+        let updateWorkPackages = [];
 
-        let newUpdates = [];
-        let draftUpdates = [];
-        let mergedUpdates = [];
-        let ignoredUpdates = [];
 
         if(designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
-            newUpdates = dv1newUpdates;
-            draftUpdates = dv1draftUpdates;
-            mergedUpdates = dv1mergedUpdates;
-            ignoredUpdates = dv1ignoredUpdates;
-
+            incompleteUpdates = dv1incompleteUpdates;
+            assignedUpdates = dv1assignedUpdates;
+            completedUpdates = dv1completeUpdates;
         }
         if(designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE){
-            newUpdates = dv2newUpdates;
-            draftUpdates = dv2draftUpdates;
-            mergedUpdates = dv2mergedUpdates;
-            ignoredUpdates = dv2ignoredUpdates;
+            incompleteUpdates = dv2incompleteUpdates;
+            assignedUpdates = dv2assignedUpdates;
+            completedUpdates = dv2completedUpdates;
+            updateWorkPackages = dv2updateWorkPackages
         }
 
         return shallow(
             <DesignUpdatesList
-                newUpdates={newUpdates}
-                draftUpdates={draftUpdates}
-                mergedUpdates={mergedUpdates}
-                ignoredUpdates={ignoredUpdates}
+                incompleteUpdates={incompleteUpdates}
+                assignedUpdates={assignedUpdates}
+                completeUpdates={completedUpdates}
+                updateWorkPackages={updateWorkPackages}
                 designVersionStatus={designVersionStatus}
+                designUpdateStatus={designUpdateStatus}
                 userRole={userRole}
                 userContext={userContext}/>
         );
@@ -143,64 +148,27 @@ describe('JSX: DesignUpdatesList', () => {
         it('also visible to Developer', () => {
 
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
+            const designUpdateStatus = '';
             const userRole = RoleType.DEVELOPER;
             const userContext = {designVersionId: 'DV1'};
 
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
+            let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
         });
 
         it('also visible to Manager', () => {
 
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
+            const designUpdateStatus = '';
             const userRole = RoleType.MANAGER;
             const userContext = {designVersionId: 'DV1'};
 
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
+            let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('ItemContainer').length, 4, 'Item Container not found');
         });
 
-    });
-
-    describe('Design Updates are only listed for an Updatable Design Version', () => {
-
-        it('wp list is shown for initial new design version', () => {
-
-            const designVersionStatus = DesignVersionStatus.VERSION_NEW;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'DV0'};
-
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 0, 'Expected no updates');
-            chai.assert.equal(item.find('#baseWps').length, 1, 'Expected to find base WPs list');
-        });
-
-        it('wp list is shown for initial draft design version', () => {
-
-            const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'DV0'};
-
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 0, 'Expected no updates');
-            chai.assert.equal(item.find('#baseWps').length, 1, 'Expected to find base WPs list');
-        });
-
-        it('wp list is shown for initial complete design version', () => {
-
-            const designVersionStatus = DesignVersionStatus.VERSION_DRAFT_COMPLETE;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'DV0'};
-
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 0, 'Expected no updates');
-            chai.assert.equal(item.find('#baseWps').length, 1, 'Expected to find base WPs list');
-        });
     });
 
     // Add Design Update -----------------------------------------------------------------------------------------------
@@ -211,13 +179,14 @@ describe('JSX: DesignUpdatesList', () => {
 
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const userRole = RoleType.DESIGNER;
+            const designUpdateStatus = '';
             const userContext = {designVersionId: 'DV2'};
 
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
+            let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isTrue(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Design Update', 'Expecting Add Design Update footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
+            chai.assert.isTrue(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemContainer').nodes[0].props.footerAction, 'Add Design Update', 'Expecting Add Design Update footer action');
         });
     });
 
@@ -226,77 +195,122 @@ describe('JSX: DesignUpdatesList', () => {
         it('no add option for Developer', () => {
 
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
+            const designUpdateStatus = '';
             const userRole = RoleType.DEVELOPER;
             const userContext = {designVersionId: 'DV2'};
 
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
+            let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
 
         it('no add option for Manager', () => {
 
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
+            const designUpdateStatus = '';
             const userRole = RoleType.MANAGER;
             const userContext = {designVersionId: 'DV2'};
 
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
+            let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 4, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
     describe('The add Design Update option is only visible for an Updatable Design Version', () =>{
 
-        it('no add option for new initial design version', () => {
-
-            const designVersionStatus = DesignVersionStatus.VERSION_NEW;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'DV0'};
-
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
-
-            // There are no Design Updates at all here!
-            chai.assert.equal(item.find('ItemContainer').length, 0, 'Item Container was found');
-        });
-
-        it('no add option for published initial design version', () => {
-
-            const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'DV0'};
-
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
-
-            // There are no Design Updates at all here!
-            chai.assert.equal(item.find('ItemContainer').length, 0, 'Item Container was found');
-        });
-
-        it('no add option for complete initial design version', () => {
-
-            const designVersionStatus = DesignVersionStatus.VERSION_DRAFT_COMPLETE;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'DV0'};
-
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
-
-            // There are no Design Updates at all here!
-            chai.assert.equal(item.find('ItemContainer').length, 0, 'Item Container was found');
-        });
-
         it('no add option for complete updatable design version', () => {
 
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
+            const designUpdateStatus = '';
             const userRole = RoleType.DESIGNER;
             const userContext = {designVersionId: 'DV0'};
 
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
+            let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
-    })
+    });
+
+    // Add Design Update WPs -------------------------------------------------------------------------------------------
+
+    describe('The Work Package list for a Design Update has an option to add a new Work Package', () => {
+
+        it('has an add option for a manager on an updatable design version', () => {
+
+            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
+            const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
+            const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'DV2', designUpdateId: '6'};
+
+            const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
+
+            chai.assert.equal(item.find('ItemContainer').length, 4, 'Item Containers not found');
+            chai.assert.isTrue(item.find('ItemContainer').nodes[3].props.hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemContainer').nodes[3].props.footerAction, 'Add Work Package', 'Expecting Add Work Package footer action');
+        });
+    });
+
+    describe('Only a Manager can add new Design Update Work Packages', () => {
+
+        it('is not available for Designer', () => {
+
+            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
+            const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designVersionId: 'DV2', designUpdateId: '6'};
+
+            const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
+
+            chai.assert.isUndefined(item.find('ItemContainer').nodes[4], 3, 'WP List was found');
+        });
+
+        it('is not available for Developer', () => {
+
+            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
+            const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
+            const userRole = RoleType.DEVELOPER;
+            const userContext = {designVersionId: 'DV2', designUpdateId: '6'};
+
+            const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
+
+            chai.assert.isUndefined(item.find('ItemContainer').nodes[4], 3, 'WP List was found');
+        });
+    });
+
+    describe('A Work Package cannot be added to a New Design Update', () => {
+
+        it('is not available for new design update', () => {
+
+            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
+            const designUpdateStatus = DesignUpdateStatus.UPDATE_NEW;
+            const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'DV1', designUpdateId: '4'};
+
+            const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
+
+            chai.assert.equal(item.find('ItemContainer').length, 4, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[3].props.hasFooterAction, 'Expecting no footer action');
+        });
+    });
+
+    describe('A Work Package cannot be added to a Complete Design Update', () => {
+
+        it('is not available for a merged design update', () => {
+
+            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
+            const designUpdateStatus = DesignUpdateStatus.UPDATE_COMPLETE
+            const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'DV1', designUpdateId: '1'};
+
+            const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
+
+            chai.assert.equal(item.find('ItemContainer').length, 4, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[3].props.hasFooterAction, 'Expecting no footer action');
+        });
+    });
 
 });

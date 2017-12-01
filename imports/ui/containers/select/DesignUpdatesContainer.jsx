@@ -14,7 +14,7 @@ import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummary
 import ItemContainer                from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, RoleType, WorkPackageType, DisplayContext, LogLevel} from '../../../constants/constants.js';
+import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, LogLevel} from '../../../constants/constants.js';
 
 import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
@@ -90,9 +90,10 @@ export class DesignUpdatesList extends Component {
         return ClientDesignUpdateServices.getDesignUpdateRef(designUpdateId);
     }
 
+
     render() {
 
-        const {incompleteUpdates, assignedUpdates, completeUpdates, updateWorkPackages, designVersionStatus, userRole, userContext, openWpItems} = this.props;
+        const {incompleteUpdates, assignedUpdates, completeUpdates, updateWorkPackages, designVersionStatus, designUpdateStatus, userRole, userContext, openWpItems} = this.props;
 
 
         // DU List Header ----------------------------------------------------------------------------------------------
@@ -116,11 +117,16 @@ export class DesignUpdatesList extends Component {
             footerActionFunction = () => this.onAddDesignUpdate(userRole, userContext.designVersionId);
         }
 
-        if((designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE ||  designVersionStatus === DesignVersionStatus.VERSION_DRAFT) && userRole === RoleType.MANAGER){
-
-            hasFooterAction = true;
-            footerAction = 'Add Work Package';
-            footerActionFunction = () => this.onAddWorkPackage(userRole, userContext, WorkPackageType.WP_UPDATE, openWpItems);
+        if((designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE ||  designVersionStatus === DesignVersionStatus.VERSION_DRAFT)
+            && userRole === RoleType.MANAGER
+            && userContext.designUpdateId !== 'NONE'
+        ){
+            // Only can add WPs to published DUs
+            if(designUpdateStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT) {
+                hasFooterAction = true;
+                footerAction = 'Add Work Package';
+                footerActionFunction = () => this.onAddWorkPackage(userRole, userContext, WorkPackageType.WP_UPDATE, openWpItems);
+            }
         }
 
 
@@ -181,14 +187,6 @@ export class DesignUpdatesList extends Component {
 
                     }
 
-                    // let update_wp_title = '';
-                    // if(userContext.designUpdateId !== 'NONE' && userContext.workPackageId === 'NONE'){
-                    //     update_wp_title = 'Design Update Summary';
-                    // }
-                    // if(userContext.workPackageId !== 'NONE'){
-                    //     update_wp_title = 'Work Package Summary';
-                    // }
-
                     if(userRole === RoleType.MANAGER){
 
                         headerText4 = 'Work Packages for ' + this.getDesignUpdateRef(userContext.designUpdateId);
@@ -197,8 +195,12 @@ export class DesignUpdatesList extends Component {
                             bodyDataFunction4 = () => this.renderWorkPackagesList(updateWorkPackages)
 
                         } else {
+                            if(userContext.designUpdateId === 'NONE'){
+                                bodyDataFunction4 = () => this.displayNote(SELECT_DESIGN_UPDATE);
+                            } else {
+                                bodyDataFunction4 = () => this.displayNote(NO_WORK_PACKAGES);
+                            }
 
-                            bodyDataFunction4 = () => this.displayNote(NO_WORK_PACKAGES);
 
                         }
 
@@ -236,8 +238,8 @@ export class DesignUpdatesList extends Component {
                                         <ItemContainer
                                             headerText={headerText4}
                                             bodyDataFunction={bodyDataFunction4}
-                                            hasFooterAction={true}
-                                            footerAction={'Add Work Package'}
+                                            hasFooterAction={hasFooterAction}
+                                            footerAction={footerAction}
                                             footerActionFunction={footerActionFunction}
                                         />
                                     </Col>
@@ -306,7 +308,8 @@ DesignUpdatesList.propTypes = {
     assignedUpdates:        PropTypes.array.isRequired,
     completeUpdates:        PropTypes.array.isRequired,
     updateWorkPackages:     PropTypes.array.isRequired,
-    designVersionStatus:    PropTypes.string.isRequired
+    designVersionStatus:    PropTypes.string.isRequired,
+    designUpdateStatus:     PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

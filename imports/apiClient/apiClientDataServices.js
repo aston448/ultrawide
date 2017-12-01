@@ -695,6 +695,14 @@ class ClientDataServices{
         // No action if design version not yet set
         if (currentDesignVersionId !== 'NONE') {
 
+            // Get the selected DU if there is one
+            let currentDuStatus = '';
+            const currentDuId = store.getState().currentUserItemContext.designUpdateId;
+
+            if(currentDuId !== 'NONE'){
+                currentDuStatus = DesignUpdateData.getDesignUpdateById(currentDuId).updateStatus;
+            }
+
             // Get all the design updates available for the selected version sorted by type and name
             let incompleteUpdates = [];
             let assignedUpdates = [];
@@ -712,8 +720,10 @@ class ClientDataServices{
             draftUpdates.forEach((update) =>{
 
                 const unassignedScenarios = DesignUpdateData.getScenariosNotInWorkPackages(update._id);
+                const totalScenarios = DesignUpdateData.getInScopeScenarios(update._id);
 
-                if(unassignedScenarios.length > 0){
+                // Incomplete if any Scenarios not in WP OR if no Scenarios at all...
+                if(unassignedScenarios.length > 0 || totalScenarios.length === 0){
                     incompleteUpdates.push(update);
                 } else {
                     // Must be all assigned
@@ -767,7 +777,8 @@ class ClientDataServices{
                 assignedUpdates: assignedUpdates,
                 completeUpdates: completeUpdates,
                 updateWorkPackages: updateWorkPackages,
-                designVersionStatus: designVersion.designVersionStatus
+                designVersionStatus: designVersion.designVersionStatus,
+                designUpdateStatus: currentDuStatus
             };
 
         } else {
@@ -776,7 +787,8 @@ class ClientDataServices{
                 assignedUpdates: [],
                 completeUpdates: [],
                 pdateWorkPackages: [],
-                designVersionStatus: ''
+                designVersionStatus: '',
+                designUpdateStatus: '',
             };
         }
     };

@@ -458,6 +458,11 @@ class ClientDesignUpdateServices {
         }
     }
 
+    getDesignUpdate(designUpdateId){
+
+        return DesignUpdateData.getDesignUpdateById(designUpdateId);
+    }
+
 }
 
 export default new ClientDesignUpdateServices();

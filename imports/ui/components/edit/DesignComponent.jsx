@@ -572,7 +572,6 @@ export class DesignComponent extends Component{
 
             let currentItemText = currentItem.componentNameNew;
 
-            console.log('Include narratives = ' + includeNarratives);
             // Narrative is an optional item...
             let narrative = <div></div>;
 

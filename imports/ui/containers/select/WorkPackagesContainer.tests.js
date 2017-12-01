@@ -22,6 +22,7 @@ describe('JSX: WorkPackagesList', () => {
                 newWorkPackages={workPackages}
                 availableWorkPackages={workPackages}
                 adoptedWorkPackages={workPackages}
+                completedWorkPackages={workPackages}
                 designVersionStatus={designVersionStatus}
                 designUpdateStatus={designUpdateStatus}
                 userRole={userRole}
@@ -45,9 +46,11 @@ describe('JSX: WorkPackagesList', () => {
 
             const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isTrue(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Work Package', 'Expecting Add Work Package footer action');
+            const containers = item.find('ItemContainer');
+
+            chai.assert.equal(containers.length, 3, 'Item Containers not found');
+            chai.assert.isTrue(containers.nodes[0].props.hasFooterAction, 'Expecting a footer action');
+            chai.assert.isTrue(containers.nodes[0].props.footerAction.includes('Add Work Package to Design Version'), 'Expecting Add Work Package footer action');
         });
     });
 
@@ -63,8 +66,8 @@ describe('JSX: WorkPackagesList', () => {
 
             const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
 
         it('is not available for Developer', () => {
@@ -77,8 +80,8 @@ describe('JSX: WorkPackagesList', () => {
 
             const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -94,8 +97,8 @@ describe('JSX: WorkPackagesList', () => {
 
             const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -111,8 +114,8 @@ describe('JSX: WorkPackagesList', () => {
 
             const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
 
         it('is not available for updatable complete design version', () => {
@@ -125,8 +128,8 @@ describe('JSX: WorkPackagesList', () => {
 
             const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -142,93 +145,8 @@ describe('JSX: WorkPackagesList', () => {
 
             const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
-        });
-    });
-
-    // Add Design Update WPs -------------------------------------------------------------------------------------------
-
-    describe('The Work Package list for a Design Update has an option to add a new Work Package', () => {
-
-        it('has an add option for a manager on an updatable design version', () => {
-
-            const wpType = WorkPackageType.WP_UPDATE;
-            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
-            const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
-            const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isTrue(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Work Package', 'Expecting Add Work Package footer action');
-        });
-    });
-
-    describe('Only a Manager can add new Design Update Work Packages', () => {
-
-        it('is not available for Designer', () => {
-
-            const wpType = WorkPackageType.WP_UPDATE;
-            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
-            const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
-        });
-
-        it('is not available for Developer', () => {
-
-            const wpType = WorkPackageType.WP_UPDATE;
-            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
-            const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
-            const userRole = RoleType.DEVELOPER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
-        });
-    });
-
-    describe('A Work Package cannot be added to a New Design Update', () => {
-
-        it('is not available for new design update', () => {
-
-            const wpType = WorkPackageType.WP_UPDATE;
-            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
-            const designUpdateStatus = DesignUpdateStatus.UPDATE_NEW;
-            const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
-        });
-    });
-
-    describe('A Work Package cannot be added to a Complete Design Update', () => {
-
-        it('is not available for a merged design update', () => {
-
-            const wpType = WorkPackageType.WP_UPDATE;
-            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
-            const designUpdateStatus = DesignUpdateStatus.UPDATE_MERGED;
-            const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemContainer').length, 3, 'Item Containers not found');
+            chai.assert.isFalse(item.find('ItemContainer').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
