@@ -29,12 +29,10 @@ describe('UC 805 User Password Change', function(){
         browser.click('#loginSubmit');
 
         // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.SELECT)
-        }, 5000, 'expected login after 5s');
+        browser.waitForExist('#main_tabs');
 
         // Go to Config Screen
-        const actionId = '#' + RoleType.DESIGNER + '_' + UltrawideAction.ACTION_CONFIGURE;
+        const actionId = '#SETTINGS';
         browser.waitForExist(actionId);
         browser.click(actionId);
 
@@ -81,9 +79,7 @@ describe('UC 805 User Password Change', function(){
         browser.click('#loginSubmit');
 
         // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.SELECT)
-        }, 5000, 'expected login after 5s');
+        browser.waitForExist('#main_tabs');
     });
 
 

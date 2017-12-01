@@ -38,9 +38,7 @@ describe('UC 902 - User Logout', function(){
         browser.click('#loginSubmit');
 
         // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.SELECT)
-        }, 5000, 'expected roles screen after 5s');
+        browser.waitForExist('#main_tabs');
 
         // Logout
         browser.click('#Logout');
@@ -66,17 +64,8 @@ describe('UC 902 - User Logout', function(){
 
         browser.click('#loginSubmit');
 
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.SELECT)
-        }, 5000, 'expected roles screen after 5s');
+        browser.waitForExist('#main_tabs');
 
-        // Go to Home screen as designer
-        const actionId = '#' + RoleType.DESIGNER + '_' + UltrawideAction.ACTION_HOME;
-        browser.click(actionId);
-
-        browser.waitUntil(function () {
-            return browser.getText('#headerView').trim() === TextLookups.viewText(ViewType.SELECT).trim()
-        }, 5000, 'expected home screen after 5s');
 
         // Click Logout
         browser.click('#Logout');

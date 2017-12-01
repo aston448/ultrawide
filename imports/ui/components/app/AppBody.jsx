@@ -10,9 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
 import UltrawideAdmin                       from  '../../components/admin/UltrawideAdmin.jsx';
-import AppRolesContainer                    from  '../../containers/app/AppRolesContainer.jsx';
 import MainSelectionPage                    from  '../../components/select/MainSelectionPage.jsx';
-import DesignsContainer                     from  '../../containers/select/DesignsContainer.jsx';
 import EditDesignContainer                  from  '../../containers/edit/EditDesignContainer.jsx';
 import EditDesignUpdateContainer            from  '../../containers/edit/EditDesignUpdateContainer.jsx';
 import EditWorkPackageContainer             from  '../../containers/edit/EditWorkPackageContainer.jsx';
@@ -70,22 +68,12 @@ class AppBody extends Component {
                 bodyHtml =
                     <UltrawideAdmin/>;
                 break;
-            // case ViewType.ROLES:
-            //     bodyHtml =
-            //         <AppRolesContainer params={{
-            //             userId: userContext.userId
-            //         }}/>;
-            //     break;
             case ViewType.CONFIGURE:
                 bodyHtml =
                     <ConfigurationSettings
                         userContext={userContext}
                     />;
                 break;
-            // case ViewType.DESIGNS:
-            //     bodyHtml =
-            //         <DesignsContainer/>;
-            //     break;
             case ViewType.SELECT:
                 bodyHtml =
                     <MainSelectionPage/>;

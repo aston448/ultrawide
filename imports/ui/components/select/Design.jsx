@@ -76,10 +76,7 @@ export class Design extends Component {
 
         let buttons = '';
 
-        // const workButton =
-        //     <Button id="butWork" bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>;
-
-        const removeButton =
+         const removeButton =
             <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
 
         const backupButton =
@@ -114,7 +111,6 @@ export class Design extends Component {
                 currentItemId={design._id}
                 currentItemName={design.designName}
                 currentItemStatus=''
-                //onSelectItem={ () => this.onSelectDesign(userContext, design._id)}
             />;
 
         const confirmArchiveModal =

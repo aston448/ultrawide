@@ -148,7 +148,6 @@ export class DesignUpdate extends Component {
         const publishButton = <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>;
         const withdrawButton = <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>;
         const viewButton = <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>;
-        //const refreshButton = <Button id="butRefresh" bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>;
 
         const mergeOptions =
             <div className="merge-options">

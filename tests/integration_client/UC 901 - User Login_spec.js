@@ -39,9 +39,7 @@ describe('UC 901 - User Login', function(){
         browser.click('#loginSubmit');
 
         // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.SELECT)
-        }, 5000, 'expected login after 5s');
+        browser.waitForExist('#main_tabs');
 
     });
 
@@ -85,7 +83,7 @@ describe('UC 901 - User Login', function(){
 
 
     // Consequences
-    it('When successfully logged in the role selection screen is shown', function(){
+    it('When successfully logged in the home screen is shown', function(){
 
         // Execute
         browser.url('http://localhost:3000/');
@@ -98,9 +96,7 @@ describe('UC 901 - User Login', function(){
         browser.click('#loginSubmit');
 
         // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.SELECT)
-        }, 5000, 'expected login after 5s');
+        browser.waitForExist('#main_tabs');
     });
 
 });

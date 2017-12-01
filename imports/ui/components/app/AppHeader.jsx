@@ -97,8 +97,6 @@ export class AppHeader extends Component {
 
         let roleClass = '';
         let roleStatusClass = '';
-        let viewText = TextLookups.viewText(view);
-
 
 
         // Get current status
@@ -178,14 +176,6 @@ export class AppHeader extends Component {
                     </div>;
                 break;
 
-            // case ViewType.ROLES:
-            //
-            //     appHeaderMenuContent =
-            //         <div className="top-menu-bar">
-            //             {logoutItem}
-            //         </div>;
-            //     break;
-
             case ViewType.CONFIGURE:
 
                 appHeaderMenuContent =
@@ -194,27 +184,6 @@ export class AppHeader extends Component {
                         {logoutItem}
                     </div>;
                 break;
-
-            // case ViewType.TEST_OUTPUTS:
-            //
-            //     appHeaderMenuContent =
-            //         <div className="top-menu-bar">
-            //             {rolesItem}
-            //             <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
-            //             {logoutItem}
-            //         </div>;
-            //     break;
-
-            // case ViewType.DESIGNS:
-            //
-            //     appHeaderMenuContent =
-            //         <div className="top-menu-bar">
-            //             {rolesItem}
-            //             {selectItem}
-            //             <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
-            //             {logoutItem}
-            //         </div>;
-            //     break;
 
             case ViewType.SELECT:
 

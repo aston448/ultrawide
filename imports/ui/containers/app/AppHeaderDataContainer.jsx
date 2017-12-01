@@ -48,22 +48,6 @@ class AppHeaderData extends Component {
                     break;
                 case ViewType.CONFIGURE:
                     break;
-                // case ViewType.DESIGNS:
-                //     // Only here if no design is known or want to change to new design
-                //     if(currentDesign) {
-                //         headerData =
-                //             <div>
-                //                 <span className="header-title">DESIGN: </span>
-                //                 <span className="header-data">{currentDesign.designName}</span>
-                //             </div>;
-                //     } else {
-                //         headerData =
-                //             <div>
-                //                 <span className="header-title">DESIGN: </span>
-                //                 <span className="header-data">No design selected</span>
-                //             </div>;
-                //     }
-                //     break;
                 case ViewType.SELECT:
                     if(!currentDesign){
                         headerData =
