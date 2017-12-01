@@ -1,7 +1,7 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, DisplayContext } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, DisplayContext, HomePageTab } from '../constants/constants.js';
 import ClientDesignUpdateServices   from '../apiClient/apiClientDesignUpdate.js';
 
 // Data Access
@@ -12,12 +12,13 @@ import WorkPackageData                  from '../data/work/work_package_db.js';
 import WorkPackageComponentData         from '../data/work/work_package_component_db.js';
 import DesignComponentData              from '../data/design/design_component_db.js';
 import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
+import UserRoleData                     from '../data/users/user_role_db.js';
 
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurrentViewMode, setCurrentView, setCurrentUserViewOptions,
     updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems,
-    updateUserMessage, updateOpenItemsFlag, setDomainTermsOnOff} from '../redux/actions'
+    updateUserMessage, updateOpenItemsFlag, setDomainTermsOnOff, setCurrentUserHomeTab} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -38,6 +39,15 @@ class ClientAppHeaderServices{
         return store.getState();
     }
 
+    getCurrentUser(userContext){
+
+        if(userContext) {
+            return UserRoleData.getRoleByUserId(userContext.userId);
+        } else {
+            return null;
+        }
+    }
+
     getCurrentDesign(userContext){
 
         if(userContext.designId === 'NONE'){
@@ -52,6 +62,11 @@ class ClientAppHeaderServices{
             }
         }
     };
+
+    setHomeTab(newTab){
+
+        store.dispatch(setCurrentUserHomeTab(newTab));
+    }
 
     setEditorMode(newMode, view, viewOptions, userId){
 
@@ -375,11 +390,11 @@ class ClientAppHeaderServices{
         return (WorkPackageComponentData.getChildFeatureCount(userContext.workPackageId, component.componentReferenceId) === 0);
     }
 
-    setViewDesigns() {
-        // Returns to the Design selection screen
-        store.dispatch(setCurrentView(ViewType.DESIGNS));
-        return true;
-    }
+    // setViewDesigns() {
+    //     // Returns to the Design selection screen
+    //     store.dispatch(setCurrentView(ViewType.DESIGNS));
+    //     return true;
+    // }
 
 
     setViewConfigure() {
@@ -388,21 +403,58 @@ class ClientAppHeaderServices{
         return true;
     }
 
-    setViewRoles() {
-        // Returns to the Change Role Screen
-        store.dispatch(setCurrentView(ViewType.ROLES));
-        return true;
-    }
+    // setViewRoles() {
+    //     // Returns to the Change Role Screen
+    //     store.dispatch(setCurrentView(ViewType.ROLES));
+    //     return true;
+    // }
 
     setViewSelection(){
         // Returns to the Design Version selection screen
         const userContext = store.getState().currentUserItemContext;
+        const userRole = store.getState().currentUserRole;
 
         // Update the DU Statuses
         ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
 
         // Update Work Progress
         //ClientDesignVersionServices.updateWorkProgress(userContext);
+
+        // Set the tabs depending on user role and context
+        if(userContext.designId === 'NONE' || userContext.designVersionId === 'NONE'){
+            // Design or Version not set to need to select one
+            store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_DESIGNS));
+        } else {
+
+            // If we are not remember in a local tab setting...  default it
+            if(store.getState().currentUserHomeTab === HomePageTab.TAB_NOT_SET) {
+                switch (userRole) {
+                    case RoleType.DESIGNER:
+                        if (userContext.designUpdateId !== 'NONE') {
+                            // Designer was working on an update so go to Updates
+                            store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_UPDATES));
+                        } else {
+                            if (userContext.designComponentId !== 'NONE') {
+                                // Designer was working on a base component so go to design version
+                                store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_DESIGNS));
+                            } else {
+                                // Nothing specific so go to progress
+                                store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_PROGRESS));
+                            }
+                        }
+                        break;
+                    case RoleType.DEVELOPER:
+                    case RoleType.MANAGER:
+                        if (userContext.workPackageId !== 'NONE') {
+                            // Manager / Developer working on a work package to go to work list
+                            store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_WORK));
+                        } else {
+                            store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_PROGRESS));
+                        }
+                        break;
+                }
+            }
+        }
 
         store.dispatch(setCurrentView(ViewType.SELECT));
         return true;

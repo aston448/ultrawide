@@ -1,7 +1,7 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, UserSetting, DisplayContext } from '../constants/constants.js';
+import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, DisplayContext, HomePageTab } from '../constants/constants.js';
 import { log }                          from '../common/utils.js';
 import TextLookups                      from '../common/lookups.js'
 
@@ -10,7 +10,7 @@ import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersio
 import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
 import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
 import ClientAppHeaderServices          from '../apiClient/apiClientAppHeader.js';
-import ClientUserSettingsServices       from '../apiClient/apiClientUserSettings.js';
+import ClientCallbacks                  from '../apiClient/apiClientCallbacks.js';
 
 // Data Access
 import DesignData                       from '../data/design/design_db.js';
@@ -26,12 +26,12 @@ import UserDvMashScenarioData           from '../data/mash/user_dv_mash_scenario
 // REDUX services
 import store from '../redux/store'
 import {
-    setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentWindowSize,
-    setIntTestOutputDir, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems,
-    setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag, setDocSectionTextOption, setDocFeatureTextOption,
-    setDocNarrativeTextOption, setDocScenarioTextOption, setIncludeNarratives
+    setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions,
+    setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems,
+    setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag,
+    setCurrentUserHomeTab
 } from '../redux/actions'
-import {UserSettingValue} from "../constants/constants";
+
 
 // =====================================================================================================================
 
@@ -155,9 +155,9 @@ class ClientUserContextServices {
 
             if(!mashExists){
                 log((msg) => console.log(msg), LogLevel.TRACE, "Getting User Data...");
-                ClientDataServices.getUserData(userContext, this.onAllDataLoaded);
+                ClientDataServices.getUserData(userContext, ClientCallbacks.onAllDataLoaded);
             } else {
-                this.onAllDataLoaded();
+                ClientCallbacks.onAllDataLoaded();
             }
 
 
@@ -171,84 +171,16 @@ class ClientUserContextServices {
                 store.dispatch(setCurrentView(ViewType.WAIT));
 
                 // Also gets WP data if a WP is current
-                ClientDataServices.getDesignVersionData(userContext, this.onAllDataLoaded);
+                ClientDataServices.getDesignVersionData(userContext, ClientCallbacks.onAllDataLoaded);
 
             } else {
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "No DV set");
                 // Will have to wait for a DV to be selected to get data
-                this.onAllDataLoaded(userContext);
+                ClientCallbacks.onAllDataLoaded(userContext);
             }
         }
 
-    }
-
-
-    onAllDataLoaded(){
-
-        //console.log("called onAllDataLoaded");
-        const userContext = store.getState().currentUserItemContext;
-
-        // Refresh the test mash for the design version.  Also loads test results
-        //ClientTestIntegrationServices.refreshTestData(userContext);
-
-        // Display correct work progress
-        ClientDesignVersionServices.updateWorkProgress(userContext);
-
-        // Get latest status on DUs
-        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
-
-        // Restore User Settings
-        const screenSize = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_SCREEN_SIZE);
-        store.dispatch(setCurrentWindowSize(screenSize));
-
-        const intTestOutputDir = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_INT_OUTPUT_LOCATION);
-        store.dispatch(setIntTestOutputDir(intTestOutputDir));
-
-        // Include narratives setting.  Default to ON if not yet set
-        const includeNarrativesSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_INCLUDE_NARRATIVES);
-        if(includeNarrativesSetting){
-            store.dispatch(setIncludeNarratives(includeNarrativesSetting));
-        } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_INCLUDE_NARRATIVES, UserSettingValue.SETTING_INCLUDE);
-            store.dispatch(setIncludeNarratives(UserSettingValue.SETTING_INCLUDE));
-        }
-
-        // Doc export settings - default if not yet set
-        const docSectionTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION);
-        if(docSectionTextSetting) {
-            store.dispatch(setDocSectionTextOption(docSectionTextSetting));
-        } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION, UserSettingValue.SETTING_INCLUDE);
-            store.dispatch(setDocSectionTextOption(UserSettingValue.SETTING_INCLUDE));
-        }
-
-        const docFeatureTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE);
-        if(docFeatureTextSetting) {
-            store.dispatch(setDocFeatureTextOption(docFeatureTextSetting));
-        } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE, UserSettingValue.SETTING_INCLUDE);
-            store.dispatch(setDocFeatureTextOption(UserSettingValue.SETTING_INCLUDE));
-        }
-
-        const docNarrativeTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE);
-        if(docNarrativeTextSetting) {
-            store.dispatch(setDocNarrativeTextOption(docNarrativeTextSetting));
-        } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE, UserSettingValue.SETTING_INCLUDE);
-            store.dispatch(setDocNarrativeTextOption(UserSettingValue.SETTING_INCLUDE));
-        }
-
-        const docScenarioTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO);
-        if(docScenarioTextSetting) {
-            store.dispatch(setDocScenarioTextOption(docScenarioTextSetting));
-        } else {
-            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO, UserSettingValue.SETTING_INCLUDE);
-            store.dispatch(setDocScenarioTextOption(UserSettingValue.SETTING_INCLUDE));
-        }
-
-        // Go to Role choice screen
-        store.dispatch(setCurrentView(ViewType.ROLES));
     }
 
     setOpenDesignVersionItems(userContext){
@@ -449,9 +381,10 @@ class ClientUserContextServices {
 
         const userViewOptions = UserViewOptionData.getUserViewOptions(userContext.userId);
 
-        // If no design / design version selected go to Designs screen
+        // If no design / design version selected go to Designs tab in Home screen
         if(userContext.designId === 'NONE' || userContext.designVersionId === 'NONE'){
-            store.dispatch(setCurrentView(ViewType.DESIGNS));
+            store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_DESIGNS));
+            store.dispatch(setCurrentView(ViewType.SELECT));
             return;
         }
 
@@ -534,7 +467,8 @@ class ClientUserContextServices {
                     }
                 } else {
                     // No Design Version found
-                    store.dispatch(setCurrentView(ViewType.DESIGNS));
+                    store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_DESIGNS));
+                    store.dispatch(setCurrentView(ViewType.SELECT));
                     return;
                 }
 

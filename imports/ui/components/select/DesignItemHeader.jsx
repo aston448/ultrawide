@@ -150,6 +150,8 @@ export class DesignItemHeader extends Component{
         let refEditorNotEditing = <div></div>;
         let refReadOnly = <div></div>;
 
+        console.log("Render DI Header for " + userRole + " with item " + currentItemType + " caled " + currentItemName);
+
         // Versions and updates have a version component
         if(currentItemType === ItemType.DESIGN_VERSION || currentItemType === ItemType.DESIGN_UPDATE){
             refEditorEditing =

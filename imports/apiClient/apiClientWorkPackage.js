@@ -10,6 +10,7 @@ import ServerWorkPackageApi             from '../apiServer/apiWorkPackage.js';
 import ClientTestIntegrationServices    from './apiClientTestIntegration';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
+import ClientDesignUpdateSummary        from '../apiClient/apiClientDesignUpdateSummary.js';
 
 // Data Access
 import UserRoleData                     from '../data/users/user_role_db.js';
@@ -348,13 +349,27 @@ class ClientWorkPackageServices {
 
         // Returns updated context so this can be passed on if needed
 
-        if(newWorkPackageId !== userContext.workPackageId) {
+        // Set the DU in context if it is not currently set.  This ensures that
+        // if an update DU is selected, the user context is always correct.
+
+        const wp = WorkPackageData.getWorkPackageById(newWorkPackageId);
+
+        let newDu = userContext.designUpdateId;
+        let updateDu = false;
+
+        if((userContext.designUpdateId !== wp.designUpdateId) && (wp.designUpdateId !== 'NONE')){
+            newDu = wp.designUpdateId;
+            updateDu = true;
+        }
+
+        if(newWorkPackageId !== userContext.workPackageId || updateDu) {
+
 
             const newContext = {
                 userId:                         userContext.userId,
                 designId:                       userContext.designId,
                 designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
+                designUpdateId:                 newDu,
                 workPackageId:                  newWorkPackageId,
                 designComponentId:              'NONE',
                 designComponentType:            'NONE',
@@ -371,6 +386,9 @@ class ClientWorkPackageServices {
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
             ClientUserContextServices.setOpenWorkPackageItems(newContext);
+
+            // Load or refresh DU Summary data - if necessary because selecting WP has changed DU
+            ClientDesignUpdateSummary.getDesignUpdateSummary(false);
 
             // Update the test summary data to reflect the WP.  No need to recalc data
             ClientTestIntegrationServices.updateTestSummaryData(newContext);

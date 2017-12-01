@@ -442,7 +442,21 @@ class ClientDesignUpdateServices {
 
     };
 
+    getDesignUpdateRef(designUpdateId){
 
+        const designUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);
+
+        if(designUpdate){
+            if(designUpdate.updateReference.length > 0){
+                return designUpdate.updateReference;
+            } else {
+                return designUpdate.updateName;
+            }
+
+        } else {
+            return '';
+        }
+    }
 
 }
 

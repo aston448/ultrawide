@@ -2,7 +2,7 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType, WorkSummaryType, LogLevel } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType, HomePageTab, LogLevel } from '../constants/constants.js';
 import { Validation, UserRolesValidationErrors} from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
@@ -24,7 +24,7 @@ import DesignUpdateComponentData        from '../data/design_update/design_updat
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentRole, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentRole, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo, setCurrentUserHomeTab} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -311,6 +311,8 @@ class ClientDesignVersionServices{
 
         const userContext = store.getState().currentUserItemContext;
 
+        console.log("Post data load.  DV = " + userContext.designVersionId);
+
         // Open default items
         ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
@@ -329,6 +331,8 @@ class ClientDesignVersionServices{
 
         // Get latest status on DUs
         ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+
+        store.dispatch(setDesignVersionDataLoadedTo(true));
     }
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------
@@ -493,11 +497,10 @@ class ClientDesignVersionServices{
 
         const userContext = store.getState().currentUserItemContext;
 
-
-
         // Validate that user has this role...
         const userRole = UserRoleData.getRoleByUserId(userContext.userId);
         let newContext = {};
+        let newTab = 0;
 
         if(role === RoleType.DESIGNER && userRole.isDesigner || role === RoleType.DEVELOPER && userRole.isDeveloper || role === RoleType.MANAGER && userRole.isManager){
 
@@ -522,19 +525,29 @@ class ClientDesignVersionServices{
             // Set new role
             store.dispatch(setCurrentRole(userContext.userId, role));
 
+            newTab = HomePageTab.TAB_DESIGNS;
+
             // Select the item wanted
-            if(item.designUpdateId !== 'NONE'){
-                //console.log("Setting Design Update... " + item.designUpdateId);
-                newContext = ClientDesignUpdateServices.setDesignUpdate(newContext, item.designUpdateId)
-            }
+
 
             if(item.workPackageId !== 'NONE'){
                 //console.log("Setting Work package... " + item.workPackageId);
-                ClientWorkPackageServices.setWorkPackage(newContext, item.workPackageId)
+
+                // This will also set the DU if there is one for the WP
+                ClientWorkPackageServices.setWorkPackage(newContext, item.workPackageId);
+                newTab = HomePageTab.TAB_WORK;
+
+            } else {
+
+                if(item.designUpdateId !== 'NONE'){
+                    //console.log("Setting Design Update... " + item.designUpdateId);
+                    newContext = ClientDesignUpdateServices.setDesignUpdate(newContext, item.designUpdateId);
+                    newTab = HomePageTab.TAB_UPDATES;
+                }
             }
 
-            // Go to Selection screen
-            store.dispatch(setCurrentView(ViewType.SELECT));
+            // Change the tab
+            store.dispatch(setCurrentUserHomeTab(newTab));
 
             return {success: true, message: ''};
 

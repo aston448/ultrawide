@@ -71,9 +71,9 @@ export class UltrawideMenuDropdownItem extends Component {
             case MenuAction.MENU_ACTION_GOTO_CONFIG:
                 ClientAppHeaderServices.setViewConfigure();
                 break;
-            case MenuAction.MENU_ACTION_GOTO_DESIGNS:
-                ClientAppHeaderServices.setViewDesigns();
-                break;
+            // case MenuAction.MENU_ACTION_GOTO_DESIGNS:
+            //     ClientAppHeaderServices.setViewDesigns();
+            //     break;
             case MenuAction.MENU_ACTION_VIEW_DICT:
             case MenuAction.MENU_ACTION_VIEW_ACC_FILES:
             case MenuAction.MENU_ACTION_VIEW_UNIT_TESTS:

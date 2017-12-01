@@ -41,7 +41,12 @@ export class DesignEditorFooter extends Component {
         const nameData = this.getNameData(userContext);
 
         if(displayContext === DisplayContext.PROGRESS_SUMMARY){
-            return 'Progress summary for ' + nameData.designVersion;
+            if(userContext.designVersionId !== 'NONE'){
+                return 'Progress summary for ' + nameData.designVersion;
+            } else {
+                return '';
+            }
+
         } else {
             if(userContext.workPackageId !== 'NONE'){
                 if(userContext.designUpdateId !== 'NONE'){

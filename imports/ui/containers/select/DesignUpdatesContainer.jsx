@@ -9,13 +9,12 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignUpdate                 from '../../components/select/DesignUpdate.jsx';
+import WorkPackage                  from '../../components/select/WorkPackage.jsx';
 import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
-import WorkPackagesContainer        from '../../containers/select/WorkPackagesContainer.jsx';
 import ItemContainer                from '../../components/common/ItemContainer.jsx';
-import WorkProgressSummaryContainer from '../../containers/summary/WorkProgressSummaryContainer.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, RoleType, WorkPackageType, LogLevel} from '../../../constants/constants.js';
+import {DesignVersionStatus, RoleType, WorkPackageType, DisplayContext, LogLevel} from '../../../constants/constants.js';
 
 import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
@@ -26,6 +25,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import ClientWorkPackageServices from "../../../apiClient/apiClientWorkPackage";
 
 // =====================================================================================================================
 
@@ -57,14 +57,17 @@ export class DesignUpdatesList extends Component {
         }
     }
 
-    renderAllDesignUpdateLists(){
-
-        return [
-            this.renderDesignUpdatesList(this.props.newUpdates),
-            this.renderDesignUpdatesList(this.props.draftUpdates),
-            this.renderDesignUpdatesList(this.props.mergedUpdates),
-            this.renderDesignUpdatesList(this.props.ignoredUpdates)
-        ]
+    renderWorkPackagesList(workPackages){
+        if(workPackages.length > 0) {
+            return workPackages.map((workPackage) => {
+                return (
+                    <WorkPackage
+                        key={workPackage._id}
+                        workPackage={workPackage}
+                    />
+                );
+            });
+        }
     }
 
     displayNote(noteText){
@@ -76,159 +79,212 @@ export class DesignUpdatesList extends Component {
         ClientDesignUpdateServices.addNewDesignUpdate(userRole, designVersionId)
     }
 
+    onAddWorkPackage(userRole, userContext, wpType, openWpItems){
+
+        ClientWorkPackageServices.addNewWorkPackage(userRole, userContext, wpType, openWpItems);
+
+    }
+
+    getDesignUpdateRef(designUpdateId){
+
+        return ClientDesignUpdateServices.getDesignUpdateRef(designUpdateId);
+    }
+
     render() {
 
-        const {newUpdates, draftUpdates, mergedUpdates, ignoredUpdates, designVersionStatus, userRole, userContext} = this.props;
+        const {incompleteUpdates, assignedUpdates, completeUpdates, updateWorkPackages, designVersionStatus, userRole, userContext, openWpItems} = this.props;
 
-        // Elements ----------------------------------------------------------------------------------------------------
-
-        // Initial Design Work Packages List
-        const baseWorkPackages =
-            <div id="baseWps">
-                <WorkPackagesContainer params={{
-                    wpType: WorkPackageType.WP_BASE,
-                    designVersionId: userContext.designVersionId,
-                    designUpdateId: userContext.designUpdateId
-                }}/>
-            </div>;
-
-        // Design Update Work Packages List
-        const updateWorkPackages =
-            <div id="updateWps">
-                <WorkPackagesContainer params={{
-                    wpType: WorkPackageType.WP_UPDATE,
-                    designVersionId: userContext.designVersionId,
-                    designUpdateId: userContext.designUpdateId
-                }}/>
-            </div>;
-
-        // Design Update Summary
-        const updateSummary =
-              <div id="updateSummary">
-                  <DesignUpdateSummaryContainer params={{
-                      userContext: userContext
-                  }}/>
-              </div>;
-
-        // Work Progress Summary
-        const workProgressSummary =
-            <div id="workProgressSummary">
-                <WorkProgressSummaryContainer params={{
-                    userContext: userContext
-                }}/>
-            </div>;
 
         // DU List Header ----------------------------------------------------------------------------------------------
 
         // A default value...
-        let headerText = 'Design Version Data';
+        let headerText1 = '';
+        let headerText2 = '';
+        let headerText3 = '';
+        let headerText4 = '';
 
         // DU List Footer ----------------------------------------------------------------------------------------------
 
         let footerActionFunction = null;
         let hasFooterAction = false;
-        const footerAction = 'Add Design Update';
+        let footerAction = '';
 
         if(designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE && userRole === RoleType.DESIGNER){
 
             hasFooterAction = true;
+            footerAction = 'Add Design Update';
             footerActionFunction = () => this.onAddDesignUpdate(userRole, userContext.designVersionId);
+        }
+
+        if((designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE ||  designVersionStatus === DesignVersionStatus.VERSION_DRAFT) && userRole === RoleType.MANAGER){
+
+            hasFooterAction = true;
+            footerAction = 'Add Work Package';
+            footerActionFunction = () => this.onAddWorkPackage(userRole, userContext, WorkPackageType.WP_UPDATE, openWpItems);
         }
 
 
         // DU List Body ------------------------------------------------------------------------------------------------
 
         const NO_DESIGN_UPDATES = 'No Design Updates';
+        const NO_WORK_PACKAGES = 'No Work Packages for this Update';
         const SELECT_DESIGN_VERSION = 'Select a Design Version';
+        const SELECT_DESIGN_UPDATE = 'Select a Design Update';
 
-        let bodyDataFunction = () => this.displayNote(SELECT_DESIGN_VERSION);
+        let bodyDataFunction1 = () => this.displayNote(SELECT_DESIGN_VERSION);
+        let bodyDataFunction2 = () => this.displayNote('');
+        let bodyDataFunction3 = () => this.displayNote('');
+        let bodyDataFunction4 = () => this.displayNote(SELECT_DESIGN_UPDATE);
+
 
         // Layout ------------------------------------------------------------------------------------------------------
-
-        // Default layout if no data
-        let layout =
-            <Grid>
-                <Row>
-                    <Col md={6}>
-                        <ItemContainer
-                            headerText={headerText}
-                            bodyDataFunction={bodyDataFunction}
-                            hasFooterAction={hasFooterAction}
-                            footerAction={footerAction}
-                            footerActionFunction={footerActionFunction}
-                        />
-                    </Col>
-                </Row>
-            </Grid>;
+        let layout = <div></div>;
 
         // The content depends on what sort of Design Version has been selected
         if(designVersionStatus) {
 
             switch (designVersionStatus) {
-                case DesignVersionStatus.VERSION_NEW:
-                case DesignVersionStatus.VERSION_DRAFT:
-                case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
-
-                    // No Updates.  Just show the Work Packages
-                    layout =
-                        <Grid>
-                            <Row>
-                                <Col md={4}>
-                                    {baseWorkPackages}
-                                </Col>
-                                <Col md={8}>
-                                    {workProgressSummary}
-                                </Col>
-                            </Row>
-                        </Grid>;
-                    break;
 
                 case DesignVersionStatus.VERSION_UPDATABLE:
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
-                    if(newUpdates.length === 0 && draftUpdates.length === 0 && mergedUpdates.length === 0 && ignoredUpdates.length === 0){
+                    headerText1 = 'Updates Needing Work Packages';
+                    if(incompleteUpdates.length > 0){
 
-                        bodyDataFunction = () => this.displayNote(NO_DESIGN_UPDATES);
+                        bodyDataFunction1 = () => this.renderDesignUpdatesList(incompleteUpdates)
 
                     } else {
 
-                        headerText = 'Design Updates';
-                        bodyDataFunction = () => this.renderAllDesignUpdateLists()
+                        bodyDataFunction1 = () => this.displayNote(NO_DESIGN_UPDATES);
 
                     }
 
-                    let update_wp_title = '';
-                    if(userContext.designUpdateId !== 'NONE' && userContext.workPackageId === 'NONE'){
-                        update_wp_title = 'Design Update Summary';
-                    }
-                    if(userContext.workPackageId !== 'NONE'){
-                        update_wp_title = 'Work Package Summary';
+                    headerText2 = 'Updates With Work Packages';
+                    if(assignedUpdates.length > 0){
+
+                        bodyDataFunction2 = () => this.renderDesignUpdatesList(assignedUpdates)
+
+                    } else {
+
+                        bodyDataFunction2 = () => this.displayNote(NO_DESIGN_UPDATES);
+
                     }
 
-                    layout =
-                        <Grid>
-                            <Row>
-                                <Col md={3}>
-                                    <ItemContainer
-                                        headerText={headerText}
-                                        bodyDataFunction={bodyDataFunction}
-                                        hasFooterAction={hasFooterAction}
-                                        footerAction={footerAction}
-                                        footerActionFunction={footerActionFunction}
-                                    />
-                                </Col>
-                                <Col md={3}>
-                                    {updateWorkPackages}
-                                </Col>
-                                <Col md={6}>
-                                    <Tabs defaultActiveKey={2} id="summary_tabs">
-                                        <Tab eventKey={1} title={update_wp_title}>{updateSummary}</Tab>
-                                        <Tab eventKey={2} title="Overall Progress Summary">{workProgressSummary}</Tab>
-                                    </Tabs>
-                                </Col>
+                    headerText3 = 'Updates Completed';
+                    if(completeUpdates.length > 0){
 
-                            </Row>
-                        </Grid>;
+                        bodyDataFunction3 = () => this.renderDesignUpdatesList(completeUpdates)
+
+                    } else {
+
+                        bodyDataFunction3 = () => this.displayNote(NO_DESIGN_UPDATES);
+
+                    }
+
+                    // let update_wp_title = '';
+                    // if(userContext.designUpdateId !== 'NONE' && userContext.workPackageId === 'NONE'){
+                    //     update_wp_title = 'Design Update Summary';
+                    // }
+                    // if(userContext.workPackageId !== 'NONE'){
+                    //     update_wp_title = 'Work Package Summary';
+                    // }
+
+                    if(userRole === RoleType.MANAGER){
+
+                        headerText4 = 'Work Packages for ' + this.getDesignUpdateRef(userContext.designUpdateId);
+                        if(updateWorkPackages.length > 0){
+
+                            bodyDataFunction4 = () => this.renderWorkPackagesList(updateWorkPackages)
+
+                        } else {
+
+                            bodyDataFunction4 = () => this.displayNote(NO_WORK_PACKAGES);
+
+                        }
+
+                        layout =
+                            <Grid>
+                                <Row>
+                                    <Col md={3}>
+                                        <ItemContainer
+                                            headerText={headerText1}
+                                            bodyDataFunction={bodyDataFunction1}
+                                            hasFooterAction={false}
+                                            footerAction={''}
+                                            footerActionFunction={null}
+                                        />
+                                    </Col>
+                                    <Col md={3}>
+                                        <ItemContainer
+                                            headerText={headerText2}
+                                            bodyDataFunction={bodyDataFunction2}
+                                            hasFooterAction={false}
+                                            footerAction={''}
+                                            footerActionFunction={null}
+                                        />
+                                    </Col>
+                                    <Col md={3}>
+                                        <ItemContainer
+                                            headerText={headerText3}
+                                            bodyDataFunction={bodyDataFunction3}
+                                            hasFooterAction={false}
+                                            footerAction={''}
+                                            footerActionFunction={null}
+                                        />
+                                    </Col>
+                                    <Col md={3}>
+                                        <ItemContainer
+                                            headerText={headerText4}
+                                            bodyDataFunction={bodyDataFunction4}
+                                            hasFooterAction={true}
+                                            footerAction={'Add Work Package'}
+                                            footerActionFunction={footerActionFunction}
+                                        />
+                                    </Col>
+                                </Row>
+                            </Grid>;
+
+                    } else {
+
+                        layout =
+                            <Grid>
+                                <Row>
+                                    <Col md={3}>
+                                        <ItemContainer
+                                            headerText={headerText1}
+                                            bodyDataFunction={bodyDataFunction1}
+                                            hasFooterAction={hasFooterAction}
+                                            footerAction={footerAction}
+                                            footerActionFunction={footerActionFunction}
+                                        />
+                                    </Col>
+                                    <Col md={3}>
+                                        <ItemContainer
+                                            headerText={headerText2}
+                                            bodyDataFunction={bodyDataFunction2}
+                                            hasFooterAction={false}
+                                            footerAction={''}
+                                            footerActionFunction={null}
+                                        />
+                                    </Col>
+                                    <Col md={2}>
+                                        <ItemContainer
+                                            headerText={headerText3}
+                                            bodyDataFunction={bodyDataFunction3}
+                                            hasFooterAction={false}
+                                            footerAction={''}
+                                            footerActionFunction={null}
+                                        />
+                                    </Col>
+                                    <Col md={4}>
+                                        <DesignUpdateSummaryContainer params={{
+                                            userContext: userContext,
+                                            displayContext: DisplayContext.UPDATE_SUMMARY
+                                        }}/>
+                                    </Col>
+                                </Row>
+                            </Grid>;
+                    }
 
                     break;
 
@@ -238,16 +294,18 @@ export class DesignUpdatesList extends Component {
         }
 
         return (
-            layout
+            <div>
+                {layout}
+            </div>
         );
     }
 }
 
 DesignUpdatesList.propTypes = {
-    newUpdates:             PropTypes.array.isRequired,
-    draftUpdates:           PropTypes.array.isRequired,
-    mergedUpdates:          PropTypes.array.isRequired,
-    ignoredUpdates:         PropTypes.array.isRequired,
+    incompleteUpdates:      PropTypes.array.isRequired,
+    assignedUpdates:        PropTypes.array.isRequired,
+    completeUpdates:        PropTypes.array.isRequired,
+    updateWorkPackages:     PropTypes.array.isRequired,
     designVersionStatus:    PropTypes.string.isRequired
 };
 
@@ -255,13 +313,14 @@ DesignUpdatesList.propTypes = {
 function mapStateToProps(state) {
     return {
         userRole:       state.currentUserRole,
-        userContext:    state.currentUserItemContext
+        userContext:    state.currentUserItemContext,
+        openWpItems:    state.currentUserOpenWorkPackageItems
     }
 }
 
 // Default export including REDUX
 export default DesignUpdatesContainer = createContainer(({params}) => {
 
-    return ClientDataServices.getDesignUpdatesForCurrentDesignVersion(params.currentDesignVersionId);
+    return ClientDataServices.getDesignUpdatesForCurrentDesignVersion(params.designVersionId);
 
 }, connect(mapStateToProps)(DesignUpdatesList));

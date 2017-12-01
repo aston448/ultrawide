@@ -42,9 +42,9 @@ export class Design extends Component {
         ClientDesignServices.setDesign(userContext, newDesignId);
     };
 
-    onWorkDesign(userContext, userRole, newDesignId){
-        ClientDesignServices.workDesign(userContext, userRole, newDesignId);
-    }
+    // onWorkDesign(userContext, userRole, newDesignId){
+    //     ClientDesignServices.workDesign(userContext, userRole, newDesignId);
+    // }
 
     onRemoveDesign(userContext, userRole, designId){
         ClientDesignServices.removeDesign(userContext, userRole, designId);
@@ -76,8 +76,8 @@ export class Design extends Component {
 
         let buttons = '';
 
-        const workButton =
-            <Button id="butWork" bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>;
+        // const workButton =
+        //     <Button id="butWork" bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>;
 
         const removeButton =
             <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
@@ -144,14 +144,12 @@ export class Design extends Component {
                 if (design.isRemovable) {
                     buttons =
                         <ButtonGroup className="button-group-left">
-                            {workButton}
                             {removeButton}
                         </ButtonGroup>
                 } else {
 
                     buttons =
                         <ButtonGroup className="button-group-left">
-                            {workButton}
                             {backupButton}
                         </ButtonGroup>
 
@@ -181,7 +179,6 @@ export class Design extends Component {
                     // Other users can just work on a Design or back it up
                     buttons =
                         <ButtonGroup className="button-group-left">
-                            {workButton}
                             {backupButton}
                         </ButtonGroup>
                 }

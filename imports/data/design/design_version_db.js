@@ -269,6 +269,44 @@ class DesignVersionData {
         ).fetch();
     }
 
+    getBaseUserAdoptedWorkPackages(designVersionId, userId){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_BASE,
+                workPackageStatus: WorkPackageStatus.WP_ADOPTED,
+                adoptingUserId: userId
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
+    getUpdateWorkPackagesAtStatus(designVersionId, status){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_UPDATE,
+                workPackageStatus: status
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
+    getUpdateUserAdoptedWorkPackages(designVersionId, userId){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_UPDATE,
+                workPackageStatus: WorkPackageStatus.WP_ADOPTED,
+                adoptingUserId: userId
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
     getPublishedWorkPackages(designVersionId){
 
         return WorkPackages.find(

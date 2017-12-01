@@ -157,7 +157,7 @@ export class DesignUpdateSummaryList extends Component {
                         hasDesignSummary={false}
                     />
                 </div>
-            );
+            )
 
         } else {
 
@@ -199,7 +199,7 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default DesignUpdateSummaryContainer = createContainer(({params}) => {
 
-    if(params.userContext.workPackageId !== 'NONE'){
+    if(params.displayContext === DisplayContext.WP_SUMMARY){
         // Show summary for current WP only
         return ClientDesignUpdateSummary.getDesignUpdateSummaryHeadersForWp(params.userContext)
     } else {

@@ -385,9 +385,9 @@ class ClientDataServices{
             let currentWorkPackage = null;
 
             switch (view) {
-                case ViewType.DESIGNS:
-                    currentDesign = DesignData.getDesignById(userContext.designId);
-                    break;
+                // case ViewType.DESIGNS:
+                //     currentDesign = DesignData.getDesignById(userContext.designId);
+                //     break;
 
                 case ViewType.SELECT:
                 case ViewType.DESIGN_NEW:
@@ -505,57 +505,116 @@ class ClientDataServices{
     }
 
     // Get a list of known Design Versions for the current Design
-    getDesignVersionsForCurrentDesign(currentDesignId){
+    getDesignVersionsForCurrentDesign(designId){
 
         // No action if design not yet set
-        if (currentDesignId !== 'NONE') {
+        if (designId !== 'NONE') {
 
             // Get all the design versions available
-            const currentDesignVersions = DesignData.getDesignVersionsOrderByVersion(currentDesignId);
+            const currentDesignVersions = DesignData.getDesignVersionsOrderByVersion(designId);
 
-            return {
-                designVersions: currentDesignVersions,
+             return {
+                designVersions: currentDesignVersions
             };
 
         } else {
-            return {designVersions: []};
+            console.log("Get Versions - no design");
+            return {
+                designVersions: []
+            };
         }
     };
 
-    // Get a list of Work Packages for a base Design Version
-    getWorkPackagesForCurrentDesignVersion(currentDesignVersionId){
+    // Get a list of Work Packages for a Design Version
+    getWorkPackagesForCurrentDesignVersion(currentDesignVersionId, userRole, userId, wpType){
 
         // No action if design version not yet set
         if (currentDesignVersionId !== 'NONE') {
 
-            // Get New WPS
-            const newWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_NEW);
+            if(wpType === WorkPackageType.WP_BASE) {
 
-            // Get Available WPS
-            const availableWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_AVAILABLE);
+                // Get New WPS
+                const newWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_NEW);
 
-            // Get Adopted WPS
-            const adoptedWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
+                // Get Available WPS
+                const availableWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_AVAILABLE);
 
-            // Get the status of the current design version
-            const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
+                // Get Adopted WPS
 
-            //console.log("Base WPs found found: " + currentWorkPackages.count());
+                let adoptedWorkPackages = [];
 
-            return {
-                wpType: WorkPackageType.WP_BASE,
-                newWorkPackages: newWorkPackages,
-                availableWorkPackages: availableWorkPackages,
-                adoptedWorkPackages: adoptedWorkPackages,
-                designVersionStatus: designVersion.designVersionStatus
-            };
+                if(userRole === RoleType.DEVELOPER){
+
+                    // Just get the WPS the developer has adopted
+                    DesignVersionData.getBaseUserAdoptedWorkPackages(currentDesignVersionId, userId)
+
+                } else {
+                    DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
+                }
+
+                // Get Completed WPs
+                const completedWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_COMPLETE);
+
+                // Get the status of the current design version
+                const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
+
+                //console.log("Base WPs found found: " + currentWorkPackages.count());
+
+                return {
+                    wpType: WorkPackageType.WP_BASE,
+                    newWorkPackages: newWorkPackages,
+                    availableWorkPackages: availableWorkPackages,
+                    adoptedWorkPackages: adoptedWorkPackages,
+                    completedWorkPackages: completedWorkPackages,
+                    designVersionStatus: designVersion.designVersionStatus
+                };
+
+            } else {
+
+                // Get New WPS
+                const newWorkPackages = DesignVersionData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_NEW);
+
+                // Get Available WPS
+                const availableWorkPackages = DesignVersionData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_AVAILABLE);
+
+                // Get Adopted WPS
+                let adoptedWorkPackages = [];
+
+                if(userRole === RoleType.DEVELOPER){
+
+                    // Just get the WPS the developer has adopted
+                    // console.log("Getting adopted WPs for user " + userId);
+                    adoptedWorkPackages = DesignVersionData.getUpdateUserAdoptedWorkPackages(currentDesignVersionId, userId)
+
+                } else {
+                    adoptedWorkPackages = DesignVersionData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
+                }
+
+
+
+                // Get Completed WPs
+                const completedWorkPackages = DesignVersionData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_COMPLETE);
+
+                // Get the status of the current design version
+                const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
+
+                return {
+                    wpType: WorkPackageType.WP_UPDATE,
+                    newWorkPackages: newWorkPackages,
+                    availableWorkPackages: availableWorkPackages,
+                    adoptedWorkPackages: adoptedWorkPackages,
+                    completedWorkPackages: completedWorkPackages,
+                    designVersionStatus: designVersion.designVersionStatus
+                };
+
+            }
 
         } else {
             return {
-                wpType: WorkPackageType.WP_BASE,
                 newWorkPackages: [],
                 availableWorkPackages: [],
                 adoptedWorkPackages: [],
+                completedWorkPackages: [],
                 designVersionStatus: null
             };
         }
@@ -637,32 +696,86 @@ class ClientDataServices{
         if (currentDesignVersionId !== 'NONE') {
 
             // Get all the design updates available for the selected version sorted by type and name
+            let incompleteUpdates = [];
+            let assignedUpdates = [];
 
+            // New updates must by definition be not in WPs and not completed
             const newUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_NEW);
 
+            newUpdates.forEach((update) => {
+                incompleteUpdates.push(update);
+            });
+
+            // Draft updates may be incomplete or assigned
             const draftUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT);
+
+            draftUpdates.forEach((update) =>{
+
+                const unassignedScenarios = DesignUpdateData.getScenariosNotInWorkPackages(update._id);
+
+                if(unassignedScenarios.length > 0){
+                    incompleteUpdates.push(update);
+                } else {
+                    // Must be all assigned
+                    assignedUpdates.push(update);
+                }
+            });
 
             const mergedUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_MERGED);
 
+            mergedUpdates.forEach((update) =>{
+
+                const unassignedScenarios = DesignUpdateData.getScenariosNotInWorkPackages(update._id);
+
+                if(unassignedScenarios.length > 0){
+                    incompleteUpdates.push(update);
+                } else {
+                    // Must be all assigned
+                    assignedUpdates.push(update);
+                }
+            });
+
             const ignoredUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_IGNORED);
+
+            ignoredUpdates.forEach((update) =>{
+
+                const unassignedScenarios = DesignUpdateData.getScenariosNotInWorkPackages(update._id);
+
+                if(unassignedScenarios.length > 0){
+                    incompleteUpdates.push(update);
+                } else {
+                    // Must be all assigned
+                    assignedUpdates.push(update);
+                }
+            });
+
+            // Complete updates must by definition not have unassigned scenarios
+            const completeUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_COMPLETE);
+
 
             // Get the status of the current design version
             const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
 
+            let updateWorkPackages = [];
+            if(store.getState().currentUserRole === RoleType.MANAGER && store.getState().currentUserItemContext.designUpdateId !== 'NONE'){
+                // For a manager viewing updates select the WPs in the update
+                updateWorkPackages = DesignUpdateData.getAllWorkPackages(store.getState().currentUserItemContext.designUpdateId);
+            }
+
             return {
-                newUpdates: newUpdates,
-                draftUpdates: draftUpdates,
-                mergedUpdates: mergedUpdates,
-                ignoredUpdates: ignoredUpdates,
+                incompleteUpdates: incompleteUpdates,
+                assignedUpdates: assignedUpdates,
+                completeUpdates: completeUpdates,
+                updateWorkPackages: updateWorkPackages,
                 designVersionStatus: designVersion.designVersionStatus
             };
 
         } else {
             return {
-                newUpdates: [],
-                draftUpdates: [],
-                mergedUpdates: [],
-                ignoredUpdates: [],
+                incompleteUpdates: [],
+                assignedUpdates: [],
+                completeUpdates: [],
+                pdateWorkPackages: [],
                 designVersionStatus: ''
             };
         }
@@ -717,6 +830,8 @@ class ClientDataServices{
                     case ViewType.WORK_PACKAGE_BASE_EDIT:
                     case ViewType.DEVELOP_BASE_WP:
 
+                        //console.log("Getting Base Applications...");
+
                         // The app data is the Design Version data
                         let appDvComponent = DesignComponentData.getDesignComponentByRef(wpApp.designVersionId, wpApp.componentReferenceId);
 
@@ -728,6 +843,8 @@ class ClientDataServices{
                     case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                     case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                     case ViewType.DEVELOP_UPDATE_WP:
+
+                        //console.log("Getting Update Applications...");
 
                         // The app data is the Design Update data
                         let appDuComponent = DesignUpdateComponentData.getUpdateComponentByRef(userContext.designVersionId, userContext.designUpdateId, wpApp.componentReferenceId);
@@ -1591,14 +1708,14 @@ class ClientDataServices{
         const currentOptions = this.getCurrentViewOptions(view, userViewOptions);
 
         // Dropdown Items - Go To
-        const gotoDesigns = {
-            key: MenuAction.MENU_ACTION_GOTO_DESIGNS,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_DESIGNS),
-            action: MenuAction.MENU_ACTION_GOTO_DESIGNS,
-            hasCheckbox: false,
-            checkboxValue: false,
-            viewOptionType: ViewOptionType.NONE
-        };
+        // const gotoDesigns = {
+        //     key: MenuAction.MENU_ACTION_GOTO_DESIGNS,
+        //     itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_DESIGNS),
+        //     action: MenuAction.MENU_ACTION_GOTO_DESIGNS,
+        //     hasCheckbox: false,
+        //     checkboxValue: false,
+        //     viewOptionType: ViewOptionType.NONE
+        // };
 
         const gotoConfig = {
             key: MenuAction.MENU_ACTION_GOTO_CONFIG,
@@ -1742,11 +1859,11 @@ class ClientDataServices{
 
             case ViewType.ADMIN:
 
-                switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [gotoDesigns];
-
-                }
+                // switch (menuType) {
+                //     case MenuDropdown.MENU_DROPDOWN_GOTO:
+                //         return [gotoDesigns];
+                //
+                // }
                 break;
 
             case ViewType.CONFIGURE:
@@ -1760,9 +1877,9 @@ class ClientDataServices{
             case ViewType.SELECT:
 
                 switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [gotoConfig, gotoDesigns];
-                        break;
+                    // case MenuDropdown.MENU_DROPDOWN_GOTO:
+                    //     return [gotoConfig, gotoDesigns];
+                    //     break;
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
                         return [
                             refreshProgressData,
@@ -1772,13 +1889,13 @@ class ClientDataServices{
                 }
                 break;
 
-            case ViewType.DESIGNS:
-
-                switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [gotoSelection, gotoConfig];
-                }
-                break;
+            // case ViewType.DESIGNS:
+            //
+            //     switch (menuType) {
+            //         case MenuDropdown.MENU_DROPDOWN_GOTO:
+            //             return [gotoSelection, gotoConfig];
+            //     }
+            //     break;
 
             case ViewType.DESIGN_NEW:
             case ViewType.DESIGN_PUBLISHED:

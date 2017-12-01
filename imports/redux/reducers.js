@@ -3,7 +3,7 @@
  */
 
 import * as Actions from './actions'
-import {RoleType, ViewType, ViewMode, MessageType, UserSettingValue} from '../constants/constants.js'
+import {RoleType, ViewType, ViewMode, MessageType, UserSettingValue, HomePageTab} from '../constants/constants.js'
 
 // Creates the initial state container for your application - the same as getInitialState
 const initialState = {
@@ -36,6 +36,7 @@ const initialState = {
         workShowAllAsTabs:          false
     },
     currentUserItemContext:             null,
+    currentUserHomeTab:                 HomePageTab.TAB_NOT_SET,
     currentUserTestOutputLocationId:    'NONE',
     currentUserDevContext:              null,
     currentUserOpenDesignItems:         [],
@@ -134,9 +135,12 @@ export function myApplication(state = initialState, action) {
                 domainTermsVisible: action.newSetting
             });
         case Actions.SET_CURRENT_USER_ITEM_CONTEXT:
-            //console.log("Updated User Item Context: " + action.newUserItemContext);
             return Object.assign({}, state, {
                 currentUserItemContext: action.newUserItemContext
+            });
+        case Actions.SET_CURRENT_USER_HOME_TAB:
+            return Object.assign({}, state, {
+                currentUserHomeTab: action.newTab
             });
         case Actions.SET_CURRENT_USER_TEST_OUTPUT_LOCATION:
             return Object.assign({}, state, {

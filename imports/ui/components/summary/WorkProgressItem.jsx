@@ -36,6 +36,7 @@ class WorkProgressItem extends Component {
     }
 
     onGotoItemAsRole(roleType, item){
+        event.preventDefault();
         ClientDesignVersionServices.gotoWorkProgressSummaryItemAsRole(item, roleType);
     }
 
@@ -162,13 +163,13 @@ class WorkProgressItem extends Component {
 
             <InputGroup>
                 <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipDes}>
-                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.DESIGNER, item)}><div className={designerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                    <InputGroup.Addon onMouseUp={() => this.onGotoItemAsRole(RoleType.DESIGNER, item)}><div className={designerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
                 </OverlayTrigger>
                 <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipDev}>
-                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.DEVELOPER, item)}><div className={developerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                    <InputGroup.Addon onMouseUp={() => this.onGotoItemAsRole(RoleType.DEVELOPER, item)}><div className={developerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
                 </OverlayTrigger>
                 <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipMan}>
-                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.MANAGER, item)}><div className={managerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                    <InputGroup.Addon onMouseUp={() => this.onGotoItemAsRole(RoleType.MANAGER, item)}><div className={managerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
                 </OverlayTrigger>
                 <div className={itemClass}>{itemName}</div>
             </InputGroup>;
@@ -177,13 +178,13 @@ class WorkProgressItem extends Component {
 
             <InputGroup>
                 <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipDes}>
-                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.DESIGNER, item)}><div className={designerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                    <InputGroup.Addon onMouseUp={() => this.onGotoItemAsRole(RoleType.DESIGNER, item)}><div className={designerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
                 </OverlayTrigger>
                 <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipDev}>
-                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.DEVELOPER, item)}><div className={developerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                    <InputGroup.Addon onMouseUp={() => this.onGotoItemAsRole(RoleType.DEVELOPER, item)}><div className={developerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
                 </OverlayTrigger>
                 <OverlayTrigger placement="left" delayShow={tooltipDelay} overlay={iconTooltipMan}>
-                    <InputGroup.Addon onClick={() => this.onGotoItemAsRole(RoleType.MANAGER, item)}><div className={managerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
+                    <InputGroup.Addon onMouseUp={() => this.onGotoItemAsRole(RoleType.MANAGER, item)}><div className={managerIconClass}><Glyphicon glyph={roleGlyph}/></div></InputGroup.Addon>
                 </OverlayTrigger>
                 <OverlayTrigger placement="right" delayShow={tooltipDelay} overlay={adopterTooltip}>
                     <div className={itemClass}>{itemName}</div>
@@ -196,7 +197,7 @@ class WorkProgressItem extends Component {
         if(item.scenariosFailing > 0){
             scenariosIconClass = 'mash-fail';
         } else {
-            if(item.scenariosPassing === item.totalScenarios){
+            if(item.scenariosPassing === item.totalScenarios && item.totalScenarios > 0){
                 scenariosIconClass = 'mash-pass';
             } else {
                 if(item.scenariosPassing > 0){
@@ -214,7 +215,7 @@ class WorkProgressItem extends Component {
             />;
 
         let scenariosInWpClass = 'mash-not-linked';
-        if(item.scenariosInWp === item.totalScenarios) {
+        if(item.scenariosInWp === item.totalScenarios && item.totalScenarios > 0) {
             scenariosInWpClass = 'mash-linked';
         }
         let workProgressInWps =

@@ -19,6 +19,7 @@ import ClientDataServices      from '../../../apiClient/apiClientDataServices.js
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
+import {InputGroup, Grid, Row, Col, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -70,6 +71,48 @@ export class WorkProgressSummaryList extends Component {
         // Get correct window height
         const editorClass = this.getEditorClass();
 
+        const summaryHeaders =
+            <Grid>
+                <Row>
+                    <Col md={6} className="close-col">
+                        <div className="progress-header">
+                            Design Item
+                        </div>
+                    </Col>
+                    <Col  md={6} className="close-col">
+                        <Grid>
+                            <Row>
+                                <Col md={3} className="close-col">
+                                    <div className="progress-header">
+                                        Scenario Count...
+                                    </div>
+                                </Col>
+                                <Col md={3} className="close-col">
+                                    <div className="progress-header">
+                                        ...in Work Packages
+                                    </div>
+                                </Col>
+                                <Col md={2} className="close-col">
+                                    <div className="progress-header">
+                                        Tests Passing
+                                    </div>
+                                </Col>
+                                <Col md={2} className="close-col">
+                                    <div className="progress-header">
+                                        Tests Failing
+                                    </div>
+                                </Col>
+                                <Col md={2} className="close-col">
+                                    <div className="progress-header">
+                                        Not Tested
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </Col>
+                </Row>
+            </Grid>;
+
         let dvAllItemSummary = <div></div>;
         if(dvAllItem){
             dvAllItemSummary =
@@ -105,13 +148,16 @@ export class WorkProgressSummaryList extends Component {
         }
 
 
-        if(userContext.designVersion !== 'NONE') {
+        if(userContext.designVersionId !== 'NONE') {
 
             return (
                 <div id="progressSummary" className="design-editor-container">
                     <DesignEditorHeader
                         displayContext={DisplayContext.PROGRESS_SUMMARY}
                     />
+                    <div className={editorClass}>
+                        {summaryHeaders}
+                    </div>
                     <div className={editorClass}>
                         {dvAllItemSummary}
                         {dvItemSummary}

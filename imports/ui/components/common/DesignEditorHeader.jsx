@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
-import {MenuType, RoleType, ViewType, ViewMode, DisplayContext, DetailsViewType} from '../../../constants/constants.js';
+import {MenuType, RoleType, ViewType, ViewMode, DisplayContext, DetailsViewType, HomePageTab} from '../../../constants/constants.js';
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
@@ -76,7 +76,7 @@ export class DesignEditorHeader extends Component {
 
     render() {
 
-        const {displayContext, view, mode, userContext, userRole, userViewOptions, currentViewDataValue, domainTermsVisible} = this.props;
+        const {displayContext, view, mode, userContext, userRole, userViewOptions, currentViewDataValue, domainTermsVisible, userHomeTab} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ export class DesignEditorHeader extends Component {
             case ViewType.SELECT:
                 switch(displayContext){
                     case DisplayContext.UPDATE_SUMMARY:
-                        if(userContext.workPackageId !== 'NONE'){
+                        if(userContext.workPackageId !== 'NONE' && userHomeTab === HomePageTab.TAB_WORK){
                             description = 'WORK PACKAGE SUMMARY';
                             if(nameData.workPackage !== 'NONE'){
                                 description += ': ' + nameData.workPackage
@@ -422,7 +422,8 @@ function mapStateToProps(state) {
         userRole:               state.currentUserRole,
         userViewOptions:        state.currentUserViewOptions,
         currentViewDataValue:   state.currentViewOptionsDataValue,
-        domainTermsVisible:     state.domainTermsVisible
+        domainTermsVisible:     state.domainTermsVisible,
+        userHomeTab:            state.currentUserHomeTab
     }
 }
 

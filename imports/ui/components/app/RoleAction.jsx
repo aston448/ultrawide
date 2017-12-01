@@ -83,7 +83,7 @@ class RoleAction extends Component {
                     ClientAppHeaderServices.setViewSelection();
                     ClientUserContextServices.setOpenDesignVersionItems(userContext);
                 } else {
-                    ClientAppHeaderServices.setViewDesigns();
+                    ClientAppHeaderServices.setViewSelection();
                 }
                 break;
             case UltrawideAction.ACTION_LAST_DESIGNER:
@@ -125,7 +125,7 @@ class RoleAction extends Component {
                     ClientUserContextServices.setViewFromUserContext(newContext, userRole, testIntegrationDataContext, this.props.testDataFlag);
 
                 } else {
-                    ClientAppHeaderServices.setViewDesigns();
+                    ClientAppHeaderServices.setViewSelection();
                 }
 
                 break;

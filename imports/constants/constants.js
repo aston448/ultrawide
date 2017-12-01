@@ -27,12 +27,12 @@ export const UltrawideAction = {
 
 // Determines what we are looking at
 export const ViewType = {
-    ADMIN:                      'ADMIN',                    // User Management Screen
+    ADMIN:                      'ADMIN',                    // Admin Management Screen
     AUTHORISE:                  'AUTHORISE',                // Login screen
-    ROLES:                      'ROLES',                    // Available user roles / actions
+//    ROLES:                      'ROLES',                    // Available user roles / actions
     CONFIGURE:                  'CONFIGURE',                // Change user settings
-    DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
-    SELECT:                     'SELECT',                   // Home Selection Screen once in a Design
+//    DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
+    SELECT:                     'SELECT',                   // Home Selection Screen
     DESIGN_NEW:                 'DESIGN_NEW',               // An unpublished design version
     DESIGN_PUBLISHED:           'DESIGN_PUBLISHED',         // A published Initial Design Version
     DESIGN_UPDATABLE:           'DESIGN_UPDATABLE',         // An Updatable Design Version - not directly editable
@@ -64,7 +64,8 @@ export const DetailsViewType = {
 };
 
 export const MenuType = {
-    MENU_TOP:                       'MENU_TOP',
+    MENU_TOP_TEXT:                  'MENU_TOP_TEXT',
+    MENU_TOP_ICON:                  'MENU_TOP_ICON',
     MENU_EDITOR:                    'MENU_EDITOR'
 };
 
@@ -155,6 +156,7 @@ export const DisplayContext = {
     INT_TEST_FEATURE_ASPECT:'INT_TEST_FEATURE_ASPECT',
     INT_TEST_SCENARIO:      'INT_TEST_SCENARIO',
     UPDATE_SUMMARY:         'UPDATE_SUMMARY',
+    WP_SUMMARY:             'WP_SUMMARY',
     PROGRESS_SUMMARY:       'PROGRESS_SUMMARY',
     EDITOR_FOOTER:          'EDITOR_FOOTER',
     EDITOR_HEADER:          'EDITOR_HEADER',
@@ -227,7 +229,8 @@ export const DesignUpdateStatus = {
     UPDATE_NEW:             'NEW',              // Designer can edit this update.  Cannot be adopted yet
     UPDATE_PUBLISHED_DRAFT: 'DRAFT',            // Can be adopted.  Can still be edited...
     UPDATE_MERGED:          'MERGED',           // Merged into a new design version
-    UPDATE_IGNORED:         'IGNORED'           // Neither merged nor carried forward in a change to the next design version
+    UPDATE_IGNORED:         'IGNORED',          // Neither merged nor carried forward in a change to the next design version
+    UPDATE_COMPLETE:        'COMPLETE'
 };
 
 export const DesignUpdateWpStatus = {
@@ -254,6 +257,13 @@ export const WorkPackageScopeType = {
     SCOPE_ACTIVE:           'SCOPE_ACTIVE',
     SCOPE_PARENT:           'SCOPE_PARENT',
     SCOPE_NONE:             'SCOPE_NONE'
+};
+
+export const WorkPackageReviewType = {
+    REVIEW_NONE:            'REVIEW_NONE',
+    REVIEW_OK:              'REVIEW_OK',
+    REVIEW_IGNORE:          'REVIEW_IGNORE',
+    REVIEW_NOT_OK:          'REVIEW_NOT_OK'
 };
 
 export const WorkPackageStatus = {
@@ -310,6 +320,14 @@ export const DesignUpdateSummaryItem = {
     SUMMARY_APPLICATION:            'Application'
 };
 
+export const HomePageTab = {
+    TAB_DESIGNS:                    '1',
+    TAB_UPDATES:                    '2',
+    TAB_WORK:                       '3',
+    TAB_PROGRESS:                   '4',
+    TAB_NOT_SET:                    '0'
+};
+
 export const ScenarioStepType = {
     STEP_GIVEN:         'Given',
     STEP_WHEN:          'When',
@@ -339,27 +357,6 @@ export const UserSettingValue = {
     SCREEN_SIZE_LARGE:      'SCREEN_SIZE_LARGE',
     SETTING_INCLUDE:        'INCLUDE',
     SETTING_EXCLUDE:        'EXCLUDE'
-};
-
-
-export const ExportFileName = {
-    USERS:                      'USERS.EXP',
-    USER_SETTINGS:              'USER_SETTINGS.EXP',
-    USER_CONTEXT:               'USER_CONTEXT.EXP',
-    TEST_OUTPUT_LOCATIONS:      'TEST_OUTPUT_LOCATIONS.EXP',
-    TEST_OUTPUT_LOCATION_FILES: 'TEST_OUTPUT_LOCATION_FILES.EXP',
-    USER_TEST_TYPE_LOCATIONS:   'USER_TEST_TYPE_LOCATIONS.EXP',
-    DESIGNS:                    'DESIGNS.EXP',
-    DESIGN_VERSIONS:            'DESIGN_VERSIONS.EXP',
-    DESIGN_UPDATES:             'DESIGN_UPDATES.EXP',
-    DESIGN_UPDATE_SUMMARIES:    'DESIGN_UPDATE_SUMMARIES.EXP',
-    WORK_PACKAGES:              'WORK_PACKAGES.EXP',
-    DOMAIN_DICTIONARY:          'DOMAIN_DICTIONARY.EXP',
-    DESIGN_VERSION_COMPONENTS:  'DESIGN_VERSION_COMPONENTS.EXP',
-    DESIGN_UPDATE_COMPONENTS:   'DESIGN_UPDATE_COMPONENTS.EXP',
-    WORK_PACKAGE_COMPONENTS:    'WORK_PACKAGE_COMPONENTS.EXP',
-    FEATURE_BACKGROUND_STEPS:   'FEATURE_BACKGROUND_STEPS.EXP',
-    SCENARIO_STEPS:             'SCENARIO_STEPS.EXP'
 };
 
 export const UserDevFeatureFileStatus = {

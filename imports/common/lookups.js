@@ -30,8 +30,8 @@ class TextLookups {
                 return 'ADMINISTRATION';
             case ViewType.AUTHORISE:
                 return 'LOGIN';
-            case ViewType.ROLES:
-                return 'ROLE SELECTION';
+            // case ViewType.ROLES:
+            //     return 'ROLE SELECTION';
             case ViewType.CONFIGURE:
                 return 'USER SETTINGS';
             case ViewType.DESIGN_NEW:
@@ -44,8 +44,8 @@ class TextLookups {
                 return 'DESIGN UPDATE EDITOR';
             case ViewType.DESIGN_UPDATE_VIEW:
                 return 'DESIGN UPDATE VIEW';
-            case ViewType.DESIGNS:
-                return 'SELECT DESIGN';
+            // case ViewType.DESIGNS:
+            //     return 'SELECT DESIGN';
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 return 'WORK PACKAGE IMPLEMENTATION';

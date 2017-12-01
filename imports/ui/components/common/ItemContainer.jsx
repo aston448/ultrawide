@@ -44,7 +44,7 @@ export default class ItemContainer extends Component {
 
     render() {
 
-        const {headerText, hasFooterAction, footerAction} = this.props;
+        const {headerText, hasFooterAction, footerAction, footerText} = this.props;
 
         const bodyClass = this.getWindowSizeClass();
 
@@ -75,6 +75,7 @@ export default class ItemContainer extends Component {
                         {this.bodyData()}
                     </div>
                     <div className="item-container-footer">
+                        {footerText}
                     </div>
                 </div>
             )
@@ -88,4 +89,5 @@ ItemContainer.propTypes = {
     hasFooterAction: PropTypes.bool.isRequired,
     footerAction: PropTypes.string,
     footerActionFunction: PropTypes.func,
+    footerText: PropTypes.string
 };

@@ -200,7 +200,30 @@ class DesignUpdateData{
         ).fetch();
     }
 
+    getScenariosNotInWorkPackages(designUpdateId){
+
+        return DesignUpdateComponents.find(
+            {
+                designUpdateId: designUpdateId,
+                componentType:  ComponentType.SCENARIO,
+                scopeType:      UpdateScopeType.SCOPE_IN_SCOPE,
+                workPackageId:  'NONE'
+            }
+        ).fetch();
+    }
     // DU Work Packages ------------------------------------------------------------------------------------------------
+    getAllWorkPackages(designUpdateId){
+
+        return WorkPackages.find(
+            {
+                designUpdateId: designUpdateId
+            },
+            {
+                $sort: {workPackageName: 1}
+            }
+        ).fetch();
+    }
+
     getPublishedWorkPackages(designUpdateId){
 
         return WorkPackages.find(

@@ -134,8 +134,13 @@ export class WorkPackage extends Component {
 
         // Active if this work package is the current context work package
         let active = workPackage._id === userContext.workPackageId;
+        let activeUpdate = (workPackage.designUpdateId !== 'NONE' && workPackage.designUpdateId === userContext.designUpdateId)
 
         let itemStyle = (active ? 'design-item di-active' : 'design-item');
+
+        if(activeUpdate){
+            itemStyle += ' di-highlight';
+        }
 
         let buttons = '';
         let options = '';

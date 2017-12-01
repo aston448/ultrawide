@@ -133,7 +133,8 @@ export class DesignVersion extends Component {
 
 
     render() {
-        const {designVersion, userRole, viewOptions, userContext, testDataFlag} = this.props;
+
+        const {designVersion, userRole, userContext} = this.props;
 
         // Active if this design version is the current context design version
         let active = designVersion._id === userContext.designVersionId;
@@ -197,7 +198,6 @@ export class DesignVersion extends Component {
                 currentItemName={designVersion.designVersionName}
                 currentItemRef={designVersion.designVersionNumber}
                 currentItemStatus={designVersion.designVersionStatus}
-                //onSelectItem={ () => this.setNewDesignVersionActive(userRole, userContext, designVersion)}
             />;
 
 
@@ -386,16 +386,10 @@ DesignVersion.propTypes = {
 
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
+
     return {
         userRole:                   state.currentUserRole,
-        viewOptions:                state.currentUserViewOptions,
-        userContext:                state.currentUserItemContext,
-        testDataFlag:               state.testDataFlag,
-        dvDataLoaded:               state.designVersionDataLoaded,
-        testDataLoaded:             state.testIntegrationDataLoaded,
-        summaryDataLoaded:          state.testSummaryDataLoaded,
-        mashDataStale:              state.mashDataStale,
-        testDataStale:              state.testDataStale
+        userContext:                state.currentUserItemContext
     }
 }
 

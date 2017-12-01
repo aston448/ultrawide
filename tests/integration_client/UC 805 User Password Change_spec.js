@@ -30,7 +30,7 @@ describe('UC 805 User Password Change', function(){
 
         // Verify
         browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.ROLES)
+            return browser.getText('#headerView') === TextLookups.viewText(ViewType.SELECT)
         }, 5000, 'expected login after 5s');
 
         // Go to Config Screen
@@ -82,7 +82,7 @@ describe('UC 805 User Password Change', function(){
 
         // Verify
         browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.ROLES)
+            return browser.getText('#headerView') === TextLookups.viewText(ViewType.SELECT)
         }, 5000, 'expected login after 5s');
     });
 

@@ -13,6 +13,7 @@ describe('JSX: AppHeader', () => {
 
     function testAppHeader(mode, view, userRole, userName){
 
+        const user = {};
         const userContext = {};
         const userViewOptions = {};
         const message = 'No message';
@@ -21,6 +22,7 @@ describe('JSX: AppHeader', () => {
 
         return shallow(
             <AppHeader
+                user={user}
                 mode={mode}
                 view={view}
                 userRole={userRole}

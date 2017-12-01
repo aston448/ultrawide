@@ -60,7 +60,7 @@ export class DesignsList extends Component {
 
     render() {
 
-        const {designs, userRole, userContext} = this.props;
+        const {designs, userRole} = this.props;
 
 
         let hasFooterAction = false;
@@ -79,21 +79,15 @@ export class DesignsList extends Component {
             bodyDataFunction = () => this.noDesign()
         }
 
-        return (
-            <Grid>
-                <Row>
-                    <Col md={6}>
-                        <ItemContainer
-                            headerText={'Designs'}
-                            bodyDataFunction={bodyDataFunction}
-                            hasFooterAction={hasFooterAction}
-                            footerAction={'Add Design'}
-                            footerActionFunction={footerActionFunction}
-                        />
-                    </Col>
-                </Row>
-            </Grid>
-        );
+        return(
+            <ItemContainer
+                headerText={'Designs'}
+                bodyDataFunction={bodyDataFunction}
+                hasFooterAction={hasFooterAction}
+                footerAction={'Add Design'}
+                footerActionFunction={footerActionFunction}
+            />
+        )
 
     }
 }
@@ -105,20 +99,16 @@ DesignsList.propTypes = {
 
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
+
     return {
         userRole: state.currentUserRole,
-        userContext: state.currentUserItemContext
     }
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-let DesignsListRedux = connect(mapStateToProps)(DesignsList);
-
-
 export default DesignsContainer = createContainer(({params}) => {
 
     // Gets the currently saved user context and a list of known Designs
     return ClientDataServices.getUltrawideDesigns();
 
-
-}, DesignsListRedux);
+}, connect(mapStateToProps)(DesignsList));

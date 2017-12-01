@@ -2,6 +2,7 @@
 
 // Meteor / React Services
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
 
@@ -18,11 +19,13 @@ import { log }                          from '../../../common/utils.js'
 
 import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
 import ClientIdentityServices           from '../../../apiClient/apiIdentity';
+import ClientUserContextServices        from "../../../apiClient/apiClientUserContext";
 
  // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // React DnD
 
@@ -49,14 +52,22 @@ export class AppHeader extends Component {
         }
     }
 
-    onGoToRoles(){
-        // Back to Roles Screen
-        ClientAppHeaderServices.setViewRoles();
-    }
+    // onGoToRoles(){
+    //     // Back to Roles Screen
+    //     ClientAppHeaderServices.setViewRoles();
+    // }
 
     onGoToSelect(){
         // Back to Selection Screen
         ClientAppHeaderServices.setViewSelection();
+    }
+
+    onGoToSettings(){
+        ClientAppHeaderServices.setViewConfigure();
+    }
+
+    onChangeRole(userContext, roleType){
+        ClientUserContextServices.setUserRole(userContext.userId, roleType);
     }
 
     onLogOut(userContext){
@@ -64,6 +75,9 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin(userContext);
     }
 
+    getUser(userContext){
+        return ClientAppHeaderServices.getCurrentUser(userContext);
+    }
 
     render() {
 
@@ -74,9 +88,12 @@ export class AppHeader extends Component {
         let appHeaderMenuContent = <div>Loading</div>;
 
         // Menu Items
-        const rolesItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="ROLES" actionFunction={() => this.onGoToRoles()}/>;
-        const selectItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="HOME" actionFunction={() => this.onGoToSelect()}/>;
-        const logoutItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="Logout" actionFunction={() => this.onLogOut(userContext)}/>;
+        let designerItem = '';
+        let developerItem = '';
+        let managerItem = '';
+        const settingsItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_ICON} itemName="SETTINGS" actionFunction={() => this.onGoToSettings()}/>;
+        const selectItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_TEXT} itemName="HOME" actionFunction={() => this.onGoToSelect()}/>;
+        const logoutItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_TEXT} itemName="Logout" actionFunction={() => this.onLogOut(userContext)}/>;
 
         let roleClass = '';
         let roleStatusClass = '';
@@ -94,18 +111,48 @@ export class AppHeader extends Component {
             extra = ClientAppHeaderServices.getCurrentDesign(userContext);
         }
 
+        // If the user is known see what roles they have
+        const user = this.getUser(userContext);
+        let isDesigner = false;
+        let isDeveloper = false;
+        let isManager = false;
+
+        if(user){
+            isDesigner = user.isDesigner;
+            isDeveloper = user.isDeveloper;
+            isManager = user.isManager;
+        }
+
         switch(userRole){
             case RoleType.DESIGNER:
                 roleClass = 'designer';
                 roleStatusClass = 'status-designer';
+                if(isDeveloper){
+                    developerItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_ICON} itemName="DEVELOPER" actionFunction={() => this.onChangeRole(userContext, RoleType.DEVELOPER)}/>;
+                }
+                if(isManager){
+                    managerItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_ICON} itemName="MANAGER" actionFunction={() => this.onChangeRole(userContext, RoleType.MANAGER)}/>;
+                }
                 break;
             case RoleType.DEVELOPER:
                 roleClass = 'developer';
                 roleStatusClass = 'status-developer';
+                if(isDesigner){
+                    designerItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_ICON} itemName="DESIGNER" actionFunction={() => this.onChangeRole(userContext, RoleType.DESIGNER)}/>;
+                }
+                if(isManager){
+                    managerItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_ICON} itemName="MANAGER" actionFunction={() => this.onChangeRole(userContext, RoleType.MANAGER)}/>;
+                }
                 break;
             case RoleType.MANAGER:
                 roleClass = 'manager';
                 roleStatusClass = 'status-manager';
+                if(isDesigner){
+                    designerItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_ICON} itemName="DESIGNER" actionFunction={() => this.onChangeRole(userContext, RoleType.DESIGNER)}/>;
+                }
+                if(isDeveloper){
+                    developerItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_ICON} itemName="DEVELOPER" actionFunction={() => this.onChangeRole(userContext, RoleType.DEVELOPER)}/>;
+                }
                 break;
             default:
                 // Admin user
@@ -127,27 +174,23 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {rolesItem}
-                        <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;
                 break;
 
-            case ViewType.ROLES:
-
-                appHeaderMenuContent =
-                    <div className="top-menu-bar">
-                        {logoutItem}
-                    </div>;
-                break;
+            // case ViewType.ROLES:
+            //
+            //     appHeaderMenuContent =
+            //         <div className="top-menu-bar">
+            //             {logoutItem}
+            //         </div>;
+            //     break;
 
             case ViewType.CONFIGURE:
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {rolesItem}
                         {selectItem}
-                        <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;
                 break;
@@ -162,24 +205,26 @@ export class AppHeader extends Component {
             //         </div>;
             //     break;
 
-            case ViewType.DESIGNS:
-
-                appHeaderMenuContent =
-                    <div className="top-menu-bar">
-                        {rolesItem}
-                        {selectItem}
-                        <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
-                        {logoutItem}
-                    </div>;
-                break;
+            // case ViewType.DESIGNS:
+            //
+            //     appHeaderMenuContent =
+            //         <div className="top-menu-bar">
+            //             {rolesItem}
+            //             {selectItem}
+            //             <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
+            //             {logoutItem}
+            //         </div>;
+            //     break;
 
             case ViewType.SELECT:
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {rolesItem}
+                        {designerItem}
+                        {developerItem}
+                        {managerItem}
                         <UltrawideMenuDropdown itemName="Refresh" menuType={MenuDropdown.MENU_DROPDOWN_REFRESH}/>
-                        <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
+                        {settingsItem}
                         {logoutItem}
                     </div>;
                 break;
@@ -197,9 +242,8 @@ export class AppHeader extends Component {
             case ViewType.DEVELOP_UPDATE_WP:
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {rolesItem}
                         {selectItem}
-                        <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
+                        {settingsItem}
                         <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>
                         <UltrawideMenuDropdown itemName="Refresh" menuType={MenuDropdown.MENU_DROPDOWN_REFRESH}/>
                         {logoutItem}
@@ -243,7 +287,6 @@ export class AppHeader extends Component {
 }
 
 AppHeader.propTypes = {
-
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

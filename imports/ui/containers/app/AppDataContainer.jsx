@@ -40,7 +40,7 @@ class AppData extends Component {
 
     render() {
 
-        const {isLoading} = this.props;
+        const {user, isLoading} = this.props;
 
         if(isLoading){
             return(
@@ -50,12 +50,10 @@ class AppData extends Component {
             return (
                 <Grid className="main-grid" fluid={true}>
                     <Row>
-                        <AppHeader
-                        />
+                        <AppHeader/>
                     </Row>
                     <Row>
-                        <AppBody
-                        />
+                        <AppBody/>
                     </Row>
                 </Grid>
             );
@@ -64,7 +62,7 @@ class AppData extends Component {
 }
 
 AppData.propTypes = {
-    isLoading: PropTypes.bool.isRequired
+    isLoading:  PropTypes.bool.isRequired
 };
 
 export default AppDataContainer = createContainer(({params}) => {

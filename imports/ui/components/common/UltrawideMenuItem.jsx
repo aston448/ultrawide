@@ -69,7 +69,8 @@ export class UltrawideMenuItem extends Component {
         }
 
         switch(menuType){
-            case MenuType.MENU_TOP:
+            case MenuType.MENU_TOP_TEXT:
+            case MenuType.MENU_TOP_ICON:
                 className = this.state.isHighlighted ? 'top-menu-item ' + highlight : 'top-menu-item';
                 break;
             case MenuType.MENU_EDITOR:
@@ -81,6 +82,22 @@ export class UltrawideMenuItem extends Component {
         let tooltipDelay = 100;
 
         switch(itemName){
+            case 'SETTINGS':
+                menuGlyph = 'cog';
+                menuItemToolTip = 'Configure Ultrawide';
+                break;
+            case 'DESIGNER':
+                menuGlyph = 'queen';
+                menuItemToolTip = 'Change to ' + itemName;
+                break;
+            case 'DEVELOPER':
+                menuGlyph = 'knight';
+                menuItemToolTip = 'Change to ' + itemName;
+                break;
+            case 'MANAGER':
+                menuGlyph = 'king';
+                menuItemToolTip = 'Change to ' + itemName;
+                break;
             case 'FFF':
                 menuGlyph = 'th';
                 menuItemToolTip = 'Zoom to Features';
@@ -112,17 +129,27 @@ export class UltrawideMenuItem extends Component {
             </Tooltip>
         );
 
-        if(menuType === MenuType.MENU_TOP){
-            return(
-                <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}>{itemName}</div>
-            )
-        } else {
-            return(
-                <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipIcon}>
-                    <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
-                </OverlayTrigger>
+        // Layout ------------------------------------------------------------------------------------------------------
 
-            )
+        switch(menuType){
+            case MenuType.MENU_TOP_TEXT:
+                return(
+                    <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}>{itemName}</div>
+                );
+
+            case MenuType.MENU_TOP_ICON:
+                return(
+                    <OverlayTrigger delayShow={tooltipDelay} placement="bottom" overlay={tooltipIcon}>
+                        <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+                    </OverlayTrigger>
+                );
+            case MenuType.MENU_EDITOR:
+                return(
+                    <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipIcon}>
+                        <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+                    </OverlayTrigger>
+                );
+
         }
 
     }

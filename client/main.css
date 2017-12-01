@@ -656,6 +656,12 @@ input {
 
 .item-container-footer{
     border-top: 1px solid ghostwhite;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: black;
+    background-color: ghostwhite;
+    margin: 0;
+    padding: 3px 10px 3px 20px;
     min-height: 25px
 }
 
@@ -675,7 +681,7 @@ input {
 }
 
 .design-item{
-    border: 1px solid lightgrey;
+    border: 0px solid lightgrey;
     border-radius: 0px;
     margin: 10px;
     padding: 0px;
@@ -684,7 +690,14 @@ input {
 .di-active{
     border: 1px solid black;
     border-radius: 0px;
-    background-color: aliceblue;
+    /*background-color: aliceblue;*/
+    /*box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);*/
+}
+
+.di-highlight{
+    border: 2px solid black;
+    border-radius: 0px;
+    /*background-color: aliceblue;*/
     /*box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);*/
 }
 
@@ -1170,6 +1183,15 @@ input {
 
 .no-icon{
     color: lightgrey;
+}
+
+.progress-header{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    font-weight: bold;
+    color: darkred;
+    border-bottom: 1px solid black;
+    padding: 0 0 0 5px;
 }
 
 .row-progress-1{
