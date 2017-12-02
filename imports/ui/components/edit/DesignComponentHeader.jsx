@@ -73,7 +73,7 @@ export class DesignComponentHeader extends Component{
             inScope: false,
             parentScope: false,
             scopeChange: false,
-            editable: false,
+            editing: false,
             highlighted: false,
             name: '',
             editorState: EditorState.createEmpty(),
@@ -542,7 +542,7 @@ export class DesignComponentHeader extends Component{
         this.setCurrentComponent();
 
         log((msg) => console.log(msg), LogLevel.TRACE, "EDIT COMPONENT NAME");
-        this.setState({editable: true});
+        this.setState({editing: true});
     }
 
     // Cancel editing the component name
@@ -550,7 +550,7 @@ export class DesignComponentHeader extends Component{
 
         // Reset the text in case changed on screen
         this.updateTitleText(this.props);
-        this.setState({editable: false});
+        this.setState({editing: false});
     }
 
     // Set and persist the currently selected design component
@@ -588,7 +588,7 @@ export class DesignComponentHeader extends Component{
 
         if(result.success){
             // Finished editing
-            this.setState({editable: false});
+            this.setState({editing: false});
             this.setCurrentComponent();
         }
 

@@ -1869,29 +1869,10 @@ class ClientDataServices{
 
         switch(view) {
 
-            case ViewType.ADMIN:
-
-                // switch (menuType) {
-                //     case MenuDropdown.MENU_DROPDOWN_GOTO:
-                //         return [gotoDesigns];
-                //
-                // }
-                break;
-
-            case ViewType.CONFIGURE:
-
-                switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [gotoSelection, gotoDesigns];
-                }
-                break;
 
             case ViewType.SELECT:
 
                 switch (menuType) {
-                    // case MenuDropdown.MENU_DROPDOWN_GOTO:
-                    //     return [gotoConfig, gotoDesigns];
-                    //     break;
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
                         return [
                             refreshProgressData,
@@ -1901,24 +1882,10 @@ class ClientDataServices{
                 }
                 break;
 
-            // case ViewType.DESIGNS:
-            //
-            //     switch (menuType) {
-            //         case MenuDropdown.MENU_DROPDOWN_GOTO:
-            //             return [gotoSelection, gotoConfig];
-            //     }
-            //     break;
-
             case ViewType.DESIGN_NEW:
             case ViewType.DESIGN_PUBLISHED:
             case ViewType.DESIGN_UPDATABLE:
                 switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return  [
-                                gotoSelection,
-                                gotoConfig,
-                                gotoDesigns
-                            ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
 
@@ -1944,12 +1911,6 @@ class ClientDataServices{
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
 
                 switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return  [
-                            gotoSelection,
-                            gotoConfig,
-                            gotoDesigns
-                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
                         return [
@@ -1968,12 +1929,6 @@ class ClientDataServices{
             case ViewType.DESIGN_UPDATE_VIEW:
 
                 switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [
-                            gotoSelection,
-                            gotoConfig,
-                            gotoDesigns
-                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
 
@@ -1999,12 +1954,6 @@ class ClientDataServices{
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
 
                 switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [
-                            gotoSelection,
-                            gotoConfig,
-                            gotoDesigns
-                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
                         return [
@@ -2026,19 +1975,11 @@ class ClientDataServices{
             case ViewType.DEVELOP_UPDATE_WP:
 
                 switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return [
-                            gotoSelection,
-                            gotoConfig,
-                            gotoDesigns
-                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
                         return [
                             viewDetails,
                             viewDomainDict,
-                            viewAccTests,
-                            viewAccFiles,
                             viewIntTests,
                             viewUnitTests,
                             viewTestSummary,

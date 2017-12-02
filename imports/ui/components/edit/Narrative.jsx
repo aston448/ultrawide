@@ -87,7 +87,7 @@ export default class Narrative extends React.Component {
         this.focus = () => {if(this.refs.editor){this.refs.editor.focus()}};
 
         this.state = {
-            editable: false,
+            editing: false,
             editorState: EditorState.createEmpty()
         };
 
@@ -106,7 +106,7 @@ export default class Narrative extends React.Component {
     componentDidUpdate() {
 
         // Focus on the component when editable
-        // if(this.state.editable) {
+        // if(this.state.editing) {
         //     this.focus();
         // }
         //this.updateNarrativeText(this.props);
@@ -278,12 +278,12 @@ export default class Narrative extends React.Component {
         event.preventDefault();
         //console.log("UNDO");
         this.updateNarrativeText(this.props);
-        this.setState({editable: false});
+        this.setState({editing: false});
     }
 
     editNarrative(){
         event.preventDefault();
-        this.setState({editable: true});
+        this.setState({editing: true});
     }
 
     saveNarrative(view, mode){
@@ -302,7 +302,7 @@ export default class Narrative extends React.Component {
 
         }
 
-        this.setState({editable: false});
+        this.setState({editing: false});
     }
 
     blockStyles(contentBlock){

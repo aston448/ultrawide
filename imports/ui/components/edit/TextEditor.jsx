@@ -67,7 +67,7 @@ export class TextEditor extends Component {
         this.focus = () => this.refs.editor.focus();
 
         this.state = {
-            editable: false,
+            editing: false,
             editorState: EditorState.createEmpty()
         };
     }
@@ -165,7 +165,7 @@ export class TextEditor extends Component {
 
     onEdit(){
         event.preventDefault();
-        this.setState({editable: true});
+        this.setState({editing: true});
     }
 
     onBoldClick(){
@@ -199,7 +199,7 @@ export class TextEditor extends Component {
 
         // Close editor
         if (andClose) {
-            this.setState({editable: false});
+            this.setState({editing: false});
         }
     }
 
@@ -207,7 +207,7 @@ export class TextEditor extends Component {
         event.preventDefault();
         //console.log("UNDO");
         this.updateComponentText(this.props);
-        this.setState({editable: false});
+        this.setState({editing: false});
     }
 
     toggleList(){
