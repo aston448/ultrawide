@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import { DesignUpdateStatus, DesignUpdateMergeAction, DesignUpdateTestStatus, DesignUpdateWpStatus, MashTestStatus, ComponentType, UpdateScopeType, LogLevel } from '../../constants/constants.js';
+import { DesignUpdateStatus, DesignUpdateMergeAction, DesignUpdateTestStatus, DesignUpdateWpStatus, DuWorkPackageTestStatus, MashTestStatus, WorkPackageTestStatus, LogLevel } from '../../constants/constants.js';
 import { DefaultItemNames }         from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
@@ -209,6 +209,25 @@ class DesignUpdateServices{
 
             });
         }
+    }
+
+    updateDesignUpdateWorkPackageTestStatus(designUpdateId){
+
+        const updateWps = DesignUpdateData.getAllWorkPackages(designUpdateId);
+
+        let wpTestStatus = DuWorkPackageTestStatus.DU_WPS_COMPLETE;
+
+        for(const wp of updateWps){
+
+            if(wp.workPackageTestStatus === WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE){
+                wpTestStatus = DuWorkPackageTestStatus.DU_WPS_NOT_COMPLETE;
+                break;
+            }
+        }
+
+        log((msg) => console.log(msg), LogLevel.INFO, 'Updating DU Completeness to {}...', wpTestStatus);
+        DesignUpdateData.updateWpTestStatus(designUpdateId, wpTestStatus);
+
     }
 }
 

@@ -59,7 +59,7 @@ class DesignComponentModules{
     updateWorkPackagesWithNewItem(designVersionId, newComponentId){
 
         // See if any base WPs affected by this update
-        const workPackages = DesignVersionData.getNonCompleteBaseWorkPackages(designVersionId);
+        const workPackages = DesignVersionData.getBaseWorkPackages(designVersionId);
 
         const component = DesignComponentData.getDesignComponentById(newComponentId);
         const componentParent = DesignComponentData.getDesignComponentByRef(designVersionId, component.componentParentReferenceIdNew);
@@ -76,7 +76,7 @@ class DesignComponentModules{
         const component = DesignComponentData.getDesignComponentById(designComponentId);
 
         // See if any base WPs affected by this update
-        const workPackages = DesignVersionData.getNonCompleteBaseWorkPackages(component.designVersionId);
+        const workPackages = DesignVersionData.getBaseWorkPackages(component.designVersionId);
 
         const componentParent = DesignComponentData.getDesignComponentByRef(component.designVersionId, component.componentParentReferenceIdNew);
 
@@ -89,7 +89,7 @@ class DesignComponentModules{
     removeWorkPackageItems(designComponentRef, designVersionId){
 
         // See if any base WPs affected by this update
-        const workPackages = DesignVersionData.getNonCompleteBaseWorkPackages(designVersionId);
+        const workPackages = DesignVersionData.getBaseWorkPackages(designVersionId);
 
         workPackages.forEach((wp) => {
 

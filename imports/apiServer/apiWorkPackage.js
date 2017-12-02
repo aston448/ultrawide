@@ -6,7 +6,8 @@ import {
     withdrawWorkPackage,
     adoptWorkPackage,
     releaseWorkPackage,
-    removeWorkPackage
+    removeWorkPackage,
+    updateWorkPackageTestCompleteness
 } from '../apiValidatedMethods/work_package_methods.js'
 
 // =====================================================================================================================
@@ -97,6 +98,18 @@ class ServerWorkPackageApi {
         removeWorkPackage.call(
             {
                 userRole: userRole,
+                workPackageId: workPackageId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateWorkPackageTestCompleteness(userContext, workPackageId, callback){
+        updateWorkPackageTestCompleteness.call(
+            {
+                userContext: userContext,
                 workPackageId: workPackageId
             },
             (err, result) => {

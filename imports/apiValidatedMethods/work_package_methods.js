@@ -26,7 +26,7 @@ export const addWorkPackage = new ValidatedMethod({
         // Server validation
         const result = WorkPackageValidationApi.validateAddWorkPackage(userRole, designVersionId, designUpdateId, workPackageType);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('workPackage.addWorkPackage.failValidation', result)
         }
 
@@ -55,7 +55,7 @@ export const updateWorkPackageName = new ValidatedMethod({
         // Server validation
         const result = WorkPackageValidationApi.validateUpdateWorkPackageName(userRole, workPackageId, newName);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('workPackage.updateWorkPackageName.failValidation', result)
         }
 
@@ -83,7 +83,7 @@ export const publishWorkPackage = new ValidatedMethod({
         // Server validation
         const result = WorkPackageValidationApi.validatePublishWorkPackage(userRole, workPackageId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('workPackage.publishWorkPackage.failValidation', result)
         }
 
@@ -111,7 +111,7 @@ export const withdrawWorkPackage = new ValidatedMethod({
         // Server validation
         const result = WorkPackageValidationApi.validateWithdrawWorkPackage(userRole, workPackageId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('workPackage.withdrawWorkPackage.failValidation', result)
         }
 
@@ -140,7 +140,7 @@ export const adoptWorkPackage = new ValidatedMethod({
         // Server validation
         const result = WorkPackageValidationApi.validateAdoptWorkPackage(userRole, workPackageId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('workPackage.adoptWorkPackage.failValidation', result)
         }
 
@@ -169,7 +169,7 @@ export const releaseWorkPackage = new ValidatedMethod({
         // Server validation
         const result = WorkPackageValidationApi.validateReleaseWorkPackage(userRole, userId, workPackageId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('workPackage.releaseWorkPackage.failValidation', result)
         }
 
@@ -197,13 +197,34 @@ export const removeWorkPackage = new ValidatedMethod({
         // Server validation
         const result = WorkPackageValidationApi.validateRemoveWorkPackage(userRole, workPackageId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('workPackage.removeWorkPackage.failValidation', result)
         }
 
         // Server action
         try {
             WorkPackageServices.removeWorkPackage(workPackageId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
+
+export const updateWorkPackageTestCompleteness = new ValidatedMethod({
+
+    name: 'workPackage.updateWorkPackageTestCompleteness',
+
+    validate: new SimpleSchema({
+        userContext:        {type: Object, blackbox: true},
+        workPackageId:      {type: String}
+    }).validator(),
+
+    run({userContext, workPackageId}){
+
+        // Server action
+        try {
+            WorkPackageServices.updateWorkPackageTestCompleteness(userContext, workPackageId);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.code, e.stack)

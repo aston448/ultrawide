@@ -2,7 +2,7 @@
 import {WorkPackages}                   from '../../collections/work/work_packages.js';
 import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
 
-import { WorkPackageStatus, WorkPackageType, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, UpdateMergeStatus, LogLevel }      from '../../constants/constants.js';
+import { WorkPackageStatus, WorkPackageTestStatus, WorkPackageType, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, UpdateMergeStatus, LogLevel }      from '../../constants/constants.js';
 import { DefaultItemNames } from "../../constants/default_names";
 
 class WorkPackageData {
@@ -18,7 +18,7 @@ class WorkPackageData {
                 workPackageType: wpType,                     // Either Base Version Implementation or Design Update Implementation
                 workPackageName: DefaultItemNames.NEW_WORK_PACKAGE_NAME,         // Identifier of this work package
                 workPackageStatus: WorkPackageStatus.WP_NEW,
-
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE
             }
         );
     }
@@ -34,6 +34,7 @@ class WorkPackageData {
                     workPackageName: workPackage.workPackageName,
                     workPackageRawText: workPackage.workPackageRawText,
                     workPackageStatus: workPackage.workPackageStatus,
+                    workPackageTestStatus: workPackage.workPackageTestStatus,
                     adoptingUserId: adoptingUserId
                 }
             );
@@ -52,7 +53,6 @@ class WorkPackageData {
         return WorkPackages.find({
             designVersionId:    designVersionId,
             designUpdateId:     designUpdateId,
-            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
             workPackageType:    WorkPackageType.WP_UPDATE
         }).fetch();
     }
@@ -143,6 +143,18 @@ class WorkPackageData {
             {
                 $set: {
                     workPackageStatus: status
+                }
+            }
+        );
+    }
+
+    setWorkPackageTestStatus(workPackageId, status){
+
+        return WorkPackages.update(
+            {_id: workPackageId},
+            {
+                $set: {
+                    workPackageTestStatus: status
                 }
             }
         );

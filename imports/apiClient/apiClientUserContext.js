@@ -499,7 +499,6 @@ class ClientUserContextServices {
                                 return;
 
                             case WorkPackageStatus.WP_AVAILABLE:
-                            case WorkPackageStatus.WP_COMPLETE:
                             case WorkPackageStatus.WP_NEW:
 
                                 // Anything else, allow developer to select a WP
@@ -543,27 +542,6 @@ class ClientUserContextServices {
                                     case WorkPackageType.WP_UPDATE:
                                         if(userContext.designComponentId !== 'NONE') {
                                             ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
-                                        } else {
-                                            store.dispatch(setCurrentView(ViewType.SELECT));
-                                        }
-                                        return;
-                                }
-                                break;
-                            case WorkPackageStatus.WP_COMPLETE:
-
-                                // View Only
-                                switch(workPackage.workPackageType){
-                                    case WorkPackageType.WP_BASE:
-                                        if(userContext.designComponentId !== 'NONE') {
-                                            ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
-                                        } else {
-                                            store.dispatch(setCurrentView(ViewType.SELECT));
-                                        }
-                                        return;
-
-                                    case WorkPackageType.WP_UPDATE:
-                                        if(userContext.designComponentId !== 'NONE') {
-                                            ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
                                         } else {
                                             store.dispatch(setCurrentView(ViewType.SELECT));
                                         }

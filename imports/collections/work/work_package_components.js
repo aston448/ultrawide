@@ -22,7 +22,7 @@ let Schema = new SimpleSchema({
 
     // Status
     scopeType:                  {type: String, defaultValue: WorkPackageScopeType.SCOPE_NONE},  // Whether active or a parent in the WP
-    //reviewStatus:               {type: String, defaultValue: WorkPackageReviewType.REVIEW_NONE}
+    reviewStatus:               {type: String, defaultValue: WorkPackageReviewType.REVIEW_NONE}
 });
 
 WorkPackageComponents.attachSchema(Schema);

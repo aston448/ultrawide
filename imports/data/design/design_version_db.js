@@ -11,7 +11,7 @@ import { UserDevDesignSummary }         from "../../collections/summary/user_dev
 import { UserDevTestSummary }           from "../../collections/summary/user_dev_test_summary";
 import { UserWorkProgressSummary }      from "../../collections/summary/user_work_progress_summary";
 
-import { ComponentType, UpdateMergeStatus, WorkPackageStatus, DesignUpdateStatus, DesignUpdateMergeAction, WorkPackageType }                    from '../../constants/constants.js';
+import { ComponentType, UpdateMergeStatus, WorkPackageStatus, WorkPackageTestStatus, DesignUpdateStatus, DuWorkPackageTestStatus, DesignUpdateMergeAction, WorkPackageType } from '../../constants/constants.js';
 
 class DesignVersionData {
 
@@ -189,6 +189,29 @@ class DesignVersionData {
         ).fetch();
     }
 
+    getIncompleteUpdatesAtStatus(designVersionId, status){
+
+        return DesignUpdates.find(
+            {
+                designVersionId: designVersionId,
+                updateStatus: status,
+                updateWpTestStatus: DuWorkPackageTestStatus.DU_WPS_NOT_COMPLETE
+            },
+            {sort: {updateReference: 1, updateName: 1}}
+        ).fetch();
+    }
+
+    getWpTestCompleteUpdates(designVersionId){
+
+        return DesignUpdates.find(
+            {
+                designVersionId: designVersionId,
+                updateWpTestStatus: DuWorkPackageTestStatus.DU_WPS_COMPLETE
+            },
+            {sort: {updateReference: 1, updateName: 1}}
+        ).fetch();
+    }
+
     getOtherUpdates(designUpdateId, designVersionId){
 
         return DesignUpdates.find({
@@ -269,6 +292,45 @@ class DesignVersionData {
         ).fetch();
     }
 
+    getIncompleteBaseWorkPackagesAtStatus(designVersionId, status){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_BASE,
+                workPackageStatus: status,
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
+    getTestCompletedBaseWorkPackages(designVersionId){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_BASE,
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_COMPLETE
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
+    getAdoptingUserTestCompletedBaseWorkPackages(designVersionId, userId){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_BASE,
+                workPackageStatus: WorkPackageStatus.WP_ADOPTED,
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_COMPLETE,
+                adoptingUserId: userId
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
     getBaseUserAdoptedWorkPackages(designVersionId, userId){
 
         return WorkPackages.find(
@@ -276,6 +338,7 @@ class DesignVersionData {
                 designVersionId: designVersionId,
                 workPackageType: WorkPackageType.WP_BASE,
                 workPackageStatus: WorkPackageStatus.WP_ADOPTED,
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
                 adoptingUserId: userId
             },
             {sort: {workPackageName: 1}}
@@ -294,6 +357,45 @@ class DesignVersionData {
         ).fetch();
     }
 
+    getIncompleteUpdateWorkPackagesAtStatus(designVersionId, status){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_UPDATE,
+                workPackageStatus: status,
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
+    getTestCompletedUpdateWorkPackages(designVersionId){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_UPDATE,
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_COMPLETE
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
+    getAdoptingUserTestCompletedUpdateWorkPackages(designVersionId, userId){
+
+        return WorkPackages.find(
+            {
+                designVersionId: designVersionId,
+                workPackageType: WorkPackageType.WP_UPDATE,
+                workPackageStatus: WorkPackageStatus.WP_ADOPTED,
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_COMPLETE,
+                adoptingUserId: userId
+            },
+            {sort: {workPackageName: 1}}
+        ).fetch();
+    }
+
     getUpdateUserAdoptedWorkPackages(designVersionId, userId){
 
         return WorkPackages.find(
@@ -301,6 +403,7 @@ class DesignVersionData {
                 designVersionId: designVersionId,
                 workPackageType: WorkPackageType.WP_UPDATE,
                 workPackageStatus: WorkPackageStatus.WP_ADOPTED,
+                workPackageTestStatus: WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
                 adoptingUserId: userId
             },
             {sort: {workPackageName: 1}}
@@ -320,12 +423,11 @@ class DesignVersionData {
         ).fetch();
     }
 
-    getNonCompleteBaseWorkPackages(designVersionId){
+    getBaseWorkPackages(designVersionId){
 
         return WorkPackages.find({
             designVersionId:    designVersionId,
             designUpdateId:     'NONE',
-            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
             workPackageType:    WorkPackageType.WP_BASE
         }).fetch();
     }

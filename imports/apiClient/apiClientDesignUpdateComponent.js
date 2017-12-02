@@ -6,6 +6,7 @@ import { DesignUpdateComponentMessages }    from '../constants/message_texts.js'
 import { Validation }                       from '../constants/validation_errors.js';
 
 import ServerDesignUpdateComponentApi       from '../apiServer/apiDesignUpdateComponent.js';
+import ServerWorkPackageApi                 from '../apiServer/apiWorkPackage.js';
 import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpdateComponentValidation.js';
 import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdateSummary.js';
 
@@ -330,6 +331,8 @@ class ClientDesignUpdateComponentServices{
 
         log((msg) => console.log(msg), LogLevel.DEBUG, 'CLIENT: Add Scenaro...');
 
+        const userContext = store.getState().currentUserItemContext;
+
         // Client validation
         log((msg) => console.log(msg), LogLevel.DEBUG, '  Client Validation...');
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent, ComponentType.SCENARIO);
@@ -359,6 +362,11 @@ class ClientDesignUpdateComponentServices{
 
                     this.refreshDesignUpdateSummary(true);
 
+                    // Update WP Completeness if in a WP
+                    if(workPackageId !== 'NONE') {
+                        ServerWorkPackageApi.updateWorkPackageTestCompleteness(userContext, workPackageId);
+                    }
+
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
                         messageType: MessageType.INFO,
@@ -376,6 +384,8 @@ class ClientDesignUpdateComponentServices{
 
     // User clicked Delete for a design component when editing a Design Update -----------------------------------------
     removeComponent(view, mode, designUpdateComponent){
+
+        const userContext = store.getState().currentUserItemContext;
 
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent._id);
@@ -418,6 +428,12 @@ class ClientDesignUpdateComponentServices{
                     this.refreshDesignUpdateSummary(true);
 
                     // No need to remove from user context as only a logical delete and still visible
+
+
+                    // Update WP Completeness if a scenario in a WP
+                    if(userContext.workPackageId !== 'NONE' && designUpdateComponent.componentType === ComponentType.SCENARIO) {
+                        ServerWorkPackageApi.updateWorkPackageTestCompleteness(userContext, userContext.workPackageId);
+                    }
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({

@@ -194,6 +194,9 @@ export class WorkPackagesList extends Component {
                     }
 
                     headerText3 = 'Completed Work Packages';
+                    if(userRole === RoleType.DEVELOPER){
+                        headerText3 = 'My Completed Work Packages';
+                    }
                     if(completedWorkPackages.length === 0){
 
                         bodyDataFunction3 = () => this.displayNote(NO_WORK_PACKAGES);

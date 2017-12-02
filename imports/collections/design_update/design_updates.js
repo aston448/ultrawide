@@ -4,7 +4,7 @@
 
 import { Mongo } from 'meteor/mongo';
 
-import {DesignUpdateStatus, DesignUpdateMergeAction, DesignUpdateWpStatus, DesignUpdateTestStatus} from '../../constants/constants.js';
+import {DesignUpdateStatus, DesignUpdateMergeAction, DesignUpdateWpStatus, DesignUpdateTestStatus, DuWorkPackageTestStatus} from '../../constants/constants.js';
 
 export const DesignUpdates = new Mongo.Collection('designUpdates');
 
@@ -17,7 +17,8 @@ let Schema = new SimpleSchema({
     updateMergeAction:          {type: String, defaultValue: DesignUpdateMergeAction.MERGE_IGNORE},     // Indicates what to do with this update when creating a new design version
     summaryDataStale:           {type: Boolean, defaultValue: false},
     updateWpStatus:             {type: String, defaultValue: DesignUpdateWpStatus.DU_NO_WP_SCENARIOS},
-    updateTestStatus:           {type: String, defaultValue: DesignUpdateTestStatus.DU_NO_SCENARIOS_PASSING}
+    updateTestStatus:           {type: String, defaultValue: DesignUpdateTestStatus.DU_NO_SCENARIOS_PASSING},
+    updateWpTestStatus:         {type: String, defaultValue: DuWorkPackageTestStatus.DU_WPS_NOT_COMPLETE}
 });
 
 DesignUpdates.attachSchema(Schema);

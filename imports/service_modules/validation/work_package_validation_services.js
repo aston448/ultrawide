@@ -16,7 +16,7 @@ class WorkPackageValidationServices{
     validateAddWorkPackage(userRole, designVersion, designUpdate, workPackageType){
 
         // Only a Manager can add Work Packages
-        if(userRole != RoleType.MANAGER){
+        if(userRole !== RoleType.MANAGER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_ADD;
         }
 
@@ -24,7 +24,7 @@ class WorkPackageValidationServices{
             case WorkPackageType.WP_BASE:
 
                 // Work Packages can only be added to a Draft Design Version
-                if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_DRAFT){
+                if(designVersion.designVersionStatus !== DesignVersionStatus.VERSION_DRAFT){
                     return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_ADD;
                 }
                 break;
@@ -32,7 +32,7 @@ class WorkPackageValidationServices{
             case WorkPackageType.WP_UPDATE:
 
                 // Work Packages can only be added to a Draft Design Update
-                if(designUpdate.updateStatus != DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT){
+                if(designUpdate.updateStatus !== DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT){
                     return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_ADD;
                 }
                 break;
@@ -47,7 +47,7 @@ class WorkPackageValidationServices{
     validateUpdateWorkPackageName(userRole, newName, otherWorkPackages){
 
         // To edit a WP Name, user must be a Manager
-        if(userRole != RoleType.MANAGER){
+        if(userRole !== RoleType.MANAGER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_EDIT;
         }
 
@@ -70,12 +70,12 @@ class WorkPackageValidationServices{
     validatePublishWorkPackage(userRole, wpStatus){
 
         // To publish a WP, user must be a Manager
-        if(userRole != RoleType.MANAGER){
+        if(userRole !== RoleType.MANAGER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_PUBLISH;
         }
 
         // Work Package must be New
-        if(wpStatus != WorkPackageStatus.WP_NEW){
+        if(wpStatus !== WorkPackageStatus.WP_NEW){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_PUBLISH;
         }
 
@@ -85,12 +85,12 @@ class WorkPackageValidationServices{
     validateWithdrawWorkPackage(userRole, wpStatus){
 
         // To withdraw a WP, user must be a Manager
-        if(userRole != RoleType.MANAGER){
+        if(userRole !== RoleType.MANAGER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_WITHDRAW;
         }
 
         // Work Package must be Available
-        if(wpStatus != WorkPackageStatus.WP_AVAILABLE){
+        if(wpStatus !== WorkPackageStatus.WP_AVAILABLE){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_WITHDRAW;
         }
 
@@ -100,12 +100,12 @@ class WorkPackageValidationServices{
     validateAdoptWorkPackage(userRole, wpStatus){
 
         // Adopter must be a Developer
-        if(userRole != RoleType.DEVELOPER){
+        if(userRole !== RoleType.DEVELOPER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_ADOPT;
         }
 
         // WP must be Available
-        if(wpStatus != WorkPackageStatus.WP_AVAILABLE){
+        if(wpStatus !== WorkPackageStatus.WP_AVAILABLE){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_ADOPT;
         }
 
@@ -120,13 +120,13 @@ class WorkPackageValidationServices{
         }
 
         // WP must be Adopted
-        if(wp.workPackageStatus != WorkPackageStatus.WP_ADOPTED){
+        if(wp.workPackageStatus !== WorkPackageStatus.WP_ADOPTED){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_RELEASE;
         }
 
         // If Developer and Adopted, must be adopted by them
         if(userRole === RoleType.DEVELOPER){
-            if(wp.adoptingUserId != userId){
+            if(wp.adoptingUserId !== userId){
                 return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_USER_RELEASE;
             }
         }
@@ -138,12 +138,12 @@ class WorkPackageValidationServices{
     validateRemoveWorkPackage(userRole, wpStatus){
 
         // To remove a WP, user must be a Manager
-        if(userRole != RoleType.MANAGER){
+        if(userRole !== RoleType.MANAGER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_REMOVE;
         }
 
         // Work Package must be New
-        if(wpStatus != WorkPackageStatus.WP_NEW){
+        if(wpStatus !== WorkPackageStatus.WP_NEW){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_REMOVE;
         }
 
@@ -153,13 +153,8 @@ class WorkPackageValidationServices{
     validateEditWorkPackage(userRole, wpStatus){
 
         // To edit a WP, user must be a Manager
-        if(userRole != RoleType.MANAGER){
+        if(userRole !== RoleType.MANAGER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_EDIT;
-        }
-
-        // Work Package must not be Complete
-        if(wpStatus === WorkPackageStatus.WP_COMPLETE){
-            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_EDIT;
         }
 
         return Validation.VALID;
@@ -168,7 +163,7 @@ class WorkPackageValidationServices{
     validateViewWorkPackage(userRole, wpStatus){
 
         // To view a WP, user must be a Manager if WP is New
-        if(userRole != RoleType.MANAGER && wpStatus === WorkPackageStatus.WP_NEW){
+        if(userRole !== RoleType.MANAGER && wpStatus === WorkPackageStatus.WP_NEW){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_VIEW_NEW;
         }
 

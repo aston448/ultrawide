@@ -534,26 +534,26 @@ class ClientDataServices{
             if(wpType === WorkPackageType.WP_BASE) {
 
                 // Get New WPS
-                const newWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_NEW);
+                const newWorkPackages = DesignVersionData.getIncompleteBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_NEW);
 
                 // Get Available WPS
-                const availableWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_AVAILABLE);
+                const availableWorkPackages = DesignVersionData.getIncompleteBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_AVAILABLE);
 
                 // Get Adopted WPS
 
                 let adoptedWorkPackages = [];
+                let completedWorkPackages = [];
 
                 if(userRole === RoleType.DEVELOPER){
 
                     // Just get the WPS the developer has adopted
-                    DesignVersionData.getBaseUserAdoptedWorkPackages(currentDesignVersionId, userId)
+                    adoptedWorkPackages = DesignVersionData.getBaseUserAdoptedWorkPackages(currentDesignVersionId, userId);
+                    completedWorkPackages = DesignVersionData.getAdoptingUserTestCompletedBaseWorkPackages(currentDesignVersionId, userId);
 
                 } else {
-                    DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
+                    adoptedWorkPackages = DesignVersionData.getIncompleteBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
+                    completedWorkPackages = DesignVersionData.getTestCompletedBaseWorkPackages(currentDesignVersionId);
                 }
-
-                // Get Completed WPs
-                const completedWorkPackages = DesignVersionData.getBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_COMPLETE);
 
                 // Get the status of the current design version
                 const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
@@ -572,28 +572,27 @@ class ClientDataServices{
             } else {
 
                 // Get New WPS
-                const newWorkPackages = DesignVersionData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_NEW);
+                const newWorkPackages = DesignVersionData.getIncompleteUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_NEW);
 
                 // Get Available WPS
-                const availableWorkPackages = DesignVersionData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_AVAILABLE);
+                const availableWorkPackages = DesignVersionData.getIncompleteUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_AVAILABLE);
 
                 // Get Adopted WPS
                 let adoptedWorkPackages = [];
+                let completedWorkPackages = [];
 
                 if(userRole === RoleType.DEVELOPER){
 
                     // Just get the WPS the developer has adopted
                     // console.log("Getting adopted WPs for user " + userId);
-                    adoptedWorkPackages = DesignVersionData.getUpdateUserAdoptedWorkPackages(currentDesignVersionId, userId)
+                    adoptedWorkPackages = DesignVersionData.getUpdateUserAdoptedWorkPackages(currentDesignVersionId, userId);
+                    completedWorkPackages = DesignVersionData.getAdoptingUserTestCompletedUpdateWorkPackages(currentDesignVersionId, userId);
 
                 } else {
-                    adoptedWorkPackages = DesignVersionData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
+                    adoptedWorkPackages = DesignVersionData.getIncompleteUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
+                    completedWorkPackages = DesignVersionData.getTestCompletedUpdateWorkPackages(currentDesignVersionId);
                 }
 
-
-
-                // Get Completed WPs
-                const completedWorkPackages = DesignVersionData.getUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_COMPLETE);
 
                 // Get the status of the current design version
                 const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
@@ -708,14 +707,14 @@ class ClientDataServices{
             let assignedUpdates = [];
 
             // New updates must by definition be not in WPs and not completed
-            const newUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_NEW);
+            const newUpdates = DesignVersionData.getIncompleteUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_NEW);
 
             newUpdates.forEach((update) => {
                 incompleteUpdates.push(update);
             });
 
             // Draft updates may be incomplete or assigned
-            const draftUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT);
+            const draftUpdates = DesignVersionData.getIncompleteUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT);
 
             draftUpdates.forEach((update) =>{
 
@@ -731,7 +730,7 @@ class ClientDataServices{
                 }
             });
 
-            const mergedUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_MERGED);
+            const mergedUpdates = DesignVersionData.getIncompleteUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_MERGED);
 
             mergedUpdates.forEach((update) =>{
 
@@ -745,7 +744,7 @@ class ClientDataServices{
                 }
             });
 
-            const ignoredUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_IGNORED);
+            const ignoredUpdates = DesignVersionData.getIncompleteUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_IGNORED);
 
             ignoredUpdates.forEach((update) =>{
 
@@ -759,8 +758,8 @@ class ClientDataServices{
                 }
             });
 
-            // Complete updates must by definition not have unassigned scenarios
-            const completeUpdates = DesignVersionData.getUpdatesAtStatus(currentDesignVersionId, DesignUpdateStatus.UPDATE_COMPLETE);
+            // Complete updates are where all WPs are completed
+            const completeUpdates = DesignVersionData.getWpTestCompleteUpdates(currentDesignVersionId);
 
 
             // Get the status of the current design version

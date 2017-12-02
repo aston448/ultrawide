@@ -2,7 +2,7 @@
 import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
 
 
-import { DesignVersionStatus, WorkSummaryType, WorkPackageStatus, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, UpdateMergeStatus, LogLevel }      from '../../constants/constants.js';
+import { ComponentType, WorkPackageScopeType, LogLevel }      from '../../constants/constants.js';
 
 class WorkPackageComponentData {
 
@@ -32,18 +32,19 @@ class WorkPackageComponentData {
             return WorkPackageComponents.insert(
                 {
                     // Identity
-                    designVersionId: designVersionId,
-                    designUpdateId: designUpdateId,
-                    workPackageId: workPackageId,
-                    workPackageType: wpComponent.workPackageType,
-                    componentReferenceId: wpComponent.componentReferenceId,
-                    componentParentReferenceId: wpComponent.componentParentReferenceId,
-                    componentFeatureReferenceId: wpComponent.componentFeatureReferenceId,
-                    componentType: wpComponent.componentType,
-                    componentIndex: wpComponent.componentIndex,
+                    designVersionId:                designVersionId,
+                    designUpdateId:                 designUpdateId,
+                    workPackageId:                  workPackageId,
+                    workPackageType:                wpComponent.workPackageType,
+                    componentReferenceId:           wpComponent.componentReferenceId,
+                    componentParentReferenceId:     wpComponent.componentParentReferenceId,
+                    componentFeatureReferenceId:    wpComponent.componentFeatureReferenceId,
+                    componentType:                  wpComponent.componentType,
+                    componentIndex:                 wpComponent.componentIndex,
 
                     // Status
-                    scopeType: wpComponent.scopeType
+                    scopeType:                      wpComponent.scopeType,
+                    reviewStatus:                   wpComponent.reviewStatus
                 }
             );
         }

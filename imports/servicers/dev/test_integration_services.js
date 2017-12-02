@@ -6,12 +6,14 @@ import DesignUpdateSummaryServices      from '../summary/design_update_summary_s
 import { TestRunner, LogLevel}          from '../../constants/constants.js';
 import {log}                            from '../../common/utils.js';
 
+import WorkPackageServices              from '../../servicers/work/work_package_services.js';
 import MashDataModules                  from '../../service_modules/dev/test_integration_service_modules.js';
 import TestSummaryServices              from '../summary/test_summary_services.js';
 import ChimpMochaTestServices           from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
 // Data Access
 import DesignUpdateData                 from '../../data/design_update/design_update_db.js';
+import DesignVersionData                from '../../data/design/design_version_db.js';
 import UserIntegrationTestResultData    from '../../data/test_results/user_integration_test_result_db.js';
 import UserUnitTestResultData           from '../../data/test_results/user_unit_test_result_db.js';
 
@@ -46,11 +48,10 @@ class TestIntegrationServices{
             // Recalculate the design-test mash
             MashDataModules.recreateUserScenarioTestMashData(userContext);
 
-            // // Load the unit test data below the Scenario level
-            // MashDataModules.updateUnitTestScenarioResults(userContext);
-            //
-            // // Recalculate the Design Mash Scenarios
-            // MashDataModules.updateUserMashScenariosForDesignVersion(userContext);
+            log((msg) => console.log(msg), LogLevel.PERF, "    Updating WP completeness...");
+
+            // Update the completeness of work packages
+            this.updateWorkPackageCompleteness(userContext);
 
             log((msg) => console.log(msg), LogLevel.PERF, "    Updating test summary...");
             // And update the test summary data
@@ -86,6 +87,15 @@ class TestIntegrationServices{
             // Recreate the summary mash
             TestSummaryServices.refreshTestSummaryData(userContext);
         }
+    }
+
+    updateWorkPackageCompleteness(userContext){
+
+        const dvWorkPackages = DesignVersionData.getAllWorkPackages(userContext.designVersionId);
+
+        dvWorkPackages.forEach((wp) => {
+            WorkPackageServices.updateWorkPackageTestCompleteness(userContext, wp._id);
+        })
     }
 
     // User generates a test file from a Design or Design Update Feature

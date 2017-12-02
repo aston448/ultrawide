@@ -269,8 +269,17 @@ export const WorkPackageReviewType = {
 export const WorkPackageStatus = {
     WP_NEW:                 'NEW',
     WP_AVAILABLE:           'AVAILABLE',
-    WP_ADOPTED:             'ADOPTED',
-    WP_COMPLETE:            'COMPLETE'
+    WP_ADOPTED:             'ADOPTED'
+};
+
+export const DuWorkPackageTestStatus = {
+    DU_WPS_COMPLETE:        'DU_WPS_COMPLETE',
+    DU_WPS_NOT_COMPLETE:    'DU_WPS_NOT_COMPLETE'
+};
+
+export const WorkPackageTestStatus = {
+    WP_TESTS_COMPLETE:      'WP_TESTS_COMPLETE',
+    WP_TESTS_NOT_COMPLETE:  'WP_TESTS_NOT_COMPLETE'
 };
 
 export const WorkPackageType = {

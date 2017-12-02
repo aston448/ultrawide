@@ -2,7 +2,8 @@
 // Ultrawide Services
 import { ViewType, WorkPackageType, WorkPackageScopeType }            from '../../constants/constants.js';
 
-import  WorkPackageModules          from '../../service_modules/work/work_package_service_modules.js';
+import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
+import WorkPackageServices          from '../../servicers/work/work_package_services.js';
 
 // Data Access
 import DesignComponentData          from '../../data/design/design_component_db.js';
@@ -74,6 +75,10 @@ class WorkPackageComponentServices{
                     WorkPackageModules.removeChildlessParentsFromWp(userContext, wpType, designComponent);
 
                 }
+
+                // As the WP scope has changed, recalculate the completeness
+                WorkPackageServices.updateWorkPackageTestCompleteness(userContext, userContext.workPackageId);
+
             }
         }
     };

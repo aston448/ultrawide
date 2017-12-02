@@ -323,6 +323,20 @@ class DesignUpdateData{
         );
     }
 
+    updateWpTestStatus(designUpdateId, wpTestStatus){
+
+        return DesignUpdates.update(
+            {
+                _id: designUpdateId
+            },
+            {
+                $set: {
+                    updateWpTestStatus: wpTestStatus
+                }
+            }
+        );
+    }
+
     setSummaryDataStale(designUpdateId, isStale){
 
         return DesignUpdates.update({_id: designUpdateId}, {$set:{summaryDataStale: isStale}});

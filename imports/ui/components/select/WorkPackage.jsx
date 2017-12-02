@@ -10,13 +10,14 @@ import DesignItemHeader             from './DesignItemHeader.jsx';
 // Ultrawide Services
 import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackage.js';
 
-import {ItemType, WorkPackageStatus, WorkPackageType, RoleType} from '../../../constants/constants.js';
+import {ItemType, WorkPackageStatus, WorkPackageTestStatus, RoleType} from '../../../constants/constants.js';
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -155,14 +156,16 @@ export class WorkPackage extends Component {
             case WorkPackageStatus.WP_AVAILABLE:
                 statusClass = 'design-item-status item-status-available';
                 break;
-            case WorkPackageStatus.WP_COMPLETE:
-                statusClass = 'design-item-status item-status-complete';
-                break;
             case WorkPackageStatus.WP_ADOPTED:
                 statusClass = 'design-item-status item-status-adopted';
                 // Set up label to show who has adopted
                 adopter = ' by ' + this.getAdopterName(workPackage.adoptingUserId);
                 break;
+        }
+
+        // Highlight tests complete WPs
+        if(workPackage.workPackageTestStatus === WorkPackageTestStatus.WP_TESTS_COMPLETE){
+            statusClass = 'design-item-status item-status-complete';
         }
 
         const summary =
@@ -289,13 +292,6 @@ export class WorkPackage extends Component {
                         break;
                 }
 
-                break;
-            case WorkPackageStatus.WP_COMPLETE:
-                // View only for everyone
-                buttons =
-                    <ButtonGroup className="button-group-left">
-                        {buttonView}
-                    </ButtonGroup>;
                 break;
         }
 

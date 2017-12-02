@@ -9,6 +9,7 @@ import ServerDesignComponentApi      from '../apiServer/apiDesignComponent.js';
 import DesignComponentValidationApi  from '../apiValidation/apiDesignComponentValidation.js';
 import ClientUserContextServices     from '../apiClient/apiClientUserContext.js';
 import ClientWorkPackageServices     from '../apiClient/apiClientWorkPackage.js';
+import ServerWorkPackageApi          from '../apiServer/apiWorkPackage.js';
 
 import {log} from '../common/utils.js';
 
@@ -20,6 +21,7 @@ import DesignUpdateComponentData        from '../data/design_update/design_updat
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage, updateOpenItemsFlag, setCurrentView} from '../redux/actions'
+import apiWorkPackage from "../apiServer/apiWorkPackage";
 
 // =====================================================================================================================
 // Client API for Design Components
@@ -318,6 +320,8 @@ class ClientDesignComponentServices{
     // User clicked Add Scenario in either a Feature or Feature Aspect -------------------------------------------------
     addScenario(view, mode, parentComponent, workPackageId){
 
+        const userContext = store.getState().currentUserItemContext;
+
         // Client validation
         let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.SCENARIO);
 
@@ -342,6 +346,11 @@ class ClientDesignComponentServices{
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Scenario Actions:
+
+                    // Update WP Completeness if in a WP
+                    if(workPackageId !== 'NONE') {
+                        ServerWorkPackageApi.updateWorkPackageTestCompleteness(userContext, workPackageId);
+                    }
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -399,6 +408,10 @@ class ClientDesignComponentServices{
                 } else {
                     // Remove Design Component Actions:
 
+                    // Update WP Completeness if a Scenario in a WP
+                    if(userContext.workPackageId !== 'NONE' && designComponent.componentType === ComponentType.SCENARIO) {
+                        ServerWorkPackageApi.updateWorkPackageTestCompleteness(userContext, userContext.workPackageId);
+                    }
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
