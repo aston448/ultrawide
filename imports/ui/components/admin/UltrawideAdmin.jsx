@@ -47,7 +47,7 @@ import {connect} from 'react-redux';
 
         if(userRole === RoleType.ADMIN){
             return (
-                <Tabs defaultActiveKey={1} id="admin-view_tabs">
+                <Tabs className="top-tabs" defaultActiveKey={1} id="admin-view_tabs">
                     <Tab eventKey={1} title="USER MANAGEMENT">{userContainer}</Tab>
                     <Tab eventKey={2} title="BACKUP MANAGEMENT">{backupContainer}</Tab>
                     <Tab eventKey={3} title="API MANAGEMENT">{apiDetails}</Tab>

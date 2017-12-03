@@ -302,7 +302,7 @@ class WorkPackageApplicationsList extends Component {
                         // Col 3 - Tabs
                         let col3 =
                             <Col id="column2" md={col2width} className="close-col">
-                                <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                                <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
                                     <Tab eventKey={1} title="DETAILS">{wpTextComponentView}</Tab>
                                     <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
                                 </Tabs>

@@ -11,6 +11,7 @@ import DesignVersionsContainer              from '../../containers/select/Design
 import DesignUpdatesContainer               from '../../containers/select/DesignUpdatesContainer.jsx';
 import WorkPackagesContainer                from '../../containers/select/WorkPackagesContainer.jsx';
 import WorkProgressSummaryContainer         from '../../containers/summary/WorkProgressSummaryContainer.jsx';
+import FeatureSummaryContainer              from '../../containers/select/FeatureSummaryContainer.jsx';
 
 
 // Ultrawide Services
@@ -20,7 +21,7 @@ import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVers
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 
 // Bootstrap
-import {Tabs, Tab, Grid, Row, Col} from 'react-bootstrap';
+import {Tabs, Tab, Grid, Row, Col, Nav, NavItem} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -58,14 +59,20 @@ export class MainSelectionPage extends Component {
         // Items -------------------------------------------------------------------------------------------------------
 
         const designTabLayout =
-            <Grid>
+            <Grid className="close-grid">
                 <Row>
-                    <Col md={6}>
+                    <Col className="close-col" md={3}>
                         <DesignsContainer/>
                     </Col>
-                    <Col md={6}>
+                    <Col className="close-col"  md={3}>
                         <DesignVersionsContainer params={{
                             designId: userContext.designId
+                        }}/>
+                    </Col>
+                    <Col className="close-col"  md={6}>
+                        <FeatureSummaryContainer params={{
+                            userContext: userContext,
+                            homePageTab: userHomeTab
                         }}/>
                     </Col>
                 </Row>
@@ -119,20 +126,81 @@ export class MainSelectionPage extends Component {
         ){
 
             layout =
-                <Tabs animation={true} unmountOnExit={true} activeKey={userHomeTab} id="main_tabs" onSelect={(tab) => this.onSelectTab(tab)}>
-                    <Tab eventKey={HomePageTab.TAB_DESIGNS} title="DESIGNS">{designTabLayout}</Tab>
-                    <Tab eventKey={HomePageTab.TAB_WORK} title="WORK">{workTabLayout}</Tab>
-                    <Tab eventKey={HomePageTab.TAB_PROGRESS} title="PROGRESS">{progressTabLayout}</Tab>
-                </Tabs>
+                <div className="home-page">
+                    <Tab.Container id="main-page" activeKey={userHomeTab} onSelect={(tab) => this.onSelectTab(tab)}>
+                        <Row>
+                            <Col md={1}>
+                                <Nav bsStyle="pills" className="side-menu" stacked>
+                                    <NavItem eventKey={HomePageTab.TAB_DESIGNS}>
+                                        DESIGNS
+                                    </NavItem>
+                                    <NavItem eventKey={HomePageTab.TAB_WORK}>
+                                        WORK
+                                    </NavItem>
+                                    <NavItem eventKey={HomePageTab.TAB_PROGRESS}>
+                                        PROGRESS
+                                    </NavItem>
+                                </Nav>
+                            </Col>
+                            <Col  className="main-panel" md={11}>
+                                <Tab.Content animation>
+                                    <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_DESIGNS}>
+                                        {designTabLayout}
+                                    </Tab.Pane>
+                                    <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_WORK}>
+                                        {workTabLayout}
+                                    </Tab.Pane>
+                                    <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_PROGRESS}>
+                                        {progressTabLayout}
+                                    </Tab.Pane>
+                                </Tab.Content>
+                            </Col>
+                        </Row>
+                    </Tab.Container>
+                </div>;
+
         } else {
 
             layout =
-                <Tabs animation={true} unmountOnExit={true} activeKey={userHomeTab} id="main_tabs" onSelect={(tab) => this.onSelectTab(tab)}>
-                    <Tab eventKey={HomePageTab.TAB_DESIGNS} title="DESIGNS">{designTabLayout}</Tab>
-                    <Tab eventKey={HomePageTab.TAB_UPDATES} title="UPDATES">{updatesTabLayout}</Tab>
-                    <Tab eventKey={HomePageTab.TAB_WORK} title="WORK">{workTabLayout}</Tab>
-                    <Tab eventKey={HomePageTab.TAB_PROGRESS} title="PROGRESS">{progressTabLayout}</Tab>
-                </Tabs>
+                <div className="home-page">
+                    <Tab.Container id="main-page" activeKey={userHomeTab} onSelect={(tab) => this.onSelectTab(tab)}>
+                        <Row>
+                            <Col md={1}>
+                                <Nav bsStyle="pills" className="side-menu" stacked>
+                                    <NavItem eventKey={HomePageTab.TAB_DESIGNS}>
+                                        DESIGNS
+                                    </NavItem>
+                                    <NavItem eventKey={HomePageTab.TAB_UPDATES}>
+                                        UPDATES
+                                    </NavItem>
+                                    <NavItem eventKey={HomePageTab.TAB_WORK}>
+                                        WORK
+                                    </NavItem>
+                                    <NavItem eventKey={HomePageTab.TAB_PROGRESS}>
+                                        PROGRESS
+                                    </NavItem>
+                                </Nav>
+                            </Col>
+                            <Col  className="main-panel" md={11}>
+                                <Tab.Content animation>
+                                    <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_DESIGNS}>
+                                        {designTabLayout}
+                                    </Tab.Pane>
+                                    <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_UPDATES}>
+                                        {updatesTabLayout}
+                                    </Tab.Pane>
+                                    <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_WORK}>
+                                        {workTabLayout}
+                                    </Tab.Pane>
+                                    <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_PROGRESS}>
+                                        {progressTabLayout}
+                                    </Tab.Pane>
+                                </Tab.Content>
+                            </Col>
+                        </Row>
+                    </Tab.Container>
+                </div>;
+
         }
 
 

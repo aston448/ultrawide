@@ -40,6 +40,7 @@ import DefaultFeatureAspectData         from '../data/design/default_feature_asp
 // REDUX services
 import store from '../redux/store'
 import { setDesignVersionDataLoadedTo, updateUserMessage } from '../redux/actions'
+import {HomePageTab, UpdateMergeStatus} from "../constants/constants";
 
 
 // =====================================================================================================================
@@ -524,6 +525,100 @@ class ClientDataServices{
             };
         }
     };
+
+    getDesignVersionFeatureSummaries(userContext, homePageTab){
+
+        let featureSummaries = [];
+
+        if(userContext.designVersionId === 'NONE'){
+
+            return{
+                featureSummaries:   featureSummaries,
+                designVersionName:  'NONE',
+                workPackageName:    'NONE',
+                homePageTab:        HomePageTab.TAB_DESIGNS
+            };
+
+        } else {
+
+            let features = [];
+            let wpFeatures = [];
+            if(homePageTab === HomePageTab.TAB_DESIGNS){
+
+                // Get all features in a Design Version
+                features = DesignVersionData.getNonRemovedFeatures(userContext.designId, userContext.designVersionId);
+
+            } else {
+
+                // Getting features in a WP only
+                wpFeatures = WorkPackageData.getWorkPackageComponentsOfType(userContext.workPackageId, ComponentType.FEATURE);
+
+                wpFeatures.forEach((wpFeature) => {
+
+                    let dvFeature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, wpFeature.componentReferenceId);
+
+                    if(dvFeature && dvFeature.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED){
+                        features.push(dvFeature);
+                    }
+                });
+            }
+
+
+            const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+            let wpName = '';
+
+            if(homePageTab === HomePageTab.TAB_WORK && userContext.workPackageId !== 'NONE'){
+                const wp = WorkPackageData.getWorkPackageById(userContext.workPackageId)
+                if(wp){
+                    wpName = wp.workPackageName
+                }
+            }
+
+            features.forEach((feature) => {
+
+                const mashData = UserDevTestSummaryData.getTestSummaryForFeature(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
+
+                let featureSummary = {};
+
+                if(mashData){
+
+                    featureSummary = {
+                        _id:                feature._id,
+                        featureName:        feature.componentNameNew,
+                        featureRef:         feature.componentReferenceId,
+                        hasTestData:        true,
+                        summaryStatus:      mashData.featureSummaryStatus,
+                        testPassCount:      mashData.featureTestPassCount,
+                        testFailCount:      mashData.featureTestFailCount,
+                        noTestCount:        mashData.featureNoTestCount
+                    };
+
+                } else {
+
+                    featureSummary = {
+                        _id:                feature._id,
+                        featureName:        feature.componentNameNew,
+                        featureRef:         feature.componentReferenceId,
+                        hasTestData:        false,
+                        summaryStatus:      'NONE',
+                        testPassCount:      0,
+                        testFailCount:      0,
+                        noTestCount:        0
+                    };
+
+                }
+
+                featureSummaries.push(featureSummary);
+            });
+
+            return{
+                featureSummaries:   featureSummaries,
+                designVersionName:  dv.designVersionName,
+                workPackageName:    wpName,
+                homePageTab:        homePageTab
+            };
+        }
+    }
 
     // Get a list of Work Packages for a Design Version
     getWorkPackagesForCurrentDesignVersion(currentDesignVersionId, userRole, userId, wpType){

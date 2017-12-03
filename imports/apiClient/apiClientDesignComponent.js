@@ -1,7 +1,7 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import { ComponentType, DisplayContext, ViewType, LogLevel, MessageType} from '../constants/constants.js';
+import { ComponentType, DisplayContext, ViewType, LogLevel, MessageType, DesignVersionStatus} from '../constants/constants.js';
 import { DesignComponentMessages } from '../constants/message_texts.js';
 import { Validation } from '../constants/validation_errors.js';
 
@@ -14,6 +14,7 @@ import ServerWorkPackageApi          from '../apiServer/apiWorkPackage.js';
 import {log} from '../common/utils.js';
 
 // Data Access
+import DesignVersionData                from '../data/design/design_version_db.js';
 import WorkPackageData                  from '../data/work/work_package_db.js';
 import DesignComponentData              from '../data/design/design_component_db.js';
 import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
@@ -622,6 +623,75 @@ class ClientDesignComponentServices{
 
         // And select the WP wanted
         ClientWorkPackageServices.setWorkPackage(newContext, workPackageId)
+
+    }
+
+    gotoFeature(featureReferenceId){
+
+        const userContext = store.getState().currentUserItemContext;
+        const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+        const feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, featureReferenceId);
+
+        // Set the Feature as current component
+        const newContext = {
+            userId:                         userContext.userId,
+            designId:                       userContext.designId,
+            designVersionId:                userContext.designVersionId,
+            designUpdateId:                 'NONE',
+            workPackageId:                  'NONE',
+            designComponentId:              feature._id,
+            designComponentType:            ComponentType.FEATURE,
+            featureReferenceId:             featureReferenceId,
+            featureAspectReferenceId:       'NONE',
+            scenarioReferenceId:            'NONE',
+            scenarioStepId:                 'NONE'
+        };
+
+        store.dispatch(setCurrentUserItemContext(newContext, true));
+
+        // And switch to the design version view
+        if(dv.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE || dv.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
+            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATABLE));
+        } else {
+            store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED));
+        }
+
+        // Open it and its parents
+
+        // Close all items to start with
+
+        let openList = [];
+
+        store.dispatch(setCurrentUserOpenDesignItems(
+            openList,
+            null,
+            false
+        ));
+
+        // Open the selected feature
+
+        store.dispatch(setCurrentUserOpenDesignItems(
+            openList,
+            feature._id,
+            true
+        ));
+
+        // Also open the feature aspects
+        const featureComponents = DesignComponentData.getNonScenarioFeatureComponents(userContext.designVersionId, featureReferenceId);
+
+        featureComponents.forEach((component) => {
+            store.dispatch(setCurrentUserOpenDesignItems(
+                openList,
+                component._id,
+                true
+            ));
+        });
+
+        // Recursively open up to top
+        const newList = store.getState().currentUserOpenDesignItems;
+
+        // And move on up
+        this.openParent(feature._id, newList);
 
     }
 

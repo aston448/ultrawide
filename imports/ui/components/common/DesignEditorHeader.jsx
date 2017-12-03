@@ -126,7 +126,7 @@ export class DesignEditorHeader extends Component {
                         } else {
                             description = 'UPDATE SUMMARY';
                             if(nameData.designUpdate !== 'NONE'){
-                                description += ': ' + nameData.designUpdate
+                                description += ': ' + nameData.designUpdateRef + ' - ' + nameData.designUpdate
                             }
                         }
                         break;

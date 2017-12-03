@@ -330,7 +330,7 @@ export class UpdateApplicationsList extends Component {
 
                 let col3 =
                     <Col id="tabsCol" md={col3width} className="close-col">
-                        <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                        <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
                             <Tab eventKey={1} title="DETAILS">{updateTextComponent}</Tab>
                             <Tab eventKey={2} title="WORKING VIEW">{workingVersionComponent}</Tab>
                             <Tab eventKey={3} title="SUMMARY">{updateSummary}</Tab>
@@ -598,7 +598,7 @@ export class UpdateApplicationsList extends Component {
 
                 let col2 =
                     <Col id="tabsCol" md={col2width} className="close-col">
-                        <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                        <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
                             <Tab eventKey={1} title="DETAILS">{updateTextComponent}</Tab>
                             <Tab eventKey={2} title="WORKING VIEW">{workingVersionComponent}</Tab>
                             <Tab eventKey={3} title="SUMMARY">{updateSummary}</Tab>

@@ -620,7 +620,7 @@ class DevApplicationsList extends Component {
 
                 let col2 =
                     <Col id="tabsCol" md={col2width} className="close-col">
-                        <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                        <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
                             <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
                             <Tab eventKey={2} title="INTEGRATION TESTS">{intTests}</Tab>
                             <Tab eventKey={3} title="UNIT TESTS">{unitTests}</Tab>

@@ -38,8 +38,15 @@ li .text {
     margin-left: 10px;
 }
 
+/* to fix vertical tab list */
+.nav-stacked > li{
+    margin: 0;
+}
 
-
+/* for inactive tabs */
+a {
+    color: darkgray;
+}
 
 input {
     margin: 0;
@@ -588,6 +595,27 @@ input {
     margin: 10px;
 }
 
+.home-page{
+    margin: 0;
+    padding: 5px 0 0 5px;
+}
+
+.side-menu{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    font-weight: normal;
+}
+
+.top-tabs{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  15px;
+    font-weight: normal;
+}
+
+.main-panel{
+    border-left: 1px lightgrey solid;
+}
+
 .main-grid{
     margin: 0;
     padding: 0px;
@@ -612,7 +640,7 @@ input {
 
 .close-col{
     margin: 0;
-    padding: 0 5px 0 5px;
+    padding: 0 4px 0 4px;
     background-color: transparent;
 }
 
@@ -644,7 +672,7 @@ input {
 
 .item-container-header{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  18px;
+    font-size:  16px;
     color: lightgrey;
     background-color: darkslategray;
     margin: 0;
@@ -690,8 +718,8 @@ input {
 .di-active{
     border: 1px solid black;
     border-radius: 0px;
-    /*background-color: aliceblue;*/
-    /*box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);*/
+    background-color: aliceblue;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);
 }
 
 .di-highlight{
@@ -720,7 +748,6 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: normal;
-    /*border-bottom: 1px solid lightgrey;*/
     color: black;
     width: 100%;
 }
@@ -734,7 +761,7 @@ input {
 }
 
 .item-status-complete{
-    background-color: #AAEEAA;
+    background-color: #EEFFEE;
 }
 
 .item-status-updatable{
@@ -1617,6 +1644,18 @@ input {
     color: black;
 }
 
+.feature-small {
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    padding-top: 3px;
+    font-size:  16px;
+    font-weight: 500;
+    color: black;
+}
+
+.feature-summary-row{
+    border-bottom: 1px lightgrey solid;
+}
+
 .feature-aspect {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     padding-top: 4px;
@@ -2245,7 +2284,7 @@ input {
 
 .test-summary-result{
     margin: 0;
-    padding: 0 5px 0 10px;
+    padding: 0 5px 0 5px;
     border: none;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  10px;

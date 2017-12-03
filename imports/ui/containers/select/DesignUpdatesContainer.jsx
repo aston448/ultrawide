@@ -26,6 +26,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 // REDUX services
 import {connect} from 'react-redux';
 import ClientWorkPackageServices from "../../../apiClient/apiClientWorkPackage";
+import {HomePageTab} from "../../../constants/constants";
 
 // =====================================================================================================================
 
@@ -90,6 +91,10 @@ export class DesignUpdatesList extends Component {
         return ClientDesignUpdateServices.getDesignUpdateRef(designUpdateId);
     }
 
+    onSelectTab(){
+
+    }
+
 
     render() {
 
@@ -103,6 +108,10 @@ export class DesignUpdatesList extends Component {
         let headerText2 = '';
         let headerText3 = '';
         let headerText4 = '';
+
+        let tabText1 = '';
+        let tabText2 = '';
+        let tabText3 = '';
 
         // DU List Footer ----------------------------------------------------------------------------------------------
 
@@ -154,6 +163,7 @@ export class DesignUpdatesList extends Component {
                 case DesignVersionStatus.VERSION_UPDATABLE:
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
+                    tabText1 = 'NEW';
                     headerText1 = 'Updates Needing Work Packages';
                     if(incompleteUpdates.length > 0){
 
@@ -165,6 +175,7 @@ export class DesignUpdatesList extends Component {
 
                     }
 
+                    tabText2 = 'WORK ASSIGNED';
                     headerText2 = 'Updates With Work Packages';
                     if(assignedUpdates.length > 0){
 
@@ -176,7 +187,8 @@ export class DesignUpdatesList extends Component {
 
                     }
 
-                    headerText3 = 'Updates Completed';
+                    tabText3 = 'TEST COMPLETE';
+                    headerText3 = 'Updates with Tests Passing';
                     if(completeUpdates.length > 0){
 
                         bodyDataFunction3 = () => this.renderDesignUpdatesList(completeUpdates)
@@ -251,34 +263,38 @@ export class DesignUpdatesList extends Component {
                         layout =
                             <Grid>
                                 <Row>
-                                    <Col md={3}>
-                                        <ItemContainer
-                                            headerText={headerText1}
-                                            bodyDataFunction={bodyDataFunction1}
-                                            hasFooterAction={hasFooterAction}
-                                            footerAction={footerAction}
-                                            footerActionFunction={footerActionFunction}
-                                        />
+                                    <Col md={6}>
+                                        <Tabs className="top-tabs" animation={true} unmountOnExit={true} defaultActiveKey={2} id="main_tabs" onSelect={(tab) => this.onSelectTab(tab)}>
+                                            <Tab eventKey={1} title={tabText1}>
+                                                <ItemContainer
+                                                    headerText={headerText1}
+                                                    bodyDataFunction={bodyDataFunction1}
+                                                    hasFooterAction={hasFooterAction}
+                                                    footerAction={footerAction}
+                                                    footerActionFunction={footerActionFunction}
+                                                />
+                                            </Tab>
+                                            <Tab eventKey={2} title={tabText2}>
+                                                <ItemContainer
+                                                    headerText={headerText2}
+                                                    bodyDataFunction={bodyDataFunction2}
+                                                    hasFooterAction={false}
+                                                    footerAction={''}
+                                                    footerActionFunction={null}
+                                                />
+                                            </Tab>
+                                            <Tab eventKey={3} title={tabText3}>
+                                                <ItemContainer
+                                                    headerText={headerText3}
+                                                    bodyDataFunction={bodyDataFunction3}
+                                                    hasFooterAction={false}
+                                                    footerAction={''}
+                                                    footerActionFunction={null}
+                                                />
+                                            </Tab>
+                                        </Tabs>
                                     </Col>
-                                    <Col md={3}>
-                                        <ItemContainer
-                                            headerText={headerText2}
-                                            bodyDataFunction={bodyDataFunction2}
-                                            hasFooterAction={false}
-                                            footerAction={''}
-                                            footerActionFunction={null}
-                                        />
-                                    </Col>
-                                    <Col md={2}>
-                                        <ItemContainer
-                                            headerText={headerText3}
-                                            bodyDataFunction={bodyDataFunction3}
-                                            hasFooterAction={false}
-                                            footerAction={''}
-                                            footerActionFunction={null}
-                                        />
-                                    </Col>
-                                    <Col md={4}>
+                                    <Col md={6}>
                                         <DesignUpdateSummaryContainer params={{
                                             userContext: userContext,
                                             displayContext: DisplayContext.UPDATE_SUMMARY

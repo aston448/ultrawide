@@ -11,9 +11,10 @@ import { createContainer }  from 'meteor/react-meteor-data';
 import WorkPackage                  from '../../components/select/WorkPackage.jsx';
 import ItemContainer                from '../../components/common/ItemContainer.jsx';
 import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
+import FeatureSummaryContainer      from '../../containers/select/FeatureSummaryContainer.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, LogLevel} from '../../../constants/constants.js';
+import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, HomePageTab, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js';
 
 import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
@@ -22,7 +23,7 @@ import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackag
 import DesignVersionData             from '../../../data/design/design_version_db.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -138,6 +139,10 @@ export class WorkPackagesList extends Component {
         let headerText2 = '';
         let headerText3 = '';
 
+        let tabText1 = '';
+        let tabText2 = '';
+        let tabText3 = '';
+
         const wpsNotAppropriate = 'Work Packages may only be added to a Draft design version...';
         const NO_WORK_PACKAGES = 'No Work Packages';
         const selectDesignUpdate = 'Select a Design Update';
@@ -151,6 +156,7 @@ export class WorkPackagesList extends Component {
 
                     // No work packages available and none can be added...
 
+                    tabText1 = 'AVAILABLE';
                     headerText1 = 'Available Work Packages';
                     if(userRole === RoleType.MANAGER){
                         bodyDataFunction1 = () => this.displayNote(wpsNotAppropriate);
@@ -158,8 +164,11 @@ export class WorkPackagesList extends Component {
                         bodyDataFunction1 = () => this.displayNote(NO_WORK_PACKAGES);
                     }
 
+                    tabText2 = 'ADOPTED';
                     headerText2 = 'Adopted Work Packages';
                     bodyDataFunction2 = () => this.displayNote(NO_WORK_PACKAGES);
+
+                    tabText3 = 'COMPLETED';
                     headerText3 = 'Completed Work Packages';
                     bodyDataFunction3 = () => this.displayNote(NO_WORK_PACKAGES);
 
@@ -170,6 +179,7 @@ export class WorkPackagesList extends Component {
                 case DesignVersionStatus.VERSION_UPDATABLE:
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
+                    tabText1 = 'AVAILABLE';
                     headerText1 = 'Available Work Packages';
                     if(newWorkPackages.length === 0 && availableWorkPackages.length === 0){
 
@@ -181,6 +191,7 @@ export class WorkPackagesList extends Component {
 
                     }
 
+                    tabText2 = 'ADOPTED';
                     headerText2 = 'Adopted Work Packages';
                     if(userRole === RoleType.DEVELOPER){
                         headerText2 = 'My Adopted Work Packages';
@@ -193,6 +204,7 @@ export class WorkPackagesList extends Component {
                         bodyDataFunction2 = () => this.renderWorkPackagesList(adoptedWorkPackages);
                     }
 
+                    tabText3 = 'COMPLETED';
                     headerText3 = 'Completed Work Packages';
                     if(userRole === RoleType.DEVELOPER){
                         headerText3 = 'My Completed Work Packages';
@@ -216,100 +228,80 @@ export class WorkPackagesList extends Component {
 
         let wpSummary = <div></div>;
 
-        if(userContext.workPackageId !== 'NONE' && (designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE || designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE)){
-            wpSummary =
-                <DesignUpdateSummaryContainer params={{
-                    userContext: userContext,
-                    displayContext: DisplayContext.WP_SUMMARY
-                }}/>;
+        if((designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE || designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE)){
+
+            // Updatable Version WPs
+            if(userContext.workPackageId !== 'NONE') {
+                wpSummary =
+                    <DesignUpdateSummaryContainer params={{
+                        userContext: userContext,
+                        displayContext: DisplayContext.WP_SUMMARY
+                    }}/>;
+            } else {
+                wpSummary =
+                    <div className="design-item-note">
+                        Select a Work Package to see Summary
+                    </div>
+            }
+        } else {
+
+            if(userContext.workPackageId !== 'NONE') {
+                wpSummary =
+                    <div className="design-item-note">
+                        <FeatureSummaryContainer params={{
+                            userContext: userContext,
+                            homePageTab: HomePageTab.TAB_WORK
+                        }}/>
+                    </div>
+            } else {
+                wpSummary =
+                    <div className="design-item-note">
+                        Select a Work Package to see Features
+                    </div>
+            }
         }
 
         // Display as an item container --------------------------------------------------------------------------------
 
-        let layout = '';
-
-
-        if(designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE || designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
-
-            // Updatable version.  Add an update summary to WPs
-            layout =
-                <Grid>
-                    <Row>
-                        <Col md={3}>
-                            <ItemContainer
-                                headerText={headerText1}
-                                bodyDataFunction={bodyDataFunction1}
-                                hasFooterAction={hasFooterAction}
-                                footerAction={footerAction}
-                                footerActionFunction={footerActionFunction}
-                                footerText={footerText}
-                            />
-                        </Col>
-                        <Col md={3}>
-                            <ItemContainer
-                                headerText={headerText2}
-                                bodyDataFunction={bodyDataFunction2}
-                                hasFooterAction={false}
-                                footerAction={null}
-                                footerActionFunction={null}
-                                footerText={footerText}
-                            />
-                        </Col>
-                        <Col md={2}>
-                            <ItemContainer
-                                headerText={headerText3}
-                                bodyDataFunction={bodyDataFunction3}
-                                hasFooterAction={false}
-                                footerAction={null}
-                                footerActionFunction={null}
-                                footerText={footerText}
-                            />
-                        </Col>
-                        <Col md={4}>
-                            {wpSummary}
-                        </Col>
-                    </Row>
-                </Grid>;
-
-        } else {
-
-            // Initial Design Version - WPS do not have an update summary
-            layout =
-                <Grid>
-                    <Row>
-                        <Col md={4}>
-                            <ItemContainer
-                                headerText={headerText1}
-                                bodyDataFunction={bodyDataFunction1}
-                                hasFooterAction={hasFooterAction}
-                                footerAction={footerAction}
-                                footerActionFunction={footerActionFunction}
-                                footerText={footerText}
-                            />
-                        </Col>
-                        <Col md={4}>
-                            <ItemContainer
-                                headerText={headerText2}
-                                bodyDataFunction={bodyDataFunction2}
-                                hasFooterAction={false}
-                                footerAction={null}
-                                footerActionFunction={null}
-                                footerText={footerText}
-                            />
-                        </Col>
-                        <Col md={4}>
-                            <ItemContainer
-                                headerText={headerText3}
-                                bodyDataFunction={bodyDataFunction3}
-                                hasFooterAction={false}
-                                footerAction={null}
-                                footerActionFunction={null}
-                                footerText={footerText}
-                            />
-                        </Col>
-                    </Row>
-                </Grid>;
-        }
+        let layout =
+            <Grid>
+                <Row>
+                    <Col md={6}>
+                        <Tabs className="top-tabs" animation={true} unmountOnExit={true} defaultActiveKey={2} id="main_tabs">
+                            <Tab eventKey={1} title={tabText1}>
+                                <ItemContainer
+                                    headerText={headerText1}
+                                    bodyDataFunction={bodyDataFunction1}
+                                    hasFooterAction={hasFooterAction}
+                                    footerAction={footerAction}
+                                    footerActionFunction={footerActionFunction}
+                                />
+                            </Tab>
+                            <Tab eventKey={2} title={tabText2}>
+                                <ItemContainer
+                                    headerText={headerText2}
+                                    bodyDataFunction={bodyDataFunction2}
+                                    hasFooterAction={false}
+                                    footerAction={''}
+                                    footerActionFunction={null}
+                                />
+                            </Tab>
+                            <Tab eventKey={3} title={tabText3}>
+                                <ItemContainer
+                                    headerText={headerText3}
+                                    bodyDataFunction={bodyDataFunction3}
+                                    hasFooterAction={false}
+                                    footerAction={''}
+                                    footerActionFunction={null}
+                                />
+                            </Tab>
+                        </Tabs>
+                    </Col>
+                    <Col md={6}>
+                        {wpSummary}
+                    </Col>
+                </Row>
+            </Grid>;
 
         return (
             <div>

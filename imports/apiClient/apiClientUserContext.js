@@ -573,6 +573,7 @@ class ClientUserContextServices {
             design:             'NONE',
             designVersion:      'NONE',
             designUpdate:       'NONE',
+            designUpdateRef:    'NONE',
             designUpdateAction: 'NONE',
             workPackage:        'NONE',
             application:        'NONE',
@@ -606,6 +607,7 @@ class ClientUserContextServices {
 
             if(designUpdate) {
                 contextNameData.designUpdate = designUpdate.updateName;
+                contextNameData.designUpdateRef = designUpdate.updateReference;
                 contextNameData.designUpdateAction = TextLookups.updateMergeActions(designUpdate.updateMergeAction);
             }
         }
