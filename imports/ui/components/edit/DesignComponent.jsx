@@ -137,6 +137,7 @@ export class DesignComponent extends Component{
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
+                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
                     nextProps.testDataFlag === this.props.testDataFlag

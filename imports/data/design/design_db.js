@@ -80,7 +80,7 @@ class DesignData {
 
         const features = DesignVersionComponents.find({designId: designId, componentType: ComponentType.FEATURE});
 
-        return features !== null;
+        return features.count() > 0;
 
     }
 
@@ -88,7 +88,7 @@ class DesignData {
 
         const updateFeatures = DesignUpdateComponents.find({designId: designId, componentType: ComponentType.FEATURE});
 
-        return updateFeatures !== null;
+        return updateFeatures.count() > 0;
     }
 
     // UPDATE ==========================================================================================================
