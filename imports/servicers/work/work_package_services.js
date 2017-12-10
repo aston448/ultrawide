@@ -68,7 +68,7 @@ class WorkPackageServices{
 
         if(Meteor.isServer) {
 
-            // A WP is complete if, for active scenarios:
+            // A WP is complete if Adopted and, for active scenarios:
             // - No failing test Scenarios
             // - No untested Scenarios that are not ignored
 
@@ -80,59 +80,71 @@ class WorkPackageServices{
 
             log((msg) => console.log(msg), LogLevel.INFO, 'Updating WP Completeness for WP {}...', wp.workPackageName);
 
-            // This loop breaks as soon as we decide it is not complete
-            for (let scenario of wpScenarios){
+            // Only Adopted WPs can go to complete...
+            if(wp.workPackageStatus === WorkPackageStatus.WP_ADOPTED) {
 
-                // Get latest test results
-                let scenarioMash = UserDvMashScenarioData.getScenario(userContext, scenario.componentReferenceId);
+                // No scenarios = not complete
+                if(wpScenarios.length > 0) {
 
-                let problem = false;
+                    // This loop breaks as soon as we decide it is not complete
+                    for (let scenario of wpScenarios) {
 
-                // Not complete if no test data
-                if(scenarioMash) {
+                        // Get latest test results
+                        let scenarioMash = UserDvMashScenarioData.getScenario(userContext, scenario.componentReferenceId);
 
-                    // Not complete if any fails
+                        let problem = false;
 
-                    if (
-                        (scenarioMash.accFailCount && scenarioMash.accFailCount > 0) ||
-                        (scenarioMash.intFailCount && scenarioMash.intFailCount > 0) ||
-                        (scenarioMash.unitFailCount && scenarioMash.unitFailCount > 0)
-                        ) {
-                            log((msg) => console.log(msg), LogLevel.INFO, '  Fails');
+                        // Not complete if no test data
+                        if (scenarioMash) {
+
+                            // Not complete if any fails
+
+                            if (
+                                (scenarioMash.accFailCount && scenarioMash.accFailCount > 0) ||
+                                (scenarioMash.intFailCount && scenarioMash.intFailCount > 0) ||
+                                (scenarioMash.unitFailCount && scenarioMash.unitFailCount > 0)
+                            ) {
+                                log((msg) => console.log(msg), LogLevel.INFO, '  Fails');
+                                problem = true;
+                            }
+
+                            // Not complete if no passes and not ignored
+                            let passCount = 0;
+                            if (scenarioMash.accPassCount) {passCount += scenarioMash.accPassCount}
+                            if (scenarioMash.intPassCount) {passCount += scenarioMash.intPassCount}
+                            if (scenarioMash.unitPassCount) {passCount += scenarioMash.unitPassCount}
+
+                            log((msg) => console.log(msg), LogLevel.INFO, '  Pass count = {}', passCount);
+
+                            if (
+                                (passCount === 0) &&
+                                (scenario.reviewStatus !== WorkPackageReviewType.REVIEW_IGNORE)
+                            ) {
+                                log((msg) => console.log(msg), LogLevel.INFO, '  No Passes');
+                                problem = true;
+                            }
+                        } else {
+                            log((msg) => console.log(msg), LogLevel.INFO, '  No Mash');
                             problem = true;
-                    }
+                        }
 
-                    // Not complete if no passes and not ignored
-                    let passCount = 0;
-                    if(scenarioMash.accPassCount){passCount += scenarioMash.accPassCount}
-                    if(scenarioMash.intPassCount){passCount += scenarioMash.intPassCount}
-                    if(scenarioMash.unitPassCount){passCount += scenarioMash.unitPassCount}
+                        if (problem) {
 
-                    log((msg) => console.log(msg), LogLevel.INFO, '  Pass count = {}', passCount);
+                            // Check it is not a removed Scenario before failing the WP
+                            const designComponent = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, scenario.componentReferenceId);
 
-                    if (
-                        (passCount === 0) &&
-                        (scenario.reviewStatus !== WorkPackageReviewType.REVIEW_IGNORE)
-                    ) {
-                        log((msg) => console.log(msg), LogLevel.INFO, '  No Passes');
-                        problem = true;
+                            if (designComponent.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED) {
+                                log((msg) => console.log(msg), LogLevel.INFO, '  Not Removed');
+                                wpTestStatus = WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE;
+                                break;
+                            }
+                        }
                     }
                 } else {
-                    log((msg) => console.log(msg), LogLevel.INFO, '  No Mash');
-                    problem = true;
+                    wpTestStatus = WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE;
                 }
-
-                if(problem){
-
-                    // Check it is not a removed Scenario before failing the WP
-                    const designComponent = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, scenario.componentReferenceId);
-
-                    if(designComponent.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED){
-                        log((msg) => console.log(msg), LogLevel.INFO, '  Not Removed');
-                        wpTestStatus = WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE;
-                        break;
-                    }
-                }
+            } else {
+                wpTestStatus = WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE;
             }
 
             // Update the WP status
