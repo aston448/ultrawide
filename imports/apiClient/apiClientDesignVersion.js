@@ -353,7 +353,21 @@ class ClientDesignVersionServices{
         // Ensure that the current version is the version we chose to edit.  Reset User Context
         let updatedContext = this.setDesignVersion(userContext, userRole, designVersionToEditId, true);
 
-        store.dispatch(setCurrentView(ViewType.DESIGN_NEW));
+        const designVersion = DesignVersionData.getDesignVersionById(designVersionToEditId);
+
+        // Choose whether we are editing a new or published Design Version
+        let view = ViewType.SELECT;
+
+        switch(designVersion.designVersionStatus){
+            case DesignVersionStatus.VERSION_NEW:
+                view = ViewType.DESIGN_NEW;
+                break;
+            case DesignVersionStatus.VERSION_DRAFT:
+                view = ViewType.DESIGN_PUBLISHED;
+                break;
+        }
+
+        store.dispatch(setCurrentView(view));
 
         // Put the view in edit mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
@@ -393,9 +407,10 @@ class ClientDesignVersionServices{
             case RoleType.DESIGNER:
                 switch(designVersion.designVersionStatus){
                     case DesignVersionStatus.VERSION_NEW:
-                    case DesignVersionStatus.VERSION_DRAFT:
-                        // For new / draft design versions, viewing does not preclude switching to editing
                         view = ViewType.DESIGN_NEW;
+                        break;
+                    case DesignVersionStatus.VERSION_DRAFT:
+                        view = ViewType.DESIGN_PUBLISHED;
                         break;
                     case DesignVersionStatus.VERSION_UPDATABLE:
                         view = ViewType.DESIGN_UPDATABLE;
