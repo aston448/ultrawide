@@ -54,37 +54,47 @@ export default class SingleTestScenarioMashItem extends Component {
         let testStyle = '';
         let testOutcome = '';
         let testType = '';
+        let resultCount = 0;
 
         switch(displayContext){
             case DisplayContext.MASH_ACC_TESTS:
+                testStyle = mashItem.accMashTestStatus;
+                testOutcome = TextLookups.mashTestStatus(mashItem.accMashTestStatus);
+                testType = TestType.ACCEPTANCE;
+                resultCount = mashItem.accTestCount;
                 break;
 
             case DisplayContext.MASH_INT_TESTS:
                 testStyle = mashItem.intMashTestStatus;
                 testOutcome = TextLookups.mashTestStatus(mashItem.intMashTestStatus);
                 testType = TestType.INTEGRATION;
+                resultCount = mashItem.intTestCount;
                 break;
 
             case DisplayContext.MASH_UNIT_TESTS:
                 testStyle = mashItem.unitMashTestStatus;
                 testOutcome = TextLookups.mashTestStatus(mashItem.unitMashTestStatus);
                 testType = TestType.UNIT;
+                resultCount = mashItem.unitTestCount;
                 break;
         }
+
+
 
         // Get the details so we can display them for the one test for the scenario
         const testResult = this.getTestResultDetails(mashItem.userId, mashItem.designVersionId, mashItem.designScenarioReferenceId, testType);
 
         //console.log('Test style for ' + mashItem.scenarioName + ' is ' + testStyle);
 
-        if(this.state.showResultDetails) {
+        if (this.state.showResultDetails) {
             return (
                 <Grid className="mash-unit-scenario" onClick={() => this.toggleOverlay()}>
                     <Row className="mash-unit-scenario-header">
                         <Col md={11} className="close-col">
                             <InputGroup>
                                 <InputGroup.Addon>
-                                    <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/></div>
+                                    <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/>
+                                    </div>
                                 </InputGroup.Addon>
                                 <div className={'mash-scenario ' + testStyle}>
                                     {mashItem.scenarioName}
@@ -112,7 +122,8 @@ export default class SingleTestScenarioMashItem extends Component {
                         <Col md={11} className="close-col">
                             <InputGroup>
                                 <InputGroup.Addon>
-                                    <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/></div>
+                                    <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/>
+                                    </div>
                                 </InputGroup.Addon>
                                 <div className={'mash-scenario ' + testStyle}>
                                     {mashItem.scenarioName}
@@ -128,6 +139,7 @@ export default class SingleTestScenarioMashItem extends Component {
                 </Grid>
             )
         }
+
     }
 
 }

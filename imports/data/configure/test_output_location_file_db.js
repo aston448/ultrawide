@@ -49,6 +49,14 @@ class TestOutputLocationFileData{
         });
     }
 
+    getAcceptanceTestFilesForLocation(outputLocationId){
+
+        return TestOutputLocationFiles.find({
+            locationId: outputLocationId,
+            fileType:   TestLocationFileType.ACCEPTANCE
+        }).fetch();
+    }
+
     getIntegrationTestFilesForLocation(outputLocationId){
 
         return TestOutputLocationFiles.find({

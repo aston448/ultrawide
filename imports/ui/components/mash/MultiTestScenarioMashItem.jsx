@@ -49,7 +49,10 @@ export class MultiTestScenarioMashItem extends Component {
         let testOutcome = '';
 
         switch(displayContext){
+
             case DisplayContext.MASH_ACC_TESTS:
+                testStyle = mashItem.accMashTestStatus;
+                testOutcome = TextLookups.mashTestStatus(mashItem.accMashTestStatus);
                 break;
 
             case DisplayContext.MASH_INT_TESTS:

@@ -197,6 +197,66 @@ export class DesignApplicationsList extends Component {
                 displayContext={DisplayContext.BASE_VIEW}
             />;
 
+        let accTests = '';
+
+        if(userContext.designComponentType !== 'NONE'){
+            switch(userContext.designComponentType){
+                case ComponentType.APPLICATION:
+                case ComponentType.DESIGN_SECTION:
+                    // Tests not displayed for these items
+                    accTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: 'NONE',
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_ACC_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE:
+                    accTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.FEATURE_ASPECT,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_ACC_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                    accTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.SCENARIO,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_ACC_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.SCENARIO:
+                    accTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.TEST,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_ACC_TESTS
+                        }}/>;
+
+                    break;
+            }
+        } else {
+            accTests =
+                <MashSelectedItemContainer params={{
+                    childComponentType: 'NONE',
+                    designItemId: 'NONE',
+                    userContext: userContext,
+                    view: view,
+                    displayContext: DisplayContext.MASH_ACC_TESTS
+                }}/>;
+        }
+
+
         let intTests = '';
 
         if(userContext.designComponentType !== 'NONE'){
@@ -325,6 +385,7 @@ export class DesignApplicationsList extends Component {
         let col3width = 6;
         let col4width = 6;
         let col5width = 6;
+        let col6width = 6;
 
         if(viewOptions.designShowAllAsTabs){
 
@@ -347,6 +408,42 @@ export class DesignApplicationsList extends Component {
                     col2width = 4;
                     col3width = 4;
                     col5width = 4;
+                    col6width = 4;
+                }
+
+                displayedItems++;
+            }
+
+            if (viewOptions.devAccTestsVisible) {
+
+                switch (displayedItems) {
+                    case 1:
+                        // Now 2 items
+                        col1width = 6;
+                        col2width = 6;
+                        col3width = 6;
+                        col4width = 6;
+                        col5width = 6;
+                        col6width = 6;
+                        break;
+                    case 2:
+                        // Now 3 items
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
+                        col6width = 4;
+                        break;
+                    case 3:
+                        // Now 4 items
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        col6width = 3;
+                        break;
                 }
 
                 displayedItems++;
@@ -362,6 +459,7 @@ export class DesignApplicationsList extends Component {
                         col3width = 6;
                         col4width = 6;
                         col5width = 6;
+                        col6width = 6;
                         break;
                     case 2:
                         // Now 3 items
@@ -370,6 +468,7 @@ export class DesignApplicationsList extends Component {
                         col3width = 4;
                         col4width = 4;
                         col5width = 4;
+                        col6width = 4;
                         break;
                     case 3:
                         // Now 4 items
@@ -378,6 +477,16 @@ export class DesignApplicationsList extends Component {
                         col3width = 3;
                         col4width = 3;
                         col5width = 3;
+                        col6width = 3;
+                        break;
+                    case 4:
+                        // Now 5 items
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
                         break;
                 }
 
@@ -394,6 +503,7 @@ export class DesignApplicationsList extends Component {
                         col3width = 6;
                         col4width = 6;
                         col5width = 6;
+                        col6width = 6;
                         break;
                     case 2:
                         // Now 3 items
@@ -402,6 +512,7 @@ export class DesignApplicationsList extends Component {
                         col3width = 4;
                         col4width = 4;
                         col5width = 4;
+                        col6width = 4;
                         break;
                     case 3:
                         // Now 4 items
@@ -410,6 +521,7 @@ export class DesignApplicationsList extends Component {
                         col3width = 3;
                         col4width = 3;
                         col5width = 3;
+                        col6width = 3;
                         break;
                     case 4:
                         // Now 5 items
@@ -418,6 +530,16 @@ export class DesignApplicationsList extends Component {
                         col3width = 2;
                         col4width = 2;
                         col5width = 2;
+                        col6width = 2;
+                        break;
+                    case 5:
+                        // Now 6 items
+                        col1width = 2;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
                         break;
                 }
 
@@ -435,6 +557,7 @@ export class DesignApplicationsList extends Component {
                         col3width = 0;
                         col4width = 0;
                         col5width = 0;
+                        col6width = 0;
                         break;
                     case 2:
                         // Col 1 gets bigger
@@ -443,6 +566,7 @@ export class DesignApplicationsList extends Component {
                         col3width = 4;
                         col4width = 4;
                         col5width = 4;
+                        col6width = 4;
                         break;
                     case 3:
                         // Col 1 gets bigger
@@ -451,6 +575,7 @@ export class DesignApplicationsList extends Component {
                         col3width = 3;
                         col4width = 3;
                         col5width = 3;
+                        col6width = 3;
                         break;
                     case 4:
                         // Col 1 gets bigger
@@ -459,14 +584,16 @@ export class DesignApplicationsList extends Component {
                         col3width = 2;
                         col4width = 2;
                         col5width = 2;
+                        col6width = 2;
                         break;
                     case 5:
-                        // Col 1 gets bigger
-                        col1width = 4;
+                        // Col 1 gets bigger - but no room :(
+                        col1width = 2;
                         col2width = 2;
                         col3width = 2;
                         col4width = 2;
                         col5width = 2;
+                        col6width = 2;
                         break;
                 }
             }
@@ -496,9 +623,10 @@ export class DesignApplicationsList extends Component {
                                 <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
                                     <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
                                     <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
-                                    <Tab eventKey={3} title="INTEGRATION TESTS">{intTests}</Tab>
-                                    <Tab eventKey={4} title="UNIT TESTS">{unitTests}</Tab>
-                                    <Tab eventKey={5} title="FIND SCENARIO">{scenarioFinder}</Tab>
+                                    <Tab eventKey={3} title="ACCEPTANCE TESTS">{accTests}</Tab>
+                                    <Tab eventKey={4} title="INTEGRATION TESTS">{intTests}</Tab>
+                                    <Tab eventKey={5} title="UNIT TESTS">{unitTests}</Tab>
+                                    <Tab eventKey={6} title="FIND SCENARIO">{scenarioFinder}</Tab>
                                 </Tabs>
                             </Col>;
                         break;
@@ -530,17 +658,25 @@ export class DesignApplicationsList extends Component {
                 }
 
                 let col4 = '';
-                if (viewOptions.devIntTestsVisible) {
+                if (viewOptions.devAccTestsVisible) {
                     col4 =
                         <Col id="column4" md={col4width} className="close-col">
-                            {intTests}
+                            {accTests}
                         </Col>;
                 }
 
                 let col5 = '';
-                if (viewOptions.devUnitTestsVisible) {
+                if (viewOptions.devIntTestsVisible) {
                     col5 =
                         <Col id="column5" md={col5width} className="close-col">
+                            {intTests}
+                        </Col>;
+                }
+
+                let col6 = '';
+                if (viewOptions.devUnitTestsVisible) {
+                    col6 =
+                        <Col id="column6" md={col6width} className="close-col">
                             {unitTests}
                         </Col>;
                 }
@@ -554,6 +690,7 @@ export class DesignApplicationsList extends Component {
                             {col3}
                             {col4}
                             {col5}
+                            {col6}
                         </Row>
                     </Grid>;
 

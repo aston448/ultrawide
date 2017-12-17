@@ -6,6 +6,7 @@ import {log} from '../../common/utils.js';
 // Data Access
 import UserUnitTestResultData               from '../../data/test_results/user_unit_test_result_db.js';
 import UserIntegrationTestResultData        from '../../data/test_results/user_integration_test_result_db.js';
+import UserAcceptanceTestResultData         from '../../data/test_results/user_acceptance_test_result_db.js';
 
 // Plugin class to read test results from an ultrawide-mocha-reporter JSON file
 class UltrawideMochaTestServices{
@@ -121,6 +122,10 @@ class UltrawideMochaTestServices{
 
                 if (resultsBatch.length > 0) {
                     switch(testType){
+                        case TestType.ACCEPTANCE:
+                            log((msg) => console.log(msg), LogLevel.DEBUG, "    Inserting {} acc results...", resultsBatch.length);
+                            UserAcceptanceTestResultData.bulkInsertData(resultsBatch);
+                            break;
                         case TestType.INTEGRATION:
                             log((msg) => console.log(msg), LogLevel.DEBUG, "    Inserting {} int results...", resultsBatch.length);
                             UserIntegrationTestResultData.bulkInsertData(resultsBatch);

@@ -41,26 +41,39 @@ class ScenarioTestResultsList extends Component {
         return true;
     };
 
-    // renderAcceptanceScenarios(mashData){
-    //
-    //     return mashData.map((mashItem) => {
-    //         if(mashItem) {
-    //             return (
-    //                 <AcceptanceTestScenarioMashItem
-    //                     key={mashItem._id}
-    //                     mashItem={mashItem}
-    //                 />
-    //             );
-    //         }
-    //     });
-    // };
+    renderAcceptanceScenarios(mashData){
+
+        return mashData.map((mashItem) => {
+            if(mashItem) {
+
+                // For acceptance tests show as a list if more than one test is defined for a scenario
+                if(mashItem.accTestCount > 1){
+                    return (
+                        <MultiTestScenarioMashItem
+                            key={mashItem._id}
+                            mashItem={mashItem}
+                            displayContext={DisplayContext.MASH_ACC_TESTS}
+                        />
+                    );
+                } else {
+                    return (
+                        <SingleTestScenarioMashItem
+                            key={mashItem._id}
+                            mashItem={mashItem}
+                            displayContext={DisplayContext.MASH_ACC_TESTS}
+                        />
+                    );
+                }
+            }
+        });
+    };
 
     renderIntegrationScenarios(mashData){
 
         return mashData.map((mashItem) => {
             if(mashItem) {
 
-                // For integration tests sow as a list if more than one test is defined for a scenario
+                // For integration tests show as a list if more than one test is defined for a scenario
                 if(mashItem.intTestCount > 1){
                     return (
                         <MultiTestScenarioMashItem
@@ -106,12 +119,11 @@ class ScenarioTestResultsList extends Component {
 
         switch(displayContext){
             case DisplayContext.MASH_ACC_TESTS:
-                // TODO
                 return(
                     <div>
+                        {this.renderAcceptanceScenarios(scenarioMashData)}
                     </div>
                 );
-                break;
 
             case DisplayContext.MASH_INT_TESTS:
                 return(
@@ -119,7 +131,6 @@ class ScenarioTestResultsList extends Component {
                         {this.renderIntegrationScenarios(scenarioMashData)}
                     </div>
                 );
-                break;
 
             case DisplayContext.MASH_UNIT_TESTS:
                 return(
@@ -127,7 +138,7 @@ class ScenarioTestResultsList extends Component {
                         {this.renderUnitScenarios(scenarioMashData)}
                     </div>
                 );
-                break;
+
         }
 
 

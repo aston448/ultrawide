@@ -7,6 +7,7 @@ import UltrawideMochaTestServices       from '../../service_modules/dev/test_pro
 
 // Data Access
 import DesignComponentData              from '../../data/design/design_component_db.js';
+import UserAcceptanceTestResultData     from '../../data/test_results/user_acceptance_test_result_db.js';
 import UserIntegrationTestResultData    from '../../data/test_results/user_integration_test_result_db.js';
 import UserUnitTestResultData           from '../../data/test_results/user_unit_test_result_db.js';
 import UserTestTypeLocationData         from '../../data/configure/user_test_type_location_db.js';
@@ -25,13 +26,57 @@ import UserMashScenarioTestData         from '../../data/mash/user_mash_scenario
 
 class TestIntegrationModules{
 
+    getAcceptanceTestResults(userContext){
+
+        log((msg) => console.log(msg), LogLevel.PERF, "    Getting Acceptance test results...");
+
+        // Get a list of the expected test files for integration
+
+        // See which locations the user has marked as containing acceptance test files for the current role
+        const userLocations = UserTestTypeLocationData.getUserAcceptanceTestsLocations(userContext.userId);
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user acceptance test locations", userLocations.length);
+
+        userLocations.forEach((userLocation) => {
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {}", userLocation.locationName);
+
+            // Get the actual location data
+            const outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
+
+            // Grab any files here marked as integration test outputs
+            const testOutputFiles = TestOutputLocationFileData.getAcceptanceTestFilesForLocation(outputLocation._id);
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user acceptance test files", testOutputFiles.length);
+
+            testOutputFiles.forEach((file) => {
+
+                const testFile = outputLocation.locationFullPath + file.fileName;
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Acceptance Results from {}", testFile);
+
+                // Call the appropriate file parser
+                switch (file.testRunner) {
+                    case TestRunner.CHIMP_MOCHA:
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Acceptance Results Data");
+
+                        UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.ACCEPTANCE);
+                        break;
+
+                }
+            });
+        });
+    }
+
     getIntegrationTestResults(userContext){
 
         log((msg) => console.log(msg), LogLevel.PERF, "    Getting Integration test results...");
 
         // Get a list of the expected test files for integration
 
-        // See which locations the user has marked as containing integration files for the current role
+        // See which locations the user has marked as containing integration test files for the current role
         const userLocations = UserTestTypeLocationData.getUserIntegrationTestsLocations(userContext.userId);
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test locations", userLocations.length);
@@ -124,8 +169,12 @@ class TestIntegrationModules{
 
         // Extract out just the user's test results so that when there are many users this does not
         // slow down
+        let myAcceptanceTestResults = new Mongo.Collection(null);
         let myIntegrationTestResults = new Mongo.Collection(null);
         let myUnitTestResults = new Mongo.Collection(null);
+
+        const userAccResults = UserAcceptanceTestResultData.getUserTestResults(userContext.userId);
+        myAcceptanceTestResults.batchInsert(userAccResults);
 
         const userIntResults = UserIntegrationTestResultData.getUserTestResults(userContext.userId);
         myIntegrationTestResults.batchInsert(userIntResults);
@@ -156,6 +205,13 @@ class TestIntegrationModules{
 
             //log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} int tests", intTests.length);
 
+            // Acceptance Tests
+            const accTests = myAcceptanceTestResults.find({
+                testFullName:   {$regex: searchRegex}
+            }).fetch();
+
+            //log((msg) => console.log(msg), LogLevel.TRACE, "    Matched {} acc tests", accTests.length);
+
             // Create the basic Scenario Mash
             let unitTestCount = 0;
             let unitTestPasses = 0;
@@ -165,10 +221,16 @@ class TestIntegrationModules{
             let intTestPasses = 0;
             let intTestFails = 0;
             let intTestPendings = 0;
+            let accTestCount = 0;
+            let accTestPasses = 0;
+            let accTestFails = 0;
+            let accTestPendings = 0;
             let scenarioUnitTestStatus = MashTestStatus.MASH_NOT_LINKED;
             let scenarioIntTestStatus = MashTestStatus.MASH_NOT_LINKED;
+            let scenarioAccTestStatus = MashTestStatus.MASH_NOT_LINKED;
             let scenarioUnitMashStatus = MashStatus.MASH_NOT_LINKED;
             let scenarioIntMashStatus = MashStatus.MASH_NOT_LINKED;
+            let scenarioAccMashStatus = MashStatus.MASH_NOT_LINKED;
 
             unitTests.forEach((unitTest) => {
 
@@ -210,8 +272,6 @@ class TestIntegrationModules{
 
             });
 
-
-
             intTests.forEach((intTest) => {
 
                 intTestCount++;
@@ -251,6 +311,44 @@ class TestIntegrationModules{
                 );
             });
 
+            accTests.forEach((accTest) => {
+
+                accTestCount++;
+                scenarioAccMashStatus = MashStatus.MASH_LINKED;
+
+                if(accTest.testResult === MashTestStatus.MASH_PASS){
+                    accTestPasses++;
+                }
+                if(accTest.testResult === MashTestStatus.MASH_FAIL){
+                    accTestFails++;
+                }
+                if(accTest.testResult === MashTestStatus.MASH_PENDING){
+                    accTestPendings++;
+                }
+                const testIdentity = this.getTestIdentity(accTest.testFullName, scenario.componentNameNew, accTest.testSuite, accTest.testGroup, accTest.testName);
+
+                // Insert an acc test record
+                scenarioTestBatchData.push(
+                    {
+                        userId:                     userContext.userId,                         // Meteor user id
+                        designVersionId:            userContext.designVersionId,                // Current design version
+                        designScenarioReferenceId:  scenario.componentReferenceId,              // Reference to matching scenario in design (if any)
+                        designAspectReferenceId:    scenario.componentParentReferenceIdNew,     // Reference to parent Feature Aspect in design (if any)
+                        designFeatureReferenceId:   scenario.componentFeatureReferenceIdNew,    // Reference to parent Feature in design (if any)
+                        testType:                   TestType.ACCEPTANCE,
+                        // Data
+                        suiteName:                  testIdentity.suite,                         // Feature or Module
+                        groupName:                  testIdentity.group,                         // Scenario or Group
+                        testName:                   testIdentity.test,                          // Scenario or Test
+                        // Status
+                        testOutcome:                accTest.testResult,                         // Pending / Pass / Fail
+                        testError:                  accTest.testError,                          // Error if Failure
+                        testErrorReason:            accTest.testErrorReason,                    // Error reason if Failure
+                        testStack:                  accTest.testStackTrace,                     // Stack if Failure
+                        testDuration:               accTest.testDuration,                       // Duration if test run successfully
+                    }
+                );
+            });
 
 
             // Get the overall Scenario status based on tests
@@ -278,6 +376,18 @@ class TestIntegrationModules{
                 }
             }
 
+            if(accTestFails > 0){
+                scenarioAccTestStatus = MashTestStatus.MASH_FAIL;
+            } else {
+                if(accTestPasses > 0){
+                    scenarioAccTestStatus = MashTestStatus.MASH_PASS;
+                }else {
+                    if(accTestPendings > 0){
+                        scenarioAccTestStatus = MashTestStatus.MASH_PENDING;
+                    }
+                }
+            }
+
             if(intTestCount > 0){
 
             }
@@ -294,10 +404,11 @@ class TestIntegrationModules{
                     mashItemIndex:                  scenario.componentIndexNew,
                     // Test Data
                     // Acceptance
-                    // accMashStatus:                  ,                     // Whether linked to dev or not and where originating - Acceptance Tests
-                    // accMashTestStatus:              ,                     // If linked, latest test results status - Acceptance Tests
-                    // accPassCount:                   ,
-                    // accFailCount:                   ,
+                    accMashStatus:                  scenarioAccMashStatus,                     // Whether linked to dev or not and where originating - Acceptance Tests
+                    accMashTestStatus:              scenarioAccTestStatus,                     // If linked, latest test results status - Acceptance Tests
+                    accTestCount:                   accTestCount,
+                    accPassCount:                   accTestPasses,
+                    accFailCount:                   accTestFails,
                     // Integration
                     intMashStatus:                  scenarioIntMashStatus,                     // Whether linked to dev or not and where originating - Integration Tests
                     intMashTestStatus:              scenarioIntTestStatus,                     // If linked, latest test results status - Integration Tests

@@ -102,6 +102,7 @@ class DevApplicationsList extends Component {
         let devFiles = '';
         let unitTests = '';
         let intTests = '';
+        let accTests = '';
         let domainDictionary = '';
         let displayedItems = 1;
 
@@ -145,21 +146,79 @@ class DevApplicationsList extends Component {
             }}/>;
 
         // Acceptance Tests Pane
-        featureTests = <div></div>;
+        if(userContext.designComponentType !== 'NONE'){
+            switch(userContext.designComponentType){
+                case ComponentType.APPLICATION:
+                    accTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.DESIGN_SECTION,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_ACC_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.DESIGN_SECTION:
+                    accTests =
+                        <div>
+                            <MashSelectedItemContainer params={{
+                                childComponentType: ComponentType.FEATURE,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_ACC_TESTS
+                            }}/>
+                            <MashSelectedItemContainer params={{
+                                childComponentType: ComponentType.DESIGN_SECTION,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_ACC_TESTS
+                            }}/>
+                        </div>;
+                    break;
+                case ComponentType.FEATURE:
+                    accTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.FEATURE_ASPECT,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_ACC_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                    accTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.SCENARIO,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_ACC_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.SCENARIO:
+                    accTests =
+                        <MashSelectedItemContainer params={{
+                            childComponentType: ComponentType.TEST,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_ACC_TESTS
+                        }}/>;
 
-        // Acceptance Tests Files Pane
-        devFiles =
-            <Panel header="Build Feature Files" className="panel-update panel-update-body">
-                <Grid>
-                    <Row>
-                        <Col md={12} className="close-col">
-                            {/*<DevFilesContainer params={{*/}
-                                {/*userContext: userContext*/}
-                            {/*}}/>*/}
-                        </Col>
-                    </Row>
-                </Grid>
-            </Panel>;
+                    break;
+            }
+        } else {
+            accTests =
+                <MashSelectedItemContainer params={{
+                    childComponentType: 'NONE',
+                    designItemId: 'NONE',
+                    userContext: userContext,
+                    view: view,
+                    displayContext: DisplayContext.MASH_ACC_TESTS
+                }}/>;
+        }
 
 
         // Integration Tests Pane
@@ -622,9 +681,10 @@ class DevApplicationsList extends Component {
                     <Col id="tabsCol" md={col2width} className="close-col">
                         <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
                             <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
-                            <Tab eventKey={2} title="INTEGRATION TESTS">{intTests}</Tab>
-                            <Tab eventKey={3} title="UNIT TESTS">{unitTests}</Tab>
-                            <Tab eventKey={4} title="DICTIONARY">{domainDictionary}</Tab>
+                            <Tab eventKey={2} title="ACCEPTANCE TESTS">{accTests}</Tab>
+                            <Tab eventKey={3} title="INTEGRATION TESTS">{intTests}</Tab>
+                            <Tab eventKey={4} title="UNIT TESTS">{unitTests}</Tab>
+                            <Tab eventKey={5} title="DICTIONARY">{domainDictionary}</Tab>
                         </Tabs>
                     </Col>;
 
@@ -654,7 +714,7 @@ class DevApplicationsList extends Component {
                 if (viewOptions.devAccTestsVisible) {
                     col3 =
                         <Col md={col3width} className="close-col">
-                            {featureTests}
+                            {accTests}
                         </Col>;
                 }
 

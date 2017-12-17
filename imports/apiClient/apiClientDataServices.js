@@ -1057,6 +1057,7 @@ class ClientDataServices{
                 case ViewType.DESIGN_UPDATABLE:
 
                     switch (displayContext) {
+                        case DisplayContext.MASH_ACC_TESTS:
                         case DisplayContext.MASH_UNIT_TESTS:
                         case DisplayContext.MASH_INT_TESTS:
 
@@ -1123,6 +1124,7 @@ class ClientDataServices{
                         case DisplayContext.DEV_DESIGN:
                         case DisplayContext.MASH_UNIT_TESTS:
                         case DisplayContext.MASH_INT_TESTS:
+                        case DisplayContext.MASH_ACC_TESTS:
 
                             // Get only the Design Components that are in the WP
 
@@ -1170,6 +1172,7 @@ class ClientDataServices{
                         case DisplayContext.DEV_DESIGN:
                         case DisplayContext.MASH_UNIT_TESTS:
                         case DisplayContext.MASH_INT_TESTS:
+                        case DisplayContext.MASH_ACC_TESTS:
 
                             // Get only the Update Components that are in the WP
 
@@ -1683,6 +1686,8 @@ class ClientDataServices{
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 testSummaryValue = userViewOptions.testSummaryVisible;
+                accTestOption = ViewOptionType.DEV_ACC_TESTS;
+                accTestValue = userViewOptions.devAccTestsVisible;
                 intTestOption = ViewOptionType.DEV_INT_TESTS;
                 intTestValue = userViewOptions.devIntTestsVisible;
                 unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
@@ -1697,6 +1702,8 @@ class ClientDataServices{
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 testSummaryValue = userViewOptions.testSummaryVisible;
+                accTestOption = ViewOptionType.DEV_ACC_TESTS;
+                accTestValue = userViewOptions.devAccTestsVisible;
                 intTestOption = ViewOptionType.DEV_INT_TESTS;
                 intTestValue = userViewOptions.devIntTestsVisible;
                 unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
@@ -1986,6 +1993,7 @@ class ClientDataServices{
                         return [
                             viewDetails,
                             viewDomainDict,
+                            viewAccTests,
                             viewIntTests,
                             viewUnitTests,
                             viewTestSummary,
@@ -2074,6 +2082,7 @@ class ClientDataServices{
                         return [
                             viewDetails,
                             viewDomainDict,
+                            viewAccTests,
                             viewIntTests,
                             viewUnitTests,
                             viewTestSummary,

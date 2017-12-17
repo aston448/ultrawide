@@ -62,7 +62,7 @@ class MashScenarioTestList extends Component {
         } else {
             return (
                 <div className="unit-test-none">
-                    No unit tests found
+                    No tests found
                 </div>
             )
         }
@@ -100,6 +100,9 @@ export default MashScenarioTestContainer = createContainer(({params}) => {
             testResults = ClientDataServices.getMashScenarioTestResults(params.userContext, params.scenario, TestType.INTEGRATION);
             break;
 
+        case DisplayContext.MASH_ACC_TESTS:
+            testResults = ClientDataServices.getMashScenarioTestResults(params.userContext, params.scenario, TestType.ACCEPTANCE);
+            break;
     }
 
     return{

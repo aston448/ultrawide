@@ -41,6 +41,14 @@ class UserTestTypeLocationData {
         });
     }
 
+    getUserAcceptanceTestsLocations(userId){
+
+        return UserTestTypeLocations.find({
+            userId:         userId,
+            isAccLocation:  true
+        }).fetch();
+    }
+
     getUserIntegrationTestsLocations(userId){
 
         return UserTestTypeLocations.find({

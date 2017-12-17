@@ -68,19 +68,21 @@ class MashSelectedItemList extends Component {
         const {designItems, itemType, displayContext, isTopParent, userContext, view} = this.props;
 
         let panelHeader = '';
-        let secondPanelHeader = '';
         let detailsType = '';
         let menuVisible = false;
 
         let itemHeader = '';
         let panelId = '';
-        let secondPanel = <div></div>;
+
 
         if(isTopParent || userContext.designComponentId === 'NONE') {
 
             const nameData = ClientUserContextServices.getContextNameData(userContext, displayContext);
 
             switch (displayContext) {
+                case DisplayContext.MASH_ACC_TESTS:
+                    detailsType = DetailsViewType.VIEW_ACC_TESTS;
+                    break;
                 case DisplayContext.MASH_INT_TESTS:
                     detailsType = DetailsViewType.VIEW_INT_TESTS;
                     break;
@@ -120,7 +122,9 @@ class MashSelectedItemList extends Component {
                     panelId = 'featureAspectList';
                     switch (displayContext) {
                         case DisplayContext.MASH_ACC_TESTS:
-
+                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                            // Allow feature export to int test file
+                            menuVisible = true;
                             break;
                         case DisplayContext.MASH_INT_TESTS:
                             panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
@@ -153,34 +157,46 @@ class MashSelectedItemList extends Component {
 
         if(designItems.length > 0 ) {
 
+            // Render more design mash or the test results
             mainPanel =
                 <div id={panelId}>
                     {this.renderDesignItems(designItems, displayContext)}
                 </div>;
 
         } else {
-            if(
+
+            // Show a missing selection message if appropriate
+
+            // This could be if no component selected yet or if a Feature Component is not selected when not in the Develop WP View
+            if (
                 userContext.designComponentId === 'NONE' ||
-                (userContext.designComponentType === ComponentType.APPLICATION && view === ViewType.DESIGN_UPDATABLE)||
-                (userContext.designComponentType === ComponentType.DESIGN_SECTION && view === ViewType.DESIGN_UPDATABLE)
+                userContext.designComponentType === ComponentType.APPLICATION ||
+                userContext.designComponentType === ComponentType.DESIGN_SECTION
             ) {
 
-                // No data because no item or non-display item selected
-                if(view === ViewType.DESIGN_UPDATABLE){
-                    mainPanel = <div className="design-item-note">Select a Feature or Feature item to see test results</div>;
-                } else {
-                    mainPanel = <div className="design-item-note">Select a Design item to see test results</div>;
-                }
+                if(view !== ViewType.DEVELOP_BASE_WP && view !== ViewType.DEVELOP_UPDATE_WP) {
 
-                noData = true;
+                    mainPanel =
+                        <div className="design-item-note">Select a Feature or Feature item to see test results</div>;
+                    noData = true;
+
+                } else {
+
+                    if(userContext.designComponentId === 'NONE' ){
+                        mainPanel =
+                            <div className="design-item-note">Select a Design Item item to see test results</div>;
+                        noData = true;
+                    }
+                }
             }
+
         }
 
         // Get correct window height
         const editorClass = this.getEditorClass();
 
         // Show the main item box if we have a list of items for the original parent or no parent is selected
-        if((isTopParent && designItems.length > 0) || userContext.designComponentId === 'NONE' || noData) {
+        if(((isTopParent && designItems.length > 0) || userContext.designComponentId === 'NONE' || noData) && userContext.designComponentType === itemType){
             return (
 
                 <div className="design-editor-container">
@@ -191,7 +207,6 @@ class MashSelectedItemList extends Component {
                     />
                     <div className={editorClass}>
                         {mainPanel}
-                        {secondPanel}
                     </div>
                     <DetailsViewFooter
                         detailsType={detailsType}
@@ -203,7 +218,6 @@ class MashSelectedItemList extends Component {
             return (
                 <div>
                     {mainPanel}
-                    {secondPanel}
                 </div>
             )
         }

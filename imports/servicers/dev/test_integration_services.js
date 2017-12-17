@@ -42,6 +42,7 @@ class TestIntegrationServices{
             log((msg) => console.log(msg), LogLevel.PERF, "    Old data removed.");
 
             // Get latest results
+            MashDataModules.getAcceptanceTestResults(userContext);
             MashDataModules.getIntegrationTestResults(userContext);
             MashDataModules.getUnitTestResults(userContext);
 
