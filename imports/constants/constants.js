@@ -446,13 +446,13 @@ export const MessageType = {
 };
 
 export const LogLevel = {
-    TRACE:      'TRACE:   ',
-    PERF:       'PERF:    ',
-    DEBUG:      'DEBUG:   ',
-    INFO:       'INFO:    ',
-    WARNING:    'WARNING: ',
-    ERROR:      'ERROR:   ',
-    NONE:       'NONE:    '
+    TRACE:      'TRACE',
+    PERF:       'PERF',
+    DEBUG:      'DEBUG',
+    INFO:       'INFO',
+    WARNING:    'WARNING',
+    ERROR:      'ERROR',
+    NONE:       'NONE'
 };
 
 export const TestType = {

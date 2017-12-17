@@ -7,6 +7,8 @@ import {DesignUpdateComponents} from '../collections/design_update/design_update
 
 import {ViewType, MessageType, DisplayContext, MashStatus, LogLevel} from '../constants/constants.js';
 
+import TextLookups   from '../common/lookups.js';
+
 import store from '../redux/store'
 import {updateUserMessage} from '../redux/actions'
 
@@ -398,13 +400,12 @@ export function isAlphaNumeric(str) {
 
 export function log(callback, level, message, ...vars){
 
-    // Change these to change the output
-    // const logLevel = LogLevel.TRACE;
-    // const logLevel = LogLevel.PERF;
-    // const logLevel = LogLevel.DEBUG;
-     const logLevel = LogLevel.INFO;
-    // const logLevel = LogLevel.NONE;
+    // Log level is set when running app.  If not set, defaults to INFO
+    let logLevel = process.env.LOG_LEVEL;
 
+    if (typeof(logLevel) === 'undefined') {
+        logLevel = LogLevel.INFO;
+    }
 
     let log = false;
 
@@ -440,7 +441,7 @@ export function log(callback, level, message, ...vars){
         let date = new Date();
 
         // Callback so the actual line number of the calling code is logged
-        callback(level + ' ' + padDigits(date.getMinutes(), 2) + ':' + padDigits(date.getSeconds(), 2) +'.' + padDigits(date.getMilliseconds(), 3) + ' ' + finalMessage);
+        callback(TextLookups.logLevel(level) + ' ' + padDigits(date.getMinutes(), 2) + ':' + padDigits(date.getSeconds(), 2) +'.' + padDigits(date.getMilliseconds(), 3) + ' ' + finalMessage);
     }
 
 }

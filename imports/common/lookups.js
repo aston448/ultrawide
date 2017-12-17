@@ -1,5 +1,5 @@
 import {DesignVersionStatus, ViewType, UltrawideAction, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus,
-    DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus, MenuAction, TestLocationFileStatus, TestLocationFileType} from '../constants/constants.js';
+    DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus, MenuAction, TestLocationFileStatus, TestLocationFileType, LogLevel} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -268,6 +268,24 @@ class TextLookups {
                 return 'UPLOADED';
             case TestLocationFileStatus.FILE_NOT_UPLOADED:
                 return 'MISSING';
+        }
+    }
+
+    logLevel(logLevel){
+
+        switch(logLevel) {
+            case LogLevel.TRACE:
+                return 'TRACE:   ';
+            case LogLevel.PERF:
+                return 'PERF:    ';
+            case LogLevel.DEBUG:
+                return 'DEBUG:   ';
+            case LogLevel.INFO:
+                return 'INFO:    ';
+            case LogLevel.WARNING:
+                return 'WARNING: ';
+            case LogLevel.ERROR:
+                return 'ERROR:   ';
         }
     }
 
