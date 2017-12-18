@@ -98,6 +98,10 @@ jobs:
           command: npm run chimp:int_client
 
       - run:
+          name: acc-test-design
+          command: npm run chimp:acc_des
+
+      - run:
           name: upload-results - unit
           command: sh scripts/upload-test-results.sh unit_results.json
 

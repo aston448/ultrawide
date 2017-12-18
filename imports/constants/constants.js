@@ -92,7 +92,8 @@ export const MenuAction = {
     MENU_ACTION_VIEW_ALL_TABS:      'MENU_ACTION_VIEW_ALL_TABS',
     MENU_ACTION_REFRESH_TESTS:      'MENU_ACTION_REFRESH_TESTS',
     MENU_ACTION_REFRESH_PROGRESS:   'MENU_ACTION_REFRESH_PROGRESS',
-    MENU_ACTION_REFRESH_DATA:       'MENU_ACTION_REFRESH_DATA'
+    MENU_ACTION_REFRESH_DATA:       'MENU_ACTION_REFRESH_DATA',
+    MENU_ACTION_LOGOUT:             'MENU_ACTION_LOGOUT'
 };
 
 // In some views there is an option of seeing everything read-only (no controls visible)

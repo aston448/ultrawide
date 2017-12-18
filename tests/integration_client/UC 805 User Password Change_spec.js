@@ -1,8 +1,12 @@
 import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
 import TextLookups                      from '../../imports/common/lookups.js'
 
+import BrowserActions                   from '../../test_framework/browser_actions/browser_actions.js';
+import BrowserChecks                    from '../../test_framework/browser_actions/browser_checks.js';
+
 import { ViewType, RoleType, UltrawideAction }           from '../../imports/constants/constants.js';
 import { LoginMessages }      from '../../imports/constants/message_texts.js';
+import {MenuAction} from "../../imports/constants/constants";
 
 describe('UC 805 User Password Change', function(){
 
@@ -19,79 +23,63 @@ describe('UC 805 User Password Change', function(){
         TestFixtures.clearAllData();
 
         // Login as old password user
-        browser.url('http://localhost:3000/');
-
-        browser.waitForExist('#loginUserName');
-
-        browser.setValue('#loginUserName', 'gloria');
-        browser.setValue('#loginPassword', 'gloria123');
-
-        browser.click('#loginSubmit');
+        BrowserActions.loginAs('gloria', 'gloria123');
 
         // Verify
-        browser.waitForExist('#main_tabs');
+        BrowserChecks.isLoggedIn();
 
         // Go to Config Screen
-        const actionId = '#SETTINGS';
-        browser.waitForExist(actionId);
-        browser.click(actionId);
+        BrowserActions.selectMenuItem(MenuAction.MENU_ACTION_GOTO_CONFIG);
 
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.CONFIGURE)
-        }, 5000, 'expected config screen after 5s');
+        // Verify
+        BrowserChecks.isOnScreen(ViewType.CONFIGURE);
 
         // Select My Settings tab
-        browser.waitForExist('#config-view_tabs-tab-3');
-        browser.click('#config-view_tabs-tab-3');
+        BrowserActions.selectMySettingsTab()
 
     });
 
     afterEach(function(){
 
-        browser.click('#Logout');
+        // Logout
+        BrowserActions.selectMenuItem(MenuAction.MENU_ACTION_LOGOUT);
     });
 
 
-    // Actions
-    it('An Ultrawide user may update their password', function(){
+    describe('Actions', function(){
 
-        // Set new values
-        browser.waitForVisible('#configOldPassword');
-        browser.setValue('#configOldPassword', 'gloria123');
-        browser.waitForVisible('#configNewPassword1');
-        browser.setValue('#configNewPassword1', 'gloria456');
-        browser.waitForVisible('#configNewPassword2');
-        browser.setValue('#configNewPassword2', 'gloria456');
+        it('An Ultrawide user may update their password', function(){
 
-        // Execute
-        browser.waitForVisible('#configChangePassword');
-        browser.click('#configChangePassword');
+            // Set new password
+            BrowserActions.updatePassword('gloria123', 'gloria456');
 
-        // Verify - should now be logged out
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.AUTHORISE)
-        }, 5000, 'expected login after 5s');
+            // Verify - should now be logged out
+            BrowserChecks.isOnScreen(ViewType.AUTHORISE);
 
-        // Verify - can log in with new password
-        browser.setValue('#loginUserName', 'gloria');
-        browser.setValue('#loginPassword', 'gloria456');
+            // Verify - can log in with new password
+            BrowserActions.loginAs('gloria', 'gloria456');
 
-        browser.click('#loginSubmit');
-
-        // Verify
-        browser.waitForExist('#main_tabs');
+            // Verify
+            BrowserChecks.isLoggedIn();
+        });
     });
 
 
-    // Conditions
-    it('The new password cannot be the same as the old password');
 
-    it('The old password must be correct for the currently logged on user');
+    describe('Conditions', function(){
 
-    it('The new password and password confirmation must match');
+        it('The new password cannot be the same as the old password');
+
+        it('The old password must be correct for the currently logged on user');
+
+        it('The new password and password confirmation must match');
+    });
 
 
-    // Consequences
-    it('When a user password is successfully changed the user is logged out and must log in with the new password');
+
+    describe('Consequences', function(){
+
+        it('When a user password is successfully changed the user is logged out and must log in with the new password');
+    });
 
 });

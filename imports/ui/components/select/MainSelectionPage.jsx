@@ -126,18 +126,18 @@ export class MainSelectionPage extends Component {
         ){
 
             layout =
-                <div className="home-page">
+                <div  className="home-page">
                     <Tab.Container id="main-page" activeKey={userHomeTab} onSelect={(tab) => this.onSelectTab(tab)}>
                         <Row>
                             <Col md={1}>
                                 <Nav bsStyle="pills" className="side-menu" stacked>
-                                    <NavItem eventKey={HomePageTab.TAB_DESIGNS}>
+                                    <NavItem id="tab-designs" eventKey={HomePageTab.TAB_DESIGNS}>
                                         DESIGNS
                                     </NavItem>
-                                    <NavItem eventKey={HomePageTab.TAB_WORK}>
+                                    <NavItem id="tab-work" eventKey={HomePageTab.TAB_WORK}>
                                         WORK
                                     </NavItem>
-                                    <NavItem eventKey={HomePageTab.TAB_PROGRESS}>
+                                    <NavItem id="tab-progress" eventKey={HomePageTab.TAB_PROGRESS}>
                                         PROGRESS
                                     </NavItem>
                                 </Nav>
@@ -167,16 +167,16 @@ export class MainSelectionPage extends Component {
                         <Row>
                             <Col md={1}>
                                 <Nav bsStyle="pills" className="side-menu" stacked>
-                                    <NavItem eventKey={HomePageTab.TAB_DESIGNS}>
+                                    <NavItem id="tab-designs" eventKey={HomePageTab.TAB_DESIGNS}>
                                         DESIGNS
                                     </NavItem>
-                                    <NavItem eventKey={HomePageTab.TAB_UPDATES}>
+                                    <NavItem id="tab-updates" eventKey={HomePageTab.TAB_UPDATES}>
                                         UPDATES
                                     </NavItem>
-                                    <NavItem eventKey={HomePageTab.TAB_WORK}>
+                                    <NavItem id="tab-work" eventKey={HomePageTab.TAB_WORK}>
                                         WORK
                                     </NavItem>
-                                    <NavItem eventKey={HomePageTab.TAB_PROGRESS}>
+                                    <NavItem id="tab-progress" eventKey={HomePageTab.TAB_PROGRESS}>
                                         PROGRESS
                                     </NavItem>
                                 </Nav>
@@ -205,7 +205,7 @@ export class MainSelectionPage extends Component {
 
 
         return(
-            <div>
+            <div id="home-page">
                 {layout}
             </div>
         );

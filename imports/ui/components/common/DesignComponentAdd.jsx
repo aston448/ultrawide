@@ -67,9 +67,12 @@ export default class DesignComponentAdd extends Component {
     }
 
     render() {
+
+        let actionId = this.props.addText.replace(' ', '-');
+
         return (
             <div>
-                <InputGroup onClick={ () => this.clickHandler()}  onMouseEnter={ () => this.setAddActive()} onMouseLeave={ () => this.setAddInactive()}>
+                <InputGroup id={actionId} onClick={ () => this.clickHandler()}  onMouseEnter={ () => this.setAddActive()} onMouseLeave={ () => this.setAddInactive()}>
                     <InputGroup.Addon>
                         <div className={this.state.addActive ? 'add-icon-active' : 'add-icon'}><Glyphicon glyph='plus'/></div>
                     </InputGroup.Addon>

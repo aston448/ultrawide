@@ -1,6 +1,9 @@
 import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
 import TextLookups                      from '../../imports/common/lookups.js'
 
+import BrowserActions                   from '../../test_framework/browser_actions/browser_actions.js';
+import BrowserChecks                    from '../../test_framework/browser_actions/browser_checks.js';
+
 import { ViewType }           from '../../imports/constants/constants.js';
 import { LoginMessages }      from '../../imports/constants/message_texts.js';
 
@@ -25,78 +28,56 @@ describe('UC 901 - User Login', function(){
     });
 
 
-    // Actions
-    it('A user may log in with the correct username and password', function(){
+    describe('Actions', function(){
 
-        // Execute
-        browser.url('http://localhost:3000/');
+        it('A user may log in with the correct username and password', function(){
 
-        browser.waitForVisible('#loginUserName');
+            // Execute
+            BrowserActions.loginAs('gloria', 'gloria123');
 
-        browser.setValue('#loginUserName', 'gloria');
-        browser.setValue('#loginPassword', 'gloria123');
+            // Verify
+            BrowserChecks.isLoggedIn();
 
-        browser.click('#loginSubmit');
-
-        // Verify
-        browser.waitForExist('#main_tabs');
-
+        });
     });
 
 
-    // Conditions
-    it('An error is shown if an unknown username is entered', function(){
+    describe('Conditions', function(){
 
-        // Execute
-        browser.url('http://localhost:3000/');
+        it('An error is shown if an unknown username is entered', function(){
 
-        browser.waitForVisible('#loginUserName');
+            // Execute
+            BrowserActions.loginAs('hen', 'hen123');
 
-        browser.setValue('#loginUserName', 'hen');
-        browser.setValue('#loginPassword', 'hen123');
+            // Verify
+            BrowserChecks.hasUserMessage(LoginMessages.MSG_LOGIN_FAIL);
+        });
 
-        browser.click('#loginSubmit');
+        it('An error is shown if a password that is not correct for the username is entered', function(){
 
-        // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerMessage') === LoginMessages.MSG_LOGIN_FAIL
-        }, 5000, 'expected rejection after 5s');
-    });
+            // Execute
+            BrowserActions.loginAs('gloria', 'hen123');
 
-    it('An error is shown if a password that is not correct for the username is entered', function(){
-
-        // Execute
-        browser.url('http://localhost:3000/');
-
-        browser.waitForVisible('#loginUserName');
-
-        browser.setValue('#loginUserName', 'gloria');
-        browser.setValue('#loginPassword', 'bollox');
-
-        browser.click('#loginSubmit');
-
-        // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerMessage') === LoginMessages.MSG_LOGIN_FAIL
-        }, 5000, 'expected rejection after 5s');
+            // Verify
+            BrowserChecks.hasUserMessage(LoginMessages.MSG_LOGIN_FAIL);
+        });
     });
 
 
-    // Consequences
-    it('When successfully logged in the home screen is shown', function(){
 
-        // Execute
-        browser.url('http://localhost:3000/');
 
-        browser.waitForVisible('#loginUserName');
 
-        browser.setValue('#loginUserName', 'miles');
-        browser.setValue('#loginPassword', 'miles123');
+    describe('Consequences', function(){
 
-        browser.click('#loginSubmit');
+        it('When successfully logged in the home screen is shown', function(){
 
-        // Verify
-        browser.waitForExist('#main_tabs');
+            // Execute
+            BrowserActions.loginAs('miles', 'miles123');
+
+            // Verify
+            BrowserChecks.isLoggedIn();
+        });
     });
+
 
 });

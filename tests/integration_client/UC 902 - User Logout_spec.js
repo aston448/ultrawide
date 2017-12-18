@@ -1,7 +1,10 @@
 import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
 import TextLookups                      from '../../imports/common/lookups.js'
+import BrowserActions                   from '../../test_framework/browser_actions/browser_actions.js';
+import BrowserChecks                    from '../../test_framework/browser_actions/browser_checks.js';
 
 import { ViewType, RoleType, UltrawideAction } from '../../imports/constants/constants.js';
+import {MenuAction} from "../../imports/constants/constants";
 
 describe('UC 902 - User Logout', function(){
 
@@ -24,57 +27,43 @@ describe('UC 902 - User Logout', function(){
     });
 
 
-    // Actions
-    it('A user may log out of Ultrawide', function(){
+    describe('Actions', function(){
 
-        // Setup - Login
-        browser.url('http://localhost:3000/');
+        it('A user may log out of Ultrawide', function(){
 
-        browser.waitForVisible('#loginUserName');
+            // Setup - Login
+            BrowserActions.loginAs('gloria', 'gloria123');
 
-        browser.setValue('#loginUserName', 'gloria');
-        browser.setValue('#loginPassword', 'gloria123');
+            // Verify
+            BrowserChecks.isLoggedIn();
 
-        browser.click('#loginSubmit');
+            // Logout
+            BrowserActions.selectMenuItem(MenuAction.MENU_ACTION_LOGOUT);
 
-        // Verify
-        browser.waitForExist('#main_tabs');
+            // Verify on login screen again
+            BrowserChecks.isOnScreen(ViewType.AUTHORISE);
 
-        // Logout
-        browser.click('#Logout');
-
-        // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.AUTHORISE)
-        }, 5000, 'expected login after 5s');
-
+        });
     });
 
 
-    // Consequences
-    it('When a user logs out the login screen is shown', function(){
+    describe('Consequences', function(){
 
-        // Setup - Login
-        browser.url('http://localhost:3000/');
+        it('When a user logs out the login screen is shown', function(){
 
-        browser.waitForVisible('#loginUserName');
+            // Setup - Login
+            BrowserActions.loginAs('gloria', 'gloria123');
 
-        browser.setValue('#loginUserName', 'gloria');
-        browser.setValue('#loginPassword', 'gloria123');
+            // Verify
+            BrowserChecks.isLoggedIn();
 
-        browser.click('#loginSubmit');
+            // Logout
+            BrowserActions.selectMenuItem(MenuAction.MENU_ACTION_LOGOUT);
 
-        browser.waitForExist('#main_tabs');
-
-
-        // Click Logout
-        browser.click('#Logout');
-
-        // Verify
-        browser.waitUntil(function () {
-            return browser.getText('#headerView') === TextLookups.viewText(ViewType.AUTHORISE)
-        }, 5000, 'expected login after 5s');
-
+            // Verify on login screen again
+            BrowserChecks.isOnScreen(ViewType.AUTHORISE);
+        });
     });
+
 
 });
