@@ -71,6 +71,21 @@ class DefaultFeatureAspectData{
         );
     }
 
+
+    // REMOVE ==========================================================================================================
+
+    removeAllDefaultAspects(){
+
+        return DefaultFeatureAspects.remove({});
+    }
+
+    removeDesignDefaultAspects(designId){
+
+        return DefaultFeatureAspects.remove({
+            designId: designId
+        });
+    }
+
 }
 
 export default new DefaultFeatureAspectData();

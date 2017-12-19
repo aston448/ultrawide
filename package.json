@@ -17,6 +17,7 @@
     "chimp:int_server_du": "chimp .config/chimp_du.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/500_design_updates",
     "chimp:int_server_dom": "chimp .config/chimp_dom.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/700_domain",
     "chimp:int_server_adm": "chimp .config/chimp_adm.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/800_admin",
+    "chimp:int_server_temp": "chimp .config/chimp_adm.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/aaa_temp",
     "chimp:int_client": "chimp .config/chimp_client.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_client",
     "chimp:acc_des": "chimp .config/chimp_acc_des.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/acceptance/100_designs",
     "local_int_des": "chimp .config/chimp_des.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/100_designs",

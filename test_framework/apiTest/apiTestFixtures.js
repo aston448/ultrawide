@@ -95,6 +95,7 @@ Meteor.methods({
             UserCurrentViewOptions.remove({});
             UserRoles.remove({});
 
+
             // Recreate users and default contexts and options
 
             let adminUserId = '';
@@ -358,7 +359,7 @@ Meteor.methods({
         );
     },
 
-    'testFixtures.AddBasicDesignData'(designName, designVersionName){
+    'testFixtures.AddBasicDesignData'(designName, designVersionName) {
 
         // Add an Application, Design Sections, Features and Scenarios as basic data for a Design
         const view = ViewType.DESIGN_NEW;
@@ -366,87 +367,92 @@ Meteor.methods({
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
         const userContext = {
-            userId:                         'NONE',
-            designId:                       design._id,
-            designVersionId:                designVersion._id,
-            designUpdateId:                 'NONE',
-            workPackageId:                  'NONE',
-            designComponentId:              'NONE',
-            designComponentType:            'NONE',
-            featureReferenceId:             'NONE',
-            featureAspectReferenceId:       'NONE',
-            scenarioReferenceId:            'NONE',
-            scenarioStepId:                 'NONE'
+            userId: 'NONE',
+            designId: design._id,
+            designVersionId: designVersion._id,
+            designUpdateId: 'NONE',
+            workPackageId: 'NONE',
+            designComponentId: 'NONE',
+            designComponentType: 'NONE',
+            featureReferenceId: 'NONE',
+            featureAspectReferenceId: 'NONE',
+            scenarioReferenceId: 'NONE',
+            scenarioStepId: 'NONE'
         };
         let rawName = null;
 
         // Set Default Default Feature Aspects
         // Create 8 default aspects
-        const aspect1 = {
-            defaultAspectName:      'Interface',
-            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Interface'),
-            defaultAspectIncluded:  true,
-            defaultAspectIndex:     1
-        };
 
-        const aspect2 = {
-            defaultAspectName:      'Actions',
-            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Actions'),
-            defaultAspectIncluded:  true,
-            defaultAspectIndex:     2
-        };
+        let dfas = DefaultFeatureAspectData.getDefaultAspectsForDesign(design._id);
 
-        const aspect3 = {
-            defaultAspectName:      'Conditions',
-            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Conditions'),
-            defaultAspectIncluded:  true,
-            defaultAspectIndex:     3
-        };
+        if (dfas.length === 0) {
 
-        const aspect4 = {
-            defaultAspectName:      'Consequences',
-            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Consequences'),
-            defaultAspectIncluded:  true,
-            defaultAspectIndex:     4
-        };
+            const aspect1 = {
+                defaultAspectName: 'Interface',
+                defaultAspectNameRaw: DesignComponentModules.getRawTextFor('Interface'),
+                defaultAspectIncluded: true,
+                defaultAspectIndex: 1
+            };
 
-        const aspect5 = {
-            defaultAspectName:      'Unused 1',
-            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 1'),
-            defaultAspectIncluded:  false,
-            defaultAspectIndex:     5
-        };
+            const aspect2 = {
+                defaultAspectName: 'Actions',
+                defaultAspectNameRaw: DesignComponentModules.getRawTextFor('Actions'),
+                defaultAspectIncluded: true,
+                defaultAspectIndex: 2
+            };
 
-        const aspect6 = {
-            defaultAspectName:      'Unused 2',
-            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 2'),
-            defaultAspectIncluded:  false,
-            defaultAspectIndex:     6
-        };
+            const aspect3 = {
+                defaultAspectName: 'Conditions',
+                defaultAspectNameRaw: DesignComponentModules.getRawTextFor('Conditions'),
+                defaultAspectIncluded: true,
+                defaultAspectIndex: 3
+            };
 
-        const aspect7 = {
-            defaultAspectName:      'Unused 3',
-            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 3'),
-            defaultAspectIncluded:  false,
-            defaultAspectIndex:     7
-        };
+            const aspect4 = {
+                defaultAspectName: 'Consequences',
+                defaultAspectNameRaw: DesignComponentModules.getRawTextFor('Consequences'),
+                defaultAspectIncluded: true,
+                defaultAspectIndex: 4
+            };
 
-        const aspect8 = {
-            defaultAspectName:      'Unused 4',
-            defaultAspectNameRaw:   DesignComponentModules.getRawTextFor('Unused 4'),
-            defaultAspectIncluded:  false,
-            defaultAspectIndex:     8
-        };
+            const aspect5 = {
+                defaultAspectName: 'Unused 1',
+                defaultAspectNameRaw: DesignComponentModules.getRawTextFor('Unused 1'),
+                defaultAspectIncluded: false,
+                defaultAspectIndex: 5
+            };
 
-        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect1);
-        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect2);
-        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect3);
-        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect4);
-        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect5);
-        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect6);
-        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect7);
-        DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect8);
+            const aspect6 = {
+                defaultAspectName: 'Unused 2',
+                defaultAspectNameRaw: DesignComponentModules.getRawTextFor('Unused 2'),
+                defaultAspectIncluded: false,
+                defaultAspectIndex: 6
+            };
 
+            const aspect7 = {
+                defaultAspectName: 'Unused 3',
+                defaultAspectNameRaw: DesignComponentModules.getRawTextFor('Unused 3'),
+                defaultAspectIncluded: false,
+                defaultAspectIndex: 7
+            };
+
+            const aspect8 = {
+                defaultAspectName: 'Unused 4',
+                defaultAspectNameRaw: DesignComponentModules.getRawTextFor('Unused 4'),
+                defaultAspectIncluded: false,
+                defaultAspectIndex: 8
+            };
+
+            DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect1);
+            DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect2);
+            DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect3);
+            DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect4);
+            DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect5);
+            DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect6);
+            DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect7);
+            DefaultFeatureAspectData.insertDefaultAspect(design._id, aspect8);
+        }
         // Data Available:
         //
         //  Application1
@@ -480,6 +486,7 @@ Meteor.methods({
         //  Application99
         //      Section99
         //          Feature99 - removable
+
 
 
         // Add Application1
