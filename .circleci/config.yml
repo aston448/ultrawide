@@ -65,38 +65,38 @@ jobs:
           name: wait-for-app
           command: sleep 50
 
-#      - run:
-#          name: int-test-designs
-#          command: npm run chimp:int_server_des
-#
-#      - run:
-#          name: int-test-wps
-#          command: npm run chimp:int_server_wp
-#
-#      - run:
-#          name: int-test-dev
-#          command: npm run chimp:int_server_dev
-#
-#      - run:
-#          name: int-test-summary
-#          command: npm run chimp:int_server_sum
-#
-#      - run:
-#          name: int-test-design-updates
-#          command: npm run chimp:int_server_du
-#
-#      - run:
-#          name: int-test-domain
-#          command: npm run chimp:int_server_dom
-#
-#      - run:
-#          name: int-test-admin
-#          command: npm run chimp:int_server_adm
-#
-#      - run:
-#          name: client-tests
-#          command: npm run chimp:int_client
-#
+      - run:
+          name: int-test-designs
+          command: npm run chimp:int_server_des
+
+      - run:
+          name: int-test-wps
+          command: npm run chimp:int_server_wp
+
+      - run:
+          name: int-test-dev
+          command: npm run chimp:int_server_dev
+
+      - run:
+          name: int-test-summary
+          command: npm run chimp:int_server_sum
+
+      - run:
+          name: int-test-design-updates
+          command: npm run chimp:int_server_du
+
+      - run:
+          name: int-test-domain
+          command: npm run chimp:int_server_dom
+
+      - run:
+          name: int-test-admin
+          command: npm run chimp:int_server_adm
+
+      - run:
+          name: client-tests
+          command: npm run chimp:int_client
+
       - run:
           name: acc-test-design
           command: npm run chimp:acc_des
