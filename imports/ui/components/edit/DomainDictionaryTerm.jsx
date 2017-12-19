@@ -77,9 +77,10 @@ class DomainDictionaryTerm extends Component {
         // New untouched items are editable...
         switch (this.props.view) {
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
             case ViewType.DESIGN_UPDATE_EDIT:
                 // A new component not yet changed is automatically editable
-                if (this.props.dictionaryTerm.isNew && ! this.props.dictionaryTerm.isChanged) {
+                if (this.props.mode === ViewMode.MODE_EDIT &&  this.props.dictionaryTerm.isNew && !this.props.dictionaryTerm.isChanged) {
                     this.editTermName();
                 }
                 break;

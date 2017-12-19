@@ -221,22 +221,26 @@ export class DesignComponentHeader extends Component{
         // New untouched items are editable by default as they need to be changed
         switch (this.props.view) {
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DEVELOP_UPDATE_WP:
+
                 // A new component not yet changed is automatically editable
-                const item = this.props.currentItem;
-                if(item.componentType === ComponentType.APPLICATION && item.componentNameNew === DefaultComponentNames.NEW_APPLICATION_NAME){
-                    this.editComponentName();
-                }
-                if(item.componentType === ComponentType.DESIGN_SECTION && item.componentNameNew === DefaultComponentNames.NEW_DESIGN_SECTION_NAME){
-                    this.editComponentName();
-                }
-                if(item.componentType === ComponentType.FEATURE && item.componentNameNew === DefaultComponentNames.NEW_FEATURE_NAME){
-                    this.editComponentName();
-                }
-                if(item.componentType === ComponentType.SCENARIO && item.componentNameNew === DefaultComponentNames.NEW_SCENARIO_NAME){
-                    this.editComponentName();
+                if(this.props.mode === ViewMode.MODE_EDIT) {
+                    const item = this.props.currentItem;
+                    if (item.componentType === ComponentType.APPLICATION && item.componentNameNew === DefaultComponentNames.NEW_APPLICATION_NAME) {
+                        this.editComponentName();
+                    }
+                    if (item.componentType === ComponentType.DESIGN_SECTION && item.componentNameNew === DefaultComponentNames.NEW_DESIGN_SECTION_NAME) {
+                        this.editComponentName();
+                    }
+                    if (item.componentType === ComponentType.FEATURE && item.componentNameNew === DefaultComponentNames.NEW_FEATURE_NAME) {
+                        this.editComponentName();
+                    }
+                    if (item.componentType === ComponentType.SCENARIO && item.componentNameNew === DefaultComponentNames.NEW_SCENARIO_NAME) {
+                        this.editComponentName();
+                    }
                 }
 
                 break;
@@ -574,6 +578,7 @@ export class DesignComponentHeader extends Component{
         // What is saved depends on the context
         switch (view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
             case ViewType.DEVELOP_BASE_WP:
                 // Updates to the base design
                 result = ClientDesignComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
@@ -599,6 +604,7 @@ export class DesignComponentHeader extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
             case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.removeDesignComponent(view, mode, item, userContext);
                 break;
@@ -1652,6 +1658,7 @@ const componentSource = {
 
                 switch (props.view) {
                     case ViewType.DESIGN_NEW:
+                    case ViewType.DESIGN_PUBLISHED:
                         // Validates drop allowed and then moves component
                         ClientDesignComponentServices.moveDesignComponent(props.view, props.mode, props.displayContext, item.component._id, dropResult.targetItem._id);
                         break;
@@ -1665,6 +1672,7 @@ const componentSource = {
 
                 switch (props.view) {
                     case ViewType.DESIGN_NEW:
+                    case ViewType.DESIGN_PUBLISHED:
                         ClientDesignComponentServices.reorderDesignComponent(props.view, props.mode, props.displayContext, item.component._id, dropResult.targetItem._id);
                         break;
                     case ViewType.DESIGN_UPDATE_EDIT:

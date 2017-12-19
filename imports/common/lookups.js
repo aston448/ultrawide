@@ -35,9 +35,8 @@ class TextLookups {
             case ViewType.CONFIGURE:
                 return 'USER SETTINGS';
             case ViewType.DESIGN_NEW:
-                return 'DESIGN EDITOR';
             case ViewType.DESIGN_PUBLISHED:
-                return 'DESIGN VIEW';
+                return 'DESIGN EDITOR';
             case ViewType.DESIGN_UPDATABLE:
                 return 'DESIGN VERSION PROGRESS';
             case ViewType.DESIGN_UPDATE_EDIT:

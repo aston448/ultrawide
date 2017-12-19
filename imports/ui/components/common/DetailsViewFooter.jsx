@@ -76,7 +76,7 @@ export class DetailsViewFooter extends Component {
             case DetailsViewType.VIEW_DOM_DICT:
 
                 // Add Dict item available if in editing view
-                if((view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT) {
+                if((view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT) {
                     footerContent =
                         <div id="addDomainTerm">
                             <DesignComponentAdd

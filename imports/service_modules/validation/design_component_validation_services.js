@@ -18,7 +18,7 @@ class DesignComponentValidationServices{
     validateAddDesignComponent(view, mode, componentType){
 
         // Additions only allowed in design edit or base work package when in edit mode
-        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DEVELOP_BASE_WP)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DEVELOP_BASE_WP)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_ADD;
         }
 
@@ -41,7 +41,7 @@ class DesignComponentValidationServices{
     validateRemoveDesignComponent(view, mode, designComponent){
 
         // Only can remove if editing design or WP
-        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DEVELOP_BASE_WP)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DEVELOP_BASE_WP)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_REMOVE;
         }
 
@@ -68,7 +68,7 @@ class DesignComponentValidationServices{
     validateUpdateComponentName(view, mode, componentType, isDevAdded, newName, existingComponents, componentParentRefId){
 
         // Updates only allowed in design edit when in edit mode or for Base WP editing
-        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DEVELOP_BASE_WP)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DEVELOP_BASE_WP)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_EDIT;
         }
 
@@ -158,7 +158,7 @@ class DesignComponentValidationServices{
     validateUpdateFeatureNarrative(view, mode){
 
         // Updates only allowed in design edit when in edit mode
-        if(view !== ViewType.DESIGN_NEW){
+        if(view !== ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_EDIT;
         }
 
@@ -173,7 +173,7 @@ class DesignComponentValidationServices{
     validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent){
 
         // Moves only allowed in design edit when in edit mode
-        if(view !== ViewType.DESIGN_NEW){
+        if(view !== ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_MOVE;
         }
 
@@ -198,7 +198,7 @@ class DesignComponentValidationServices{
     validateReorderDesignComponent(view, mode, displayContext, movingComponent, targetComponent){
 
         // Moves only allowed in design edit when in edit mode
-        if(view !== ViewType.DESIGN_NEW){
+        if(view !== ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_MOVE;
         }
 

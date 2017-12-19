@@ -15,17 +15,17 @@ class DomainDictionaryValidationServices{
     validateAddNewTerm(userRole, view, mode){
 
         // To add a Term, user must be a Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_ROLE_ADD;
         }
 
         // View must be a Design Edit
-        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DESIGN_UPDATE_EDIT)){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_ADD;
         }
 
         // Must be in edit mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_MODE_ADD;
         }
 
@@ -35,17 +35,17 @@ class DomainDictionaryValidationServices{
     validateUpdateTermName(userRole, view, mode, newTermName, otherTerms){
 
         // To edit a Term, user must be a Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_ROLE_EDIT;
         }
 
         // View must be a Design Edit
-        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DESIGN_UPDATE_EDIT)){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
         }
 
         // Must be in edit mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_MODE_EDIT;
         }
 
@@ -68,17 +68,17 @@ class DomainDictionaryValidationServices{
     validateUpdateTermDefinition(userRole, view, mode){
 
         // To edit a Term, user must be a Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_ROLE_EDIT;
         }
 
         // View must be a Design Edit
-        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DESIGN_UPDATE_EDIT)){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
         }
 
         // Must be in edit mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_MODE_EDIT;
         }
 
@@ -88,17 +88,17 @@ class DomainDictionaryValidationServices{
     validateRemoveTerm(userRole, view, mode){
 
         // To remove a Term, user must be a Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_ROLE_EDIT;
         }
 
         // View must be a Design Edit
-        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_UPDATE_EDIT)){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DESIGN_UPDATE_EDIT)){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
         }
 
         // Must be in edit mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DomainDictionaryValidationErrors.DICTIONARY_INVALID_MODE_EDIT;
         }
 

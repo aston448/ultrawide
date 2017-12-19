@@ -213,6 +213,30 @@ export class DesignEditorHeader extends Component {
                     </div>;
                 break;
 
+            case ViewType.DESIGN_PUBLISHED:
+
+                if(userRole === RoleType.DESIGNER){
+
+                    options =
+                        <div className="details-menu-bar">
+                            {zoomFeaturesOption}
+                            {zoomSectionsOption}
+                            {viewModeViewOption}
+                            {viewModeEditOption}
+                            {domainTermsOption}
+                        </div>;
+
+                } else {
+
+                    options =
+                        <div className="details-menu-bar">
+                            {zoomFeaturesOption}
+                            {zoomSectionsOption}
+                            {domainTermsOption}
+                        </div>;
+                }
+                break;
+
             case ViewType.DESIGN_UPDATE_EDIT:
 
                 switch(displayContext) {
@@ -295,7 +319,6 @@ export class DesignEditorHeader extends Component {
                 }
                 break;
 
-            case ViewType.DESIGN_PUBLISHED:
             case ViewType.DESIGN_UPDATABLE:
 
                 options =

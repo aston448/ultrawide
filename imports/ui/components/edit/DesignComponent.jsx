@@ -414,6 +414,7 @@ export class DesignComponent extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
                 // Adding to the design itself
                 ClientDesignComponentServices.addDesignSectionToApplication(view, mode, appItem);
                 break;
@@ -429,6 +430,7 @@ export class DesignComponent extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
                 // Adding to the design itself
                 ClientDesignComponentServices.addSectionToDesignSection(view, mode, sectionItem);
                 break;
@@ -444,6 +446,7 @@ export class DesignComponent extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
                 // Adding to the design itself
                 ClientDesignComponentServices.addFeatureToDesignSection(view, mode, sectionItem);
                 break;
@@ -459,6 +462,7 @@ export class DesignComponent extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
             case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureItem, userContext.workPackageId);
                 break;
@@ -476,6 +480,7 @@ export class DesignComponent extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
             case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.addScenario(view, mode, parentItem, userContext.workPackageId);
                 break;
@@ -613,6 +618,8 @@ export class DesignComponent extends Component{
                 }}/>;
 
             // Adding stuff is not allowed in these contexts
+
+
             let notEditable = (
                 mode === ViewMode.MODE_VIEW ||
                 displayContext === DisplayContext.UPDATE_SCOPE ||
@@ -627,7 +634,7 @@ export class DesignComponent extends Component{
                 (updateItem && updateItem.isRemoved)
             );
 
-            switch (currentItem.componentType) {
+              switch (currentItem.componentType) {
                 case ComponentType.APPLICATION:
                     // An application is the entire application and can contain design sections
                     if (notEditable) {

@@ -294,6 +294,7 @@ export default class Narrative extends React.Component {
 
         switch(view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
                 ClientDesignComponentServices.updateFeatureNarrative(view, mode, this.props.designComponent._id, plainText, rawText);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:

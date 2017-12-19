@@ -131,13 +131,13 @@ export class MainSelectionPage extends Component {
                         <Row>
                             <Col md={1}>
                                 <Nav bsStyle="pills" className="side-menu" stacked>
-                                    <NavItem id="tab-designs" eventKey={HomePageTab.TAB_DESIGNS}>
+                                    <NavItem eventKey={HomePageTab.TAB_DESIGNS}>
                                         DESIGNS
                                     </NavItem>
-                                    <NavItem id="tab-work" eventKey={HomePageTab.TAB_WORK}>
+                                    <NavItem eventKey={HomePageTab.TAB_WORK}>
                                         WORK
                                     </NavItem>
-                                    <NavItem id="tab-progress" eventKey={HomePageTab.TAB_PROGRESS}>
+                                    <NavItem eventKey={HomePageTab.TAB_PROGRESS}>
                                         PROGRESS
                                     </NavItem>
                                 </Nav>
@@ -167,16 +167,16 @@ export class MainSelectionPage extends Component {
                         <Row>
                             <Col md={1}>
                                 <Nav bsStyle="pills" className="side-menu" stacked>
-                                    <NavItem id="tab-designs" eventKey={HomePageTab.TAB_DESIGNS}>
+                                    <NavItem  eventKey={HomePageTab.TAB_DESIGNS}>
                                         DESIGNS
                                     </NavItem>
-                                    <NavItem id="tab-updates" eventKey={HomePageTab.TAB_UPDATES}>
+                                    <NavItem eventKey={HomePageTab.TAB_UPDATES}>
                                         UPDATES
                                     </NavItem>
-                                    <NavItem id="tab-work" eventKey={HomePageTab.TAB_WORK}>
+                                    <NavItem eventKey={HomePageTab.TAB_WORK}>
                                         WORK
                                     </NavItem>
-                                    <NavItem id="tab-progress" eventKey={HomePageTab.TAB_PROGRESS}>
+                                    <NavItem eventKey={HomePageTab.TAB_PROGRESS}>
                                         PROGRESS
                                     </NavItem>
                                 </Nav>

@@ -191,6 +191,7 @@ export class TextEditor extends Component {
 
         switch(view){
             case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
                 ClientTextEditorServices.saveDesignComponentText(role, designComponent._id, rawText);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -269,7 +270,10 @@ export class TextEditor extends Component {
                     }
                     break;
                 case ViewType.DESIGN_NEW:
-                    detailsEditable = true;
+                case ViewType.DESIGN_PUBLISHED:
+                    if(mode === ViewMode.MODE_EDIT) {
+                        detailsEditable = true;
+                    }
                     break;
             }
         }

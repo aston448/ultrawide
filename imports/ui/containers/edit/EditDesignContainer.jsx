@@ -123,10 +123,12 @@ export class DesignApplicationsList extends Component {
         let displayContext = DisplayContext.BASE_VIEW;
         switch(view){
             case ViewType.DESIGN_NEW:
-                displayContext = DisplayContext.BASE_EDIT;
-                break;
             case ViewType.DESIGN_PUBLISHED:
-                displayContext = DisplayContext.BASE_VIEW;
+                if(mode === ViewMode.MODE_EDIT && userRole === RoleType.DESIGNER) {
+                    displayContext = DisplayContext.BASE_EDIT;
+                } else {
+                    displayContext = DisplayContext.BASE_VIEW;
+                }
                 break;
             case ViewType.DESIGN_UPDATABLE:
                 displayContext = DisplayContext.WORKING_VIEW;
