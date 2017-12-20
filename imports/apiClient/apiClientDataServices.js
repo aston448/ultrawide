@@ -10,6 +10,7 @@ import { RoleType, ComponentType, ViewType, ViewOptionType, DisplayContext, Desi
      UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, WorkSummaryType } from '../constants/constants.js';
 
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
+import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 
 import { log } from '../common/utils.js';
 import TextLookups from '../common/lookups.js';
@@ -39,8 +40,17 @@ import DefaultFeatureAspectData         from '../data/design/default_feature_asp
 
 // REDUX services
 import store from '../redux/store'
-import { setDesignVersionDataLoadedTo, updateUserMessage } from '../redux/actions'
-import {HomePageTab, UpdateMergeStatus} from "../constants/constants";
+import {
+    setCurrentRole, setCurrentView, setCurrentWindowSize, setDesignVersionDataLoadedTo, setDocFeatureTextOption,
+    setDocNarrativeTextOption, setDocScenarioTextOption,
+    setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
+    updateUserMessage
+} from '../redux/actions'
+import {HomePageTab, UpdateMergeStatus, UserSetting, UserSettingValue} from "../constants/constants";
+import ClientAppHeaderServices from "./apiClientAppHeader";
+import ClientDesignVersionServices from "./apiClientDesignVersion";
+import ClientUserSettingsServices from "./apiClientUserSettings";
+import ClientDesignUpdateServices from "./apiClientDesignUpdate";
 
 
 // =====================================================================================================================
@@ -52,6 +62,138 @@ import {HomePageTab, UpdateMergeStatus} from "../constants/constants";
 // ---------------------------------------------------------------------------------------------------------------------
 
 class ClientDataServices{
+
+    loadMainData(userContext){
+
+        if(Meteor.isClient) {
+            log((msg) => console.log(msg), LogLevel.TRACE, "Loading main data...");
+
+            const componentsExist = DesignVersionData.checkForComponents();
+            const mashExists = UserDvMashScenarioData.hasUserDvData(userContext);
+
+            if (componentsExist) {
+                log((msg) => console.log(msg), LogLevel.TRACE, "Data already loaded...");
+
+                if (!mashExists) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Getting User Data...");
+                    this.getUserData(userContext, this.onAllDataLoaded);
+                } else {
+                    this.onAllDataLoaded();
+                }
+
+
+            } else {
+
+                // Need to load data
+                if (userContext.designVersionId !== 'NONE') {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Loading data for DV {}", userContext.designVersionId);
+
+                    // Show wait screen
+                    store.dispatch(setCurrentView(ViewType.WAIT));
+
+                    // Also gets WP data if a WP is current
+                    if (Meteor.isClient) {
+                        this.getDesignVersionData(userContext, this.onAllDataLoaded);
+                    }
+
+                } else {
+
+                    log((msg) => console.log(msg), LogLevel.TRACE, "No DV set");
+                    // Will have to wait for a DV to be selected to get data
+                    this.onAllDataLoaded(userContext);
+                }
+            }
+        }
+    }
+
+    onAllDataLoaded(){
+
+        //console.log("called onAllDataLoaded");
+        const userContext = store.getState().currentUserItemContext;
+
+        // Refresh the test mash for the design version.  Also loads test results
+        //ClientTestIntegrationServices.refreshTestData(userContext);
+
+        // Display correct work progress
+        ClientDesignVersionServices.updateWorkProgress(userContext);
+
+        // Get latest status on DUs
+        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+
+        // Restore User Settings
+        const screenSize = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_SCREEN_SIZE);
+        store.dispatch(setCurrentWindowSize(screenSize));
+
+        const intTestOutputDir = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_INT_OUTPUT_LOCATION);
+        store.dispatch(setIntTestOutputDir(intTestOutputDir));
+
+        // Include narratives setting.  Default to ON if not yet set
+        const includeNarrativesSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_INCLUDE_NARRATIVES);
+        if(includeNarrativesSetting){
+            store.dispatch(setIncludeNarratives(includeNarrativesSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_INCLUDE_NARRATIVES, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setIncludeNarratives(UserSettingValue.SETTING_INCLUDE));
+        }
+
+        // Doc export settings - default if not yet set
+        const docSectionTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION);
+        if(docSectionTextSetting) {
+            store.dispatch(setDocSectionTextOption(docSectionTextSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SECTION, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setDocSectionTextOption(UserSettingValue.SETTING_INCLUDE));
+        }
+
+        const docFeatureTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE);
+        if(docFeatureTextSetting) {
+            store.dispatch(setDocFeatureTextOption(docFeatureTextSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_FEATURE, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setDocFeatureTextOption(UserSettingValue.SETTING_INCLUDE));
+        }
+
+        const docNarrativeTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE);
+        if(docNarrativeTextSetting) {
+            store.dispatch(setDocNarrativeTextOption(docNarrativeTextSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_NARRATIVE, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setDocNarrativeTextOption(UserSettingValue.SETTING_INCLUDE));
+        }
+
+        const docScenarioTextSetting = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO);
+        if(docScenarioTextSetting) {
+            store.dispatch(setDocScenarioTextOption(docScenarioTextSetting));
+        } else {
+            ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_DOC_TEXT_SCENARIO, UserSettingValue.SETTING_INCLUDE);
+            store.dispatch(setDocScenarioTextOption(UserSettingValue.SETTING_INCLUDE));
+        }
+
+        // Set User Role
+        // TODO - Implement default role
+        const user = UserRoleData.getRoleByUserId(userContext.userId);
+
+        if(user.isDesigner){
+            store.dispatch(setCurrentRole(userContext.userId, RoleType.DESIGNER))
+        } else{
+            if(user.isManager){
+                store.dispatch(setCurrentRole(userContext.userId, RoleType.MANAGER))
+            } else {
+                if(user.isDeveloper){
+                    store.dispatch(setCurrentRole(userContext.userId, RoleType.DEVELOPER))
+                }
+            }
+        }
+
+        // Go to home screen
+        if (userContext.designId !== 'NONE') {
+            ClientAppHeaderServices.setViewSelection();
+            ClientUserContextServices.setOpenDesignVersionItems(userContext);
+        } else {
+            ClientAppHeaderServices.setViewSelection();
+        }
+    }
+
 
     getApplicationData(){
 
@@ -84,6 +226,8 @@ class ClientDataServices{
     getUserData(userContext, callback){
 
         if(Meteor.isClient){
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Get User Data with callback {}", callback);
 
             store.dispatch(updateUserMessage({
                 messageType: MessageType.WARNING,
@@ -133,6 +277,10 @@ class ClientDataServices{
     getDesignVersionData(userContext, callback){
 
         if(Meteor.isClient) {
+
+            console.log("Get Design Version Data with callback " + callback);
+            //log((msg) => console.log(msg), LogLevel.DEBUG, "Get Design Version Data with callback {}", callback);
+
 
             if(store.getState().designVersionDataLoaded){
 
@@ -611,12 +759,25 @@ class ClientDataServices{
                 featureSummaries.push(featureSummary);
             });
 
-            return{
-                featureSummaries:   featureSummaries,
-                designVersionName:  dv.designVersionName,
-                workPackageName:    wpName,
-                homePageTab:        homePageTab
-            };
+            if(dv){
+
+                return{
+                    featureSummaries:   featureSummaries,
+                    designVersionName:  dv.designVersionName,
+                    workPackageName:    wpName,
+                    homePageTab:        homePageTab
+                };
+            } else {
+
+                return{
+                    featureSummaries:   featureSummaries,
+                    designVersionName:  'NONE',
+                    workPackageName:    'NONE',
+                    homePageTab:        HomePageTab.TAB_DESIGNS
+                };
+            }
+
+
         }
     }
 

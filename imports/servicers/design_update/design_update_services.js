@@ -225,7 +225,7 @@ class DesignUpdateServices{
             }
         }
 
-        log((msg) => console.log(msg), LogLevel.INFO, 'Updating DU Completeness to {}...', wpTestStatus);
+        log((msg) => console.log(msg), LogLevel.DEBUG, 'Updating DU Completeness to {}...', wpTestStatus);
         DesignUpdateData.updateWpTestStatus(designUpdateId, wpTestStatus);
 
     }

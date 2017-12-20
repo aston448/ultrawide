@@ -5,12 +5,10 @@ import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentT
 import { log }                          from '../common/utils.js';
 import TextLookups                      from '../common/lookups.js'
 
-import ClientDataServices               from './apiClientDataServices.js';
 import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
 import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
 import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
 import ClientAppHeaderServices          from '../apiClient/apiClientAppHeader.js';
-import ClientCallbacks                  from '../apiClient/apiClientCallbacks.js';
 
 // Data Access
 import DesignData                       from '../data/design/design_db.js';
@@ -21,7 +19,6 @@ import DesignComponentData              from '../data/design/design_component_db
 import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
 import UserViewOptionData               from '../data/context/user_view_option_db.js';
 import UserContextData                  from '../data/context/user_context_db.js';
-import UserDvMashScenarioData           from '../data/mash/user_dv_mash_scenario_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -31,6 +28,7 @@ import {
     setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag,
     setCurrentUserHomeTab
 } from '../redux/actions'
+
 
 
 // =====================================================================================================================
@@ -144,44 +142,6 @@ class ClientUserContextServices {
         store.dispatch(setCurrentRole(userId, roleType));
     }
 
-    loadMainData(userContext){
-        log((msg) => console.log(msg), LogLevel.TRACE, "Loading main data...");
-
-        const componentsExist = DesignVersionData.checkForComponents();
-        const mashExists = UserDvMashScenarioData.hasUserDvData(userContext);
-
-        if(componentsExist){
-            log((msg) => console.log(msg), LogLevel.TRACE, "Data already loaded...");
-
-            if(!mashExists){
-                log((msg) => console.log(msg), LogLevel.TRACE, "Getting User Data...");
-                ClientDataServices.getUserData(userContext, ClientCallbacks.onAllDataLoaded);
-            } else {
-                ClientCallbacks.onAllDataLoaded();
-            }
-
-
-        } else {
-
-            // Need to load data
-            if(userContext.designVersionId !== 'NONE'){
-                log((msg) => console.log(msg), LogLevel.TRACE, "Loading data for DV {}", userContext.designVersionId);
-
-                // Show wait screen
-                store.dispatch(setCurrentView(ViewType.WAIT));
-
-                // Also gets WP data if a WP is current
-                ClientDataServices.getDesignVersionData(userContext, ClientCallbacks.onAllDataLoaded);
-
-            } else {
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "No DV set");
-                // Will have to wait for a DV to be selected to get data
-                ClientCallbacks.onAllDataLoaded(userContext);
-            }
-        }
-
-    }
 
     setOpenDesignVersionItems(userContext){
 

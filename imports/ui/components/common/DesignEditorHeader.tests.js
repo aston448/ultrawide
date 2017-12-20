@@ -156,7 +156,7 @@ describe('JSX: DesignEditorHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
-            const userRole = RoleType.DESIGNER;
+            const userRole = RoleType.MANAGER;
 
             let item = testDesignEditorHeader(view, mode, displayContext, userRole);
 
@@ -168,7 +168,7 @@ describe('JSX: DesignEditorHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED;
             const mode = ViewMode.MODE_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
-            const userRole = RoleType.DESIGNER;
+            const userRole = RoleType.MANAGER;
 
             let item = testDesignEditorHeader(view, mode, displayContext, userRole);
 

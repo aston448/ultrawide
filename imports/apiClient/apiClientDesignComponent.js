@@ -350,7 +350,11 @@ class ClientDesignComponentServices{
 
                     // Update WP Completeness if in a WP
                     if(workPackageId !== 'NONE') {
-                        ServerWorkPackageApi.updateWorkPackageTestCompleteness(userContext, workPackageId);
+                        ServerWorkPackageApi.updateWorkPackageTestCompleteness(userContext, workPackageId, (err, result) => {
+                            if(err){
+                                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                            }
+                        });
                     }
 
                     // Show action success on screen
@@ -411,7 +415,11 @@ class ClientDesignComponentServices{
 
                     // Update WP Completeness if a Scenario in a WP
                     if(userContext.workPackageId !== 'NONE' && designComponent.componentType === ComponentType.SCENARIO) {
-                        ServerWorkPackageApi.updateWorkPackageTestCompleteness(userContext, userContext.workPackageId);
+                        ServerWorkPackageApi.updateWorkPackageTestCompleteness(userContext, userContext.workPackageId, (err, result) => {
+                            if(err){
+                                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                            }
+                        });
                     }
 
                     // Show action success on screen

@@ -78,7 +78,7 @@ class WorkPackageServices{
             // Assume complete until we find trouble
             let wpTestStatus = WorkPackageTestStatus.WP_TESTS_COMPLETE;
 
-            log((msg) => console.log(msg), LogLevel.INFO, 'Updating WP Completeness for WP {}...', wp.workPackageName);
+            log((msg) => console.log(msg), LogLevel.DEBUG, 'Updating WP Completeness for WP {}...', wp.workPackageName);
 
             // Only Adopted WPs can go to complete...
             if(wp.workPackageStatus === WorkPackageStatus.WP_ADOPTED) {
@@ -104,7 +104,7 @@ class WorkPackageServices{
                                 (scenarioMash.intFailCount && scenarioMash.intFailCount > 0) ||
                                 (scenarioMash.unitFailCount && scenarioMash.unitFailCount > 0)
                             ) {
-                                log((msg) => console.log(msg), LogLevel.INFO, '  Fails');
+                                log((msg) => console.log(msg), LogLevel.DEBUG, '  Fails');
                                 problem = true;
                             }
 
@@ -114,17 +114,17 @@ class WorkPackageServices{
                             if (scenarioMash.intPassCount) {passCount += scenarioMash.intPassCount}
                             if (scenarioMash.unitPassCount) {passCount += scenarioMash.unitPassCount}
 
-                            log((msg) => console.log(msg), LogLevel.INFO, '  Pass count = {}', passCount);
+                            log((msg) => console.log(msg), LogLevel.DEBUG, '  Pass count = {}', passCount);
 
                             if (
                                 (passCount === 0) &&
                                 (scenario.reviewStatus !== WorkPackageReviewType.REVIEW_IGNORE)
                             ) {
-                                log((msg) => console.log(msg), LogLevel.INFO, '  No Passes');
+                                log((msg) => console.log(msg), LogLevel.DEBUG, '  No Passes');
                                 problem = true;
                             }
                         } else {
-                            log((msg) => console.log(msg), LogLevel.INFO, '  No Mash');
+                            log((msg) => console.log(msg), LogLevel.DEBUG, '  No Mash');
                             problem = true;
                         }
 
@@ -148,12 +148,12 @@ class WorkPackageServices{
             }
 
             // Update the WP status
-            log((msg) => console.log(msg), LogLevel.INFO, 'UpdatingWP Completeness to {}...', wpTestStatus);
+            log((msg) => console.log(msg), LogLevel.DEBUG, 'UpdatingWP Completeness to {}...', wpTestStatus);
             WorkPackageData.setWorkPackageTestStatus(workPackageId, wpTestStatus);
 
             // Also update the status of the relevant DU if any
             if(wp.designUpdateId !== 'NONE') {
-                log((msg) => console.log(msg), LogLevel.INFO, 'Updating DU...');
+                log((msg) => console.log(msg), LogLevel.DEBUG, 'Updating DU...');
                 DesignUpdateServices.updateDesignUpdateWorkPackageTestStatus(wp.designUpdateId);
             }
         }
