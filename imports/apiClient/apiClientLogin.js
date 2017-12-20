@@ -3,7 +3,9 @@
 // Ultrawide Services
 import {RoleType, ViewType, MessageType} from '../constants/constants.js'
 import {LoginMessages} from '../constants/message_texts.js';
-import ClientUserContextServices from './apiClientUserContext.js'
+
+import ClientUserContextServices    from './apiClientUserContext.js';
+import ClientDataServices           from './apiClientDataServices.js';
 
 // Data Access
 import UserRoleData                     from '../data/users/user_role_db.js';
@@ -77,7 +79,7 @@ class ClientLoginServices{
                                 store.dispatch(setCurrentUserName(user.displayName));
 
                                 // Having got these go to a WAIT screen until the design data is loaded...
-                                ClientUserContextServices.loadMainData(userContext);
+                                ClientDataServices.loadMainData(userContext);
                             }
                         } else {
                             store.dispatch(updateUserMessage({
