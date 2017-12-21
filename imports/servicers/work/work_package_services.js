@@ -134,7 +134,7 @@ class WorkPackageServices{
                             const designComponent = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, scenario.componentReferenceId);
 
                             if (designComponent.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED) {
-                                log((msg) => console.log(msg), LogLevel.INFO, '  Not Removed');
+                                log((msg) => console.log(msg), LogLevel.DEBUG, '  Not Removed');
                                 wpTestStatus = WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE;
                                 break;
                             }

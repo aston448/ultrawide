@@ -29,9 +29,7 @@ export const UltrawideAction = {
 export const ViewType = {
     ADMIN:                      'ADMIN',                    // Admin Management Screen
     AUTHORISE:                  'AUTHORISE',                // Login screen
-//    ROLES:                      'ROLES',                    // Available user roles / actions
     CONFIGURE:                  'CONFIGURE',                // Change user settings
-//    DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
     SELECT:                     'SELECT',                   // Home Selection Screen
     DESIGN_NEW:                 'DESIGN_NEW',               // An unpublished design version
     DESIGN_PUBLISHED:           'DESIGN_PUBLISHED',         // A published Initial Design Version
