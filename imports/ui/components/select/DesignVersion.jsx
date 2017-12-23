@@ -13,7 +13,7 @@ import UpdateMergeItem              from './UpdateMergeItem.jsx';
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 
 import {RoleType, DesignVersionStatus, ItemType, DesignUpdateMergeAction, ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
-import { log } from '../../../common/utils.js';
+import { replaceAll, log } from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js';
 
 // Bootstrap
@@ -135,6 +135,8 @@ export class DesignVersion extends Component {
     render() {
 
         const {designVersion, userRole, userContext} = this.props;
+
+        const uiDesignVersionId = replaceAll(designVersion.designVersionName, ' ', '_');
 
         // Active if this design version is the current context design version
         let active = designVersion._id === userContext.designVersionId;
@@ -361,7 +363,7 @@ export class DesignVersion extends Component {
 
         if(active) {
             return (
-                <div className={itemStyle}
+                <div id={uiDesignVersionId} className={itemStyle}
                      onClick={() => this.setNewDesignVersionActive(userRole, userContext, designVersion)}>
                     {status}
                     {header}
@@ -371,7 +373,7 @@ export class DesignVersion extends Component {
             );
         } else {
             return (
-                <div className={itemStyle}
+                <div id={uiDesignVersionId} className={itemStyle}
                      onClick={() => this.setNewDesignVersionActive(userRole, userContext, designVersion)}>
                     {summary}
                 </div>

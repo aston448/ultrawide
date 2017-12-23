@@ -11,7 +11,8 @@ import DesignComponentAdd               from '../../components/common/DesignComp
 import UltrawideMenuItem                from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
-import {ViewType, ViewMode, DetailsViewType, MenuType} from '../../../constants/constants.js';
+import {ViewType, ViewMode, DetailsViewType, MenuType}  from '../../../constants/constants.js';
+import {AddActionIds}                                   from "../../../constants/ui_context_ids.js";
 
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
@@ -80,6 +81,7 @@ export class DetailsViewFooter extends Component {
                     footerContent =
                         <div id="addDomainTerm">
                             <DesignComponentAdd
+                                uiContextId={AddActionIds.UI_CONTEXT_ADD_DOMAIN_TERM}
                                 addText="Add new Domain Term"
                                 onClick={() => this.addDomainTerm(userRole, view, mode, userContext.designId, userContext.designVersionId)}
                             />

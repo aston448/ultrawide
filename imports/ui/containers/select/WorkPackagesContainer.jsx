@@ -28,6 +28,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 // REDUX services
 import {connect} from 'react-redux';
 import {DisplayContext} from "../../../constants/constants";
+import {AddActionIds} from "../../../constants/ui_context_ids";
 
 // =====================================================================================================================
 
@@ -111,6 +112,7 @@ export class WorkPackagesList extends Component {
         let footerActionFunction = null;
         let hasFooterAction = false;
         const footerAction = 'Add Work Package to Design Version: ' + this.getDesignVersionName(userContext);
+        const footerActionUiContextId = AddActionIds.UI_CONTEXT_ADD_WORK_PACKAGE;
         const footerText = 'for Design Version: ' + this.getDesignVersionName(userContext);
 
         // Add WP available to Managers for Base DVs
@@ -274,6 +276,7 @@ export class WorkPackagesList extends Component {
                                     bodyDataFunction={bodyDataFunction1}
                                     hasFooterAction={hasFooterAction}
                                     footerAction={footerAction}
+                                    footerActionUiContext={footerActionUiContextId}
                                     footerActionFunction={footerActionFunction}
                                 />
                             </Tab>
@@ -283,6 +286,7 @@ export class WorkPackagesList extends Component {
                                     bodyDataFunction={bodyDataFunction2}
                                     hasFooterAction={false}
                                     footerAction={''}
+                                    footerActionUiContext={''}
                                     footerActionFunction={null}
                                 />
                             </Tab>
@@ -292,6 +296,7 @@ export class WorkPackagesList extends Component {
                                     bodyDataFunction={bodyDataFunction3}
                                     hasFooterAction={false}
                                     footerAction={''}
+                                    footerActionUiContext={''}
                                     footerActionFunction={null}
                                 />
                             </Tab>

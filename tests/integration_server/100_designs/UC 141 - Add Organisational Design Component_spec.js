@@ -97,7 +97,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
-        // Execute - add new section to 'Section1'
+        // Execute - add new aspect to 'Feature1'
         DesignComponentActions.designerAddsFeatureAspectToFeature_('Feature1');
 
         // Verify - new component added

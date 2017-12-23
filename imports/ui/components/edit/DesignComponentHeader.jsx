@@ -20,7 +20,7 @@ import ClientTextEditorServices             from '../../../apiClient/apiClientTe
 import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel,
     MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
 import {DefaultComponentNames}          from '../../../constants/default_names.js';
-import {getComponentClass, log}         from '../../../common/utils.js';
+import {getComponentClass, replaceAll, log}         from '../../../common/utils.js';
 import TextLookups                      from '../../../common/lookups.js'
 
 // Bootstrap
@@ -661,10 +661,11 @@ export class DesignComponentHeader extends Component{
     };
 
 
+
+
     // Render the header of the design component - has tools in it depending on context
     render() {
-        const {currentItem, updateItem, wpItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
-
+        const {currentItem, updateItem, wpItem, uiContextName, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
         //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with test summary " + testSummary + " and test summary data " + testSummaryData);
 
@@ -1021,7 +1022,7 @@ export class DesignComponentHeader extends Component{
             </InputGroup.Addon>;
 
         let openClose =
-            <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
+            <InputGroup.Addon id={'openClose_' + uiContextName + '_' + openStatus} onClick={ () => this.toggleOpen()}>
                 <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
             </InputGroup.Addon>;
 
@@ -1035,27 +1036,30 @@ export class DesignComponentHeader extends Component{
             </InputGroup.Addon>;
 
         let editableEditor =
-            <div id="editorEdit" className={itemStyle + ' editableItem' + ' editBackground'} onClick={ () => this.setCurrentComponent()}>
-                <Editor
-                    editorState={this.state.editorState}
-                    handleKeyCommand={this.handleTitleKeyCommand}
-                    keyBindingFn={this.keyBindings}
-                    onChange={this.onTitleChange}
-                    spellCheck={true}
-                    ref="editor"
-                    readOnly={false}
-                />
+            <div id={'ActiveEditor_' + uiContextName} onClick={ () => this.setCurrentComponent()}>
+                <div id="editorEdit" className={itemStyle + ' editableItem' + ' editBackground'} >
+                    <Editor
+                        editorState={this.state.editorState}
+                        handleKeyCommand={this.handleTitleKeyCommand}
+                        keyBindingFn={this.keyBindings}
+                        onChange={this.onTitleChange}
+                        spellCheck={true}
+                        ref="editor"
+                        readOnly={false}
+                    />
+                </div>
             </div>;
 
         let readOnlyEditor =
-            <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}
-                 onClick={ () => this.setCurrentComponent()}>
-                <Editor
-                    editorState={this.state.editorState}
-                    spellCheck={true}
-                    ref="editorReadOnly"
-                    readOnly={true}
-                />
+            <div id={'PassiveEditor_' + uiContextName} onClick={ () => this.setCurrentComponent()}>
+                <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}>
+                    <Editor
+                        editorState={this.state.editorState}
+                        spellCheck={true}
+                        ref="editorReadOnly"
+                        readOnly={true}
+                    />
+                </div>
             </div>;
 
         let wpStatus =
@@ -1090,39 +1094,47 @@ export class DesignComponentHeader extends Component{
         }
 
 
-
         let editAction =
-            <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
+            <InputGroup.Addon >
                 <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipEdit}>
-                    <div className="blue"><Glyphicon glyph="edit"/></div>
+                    <div id={'Edit_' + uiContextName} onClick={ () => this.editComponentName()}>
+                        <div className="blue"><Glyphicon glyph="edit"/></div>
+                    </div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
 
+
         let deleteAction =
-            <InputGroup.Addon id="actionDelete"
-                              onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
+            <InputGroup.Addon>
                 <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipDelete}>
-                    <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
+                    <div id={'Remove_' + uiContextName} onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
+                        <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
+                    </div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
 
         let moveAction =
             <InputGroup.Addon>
-                <div id="actionMove" className="lgrey">
+                <div className="lgrey">
                     <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMove}>
-                        <Glyphicon glyph="move"/>
+                        <div id={'Move_' + uiContextName}>
+                            <Glyphicon glyph="move"/>
+                        </div>
                     </OverlayTrigger>
                 </div>
             </InputGroup.Addon>;
+
 
         let draggableMoveAction = '';
         if (!(Meteor.isTest)) {
             draggableMoveAction =
                 <InputGroup.Addon>
                     {connectDragSource(
-                        <div id="actionMove" className="lgrey">
+                        <div className="lgrey">
                             <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMove}>
-                                <Glyphicon glyph="move"/>
+                                <div id={'Move_' + uiContextName}>
+                                    <Glyphicon glyph="move"/>
+                                </div>
                             </OverlayTrigger>
                         </div>)
                     }
@@ -1130,16 +1142,20 @@ export class DesignComponentHeader extends Component{
         }
 
         let saveAction =
-            <InputGroup.Addon id="actionSave" onClick={ () => this.saveComponentName(view, mode)}>
+            <InputGroup.Addon>
                 <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipSave}>
-                    <div className="green"><Glyphicon glyph="ok"/></div>
+                    <div id={'Save_' + uiContextName} onClick={ () => this.saveComponentName(view, mode)}>
+                        <div className="green"><Glyphicon glyph="ok"/></div>
+                    </div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
 
         let undoAction =
-            <InputGroup.Addon id="actionUndo" onClick={ () => this.undoComponentNameChange()}>
+            <InputGroup.Addon id="actionUndo">
                 <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipCancel}>
-                    <div className="red"><Glyphicon glyph="arrow-left"/></div>
+                    <div id={'Undo_' + uiContextName} onClick={ () => this.undoComponentNameChange()}>
+                        <div className="red"><Glyphicon glyph="arrow-left"/></div>
+                    </div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
 
@@ -1526,9 +1542,9 @@ export class DesignComponentHeader extends Component{
 
                     return(
                         <Grid id="featureTestSummary">
-                            <Row className={featureRowClass}>
+                            <Row id={uiContextName} className={featureRowClass}>
                                 <Col md={7} className="close-col">
-                                    <div id="headerItem">
+                                    <div id={uiItemId}>
                                         {designComponentElement}
                                     </div>
                                 </Col>
@@ -1540,7 +1556,6 @@ export class DesignComponentHeader extends Component{
                             </Row>
                         </Grid>
                     );
-                    break;
 
                 case ComponentType.SCENARIO:
                     // Scenario level test summary
@@ -1561,9 +1576,9 @@ export class DesignComponentHeader extends Component{
 
                     return(
                         <Grid id="scenarioTestSummary">
-                            <Row className={rowClass}>
+                            <Row id={uiContextName} className={rowClass}>
                                 <Col md={7} className="close-col">
-                                    <div id="headerItem">
+                                    <div>
                                         {designComponentElement}
                                     </div>
                                 </Col>
@@ -1575,13 +1590,13 @@ export class DesignComponentHeader extends Component{
                             </Row>
                         </Grid>
                     );
-                    break;
+
                 default:
                     return(
                         <Grid>
-                            <Row className="non-summary-row">
+                            <Row id={uiContextName} className="non-summary-row">
                                 <Col md={7} className="close-col">
-                                    <div id="headerItem">
+                                    <div >
                                         {designComponentElement}
                                     </div>
                                 </Col>
@@ -1593,7 +1608,7 @@ export class DesignComponentHeader extends Component{
             }
         } else {
             return(
-                <div id="headerItem">
+                <div id={uiContextName}>
                     {designComponentElement}
                 </div>
             );
@@ -1607,6 +1622,7 @@ DesignComponentHeader.propTypes = {
     currentItem: PropTypes.object.isRequired,
     updateItem: PropTypes.object,
     wpItem: PropTypes.object,
+    uiContextName: PropTypes.string.isRequired,
     isDragDropHovering: PropTypes.bool,
     onToggleOpen: PropTypes.func,
     onSelectItem: PropTypes.func,

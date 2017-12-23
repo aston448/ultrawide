@@ -19,11 +19,12 @@ import ScenarioFinder               from '../../components/search/ScenarioFinder
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
-import { log }        from '../../../common/utils.js';
+import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
+import { log }                              from '../../../common/utils.js';
 
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
@@ -31,6 +32,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -151,6 +153,7 @@ export class UpdateApplicationsList extends Component {
                     <tr>
                         <td id="addApplication" className="control-table-data-app">
                             <DesignComponentAdd
+                                uiContextId={AddActionIds.UI_CONTEXT_ADD_APPLICATION}
                                 addText="Add Application"
                                 onClick={ () => this.onAddApplication(view, mode, userContext.designVersionId, userContext.designUpdateId)}
                             />

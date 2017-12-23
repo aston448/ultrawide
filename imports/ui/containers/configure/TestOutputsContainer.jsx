@@ -6,22 +6,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// Ultrawide Collections
-
 // Ultrawide GUI Components
-import TestOutputLocation       from '../../components/configure/TestOutputLocation.jsx';
-import TestOutputFilesContainer from '../../containers/configure/TestOutputFilesContainer.jsx';
-import ItemContainer            from '../../components/common/ItemContainer.jsx';
+import TestOutputLocation                   from '../../components/configure/TestOutputLocation.jsx';
+import TestOutputFilesContainer             from '../../containers/configure/TestOutputFilesContainer.jsx';
+import ItemContainer                        from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js'
+
+import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -81,6 +82,7 @@ export class TestOutputsScreen extends Component {
                             bodyDataFunction={bodyDataFunction}
                             hasFooterAction={true}
                             footerAction={'Add Location'}
+                            footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_TEST_LOCATION}
                             footerActionFunction={() => this.addNewLocation(userRole, userContext)}
                         />
                     </Col>

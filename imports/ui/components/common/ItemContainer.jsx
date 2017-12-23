@@ -44,7 +44,7 @@ export default class ItemContainer extends Component {
 
     render() {
 
-        const {headerText, hasFooterAction, footerAction, footerText} = this.props;
+        const {headerText, hasFooterAction, footerAction, footerActionUiContext, footerText} = this.props;
 
         const bodyClass = this.getWindowSizeClass();
 
@@ -59,6 +59,7 @@ export default class ItemContainer extends Component {
                     <div className="item-container-footer">
                         <div className="design-item-add">
                             <DesignComponentAdd
+                                uiContextId={footerActionUiContext}
                                 addText={footerAction}
                                 onClick={ () => this.footerAction()}
                             />
@@ -89,5 +90,6 @@ ItemContainer.propTypes = {
     hasFooterAction: PropTypes.bool.isRequired,
     footerAction: PropTypes.string,
     footerActionFunction: PropTypes.func,
+    footerActionUiContext: PropTypes.string,
     footerText: PropTypes.string
 };

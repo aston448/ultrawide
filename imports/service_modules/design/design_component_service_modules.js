@@ -62,13 +62,25 @@ class DesignComponentModules{
         const workPackages = DesignVersionData.getBaseWorkPackages(designVersionId);
 
         const component = DesignComponentData.getDesignComponentById(newComponentId);
-        const componentParent = DesignComponentData.getDesignComponentByRef(designVersionId, component.componentParentReferenceIdNew);
 
-        // If the parent is in the WP actual scope, add in this component too
-        workPackages.forEach((wp) => {
+        if(component) {
 
-            WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParent._id, designVersionId, 'NONE');
-        });
+            // But not if its a new Application with no parent...
+            if(component.componentParentReferenceIdNew !== 'NONE')
+            {
+                const componentParent = DesignComponentData.getDesignComponentByRef(designVersionId, component.componentParentReferenceIdNew);
+
+                // If the parent is in the WP actual scope, add in this component too
+                workPackages.forEach((wp) => {
+
+                    WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParent._id, designVersionId, 'NONE');
+                });
+            }
+
+        } else {
+
+            log((msg) => console.log(msg), LogLevel.WARNING, 'New component {} was not found in the DB', newComponentId);
+        }
     };
 
     updateWorkPackageLocation(designComponentId, reorder){

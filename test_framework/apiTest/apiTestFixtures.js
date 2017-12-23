@@ -46,6 +46,11 @@ Meteor.methods({
         log((msg) => console.log(msg), LogLevel.INFO, "----- {} -----", suiteName);
     },
 
+    'testFixtures.logDebug'(string, data){
+        console.log(string, data);
+
+    },
+
     'testFixtures.removeMeteorUsers'(){
         // To be called only when new users have been added in a test as an After Each action to prevent tests creating duplicate users
         // Before each must then populate the data agsin with clearAllData
@@ -62,6 +67,8 @@ Meteor.methods({
             console.log('Test Fixtures: NOT TEST INSTANCE!!!');
 
         } else {
+
+            console.log('Clearing test data...');
 
             // For testing we clear the DB and start from scratch
             //console.log('Clearing down DB Data...');

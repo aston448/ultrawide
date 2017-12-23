@@ -17,6 +17,7 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {replaceAll} from "../../../common/utils";
 
 // =====================================================================================================================
 
@@ -129,6 +130,8 @@ export class UltrawideMenuItem extends Component {
             </Tooltip>
         );
 
+        const uiContextId = replaceAll(menuItemToolTip, ' ', '_');
+
         // Layout ------------------------------------------------------------------------------------------------------
 
         switch(menuType){
@@ -140,13 +143,13 @@ export class UltrawideMenuItem extends Component {
             case MenuType.MENU_TOP_ICON:
                 return(
                     <OverlayTrigger delayShow={tooltipDelay} placement="bottom" overlay={tooltipIcon}>
-                        <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+                        <div id={'Option_' + uiContextId} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
                     </OverlayTrigger>
                 );
             case MenuType.MENU_EDITOR:
                 return(
                     <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipIcon}>
-                        <div id={itemName} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+                        <div id={'Option_' + uiContextId} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
                     </OverlayTrigger>
                 );
 

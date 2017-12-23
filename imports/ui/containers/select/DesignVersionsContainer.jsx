@@ -86,6 +86,7 @@ export class DesignVersionsList extends Component {
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}
                 footerAction={footerAction}
+                footerActionUiContext={''}
                 footerActionFunction={footerActionFunction}
                 footerText = ''
             />

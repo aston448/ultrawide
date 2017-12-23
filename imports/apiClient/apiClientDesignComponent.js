@@ -854,6 +854,11 @@ class ClientDesignComponentServices{
         return DesignComponentData.getDesignComponentById(userContext.designComponentId);
     }
 
+    getCurrentItemParent(currentItem){
+
+        return DesignComponentData.getDesignComponentByRef(currentItem.designVersionId, currentItem.componentParentReferenceIdNew);
+    }
+
     getNewAndOldRawText(newText, oldText){
 
         let newDisplayText = 'NEW: ' + newText;

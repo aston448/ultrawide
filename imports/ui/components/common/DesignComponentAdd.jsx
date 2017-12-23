@@ -4,6 +4,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import {replaceAll} from "../../../common/utils";
+
 // Ultrawide Collections
 
 
@@ -68,17 +70,16 @@ export default class DesignComponentAdd extends Component {
 
     render() {
 
-        let actionId = this.props.addText.replace(' ', '-');
+        const {addText, uiContextId} = this.props;
 
         return (
-            <div>
-                <InputGroup id={actionId} onClick={ () => this.clickHandler()}  onMouseEnter={ () => this.setAddActive()} onMouseLeave={ () => this.setAddInactive()}>
+            <div id={uiContextId} onClick={ () => this.clickHandler()}>
+                <InputGroup onMouseEnter={ () => this.setAddActive()} onMouseLeave={ () => this.setAddInactive()}>
                     <InputGroup.Addon>
                         <div className={this.state.addActive ? 'add-icon-active' : 'add-icon'}><Glyphicon glyph='plus'/></div>
                     </InputGroup.Addon>
-                    <div className={this.state.addActive ? 'add-label-active' : 'add-label'}>{this.props.addText}</div>
+                    <div className={this.state.addActive ? 'add-label-active' : 'add-label'}>{addText}</div>
                 </InputGroup>
-
             </div>
         );
     }
@@ -86,6 +87,7 @@ export default class DesignComponentAdd extends Component {
 
 DesignComponentAdd.propTypes = {
     addText: PropTypes.string.isRequired,
+    uiContextId: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     toggleHighlight: PropTypes.func
 };

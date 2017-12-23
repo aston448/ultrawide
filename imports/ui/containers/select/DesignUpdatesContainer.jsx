@@ -27,6 +27,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import ClientWorkPackageServices from "../../../apiClient/apiClientWorkPackage";
 import {HomePageTab} from "../../../constants/constants";
+import {AddActionIds} from "../../../constants/ui_context_ids";
 
 // =====================================================================================================================
 
@@ -118,11 +119,13 @@ export class DesignUpdatesList extends Component {
         let footerActionFunction = null;
         let hasFooterAction = false;
         let footerAction = '';
+        let footerUiContextId = '';
 
         if(designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE && userRole === RoleType.DESIGNER){
 
             hasFooterAction = true;
             footerAction = 'Add Design Update';
+            footerUiContextId = AddActionIds.UI_CONTEXT_ADD_DESIGN_UPDATE;
             footerActionFunction = () => this.onAddDesignUpdate(userRole, userContext.designVersionId);
         }
 
@@ -134,6 +137,7 @@ export class DesignUpdatesList extends Component {
             if(designUpdateStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT) {
                 hasFooterAction = true;
                 footerAction = 'Add Work Package';
+                footerUiContextId = AddActionIds.UI_CONTEXT_ADD_WORK_PACKAGE;
                 footerActionFunction = () => this.onAddWorkPackage(userRole, userContext, WorkPackageType.WP_UPDATE, openWpItems);
             }
         }
@@ -225,6 +229,7 @@ export class DesignUpdatesList extends Component {
                                             bodyDataFunction={bodyDataFunction1}
                                             hasFooterAction={false}
                                             footerAction={''}
+                                            footerActionUiContext={''}
                                             footerActionFunction={null}
                                         />
                                     </Col>
@@ -234,6 +239,7 @@ export class DesignUpdatesList extends Component {
                                             bodyDataFunction={bodyDataFunction2}
                                             hasFooterAction={false}
                                             footerAction={''}
+                                            footerActionUiContext={''}
                                             footerActionFunction={null}
                                         />
                                     </Col>
@@ -243,6 +249,7 @@ export class DesignUpdatesList extends Component {
                                             bodyDataFunction={bodyDataFunction3}
                                             hasFooterAction={false}
                                             footerAction={''}
+                                            footerActionUiContext={''}
                                             footerActionFunction={null}
                                         />
                                     </Col>
@@ -252,6 +259,7 @@ export class DesignUpdatesList extends Component {
                                             bodyDataFunction={bodyDataFunction4}
                                             hasFooterAction={hasFooterAction}
                                             footerAction={footerAction}
+                                            footerActionUiContext={footerUiContextId}
                                             footerActionFunction={footerActionFunction}
                                         />
                                     </Col>
@@ -271,6 +279,7 @@ export class DesignUpdatesList extends Component {
                                                     bodyDataFunction={bodyDataFunction1}
                                                     hasFooterAction={hasFooterAction}
                                                     footerAction={footerAction}
+                                                    footerActionUiContext={footerUiContextId}
                                                     footerActionFunction={footerActionFunction}
                                                 />
                                             </Tab>
@@ -280,6 +289,7 @@ export class DesignUpdatesList extends Component {
                                                     bodyDataFunction={bodyDataFunction2}
                                                     hasFooterAction={false}
                                                     footerAction={''}
+                                                    footerActionUiContext={''}
                                                     footerActionFunction={null}
                                                 />
                                             </Tab>
@@ -289,6 +299,7 @@ export class DesignUpdatesList extends Component {
                                                     bodyDataFunction={bodyDataFunction3}
                                                     hasFooterAction={false}
                                                     footerAction={''}
+                                                    footerActionUiContext={''}
                                                     footerActionFunction={null}
                                                 />
                                             </Tab>

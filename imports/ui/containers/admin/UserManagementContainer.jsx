@@ -9,12 +9,14 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemContainer        from '../../components/common/ItemContainer.jsx';
-import UserDetails          from '../../components/admin/UserDetails.jsx';
+import ItemContainer                    from '../../components/common/ItemContainer.jsx';
+import UserDetails                      from '../../components/admin/UserDetails.jsx';
 
 // Ultrawide Services
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
-import ClientUserManagementServices         from '../../../apiClient/apiClientUserManagement.js';
+import ClientDataServices               from '../../../apiClient/apiClientDataServices.js';
+import ClientUserManagementServices     from '../../../apiClient/apiClientUserManagement.js';
+
+import {AddActionIds}                   from "../../../constants/ui_context_ids.js";
 
 // Bootstrap
 import {Well, FormGroup, ControlLabel, FormControl, Button}          from 'react-bootstrap';
@@ -22,6 +24,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -110,6 +113,7 @@ class UserManagementScreen extends Component {
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}
                 footerAction={'Add User'}
+                footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_USER}
                 footerActionFunction={footerActionFunction}
             />;
 

@@ -28,6 +28,10 @@ class TestFixtures{
         server.call('testFixtures.logTestSuite', suiteName);
     }
 
+    logDebug(string, data){
+        server.call('testFixtures.logDebug', string, data);
+    }
+
     clearAllData(){
         server.call('testFixtures.clearAllData');
     };

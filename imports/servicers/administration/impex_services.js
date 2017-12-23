@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 // Ultrawide Services
-import { padDigits, log }               from '../../common/utils.js';
+import { padDigits, replaceAll, log }               from '../../common/utils.js';
 import { LogLevel }                     from '../../constants/constants.js';
 
 import ImpexModules                     from '../../service_modules/administration/impex_service_modules.js';
@@ -231,7 +231,7 @@ class ImpExServices{
             const jsonData = JSON.stringify(designBackup);
             //const jsonData = JSON.stringify(designBackup, null, 2); // Use if want readable backup file - but much bigger
 
-            const fileName = 'ULTRAWIDE_' + design.designName.trim().replace(' ', '_') + '_' + fileDate + '.UBK';
+            const fileName = 'ULTRAWIDE_' + replaceAll(design.designName.trim(), ' ', '_') + '_' + fileDate + '.UBK';
 
             try {
 

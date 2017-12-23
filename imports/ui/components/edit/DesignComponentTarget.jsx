@@ -19,6 +19,8 @@ import {locationMoveDropAllowed} from '../../../common/utils.js';
 
 // React DnD
 import { DropTarget } from 'react-dnd';
+import {replaceAll} from "../../../common/utils";
+import ClientDesignComponentServices from "../../../apiClient/apiClientDesignComponent";
 
 // =====================================================================================================================
 
@@ -43,21 +45,47 @@ export class DesignComponentTarget extends Component{
         //console.log("TARGET " + this.props.currentItem.componentType + " - " + this.props.currentItem.componentNameNew + " receiving props Update Item was " + this.props.updateItem + " and now " + newProps.updateItem);
     }
 
+
+    getParentName(currentItem){
+
+        if(currentItem.componentParentReferenceIdNew !== 'NONE') {
+            const feature = ClientDesignComponentServices.getCurrentItemParent(currentItem);
+            return feature.componentNameNew;
+        } else {
+            return '';
+        }
+
+    }
+
     render(){
 
-        const {currentItem, updateItem, wpItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData} = this.props;
+        const {currentItem, updateItem, wpItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData, mode} = this.props;
+
+
+        const uiItemId = replaceAll(currentItem.componentNameNew, ' ', '_');
+        const uiParentId = replaceAll(this.getParentName(currentItem), ' ', '_');
+        let uiContextName = uiItemId;
+
+        // To get a guaranteed unique context, design sections and feature aspects must say who their parent is
+        switch(currentItem.componentType){
+
+            case ComponentType.DESIGN_SECTION:
+            case ComponentType.FEATURE_ASPECT:
+                uiContextName = uiParentId + '_' + uiItemId;
+                break;
+        }
 
         let updateItemScope = UpdateScopeType.SCOPE_OUT_SCOPE;
         if(updateItem && updateItem.scopeType){
             updateItemScope = updateItem.scopeType;
         }
 
-        //console.log("Rendering design component target: " + this.props.currentItem.componentType + " - " + currentItem.componentNameNew + " wpItem: " + wpItem + " display context " + displayContext + "testSummary " + testSummary);
+        console.log("Rendering design component target: " + this.props.currentItem.componentType + " - " + currentItem.componentNameNew + " canDrop: " + canDrop + " display context " + displayContext + "mode " + mode);
 
         if(!(Meteor.isTest) && canDrop && (this.props.displayContext === DisplayContext.UPDATE_EDIT || this.props.displayContext === DisplayContext.BASE_EDIT) && this.props.mode === ViewMode.MODE_EDIT) {
             // Only can be droppable if in Edit mode and if the edit section of the view
             return connectDropTarget(
-                <div>
+                <div id={'Target_' + uiContextName}>
                     <DesignComponent
                         currentItem={currentItem}
                         updateItem={updateItem}
@@ -72,7 +100,7 @@ export class DesignComponentTarget extends Component{
             )
         } else {
             return (
-                <div>
+                <div id={'NoDropTarget_' + uiContextName}>
                     <DesignComponent
                         currentItem={currentItem}
                         updateItem={updateItem}

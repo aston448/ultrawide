@@ -97,6 +97,7 @@ export class FeaturesList extends Component {
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}
                 footerAction={''}
+                footerActionUiContext={''}
                 footerActionFunction={footerActionFunction}
             />
         )

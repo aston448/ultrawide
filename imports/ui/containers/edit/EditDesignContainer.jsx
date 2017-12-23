@@ -18,10 +18,11 @@ import MashSelectedItemContainer        from '../mash/MashSelectedItemContainer.
 import ScenarioFinder                   from '../../components/search/ScenarioFinder.jsx';
 
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType } from '../../../constants/constants.js';
+import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType, WorkPackageType } from '../../../constants/constants.js';
+import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
@@ -31,7 +32,8 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {WorkPackageType} from "../../../constants/constants";
+
+
 
 
 // =====================================================================================================================
@@ -145,6 +147,7 @@ export class DesignApplicationsList extends Component {
                     <tr>
                         <td id="addApplication" className="control-table-data-app">
                             <DesignComponentAdd
+                                uiContextId={AddActionIds.UI_CONTEXT_ADD_APPLICATION}
                                 addText="Add Application"
                                 onClick={ () => this.onAddApplication(view, mode, userContext.designVersionId)}
                             />

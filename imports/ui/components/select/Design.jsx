@@ -11,6 +11,7 @@ import DesignItemHeader         from './DesignItemHeader.jsx';
 
 // Ultrawide Services
 import { ItemType, RoleType, DesignStatus } from '../../../constants/constants.js';
+import {replaceAll} from "../../../common/utils";
 
 import ClientDesignServices     from '../../../apiClient/apiClientDesign.js';
 import ClientImpExServices     from '../../../apiClient/apiClientImpEx.js';
@@ -68,6 +69,8 @@ export class Design extends Component {
 
     render() {
         const {design, userContext, userRole} = this.props;
+
+        const uiDesignId = replaceAll(design.designName, ' ', '_');
 
         // Active if this design is the current context design
         let active = design._id === userContext.designId;
@@ -182,7 +185,7 @@ export class Design extends Component {
 
             if(active) {
                 return (
-                    <div className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
+                    <div id={uiDesignId} className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
                         {status}
                         {header}
                         {buttons}
@@ -190,7 +193,7 @@ export class Design extends Component {
                 );
             } else {
                 return (
-                    <div className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
+                    <div id={uiDesignId} className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
                         {summary}
                     </div>
                 );

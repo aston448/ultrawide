@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
 
 import {UltrawideDirectory, TestLocationTypes, TestLocationAccessTypes} from '../../../constants/constants.js';
-import { createSelectionList }                  from '../../../common/utils.js'
+import { createSelectionList }                  from '../../../common/reactUtils.js';
 
 // Bootstrap
 import {Checkbox, Button, ButtonGroup, Modal} from 'react-bootstrap';

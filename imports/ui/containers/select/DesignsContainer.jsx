@@ -12,16 +12,18 @@ import Design               from '../../components/select/Design.jsx';
 import ItemContainer        from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
-import {RoleType} from '../../../constants/constants.js';
+import {RoleType}           from '../../../constants/constants.js';
+import {AddActionIds}       from "../../../constants/ui_context_ids.js";
 
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
-import ClientDesignServices         from  '../../../apiClient/apiClientDesign.js';
+import ClientDataServices   from '../../../apiClient/apiClientDataServices.js';
+import ClientDesignServices from  '../../../apiClient/apiClientDesign.js';
 
 // Bootstrap
 import {Grid, Col, Row} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -85,6 +87,7 @@ export class DesignsList extends Component {
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}
                 footerAction={'Add Design'}
+                footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_DESIGN}
                 footerActionFunction={footerActionFunction}
             />
         )

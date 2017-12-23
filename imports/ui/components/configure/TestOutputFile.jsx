@@ -10,9 +10,9 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
 import { TestLocationFileTypes, TestRunners, TestLocationFileStatus}    from '../../../constants/constants.js';
-import { createSelectionList }                  from '../../../common/utils.js';
+import { createSelectionList }                  from '../../../common/reactUtils.js';
 import TextLookups                              from '../../../common/lookups.js';
-import { getDateTimeString} from '../../../common/utils.js';
+import { getDateTimeString}                     from '../../../common/utils.js';
 // Bootstrap
 import {Button} from 'react-bootstrap';
 import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-bootstrap';

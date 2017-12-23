@@ -20,6 +20,7 @@ import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTe
 
 // REDUX services
 import {connect} from 'react-redux';
+import {AddActionIds} from "../../../constants/ui_context_ids";
 
 // =====================================================================================================================
 
@@ -74,12 +75,13 @@ class TestOutputFilesScreen extends Component {
         let hasFooterAction = true;
         let footerActionFunction = null;
         let footerAction = 'Add File';
+        let footerActionUiContext = AddActionIds.UI_CONTEXT_ADD_TEST_FILE;
 
         const locationName = this.getLocationName(locationId);
 
         let headerText = 'Test Output Files';
 
-        if(locationName != 'NONE'){
+        if(locationName !== 'NONE'){
             headerText = 'Test Output Files for ' + locationName;
         }
 
@@ -87,7 +89,7 @@ class TestOutputFilesScreen extends Component {
             bodyDataFunction = () => this.renderFilesList(locationFiles);
             footerActionFunction = () => this.addNewLocationFile(userRole, locationId);
         } else {
-            if(locationId != 'NONE'){
+            if(locationId !== 'NONE'){
                 bodyDataFunction = () => this.noFiles();
                 footerActionFunction = () => this.addNewLocationFile(userRole, locationId);
             } else {
@@ -103,6 +105,7 @@ class TestOutputFilesScreen extends Component {
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}
                 footerAction={footerAction}
+                footerActionUiContext={footerActionUiContext}
                 footerActionFunction={footerActionFunction}
             />
         );

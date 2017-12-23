@@ -1,22 +1,20 @@
-// Required for createSelectionList
-import React from 'react';
+// Note no code referencing DB in here - will break tests that use utils
 
 import {ComponentType, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType} from '../constants/constants.js';
-import {DesignVersionComponents} from '../collections/design/design_version_components.js';
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
-import {ViewType, MessageType, DisplayContext, MashStatus, LogLevel} from '../constants/constants.js';
+import {ViewType,DisplayContext, LogLevel} from '../constants/constants.js';
 
 import TextLookups   from '../common/lookups.js';
-
-import store from '../redux/store'
-import {updateUserMessage} from '../redux/actions'
-
 
 export function padDigits(number, digits) {
     return new Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
 }
 
+
+export function replaceAll(string, find, replace){
+
+    return string.replace(new RegExp(find, 'g'), replace);
+}
 
 export function getDateTimeString(dateTime){
 
@@ -37,18 +35,6 @@ export function getDateTimeStringWithSeconds(dateTime){
         padDigits(dateTime.getSeconds(), 2);
 }
 
-export function createSelectionList(typesArray){
-
-    // NOTE: This implicitly requires an import of React
-
-    let items = [];
-
-    typesArray.forEach((item) => {
-        items.push(<option key={item} value={item}>{item}</option>);
-    });
-
-    return items;
-}
 
 export function getComponentClass(currentItem, updateItem, wpItem, view, context, isNarrative){
 
@@ -242,56 +228,56 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
 //     return true;
 // }
 
-export function validateDesignUpdateComponentName(component, newName){
-
-    // A design component with the same name as another component is not allowed.  This is because it describes a specific bit of functionality
-    // and the same description implies ambiguity.  Also the name will act as a key to tests.
-
-    // However the rule does not apply to Design Sections and Feature Aspects which may well want to have the same titles
-    if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
-        return true;
-    }
-
-    let message = '';
-
-    // Problem if same name is used in the update...
-    let existingComponents = DesignUpdateComponents.find({
-        _id:{$ne: component._id},
-        designVersionId: component.designVersionId,
-        designUpdateId: component.designUpdateId,
-        componentNewName: newName                   // Need to check the new name for each component - for unchanged items will be same as old name
-    });
-
-    if (existingComponents.count() > 0){
-        //console.log("Error: " + newName + " already exists");
-
-        message = {messageType: MessageType.WARNING, messageText: 'Design component names must be unique in this design update'};
-        store.dispatch(updateUserMessage(message));
-        return false;
-    }
-
-    // Problem if the same name is used for a *different* component in parallel updates
-    // If its the same item in two updates it will have the same reference id...
-    let referenceId = DesignUpdateComponents.findOne({_id:component._id}).componentReferenceId;
-    let existingParallelComponents = DesignUpdateComponents.find({
-        _id:{$ne: component._id},
-        componentReferenceId:{$ne: referenceId},
-        designVersionId: component.designVersionId,
-        componentNewName: newName});
-
-    if (existingParallelComponents.count() > 0){
-        //console.log("Error: " + newName + " already exists in a parallel design update for a different item");
-
-        message = {messageType: MessageType.WARNING, messageText: 'This component name already exists for a different component in another update to this design version'};
-        store.dispatch(updateUserMessage(message));
-        return false;
-    }
-
-    message = {messageType: MessageType.SUCCESS, messageText: 'Name saved successfully'};
-    store.dispatch(updateUserMessage(message));
-    return true;
-
-}
+// export function validateDesignUpdateComponentName(component, newName){
+//
+//     // A design component with the same name as another component is not allowed.  This is because it describes a specific bit of functionality
+//     // and the same description implies ambiguity.  Also the name will act as a key to tests.
+//
+//     // However the rule does not apply to Design Sections and Feature Aspects which may well want to have the same titles
+//     if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
+//         return true;
+//     }
+//
+//     let message = '';
+//
+//     // Problem if same name is used in the update...
+//     let existingComponents = DesignUpdateComponents.find({
+//         _id:{$ne: component._id},
+//         designVersionId: component.designVersionId,
+//         designUpdateId: component.designUpdateId,
+//         componentNewName: newName                   // Need to check the new name for each component - for unchanged items will be same as old name
+//     });
+//
+//     if (existingComponents.count() > 0){
+//         //console.log("Error: " + newName + " already exists");
+//
+//         message = {messageType: MessageType.WARNING, messageText: 'Design component names must be unique in this design update'};
+//         store.dispatch(updateUserMessage(message));
+//         return false;
+//     }
+//
+//     // Problem if the same name is used for a *different* component in parallel updates
+//     // If its the same item in two updates it will have the same reference id...
+//     let referenceId = DesignUpdateComponents.findOne({_id:component._id}).componentReferenceId;
+//     let existingParallelComponents = DesignUpdateComponents.find({
+//         _id:{$ne: component._id},
+//         componentReferenceId:{$ne: referenceId},
+//         designVersionId: component.designVersionId,
+//         componentNewName: newName});
+//
+//     if (existingParallelComponents.count() > 0){
+//         //console.log("Error: " + newName + " already exists in a parallel design update for a different item");
+//
+//         message = {messageType: MessageType.WARNING, messageText: 'This component name already exists for a different component in another update to this design version'};
+//         store.dispatch(updateUserMessage(message));
+//         return false;
+//     }
+//
+//     message = {messageType: MessageType.SUCCESS, messageText: 'Name saved successfully'};
+//     store.dispatch(updateUserMessage(message));
+//     return true;
+//
+// }
 
 export function locationMoveDropAllowed(itemType, targetType, viewType, inScope){
     // Is drop allowed for this item when moving a component to a new location?
