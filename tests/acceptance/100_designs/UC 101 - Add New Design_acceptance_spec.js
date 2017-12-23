@@ -1,11 +1,11 @@
 
-import TestFixtures from '../../test_framework/test_wrappers/test_fixtures.js';
-import DesignVerifications from '../../test_framework/test_wrappers/design_verifications.js';
+import TestFixtures from '../../../test_framework/test_wrappers/test_fixtures.js';
+import DesignVerifications from '../../../test_framework/test_wrappers/design_verifications.js';
 
-import BrowserActions                   from '../../test_framework/browser_actions/browser_actions.js';
-import BrowserChecks                    from '../../test_framework/browser_actions/browser_checks.js';
-import {MenuAction}                     from "../../imports/constants/constants";
-import {DefaultItemNames}               from "../../imports/constants/default_names";
+import BrowserActions                   from '../../../test_framework/browser_actions/browser_actions.js';
+import BrowserChecks                    from '../../../test_framework/browser_actions/browser_checks.js';
+import {MenuAction}                     from "../../../imports/constants/constants";
+import {DefaultItemNames}               from "../../../imports/constants/default_names";
 
 
 describe('UC 101 - Add New Design', function() {
