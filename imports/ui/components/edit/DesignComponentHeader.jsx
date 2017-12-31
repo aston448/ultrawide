@@ -16,6 +16,7 @@ import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDe
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTextEditorServices             from '../../../apiClient/apiClientTextEditor.js';
+import ComponentUiModules                   from '../../../ui_modules/design_component.js'
 
 import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel,
     MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
@@ -89,7 +90,7 @@ export class DesignComponentHeader extends Component{
         this.handleTitleKeyCommand = this.handleTitleKeyCommand.bind(this);
         this.focus = () => {if(this.refs.editor){this.refs.editor.focus()}};
 
-        this.updateTitleText(this.props);
+        this.updateComponentEditorText(this.props);
 
     }
 
@@ -256,7 +257,7 @@ export class DesignComponentHeader extends Component{
             (this.props.displayContext !== DisplayContext.WP_SCOPE) &&
             (newProps.domainTermsVisible !== this.props.domainTermsVisible)
         ){
-            this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew)
+            this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew)
         }
 
         switch (newProps.view) {
@@ -264,7 +265,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_PUBLISHED:
             case ViewType.DESIGN_UPDATABLE:
                 if (newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew) {
-                    this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
+                    this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 }
 
                 // if(newProps.currentProgressDataValue != this.props.currentProgressDataValue) {
@@ -277,7 +278,7 @@ export class DesignComponentHeader extends Component{
                 if(this.props.displayContext === DisplayContext.UPDATE_SCOPE){
                     // Base view.  Should not be updating
                     // if (newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew) {
-                    //     this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
+                    //     this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                     // }
 
                     // // Reflect any changes in scope
@@ -289,7 +290,7 @@ export class DesignComponentHeader extends Component{
                         newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew ||
                         newProps.currentItem.scopeType !== this.props.currentItem.scopeType
                     ){
-                        this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
+                        this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                     }
 
 
@@ -303,7 +304,7 @@ export class DesignComponentHeader extends Component{
                 if(this.props.displayContext === DisplayContext.WP_SCOPE){
                     this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
                 }
-                this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
+                this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
 
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
@@ -311,13 +312,13 @@ export class DesignComponentHeader extends Component{
                 if(newProps.displayContext === DisplayContext.WP_SCOPE){
                     this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
                 }
-                this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
+                this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
             case ViewType.DEVELOP_BASE_WP:
-                this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
+                this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
             case ViewType.DEVELOP_UPDATE_WP:
-                this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
+                this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
 
         }
@@ -330,160 +331,171 @@ export class DesignComponentHeader extends Component{
     }
 
     // Refresh the component name text
-    updateTitleText(props, newRawText){
+    updateComponentEditorText(props, newRawText){
 
-        let currentContent = null;
-        let compositeDecorator = null;
-        let item = props.currentItem;
-
-        // Decoration for Scenarios only - and not if greyed out in WP scope
-        if(props.currentItem.componentType === ComponentType.SCENARIO) {
-
-            log((msg) => console.log(msg), LogLevel.TRACE, "Decorator check: Component: {} Context: {}", props.currentItem.componentType, props.displayContext);
-
-            // Item is a Scenario
-            if(props.displayContext === DisplayContext.WP_SCOPE || props.displayContext === DisplayContext.UPDATE_SCOPE){
-                // We are in a WP or Update Scope context
-                if((props.displayContext === DisplayContext.WP_SCOPE) && props.currentItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
-                    // The WP Scenario is active
-                    compositeDecorator = new CompositeDecorator([
-                        {
-                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
-                            component: DomainSpan,
-                        }
-                    ]);
-                }
-
-                if(props.domainTermsVisible && (props.displayContext === DisplayContext.UPDATE_SCOPE) && (props.currentItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
-                    // The Update Scenario is active
-                    compositeDecorator = new CompositeDecorator([
-                        {
-                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
-                            component: DomainSpan,
-                        }
-                    ]);
-                }
-
-            } else {
-                // We are not in WP scope context so OK for all Scenarios as long as not inserted as peers in an update
-                if(props.domainTermsVisible && !(this.props.updateItem && this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE)) {
-                    compositeDecorator = new CompositeDecorator([
-                        {
-                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
-                            component: DomainSpan,
-                        }
-                    ]);
-                }
-            }
-
-            EditorState.set(this.state.editorState, {decorator: compositeDecorator});
+        // Don't call this if unit testing this component as it will set the state to NULL
+        if(!Meteor.isTest) {
+            this.state = ComponentUiModules.setComponentNameEditorText(this.state, props, newRawText);
         }
 
-        if(newRawText){
-            // Immediate update of latest text
-            log((msg) => console.log(msg), LogLevel.TRACE, "Updating title editor with {}", newRawText);
-
-            // Don't want to update SCOPE in DU when content is edited
-            if(!(props.view === ViewType.DESIGN_UPDATE_EDIT && props.displayContext === DisplayContext.UPDATE_SCOPE)){
-                currentContent = convertFromRaw(newRawText);
-            }
-
-        } else {
-            // Getting stored text
-            let existingRawText = null;
-
-            switch (props.view) {
-                case ViewType.DESIGN_NEW:
-                case ViewType.DESIGN_PUBLISHED:
-
-                    existingRawText = props.currentItem.componentNameRawNew;
-                    break;
-                case ViewType.DESIGN_UPDATABLE:
-                    // If there is an item whose name has changed then create a new editor entry showing both
-                    if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
-                        existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
-                    } else {
-                        existingRawText = item.componentNameRawNew;
-                    }
-
-                    break;
-                case ViewType.DESIGN_UPDATE_EDIT:
-
-                    switch(props.displayContext){
-                        case  DisplayContext.UPDATE_SCOPE:
-                            // The editor shows the Old DV Values
-                            existingRawText = item.componentNameRawOld;
-                            break;
-                        case DisplayContext.UPDATE_VIEW:
-                        case DisplayContext.UPDATE_EDIT:
-                            // The editor shows what's in the actual DU
-                            if(props.updateItem) {
-                                existingRawText = props.updateItem.componentNameRawNew;
-                            }
-                            break;
-                        case DisplayContext.WORKING_VIEW:
-                            // The editor shows the New DV Values
-                            if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
-                                existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
-                            } else {
-                                existingRawText = item.componentNameRawNew;
-                            }
-                    }
-                    break;
-
-                case ViewType.DESIGN_UPDATE_VIEW:
-
-                    switch(props.displayContext){
-                        case  DisplayContext.UPDATE_SCOPE:
-                            // Scope uses the base DV components
-                            existingRawText = item.componentNameRawOld;
-                            break;
-                        case DisplayContext.UPDATE_VIEW:
-                        case DisplayContext.UPDATE_EDIT:
-                            // The editor shows what's in the actual DU
-                            if(props.updateItem) {
-                                existingRawText = props.updateItem.componentNameRawNew;
-                            }
-                            break;
-                        case DisplayContext.WORKING_VIEW:
-                            // The editor shows the New DV Values
-                            if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
-                                existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
-                            } else {
-                                existingRawText = item.componentNameRawNew;
-                            }
-                    }
-                    break;
-
-                case ViewType.WORK_PACKAGE_BASE_EDIT:
-                case ViewType.WORK_PACKAGE_BASE_VIEW:
-                case ViewType.DEVELOP_BASE_WP:
-                case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                case ViewType.DEVELOP_UPDATE_WP:
-
-                    existingRawText = props.currentItem.componentNameRawNew;
-                    break;
-            }
-
-            if (existingRawText) {
-                currentContent = convertFromRaw(existingRawText, compositeDecorator);
-            } else {
-                this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
-                return;
-            }
-
-        }
-
-        // Got some content...
-        if (currentContent && currentContent.hasText()) {
-            log((msg) => console.log(msg), LogLevel.TRACE, "Updating title editor with {}", currentContent.getPlainText());
-            this.state.name = currentContent.getPlainText();
-            this.state.editorState = EditorState.createWithContent(currentContent, compositeDecorator);
-        } else {
-            this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
-        }
     }
+
+    // updateTitleText(props, newRawText){
+    //
+    //     this.updateComponentEditorText(props, newRawText);
+
+        // let currentContent = null;
+        // let compositeDecorator = null;
+        // let item = props.currentItem;
+        //
+        // // Decoration for Scenarios only - and not if greyed out in WP scope
+        // if(props.currentItem.componentType === ComponentType.SCENARIO) {
+        //
+        //     log((msg) => console.log(msg), LogLevel.TRACE, "Decorator check: Component: {} Context: {}", props.currentItem.componentType, props.displayContext);
+        //
+        //     // Item is a Scenario
+        //     if(props.displayContext === DisplayContext.WP_SCOPE || props.displayContext === DisplayContext.UPDATE_SCOPE){
+        //         // We are in a WP or Update Scope context
+        //         if((props.displayContext === DisplayContext.WP_SCOPE) && props.currentItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
+        //             // The WP Scenario is active
+        //             compositeDecorator = new CompositeDecorator([
+        //                 {
+        //                     strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
+        //                     component: DomainSpan,
+        //                 }
+        //             ]);
+        //         }
+        //
+        //         if(props.domainTermsVisible && (props.displayContext === DisplayContext.UPDATE_SCOPE) && (props.currentItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
+        //             // The Update Scenario is active
+        //             compositeDecorator = new CompositeDecorator([
+        //                 {
+        //                     strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
+        //                     component: DomainSpan,
+        //                 }
+        //             ]);
+        //         }
+        //
+        //     } else {
+        //         // We are not in WP scope context so OK for all Scenarios as long as not inserted as peers in an update
+        //         if(props.domainTermsVisible && !(this.props.updateItem && this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE)) {
+        //             compositeDecorator = new CompositeDecorator([
+        //                 {
+        //                     strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
+        //                     component: DomainSpan,
+        //                 }
+        //             ]);
+        //         }
+        //     }
+        //
+        //     EditorState.set(this.state.editorState, {decorator: compositeDecorator});
+        // }
+        //
+        // if(newRawText){
+        //     // Immediate update of latest text
+        //     log((msg) => console.log(msg), LogLevel.TRACE, "Updating title editor with {}", newRawText);
+        //
+        //     // Don't want to update SCOPE in DU when content is edited
+        //     if(!(props.view === ViewType.DESIGN_UPDATE_EDIT && props.displayContext === DisplayContext.UPDATE_SCOPE)){
+        //         currentContent = convertFromRaw(newRawText);
+        //     }
+        //
+        // } else {
+        //     // Getting stored text
+        //     let existingRawText = null;
+        //
+        //     switch (props.view) {
+        //         case ViewType.DESIGN_NEW:
+        //         case ViewType.DESIGN_PUBLISHED:
+        //
+        //             existingRawText = props.currentItem.componentNameRawNew;
+        //             break;
+        //         case ViewType.DESIGN_UPDATABLE:
+        //             // If there is an item whose name has changed then create a new editor entry showing both
+        //             if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
+        //                 existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
+        //             } else {
+        //                 existingRawText = item.componentNameRawNew;
+        //             }
+        //
+        //             break;
+        //         case ViewType.DESIGN_UPDATE_EDIT:
+        //
+        //             switch(props.displayContext){
+        //                 case  DisplayContext.UPDATE_SCOPE:
+        //                     // The editor shows the Old DV Values
+        //                     existingRawText = item.componentNameRawOld;
+        //                     break;
+        //                 case DisplayContext.UPDATE_VIEW:
+        //                 case DisplayContext.UPDATE_EDIT:
+        //                     // The editor shows what's in the actual DU
+        //                     if(props.updateItem) {
+        //                         existingRawText = props.updateItem.componentNameRawNew;
+        //                     }
+        //                     break;
+        //                 case DisplayContext.WORKING_VIEW:
+        //                     // The editor shows the New DV Values
+        //                     if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
+        //                         existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
+        //                     } else {
+        //                         existingRawText = item.componentNameRawNew;
+        //                     }
+        //             }
+        //             break;
+        //
+        //         case ViewType.DESIGN_UPDATE_VIEW:
+        //
+        //             switch(props.displayContext){
+        //                 case  DisplayContext.UPDATE_SCOPE:
+        //                     // Scope uses the base DV components
+        //                     existingRawText = item.componentNameRawOld;
+        //                     break;
+        //                 case DisplayContext.UPDATE_VIEW:
+        //                 case DisplayContext.UPDATE_EDIT:
+        //                     // The editor shows what's in the actual DU
+        //                     if(props.updateItem) {
+        //                         existingRawText = props.updateItem.componentNameRawNew;
+        //                     }
+        //                     break;
+        //                 case DisplayContext.WORKING_VIEW:
+        //                     // The editor shows the New DV Values
+        //                     if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
+        //                         existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
+        //                     } else {
+        //                         existingRawText = item.componentNameRawNew;
+        //                     }
+        //             }
+        //             break;
+        //
+        //         case ViewType.WORK_PACKAGE_BASE_EDIT:
+        //         case ViewType.WORK_PACKAGE_BASE_VIEW:
+        //         case ViewType.DEVELOP_BASE_WP:
+        //         case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+        //         case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+        //         case ViewType.DEVELOP_UPDATE_WP:
+        //
+        //             existingRawText = props.currentItem.componentNameRawNew;
+        //             break;
+        //     }
+        //
+        //     if (existingRawText) {
+        //         currentContent = convertFromRaw(existingRawText, compositeDecorator);
+        //     } else {
+        //         this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
+        //         return;
+        //     }
+        //
+        // }
+        //
+        // // Got some content...
+        // if (currentContent && currentContent.hasText()) {
+        //     log((msg) => console.log(msg), LogLevel.TRACE, "Updating title editor with {}", currentContent.getPlainText());
+        //     this.state.name = currentContent.getPlainText();
+        //     this.state.editorState = EditorState.createWithContent(currentContent, compositeDecorator);
+        // } else {
+        //     this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
+        // }
+    // }
 
     // Handles keyboard actions when component name editable
     keyBindings(e){
@@ -553,7 +565,7 @@ export class DesignComponentHeader extends Component{
     undoComponentNameChange(){
 
         // Reset the text in case changed on screen
-        this.updateTitleText(this.props);
+        this.updateComponentEditorText(this.props);
         this.setState({editing: false});
     }
 
@@ -1023,7 +1035,7 @@ export class DesignComponentHeader extends Component{
 
         let openClose =
             <InputGroup.Addon id={'openClose_' + uiContextName + '_' + openStatus} onClick={ () => this.toggleOpen()}>
-                <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                <div id={'openCloseIcon_' + uiContextName} className={openStatus}><Glyphicon glyph={openGlyph}/></div>
             </InputGroup.Addon>;
 
         let indent =
@@ -1544,7 +1556,7 @@ export class DesignComponentHeader extends Component{
                         <Grid id="featureTestSummary">
                             <Row id={uiContextName} className={featureRowClass}>
                                 <Col md={7} className="close-col">
-                                    <div id={uiItemId}>
+                                    <div id={uiContextName}>
                                         {designComponentElement}
                                     </div>
                                 </Col>

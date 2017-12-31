@@ -91,6 +91,8 @@ export class DesignComponentTarget extends Component{
                         updateItem={updateItem}
                         updateItemScope={updateItemScope}
                         wpItem={wpItem}
+                        uiItemId={uiItemId}
+                        uiParentId={uiParentId}
                         isDragDropHovering={isOverCurrent && canDrop}
                         displayContext={displayContext}
                         testSummary={testSummary}
@@ -106,6 +108,8 @@ export class DesignComponentTarget extends Component{
                         updateItem={updateItem}
                         updateItemScope={updateItemScope}
                         wpItem={wpItem}
+                        uiItemId={uiItemId}
+                        uiParentId={uiParentId}
                         isDragDropHovering={false}
                         displayContext={displayContext}
                         testSummary={testSummary}

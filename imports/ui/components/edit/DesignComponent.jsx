@@ -20,7 +20,6 @@ import DesignComponentHeader    from './DesignComponentHeader.jsx';
 // Ultrawide Services
 import {ComponentType, ViewMode, ViewType, DisplayContext, WorkPackageType, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
 import {AddActionIds}   from "../../../constants/ui_context_ids.js";
-import {replaceAll} from "../../../common/utils";
 
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
@@ -507,16 +506,13 @@ export class DesignComponent extends Component{
     // Render generic design component
     render() {
 
-
-        const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext,
+        const {currentItem, updateItem, wpItem, uiItemId, uiParentId, displayContext, isDragDropHovering, mode, view, userContext,
             testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag,
             workPackageScopeItems, workPackageScopeFlag, domainTermsVisible, includeNarratives} = this.props;
 
-        const uiItemId = replaceAll(currentItem.componentNameNew, ' ', '_');
-        const uiParentId = replaceAll(this.getParentName(currentItem), ' ', '_');
         let uiContextName = uiItemId;
 
-        // To get a guaranteed unique context, design sections and feature aspects must say who their parent is
+         // To get a guaranteed unique context, design sections and feature aspects must say who their parent is
         switch(currentItem.componentType){
 
             case ComponentType.DESIGN_SECTION:
@@ -661,7 +657,10 @@ export class DesignComponent extends Component{
                 (updateItem && updateItem.isRemoved)
             );
 
-              switch (currentItem.componentType) {
+            let uiContextId1 = '';
+            let uiContextId2 = '';
+
+            switch (currentItem.componentType) {
                 case ComponentType.APPLICATION:
                     // An application is the entire application and can contain design sections
                     if (notEditable) {
@@ -674,6 +673,8 @@ export class DesignComponent extends Component{
                             </div>
                     } else {
                         // EDIT mode
+                        uiContextId1 = AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + uiItemId;
+
                         bodyHtml =
                             <div className="activeStyle">
                                 <Panel className="panel-design" collapsible expanded={this.state.open}>
@@ -685,12 +686,14 @@ export class DesignComponent extends Component{
                                                 {currentItemText + ':'}
                                             </td>
                                             <td className="control-table-data-section">
-                                                <DesignComponentAdd
-                                                    uiContextId={AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + uiItemId}
-                                                    addText="Add Design Section"
-                                                    onClick={ () => this.addDesignSectionToApplication(view, mode, currentItem)}
-                                                    toggleHighlight={ (value) => this.toggleHighlight(value)}
-                                                />
+                                                <div id={uiContextId1 + '_SHALLOW'}>
+                                                    <DesignComponentAdd
+                                                        uiContextId={uiContextId1}
+                                                        addText="Add Design Section"
+                                                        onClick={ () => this.addDesignSectionToApplication(view, mode, currentItem)}
+                                                        toggleHighlight={ (value) => this.toggleHighlight(value)}
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -723,6 +726,10 @@ export class DesignComponent extends Component{
                         // - List of sub sections in this section
                         // - Add new Feature option
                         // - Add new Section option
+
+                        uiContextId1 = AddActionIds.UI_CONTEXT_ADD_FEATURE_TO + uiParentId + '_' + uiItemId;
+                        uiContextId2 = AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + uiParentId + '_' + uiItemId
+
                         bodyHtml =
                             <div className="activeStyle">
                                 <Panel className="panel-design" collapsible expanded={this.state.open}>
@@ -735,20 +742,24 @@ export class DesignComponent extends Component{
                                                 {currentItemText + ':'}
                                             </td>
                                             <td className="control-table-data-feature">
-                                                <DesignComponentAdd
-                                                    uiContextId={AddActionIds.UI_CONTEXT_ADD_FEATURE_TO + uiParentId + '_' + uiItemId}
-                                                    addText='Add Feature'
-                                                    onClick={ () => this.addFeatureToDesignSection(view, mode, currentItem)}
-                                                    toggleHighlight={ (value) => this.toggleHighlight(value)}
-                                                />
+                                                <div id={uiContextId1 + '_SHALLOW'}>
+                                                    <DesignComponentAdd
+                                                        uiContextId={uiContextId1}
+                                                        addText='Add Feature'
+                                                        onClick={ () => this.addFeatureToDesignSection(view, mode, currentItem)}
+                                                        toggleHighlight={ (value) => this.toggleHighlight(value)}
+                                                    />
+                                                </div>
                                             </td>
                                             <td >
-                                                <DesignComponentAdd
-                                                    uiContextId={AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + uiParentId + '_' + uiItemId}
-                                                    addText="Add Sub Section"
-                                                    onClick={ () => this.addSectionToDesignSection(view, mode, currentItem)}
-                                                    toggleHighlight={ (value) => this.toggleHighlight(value)}
-                                                />
+                                                <div id={uiContextId2 + '_SHALLOW'}>
+                                                    <DesignComponentAdd
+                                                        uiContextId={uiContextId2}
+                                                        addText="Add Sub Section"
+                                                        onClick={ () => this.addSectionToDesignSection(view, mode, currentItem)}
+                                                        toggleHighlight={ (value) => this.toggleHighlight(value)}
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -782,6 +793,9 @@ export class DesignComponent extends Component{
                         // - List of Feature Aspect headings for this Feature
                         // - Add new Scenario option
                         // - Add new Feature Aspect option
+
+                        uiContextId1 = AddActionIds.UI_CONTEXT_ADD_FEATURE_ASPECT_TO + uiItemId;
+
                         bodyHtml =
                             <div className="activeStyle">
                                 <Panel className="panel-design" collapsible expanded={this.state.open}>
@@ -795,12 +809,14 @@ export class DesignComponent extends Component{
                                                 {currentItemText + ':'}
                                             </td>
                                             <td className="control-table-data-feature-aspect">
-                                                <DesignComponentAdd
-                                                    uiContextId={AddActionIds.UI_CONTEXT_ADD_FEATURE_ASPECT_TO + uiItemId}
-                                                    addText="Add Feature Aspect"
-                                                    onClick={ () => this.addFeatureAspectToFeature(view, mode, currentItem, userContext)}
-                                                    toggleHighlight={ (value) => this.toggleHighlight(value)}
-                                                />
+                                                <div id={uiContextId1 + '_SHALLOW'}>
+                                                    <DesignComponentAdd
+                                                        uiContextId={uiContextId1}
+                                                        addText="Add Feature Aspect"
+                                                        onClick={ () => this.addFeatureAspectToFeature(view, mode, currentItem, userContext)}
+                                                        toggleHighlight={ (value) => this.toggleHighlight(value)}
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -828,6 +844,9 @@ export class DesignComponent extends Component{
                         // What is shown when it is opened up
                         // - A list of Scenarios
                         // - Add new Scenario option
+
+                        uiContextId1 = AddActionIds.UI_CONTEXT_ADD_SCENARIO_TO + uiParentId + '_' + uiItemId;
+
                         bodyHtml =
                             <div className="activeStyle">
                                 <Panel className="panel-design" collapsible expanded={this.state.open}>
@@ -836,12 +855,14 @@ export class DesignComponent extends Component{
                                         <tbody>
                                         <tr>
                                             <td className="control-table-data-scenario">
-                                                <DesignComponentAdd
-                                                    uiContextId={AddActionIds.UI_CONTEXT_ADD_SCENARIO_TO + uiParentId + '_' + uiItemId}
-                                                    addText="Add Scenario"
-                                                    onClick={ () => this.addScenario(view, mode, currentItem, userContext)}
-                                                    toggleHighlight={ (value) => this.toggleHighlight(value)}
-                                                />
+                                                <div id={uiContextId1 + '_SHALLOW'}>
+                                                    <DesignComponentAdd
+                                                        uiContextId={uiContextId1}
+                                                        addText="Add Scenario"
+                                                        onClick={ () => this.addScenario(view, mode, currentItem, userContext)}
+                                                        toggleHighlight={ (value) => this.toggleHighlight(value)}
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -890,6 +911,8 @@ DesignComponent.propTypes = {
     currentItem: PropTypes.object.isRequired,
     updateItem: PropTypes.object,
     wpItem: PropTypes.object,
+    uiItemId: PropTypes.string,
+    uiParentId: PropTypes.string,
     isDragDropHovering: PropTypes.bool.isRequired,
     displayContext: PropTypes.string.isRequired,
     testSummary: PropTypes.bool.isRequired,

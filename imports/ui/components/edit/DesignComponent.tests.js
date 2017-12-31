@@ -8,6 +8,8 @@ import { DesignComponent } from './DesignComponent.jsx';  // Non Redux wrapped
 import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, ComponentType, UpdateScopeType} from '../../../constants/constants.js'
 
 import { DesignVersions } from '../../../collections/design/design_versions.js'
+import PropTypes from "prop-types";
+import {AddActionIds} from "../../../constants/ui_context_ids";
 
 describe('JSX: DesignComponent', () => {
 
@@ -20,12 +22,16 @@ describe('JSX: DesignComponent', () => {
         const openDesignItems = [];
         const openDesignUpdateItems = [];
         const openWorkPackageItems = [];
+        const uiItemId = 'ComponentName';
+        const uiParentId = 'ParentName';
 
         return shallow(
             <DesignComponent
                 currentItem={currentItem}
                 updateItem={updateItem}
                 wpItem={wpItem}
+                uiItemId={uiItemId}
+                uiParentId={uiParentId}
                 isDragDropHovering={isDragDropHovering}
                 displayContext={displayContext}
                 testSummary={testSummary}
@@ -119,7 +125,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToApp').length, 1, 'Add design section not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add design section not found for ' + itemId);
         });
 
     });
@@ -141,7 +149,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToDesignSection').length, 1, 'Add design section not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add design section not found');
         });
     });
 
@@ -162,7 +172,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeatureAspect').length, 1, 'Add feature aspect not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_ASPECT_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add feature aspect not found');
         });
     });
 
@@ -183,7 +195,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeature').length, 1, 'Add feature not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add feature not found');
         });
     });
 
@@ -204,7 +218,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addScenario').length, 1, 'Add scenario not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_SCENARIO_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add scenario not found');
         });
     });
 
@@ -225,7 +241,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToApp').length, 0, 'Add design section was found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add design section was found');
         });
 
         it('no option to add design section to design section', () => {
@@ -243,7 +261,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToDesignSection').length, 0, 'Add design section was found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add design section was found');
         });
 
         it('no option to add feature aspect to feature', () => {
@@ -261,7 +281,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeatureAspect').length, 0, 'Add feature aspect was found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_ASPECT_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add feature aspect was found');
         });
     });
 
@@ -282,7 +304,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeature').length, 0, 'Add feature was found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add feature was found');
         });
 
         it('no option to add scenario to feature aspect', () => {
@@ -300,7 +324,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addScenario').length, 0, 'Add scenario was found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_SCENARIO_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add scenario was found');
         });
     });
 
@@ -558,7 +584,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToApp').length, 1, 'Add design section not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add design section not found');
         });
 
     });
@@ -580,7 +608,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToDesignSection').length, 1, 'Add design section not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add design section not found');
         });
     });
 
@@ -601,7 +631,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeatureAspect').length, 1, 'Add feature aspect not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_ASPECT_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add feature aspect not found');
         });
 
         it('no option if not in scope', () => {
@@ -619,7 +651,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeatureAspect').length, 0, 'Add feature aspect found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_ASPECT_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add feature aspect found');
         });
     });
 
@@ -642,7 +676,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToApp').length, 0, 'Add design section found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add design section found');
         });
 
         it('no option for add section to application when viewing', () => {
@@ -660,7 +696,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToApp').length, 0, 'Add design section found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add design section found');
         });
 
         it('no option to add section to section in view mode', () => {
@@ -678,7 +716,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToDesignSection').length, 0, 'Add design section found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add design section found');
         });
 
         it('no option to add section to section when viewing', () => {
@@ -696,7 +736,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addDesignSectionToDesignSection').length, 0, 'Add design section found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN_SECTION_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add design section found');
         });
 
         it('no option to add aspect to in scope feature in view mode', () => {
@@ -714,7 +756,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeatureAspect').length, 0, 'Add feature aspect found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_ASPECT_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add feature aspect found');
         });
 
         it('no option to add aspect to in scope feature when viewing', () => {
@@ -732,7 +776,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeatureAspect').length, 0, 'Add feature aspect found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_ASPECT_TO + 'ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add feature aspect found');
         });
     });
 
@@ -753,7 +799,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeature').length, 1, 'Add feature not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add feature not found');
         });
     });
 
@@ -774,7 +822,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addScenario').length, 1, 'Add scenario not found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_SCENARIO_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 1, 'Add scenario not found');
         });
 
         it('no option if not in scope', () => {
@@ -792,7 +842,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addScenario').length, 0, 'Add scenario found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_SCENARIO_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add scenario found');
         });
     });
 
@@ -813,7 +865,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeature').length, 0, 'Add feature found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add feature found');
         });
 
         it('no option for add feature to section when viewing', () => {
@@ -831,7 +885,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addFeature').length, 0, 'Add feature found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_FEATURE_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add feature found');
         });
 
         it('no option to add scenario to feature aspect in view mode', () => {
@@ -849,7 +905,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addScenario').length, 0, 'Add scenario found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_SCENARIO_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add scenario found');
         });
 
         it('no option to add scenario to feature aspect when viewing', () => {
@@ -867,7 +925,9 @@ describe('JSX: DesignComponent', () => {
             // Make sure item is open
             item.setState({open: true});
 
-            chai.assert.equal(item.find('#addScenario').length, 0, 'Add scenario found');
+            const itemId = '#' + AddActionIds.UI_CONTEXT_ADD_SCENARIO_TO + 'ParentName_ComponentName_SHALLOW';
+
+            chai.assert.equal(item.find(itemId).length, 0, 'Add scenario found');
         });
     });
 });

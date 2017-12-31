@@ -1,7 +1,6 @@
 node_modules/
 .idea/
 backup/
-imports/client/
 mocha-output.json
 imports/service_modules/design/unit_modules/
 mocha-unit-output.json

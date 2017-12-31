@@ -8,7 +8,7 @@ import { DesignComponentHeader } from './DesignComponentHeader.jsx';  // Non Red
 import { ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageScopeType} from '../../../constants/constants.js'
 
 
-describe('JSX: DesignComponentHeader', () => {
+describe('JSX: DesCompHdr WP', () => {
 
     // Work Package Components -----------------------------------------------------------------------------------------
 
@@ -28,12 +28,15 @@ describe('JSX: DesignComponentHeader', () => {
         const updateScopeItems = {};
         const workPackageScopeItems = {};
         const domainTermsVisible = true;
+        const uiContextName = 'ComponentName';
+
 
         return shallow(
             <DesignComponentHeader
                 currentItem={currentItem}
                 updateItem={updateItem}
                 wpItem={wpItem}
+                uiContextName={uiContextName}
                 isDragDropHovering={isDragDropHovering}
                 onToggleOpen={onToggleOpen}
                 onSelectItem={onSelectItem}
@@ -66,8 +69,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -81,8 +84,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -96,8 +99,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -112,8 +115,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
     });
@@ -130,7 +133,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
+            chai.assert.equal(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was visible!');
 
         });
 
@@ -148,8 +151,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -163,8 +166,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -178,8 +181,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -193,8 +196,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -208,8 +211,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -223,8 +226,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -238,8 +241,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -254,8 +257,8 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
-            chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
+            chai.assert(item.find('#openCloseIcon_ComponentName').length === 1, 'Open-close option not found');
+            chai.assert.notEqual(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was invisible!');
 
         });
 
@@ -273,7 +276,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
+            chai.assert.equal(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was visible!');
 
         });
 
@@ -287,7 +290,7 @@ describe('JSX: DesignComponentHeader', () => {
 
             let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
-            chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
+            chai.assert.equal(item.find('#openCloseIcon_ComponentName').props().className, 'invisible', 'Open-close option was visible!');
 
         });
     });

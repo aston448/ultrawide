@@ -278,7 +278,7 @@ class ClientDataServices{
 
         if(Meteor.isClient) {
 
-            console.log("Get Design Version Data with callback " + callback);
+            //console.log("Get Design Version Data with callback " + callback);
             //log((msg) => console.log(msg), LogLevel.DEBUG, "Get Design Version Data with callback {}", callback);
 
 
