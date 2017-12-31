@@ -2,6 +2,7 @@
 import {
     addWorkPackage,
     updateWorkPackageName,
+    updateWorkPackageLink,
     publishWorkPackage,
     withdrawWorkPackage,
     adoptWorkPackage,
@@ -37,6 +38,18 @@ class ServerWorkPackageApi {
                 userRole: userRole,
                 workPackageId: workPackageId,
                 newName: newName
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateWorkPackageLink(workPackageId, newLink, callback){
+        updateWorkPackageLink.call(
+            {
+                workPackageId: workPackageId,
+                newLink: newLink
             },
             (err, result) => {
                 callback(err, result);

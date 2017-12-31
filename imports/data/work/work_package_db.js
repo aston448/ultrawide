@@ -28,14 +28,15 @@ class WorkPackageData {
         if(Meteor.isServer) {
             return WorkPackages.insert(
                 {
-                    designVersionId: designVersionId,
-                    designUpdateId: designUpdateId,
-                    workPackageType: workPackage.workPackageType,
-                    workPackageName: workPackage.workPackageName,
-                    workPackageRawText: workPackage.workPackageRawText,
-                    workPackageStatus: workPackage.workPackageStatus,
-                    workPackageTestStatus: workPackage.workPackageTestStatus,
-                    adoptingUserId: adoptingUserId
+                    designVersionId:        designVersionId,
+                    designUpdateId:         designUpdateId,
+                    workPackageType:        workPackage.workPackageType,
+                    workPackageName:        workPackage.workPackageName,
+                    workPackageRawText:     workPackage.workPackageRawText,
+                    workPackageStatus:      workPackage.workPackageStatus,
+                    workPackageTestStatus:  workPackage.workPackageTestStatus,
+                    adoptingUserId:         adoptingUserId,
+                    workPackageLink:        workPackage.workPackageLink
                 }
             );
         }
@@ -131,6 +132,18 @@ class WorkPackageData {
             {
                 $set: {
                     workPackageName: newName
+                }
+            }
+        );
+    }
+
+    setWorkPackageLink(workPackageId, newLink){
+
+        return WorkPackages.update(
+            {_id: workPackageId},
+            {
+                $set: {
+                    workPackageLink: newLink
                 }
             }
         );

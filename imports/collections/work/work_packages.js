@@ -15,7 +15,8 @@ let Schema = new SimpleSchema({
     workPackageRawText:         {type: Object, blackbox: true, optional: true},                         // Text descriptive of this package
     workPackageStatus:          {type: String, defaultValue: WorkPackageStatus.WP_NEW},                 // Indicates if this WP is adoptable yet or not and when it is in use or considered complete
     workPackageTestStatus:      {type: String, defaultValue: WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE},
-    adoptingUserId:             {type: String, defaultValue: 'NONE'}
+    adoptingUserId:             {type: String, defaultValue: 'NONE'},
+    workPackageLink:            {type: String, defaultValue: 'NONE'},
 });
 
 WorkPackages.attachSchema(Schema);

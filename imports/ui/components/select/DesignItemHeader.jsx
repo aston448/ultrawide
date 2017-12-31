@@ -44,8 +44,10 @@ export class DesignItemHeader extends Component{
             open: false,
             nameEditable: false,
             refEditable: false,
+            linkEditable: false,
             nameValue: this.props.currentItemName,
             refValue: this.props.currentItemRef,
+            linkValue: this.props.currentItemLink,
             highlighted: false,
         };
 
@@ -55,14 +57,19 @@ export class DesignItemHeader extends Component{
     editItemName(){
         event.preventDefault();
         this.setState({nameEditable: true});
-        //console.log("EDIT");
     }
 
     // Allow editing of version text (if there is one)
     editItemVersion(){
         event.preventDefault();
         this.setState({refEditable: true});
-        //console.log("EDIT");
+    }
+
+    // Allow editing of link
+    editItemLink(){
+        event.preventDefault();
+        this.setState({linkEditable: true});
+
     }
 
     saveItemName(userRole, currentItemType, currentItemId){
@@ -107,6 +114,16 @@ export class DesignItemHeader extends Component{
         this.setState({refEditable: false});
     }
 
+    saveItemLink(currentItemId){
+        event.preventDefault();
+
+        let newLink = this.state.linkValue;
+
+        ClientWorkPackageServices.updateWorkPackageLink(currentItemId, newLink);
+
+        this.setState({linkEditable: false});
+    }
+
     handleNameKeyEvents(userRole, event, currentItemType, currentItemId) {
         if(event.charCode === 13){
             // Enter Key
@@ -121,6 +138,13 @@ export class DesignItemHeader extends Component{
         }
     }
 
+    handleLinkKeyEvents(event, currentItemId) {
+        if(event.charCode === 13){
+            // Enter Key
+            this.saveItemLink(currentItemId);
+        }
+    }
+
     handleNameChange(event) {
         this.setState({nameValue: event.target.value});
     }
@@ -129,28 +153,38 @@ export class DesignItemHeader extends Component{
         this.setState({refValue: event.target.value});
     }
 
+    handleLinkChange(event) {
+        this.setState({linkValue: event.target.value});
+    }
+
     undoItemNameChange(){
         event.preventDefault();
-        //console.log("UNDO NAME");
         this.setState({nameValue: this.props.currentItemName});
         this.setState({nameEditable: false});
     }
 
     undoItemRefChange(){
         event.preventDefault();
-        //console.log("UNDO VERSION");
         this.setState({refValue: this.props.currentItemRef});
         this.setState({refEditable: false});
     }
 
+    undoItemLinkChange(){
+        event.preventDefault();
+        this.setState({linkValue: this.props.currentItemLink});
+        this.setState({linkEditable: false});
+    }
+
     render(){
-        const {currentItemId, currentItemName, currentItemRef, currentItemStatus, currentItemType, userRole} = this.props;
+        const {currentItemId, currentItemName, currentItemRef, currentItemLink, currentItemStatus, currentItemType, userRole} = this.props;
 
         let refEditorEditing = <div></div>;
         let refEditorNotEditing = <div></div>;
         let refReadOnly = <div></div>;
 
         //console.log("Render DI Header for " + userRole + " with item " + currentItemType + " caled " + currentItemName);
+
+
 
         // Versions and updates have a version component
         if(currentItemType === ItemType.DESIGN_VERSION || currentItemType === ItemType.DESIGN_UPDATE){
@@ -230,7 +264,6 @@ export class DesignItemHeader extends Component{
                 </InputGroup>
             </div>;
 
-
         let nameReadOnly =
             <div>
                 <InputGroup>
@@ -239,6 +272,47 @@ export class DesignItemHeader extends Component{
                     </div>
                 </InputGroup>
             </div>;
+
+        let linkEditorEditing =
+            <div>
+                <InputGroup>
+                    <div className="editableItem">
+                        <FormControl
+                            type="text"
+                            value={this.state.linkValue}
+                            placeholder={currentItemLink}
+                            onChange={(event) => this.handleLinkChange(event)}
+                            onKeyPress={(event) => this.handleLinkKeyEvents(event, currentItemId)}
+                        />
+                    </div>
+                    <InputGroup.Addon onClick={ () => this.saveItemLink(currentItemId)}>
+                        <div id="editOk" className="green"><Glyphicon glyph="ok"/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon onClick={ () => this.undoItemLinkChange()}>
+                        <div id="editCancel" className="red"><Glyphicon glyph="arrow-left"/></div>
+                    </InputGroup.Addon>
+                </InputGroup>
+            </div>;
+
+        let wpLink =
+            <a href={currentItemLink} target="_blank">Open Link</a>;
+
+        if(currentItemLink === 'NONE'){
+            wpLink = <div className="greyed-out">Link Not Set</div>
+        }
+
+        let linkEditorNotEditing =
+            <div>
+                <InputGroup>
+                    <div className={"readOnlyItem"}>
+                        {wpLink}
+                    </div>
+                    <InputGroup.Addon onClick={ () => this.editItemLink()}>
+                        <div id="edit" className="blue"><Glyphicon glyph="edit"/></div>
+                    </InputGroup.Addon>
+                </InputGroup>
+            </div>;
+
 
 
         // Return the view wanted
@@ -252,15 +326,35 @@ export class DesignItemHeader extends Component{
 
                     titleClass = 'design-item-header greyed-out'
                 }
-                return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
-                break;
+
+                if(currentItemType === ItemType.WORK_PACKAGE){
+                    if (this.state.linkEditable) {
+                        return (<div className="design-item-header">{nameReadOnly}{linkEditorEditing}</div>);
+                    } else {
+                        return (<div className="design-item-header">{nameReadOnly}{linkEditorNotEditing}</div>);
+                    }
+
+                } else {
+                    return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
+                }
+
             case RoleType.MANAGER:
                 // Managers can edit Work Packages
                 if(currentItemType === ItemType.WORK_PACKAGE){
-                    if (this.state.nameEditable) {
-                        return (<div className="design-item-header">{nameEditorEditing}</div>);
-                    } else {
-                        return (<div className="design-item-header">{nameEditorNotEditing}</div>);
+                    if (this.state.nameEditable && this.state.linkEditable) {
+                        return (<div className="design-item-header">{nameEditorEditing}{linkEditorEditing}</div>);
+                    }
+
+                    if (this.state.nameEditable && !this.state.linkEditable) {
+                        return (<div className="design-item-header">{nameEditorEditing}{linkEditorNotEditing}</div>);
+                    }
+
+                    if (!this.state.nameEditable && this.state.linkEditable) {
+                        return (<div className="design-item-header">{nameEditorNotEditing}{linkEditorEditing}</div>);
+                    }
+
+                    if (!this.state.nameEditable && !this.state.linkEditable) {
+                        return (<div className="design-item-header">{nameEditorNotEditing}{linkEditorNotEditing}</div>);
                     }
                 } else {
                     // Rest is same as for Developers
@@ -270,6 +364,7 @@ export class DesignItemHeader extends Component{
                     }
                     return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
                 }
+
                 break;
             case RoleType.DESIGNER:
                 if(currentItemType === ItemType.WORK_PACKAGE){
@@ -278,7 +373,11 @@ export class DesignItemHeader extends Component{
 
                         titleClass = 'design-item-header greyed-out'
                     }
-                    return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
+                    if (this.state.linkEditable) {
+                        return (<div className="design-item-header">{nameReadOnly}{linkEditorEditing}</div>);
+                    } else {
+                        return (<div className="design-item-header">{nameReadOnly}{linkEditorNotEditing}</div>);
+                    }
                 } else {
                     if (this.state.nameEditable && this.state.refEditable) {
                         return (<div className="design-item-header">{nameEditorEditing}{refEditorEditing}</div>);
@@ -312,6 +411,7 @@ DesignItemHeader.propTypes = {
     currentItemId: PropTypes.string.isRequired,
     currentItemName: PropTypes.string.isRequired,
     currentItemRef: PropTypes.string,
+    currentItemLink: PropTypes.string,
     currentItemStatus: PropTypes.string.isRequired,
     //onSelectItem: PropTypes.func.isRequired
 };

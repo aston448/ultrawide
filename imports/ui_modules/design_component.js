@@ -1,3 +1,4 @@
+import React from 'react';
 
 import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap,
     convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
@@ -29,6 +30,214 @@ const DomainSpan = (props) => {
 
 
 class ComponentUiModules{
+
+    componentShouldUpdate(props, nextProps, state, nextState){
+
+        if(this.shouldUpdateCommon(props, nextProps, state, nextState)){
+            return true;
+        }
+
+        // Do refresh if this specific component is gaining or losing focus
+        let currentItemId = props.currentItem._id;
+        let openItemId = props.currentItem._id;
+
+        if(props.displayContext === DisplayContext.WP_VIEW || props.displayContext === DisplayContext.DEV_DESIGN){
+            openItemId = props.wpItem._id;
+        }
+
+        if((nextProps.userContext.designComponentId === currentItemId) && (props.userContext.designComponentId !== currentItemId)){
+            return true;
+        }
+
+        if((nextProps.userContext.designComponentId !== currentItemId) && (props.userContext.designComponentId === currentItemId)){
+            return true;
+        }
+
+        // If this specific item has been opened or closed...
+        if(nextProps.openItemsFlag.item === openItemId){
+            return true;
+        }
+
+        if(props.view === ViewType.DESIGN_UPDATE_EDIT) {
+
+            // Look for Design Update scoping trigger
+
+            if (nextProps.updateScopeFlag !== props.updateScopeFlag) {
+
+                // If its one of the descoped items
+                if (nextProps.updateScopeItems.removed.includes(nextProps.currentItem.componentReferenceId)) {
+                    return true;
+                }
+
+                // Or its in the update scope
+                if (props.updateItem || nextProps.updateItem) {
+                    return true;
+                }
+            }
+        }
+
+        let shouldComponentUpdate = false;
+
+        switch (nextProps.view) {
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+                shouldComponentUpdate =!(
+                    nextState.open === state.open &&
+                    nextState.highlighted === state.highlighted &&
+                    nextState.editing === state.editing &&
+                    nextState.editorState === state.editorState &&
+                    nextProps.testSummary === props.testSummary &&
+                    nextProps.currentItem.componentNameNew === props.currentItem.componentNameNew &&
+                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
+                    nextProps.isDragDropHovering === props.isDragDropHovering &&
+                    nextProps.mode === props.mode &&
+                    nextProps.testDataFlag === props.testDataFlag
+                );
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DESIGN_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                shouldComponentUpdate =!(
+                    nextState.open === state.open &&
+                    nextState.highlighted === state.highlighted &&
+                    nextState.editing === state.editing &&
+                    nextState.editorState === state.editorState &&
+                    nextProps.testSummary === props.testSummary &&
+                    nextProps.currentItem.componentNameNew === props.currentItem.componentNameNew &&
+                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
+                    nextProps.currentItem.updateMergeStatus === props.currentItem.updateMergeStatus &&
+                    nextProps.isDragDropHovering === props.isDragDropHovering &&
+                    nextProps.mode === props.mode &&
+                    nextProps.testDataFlag === props.testDataFlag
+                );
+                break;
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+                shouldComponentUpdate = !(
+                    nextState.open === state.open &&
+                    nextState.highlighted === state.highlighted &&
+                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
+                    nextProps.mode === props.mode &&
+                    nextProps.testDataFlag === props.testDataFlag &&
+                    nextProps.testSummary === props.testSummary
+                );
+        }
+
+        return shouldComponentUpdate;
+
+    }
+
+    componentHeaderShouldUpdate(props, nextProps, state, nextState){
+
+        if(this.shouldUpdateCommon(props, nextProps, state, nextState)){
+            return true;
+        }
+
+        // Check for scope updates in Update Editor
+        if(props.view === ViewType.DESIGN_UPDATE_EDIT) {
+
+            if (nextProps.updateScopeFlag !== props.updateScopeFlag) {
+                // An update has been triggered.  Render if this item is in the update
+
+                // If its one of the descoped items
+                if (nextProps.updateScopeItems.removed.includes(props.currentItem.componentReferenceId)) {
+                    return true;
+                }
+
+                // Or its in the scope
+                if (nextProps.updateItem) {
+                    return true;
+                }
+            }
+        }
+
+        switch (props.view) {
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+                return !(
+                    nextState.highlighted === state.highlighted &&
+                    nextState.editing === state.editing &&
+                    nextState.editorState === state.editorState &&
+                    nextProps.testSummary === props.testSummary &&
+                    nextProps.isOpen === props.isOpen &&
+                    nextProps.currentItem.componentNameNew === props.currentItem.componentNameNew &&
+                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
+                    nextProps.isDragDropHovering === props.isDragDropHovering &&
+                    nextProps.mode === props.mode &&
+                    nextProps.isDragging === props.isDragging &&
+                    nextProps.testDataFlag === props.testDataFlag
+                );
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DESIGN_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                return !(
+                    nextState.highlighted === state.highlighted &&
+                    nextState.editing === state.editing &&
+                    nextState.inScope === state.inScope &&
+                    nextState.parentScope === state.parentScope &&
+                    nextState.editorState === state.editorState &&
+                    nextProps.testSummary === props.testSummary &&
+                    nextProps.isOpen === props.isOpen &&
+                    nextProps.currentItem.componentNameNew === props.currentItem.componentNameNew &&
+                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
+                    nextProps.currentItem.updateMergeStatus === props.currentItem.updateMergeStatus &&
+                    nextProps.isDragDropHovering === props.isDragDropHovering &&
+                    nextProps.mode === props.mode &&
+                    nextProps.isDragging === props.isDragging &&
+                    nextProps.testDataFlag === props.testDataFlag
+                );
+                break;
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+                return !(
+                    nextState.highlighted === state.highlighted &&
+                    nextState.editing === state.editing &&
+                    nextState.editorState === state.editorState &&
+                    nextProps.mode === props.mode &&
+                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
+                    nextProps.testSummary === props.testSummary &&
+                    nextProps.testDataFlag === props.testDataFlag &&
+                    nextProps.isOpen === props.isOpen
+                );
+        }
+    }
+
+
+    shouldUpdateCommon(props, nextProps, state, nextState){
+
+        if(nextProps.domainTermsVisible !== props.domainTermsVisible){
+            return true;
+        }
+
+        // Check for scope updates in WP Editor
+        if(props.view === ViewType.WORK_PACKAGE_BASE_EDIT || props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
+
+            if (nextProps.workPackageScopeFlag !== props.workPackageScopeFlag) {
+                // An update has been triggered.  Render if this item is in the WP
+
+                // If its one of the descoped items
+                if (nextProps.workPackageScopeItems.removed.includes(props.currentItem.componentReferenceId)) {
+                    return true;
+                }
+
+                // Or its in the scope
+                if (nextProps.wpItem) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     setComponentNameEditorText(state, props, newRawText){
 

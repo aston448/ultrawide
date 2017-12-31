@@ -69,6 +69,34 @@ export const updateWorkPackageName = new ValidatedMethod({
     }
 });
 
+export const updateWorkPackageLink = new ValidatedMethod({
+
+    name: 'workPackage.updateWorkPackageLink',
+
+    validate: new SimpleSchema({
+        workPackageId:      {type: String},
+        newLink:            {type: String}
+    }).validator(),
+
+    run({workPackageId, newLink}){
+
+        // Server validation
+        const result = WorkPackageValidationApi.validateUpdateWorkPackageLink(workPackageId, newLink);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('workPackage.updateWorkPackageLink.failValidation', result)
+        }
+
+        // Server action
+        try {
+            WorkPackageServices.updateWorkPackageLink(workPackageId, newLink);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
+
 export const publishWorkPackage = new ValidatedMethod({
 
     name: 'workPackage.publishWorkPackage',

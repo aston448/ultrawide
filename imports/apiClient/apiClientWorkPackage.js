@@ -121,6 +121,45 @@ class ClientWorkPackageServices {
         return {success: true, message: ''};
     }
 
+    updateWorkPackageLink(workPackageId, newLink){
+
+        // Give user a way to clear the link
+        if (newLink === ''){
+            newLink = 'NONE';
+        }
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateUpdateWorkPackageLink(workPackageId, newLink);
+
+        if(result !== Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.updateWorkPackageLink(workPackageId, newLink, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error 2: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_LINK_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    }
+
     // Manager chose to publish a WP to make it available in draft form ------------------------------------------------
     publishWorkPackage(userRole, userContext, workPackageToPublishId){
 

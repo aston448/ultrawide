@@ -24,6 +24,7 @@ import {AddActionIds}   from "../../../constants/ui_context_ids.js";
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ComponentUiModules                   from '../../../ui_modules/design_component.js'
 
 import { log }              from '../../../common/utils.js';
 
@@ -59,125 +60,127 @@ export class DesignComponent extends Component{
     shouldComponentUpdate(nextProps, nextState){
 
         // Optimisation.  No need to re-render this component if stuff that changes its look not changed
+        return ComponentUiModules.componentShouldUpdate(this.props, nextProps, this.state, nextState);
 
-        // Redraw if domain terms toggled on / off
-        //console.log('DTV New: ' + nextProps.domainTermsVisible + ' DTV old: ' + this.props.domainTermsVisible);
-        if(nextProps.domainTermsVisible !== this.props.domainTermsVisible){
-            return true;
-        }
 
-        // Do refresh if this specific component is gaining or losing focus
-        let currentItemId = this.props.currentItem._id;
-        let openItemId = this.props.currentItem._id;
-
-        if(this.props.displayContext === DisplayContext.WP_VIEW || this.props.displayContext === DisplayContext.DEV_DESIGN){
-            openItemId = this.props.wpItem._id;
-        }
-
-        if((nextProps.userContext.designComponentId === currentItemId) && (this.props.userContext.designComponentId !== currentItemId)){
-            return true;
-        }
-
-        if((nextProps.userContext.designComponentId !== currentItemId) && (this.props.userContext.designComponentId === currentItemId)){
-            return true;
-        }
-
-        // If this specific item has been opened or closed...
-        if(nextProps.openItemsFlag.item === openItemId){
-            return true;
-        }
-
-        if(this.props.view === ViewType.DESIGN_UPDATE_EDIT) {
-
-            // Look for Design Update scoping trigger
-
-            if (nextProps.updateScopeFlag !== this.props.updateScopeFlag) {
-
-                // If its one of the descoped items
-                if (nextProps.updateScopeItems.removed.includes(nextProps.currentItem.componentReferenceId)) {
-                    return true;
-                }
-
-                // Or its in the update scope
-                if (this.props.updateItem || nextProps.updateItem) {
-                    return true;
-                }
-            }
-        }
-
-        // Check for scope updates in WP Editor
-        if(this.props.view === ViewType.WORK_PACKAGE_BASE_EDIT || this.props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
-
-            if (nextProps.workPackageScopeFlag !== this.props.workPackageScopeFlag) {
-                // An update has been triggered.  Render if this item is in the WP
-
-                // If its one of the descoped items
-                if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
-                    return true;
-                }
-
-                // Or its in the scope
-                if (nextProps.wpItem) {
-                    return true;
-                }
-            }
-        }
-
-        let shouldComponentUpdate = false;
-
-        switch (nextProps.view) {
-            case ViewType.DESIGN_NEW:
-            case ViewType.DESIGN_PUBLISHED:
-            case ViewType.DESIGN_UPDATABLE:
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-                shouldComponentUpdate =!(
-                    nextState.open === this.state.open &&
-                    nextState.highlighted === this.state.highlighted &&
-                    nextState.editing === this.state.editing &&
-                    nextState.editorState === this.state.editorState &&
-                    nextProps.testSummary === this.props.testSummary &&
-                    nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.isDragDropHovering === this.props.isDragDropHovering &&
-                    nextProps.mode === this.props.mode &&
-                    nextProps.testDataFlag === this.props.testDataFlag
-                );
-                break;
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                shouldComponentUpdate =!(
-                    nextState.open === this.state.open &&
-                    nextState.highlighted === this.state.highlighted &&
-                    nextState.editing === this.state.editing &&
-                    nextState.editorState === this.state.editorState &&
-                    nextProps.testSummary === this.props.testSummary &&
-                    nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.currentItem.updateMergeStatus === this.props.currentItem.updateMergeStatus &&
-                    nextProps.isDragDropHovering === this.props.isDragDropHovering &&
-                    nextProps.mode === this.props.mode &&
-                    nextProps.testDataFlag === this.props.testDataFlag
-                );
-                break;
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-                shouldComponentUpdate = !(
-                    nextState.open === this.state.open &&
-                    nextState.highlighted === this.state.highlighted &&
-                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.mode === this.props.mode &&
-                    nextProps.testDataFlag === this.props.testDataFlag &&
-                    nextProps.testSummary === this.props.testSummary
-                 );
-        }
-
-        //console.log("Component " + nextProps.currentItem.componentNameNew + " old open = " + this.state.open + " new open = " + nextState.open);
-        //console.log("Component " + nextProps.currentItem.componentNameNew + " updating = " + shouldComponentUpdate);
-
-        return shouldComponentUpdate;
+        // // Redraw if domain terms toggled on / off
+        // //console.log('DTV New: ' + nextProps.domainTermsVisible + ' DTV old: ' + this.props.domainTermsVisible);
+        // if(nextProps.domainTermsVisible !== this.props.domainTermsVisible){
+        //     return true;
+        // }
+        //
+        // // Do refresh if this specific component is gaining or losing focus
+        // let currentItemId = this.props.currentItem._id;
+        // let openItemId = this.props.currentItem._id;
+        //
+        // if(this.props.displayContext === DisplayContext.WP_VIEW || this.props.displayContext === DisplayContext.DEV_DESIGN){
+        //     openItemId = this.props.wpItem._id;
+        // }
+        //
+        // if((nextProps.userContext.designComponentId === currentItemId) && (this.props.userContext.designComponentId !== currentItemId)){
+        //     return true;
+        // }
+        //
+        // if((nextProps.userContext.designComponentId !== currentItemId) && (this.props.userContext.designComponentId === currentItemId)){
+        //     return true;
+        // }
+        //
+        // // If this specific item has been opened or closed...
+        // if(nextProps.openItemsFlag.item === openItemId){
+        //     return true;
+        // }
+        //
+        // if(this.props.view === ViewType.DESIGN_UPDATE_EDIT) {
+        //
+        //     // Look for Design Update scoping trigger
+        //
+        //     if (nextProps.updateScopeFlag !== this.props.updateScopeFlag) {
+        //
+        //         // If its one of the descoped items
+        //         if (nextProps.updateScopeItems.removed.includes(nextProps.currentItem.componentReferenceId)) {
+        //             return true;
+        //         }
+        //
+        //         // Or its in the update scope
+        //         if (this.props.updateItem || nextProps.updateItem) {
+        //             return true;
+        //         }
+        //     }
+        // }
+        //
+        // // Check for scope updates in WP Editor
+        // if(this.props.view === ViewType.WORK_PACKAGE_BASE_EDIT || this.props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
+        //
+        //     if (nextProps.workPackageScopeFlag !== this.props.workPackageScopeFlag) {
+        //         // An update has been triggered.  Render if this item is in the WP
+        //
+        //         // If its one of the descoped items
+        //         if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
+        //             return true;
+        //         }
+        //
+        //         // Or its in the scope
+        //         if (nextProps.wpItem) {
+        //             return true;
+        //         }
+        //     }
+        // }
+        //
+        // let shouldComponentUpdate = false;
+        //
+        // switch (nextProps.view) {
+        //     case ViewType.DESIGN_NEW:
+        //     case ViewType.DESIGN_PUBLISHED:
+        //     case ViewType.DESIGN_UPDATABLE:
+        //     case ViewType.WORK_PACKAGE_BASE_EDIT:
+        //     case ViewType.WORK_PACKAGE_BASE_VIEW:
+        //         shouldComponentUpdate =!(
+        //             nextState.open === this.state.open &&
+        //             nextState.highlighted === this.state.highlighted &&
+        //             nextState.editing === this.state.editing &&
+        //             nextState.editorState === this.state.editorState &&
+        //             nextProps.testSummary === this.props.testSummary &&
+        //             nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
+        //             nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
+        //             nextProps.isDragDropHovering === this.props.isDragDropHovering &&
+        //             nextProps.mode === this.props.mode &&
+        //             nextProps.testDataFlag === this.props.testDataFlag
+        //         );
+        //         break;
+        //     case ViewType.DESIGN_UPDATE_EDIT:
+        //     case ViewType.DESIGN_UPDATE_VIEW:
+        //     case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+        //     case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+        //         shouldComponentUpdate =!(
+        //             nextState.open === this.state.open &&
+        //             nextState.highlighted === this.state.highlighted &&
+        //             nextState.editing === this.state.editing &&
+        //             nextState.editorState === this.state.editorState &&
+        //             nextProps.testSummary === this.props.testSummary &&
+        //             nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
+        //             nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
+        //             nextProps.currentItem.updateMergeStatus === this.props.currentItem.updateMergeStatus &&
+        //             nextProps.isDragDropHovering === this.props.isDragDropHovering &&
+        //             nextProps.mode === this.props.mode &&
+        //             nextProps.testDataFlag === this.props.testDataFlag
+        //         );
+        //         break;
+        //     case ViewType.DEVELOP_BASE_WP:
+        //     case ViewType.DEVELOP_UPDATE_WP:
+        //         shouldComponentUpdate = !(
+        //             nextState.open === this.state.open &&
+        //             nextState.highlighted === this.state.highlighted &&
+        //             nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
+        //             nextProps.mode === this.props.mode &&
+        //             nextProps.testDataFlag === this.props.testDataFlag &&
+        //             nextProps.testSummary === this.props.testSummary
+        //          );
+        // }
+        //
+        // //console.log("Component " + nextProps.currentItem.componentNameNew + " old open = " + this.state.open + " new open = " + nextState.open);
+        // //console.log("Component " + nextProps.currentItem.componentNameNew + " updating = " + shouldComponentUpdate);
+        //
+        // return shouldComponentUpdate;
 
     }
 

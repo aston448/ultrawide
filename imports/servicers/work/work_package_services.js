@@ -167,6 +167,13 @@ class WorkPackageServices{
         }
     };
 
+    updateWorkPackageLink(workPackageId, newLink){
+
+        if(Meteor.isServer) {
+
+            WorkPackageData.setWorkPackageLink(workPackageId, newLink);
+        }
+    }
 
     removeWorkPackage(workPackageId){
 

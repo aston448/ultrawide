@@ -97,103 +97,104 @@ export class DesignComponentHeader extends Component{
     shouldComponentUpdate(nextProps, nextState){
 
         // Optimisation.  No need to re-render this component if no change to what is seen
+        return ComponentUiModules.componentHeaderShouldUpdate(this.props, nextProps, this.state, nextState);
 
-        // Redraw if domain terms toggled on / off
-        if(nextProps.domainTermsVisible !== this.props.domainTermsVisible){
-            return true;
-        }
-
-        // Check for scope updates in Update Editor
-        if(this.props.view === ViewType.DESIGN_UPDATE_EDIT) {
-
-            if (nextProps.updateScopeFlag !== this.props.updateScopeFlag) {
-                // An update has been triggered.  Render if this item is in the update
-
-                // If its one of the descoped items
-                if (nextProps.updateScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
-                    return true;
-                }
-
-                // Or its in the scope
-                if (nextProps.updateItem) {
-                    return true;
-                }
-            }
-        }
-
-        // Check for scope updates in WP Editor
-        if(this.props.view === ViewType.WORK_PACKAGE_BASE_EDIT || this.props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
-
-            if (nextProps.workPackageScopeFlag !== this.props.workPackageScopeFlag) {
-                // An update has been triggered.  Render if this item is in the WP
-
-                // If its one of the descoped items
-                if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
-                    return true;
-                }
-
-                // Or its in the scope
-                if (nextProps.wpItem) {
-                    return true;
-                }
-            }
-        }
-
-
-        switch (this.props.view) {
-            case ViewType.DESIGN_NEW:
-            case ViewType.DESIGN_PUBLISHED:
-            case ViewType.DESIGN_UPDATABLE:
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-                return !(
-                    nextState.highlighted === this.state.highlighted &&
-                    nextState.editing === this.state.editing &&
-                    nextState.editorState === this.state.editorState &&
-                    nextProps.testSummary === this.props.testSummary &&
-                    nextProps.isOpen === this.props.isOpen &&
-                    nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.isDragDropHovering === this.props.isDragDropHovering &&
-                    nextProps.mode === this.props.mode &&
-                    nextProps.isDragging === this.props.isDragging &&
-                    nextProps.testDataFlag === this.props.testDataFlag
-                );
-                break;
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                return !(
-                    nextState.highlighted === this.state.highlighted &&
-                    nextState.editing === this.state.editing &&
-                    nextState.inScope === this.state.inScope &&
-                    nextState.parentScope === this.state.parentScope &&
-                    nextState.editorState === this.state.editorState &&
-                    nextProps.testSummary === this.props.testSummary &&
-                    nextProps.isOpen === this.props.isOpen &&
-                    nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.currentItem.updateMergeStatus === this.props.currentItem.updateMergeStatus &&
-                    nextProps.isDragDropHovering === this.props.isDragDropHovering &&
-                    nextProps.mode === this.props.mode &&
-                    nextProps.isDragging === this.props.isDragging &&
-                    nextProps.testDataFlag === this.props.testDataFlag
-                );
-                break;
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-                return !(
-                    nextState.highlighted === this.state.highlighted &&
-                    nextState.editing === this.state.editing &&
-                    nextState.editorState === this.state.editorState &&
-                    nextProps.mode === this.props.mode &&
-                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.testSummary === this.props.testSummary &&
-                    nextProps.testDataFlag === this.props.testDataFlag &&
-                    nextProps.isOpen === this.props.isOpen
-                );
-        }
+        // // Redraw if domain terms toggled on / off
+        // if(nextProps.domainTermsVisible !== this.props.domainTermsVisible){
+        //     return true;
+        // }
+        //
+        // // Check for scope updates in Update Editor
+        // if(this.props.view === ViewType.DESIGN_UPDATE_EDIT) {
+        //
+        //     if (nextProps.updateScopeFlag !== this.props.updateScopeFlag) {
+        //         // An update has been triggered.  Render if this item is in the update
+        //
+        //         // If its one of the descoped items
+        //         if (nextProps.updateScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
+        //             return true;
+        //         }
+        //
+        //         // Or its in the scope
+        //         if (nextProps.updateItem) {
+        //             return true;
+        //         }
+        //     }
+        // }
+        //
+        // // Check for scope updates in WP Editor
+        // if(this.props.view === ViewType.WORK_PACKAGE_BASE_EDIT || this.props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
+        //
+        //     if (nextProps.workPackageScopeFlag !== this.props.workPackageScopeFlag) {
+        //         // An update has been triggered.  Render if this item is in the WP
+        //
+        //         // If its one of the descoped items
+        //         if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem.componentReferenceId)) {
+        //             return true;
+        //         }
+        //
+        //         // Or its in the scope
+        //         if (nextProps.wpItem) {
+        //             return true;
+        //         }
+        //     }
+        // }
+        //
+        //
+        // switch (this.props.view) {
+        //     case ViewType.DESIGN_NEW:
+        //     case ViewType.DESIGN_PUBLISHED:
+        //     case ViewType.DESIGN_UPDATABLE:
+        //     case ViewType.WORK_PACKAGE_BASE_EDIT:
+        //     case ViewType.WORK_PACKAGE_BASE_VIEW:
+        //         return !(
+        //             nextState.highlighted === this.state.highlighted &&
+        //             nextState.editing === this.state.editing &&
+        //             nextState.editorState === this.state.editorState &&
+        //             nextProps.testSummary === this.props.testSummary &&
+        //             nextProps.isOpen === this.props.isOpen &&
+        //             nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
+        //             nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
+        //             nextProps.isDragDropHovering === this.props.isDragDropHovering &&
+        //             nextProps.mode === this.props.mode &&
+        //             nextProps.isDragging === this.props.isDragging &&
+        //             nextProps.testDataFlag === this.props.testDataFlag
+        //         );
+        //         break;
+        //     case ViewType.DESIGN_UPDATE_EDIT:
+        //     case ViewType.DESIGN_UPDATE_VIEW:
+        //     case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+        //     case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+        //         return !(
+        //             nextState.highlighted === this.state.highlighted &&
+        //             nextState.editing === this.state.editing &&
+        //             nextState.inScope === this.state.inScope &&
+        //             nextState.parentScope === this.state.parentScope &&
+        //             nextState.editorState === this.state.editorState &&
+        //             nextProps.testSummary === this.props.testSummary &&
+        //             nextProps.isOpen === this.props.isOpen &&
+        //             nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
+        //             nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
+        //             nextProps.currentItem.updateMergeStatus === this.props.currentItem.updateMergeStatus &&
+        //             nextProps.isDragDropHovering === this.props.isDragDropHovering &&
+        //             nextProps.mode === this.props.mode &&
+        //             nextProps.isDragging === this.props.isDragging &&
+        //             nextProps.testDataFlag === this.props.testDataFlag
+        //         );
+        //         break;
+        //     case ViewType.DEVELOP_BASE_WP:
+        //     case ViewType.DEVELOP_UPDATE_WP:
+        //         return !(
+        //             nextState.highlighted === this.state.highlighted &&
+        //             nextState.editing === this.state.editing &&
+        //             nextState.editorState === this.state.editorState &&
+        //             nextProps.mode === this.props.mode &&
+        //             nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
+        //             nextProps.testSummary === this.props.testSummary &&
+        //             nextProps.testDataFlag === this.props.testDataFlag &&
+        //             nextProps.isOpen === this.props.isOpen
+        //         );
+        // }
 
     }
 
