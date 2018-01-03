@@ -134,6 +134,7 @@ describe('JSX: DesignItemHeader', () => {
     let currentItemName = '';
     let currentItemRef = '';
     let currentItemStatus = '';
+    let currentItemLink = '';
     const onSelectItem = () => {return true};
 
     function testDesignItemHeader(itemType, itemSubType, itemStatus, userRole){
@@ -230,6 +231,7 @@ describe('JSX: DesignItemHeader', () => {
                 currentItemId={currentItemId}
                 currentItemName={currentItemName}
                 currentItemRef={currentItemRef}
+                currentItemLink={currentItemLink}
                 currentItemStatus={currentItemStatus}
                 onSelectItem={onSelectItem}
                 userRole={userRole}

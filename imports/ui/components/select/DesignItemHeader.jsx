@@ -286,10 +286,10 @@ export class DesignItemHeader extends Component{
                         />
                     </div>
                     <InputGroup.Addon onClick={ () => this.saveItemLink(currentItemId)}>
-                        <div id="editOk" className="green"><Glyphicon glyph="ok"/></div>
+                        <div id="editLinkOk" className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoItemLinkChange()}>
-                        <div id="editCancel" className="red"><Glyphicon glyph="arrow-left"/></div>
+                        <div id="editLinkCancel" className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
@@ -308,7 +308,7 @@ export class DesignItemHeader extends Component{
                         {wpLink}
                     </div>
                     <InputGroup.Addon onClick={ () => this.editItemLink()}>
-                        <div id="edit" className="blue"><Glyphicon glyph="edit"/></div>
+                        <div id="editLink" className="blue"><Glyphicon glyph="edit"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
