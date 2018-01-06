@@ -495,17 +495,6 @@ export class DesignComponent extends Component{
         }
     }
 
-    getParentName(currentItem){
-
-        if(currentItem.componentParentReferenceIdNew !== 'NONE') {
-            const parent = ClientDesignComponentServices.getCurrentItemParent(currentItem);
-            return parent.componentNameNew;
-        } else {
-            return '';
-        }
-
-    }
-
     // Render generic design component
     render() {
 

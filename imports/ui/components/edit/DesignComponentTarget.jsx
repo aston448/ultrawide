@@ -48,11 +48,15 @@ export class DesignComponentTarget extends Component{
 
     getParentName(currentItem){
 
-        if(currentItem.componentParentReferenceIdNew !== 'NONE') {
-            const feature = ClientDesignComponentServices.getCurrentItemParent(currentItem);
-            return feature.componentNameNew;
+        if(currentItem && currentItem.componentParentReferenceIdNew !== 'NONE') {
+            const parent = ClientDesignComponentServices.getCurrentItemParent(currentItem);
+            if(parent){
+                return parent.componentNameNew;
+            } else {
+                return 'NONE';
+            }
         } else {
-            return '';
+            return 'NONE';
         }
 
     }

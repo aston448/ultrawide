@@ -934,7 +934,7 @@ input {
     margin: 0;
     height: 38px;
     animation-name: progress;
-    animation-duration: 5s;
+    animation-duration: 15s;
 }
 
 @keyframes progress {
@@ -956,6 +956,15 @@ input {
     border: 2px solid indianred;
     border-radius: 4px;
     background-color: pink;
+}
+
+.wait-animation-message{
+    margin: 0px;
+    padding: 5px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    font-weight: normal;
+    color: black;
 }
 
 .wait-message-main{

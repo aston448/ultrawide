@@ -42,11 +42,11 @@ class Wait extends Component {
             <div>
                 <div className="wait-message">
                     <div className="wait-message-main">
-                        {userMessage.messageText}
+                        {userMessage.messageText }
                     </div>
                 </div>
                 <div className="wait-bar">
-                    <div className="wait-animation"></div>
+                    <div className="wait-animation-message">Please wait...</div>
                 </div>
             </div>
         );

@@ -18,7 +18,7 @@ import DesignUpdateComponentData        from '../data/design_update/design_updat
 
 // REDUX services
 import store from '../redux/store'
-import {updateUserMessage,  updateTestDataFlag } from '../redux/actions'
+import {updateUserMessage, updateTestDataFlag, setCurrentView} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for Design Items
@@ -127,6 +127,10 @@ class ClientTestIntegrationServices {
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST DATA...");
 
+        const currentView = store.getState().currentAppView;
+
+        store.dispatch(setCurrentView(ViewType.WAIT));
+
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
             messageText: 'Loading test definitions and results...'
@@ -153,6 +157,8 @@ class ClientTestIntegrationServices {
 
                 // Get latest status on DUs
                 ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+
+                store.dispatch(setCurrentView(currentView));
             }
         });
 
