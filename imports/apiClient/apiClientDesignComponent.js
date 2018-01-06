@@ -636,6 +636,8 @@ class ClientDesignComponentServices{
 
     gotoFeature(featureReferenceId){
 
+        store.dispatch(setCurrentView(ViewType.WAIT));
+
         const userContext = store.getState().currentUserItemContext;
         const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
         const feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, featureReferenceId);
@@ -658,10 +660,10 @@ class ClientDesignComponentServices{
         store.dispatch(setCurrentUserItemContext(newContext, true));
 
         // And switch to the design version view
+        let newView = ViewType.DESIGN_PUBLISHED;
+
         if(dv.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE || dv.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
-            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATABLE));
-        } else {
-            store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED));
+            newView = ViewType.DESIGN_UPDATABLE;
         }
 
         // Open it and its parents
@@ -700,6 +702,8 @@ class ClientDesignComponentServices{
 
         // And move on up
         this.openParent(feature._id, newList);
+
+        store.dispatch(setCurrentView(newView));
 
     }
 
