@@ -28,7 +28,8 @@ class TestOutputLocationData{
                     locationIsShared:       location.locationIsShared,
                     locationUserId:         userId,
                     locationPath:           location.locationPath,
-                    locationFullPath:       location.locationFullPath
+                    locationFullPath:       location.locationFullPath,
+                    isGuestViewerLocation:  location.isGuestViewerLocation
                 }
             );
         }
@@ -61,6 +62,11 @@ class TestOutputLocationData{
     getAllLocations(){
 
         return TestOutputLocations.find({}).fetch();
+    }
+
+    getGuestViewerLocations(){
+
+        return TestOutputLocations.find({isGuestViewerLocation: true}).fetch();
     }
 
     getOtherLocations(locationId){
@@ -101,7 +107,8 @@ class TestOutputLocationData{
                     locationIsShared:       location.locationIsShared,
                     locationUserId:         location.locationUserId,
                     locationPath:           location.locationPath,
-                    locationFullPath:       location.locationFullPath
+                    locationFullPath:       location.locationFullPath,
+                    isGuestViewerLocation:  location.isGuestViewerLocation
                 }
             }
         );
@@ -112,6 +119,11 @@ class TestOutputLocationData{
     removeOutputLocation(locationId){
 
         return TestOutputLocations.remove({_id: locationId});
+    }
+
+    removeAllLocations(){
+
+        return TestOutputLocations.remove({});
     }
 }
 

@@ -276,6 +276,8 @@ class ImpExServices{
 
                     backupDataVersion = backupData.metadata.backupDataVersion;
 
+                    log((msg) => console.log(msg), LogLevel.INFO, "Restoring from backup with backup data version {} and current data version {}", backupDataVersion, currentDataVersion);
+
                     // Data to MERGE ---------------------------------------------------------------------------------------
 
                     // Merge user data.  Make sure all the users associated with this design exist and create a map of any new users created

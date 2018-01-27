@@ -9,6 +9,7 @@ let Schema = new SimpleSchema({
     locationUserId:         {type: String, defaultValue: 'NONE'},                           // Set for non-shared locations
     locationPath:           {type: String, defaultValue: 'NONE'},                           // Path where files will be found under the application base data path
     locationFullPath:       {type: String, defaultValue: 'NONE'},                           // Full path on application server
+    isGuestViewerLocation:  {type: Boolean, defaultValue: false}                            // The location where guest viewers will get their test data
 });
 
 TestOutputLocations.attachSchema(Schema);

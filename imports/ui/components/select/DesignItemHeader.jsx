@@ -319,6 +319,9 @@ export class DesignItemHeader extends Component{
         let titleClass = 'design-item-header';
 
         switch(userRole){
+            case RoleType.GUEST_VIEWER:
+                return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
+
             case RoleType.DEVELOPER:
 
                 // Developers are aware of new stuff but can't access it yet.  They cannot edit names of things.

@@ -284,6 +284,7 @@ export class DesignVersion extends Component {
 
                 switch(userRole){
                     case RoleType.DESIGNER:
+
                         // Designers can view it, withdraw it if not adopted or create the next version from updates...
                         buttons =
                             <ButtonGroup className="button-group-left">
@@ -293,9 +294,10 @@ export class DesignVersion extends Component {
                                 {createNextButton}
                             </ButtonGroup>;
                         break;
-                    case  RoleType.DEVELOPER:
-                        //TODO - Change all this
-                        // Developers can view or adopt a draft design
+                    case RoleType.DEVELOPER:
+                    case RoleType.MANAGER:
+                    case RoleType.GUEST_VIEWER:
+
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
@@ -303,15 +305,7 @@ export class DesignVersion extends Component {
                                 </ButtonGroup>
                             </div>;
                             break;
-                    case  RoleType.MANAGER:
-                        // Managers can view a draft design
-                        buttons =
-                            <div>
-                                <ButtonGroup className="button-group-left">
-                                    {viewButton}
-                                </ButtonGroup>
-                            </div>;
-                        break;
+
                 }
                 break;
 
@@ -331,19 +325,17 @@ export class DesignVersion extends Component {
                                 </ButtonGroup>
                             </div>;
                         break;
+
                     case RoleType.DEVELOPER:
+                    case RoleType.MANAGER:
+                    case RoleType.GUEST_VIEWER:
+
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
                                     {viewButton}
                                 </ButtonGroup>
                             </div>;
-                        break;
-                    case RoleType.MANAGER:
-                        buttons =
-                            <ButtonGroup className="button-group-left">
-                                {viewButton}
-                            </ButtonGroup>;
                         break;
                 }
                 break;

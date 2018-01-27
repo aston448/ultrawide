@@ -15,7 +15,8 @@ import TestOutputLocationData           from '../../data/configure/test_output_l
 import TestOutputLocationFileData       from '../../data/configure/test_output_location_file_db.js';
 import UserDvMashScenarioData           from '../../data/mash/user_dv_mash_scenario_db.js'
 import UserMashScenarioTestData         from '../../data/mash/user_mash_scenario_test_db.js';
-;
+import UserRoleData                     from '../../data/users/user_role_db.js';
+
 //======================================================================================================================
 //
 // Server Modules for Test Integration Services.
@@ -33,7 +34,17 @@ class TestIntegrationModules{
         // Get a list of the expected test files for integration
 
         // See which locations the user has marked as containing acceptance test files for the current role
-        const userLocations = UserTestTypeLocationData.getUserAcceptanceTestsLocations(userContext.userId);
+        const user = UserRoleData.getRoleByUserId(userContext.userId);
+
+        let userLocations = [];
+
+        if(user.isGuestViewer){
+            // Use defaults
+            userLocations = TestOutputLocationData.getGuestViewerLocations();
+
+        } else {
+            userLocations = UserTestTypeLocationData.getUserAcceptanceTestsLocations(userContext.userId);
+        }
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user acceptance test locations", userLocations.length);
 
@@ -41,8 +52,14 @@ class TestIntegrationModules{
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {}", userLocation.locationName);
 
-            // Get the actual location data
-            const outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
+            let outputLocation = null;
+
+            if(user.isGuestViewer){
+                outputLocation = userLocation;
+            } else {
+                // Get the actual location data
+                outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
+            }
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
 
@@ -77,7 +94,17 @@ class TestIntegrationModules{
         // Get a list of the expected test files for integration
 
         // See which locations the user has marked as containing integration test files for the current role
-        const userLocations = UserTestTypeLocationData.getUserIntegrationTestsLocations(userContext.userId);
+        const user = UserRoleData.getRoleByUserId(userContext.userId);
+
+        let userLocations = [];
+
+        if(user.isGuestViewer){
+            // Use defaults
+            userLocations = TestOutputLocationData.getGuestViewerLocations();
+
+        } else {
+            userLocations = UserTestTypeLocationData.getUserIntegrationTestsLocations(userContext.userId);
+        }
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test locations", userLocations.length);
 
@@ -85,8 +112,14 @@ class TestIntegrationModules{
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {}", userLocation.locationName);
 
-            // Get the actual location data
-            const outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
+            let outputLocation = null;
+
+            if(user.isGuestViewer){
+                outputLocation = userLocation;
+            } else {
+                // Get the actual location data
+                outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
+            }
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
 
@@ -120,12 +153,28 @@ class TestIntegrationModules{
         log((msg) => console.log(msg), LogLevel.PERF, "    Getting Unit test results...");
 
         // See which locations the user has marked as containing unit test files for the current role
-        const userLocations = UserTestTypeLocationData.getUserUnitTestsLocations(userContext.userId);
+        const user = UserRoleData.getRoleByUserId(userContext.userId);
+
+        let userLocations = [];
+
+        if(user.isGuestViewer){
+            // Use defaults
+            userLocations = TestOutputLocationData.getGuestViewerLocations();
+
+        } else {
+            userLocations = UserTestTypeLocationData.getUserUnitTestsLocations(userContext.userId);
+        }
 
         userLocations.forEach((userLocation) => {
 
-            // Get the actual location data
-            const outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
+            let outputLocation = null;
+
+            if(user.isGuestViewer){
+                outputLocation = userLocation;
+            } else {
+                // Get the actual location data
+                outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
+            }
 
             // Grab any files here marked as integration test outputs
             const testOutputFiles = TestOutputLocationFileData.getUnitTestFilesForLocation(outputLocation._id);

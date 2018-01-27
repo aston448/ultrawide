@@ -112,6 +112,9 @@ export class UltrawideMenuDropdownItem extends Component {
             case RoleType.MANAGER:
                 highlight = 'menu-highlight-manager';
                 break;
+            case RoleType.GUEST_VIEWER:
+                highlight = 'menu-highlight-viewer';
+                break;
         }
 
         const className = this.state.isHighlighted ? 'dropdown-item-name ' + highlight : 'dropdown-item-name';

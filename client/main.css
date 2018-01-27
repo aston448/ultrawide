@@ -306,6 +306,10 @@ input {
     color: paleturquoise;
 }
 
+.status-viewer{
+    color: white;
+}
+
 .header-message{
     float: left;
     margin: 3px 10px 3px 10px;
@@ -473,6 +477,10 @@ input {
     background-color: steelblue;
 }
 
+.menu-viewer{
+    background-color: darkgrey;
+}
+
 .dropdown-menu-item{
     color: lightgrey;
     padding: 0 5px 0 5px;
@@ -494,6 +502,10 @@ input {
 
 .menu-highlight-manager{
     color: paleturquoise;
+}
+
+.menu-highlight-viewer{
+    color: white;
 }
 
 .editor-menu-highlight{
@@ -540,6 +552,11 @@ input {
 .manager{
     color: white;
     background-color: steelblue;
+}
+
+.viewer{
+    color: white;
+    background-color: darkgray;
 }
 
 .no-role{

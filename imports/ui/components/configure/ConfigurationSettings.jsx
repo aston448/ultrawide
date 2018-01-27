@@ -26,6 +26,7 @@ import {FormGroup, Radio, Checkbox, Grid, Row, Col, Tabs, Tab} from 'react-boots
 
 // REDUX services
 import {connect} from 'react-redux';
+import {RoleType} from "../../../constants/constants";
 
 // =====================================================================================================================
 
@@ -204,7 +205,7 @@ export class ConfigurationSettings extends Component {
 
     render() {
 
-        const {userContext, currentWindowSize} = this.props;
+        const {userContext, currentWindowSize, userRole} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -293,58 +294,98 @@ export class ConfigurationSettings extends Component {
                 </form>
             </Well>;
 
-        const settingsGrid = (
-            <Grid className="close-grid">
-                <Row className={scrollClass}>
-                    <Col md={12}  className="close-col">
-                        <Row>
-                            <Col md={12}>
-                                <div className="user-settings-header1">Local User Settings</div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={6} className="close-col">
-                                <Grid>
-                                    <Row>
-                                        <Col md={12}>
-                                            {screenSizeSettings}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col md={12}>
-                                            {narrativeSetting}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col md={12}>
-                                            {intTestOutputPath}
-                                        </Col>
-                                    </Row>
+        let settingsGrid = '';
 
-                                </Grid>
-                            </Col>
-                            <Col md={6} className="close-col">
-                                {changeUserPassword}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={12}>
-                                <div className="user-settings-header1">Design Settings</div>
-                            </Col>
-                            <Col md={6}>
-                                <Grid>
-                                    <Row>
-                                        <Col md={12}>
-                                            {defaultFeatureAspects}
-                                        </Col>
-                                    </Row>
-                                </Grid>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-            </Grid>
-        );
+        if(userRole === RoleType.GUEST_VIEWER){
+
+            settingsGrid =
+                <Grid className="close-grid">
+                    <Row className={scrollClass}>
+                        <Col md={12}  className="close-col">
+                            <Row>
+                                <Col md={12}>
+                                    <div className="user-settings-header1">Local User Settings</div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={6} className="close-col">
+                                    <Grid>
+                                        <Row>
+                                            <Col md={12}>
+                                                {screenSizeSettings}
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={12}>
+                                                {narrativeSetting}
+                                            </Col>
+                                        </Row>
+                                    </Grid>
+                                </Col>
+                                <Col md={6} className="close-col">
+                                    {changeUserPassword}
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Grid>
+
+        } else {
+
+            settingsGrid =
+                <Grid className="close-grid">
+                    <Row className={scrollClass}>
+                        <Col md={12}  className="close-col">
+                            <Row>
+                                <Col md={12}>
+                                    <div className="user-settings-header1">Local User Settings</div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={6} className="close-col">
+                                    <Grid>
+                                        <Row>
+                                            <Col md={12}>
+                                                {screenSizeSettings}
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={12}>
+                                                {narrativeSetting}
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={12}>
+                                                {intTestOutputPath}
+                                            </Col>
+                                        </Row>
+
+                                    </Grid>
+                                </Col>
+                                <Col md={6} className="close-col">
+                                    {changeUserPassword}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={12}>
+                                    <div className="user-settings-header1">Design Settings</div>
+                                </Col>
+                                <Col md={6}>
+                                    <Grid>
+                                        <Row>
+                                            <Col md={12}>
+                                                {defaultFeatureAspects}
+                                            </Col>
+                                        </Row>
+                                    </Grid>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Grid>
+        }
+
+
 
         const exportOptions =
             <Well className="settings-well">
@@ -417,16 +458,27 @@ export class ConfigurationSettings extends Component {
 
         // Layout ------------------------------------------------------------------------------------------------------
 
+        if(userRole === RoleType.GUEST_VIEWER){
 
-        return (
-            <Tabs className="top-tabs" defaultActiveKey={1} id="config-view_tabs">
-                <Tab eventKey={1} title="TEST LOCATION MANAGEMENT"><div id="configTabLocations">{testLocationManagement}</div></Tab>
-                <Tab eventKey={2} title="MY TEST LOCATIONS"><div id="configTabTestSettings">{userTestLocationsManagement}</div></Tab>
-                <Tab eventKey={3} title="ULTRAWIDE SETTINGS"><div id="configTabMySettings">{settingsGrid}</div></Tab>
-                <Tab eventKey={4} title="DOCUMENT EXPORT"><div id="configTabDocExport">{exportGrid}</div></Tab>
-            </Tabs>
+            return (
+                <Tabs className="top-tabs" defaultActiveKey={1} id="config-view_tabs">
+                    <Tab eventKey={1} title="ULTRAWIDE SETTINGS"><div id="configTabMySettings">{settingsGrid}</div></Tab>
+                </Tabs>
 
-        )
+            )
+        } else {
+
+            return (
+                <Tabs className="top-tabs" defaultActiveKey={1} id="config-view_tabs">
+                    <Tab eventKey={1} title="TEST LOCATION MANAGEMENT"><div id="configTabLocations">{testLocationManagement}</div></Tab>
+                    <Tab eventKey={2} title="MY TEST LOCATIONS"><div id="configTabTestSettings">{userTestLocationsManagement}</div></Tab>
+                    <Tab eventKey={3} title="ULTRAWIDE SETTINGS"><div id="configTabMySettings">{settingsGrid}</div></Tab>
+                    <Tab eventKey={4} title="DOCUMENT EXPORT"><div id="configTabDocExport">{exportGrid}</div></Tab>
+                </Tabs>
+
+            )
+        }
+
 
     }
 }
@@ -444,7 +496,8 @@ function mapStateToProps(state) {
         includeSectionDetails:      state.docSectionTextOption,
         includeFeatureDetails:      state.docFeatureTextOption,
         includeNarrativeDetails:    state.docNarrativeTextOption,
-        includeScenarioDetails:     state.docScenarioTextOption
+        includeScenarioDetails:     state.docScenarioTextOption,
+        userRole:                   state.currentUserRole
     }
 }
 

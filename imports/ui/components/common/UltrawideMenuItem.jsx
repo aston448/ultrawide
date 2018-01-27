@@ -67,6 +67,9 @@ export class UltrawideMenuItem extends Component {
             case RoleType.MANAGER:
                 highlight = 'menu-highlight-manager';
                 break;
+            case RoleType.GUEST_VIEWER:
+                highlight = 'menu-highlight-viewer';
+                break;
         }
 
         switch(menuType){

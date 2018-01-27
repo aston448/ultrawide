@@ -623,17 +623,32 @@ export class DesignApplicationsList extends Component {
                     case ViewType.DESIGN_NEW:
                     case ViewType.DESIGN_PUBLISHED:
                     case ViewType.DESIGN_UPDATABLE:
-                        col2 =
-                            <Col id="column2" md={col2width} className="close-col">
-                                <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
-                                    <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
-                                    <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
-                                    <Tab eventKey={3} title="ACCEPTANCE TESTS">{accTests}</Tab>
-                                    <Tab eventKey={4} title="INTEGRATION TESTS">{intTests}</Tab>
-                                    <Tab eventKey={5} title="UNIT TESTS">{unitTests}</Tab>
-                                    <Tab eventKey={6} title="FIND SCENARIO">{scenarioFinder}</Tab>
-                                </Tabs>
-                            </Col>;
+                        if(userRole === RoleType.GUEST_VIEWER){
+
+                            col2 =
+                                <Col id="column2" md={col2width} className="close-col">
+                                    <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
+                                        <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
+                                        <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
+                                        <Tab eventKey={3} title="FIND SCENARIO">{scenarioFinder}</Tab>
+                                    </Tabs>
+                                </Col>;
+
+                        } else {
+                            
+                            col2 =
+                                <Col id="column2" md={col2width} className="close-col">
+                                    <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
+                                        <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
+                                        <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
+                                        <Tab eventKey={3} title="ACCEPTANCE TESTS">{accTests}</Tab>
+                                        <Tab eventKey={4} title="INTEGRATION TESTS">{intTests}</Tab>
+                                        <Tab eventKey={5} title="UNIT TESTS">{unitTests}</Tab>
+                                        <Tab eventKey={6} title="FIND SCENARIO">{scenarioFinder}</Tab>
+                                    </Tabs>
+                                </Col>;
+                        }
+
                         break;
                 }
 

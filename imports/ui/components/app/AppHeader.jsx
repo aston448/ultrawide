@@ -152,6 +152,11 @@ export class AppHeader extends Component {
                     developerItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP_ICON} itemName="DEVELOPER" actionFunction={() => this.onChangeRole(userContext, RoleType.DEVELOPER)}/>;
                 }
                 break;
+            case RoleType.GUEST_VIEWER:
+                roleClass = 'viewer';
+                roleStatusClass = 'status-viewer';
+                break;
+
             default:
                 // Admin user
                 roleClass = 'no-role';

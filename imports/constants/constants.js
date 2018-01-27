@@ -9,11 +9,12 @@ export const UltrawideDirectory = {
 };
 
 export const RoleType = {
-    NONE:       'NONE',
-    DESIGNER:   'DESIGNER',
-    DEVELOPER:  'DEVELOPER',
-    MANAGER:    'MANAGER',
-    ADMIN:      'ADMIN'
+    NONE:           'NONE',
+    DESIGNER:       'DESIGNER',
+    DEVELOPER:      'DEVELOPER',
+    MANAGER:        'MANAGER',
+    ADMIN:          'ADMIN',
+    GUEST_VIEWER:   'GUEST_VIEWER'
 };
 
 export const UltrawideAction = {

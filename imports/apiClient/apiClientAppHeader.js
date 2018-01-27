@@ -430,6 +430,7 @@ class ClientAppHeaderServices{
             if(store.getState().currentUserHomeTab === HomePageTab.TAB_NOT_SET) {
                 switch (userRole) {
                     case RoleType.DESIGNER:
+
                         if (userContext.designUpdateId !== 'NONE') {
                             // Designer was working on an update so go to Updates
                             store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_UPDATES));
@@ -442,6 +443,9 @@ class ClientAppHeaderServices{
                                 store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_PROGRESS));
                             }
                         }
+                        break;
+                    case RoleType.GUEST_VIEWER:
+                        store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_DESIGNS));
                         break;
                     case RoleType.DEVELOPER:
                     case RoleType.MANAGER:

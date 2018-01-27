@@ -262,7 +262,7 @@ class ImpexModules{
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring Test Output Location Files...");
 
-        const newTestOutputLocationFileData = this.migrateTestOutputLocationData(testOutputLocationFileData, backupDataVersion, currentDataVersion);
+        const newTestOutputLocationFileData = this.migrateTestOutputLocationFileData(testOutputLocationFileData, backupDataVersion, currentDataVersion);
 
         newTestOutputLocationFileData.forEach((locationFile) => {
 
@@ -738,8 +738,9 @@ class ImpexModules{
             case 1:
                 switch(currentVersion){
                     case 1:
-                        // No changes
-                        newTestOutputLocationData = testOutputLocationData;
+                        // Need to clear down the existing data
+                        TestOutputLocationData.removeAllLocations();
+                        TestOutputLocationFileData.removeAllFiles();
                 }
         }
 

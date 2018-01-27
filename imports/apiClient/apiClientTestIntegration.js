@@ -129,6 +129,8 @@ class ClientTestIntegrationServices {
 
         const currentView = store.getState().currentAppView;
 
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Current view is {}", currentView);
+
         store.dispatch(setCurrentView(ViewType.WAIT));
 
         store.dispatch(updateUserMessage({
@@ -158,6 +160,7 @@ class ClientTestIntegrationServices {
                 // Get latest status on DUs
                 ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
 
+                log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST DATA.  View to {}", currentView);
                 store.dispatch(setCurrentView(currentView));
             }
         });

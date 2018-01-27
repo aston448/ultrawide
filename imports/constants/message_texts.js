@@ -26,7 +26,8 @@ export const UserManagementMessages = {
     MSG_USER_ACTIVATED:             'User made active',
     MSG_USER_DEACTIVATED:           'User made inactive',
     MSG_USER_API_KEY_SAVED:         'API key saved',
-    MSG_AMIN_PASSWORD_CHANGED:      'Admin password changed'
+    MSG_AMIN_PASSWORD_CHANGED:      'Admin password changed',
+    MSG_INVALID_ROLE_FOR_GUEST:     'This role cannot be assigned to a Guest Viewer'
 };
 
 export const DesignMessages = {

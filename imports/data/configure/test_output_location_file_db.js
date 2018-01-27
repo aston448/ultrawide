@@ -139,6 +139,11 @@ class TestOutputLocationFileData{
 
         return TestOutputLocationFiles.remove({locationId: locationId});
     }
+
+    removeAllFiles(){
+
+        return TestOutputLocationFiles.remove({});
+    }
 }
 
 export default new TestOutputLocationFileData();

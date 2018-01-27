@@ -138,27 +138,15 @@ export class Design extends Component {
 
             let itemStyle = (active ? 'design-item di-active' : 'design-item');
 
-            if(userRole === RoleType.DESIGNER) {
-                // Designer has various options
-                if (design.isRemovable) {
-                    buttons =
-                        <ButtonGroup className="button-group-left">
-                            {removeButton}
-                        </ButtonGroup>
-                } else {
+            if(userRole === RoleType.GUEST_VIEWER){
 
-                    buttons =
-                        <ButtonGroup className="button-group-left">
-                            {backupButton}
-                        </ButtonGroup>
+                buttons = '';
 
-                }
             } else {
 
-                if(userRole === RoleType.ADMIN){
-                    // Admin can remove, archive or backup a Design
+                if (userRole === RoleType.DESIGNER) {
+                    // Designer has various options
                     if (design.isRemovable) {
-
                         buttons =
                             <ButtonGroup className="button-group-left">
                                 {removeButton}
@@ -168,18 +156,37 @@ export class Design extends Component {
                         buttons =
                             <ButtonGroup className="button-group-left">
                                 {backupButton}
-                                {archiveButton}
-                                {confirmArchiveModal}
                             </ButtonGroup>
-                    }
 
+                    }
                 } else {
 
-                    // Other users can just work on a Design or back it up
-                    buttons =
-                        <ButtonGroup className="button-group-left">
-                            {backupButton}
-                        </ButtonGroup>
+                    if (userRole === RoleType.ADMIN) {
+                        // Admin can remove, archive or backup a Design
+                        if (design.isRemovable) {
+
+                            buttons =
+                                <ButtonGroup className="button-group-left">
+                                    {removeButton}
+                                </ButtonGroup>
+                        } else {
+
+                            buttons =
+                                <ButtonGroup className="button-group-left">
+                                    {backupButton}
+                                    {archiveButton}
+                                    {confirmArchiveModal}
+                                </ButtonGroup>
+                        }
+
+                    } else {
+
+                        // Other users can just work on a Design or back it up
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                {backupButton}
+                            </ButtonGroup>
+                    }
                 }
             }
 

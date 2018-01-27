@@ -72,6 +72,9 @@ export class DropdownItems extends Component {
             case RoleType.MANAGER:
                 background = 'menu-manager';
                 break;
+            case RoleType.GUEST_VIEWER:
+                background = 'menu-viewer';
+                break;
         }
 
         return (

@@ -173,14 +173,18 @@ class ClientDataServices{
         // TODO - Implement default role
         const user = UserRoleData.getRoleByUserId(userContext.userId);
 
-        if(user.isDesigner){
-            store.dispatch(setCurrentRole(userContext.userId, RoleType.DESIGNER))
-        } else{
-            if(user.isManager){
-                store.dispatch(setCurrentRole(userContext.userId, RoleType.MANAGER))
+        if(user.isGuestViewer){
+            store.dispatch(setCurrentRole(userContext.userId, RoleType.GUEST_VIEWER))
+        } else {
+            if (user.isDesigner) {
+                store.dispatch(setCurrentRole(userContext.userId, RoleType.DESIGNER))
             } else {
-                if(user.isDeveloper){
-                    store.dispatch(setCurrentRole(userContext.userId, RoleType.DEVELOPER))
+                if (user.isManager) {
+                    store.dispatch(setCurrentRole(userContext.userId, RoleType.MANAGER))
+                } else {
+                    if (user.isDeveloper) {
+                        store.dispatch(setCurrentRole(userContext.userId, RoleType.DEVELOPER))
+                    }
                 }
             }
         }
@@ -612,6 +616,10 @@ class ClientDataServices{
             if(user.isManager){
                 userRoles.push(RoleType.MANAGER);
             }
+
+            if(user.isGuestViewer){
+                userRoles.push(RoleType.GUEST_VIEWER);
+            }
         }
 
         return userRoles;
@@ -716,7 +724,7 @@ class ClientDataServices{
             let wpName = '';
 
             if(homePageTab === HomePageTab.TAB_WORK && userContext.workPackageId !== 'NONE'){
-                const wp = WorkPackageData.getWorkPackageById(userContext.workPackageId)
+                const wp = WorkPackageData.getWorkPackageById(userContext.workPackageId);
                 if(wp){
                     wpName = wp.workPackageName
                 }
@@ -2131,16 +2139,25 @@ class ClientDataServices{
 
         switch(view) {
 
-
             case ViewType.SELECT:
 
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
-                        return [
-                            refreshProgressData,
-                            refreshTestData
-                        ];
 
+                        switch(userRole){
+                            case RoleType.GUEST_VIEWER:
+
+                                return [
+                                    refreshTestData
+                                ];
+
+                            default:
+
+                                return [
+                                    refreshProgressData,
+                                    refreshTestData
+                                ];
+                        }
                 }
                 break;
 
@@ -2151,15 +2168,28 @@ class ClientDataServices{
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
 
-                        return [
-                            viewDetails,
-                            viewDomainDict,
-                            viewAccTests,
-                            viewIntTests,
-                            viewUnitTests,
-                            viewTestSummary,
-                            viewAllAsTabs
-                        ];
+                        switch(userRole){
+                            case RoleType.GUEST_VIEWER:
+
+                                return [
+                                    viewDetails,
+                                    viewDomainDict,
+                                    viewTestSummary,
+                                    viewAllAsTabs
+                                ];
+
+                            default:
+
+                                return [
+                                    viewDetails,
+                                    viewDomainDict,
+                                    viewAccTests,
+                                    viewIntTests,
+                                    viewUnitTests,
+                                    viewTestSummary,
+                                    viewAllAsTabs
+                                ];
+                        }
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
 

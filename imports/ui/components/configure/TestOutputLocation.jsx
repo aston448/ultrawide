@@ -33,11 +33,12 @@ export class TestOutputLocation extends Component {
         super(props);
 
         this.state = {
-            editing:                false,
-            nameValue:              this.props.location.locationName,
-            isSharedValue:          this.props.location.locationIsShared,
-            pathValue:              this.props.location.locationPath,
-            showModal:              false
+            editing:                    false,
+            nameValue:                  this.props.location.locationName,
+            isSharedValue:              this.props.location.locationIsShared,
+            pathValue:                  this.props.location.locationPath,
+            isGuestViewerLocationValue: this.props.location.isGuestViewerLocation,
+            showModal:                  false
         };
 
     }
@@ -71,7 +72,8 @@ export class TestOutputLocation extends Component {
             locationIsShared:       this.state.isSharedValue,
             locationUserId:         locationUserId,
             locationPath:           pathValue,
-            locationFullPath:       this.props.dataStore + testOutputDir + pathValue
+            locationFullPath:       this.props.dataStore + testOutputDir + pathValue,
+            isGuestViewerLocation:  this.state.isGuestViewerLocationValue
         };
 
         ClientTestOutputLocationServices.saveLocation(role, location);
@@ -105,6 +107,10 @@ export class TestOutputLocation extends Component {
         this.setState({isSharedValue: e.target.checked})
     }
 
+    onIsDefaultChange(e){
+        this.setState({isGuestViewerLocationValue: e.target.checked})
+    }
+
     onPathChange(e){
         this.setState({pathValue: e.target.value})
     }
@@ -127,6 +133,7 @@ export class TestOutputLocation extends Component {
         const activeClass = (location._id === currentLocationId ? ' location-active' : ' location-inactive');
 
         const sharedText = this.state.isSharedValue ? 'Shared' : 'Not Shared';
+        const defaultText = this.state.isGuestViewerLocationValue ? 'Default' : '';
 
         const modalOkButton =
             <Button onClick={() => this.onRemove(userRole, location)}>OK</Button>;
@@ -161,8 +168,11 @@ export class TestOutputLocation extends Component {
                         <Col sm={6}>
                             {location.locationFullPath}
                         </Col>
-                        <Col sm={2}>
+                        <Col sm={1}>
                             {sharedText}
+                        </Col>
+                        <Col sm={1}>
+                            {defaultText}
                         </Col>
                     </Row>
                 </Grid>
@@ -182,13 +192,24 @@ export class TestOutputLocation extends Component {
 
         const formInstance = (
             <Form horizontal>
-                <FormGroup controlId="formLocationName">
+                <FormGroup controlId="formLocationShared">
                     <Col componentClass={ControlLabel} sm={2}>
                         Location Is Shared
                     </Col>
                     <Col sm={10}>
                         <Checkbox checked={this.state.isSharedValue}
                                   onChange={(e) => this.onIsSharedChange(e)}>
+                        </Checkbox>
+                    </Col>
+                </FormGroup>
+
+                <FormGroup controlId="formLocationDefault">
+                    <Col componentClass={ControlLabel} sm={2}>
+                        Default View Location
+                    </Col>
+                    <Col sm={10}>
+                        <Checkbox checked={this.state.isGuestViewerLocationValue}
+                                  onChange={(e) => this.onIsDefaultChange(e)}>
                         </Checkbox>
                     </Col>
                 </FormGroup>

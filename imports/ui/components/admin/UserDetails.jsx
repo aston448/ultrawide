@@ -17,6 +17,10 @@ import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-
 
 // REDUX services
 import {connect} from 'react-redux';
+import {updateUserMessage} from '../../../redux/actions'
+import store from "../../../redux/store";
+import {DesignComponentMessages, UserManagementMessages} from "../../../constants/message_texts";
+import {MessageType} from "../../../constants/constants";
 
 // =====================================================================================================================
 
@@ -37,6 +41,7 @@ export class UserDetails extends Component {
             isDesignerValue:        this.props.user.isDesigner,
             isDeveloperValue:       this.props.user.isDeveloper,
             isManagerValue:         this.props.user.isManager,
+            isGuestViewerValue:     this.props.user.isGuestViewer,
             isActiveValue:          this.props.user.isActive
         };
 
@@ -56,6 +61,7 @@ export class UserDetails extends Component {
             isDesigner:     this.state.isDesignerValue,
             isDeveloper:    this.state.isDeveloperValue,
             isManager:      this.state.isManagerValue,
+            isGuestViewer:  this.state.isGuestViewerValue,
             isActive:       this.props.user.isActive,
             isAdmin:        false
         };
@@ -109,15 +115,50 @@ export class UserDetails extends Component {
     }
 
     onIsDesignerChange(e){
-        this.setState({isDesignerValue: e.target.checked})
+        if(this.state.isGuestViewerValue && e.target.checked){
+            // Can't assign Designer if Guest Viewer
+            store.dispatch(updateUserMessage({
+                messageType: MessageType.ERROR,
+                messageText: UserManagementMessages.MSG_INVALID_ROLE_FOR_GUEST
+            }));
+        } else {
+            this.setState({isDesignerValue: e.target.checked})
+        }
     }
 
     onIsDeveloperChange(e){
-        this.setState({isDeveloperValue: e.target.checked})
+        if(this.state.isGuestViewerValue && e.target.checked){
+            // Can't assign Designer if Guest Viewer
+            store.dispatch(updateUserMessage({
+                messageType: MessageType.ERROR,
+                messageText: UserManagementMessages.MSG_INVALID_ROLE_FOR_GUEST
+            }));
+        } else {
+            this.setState({isDeveloperValue: e.target.checked})
+        }
     }
 
     onIsManagerChange(e){
-        this.setState({isManagerValue: e.target.checked})
+        if(this.state.isGuestViewerValue && e.target.checked){
+            // Can't assign Designer if Guest Viewer
+            store.dispatch(updateUserMessage({
+                messageType: MessageType.ERROR,
+                messageText: UserManagementMessages.MSG_INVALID_ROLE_FOR_GUEST
+            }));
+        } else {
+            this.setState({isManagerValue: e.target.checked})
+        }
+    }
+
+    onIsGuestViewerChange(e){
+        this.setState({isGuestViewerValue: e.target.checked});
+
+        // If setting as Guest Viewer all other roles are revoked
+        if(e.target.checked){
+            this.setState({isDesignerValue: false});
+            this.setState({isDeveloperValue: false});
+            this.setState({isManagerValue: false});
+        }
     }
 
     onIsActiveChange(e){
@@ -137,25 +178,30 @@ export class UserDetails extends Component {
                 <div onClick={() => this.setCurrentUser(user)}>
                     <Grid>
                         <Row className={activeClass}>
-                            <Col sm={3}>
+                            <Col sm={2}>
                                 {user.displayName}
                             </Col>
                             <Col sm={2}>
                                 {user.userName}
                             </Col>
                             <Col sm={2}>
-                                <Checkbox readOnly checked={this.state.isDesignerValue}>
+                                <Checkbox readOnly={true} checked={this.state.isDesignerValue}>
                                     Designer
                                 </Checkbox>
                             </Col>
                             <Col sm={2}>
-                                <Checkbox readOnly checked={this.state.isDeveloperValue}>
+                                <Checkbox readOnly={true} checked={this.state.isDeveloperValue}>
                                     Developer
                                 </Checkbox>
                             </Col>
                             <Col sm={2}>
-                                <Checkbox readOnly checked={this.state.isManagerValue}>
+                                <Checkbox readOnly={true} checked={this.state.isManagerValue}>
                                     Manager
+                                </Checkbox>
+                            </Col>
+                            <Col sm={2}>
+                                <Checkbox readOnly={true} checked={this.state.isGuestViewerValue}>
+                                    Guest Viewer
                                 </Checkbox>
                             </Col>
                         </Row>
@@ -171,30 +217,30 @@ export class UserDetails extends Component {
             const formInstance = (
                 <Form horizontal>
                     <FormGroup controlId="formUserName">
-                        <Col componentClass={ControlLabel} sm={2}>
+                        <Col componentClass={ControlLabel} sm={3}>
                             User Name (Login)
                         </Col>
-                        <Col sm={10}>
+                        <Col sm={9}>
                             <FormControl type="text" placeholder={user.userName} value={this.state.userNameValue}
                                          onChange={(e) => this.onUserNameChange(e)}/>
                         </Col>
                     </FormGroup>
 
                     <FormGroup controlId="formDisplayName">
-                        <Col componentClass={ControlLabel} sm={2}>
+                        <Col componentClass={ControlLabel} sm={3}>
                             Display Name
                         </Col>
-                        <Col sm={10}>
+                        <Col sm={9}>
                             <FormControl type="text" placeholder={user.displayName} value={this.state.displayNameValue}
                                          onChange={(e) => this.onDisplayNameChange(e)}/>
                         </Col>
                     </FormGroup>
 
                     <FormGroup controlId="formIsDesigner">
-                        <Col componentClass={ControlLabel} sm={2}>
+                        <Col componentClass={ControlLabel} sm={3}>
                             User is Designer
                         </Col>
-                        <Col sm={10}>
+                        <Col sm={9}>
                             <Checkbox checked={this.state.isDesignerValue}
                                       onChange={(e) => this.onIsDesignerChange(e)}>
                             </Checkbox>
@@ -202,10 +248,10 @@ export class UserDetails extends Component {
                     </FormGroup>
 
                     <FormGroup controlId="formIsDeveloper">
-                        <Col componentClass={ControlLabel} sm={2}>
+                        <Col componentClass={ControlLabel} sm={3}>
                             User is Developer
                         </Col>
-                        <Col sm={10}>
+                        <Col sm={9}>
                             <Checkbox checked={this.state.isDeveloperValue}
                                       onChange={(e) => this.onIsDeveloperChange(e)}>
                             </Checkbox>
@@ -213,12 +259,23 @@ export class UserDetails extends Component {
                     </FormGroup>
 
                     <FormGroup controlId="formIsManager">
-                        <Col componentClass={ControlLabel} sm={2}>
+                        <Col componentClass={ControlLabel} sm={3}>
                             User is Manager
                         </Col>
-                        <Col sm={10}>
+                        <Col sm={9}>
                             <Checkbox checked={this.state.isManagerValue}
                                       onChange={(e) => this.onIsManagerChange(e)}>
+                            </Checkbox>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup controlId="formIsGuestUser">
+                        <Col componentClass={ControlLabel} sm={3}>
+                            User is Guest Viewer Only
+                        </Col>
+                        <Col sm={9}>
+                            <Checkbox checked={this.state.isGuestViewerValue}
+                                      onChange={(e) => this.onIsGuestViewerChange(e)}>
                             </Checkbox>
                         </Col>
                     </FormGroup>

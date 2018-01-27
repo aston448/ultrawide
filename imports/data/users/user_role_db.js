@@ -14,6 +14,7 @@ class UserRoleData{
             isDesigner: user.isDesigner,
             isDeveloper: user.isDeveloper,
             isManager: user.isManager,
+            isGuestViewer: user.isGuestViewer,
             isAdmin: false,
             isActive: user.isActive
         });
@@ -28,6 +29,7 @@ class UserRoleData{
             isDesigner:     false,
             isDeveloper:    false,
             isManager:      false,
+            isGuestViewer:  false,
             isAdmin:        true
         });
     }
@@ -74,6 +76,7 @@ class UserRoleData{
                     isDesigner:     newUser.isDesigner,
                     isDeveloper:    newUser.isDeveloper,
                     isManager:      newUser.isManager,
+                    isGuestViewer:  newUser.isGuestViewer
                 }
             }
         );
