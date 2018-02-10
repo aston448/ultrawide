@@ -58,7 +58,7 @@ describe('JSX: DesignVersionsList', () => {
                 <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
             );
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
 
         });
 
@@ -77,7 +77,7 @@ describe('JSX: DesignVersionsList', () => {
                 <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
             );
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
 
         });
 

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
+import DesignComponentAdd from '../common/DesignComponentAdd.jsx';
 
 // Ultrawide Services
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
@@ -24,7 +24,7 @@ import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettin
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class ItemContainer extends Component {
+export default class ItemList extends Component {
     constructor(props) {
         super(props);
 
@@ -84,7 +84,7 @@ export default class ItemContainer extends Component {
     }
 }
 
-ItemContainer.propTypes = {
+ItemList.propTypes = {
     headerText: PropTypes.string,
     bodyDataFunction: PropTypes.func,
     hasFooterAction: PropTypes.bool.isRequired,

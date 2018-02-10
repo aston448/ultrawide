@@ -64,7 +64,7 @@ export class DesignUpdateSummaryList extends Component {
 
     render() {
 
-        const {addOrgHeaders, addFncHeaders, removeHeaders, changeHeaders, moveHeaders, queryHeaders, userContext} = this.props;
+        const {addOrgHeaders, addFncHeaders, removeHeaders, changeHeaders, moveHeaders, queryHeaders, displayContext, userContext} = this.props;
 
         // Get correct window height
         const editorClass = this.getEditorClass();
@@ -142,7 +142,7 @@ export class DesignUpdateSummaryList extends Component {
             return (
                 <div id="updateSummary" className="design-editor-container">
                     <DesignEditorHeader
-                        displayContext={DisplayContext.UPDATE_SUMMARY}
+                        displayContext={displayContext}
                     />
                     <div className={editorClass}>
                         {orgAdditions}
@@ -153,7 +153,7 @@ export class DesignUpdateSummaryList extends Component {
                         {removals}
                     </div>
                     <DesignEditorFooter
-                        displayContext={DisplayContext.UPDATE_SUMMARY}
+                        displayContext={displayContext}
                         hasDesignSummary={false}
                     />
                 </div>
@@ -164,13 +164,13 @@ export class DesignUpdateSummaryList extends Component {
             return(
                 <div id="noSummary" className="design-editor-container">
                     <DesignEditorHeader
-                        displayContext={DisplayContext.UPDATE_SUMMARY}
+                        displayContext={displayContext}
                     />
                     <div className={editorClass}>
                         <div className="design-item-note">No update selected</div>
                     </div>
                     <DesignEditorFooter
-                        displayContext={DisplayContext.UPDATE_SUMMARY}
+                        displayContext={displayContext}
                         hasDesignSummary={false}
                     />
                 </div>
@@ -186,7 +186,8 @@ DesignUpdateSummaryList.propTypes = {
     removeHeaders:  PropTypes.array.isRequired,
     changeHeaders:  PropTypes.array.isRequired,
     moveHeaders:    PropTypes.array.isRequired,
-    queryHeaders:   PropTypes.array.isRequired
+    queryHeaders:   PropTypes.array.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

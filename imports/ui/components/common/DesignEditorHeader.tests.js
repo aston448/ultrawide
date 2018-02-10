@@ -4,7 +4,7 @@ import React from 'react';
 import { shallow, mount} from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-import ItemContainer            from '../../components/common/ItemContainer.jsx'
+import ItemContainer            from '../select/ItemList.jsx'
 import { DesignEditorHeader }   from '../../components/common/DesignEditorHeader';          // Non Redux
 import { DesignVersion }        from '../../components/select/DesignVersion.jsx';   // Non Redux
 

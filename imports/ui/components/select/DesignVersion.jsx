@@ -6,7 +6,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import DesignItemHeader             from './DesignItemHeader.jsx';
+import ItemName                     from './ItemName.jsx';
+import ItemReference                from './ItemReference.jsx';
 import UpdateMergeItem              from './UpdateMergeItem.jsx';
 
 // Ultrawide Services
@@ -14,7 +15,7 @@ import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVers
 
 import {RoleType, DesignVersionStatus, ItemType, DesignUpdateMergeAction, ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
 import { replaceAll, log } from '../../../common/utils.js';
-import TextLookups from '../../../common/lookups.js';
+
 
 // Bootstrap
 import {Button, ButtonGroup, Modal} from 'react-bootstrap';
@@ -90,17 +91,7 @@ export class DesignVersion extends Component {
     }
 
 
-    setNewDesignVersionActive(userRole, userContext, dv){
 
-        // Changing the design version updates the user context
-        ClientDesignVersionServices.setDesignVersion(
-            userContext,
-            userRole,
-            dv._id,
-            false
-        );
-
-    }
 
     getUpdates(designVersionId, updateMergeStatus){
 
@@ -134,41 +125,21 @@ export class DesignVersion extends Component {
 
     render() {
 
-        const {designVersion, userRole, userContext} = this.props;
+        const {designVersion, statusClass, userRole, userContext} = this.props;
 
         const uiDesignVersionId = replaceAll(designVersion.designVersionName, ' ', '_');
 
-        // Active if this design version is the current context design version
-        let active = designVersion._id === userContext.designVersionId;
-
-        let itemStyle = (active ? 'design-item di-active' : 'design-item');
-
         // Items -------------------------------------------------------------------------------------------------------
-        let statusClass = 'design-item-status';
 
-        switch(designVersion.designVersionStatus){
-            case DesignVersionStatus.VERSION_NEW:
-                statusClass = 'design-item-status item-status-new';
-                break;
-            case DesignVersionStatus.VERSION_DRAFT:
-                statusClass = 'design-item-status item-status-draft';
-                break;
-            case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
-            case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
-                statusClass = 'design-item-status item-status-complete';
-                break;
-            case DesignVersionStatus.VERSION_UPDATABLE:
-                statusClass = 'design-item-status item-status-updatable';
-                break;
-        }
 
-        const summary =
-            <div id="designVersionSummary" className={statusClass}>
-                {designVersion.designVersionNumber + ' - ' + designVersion.designVersionName}
-            </div>;
-
-        const status =
-            <div id="designVersionStatus" className={statusClass}>{TextLookups.designVersionStatus(designVersion.designVersionStatus)}</div>;
+        const name =
+            <ItemName
+                currentItemStatus={designVersion.designVersionStatus}
+                currentItemType={ItemType.DESIGN_VERSION}
+                currentItemId={designVersion._id}
+                currentItemName={designVersion.designVersionName}
+                statusClass={statusClass}
+            />;
 
         let buttons = '';
 
@@ -193,13 +164,13 @@ export class DesignVersion extends Component {
         const modalCancelButton =
             <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
 
-        const header =
-            <DesignItemHeader
+        const body =
+            <ItemReference
                 currentItemType={ItemType.DESIGN_VERSION}
                 currentItemId={designVersion._id}
-                currentItemName={designVersion.designVersionName}
-                currentItemRef={designVersion.designVersionNumber}
                 currentItemStatus={designVersion.designVersionStatus}
+                currentItemRef={designVersion.designVersionNumber}
+                itemStatusClass={statusClass}
             />;
 
 
@@ -353,29 +324,24 @@ export class DesignVersion extends Component {
 
         }
 
-        if(active) {
-            return (
-                <div id={uiDesignVersionId} className={itemStyle}
-                     onClick={() => this.setNewDesignVersionActive(userRole, userContext, designVersion)}>
-                    {status}
-                    {header}
+
+        return (
+            <div id={uiDesignVersionId}>
+                {name}
+                {body}
+                <div className={statusClass}>
                     {buttons}
-                    {confirmNextModal}
                 </div>
-            );
-        } else {
-            return (
-                <div id={uiDesignVersionId} className={itemStyle}
-                     onClick={() => this.setNewDesignVersionActive(userRole, userContext, designVersion)}>
-                    {summary}
-                </div>
-            );
-        }
+                {confirmNextModal}
+            </div>
+        );
+
     }
 }
 
 DesignVersion.propTypes = {
-    designVersion: PropTypes.object.isRequired
+    designVersion: PropTypes.object.isRequired,
+    statusClass: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

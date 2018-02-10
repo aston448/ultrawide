@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignItemHeader         from './DesignItemHeader.jsx';
+import ItemName         from './ItemName.jsx';
 
 // Ultrawide Services
-import { ItemType, RoleType, DesignStatus } from '../../../constants/constants.js';
+import { ItemType, RoleType } from '../../../constants/constants.js';
 import {replaceAll} from "../../../common/utils";
 
 import ClientDesignServices     from '../../../apiClient/apiClientDesign.js';
@@ -39,13 +39,6 @@ export class Design extends Component {
         };
     }
 
-    onSelectDesign(userContext, newDesignId){
-        ClientDesignServices.setDesign(userContext, newDesignId);
-    };
-
-    // onWorkDesign(userContext, userRole, newDesignId){
-    //     ClientDesignServices.workDesign(userContext, userRole, newDesignId);
-    // }
 
     onRemoveDesign(userContext, userRole, designId){
         ClientDesignServices.removeDesign(userContext, userRole, designId);
@@ -68,18 +61,16 @@ export class Design extends Component {
     }
 
     render() {
-        const {design, userContext, userRole} = this.props;
+        const {design, statusClass, userContext, userRole} = this.props;
 
         const uiDesignId = replaceAll(design.designName, ' ', '_');
 
-        // Active if this design is the current context design
-        let active = design._id === userContext.designId;
 
         // Items -------------------------------------------------------------------------------------------------------
 
         let buttons = '';
 
-         const removeButton =
+        const removeButton =
             <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
 
         const backupButton =
@@ -94,26 +85,13 @@ export class Design extends Component {
         const modalCancelButton =
             <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
 
-        let statusClass = 'design-item-status item-status-available';
-
-        if(design.isRemovable){
-            statusClass = 'design-item-status item-status-removable';
-        }
-
-        const summary =
-            <div id="designSummary" className={statusClass}>
-                {design.designName}
-            </div>;
-
-        const status =
-            <div id="designStatus" className={statusClass}>{design.designStatus}</div>;
-
-        const header =
-            <DesignItemHeader
+        const name =
+            <ItemName
+                currentItemStatus={design.designStatus}
                 currentItemType={ItemType.DESIGN}
                 currentItemId={design._id}
                 currentItemName={design.designName}
-                currentItemStatus=''
+                statusClass={statusClass}
             />;
 
         const confirmArchiveModal =
@@ -135,8 +113,6 @@ export class Design extends Component {
         // Layout ------------------------------------------------------------------------------------------------------
 
         if(userContext && userRole && userRole !== RoleType.NONE) {
-
-            let itemStyle = (active ? 'design-item di-active' : 'design-item');
 
             if(userRole === RoleType.GUEST_VIEWER){
 
@@ -190,21 +166,16 @@ export class Design extends Component {
                 }
             }
 
-            if(active) {
-                return (
-                    <div id={uiDesignId} className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
-                        {status}
-                        {header}
+
+            return (
+                <div id={uiDesignId}>
+                    {name}
+                    <div className={statusClass}>
                         {buttons}
                     </div>
-                );
-            } else {
-                return (
-                    <div id={uiDesignId} className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
-                        {summary}
-                    </div>
-                );
-            }
+                </div>
+            );
+
         } else {
             return(<div></div>);
         }
@@ -212,7 +183,8 @@ export class Design extends Component {
 }
 
 Design.propTypes = {
-    design: PropTypes.object.isRequired
+    design: PropTypes.object.isRequired,
+    statusClass: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

@@ -8,8 +8,8 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import WorkPackage                  from '../../components/select/WorkPackage.jsx';
-import ItemContainer                from '../../components/common/ItemContainer.jsx';
+import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
+import ItemContainer                from '../../components/select/ItemList.jsx';
 import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
 import FeatureSummaryContainer      from '../../containers/select/FeatureSummaryContainer.jsx';
 
@@ -17,18 +17,20 @@ import FeatureSummaryContainer      from '../../containers/select/FeatureSummary
 import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, HomePageTab, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js';
 
-import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
-import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackage.js';
+import ClientDataServices               from '../../../apiClient/apiClientDataServices.js';
+import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
+import WorkPackageContainerUiModules    from '../../../ui_modules/work_packages_container.js';
 
-import DesignVersionData             from '../../../data/design/design_version_db.js';
+
+import DesignVersionData                from '../../../data/design/design_version_db.js';
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {DisplayContext} from "../../../constants/constants";
-import {AddActionIds} from "../../../constants/ui_context_ids";
+import {DisplayContext, ItemType} from "../../../constants/constants";
+
 
 // =====================================================================================================================
 
@@ -46,44 +48,6 @@ export class WorkPackagesList extends Component {
 
     }
 
-    renderWorkPackagesList(workPackages){
-        if(workPackages.length > 0) {
-            return workPackages.map((workPackage) => {
-                return (
-                    <WorkPackage
-                        key={workPackage._id}
-                        workPackage={workPackage}
-                    />
-                );
-            });
-        }
-    }
-
-    renderNewWorkPackageLists(){
-
-        return [
-            this.renderWorkPackagesList(this.props.newWorkPackages),
-            this.renderWorkPackagesList(this.props.availableWorkPackages)
-        ]
-    }
-
-    renderUpdateWorkPackagesLists(){
-
-        return [
-            this.renderWorkPackagesList(this.props.availableWorkPackages),
-            this.renderWorkPackagesList(this.props.adoptedWorkPackages),
-            this.renderWorkPackagesList(this.props.completedWorkPackages)
-        ]
-    }
-
-    displayNote(noteText){
-        return <div className="design-item-note">{noteText}</div>;
-    }
-
-    displayNothing(){
-        return <div></div>;
-    }
-
     getDesignVersionName(userContext){
 
         const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
@@ -96,12 +60,6 @@ export class WorkPackagesList extends Component {
 
     }
 
-    onAddWorkPackage(userRole, userContext, wpType, openWpItems){
-
-        ClientWorkPackageServices.addNewWorkPackage(userRole, userContext, wpType, openWpItems);
-
-    }
-
     render() {
 
         const {wpType, newWorkPackages, availableWorkPackages, adoptedWorkPackages, completedWorkPackages, designVersionStatus, designUpdateStatus, userRole, userContext, openWpItems} = this.props;
@@ -109,124 +67,46 @@ export class WorkPackagesList extends Component {
 
         // Footer ------------------------------------------------------------------------------------------------------
 
-        let footerActionFunction = null;
-        let hasFooterAction = false;
-        const footerAction = 'Add Work Package to Design Version: ' + this.getDesignVersionName(userContext);
-        const footerActionUiContextId = AddActionIds.UI_CONTEXT_ADD_WORK_PACKAGE;
-        const footerText = 'for Design Version: ' + this.getDesignVersionName(userContext);
+        const footerData = WorkPackageContainerUiModules.getFooterDetails(
+            this.getDesignVersionName(userContext),
+            designVersionStatus,
+            userRole,
+            userContext,
+            wpType,
+            openWpItems
+        );
 
-        // Add WP available to Managers for Base DVs
-        if(userRole === RoleType.MANAGER  && wpType === WorkPackageType.WP_BASE) {
+        const footerActionFunction = footerData.footerActionFunction;
+        const hasFooterAction = footerData.hasFooterAction;
+        const footerAction = footerData.footerAction;
+        const footerActionUiContextId = footerData.footerActionUiContextId;
+        const footerText = footerData.footerText;
 
-            // And for Design Versions only of they are Draft
-            if(designVersionStatus === DesignVersionStatus.VERSION_DRAFT) {
-                hasFooterAction = true;
-
-                footerActionFunction = () => this.onAddWorkPackage(
-                    userRole,
-                    userContext,
-                    wpType,
-                    openWpItems
-                );
-            }
-        }
 
         // Body Content ------------------------------------------------------------------------------------------------
 
-        let bodyDataFunction1 = () => this.displayNothing();
-        let bodyDataFunction2 = () => this.displayNothing();
-        let bodyDataFunction3 = () => this.displayNothing();
+        const bodyData = WorkPackageContainerUiModules.getBodyDetails(
+            userContext,
+            userRole,
+            designVersionStatus,
+            newWorkPackages,
+            availableWorkPackages,
+            adoptedWorkPackages,
+            completedWorkPackages
+        );
 
-        let headerText1 = '';
-        let headerText2 = '';
-        let headerText3 = '';
+        const bodyDataFunction1 = bodyData.bodyDataFunction1;
+        const bodyDataFunction2 = bodyData.bodyDataFunction2;
+        const bodyDataFunction3 = bodyData.bodyDataFunction3;
 
-        let tabText1 = '';
-        let tabText2 = '';
-        let tabText3 = '';
+        const headerText1 = bodyData.headerText1;
+        const headerText2 = bodyData.headerText2;
+        const headerText3 = bodyData.headerText3;
 
-        const wpsNotAppropriate = 'Work Packages may only be added to a Draft design version...';
-        const NO_WORK_PACKAGES = 'No Work Packages';
-        const selectDesignUpdate = 'Select a Design Update';
+        const tabText1 = bodyData.tabText1;
+        const tabText2 = bodyData.tabText2;
+        const tabText3 = bodyData.tabText3;
 
-        // When a design version is selected...
-        if(userContext.designVersionId){
-
-            switch(designVersionStatus){
-
-                case DesignVersionStatus.VERSION_NEW:
-
-                    // No work packages available and none can be added...
-
-                    tabText1 = 'AVAILABLE';
-                    headerText1 = 'Available Work Packages';
-                    if(userRole === RoleType.MANAGER){
-                        bodyDataFunction1 = () => this.displayNote(wpsNotAppropriate);
-                    } else {
-                        bodyDataFunction1 = () => this.displayNote(NO_WORK_PACKAGES);
-                    }
-
-                    tabText2 = 'ADOPTED';
-                    headerText2 = 'Adopted Work Packages';
-                    bodyDataFunction2 = () => this.displayNote(NO_WORK_PACKAGES);
-
-                    tabText3 = 'COMPLETED';
-                    headerText3 = 'Completed Work Packages';
-                    bodyDataFunction3 = () => this.displayNote(NO_WORK_PACKAGES);
-
-                    break;
-
-                case DesignVersionStatus.VERSION_DRAFT:
-                case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
-                case DesignVersionStatus.VERSION_UPDATABLE:
-                case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
-
-                    tabText1 = 'AVAILABLE';
-                    headerText1 = 'Available Work Packages';
-                    if(newWorkPackages.length === 0 && availableWorkPackages.length === 0){
-
-                        bodyDataFunction1 = () => this.displayNote(NO_WORK_PACKAGES);
-
-                    } else {
-
-                        bodyDataFunction1 = () => this.renderNewWorkPackageLists();
-
-                    }
-
-                    tabText2 = 'ADOPTED';
-                    headerText2 = 'Adopted Work Packages';
-                    if(userRole === RoleType.DEVELOPER){
-                        headerText2 = 'My Adopted Work Packages';
-                    }
-                    if(adoptedWorkPackages.length === 0){
-
-                        bodyDataFunction2 = () => this.displayNote(NO_WORK_PACKAGES);
-                    } else {
-
-                        bodyDataFunction2 = () => this.renderWorkPackagesList(adoptedWorkPackages);
-                    }
-
-                    tabText3 = 'COMPLETED';
-                    headerText3 = 'Completed Work Packages';
-                    if(userRole === RoleType.DEVELOPER){
-                        headerText3 = 'My Completed Work Packages';
-                    }
-                    if(completedWorkPackages.length === 0){
-
-                        bodyDataFunction3 = () => this.displayNote(NO_WORK_PACKAGES);
-                    } else {
-
-                        bodyDataFunction3 = () => this.renderWorkPackagesList(completedWorkPackages);
-                    }
-
-                    break;
-
-                default:
-                    log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersionStatus);
-            }
-        } else {
-            bodyDataFunction1 = () => this.displayNote(NO_WORK_PACKAGES);
-        }
 
         let wpSummary = <div></div>;
 

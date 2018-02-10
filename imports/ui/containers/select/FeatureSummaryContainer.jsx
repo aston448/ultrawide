@@ -9,7 +9,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import FeatureSummary       from '../../components/select/FeatureSummary.jsx';
-import ItemContainer        from '../../components/common/ItemContainer.jsx';
+import ItemContainer        from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
 import {RoleType} from '../../../constants/constants.js';

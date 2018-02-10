@@ -32,9 +32,9 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
+            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
+            chai.assert(item.find('ItemList').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemList').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
 
         });
 
@@ -55,9 +55,9 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
+            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
+            chai.assert(item.find('ItemList').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemList').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
 
         });
 
@@ -78,8 +78,8 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemList').props().hasFooterAction, 'Expecting no footer action');
 
         });
 
@@ -96,8 +96,8 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemList').props().hasFooterAction, 'Expecting no footer action');
 
         });
 
@@ -123,7 +123,7 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
 
         });
 
@@ -144,7 +144,7 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
 
         });
 

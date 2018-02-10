@@ -8,11 +8,11 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import Design               from '../../components/select/Design.jsx';
-import ItemContainer        from '../../components/common/ItemContainer.jsx';
+import ItemWrapper          from '../../components/select/ItemWrapper.jsx';
+import ItemList             from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import {RoleType}           from '../../../constants/constants.js';
+import {ItemType, RoleType}           from '../../../constants/constants.js';
 import {AddActionIds}       from "../../../constants/ui_context_ids.js";
 
 import ClientDataServices   from '../../../apiClient/apiClientDataServices.js';
@@ -46,9 +46,10 @@ export class DesignsList extends Component {
     renderDesignList(designs){
         return designs.map((design) => {
             return (
-                <Design
+                <ItemWrapper
                     key={design._id}
-                    design={design}
+                    itemType={ItemType.DESIGN}
+                    item={design}
                 />
             );
         });
@@ -82,7 +83,7 @@ export class DesignsList extends Component {
         }
 
         return(
-            <ItemContainer
+            <ItemList
                 headerText={'Designs'}
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}

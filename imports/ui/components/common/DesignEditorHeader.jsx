@@ -112,6 +112,8 @@ export class DesignEditorHeader extends Component {
 
         const nameData = this.getNameData(userContext, displayContext);
 
+        //console.log('DE Header: View: ' + view + ' Context: ' + displayContext + ' UC DU: ' + userContext.designUpdateId + ' UC WP: ' + userContext.workPackageId);
+
         let description = '';
 
         switch(view){
@@ -129,6 +131,15 @@ export class DesignEditorHeader extends Component {
                                 description += ': ' + nameData.designUpdateRef + ' - ' + nameData.designUpdate
                             }
                         }
+                        break;
+
+                    case DisplayContext.WP_SUMMARY:
+
+                        description = 'WORK PACKAGE SUMMARY';
+                        if(nameData.workPackage !== 'NONE'){
+                            description += ': ' + nameData.workPackage
+                        }
+
                         break;
                     case DisplayContext.PROGRESS_SUMMARY:
                         description = 'DESIGN VERSION PROGRESS';

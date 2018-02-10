@@ -9,7 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import TestOutputLocation                   from '../../components/configure/TestOutputLocation.jsx';
 import TestOutputFilesContainer             from '../../containers/configure/TestOutputFilesContainer.jsx';
-import ItemContainer                        from '../../components/common/ItemContainer.jsx';
+import ItemContainer                        from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';

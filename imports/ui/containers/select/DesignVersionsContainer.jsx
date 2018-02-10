@@ -6,12 +6,10 @@ import PropTypes            from 'prop-types';
 import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import DesignVersion                from '../../components/select/DesignVersion.jsx';
-import DesignUpdatesContainer       from './DesignUpdatesContainer.jsx';
-import ItemContainer                from '../../components/common/ItemContainer.jsx';
+import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
+import ItemContainer                from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus}        from '../../../constants/constants.js';
 import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 
@@ -22,6 +20,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {ItemType} from "../../../constants/constants";
 
 // =====================================================================================================================
 
@@ -43,9 +42,10 @@ export class DesignVersionsList extends Component {
         if (designVersions) {
             return designVersions.map((designVersion) => {
                 return (
-                    <DesignVersion
+                    <ItemWrapper
                         key={designVersion._id}
-                        designVersion={designVersion}
+                        itemType={ItemType.DESIGN_VERSION}
+                        item={designVersion}
                     />
                 );
             });

@@ -1,11 +1,29 @@
-import {DesignVersionStatus, ViewType, UltrawideAction, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus,
-    DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus, MenuAction, TestLocationFileStatus, TestLocationFileType, LogLevel} from '../constants/constants.js';
+import {
+    DesignStatus, DesignVersionStatus, DesignUpdateStatus,
+    WorkPackageStatus, ViewType,
+    UltrawideAction, ComponentType, MashStatus,
+    MashTestStatus, FeatureTestSummaryStatus,
+    DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus,
+    MenuAction,
+    TestLocationFileStatus, TestLocationFileType,
+    LogLevel}
+    from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
 // Could be changed to source from stored data ...
 
 class TextLookups {
+
+    designStatus(status){
+
+        switch(status){
+            case DesignStatus.DESIGN_LIVE:
+                return 'ACTIVE DESIGN';
+            case DesignStatus.DESIGN_ARCHIVED:
+                return 'ARCHIVED DESIGN';
+        }
+    }
 
     designVersionStatus(status){
 
@@ -20,6 +38,34 @@ class TextLookups {
                 return 'INITIAL VERSION COMPLETED';
             case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
                 return 'UPDATABLE VERSION COMPLETED';
+        }
+    }
+
+    designUpdateStatus(status){
+
+        switch(status){
+            case DesignUpdateStatus.UPDATE_NEW:
+                return 'NEW';
+            case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
+                return 'DRAFT';
+            case DesignUpdateStatus.UPDATE_MERGED:
+                return 'MERGED';
+            case DesignUpdateStatus.UPDATE_IGNORED:
+                return 'IGNORED';
+            case DesignUpdateStatus.UPDATE_COMPLETE:
+                return 'COMPLETE';
+        }
+    }
+
+    workPackageStatus(status){
+
+        switch(status){
+            case WorkPackageStatus.WP_NEW:
+                return 'NEW';
+            case WorkPackageStatus.WP_ADOPTED:
+                return 'ADOPTED';
+            case WorkPackageStatus.WP_AVAILABLE:
+                return 'AVAILABLE';
         }
     }
 

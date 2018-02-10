@@ -88,54 +88,7 @@ describe('JSX: DesignUpdate', () => {
         );
     }
 
-    // Update Status ---------------------------------------------------------------------------------------------------
 
-    describe('The state of each Design Update is shown', () => {
-
-        it('state shown for new update', () => {
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
-
-            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
-
-            chai.assert.equal(item.find('#designUpdateStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designUpdateStatus').text(), DesignUpdateStatus.UPDATE_NEW);
-        });
-
-        it('state shown for published update', () => {
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
-
-            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
-
-            chai.assert.equal(item.find('#designUpdateStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designUpdateStatus').text(), DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT);
-        });
-
-        it('state shown for merged update', () => {
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
-
-            let item = testDesignUpdate(designUpdateMerged, userRole, userContext);
-
-            chai.assert.equal(item.find('#designUpdateStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designUpdateStatus').text(), DesignUpdateStatus.UPDATE_MERGED);
-        });
-
-        it('state shown for ignored update', () => {
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateIgnored._id};
-
-            let item = testDesignUpdate(designUpdateIgnored, userRole, userContext);
-
-            chai.assert.equal(item.find('#designUpdateStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designUpdateStatus').text(), DesignUpdateStatus.UPDATE_IGNORED);
-        });
-    });
 
     // Select Update ---------------------------------------------------------------------------------------------------
 

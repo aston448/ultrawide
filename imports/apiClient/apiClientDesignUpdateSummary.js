@@ -10,6 +10,7 @@ import DesignUpdateSummaryServices from '../apiServer/apiDesignUpdateSummary.js'
 // Data Access
 import WorkPackageComponentData         from '../data/work/work_package_component_db.js';
 import UserDesignUpdateSummaryData      from '../data/summary/user_design_update_summary_db.js';
+import {DisplayContext} from "../constants/constants";
 
 // =====================================================================================================================
 
@@ -62,7 +63,8 @@ class ClientDesignUpdateSummary{
                 removeHeaders:  [],
                 changeHeaders:  [],
                 moveHeaders:    [],
-                queryHeaders:   []
+                queryHeaders:   [],
+                displayContext: DisplayContext.UPDATE_SUMMARY
             };
         }
 
@@ -106,7 +108,8 @@ class ClientDesignUpdateSummary{
             removeHeaders:  removeHeaders,
             changeHeaders:  changeHeaders,
             moveHeaders:    moveHeaders,
-            queryHeaders:   queryHeaders
+            queryHeaders:   queryHeaders,
+            displayContext: DisplayContext.UPDATE_SUMMARY
         };
     }
 
@@ -121,7 +124,8 @@ class ClientDesignUpdateSummary{
                 removeHeaders:  [],
                 changeHeaders:  [],
                 moveHeaders:    [],
-                queryHeaders:   []
+                queryHeaders:   [],
+                displayContext: DisplayContext.WP_SUMMARY
             };
         }
 
@@ -247,7 +251,8 @@ class ClientDesignUpdateSummary{
             removeHeaders:  wpRemoveHeaders,
             changeHeaders:  wpChangeHeaders,
             moveHeaders:    [],
-            queryHeaders:   wpQueryHeaders
+            queryHeaders:   wpQueryHeaders,
+            displayContext: DisplayContext.WP_SUMMARY
         };
     }
 

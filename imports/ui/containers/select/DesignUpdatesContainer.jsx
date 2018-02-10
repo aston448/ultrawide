@@ -8,10 +8,10 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignUpdate                 from '../../components/select/DesignUpdate.jsx';
+import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
 import WorkPackage                  from '../../components/select/WorkPackage.jsx';
 import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
-import ItemContainer                from '../../components/common/ItemContainer.jsx';
+import ItemContainer                from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
 import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, LogLevel} from '../../../constants/constants.js';
@@ -26,7 +26,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 // REDUX services
 import {connect} from 'react-redux';
 import ClientWorkPackageServices from "../../../apiClient/apiClientWorkPackage";
-import {HomePageTab} from "../../../constants/constants";
+import {HomePageTab, ItemType} from "../../../constants/constants";
 import {AddActionIds} from "../../../constants/ui_context_ids";
 
 // =====================================================================================================================
@@ -50,9 +50,10 @@ export class DesignUpdatesList extends Component {
         if(designUpdates.length > 0) {
             return designUpdates.map((designUpdate) => {
                 return (
-                    <DesignUpdate
+                    <ItemWrapper
                         key={designUpdate._id}
-                        designUpdate={designUpdate}
+                        itemType={ItemType.DESIGN_UPDATE}
+                        item={designUpdate}
                     />
                 );
             });
@@ -63,9 +64,10 @@ export class DesignUpdatesList extends Component {
         if(workPackages.length > 0) {
             return workPackages.map((workPackage) => {
                 return (
-                    <WorkPackage
+                    <ItemWrapper
                         key={workPackage._id}
-                        workPackage={workPackage}
+                        itemType={ItemType.WORK_PACKAGE}
+                        item={workPackage}
                     />
                 );
             });
@@ -223,7 +225,7 @@ export class DesignUpdatesList extends Component {
                         layout =
                             <Grid>
                                 <Row>
-                                    <Col md={3}>
+                                    <Col md={4}>
                                         <ItemContainer
                                             headerText={headerText1}
                                             bodyDataFunction={bodyDataFunction1}
@@ -232,8 +234,6 @@ export class DesignUpdatesList extends Component {
                                             footerActionUiContext={''}
                                             footerActionFunction={null}
                                         />
-                                    </Col>
-                                    <Col md={3}>
                                         <ItemContainer
                                             headerText={headerText2}
                                             bodyDataFunction={bodyDataFunction2}
@@ -242,8 +242,6 @@ export class DesignUpdatesList extends Component {
                                             footerActionUiContext={''}
                                             footerActionFunction={null}
                                         />
-                                    </Col>
-                                    <Col md={3}>
                                         <ItemContainer
                                             headerText={headerText3}
                                             bodyDataFunction={bodyDataFunction3}
@@ -253,7 +251,7 @@ export class DesignUpdatesList extends Component {
                                             footerActionFunction={null}
                                         />
                                     </Col>
-                                    <Col md={3}>
+                                    <Col md={4}>
                                         <ItemContainer
                                             headerText={headerText4}
                                             bodyDataFunction={bodyDataFunction4}
@@ -262,6 +260,12 @@ export class DesignUpdatesList extends Component {
                                             footerActionUiContext={footerUiContextId}
                                             footerActionFunction={footerActionFunction}
                                         />
+                                    </Col>
+                                    <Col md={4}>
+                                        <DesignUpdateSummaryContainer params={{
+                                            userContext: userContext,
+                                            displayContext: DisplayContext.WP_SUMMARY
+                                        }}/>
                                     </Col>
                                 </Row>
                             </Grid>;

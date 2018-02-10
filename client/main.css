@@ -235,8 +235,8 @@ input {
 }
 
 .input-group-addon {
-    padding: 4px;
-    font-size: 12px;
+    padding: 0px 4px 4px 4px;
+    font-size: 14px;
     font-weight: normal;
     /*line-height: 1;*/
     color: #555;
@@ -646,6 +646,13 @@ input {
     background-color: transparent;
 }
 
+.item-grid{
+    margin: 5px 0 5px 0;
+    padding: 0 5px 0 5px;
+    width: auto;
+    background-color: transparent;
+}
+
 .close-grid-progress{
     margin: 0;
     padding: 0;
@@ -725,11 +732,79 @@ input {
     overflow-y: auto;
 }
 
-.design-item{
-    border: 0px solid lightgrey;
-    border-radius: 0px;
-    margin: 10px;
-    padding: 0px;
+.design-item-icons{
+    margin: 0;
+    padding: 3px 2px 0 5px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: black;
+    height: 27px;
+    border-left: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+
+.design-item-name-with-icons{
+    margin: 0;
+    padding: 3px 2px 0 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: black;
+    height: 27px;
+    border-right: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+
+.design-item-name {
+    margin: 0;
+    padding: 3px 2px 0 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: black;
+    height: 27px;
+    border: 1px solid lightgrey;
+}
+
+.item-top-left{
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid lightgrey;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+.item-top{
+    border-top: 1px solid black;
+    border-bottom: 1px solid lightgrey;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+.item-top-right{
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    margin: 0;
+    padding: 0;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+}
+
+.item-body{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    margin: 0;
+    padding: 0;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
 }
 
 .di-active{
@@ -761,12 +836,13 @@ input {
 
 .design-item-status{
     margin: 0;
-    padding: 3px 3px 3px 10px;
+    padding: 3px 3px 0px 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: normal;
     color: black;
     width: 100%;
+    height: 27px
 }
 
 .item-status-new{
@@ -778,7 +854,7 @@ input {
 }
 
 .item-status-complete{
-    background-color: #EEFFEE;
+    background-color: #EEEEEE;
 }
 
 .item-status-updatable{
@@ -801,15 +877,31 @@ input {
     background-color: #FFEEDD;
 }
 
-
 .design-item-header{
-    border-top: 1px solid lightgrey;
     margin: 0;
-    padding: 10px 10px 0 10px;
+    padding: 3px 2px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: bold;
     color: black;
+    height: 27px
+}
+
+.design-item-attribute{
+    margin: 0;
+    padding: 3px 2px 0 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: black;
+    height: 27px;
+}
+
+.header-arrow{
+    padding:0 5px 0 0;
+    color: darkgrey;
+    font-size: 20px;
+    text-align: right;
 }
 
 .design-item-text{
@@ -822,7 +914,7 @@ input {
 }
 
 .design-item-add{
-    margin: 10px;
+    margin: 2px 0 2px 10px;
 }
 
 .button-group-left{
@@ -832,6 +924,7 @@ input {
 
 .merge-options{
     padding: 10px;
+    margin: 0 0 0 5px;
 }
 .adopter{
     margin: 3px 0 3px 0;
@@ -1583,7 +1676,7 @@ input {
 }
 
 .editableItem{
-    padding-left: 5px;
+    padding-left: 0;
     border-top: 1px solid lightgrey;
     border-right: 1px solid ghostwhite;
     border-bottom: 1px solid ghostwhite;
@@ -2519,14 +2612,14 @@ input {
 .add-label {
     color: lightgrey;
     font-size: 10px;
-    padding: 3px 0 0 3px;
+    padding: 0 0 0 3px;
 }
 
 .add-label-active {
     cursor: pointer;
     color: black;
     font-size: 10px;
-    padding: 3px 0 0 3px;
+    padding: 0 0 0 3px;
 }
 
 .subtleButton {

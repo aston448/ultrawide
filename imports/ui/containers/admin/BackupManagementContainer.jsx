@@ -9,7 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemContainer        from '../../components/common/ItemContainer.jsx';
+import ItemContainer        from '../../components/select/ItemList.jsx';
 import DesignBackup         from '../../components/admin/DesignBackup.jsx';
 import DesignsContainer     from '../../containers/select/DesignsContainer.jsx';
 

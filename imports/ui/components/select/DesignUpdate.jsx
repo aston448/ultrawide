@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import DesignItemHeader             from './DesignItemHeader.jsx';
+import ItemName                 from './ItemName.jsx';
+import ItemReference            from './ItemReference.jsx';
 
 // Ultrawide Services
 import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
@@ -123,24 +124,26 @@ export class DesignUpdate extends Component {
     }
 
     render() {
-        const {designUpdate, userRole, userContext, viewOptions} = this.props;
-
-        // Active if this design update is the current context design update
-        let active = designUpdate._id === userContext.designUpdateId;
-
-        // Display as selected if this is the current DU in the user context
-        let itemStyle = (active ? 'design-item di-active' : 'design-item');
+        const {designUpdate, statusClass, userRole, userContext, viewOptions} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
-        const header =
-            <DesignItemHeader
+        const name =
+            <ItemName
+                currentItemStatus={designUpdate.updateStatus}
                 currentItemType={ItemType.DESIGN_UPDATE}
                 currentItemId={designUpdate._id}
                 currentItemName={designUpdate.updateName}
-                currentItemRef={designUpdate.updateReference}
+                statusClass={statusClass}
+            />;
+
+        const body =
+            <ItemReference
+                currentItemType={ItemType.DESIGN_UPDATE}
+                currentItemId={designUpdate._id}
                 currentItemStatus={designUpdate.updateStatus}
-                //onSelectItem={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }
+                currentItemRef={designUpdate.updateReference}
+                itemStatusClass={statusClass}
             />;
 
         const editButton = <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>;
@@ -150,7 +153,7 @@ export class DesignUpdate extends Component {
         const viewButton = <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>;
 
         const mergeOptions =
-            <div className="merge-options">
+            <div className={'merge-options'}>
                 <FormGroup id="mergeOptions">
                     <Radio inline id="optionMerge" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE)}>
@@ -171,50 +174,8 @@ export class DesignUpdate extends Component {
 
         let buttons = '';
         let options = '';
-        let statusClass = 'design-item-status';
 
         //console.log("Render DU Item.  Status = " + designUpdate.updateStatus)
-
-        switch(designUpdate.updateStatus){
-            case DesignUpdateStatus.UPDATE_NEW:
-                statusClass = 'design-item-status item-status-new';
-                break;
-            case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
-                statusClass = 'design-item-status item-status-draft';
-                break;
-            case DesignUpdateStatus.UPDATE_MERGED:
-                statusClass = 'design-item-status item-status-complete';
-                break;
-            case DesignUpdateStatus.UPDATE_IGNORED:
-                statusClass = 'design-item-status item-status-ignored';
-                break;
-        }
-
-        const summary =
-            <div id="designUpdateSummary" className={statusClass}>
-                <InputGroup>
-                    <div>{designUpdate.updateReference + ' - ' + designUpdate.updateName}</div>
-                    <InputGroup.Addon >
-                        <div id="updateWpSummary" className={designUpdate.updateWpStatus}><Glyphicon glyph='tasks'/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon >
-                        <div id="updateTestSummary" className={designUpdate.updateTestStatus}><Glyphicon glyph='th-large'/></div>
-                    </InputGroup.Addon>
-                </InputGroup>
-            </div>;
-
-        const status =
-            <div className={statusClass}>
-                <InputGroup>
-                    <div id="designUpdateStatus">{designUpdate.updateStatus}</div>
-                    <InputGroup.Addon >
-                        <div id="updateWpSummary" className={designUpdate.updateWpStatus}><Glyphicon glyph='tasks'/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon >
-                        <div id="updateTestSummary" className={designUpdate.updateTestStatus}><Glyphicon glyph='th-large'/></div>
-                    </InputGroup.Addon>
-                </InputGroup>
-            </div>;
 
 
         switch(designUpdate.updateStatus){
@@ -285,29 +246,23 @@ export class DesignUpdate extends Component {
                 break;
         }
 
-        if(active) {
-            return (
-                <div id="designUpdate" className={itemStyle}
-                     onClick={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }>
-                    {status}
-                    {header}
+        return (
+            <div id="designUpdate">
+                {name}
+                {body}
+                <div className={statusClass}>
                     {options}
                     {buttons}
                 </div>
-            );
-        } else {
-            return (
-                <div id="designUpdate" className={itemStyle}
-                     onClick={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }>
-                    {summary}
-                </div>
-            );
-        }
+            </div>
+        );
+
     }
 }
 
 DesignUpdate.propTypes = {
-    designUpdate: PropTypes.object.isRequired
+    designUpdate: PropTypes.object.isRequired,
+    statusClass: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

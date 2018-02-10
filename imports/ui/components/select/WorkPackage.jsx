@@ -5,12 +5,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import DesignItemHeader             from './DesignItemHeader.jsx';
+import ItemName                 from './ItemName.jsx';
+import ItemLink                 from './ItemLink.jsx';
 
 // Ultrawide Services
 import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackage.js';
 
-import {ItemType, WorkPackageStatus, WorkPackageTestStatus, RoleType} from '../../../constants/constants.js';
+import {ItemType, WorkPackageStatus, RoleType} from '../../../constants/constants.js';
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
@@ -105,15 +106,6 @@ export class WorkPackage extends Component {
         );
     };
 
-    onSelectWorkPackage(userRole, userContext, wp){
-
-        ClientWorkPackageServices.selectWorkPackage(
-            userRole,
-            userContext,
-            wp
-        );
-    };
-
     onDevelopWorkPackage(userRole, userContext, wp){
 
         ClientWorkPackageServices.developWorkPackage(
@@ -123,13 +115,11 @@ export class WorkPackage extends Component {
         );
     };
 
-    getAdopterName(userId){
-        return ClientWorkPackageServices.getAdopterName(userId)
-    }
+
 
     render() {
 
-        const {workPackage, userRole, viewOptions, userContext} = this.props;
+        const {workPackage, statusClass, userRole, viewOptions, userContext} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -144,47 +134,23 @@ export class WorkPackage extends Component {
         }
 
         let buttons = '';
-        let options = '';
-        let adopter = '';
 
-        let statusClass = 'design-item-status';
-
-        switch(workPackage.workPackageStatus){
-            case WorkPackageStatus.WP_NEW:
-                statusClass = 'design-item-status item-status-new';
-                break;
-            case WorkPackageStatus.WP_AVAILABLE:
-                statusClass = 'design-item-status item-status-available';
-                break;
-            case WorkPackageStatus.WP_ADOPTED:
-                statusClass = 'design-item-status item-status-adopted';
-                // Set up label to show who has adopted
-                adopter = ' by ' + this.getAdopterName(workPackage.adoptingUserId);
-                break;
-        }
-
-        // Highlight tests complete WPs
-        if(workPackage.workPackageTestStatus === WorkPackageTestStatus.WP_TESTS_COMPLETE){
-            statusClass = 'design-item-status item-status-complete';
-        }
-
-        const summary =
-            <div id="workPackageSummary" className={statusClass}>
-                {workPackage.workPackageName}
-            </div>;
-
-        const status =
-            <div className={statusClass}>{workPackage.workPackageStatus + adopter}</div>;
-
-        const header =
-            <DesignItemHeader
+        const name =
+            <ItemName
+                currentItemStatus={workPackage.workPackageStatus}
                 currentItemType={ItemType.WORK_PACKAGE}
                 currentItemId={workPackage._id}
                 currentItemName={workPackage.workPackageName}
-                currentItemRef=''
-                currentItemLink={workPackage.workPackageLink}
+                statusClass={statusClass}
+            />;
+
+        const body =
+            <ItemLink
+                currentItemType={ItemType.WORK_PACKAGE}
+                currentItemId={workPackage._id}
                 currentItemStatus={workPackage.workPackageStatus}
-                //onSelectItem={ () => this.onSelectWorkPackage(userRole, userContext, workPackage) }
+                currentItemLink={workPackage.workPackageLink}
+                itemStatusClass={statusClass}
             />;
 
         const buttonEdit =
@@ -296,28 +262,22 @@ export class WorkPackage extends Component {
                 break;
         }
 
-        if(active) {
-            return (
-                <div id="workPackageItem" className={itemStyle}
-                     onClick={() => this.onSelectWorkPackage(userRole, userContext, workPackage)}>
-                    {status}
-                    {header}
+        return (
+            <div id="workPackageItem">
+                {name}
+                {body}
+                <div className={statusClass}>
                     {buttons}
                 </div>
-            );
-        } else {
-            return (
-                <div id="workPackageItem" className={itemStyle}
-                     onClick={() => this.onSelectWorkPackage(userRole, userContext, workPackage)}>
-                    {summary}
-                </div>
-            );
-        }
+            </div>
+        );
+
     }
 }
 
 WorkPackage.propTypes = {
-    workPackage: PropTypes.object.isRequired
+    workPackage: PropTypes.object.isRequired,
+    statusClass: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
