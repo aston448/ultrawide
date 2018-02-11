@@ -14,6 +14,7 @@ import ChimpMochaTestServices           from '../../service_modules/dev/test_pro
 // Data Access
 import DesignUpdateData                 from '../../data/design_update/design_update_db.js';
 import DesignVersionData                from '../../data/design/design_version_db.js';
+import UserAcceptanceTestResultData     from '../../data/test_results/user_acceptance_test_result_db.js';
 import UserIntegrationTestResultData    from '../../data/test_results/user_integration_test_result_db.js';
 import UserUnitTestResultData           from '../../data/test_results/user_unit_test_result_db.js';
 
@@ -38,6 +39,7 @@ class TestIntegrationServices{
             // Clear data for current user
             UserUnitTestResultData.removeAllDataForUser(userContext.userId);
             UserIntegrationTestResultData.removeAllDataForUser(userContext.userId);
+            UserAcceptanceTestResultData.removeAllDataForUser(userContext.userId);
 
             log((msg) => console.log(msg), LogLevel.PERF, "    Old data removed.");
 
