@@ -64,7 +64,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionDraft._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -80,7 +80,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionUpdatable._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -96,7 +96,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionNew._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -111,7 +111,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionDraftComplete._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -126,7 +126,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionUpdatableComplete._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -147,7 +147,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionNew._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -167,7 +167,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionDraft._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -187,7 +187,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionNew._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -202,7 +202,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionNew._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -220,7 +220,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionNew._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -235,7 +235,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionNew._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -253,7 +253,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionNew._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -268,7 +268,7 @@ describe('JSX: DesignVersion', () => {
             const userContext = {designVersionId: designVersionNew._id};
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -287,7 +287,7 @@ describe('JSX: DesignVersion', () => {
 
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -303,7 +303,7 @@ describe('JSX: DesignVersion', () => {
 
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -319,7 +319,7 @@ describe('JSX: DesignVersion', () => {
 
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -335,7 +335,7 @@ describe('JSX: DesignVersion', () => {
 
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -355,7 +355,7 @@ describe('JSX: DesignVersion', () => {
 
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -371,7 +371,7 @@ describe('JSX: DesignVersion', () => {
 
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -387,7 +387,7 @@ describe('JSX: DesignVersion', () => {
 
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -403,7 +403,7 @@ describe('JSX: DesignVersion', () => {
 
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             //
@@ -425,7 +425,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
@@ -438,7 +438,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
@@ -451,7 +451,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
@@ -464,7 +464,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
@@ -477,7 +477,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
@@ -493,7 +493,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
@@ -506,7 +506,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DEVELOPER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
@@ -519,7 +519,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.MANAGER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
@@ -538,7 +538,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -551,7 +551,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -564,7 +564,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DEVELOPER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -577,7 +577,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.MANAGER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -590,7 +590,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -603,7 +603,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DEVELOPER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -616,7 +616,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.MANAGER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -629,7 +629,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -642,7 +642,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DEVELOPER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -655,7 +655,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.MANAGER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -668,7 +668,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -681,7 +681,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DEVELOPER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -694,7 +694,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.MANAGER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
@@ -710,7 +710,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DEVELOPER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(0);
@@ -723,7 +723,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.MANAGER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions} statusClass={'dummy'}/>
             );
 
             chai.expect(item.find('#butView')).to.have.length(0);

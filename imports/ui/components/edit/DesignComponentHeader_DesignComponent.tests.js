@@ -354,6 +354,74 @@ describe('JSX: DesCompHdr DC', () => {
 
     });
 
+    describe('There is no option to edit a Design Component name in View Only mode', () => {
+
+        it('application has no edit option', () => {
+
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            // Has edit option
+            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+        });
+
+        it('design section has no edit option', () => {
+
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            // Has edit option
+            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+        });
+
+        it('feature has no edit option', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            // Has edit option
+            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+        });
+
+        it('feature aspect has no edit option', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            // Has edit option
+            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+        });
+
+        it('scenario has no edit option', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            // Has edit option
+            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+        });
+    });
+
     describe('A Design Component name being edited has an option to save the changes', () => {
 
         it('application has a save option when being edited', () => {

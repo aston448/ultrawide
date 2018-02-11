@@ -222,6 +222,75 @@ describe('API: ClientData', () => {
         });
     });
 
+    describe('The Design Version editor has an option to show all panes as tabs', () => {
+
+        it('is available when editing a new design', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ALL_TABS), 'View All as Tabs option not found');
+        });
+
+        it('is available when editing a published design', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_PUBLISHED;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ALL_TABS), 'View All as Tabs option not found');
+        });
+
+        it('is available when editing an updatable design', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATABLE;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ALL_TABS), 'View All as Tabs option not found');
+        });
+
+        it('is available when viewing a new design', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ALL_TABS), 'View All as Tabs option not found');
+        });
+
+        it('is available when viewing a published design', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ALL_TABS), 'View All as Tabs option not found');
+        });
+
+        it('is available when viewing an updatable design', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATABLE;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_ALL_TABS), 'View All as Tabs option not found');
+        });
+    });
+
     // Design Update editor --------------------------------------------------------------------------------------------
 
     describe('The Design Update editor has an option to show or hide the Details pane', () => {

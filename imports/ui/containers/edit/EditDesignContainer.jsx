@@ -627,7 +627,7 @@ export class DesignApplicationsList extends Component {
 
                             col2 =
                                 <Col id="column2" md={col2width} className="close-col">
-                                    <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
+                                    <Tabs className="top-tabs" defaultActiveKey={1} id="all-tabs">
                                         <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
                                         <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
                                         <Tab eventKey={3} title="FIND SCENARIO">{scenarioFinder}</Tab>
@@ -638,7 +638,7 @@ export class DesignApplicationsList extends Component {
                             
                             col2 =
                                 <Col id="column2" md={col2width} className="close-col">
-                                    <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
+                                    <Tabs className="top-tabs" defaultActiveKey={1} id="all-tabs">
                                         <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
                                         <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
                                         <Tab eventKey={3} title="ACCEPTANCE TESTS">{accTests}</Tab>

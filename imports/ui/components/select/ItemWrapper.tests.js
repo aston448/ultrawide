@@ -69,6 +69,86 @@ describe('JSX: ItemWrapper', () => {
 
     });
 
+    describe('The current working Design shows full details and options', () => {
+
+        it('shows details if is the User Context Design', () => {
+
+            const itemType = ItemType.DESIGN;
+            const item = {
+                _id:            'DESIGN001',
+                designName:     'Design 1',
+                isRemovable:    false,
+                designStatus:   DesignStatus.DESIGN_LIVE
+            };
+            const userContext = {designId: 'DESIGN001'}; // Current design in context
+            const userRole = RoleType.DESIGNER;
+
+            const uiItem = testItemReference(itemType, item, userContext, userRole);
+
+            // Should find that item is expanded
+            chai.expect(uiItem.find('.item-body')).to.have.length(1);
+        });
+
+        it('has no details if is not the User Context Design', () => {
+
+            const itemType = ItemType.DESIGN;
+            const item = {
+                _id:            'DESIGN001',
+                designName:     'Design 1',
+                isRemovable:    false,
+                designStatus:   DesignStatus.DESIGN_LIVE
+            };
+            const userContext = {designId: 'DESIGN002'};  // Not current design in context
+            const userRole = RoleType.DESIGNER;
+
+            const uiItem = testItemReference(itemType, item, userContext, userRole);
+
+            // Should find that item is not expanded
+            chai.expect(uiItem.find('.item-body')).to.have.length(0);
+
+        });
+    });
+
+    describe('Designs not currently selected show the Design name only', () => {
+
+        it('no summary if is the User Context Design', () => {
+
+            const itemType = ItemType.DESIGN;
+            const item = {
+                _id:            'DESIGN001',
+                designName:     'Design 1',
+                isRemovable:    false,
+                designStatus:   DesignStatus.DESIGN_LIVE
+            };
+            const userContext = {designId: 'DESIGN001'}; // Current design in context
+            const userRole = RoleType.DESIGNER;
+
+            const uiItem = testItemReference(itemType, item, userContext, userRole);
+
+            // Should find that item is expanded
+            chai.expect(uiItem.find('#designSummary')).to.have.length(0);
+        });
+
+        it('just summary if is not the User Context Design', () => {
+
+            const itemType = ItemType.DESIGN;
+            const item = {
+                _id:            'DESIGN001',
+                designName:     'Design 1',
+                isRemovable:    false,
+                designStatus:   DesignStatus.DESIGN_LIVE
+            };
+            const userContext = {designId: 'DESIGN002'};  // Not current design in context
+            const userRole = RoleType.DESIGNER;
+
+            const uiItem = testItemReference(itemType, item, userContext, userRole);
+
+            // Should find that item is not expanded
+            chai.expect(uiItem.find('#designSummary')).to.have.length(1);
+
+        });
+    });
+
     // Select Design Version -------------------------------------------------------------------------------------------
 
     describe('The currently selected Design Version is highlighted', () => {
@@ -122,8 +202,124 @@ describe('JSX: ItemWrapper', () => {
 
             const uiItem = testItemReference(itemType, item, userContext, userRole);
 
-            // Should find that item is expanded
+            // Should find that item is not expanded
             chai.expect(uiItem.find('.item-top-left')).to.have.length(0);
+
+        });
+
+    });
+
+    describe('The currently selected Design Version shows full details and options', () => {
+
+        it('full details if is the User Context Design Version', () => {
+
+            const itemType = ItemType.DESIGN_VERSION;
+            const item = {
+                _id:                    'DESIGN_VERSION001',
+                designId:               'DESIGN001',
+                designVersionName:      'Design Version 1',
+                designVersionNumber:    '0.1',
+                designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                baseDesignVersionId:    'NONE',
+                designVersionIndex:     0
+            };
+
+            const userContext = {
+                designId:           'DESIGN001',
+                designVersionId:    'DESIGN_VERSION001'
+            }; // Current design version in context
+
+            const userRole = RoleType.DESIGNER;
+
+            const uiItem = testItemReference(itemType, item, userContext, userRole);
+
+            // Should find that item is expanded
+            chai.expect(uiItem.find('.item-body')).to.have.length(1);
+
+        });
+
+        it('summary if is not the User Context Design Version', () => {
+
+            const itemType = ItemType.DESIGN_VERSION;
+            const item = {
+                _id:                    'DESIGN_VERSION001',
+                designId:               'DESIGN001',
+                designVersionName:      'Design Version 1',
+                designVersionNumber:    '0.1',
+                designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                baseDesignVersionId:    'NONE',
+                designVersionIndex:     0
+            };
+
+            const userContext = {
+                designId:           'DESIGN001',
+                designVersionId:    'DESIGN_VERSION002'
+            }; // Current design version not in context
+
+            const userRole = RoleType.DESIGNER;
+
+            const uiItem = testItemReference(itemType, item, userContext, userRole);
+
+            // Should find that item is not expanded
+            chai.expect(uiItem.find('.item-body')).to.have.length(0);
+
+        });
+
+    });
+
+    describe('Design Versions not currently selected show the Design Version number and name only', () => {
+
+        it('no summary if is the User Context Design Version', () => {
+
+            const itemType = ItemType.DESIGN_VERSION;
+            const item = {
+                _id:                    'DESIGN_VERSION001',
+                designId:               'DESIGN001',
+                designVersionName:      'Design Version 1',
+                designVersionNumber:    '0.1',
+                designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                baseDesignVersionId:    'NONE',
+                designVersionIndex:     0
+            };
+
+            const userContext = {
+                designId:           'DESIGN001',
+                designVersionId:    'DESIGN_VERSION001'
+            }; // Current design version in context
+
+            const userRole = RoleType.DESIGNER;
+
+            const uiItem = testItemReference(itemType, item, userContext, userRole);
+
+            // Should find that item is not expanded
+            chai.expect(uiItem.find('#designSummary')).to.have.length(0);
+
+        });
+
+        it('summary if is not the User Context Design Version', () => {
+
+            const itemType = ItemType.DESIGN_VERSION;
+            const item = {
+                _id:                    'DESIGN_VERSION001',
+                designId:               'DESIGN001',
+                designVersionName:      'Design Version 1',
+                designVersionNumber:    '0.1',
+                designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                baseDesignVersionId:    'NONE',
+                designVersionIndex:     0
+            };
+
+            const userContext = {
+                designId:           'DESIGN001',
+                designVersionId:    'DESIGN_VERSION002'
+            }; // Current design version not in context
+
+            const userRole = RoleType.DESIGNER;
+
+            const uiItem = testItemReference(itemType, item, userContext, userRole);
+
+            // Should find that item is expanded
+            chai.expect(uiItem.find('#designSummary')).to.have.length(1);
 
         });
 

@@ -66,6 +66,49 @@ describe('JSX: ItemReference', () => {
 
     });
 
+    describe('The edit option for a Design Version number is only visible to a Designer', () => {
+
+        it('not visible for Developer', () => {
+
+            const itemType = ItemType.DESIGN_VERSION;
+            const itemStatus = DesignVersionStatus.VERSION_NEW;
+            const userRole = RoleType.DEVELOPER;
+            const itemRef = '0.1';
+
+            let item = testItemReference(itemType, itemStatus, userRole, itemRef);
+
+            // Edit Item is visible
+            chai.expect(item.find('#editRef')).to.have.length(0);
+        });
+
+        it('not visible for Manager', () => {
+
+            const itemType = ItemType.DESIGN_VERSION;
+            const itemStatus = DesignVersionStatus.VERSION_NEW;
+            const userRole = RoleType.DEVELOPER;
+            const itemRef = '0.1';
+
+            let item = testItemReference(itemType, itemStatus, userRole, itemRef);
+
+            // Edit Item is visible
+            chai.expect(item.find('#editRef')).to.have.length(0);
+        });
+
+        it('not visible for Guest Viewer', () => {
+
+            const itemType = ItemType.DESIGN_VERSION;
+            const itemStatus = DesignVersionStatus.VERSION_NEW;
+            const userRole = RoleType.GUEST_VIEWER;
+            const itemRef = '0.1';
+
+            let item = testItemReference(itemType, itemStatus, userRole, itemRef);
+
+            // Edit Item is visible
+            chai.expect(item.find('#editRef')).to.have.length(0);
+        });
+
+    });
+
     describe('When a Design Version name or number is being edited there is a save option', () => {
 
         it('save option visible for number', () => {

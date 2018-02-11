@@ -137,6 +137,31 @@ describe('VAL: Design', function () {
         });
     });
 
+    describe('A Design can only be removed by a Designer', function () {
+
+        it('returns INVALID for Developer', function () {
+
+            const design = newDesign;
+            const role = RoleType.DEVELOPER;
+            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_REMOVE;
+
+            const result = DesignValidationServices.validateRemoveDesign(role, design);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('eturns INVALID for Manager', function () {
+
+            const design = activeDesign;
+            const role = RoleType.MANAGER;
+            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_REMOVE;
+
+            const result = DesignValidationServices.validateRemoveDesign(role, design);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
     describe('A Designer can remove a Design that is removable', function () {
 
         it('returns VALID for a Designer if the Design is removable', function () {

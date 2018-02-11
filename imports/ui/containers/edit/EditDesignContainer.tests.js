@@ -117,6 +117,65 @@ describe('JSX: EditDesignContainer', () => {
         });
     });
 
+    describe('All panes may be displayed as tabs for the Design version editor', () => {
+
+        it('all tabs shown when option selected', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
+
+            // No extra stuff selected
+            const viewOptions = {
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:         false,
+                designShowAllAsTabs:        true
+            };
+
+            const item = testEditDesignContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#all-tabs').length, 1, 'Tabs not found');
+        });
+
+        it('all tabs not shown when option not selected', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
+
+            // No extra stuff selected
+            const viewOptions = {
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:         false,
+                designShowAllAsTabs:        false
+            };
+
+            const item = testEditDesignContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#all-tabs').length, 0, 'Tabs found!');
+        });
+    });
+
+    describe('The Design pane is always showing and cannot be hidden', () => {
+
+        it('is not shown when Dictionary not selected', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
+
+            // No extra stuff selected
+            const viewOptions = {
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
+            };
+
+            const item = testEditDesignContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
+        });
+    });
+
     describe('The width of each Design Version pane changes to accommodate the number of panes displayed', () => {
 
         it('when Design only pane fills half the screen', () => {

@@ -13,6 +13,7 @@ import WorkPackage      from "./WorkPackage.jsx";
 
 // Ultrawide Services
 import { ItemType, DesignUpdateStatus, DesignVersionStatus, WorkPackageStatus, WorkPackageTestStatus } from '../../../constants/constants.js';
+import {replaceAll} from "../../../../imports/common/utils";
 
 import ClientDesignVersionServices      from "../../../apiClient/apiClientDesignVersion";
 import ClientDesignUpdateServices       from "../../../apiClient/apiClientDesignUpdate";
@@ -93,7 +94,7 @@ export class ItemWrapper extends Component {
         switch(itemType){
 
             case ItemType.DESIGN:
-                uiName = item.designName;
+                uiName = replaceAll(item.designName, ' ', '_');
                 itemName = item.designName;
                 itemStatus = item.designStatus;
                 if(item.isRemovable){
@@ -110,7 +111,7 @@ export class ItemWrapper extends Component {
                     </div>;
                 break;
             case ItemType.DESIGN_VERSION:
-                uiName = item.designVersionName;
+                uiName = replaceAll(item.designVersionName, ' ', '_');
                 itemName = item.designVersionNumber + ' - ' + item.designVersionName;
                 itemStatus = item.designVersionStatus;
                 switch(item.designVersionStatus){
@@ -139,7 +140,7 @@ export class ItemWrapper extends Component {
                     </div>;
                 break;
             case ItemType.DESIGN_UPDATE:
-                uiName = item.updateName;
+                uiName = replaceAll(item.updateName, ' ', '_');
                 itemName = item.updateReference + ' - ' + item.updateName;
                 itemStatus = item.updateStatus;
                 switch(item.updateStatus){
@@ -178,7 +179,7 @@ export class ItemWrapper extends Component {
                     </InputGroup>  ;
                 break;
             case ItemType.WORK_PACKAGE:
-                uiName = item.workPackageName;
+                uiName = replaceAll(item.workPackageName, ' ', '_');
                 itemName = item.workPackageName;
                 itemStatus = item.workPackageStatus;
                 switch(item.workPackageStatus){
