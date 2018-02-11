@@ -1,17 +1,12 @@
 import React from 'react';
 
 
-import { shallow, mount} from 'enzyme';
+import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-import ItemContainer            from '../select/ItemList.jsx'
 import { DesignEditorHeader }   from '../../components/common/DesignEditorHeader';          // Non Redux
-import { DesignVersion }        from '../../components/select/DesignVersion.jsx';   // Non Redux
 
 import { ViewMode, ViewType, DisplayContext, RoleType, ItemType} from '../../../constants/constants.js'
-
-import { Designs } from '../../../collections/design/designs.js'
-
 
 
 describe('JSX: DesignEditorHeader', () => {

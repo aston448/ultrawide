@@ -11,7 +11,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
 import WorkPackage                  from '../../components/select/WorkPackage.jsx';
 import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
-import ItemContainer                from '../../components/select/ItemList.jsx';
+import ItemList                from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
 import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, LogLevel} from '../../../constants/constants.js';
@@ -226,7 +226,7 @@ export class DesignUpdatesList extends Component {
                             <Grid>
                                 <Row>
                                     <Col md={4}>
-                                        <ItemContainer
+                                        <ItemList
                                             headerText={headerText1}
                                             bodyDataFunction={bodyDataFunction1}
                                             hasFooterAction={false}
@@ -234,7 +234,7 @@ export class DesignUpdatesList extends Component {
                                             footerActionUiContext={''}
                                             footerActionFunction={null}
                                         />
-                                        <ItemContainer
+                                        <ItemList
                                             headerText={headerText2}
                                             bodyDataFunction={bodyDataFunction2}
                                             hasFooterAction={false}
@@ -242,7 +242,7 @@ export class DesignUpdatesList extends Component {
                                             footerActionUiContext={''}
                                             footerActionFunction={null}
                                         />
-                                        <ItemContainer
+                                        <ItemList
                                             headerText={headerText3}
                                             bodyDataFunction={bodyDataFunction3}
                                             hasFooterAction={false}
@@ -252,7 +252,7 @@ export class DesignUpdatesList extends Component {
                                         />
                                     </Col>
                                     <Col md={4}>
-                                        <ItemContainer
+                                        <ItemList
                                             headerText={headerText4}
                                             bodyDataFunction={bodyDataFunction4}
                                             hasFooterAction={hasFooterAction}
@@ -278,7 +278,7 @@ export class DesignUpdatesList extends Component {
                                     <Col md={6}>
                                         <Tabs className="top-tabs" animation={true} unmountOnExit={true} defaultActiveKey={2} id="main_tabs" onSelect={(tab) => this.onSelectTab(tab)}>
                                             <Tab eventKey={1} title={tabText1}>
-                                                <ItemContainer
+                                                <ItemList
                                                     headerText={headerText1}
                                                     bodyDataFunction={bodyDataFunction1}
                                                     hasFooterAction={hasFooterAction}
@@ -288,7 +288,7 @@ export class DesignUpdatesList extends Component {
                                                 />
                                             </Tab>
                                             <Tab eventKey={2} title={tabText2}>
-                                                <ItemContainer
+                                                <ItemList
                                                     headerText={headerText2}
                                                     bodyDataFunction={bodyDataFunction2}
                                                     hasFooterAction={false}
@@ -298,7 +298,7 @@ export class DesignUpdatesList extends Component {
                                                 />
                                             </Tab>
                                             <Tab eventKey={3} title={tabText3}>
-                                                <ItemContainer
+                                                <ItemList
                                                     headerText={headerText3}
                                                     bodyDataFunction={bodyDataFunction3}
                                                     hasFooterAction={false}

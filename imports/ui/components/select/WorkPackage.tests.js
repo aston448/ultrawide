@@ -10,49 +10,6 @@ import { WorkPackageStatus, RoleType } from '../../../constants/constants.js'
 
 describe('JSX: WorkPackage', () => {
 
-    // WP Select -----------------------------------------------------------------------------------------------------
-
-    describe('When a Work Package is selected it is highlighted in the Work Package list', () => {
-
-        it('is highlighted when it is the current work package', () => {
-
-            const workPackage = {_id: 'WP1', workPackageStatus: WorkPackageStatus.WP_NEW};
-            const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', workPackageId: 'WP1'};
-            const viewOptions = {};
-
-            const item = shallow(
-                <WorkPackage
-                    workPackage={workPackage}
-                    userRole={userRole}
-                    userContext={userContext}
-                    viewOptions={viewOptions}
-                />
-            );
-
-            chai.assert.equal(item.find('#workPackageItem').props().className, 'design-item di-active', 'Not highlighted');
-        });
-
-        it('is not highlighted when it is not the current work package', () => {
-
-            const workPackage = {_id: 'WP1', workPackageStatus: WorkPackageStatus.WP_NEW};
-            const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', workPackageId: 'WP2'};  // Different WP selected
-            const viewOptions = {};
-
-            const item = shallow(
-                <WorkPackage
-                    workPackage={workPackage}
-                    userRole={userRole}
-                    userContext={userContext}
-                    viewOptions={viewOptions}
-                />
-            );
-
-            chai.assert.notEqual(item.find('#workPackageItem').props().className, 'design-item di-active', 'Is highlighted');
-        });
-    });
-
     // WP Publish ------------------------------------------------------------------------------------------------------
 
     describe('A Work Package has an option to publish it', () => {
@@ -70,6 +27,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -94,6 +52,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -114,6 +73,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -138,6 +98,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -158,6 +119,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -184,6 +146,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -208,6 +171,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -228,6 +192,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -252,6 +217,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -272,6 +238,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -298,6 +265,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -322,6 +290,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -342,6 +311,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -366,6 +336,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -386,6 +357,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -412,6 +384,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -432,6 +405,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -452,6 +426,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -476,6 +451,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -495,6 +471,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -519,6 +496,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -539,6 +517,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -559,6 +538,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -579,6 +559,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -599,6 +580,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -619,6 +601,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -639,6 +622,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -663,6 +647,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 
@@ -682,6 +667,7 @@ describe('JSX: WorkPackage', () => {
                     userRole={userRole}
                     userContext={userContext}
                     viewOptions={viewOptions}
+                    statusClass={'dummmy'}
                 />
             );
 

@@ -8,21 +8,18 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import FeatureSummary       from '../../components/select/FeatureSummary.jsx';
-import ItemContainer        from '../../components/select/ItemList.jsx';
+import FeatureSummary           from '../../components/select/FeatureSummary.jsx';
+import ItemList                 from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import {RoleType} from '../../../constants/constants.js';
-
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
-import ClientDesignServices         from  '../../../apiClient/apiClientDesign.js';
+import ClientDataServices       from '../../../apiClient/apiClientDataServices.js';
+import {HomePageTab}            from "../../../constants/constants";
 
 // Bootstrap
-import {Grid, Col, Row} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {HomePageTab} from "../../../constants/constants";
+
 
 // =====================================================================================================================
 
@@ -92,7 +89,7 @@ export class FeaturesList extends Component {
         }
 
         return(
-            <ItemContainer
+            <ItemList
                 headerText={headerText}
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}

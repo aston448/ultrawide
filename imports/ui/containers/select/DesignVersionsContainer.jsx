@@ -7,7 +7,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
-import ItemContainer                from '../../components/select/ItemList.jsx';
+import ItemList                     from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
 import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
@@ -81,7 +81,7 @@ export class DesignVersionsList extends Component {
         const footerActionFunction = null;
 
         return(
-            <ItemContainer
+            <ItemList
                 headerText={headerText}
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}

@@ -88,10 +88,12 @@ export class ItemWrapper extends Component {
         let itemBody = '';
         let statusIcons = '';
         let onClickFunction = null;
+        let uiName = '';
 
         switch(itemType){
 
             case ItemType.DESIGN:
+                uiName = item.designName;
                 itemName = item.designName;
                 itemStatus = item.designStatus;
                 if(item.isRemovable){
@@ -108,6 +110,7 @@ export class ItemWrapper extends Component {
                     </div>;
                 break;
             case ItemType.DESIGN_VERSION:
+                uiName = item.designVersionName;
                 itemName = item.designVersionNumber + ' - ' + item.designVersionName;
                 itemStatus = item.designVersionStatus;
                 switch(item.designVersionStatus){
@@ -136,6 +139,7 @@ export class ItemWrapper extends Component {
                     </div>;
                 break;
             case ItemType.DESIGN_UPDATE:
+                uiName = item.updateName;
                 itemName = item.updateReference + ' - ' + item.updateName;
                 itemStatus = item.updateStatus;
                 switch(item.updateStatus){
@@ -174,6 +178,7 @@ export class ItemWrapper extends Component {
                     </InputGroup>  ;
                 break;
             case ItemType.WORK_PACKAGE:
+                uiName = item.workPackageName;
                 itemName = item.workPackageName;
                 itemStatus = item.workPackageStatus;
                 switch(item.workPackageStatus){
@@ -360,13 +365,13 @@ export class ItemWrapper extends Component {
             if (selected) {
 
                 return (
-                    <div>{selectedItem}</div>
+                    <div id={uiName}>{selectedItem}</div>
                 );
 
             } else {
 
                 return (
-                    <div>{unselectedItem}</div>
+                    <div id={uiName}>{unselectedItem}</div>
                 );
 
             }

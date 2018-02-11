@@ -8,8 +8,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
-import ItemContainer                from '../../components/select/ItemList.jsx';
+import ItemList                     from '../../components/select/ItemList.jsx';
 import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
 import FeatureSummaryContainer      from '../../containers/select/FeatureSummaryContainer.jsx';
 
@@ -18,7 +17,6 @@ import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, Home
 import { log } from '../../../common/utils.js';
 
 import ClientDataServices               from '../../../apiClient/apiClientDataServices.js';
-import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
 import WorkPackageContainerUiModules    from '../../../ui_modules/work_packages_container.js';
 
 
@@ -151,7 +149,7 @@ export class WorkPackagesList extends Component {
                     <Col md={6}>
                         <Tabs className="top-tabs" animation={true} unmountOnExit={true} defaultActiveKey={2} id="main_tabs">
                             <Tab eventKey={1} title={tabText1}>
-                                <ItemContainer
+                                <ItemList
                                     headerText={headerText1}
                                     bodyDataFunction={bodyDataFunction1}
                                     hasFooterAction={hasFooterAction}
@@ -161,7 +159,7 @@ export class WorkPackagesList extends Component {
                                 />
                             </Tab>
                             <Tab eventKey={2} title={tabText2}>
-                                <ItemContainer
+                                <ItemList
                                     headerText={headerText2}
                                     bodyDataFunction={bodyDataFunction2}
                                     hasFooterAction={false}
@@ -171,7 +169,7 @@ export class WorkPackagesList extends Component {
                                 />
                             </Tab>
                             <Tab eventKey={3} title={tabText3}>
-                                <ItemContainer
+                                <ItemList
                                     headerText={headerText3}
                                     bodyDataFunction={bodyDataFunction3}
                                     hasFooterAction={false}

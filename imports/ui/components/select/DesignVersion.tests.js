@@ -413,41 +413,6 @@ describe('JSX: DesignVersion', () => {
 
     });
 
-    // Select Design Version -------------------------------------------------------------------------------------------
-
-    describe('The currently selected Design Version is highlighted', () => {
-
-        it('is highlighted if is the User Context Design Version', () => {
-
-            const userContext = {designVersionId: designVersionDraft._id};
-            const viewOptions = {};
-            const userRole = RoleType.DESIGNER;
-
-            const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
-            );
-
-            // Should find the active design class
-            chai.expect(item.find('.di-active')).to.have.length(1);
-
-        });
-
-        it('is not highlighted if is not the User Context Design Version', () => {
-
-            const userContext = {designVersionId: designVersionDraft._id};
-            const viewOptions = {};
-            const userRole = RoleType.DESIGNER;
-
-            const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
-            );
-
-            // Should NOT find the active design class
-            chai.expect(item.find('.di-active')).to.have.length(0);
-
-        });
-
-    });
 
     // Edit Design Version ---------------------------------------------------------------------------------------------
 

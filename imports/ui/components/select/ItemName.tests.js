@@ -6,7 +6,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { ItemName } from './ItemName.jsx';  // Non Redux wrapped
 
 import {  DesignUpdateStatus,  RoleType, ItemType } from '../../../constants/constants.js'
-import {DesignStatus, DesignVersionStatus} from "../../../constants/constants";
+import {DesignStatus, DesignVersionStatus, WorkPackageStatus} from "../../../constants/constants";
 
 
 
@@ -465,7 +465,7 @@ describe('JSX: ItemName', () => {
         it('initial design version work package has an edit option for a Manager', () => {
 
             const itemType = ItemType.WORK_PACKAGE;
-            const itemStatus = null;
+            const itemStatus = WorkPackageStatus.WP_AVAILABLE;
             const userRole = RoleType.MANAGER;
             const itemName = 'Work Package 1';
 
@@ -478,7 +478,7 @@ describe('JSX: ItemName', () => {
         it('design update work package has an edit option for a Manager', () => {
 
             const itemType = ItemType.WORK_PACKAGE;
-            const itemStatus = null;
+            const itemStatus = WorkPackageStatus.WP_AVAILABLE;
             const userRole = RoleType.MANAGER;
             const itemName = 'Work Package 1';
 
@@ -495,7 +495,7 @@ describe('JSX: ItemName', () => {
         it('save available for initial design work package', () => {
 
             const itemType = ItemType.WORK_PACKAGE;
-            const itemStatus = null;
+            const itemStatus = WorkPackageStatus.WP_AVAILABLE;
             const userRole = RoleType.MANAGER;
             const itemName = 'Work Package 1';
 
@@ -510,7 +510,7 @@ describe('JSX: ItemName', () => {
         it('save available for design update work package', () => {
 
             const itemType = ItemType.WORK_PACKAGE;
-            const itemStatus = null;
+            const itemStatus = WorkPackageStatus.WP_AVAILABLE;
             const userRole = RoleType.MANAGER;
             const itemName = 'Work Package 1';
 
@@ -528,7 +528,7 @@ describe('JSX: ItemName', () => {
         it('cancel available for initial design work package', () => {
 
             const itemType = ItemType.WORK_PACKAGE;
-            const itemStatus = null;
+            const itemStatus = WorkPackageStatus.WP_AVAILABLE;
             const userRole = RoleType.MANAGER;
             const itemName = 'Work Package 1';
 
@@ -543,7 +543,7 @@ describe('JSX: ItemName', () => {
         it('cancel available for design update work package', () => {
 
             const itemType = ItemType.WORK_PACKAGE;
-            const itemStatus = null;
+            const itemStatus = WorkPackageStatus.WP_AVAILABLE;
             const userRole = RoleType.MANAGER;
             const itemName = 'Work Package 1';
 
@@ -561,7 +561,7 @@ describe('JSX: ItemName', () => {
         it('edit not available for Designer', () => {
 
             const itemType = ItemType.WORK_PACKAGE;
-            const itemStatus = null;
+            const itemStatus = WorkPackageStatus.WP_AVAILABLE;
             const userRole = RoleType.DESIGNER;
             const itemName = 'Work Package 1';
 
@@ -574,7 +574,7 @@ describe('JSX: ItemName', () => {
         it('edit not available for Developer', () => {
 
             const itemType = ItemType.WORK_PACKAGE;
-            const itemStatus = null;
+            const itemStatus = WorkPackageStatus.WP_AVAILABLE;
             const userRole = RoleType.DEVELOPER;
             const itemName = 'Work Package 1';
 

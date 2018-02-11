@@ -9,7 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemContainer                    from '../../components/select/ItemList.jsx';
+import ItemList                         from '../../components/select/ItemList.jsx';
 import UserDetails                      from '../../components/admin/UserDetails.jsx';
 
 // Ultrawide Services
@@ -108,7 +108,7 @@ class UserManagementScreen extends Component {
 
 
         const users =
-            <ItemContainer
+            <ItemList
                 headerText={'Ultrawide Users'}
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}

@@ -10,10 +10,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import TestOutputFile           from '../../components/configure/TestOutputFile.jsx';
-import ItemContainer            from '../../components/select/ItemList.jsx';
+import ItemList                 from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js'
 
 // Bootstrap
@@ -100,7 +100,7 @@ class TestOutputFilesScreen extends Component {
         }
 
         return(
-            <ItemContainer
+            <ItemList
                 headerText={headerText}
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}

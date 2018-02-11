@@ -4,10 +4,11 @@ import React from 'react';
 import { shallow, mount} from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-import ItemList            from './ItemList.jsx'
-import { Design }               from './Design.jsx';          // Non Redux
-import { DesignVersion }        from './DesignVersion.jsx';   // Non Redux
-import { DesignUpdate }         from './DesignUpdate.jsx';    // Non Redux
+import ItemList                 from './ItemList.jsx'
+import { ItemWrapper }          from './ItemWrapper.jsx';       // Non Redux
+import { Design }               from './Design.jsx';            // Non Redux
+import { DesignVersion }        from './DesignVersion.jsx';     // Non Redux
+import { DesignUpdate }         from './DesignUpdate.jsx';      // Non Redux
 
 import { DesignStatus, RoleType, ItemType} from '../../../constants/constants.js'
 
@@ -22,9 +23,10 @@ describe('JSX: ItemList', () => {
 
         return designs.map((design) => {
             return (
-                <Design
+                <ItemWrapper
                     key={design._id}
-                    design={design}
+                    itemType={ItemType.DESIGN}
+                    item={design}
                 />
             );
         });
@@ -32,28 +34,50 @@ describe('JSX: ItemList', () => {
 
     function renderDesignVersionsList(designVersions){
 
-        return designVersions.map((designVersion) => {
-            return (
-                <DesignVersion
-                    key={designVersion._id}
-                    designVersion={designVersion}
-                />
-            );
-        });
+        if (designVersions) {
+            return designVersions.map((designVersion) => {
+                return (
+                    <ItemWrapper
+                        key={designVersion._id}
+                        itemType={ItemType.DESIGN_VERSION}
+                        item={designVersion}
+                    />
+                );
+            });
+        }
 
     }
 
     function renderDesignUpdatesList(designUpdates){
 
-        return designUpdates.map((designUpdate) => {
-            return (
-                <DesignUpdate
-                    key={designUpdate._id}
-                    designUpdate={designUpdate}
-                />
-            );
-        });
+        if(designUpdates.length > 0) {
+            return designUpdates.map((designUpdate) => {
+                return (
+                    <ItemWrapper
+                        key={designUpdate._id}
+                        itemType={ItemType.DESIGN_UPDATE}
+                        item={designUpdate}
+                    />
+                );
+            });
+        }
     }
+
+    function  renderWorkPackagesList(workPackages){
+        if(workPackages.length > 0) {
+            return workPackages.map((workPackage) => {
+                return (
+                    <ItemWrapper
+                        key={workPackage._id}
+                        itemType={ItemType.WORK_PACKAGE}
+                        item={workPackage}
+                    />
+                );
+            });
+        }
+    }
+
+
 
     function testItemContainer(itemType, itemList,  headerText, hasFooterAction, footerAction){
 
@@ -69,6 +93,9 @@ describe('JSX: ItemList', () => {
                 break;
             case ItemType.DESIGN_UPDATE:
                 bodyDataFunction = () => renderDesignUpdatesList(itemList);
+                break;
+            case ItemType.WORK_PACKAGE:
+                bodyDataFunction = () => renderWorkPackagesList(itemList);
                 break;
         }
 
@@ -95,7 +122,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN, designs, 'Designs', false, '');
 
-            chai.assert.equal(item.find('Design').length, 0, 'Expecting no Designs');
+            chai.assert.equal(item.find('ItemWrapper').length, 0, 'Expecting no Designs');
         });
 
         it('one design in list', () => {
@@ -109,7 +136,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN, designs, 'Designs', false, '');
 
-            chai.assert.equal(item.find('Design').length, 1, 'Expecting 1 Design');
+            chai.assert.equal(item.find('ItemWrapper').length, 1, 'Expecting 1 Design');
         });
 
         it('two designs in list', () => {
@@ -127,7 +154,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN, designs, 'Designs', false, '');
 
-            chai.assert.equal(item.find('Design').length, 2, 'Expecting 2 Designs');
+            chai.assert.equal(item.find('ItemWrapper').length, 2, 'Expecting 2 Designs');
         });
     });
 
@@ -146,7 +173,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN_VERSION, designVersions, 'Design Versions', false, '');
 
-            chai.assert.equal(item.find('DesignVersion').length, 1, 'Expecting 1 Design Version');
+            chai.assert.equal(item.find('ItemWrapper').length, 1, 'Expecting 1 Design Version');
         });
 
         it('two design versions in list', () => {
@@ -164,7 +191,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN_VERSION, designVersions, 'Design Versions', false, '');
 
-            chai.assert.equal(item.find('DesignVersion').length, 2, 'Expecting 2 Design Versions');
+            chai.assert.equal(item.find('ItemWrapper').length, 2, 'Expecting 2 Design Versions');
         });
     });
 
@@ -187,7 +214,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN_UPDATE, designUpdates, 'Design Updates', false, '');
 
-            chai.assert.equal(item.find('DesignUpdate').length, 2, 'Expecting 2 Design Updates');
+            chai.assert.equal(item.find('ItemWrapper').length, 2, 'Expecting 2 Design Updates');
         });
 
         it('design version with three updates has three in list', () => {
@@ -209,31 +236,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN_UPDATE, designUpdates, 'Design Updates', false, '');
 
-            chai.assert.equal(item.find('DesignUpdate').length, 3, 'Expecting 3 Design Updates');
-        });
-    });
-
-    // Work Packages
-    describe('The Work Package list for an Initial Design Version has an option to add a new Work Package', () => {
-
-        it('has an add option for a manager in New WPs list', () => {
-
-            const wpType = WorkPackageType.WP_BASE;
-            const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
-            const designUpdateStatus = null;
-            const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
-
-            const workPackages = [
-            ];
-
-            const item = testItemContainer(ItemType.WORK_PACKAGE, workPackages, 'Design Updates', false, '');
-
-            const containers = item.find('ItemContainer');
-
-            chai.assert.equal(containers.length, 3, 'Item Containers not found');
-            chai.assert.isTrue(containers.nodes[0].props.hasFooterAction, 'Expecting a footer action');
-            chai.assert.isTrue(containers.nodes[0].props.footerAction.includes('Add Work Package to Design Version'), 'Expecting Add Work Package footer action');
+            chai.assert.equal(item.find('ItemWrapper').length, 3, 'Expecting 3 Design Updates');
         });
     });
 

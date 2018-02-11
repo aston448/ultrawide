@@ -9,7 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemContainer        from '../../components/select/ItemList.jsx';
+import ItemList             from '../../components/select/ItemList.jsx';
 import DesignBackup         from '../../components/admin/DesignBackup.jsx';
 import DesignsContainer     from '../../containers/select/DesignsContainer.jsx';
 
@@ -74,7 +74,7 @@ class BackupManagementScreen extends Component {
 
 
         const backups =
-            <ItemContainer
+            <ItemList
                 headerText={'Ultrawide Design Backups'}
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}

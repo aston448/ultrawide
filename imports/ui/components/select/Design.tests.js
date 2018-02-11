@@ -134,36 +134,4 @@ describe('JSX: Design', () => {
 
     });
 
-    describe('The current working Design for the user is highlighted', () => {
-
-        it('is highlighted if is the User Context Design', () => {
-
-            const userContext = {designId: design._id};
-            const userRole = RoleType.DESIGNER;
-
-            const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
-            );
-
-            // Should find the active design class
-            chai.expect(item.find('.di-active')).to.have.length(1);
-
-        });
-
-        it('is not highlighted if is not the User Context Design', () => {
-
-            const userContext = {designId: 'AAA'};  // Bollox ID
-            const userRole = RoleType.MANAGER;
-
-            const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
-            );
-
-            // Should NOT find the active design class
-            chai.expect(item.find('.di-active')).to.have.length(0);
-
-        });
-
-    });
-
 });

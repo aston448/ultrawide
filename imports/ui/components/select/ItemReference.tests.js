@@ -68,24 +68,6 @@ describe('JSX: ItemReference', () => {
 
     describe('When a Design Version name or number is being edited there is a save option', () => {
 
-        it('save option visible for name', () => {
-
-            const itemType = ItemType.DESIGN_VERSION;
-            const itemStatus = DesignVersionStatus.VERSION_NEW;
-            const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
-
-            let item = testItemReference(itemType, itemStatus, userRole, itemRef);
-
-            chai.expect(item.find('#editOk')).to.have.length(0);
-
-            // And now edit...
-            item.setState({nameEditable: true});
-
-            // Edit Save Item is visible
-            chai.expect(item.find('#editOk')).to.have.length(1);
-        });
-
         it('save option visible for number', () => {
 
             const itemType = ItemType.DESIGN_VERSION;
@@ -106,24 +88,6 @@ describe('JSX: ItemReference', () => {
     });
 
     describe('When a Design Version name or number is being edited there is an undo option', () => {
-
-        it('undo option visible for name', () => {
-
-            const itemType = ItemType.DESIGN_VERSION;
-            const itemStatus = DesignVersionStatus.VERSION_NEW;
-            const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
-
-            let item = testItemReference(itemType, itemStatus, userRole, itemRef);
-
-            chai.expect(item.find('#editCancel')).to.have.length(0);
-
-            // And now edit...
-            item.setState({nameEditable: true});
-
-            // Edit Save Item is visible
-            chai.expect(item.find('#editCancel')).to.have.length(1);
-        });
 
         it('undo option visible for number', () => {
 
@@ -153,13 +117,13 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
             // Design Update Name should be visible and have the expected name and status
             chai.expect(item.find('#refLabel')).to.have.length(1);
-            chai.assert.equal(item.find('#refLabel').children().text(), currentItemRef);
+            chai.assert.equal(item.find('#refLabel').children().text(), itemRef);
         });
     });
 
@@ -171,7 +135,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_NEW;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -183,7 +147,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -195,7 +159,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_MERGED;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -210,7 +174,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_NEW;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -224,7 +188,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -238,7 +202,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_MERGED;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -256,7 +220,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_NEW;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -270,7 +234,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -284,7 +248,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_MERGED;
             const userRole = RoleType.DESIGNER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -301,7 +265,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_NEW;
             const userRole = RoleType.DEVELOPER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -313,7 +277,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DEVELOPER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -325,7 +289,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_MERGED;
             const userRole = RoleType.DEVELOPER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -337,7 +301,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_NEW;
             const userRole = RoleType.MANAGER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -349,7 +313,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.MANAGER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 
@@ -361,7 +325,7 @@ describe('JSX: ItemReference', () => {
             const itemType = ItemType.DESIGN_UPDATE;
             const itemStatus = DesignUpdateStatus.UPDATE_MERGED;
             const userRole = RoleType.MANAGER;
-            const itemRef = '0.1';
+            const itemRef = 'CR001';
 
             let item = testItemReference(itemType, itemStatus, userRole, itemRef);
 

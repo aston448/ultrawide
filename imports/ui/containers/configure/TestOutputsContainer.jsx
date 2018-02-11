@@ -9,7 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import TestOutputLocation                   from '../../components/configure/TestOutputLocation.jsx';
 import TestOutputFilesContainer             from '../../containers/configure/TestOutputFilesContainer.jsx';
-import ItemContainer                        from '../../components/select/ItemList.jsx';
+import ItemList                             from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
@@ -77,7 +77,7 @@ export class TestOutputsScreen extends Component {
             <Grid>
                 <Row>
                     <Col md={6} className="close-col">
-                        <ItemContainer
+                        <ItemList
                             headerText={'Test Output Locations'}
                             bodyDataFunction={bodyDataFunction}
                             hasFooterAction={true}

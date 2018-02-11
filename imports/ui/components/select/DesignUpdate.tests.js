@@ -89,32 +89,6 @@ describe('JSX: DesignUpdate', () => {
     }
 
 
-
-    // Select Update ---------------------------------------------------------------------------------------------------
-
-    describe('The currently selected Design Update is highlighted', () => {
-
-        it('is highlighted when the current update', () => {
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
-
-            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
-
-            chai.assert.equal(item.find('#designUpdate').props().className, 'design-item di-active', 'Design Update not highlighted')
-        });
-
-        it('is not highlighted when not the current update', () => {
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};  // Context is different update
-
-            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
-
-            chai.assert.notEqual(item.find('#designUpdate').props().className, 'design-item di-active', 'Design Update highlighted!')
-        });
-    });
-
     // View Update Content ---------------------------------------------------------------------------------------------
 
     describe('A Design Update item has an option to view it', () => {

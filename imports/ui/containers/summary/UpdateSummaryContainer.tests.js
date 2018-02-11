@@ -6,7 +6,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { DesignUpdateSummaryList } from './UpdateSummaryContainer.jsx';  // Non container wrapped
 
-import { DesignStatus, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction, RoleType, ComponentType, DesignUpdateSummaryType, DesignUpdateSummaryItem } from '../../../constants/constants.js'
+import { DisplayContext, DesignStatus, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction, RoleType, ComponentType, DesignUpdateSummaryType, DesignUpdateSummaryItem } from '../../../constants/constants.js'
 
 import { Designs } from '../../../collections/design/designs.js'
 import { DesignVersions } from '../../../collections/design/design_versions.js'
@@ -28,6 +28,7 @@ describe('JSX: DesignUpdateSummaryList', () => {
               moveHeaders={[]}
               queryHeaders={queries}
               userContext={userContext}
+              displayContext={DisplayContext.UPDATE_SUMMARY}
           />
         );
     }
