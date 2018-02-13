@@ -178,28 +178,28 @@ export class UserDetails extends Component {
                 <div onClick={() => this.setCurrentUser(user)}>
                     <Grid>
                         <Row className={activeClass}>
-                            <Col sm={2}>
+                            <Col id="user-display-name-view" sm={2}>
                                 {user.displayName}
                             </Col>
-                            <Col sm={2}>
+                            <Col id="user-username-view" sm={2}>
                                 {user.userName}
                             </Col>
-                            <Col sm={2}>
+                            <Col id="user-designer-view" sm={2}>
                                 <Checkbox readOnly={true} checked={this.state.isDesignerValue}>
                                     Designer
                                 </Checkbox>
                             </Col>
-                            <Col sm={2}>
+                            <Col id="user-developer-view" sm={2}>
                                 <Checkbox readOnly={true} checked={this.state.isDeveloperValue}>
                                     Developer
                                 </Checkbox>
                             </Col>
-                            <Col sm={2}>
+                            <Col id="user-manager-view" sm={2}>
                                 <Checkbox readOnly={true} checked={this.state.isManagerValue}>
                                     Manager
                                 </Checkbox>
                             </Col>
-                            <Col sm={2}>
+                            <Col id="user-guest-view" sm={2}>
                                 <Checkbox readOnly={true} checked={this.state.isGuestViewerValue}>
                                     Guest Viewer
                                 </Checkbox>
@@ -216,7 +216,7 @@ export class UserDetails extends Component {
 
             const formInstance = (
                 <Form horizontal>
-                    <FormGroup controlId="formUserName">
+                    <FormGroup id="user-username-edit" controlId="formUserName">
                         <Col componentClass={ControlLabel} sm={3}>
                             User Name (Login)
                         </Col>
@@ -226,7 +226,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup controlId="formDisplayName">
+                    <FormGroup id="user-display-name-edit" controlId="formDisplayName">
                         <Col componentClass={ControlLabel} sm={3}>
                             Display Name
                         </Col>
@@ -236,7 +236,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup controlId="formIsDesigner">
+                    <FormGroup id="user-designer-edit" controlId="formIsDesigner">
                         <Col componentClass={ControlLabel} sm={3}>
                             User is Designer
                         </Col>
@@ -247,7 +247,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup controlId="formIsDeveloper">
+                    <FormGroup id="user-developer-edit" controlId="formIsDeveloper">
                         <Col componentClass={ControlLabel} sm={3}>
                             User is Developer
                         </Col>
@@ -258,7 +258,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup controlId="formIsManager">
+                    <FormGroup id="user-manager-edit" controlId="formIsManager">
                         <Col componentClass={ControlLabel} sm={3}>
                             User is Manager
                         </Col>
@@ -269,7 +269,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup controlId="formIsGuestUser">
+                    <FormGroup id="user-guest-edit" controlId="formIsGuestUser">
                         <Col componentClass={ControlLabel} sm={3}>
                             User is Guest Viewer Only
                         </Col>
@@ -280,13 +280,13 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <Button bsSize="xs" onClick={() => this.onSave(userContext)}>
+                    <Button id="butSave" bsSize="xs" onClick={() => this.onSave(userContext)}>
                         Save
                     </Button>
-                    <Button bsSize="xs" onClick={() => this.onCancel()}>
+                    <Button id="butCancel" bsSize="xs" onClick={() => this.onCancel()}>
                         Cancel
                     </Button>
-                    <Button bsSize="xs" onClick={() => this.onResetPassword(userContext, user)}>
+                    <Button id="butReset" bsSize="xs" onClick={() => this.onResetPassword(userContext, user)}>
                         Reset Password
                     </Button>
 

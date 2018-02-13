@@ -70,6 +70,7 @@ describe('JSX: DesignUpdate', () => {
         };
 
         const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
+        const statusClass = 'dummy';
 
         return shallow(
             <DesignUpdate
@@ -84,6 +85,7 @@ describe('JSX: DesignUpdate', () => {
                 summaryDataLoaded={true}
                 mashDataStale={false}
                 testDataStale={false}
+                statusClass={statusClass}
             />
         );
     }

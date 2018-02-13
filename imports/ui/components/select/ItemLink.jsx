@@ -96,6 +96,7 @@ export class ItemLink extends Component{
                 <InputGroup>
                     <div className="editableItem">
                         <FormControl
+                            id="linkEdit"
                             type="text"
                             value={this.state.linkValue}
                             placeholder={currentItemLink}
@@ -113,10 +114,10 @@ export class ItemLink extends Component{
             </div>;
 
         let wpLink =
-            <a href={currentItemLink} target="_blank">Open Link</a>;
+            <a id="linkLabel" href={currentItemLink} target="_blank">Open Link</a>;
 
         if(currentItemLink === 'NONE'){
-            wpLink = <div className="greyed-out">Link Not Set</div>
+            wpLink = <div  id="linkLabel" className="greyed-out">Link Not Set</div>
         }
 
         let linkEditorNotEditing =

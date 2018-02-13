@@ -31,7 +31,7 @@ describe('JSX: Design', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
+                <Design design={design} userContext={userContext} userRole={userRole} statusClass={'dummy'}/>
             );
 
             // Remove Design button should be there
@@ -46,7 +46,7 @@ describe('JSX: Design', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <Design design={designNonRemovable} userContext={userContext} userRole={userRole}/>
+                <Design design={designNonRemovable} userContext={userContext} userRole={userRole} statusClass={'dummy'}/>
             );
 
             // Remove Design button should NOT be there
@@ -64,7 +64,7 @@ describe('JSX: Design', () => {
             const userRole = RoleType.DEVELOPER;
 
             const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
+                <Design design={design} userContext={userContext} userRole={userRole} statusClass={'dummy'}/>
             );
 
             // Remove Design button should NOT be there
@@ -78,7 +78,7 @@ describe('JSX: Design', () => {
             const userRole = RoleType.MANAGER;
 
             const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
+                <Design design={design} userContext={userContext} userRole={userRole} statusClass={'dummy'}/>
             );
 
             // Remove Design button should NOT be there
@@ -96,7 +96,7 @@ describe('JSX: Design', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <Design design={designNonRemovable} userContext={userContext} userRole={userRole}/>
+                <Design design={designNonRemovable} userContext={userContext} userRole={userRole} statusClass={'dummy'}/>
             );
 
             // Remove Design button should be there
@@ -110,7 +110,7 @@ describe('JSX: Design', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
+                <Design design={design} userContext={userContext} userRole={userRole} statusClass={'dummy'}/>
             );
 
             // Remove Design button should be there
@@ -124,7 +124,7 @@ describe('JSX: Design', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <Design design={designArchived} userContext={userContext} userRole={userRole}/>
+                <Design design={designArchived} userContext={userContext} userRole={userRole} statusClass={'dummy'}/>
             );
 
             // Remove Design button should be there

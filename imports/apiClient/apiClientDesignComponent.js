@@ -21,8 +21,12 @@ import DesignUpdateComponentData        from '../data/design_update/design_updat
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage, updateOpenItemsFlag, setCurrentView} from '../redux/actions'
+import {
+    setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage,
+    updateOpenItemsFlag, setCurrentView, setCurrentUserHomeTab
+} from '../redux/actions'
 import apiWorkPackage from "../apiServer/apiWorkPackage";
+import {HomePageTab} from "../constants/constants";
 
 // =====================================================================================================================
 // Client API for Design Components
@@ -627,7 +631,9 @@ class ClientDesignComponentServices{
         store.dispatch(setCurrentUserItemContext(newContext, true));
 
         // And switch to the selection view
+        store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_WORK));
         store.dispatch(setCurrentView(ViewType.SELECT));
+
 
         // And select the WP wanted
         ClientWorkPackageServices.setWorkPackage(newContext, workPackageId)
