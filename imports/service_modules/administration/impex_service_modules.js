@@ -553,6 +553,11 @@ class ImpexModules{
                     isDevAdded:                     component.isDevAdded,
 
                     isRemovable:                    component.isRemovable,
+
+                    // Test Expectation
+                    requiresAcceptanceTest:         component.requiresAcceptanceTest ? component.requiresAcceptanceTest : false,
+                    requiresIntegrationTest:        component.requiresIntegrationTest ? component.requiresIntegrationTest : false,
+                    requiresUnitTest:               component.requiresUnitTest ? component.requiresUnitTest : false
                 }
             );
 
@@ -638,7 +643,12 @@ class ImpexModules{
                         isRemovable:                    component.isRemovable,
                         isScopable:                     component.isScopable,
                         scopeType:                      component.scopeType,
-                        lockingUser:                    component.lockingUser
+                        lockingUser:                    component.lockingUser,
+
+                        // Test Expectation
+                        requiresAcceptanceTest:         component.requiresAcceptanceTest ? component.requiresAcceptanceTest : false,
+                        requiresIntegrationTest:        component.requiresIntegrationTest ? component.requiresIntegrationTest : false,
+                        requiresUnitTest:               component.requiresUnitTest ? component.requiresUnitTest : false
                     }
                 );
 

@@ -10,6 +10,7 @@ import DesignComponentModules   from '../../service_modules/design/design_compon
 // DB services
 import DesignVersionData         from '../../data/design/design_version_db.js';
 import DesignComponentData       from '../../data/design/design_component_db.js';
+import DesignUpdateComponentData from "../../data/design_update/design_update_component_db";
 
 //======================================================================================================================
 //
@@ -343,6 +344,23 @@ class DesignComponentServices{
         }
 
     };
+
+    setScenarioTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation){
+
+        DesignComponentData.setTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation);
+
+        // Duplicate the expectations on any updates for this component in the DV
+        const baseComponent = DesignComponentData.getDesignComponentById(designComponentId);
+
+        const updateComponents = DesignUpdateComponentData.getAllDuComponentInstancesInDv(baseComponent.designVersionId, baseComponent.componentReferenceId);
+
+        if(updateComponents.length > 0){
+            updateComponents.forEach((component) => {
+                DesignUpdateComponentData.setTestExpectations(component._id, accExpectation, intExpectation, unitExpectation);
+            });
+        }
+
+    }
 }
 
 export default new DesignComponentServices();

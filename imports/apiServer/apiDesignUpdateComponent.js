@@ -12,8 +12,10 @@ import {
     restoreDesignComponent,
     moveDesignComponent,
     reorderDesignComponent,
-    toggleScope
+    toggleScope,
+    setUpdateScenarioTestExpectations
 } from '../apiValidatedMethods/design_update_component_methods.js'
+import {setScenarioTestExpectations} from "../apiValidatedMethods/design_component_methods";
 
 
 // =====================================================================================================================
@@ -222,6 +224,22 @@ class ServerDesignUpdateComponentApi {
             }
         );
     };
+
+    setScenarioTestExpectations(userRole, designUpdateComponentId, accExpectation, intExpectation, unitExpectation, callback){
+
+        setUpdateScenarioTestExpectations.call(
+            {
+                userRole: userRole,
+                designUpdateComponentId: designUpdateComponentId,
+                accExpectation: accExpectation,
+                intExpectation: intExpectation,
+                unitExpectation: unitExpectation,
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    }
 
 }
 

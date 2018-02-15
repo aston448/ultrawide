@@ -470,7 +470,11 @@ class TestIntegrationModules{
                     unitTestCount:                  unitTestCount,
                     unitPassCount:                  unitTestPasses,
                     unitFailCount:                  unitTestFails,
-                    dataStatus:                     MashStatus.MASH_IN_DESIGN
+                    dataStatus:                     MashStatus.MASH_IN_DESIGN,
+                    // Test Expectation
+                    requiresAcceptanceTest:         scenario.requiresAcceptanceTest,
+                    requiresIntegrationTest:        scenario.requiresIntegrationTest,
+                    requiresUnitTest:               scenario.requiresUnitTest
                 }
             );
 

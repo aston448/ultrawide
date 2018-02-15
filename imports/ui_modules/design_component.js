@@ -218,6 +218,19 @@ class ComponentUiModules{
             return true;
         }
 
+        // If a scenario and test expectations have changed
+        if(props.currentItem.componentType === ComponentType.SCENARIO){
+            if(props.currentItem.requiresAcceptanceTest !== nextProps.currentItem.requiresAcceptanceTest){
+                return true;
+            }
+            if(props.currentItem.requiresIntegrationTest !== nextProps.currentItem.requiresIntegrationTest){
+                return true;
+            }
+            if(props.currentItem.requiresUnitTest !== nextProps.currentItem.requiresUnitTest){
+                return true;
+            }
+        }
+
         // Check for scope updates in WP Editor
         if(props.view === ViewType.WORK_PACKAGE_BASE_EDIT || props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
 

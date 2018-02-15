@@ -75,6 +75,11 @@ class DesignComponentData {
                 isDevAdded:                     false,
 
                 isRemovable:                    updateItem.isRemovable,
+
+                // Test Expectation
+                requiresAcceptanceTest:         updateItem.requiresAcceptanceTest,
+                requiresIntegrationTest:        updateItem.requiresIntegrationTest,
+                requiresUnitTest:               updateItem.requiresUnitTest
             }
         );
     }
@@ -87,38 +92,43 @@ class DesignComponentData {
             return DesignVersionComponents.insert(
                 {
                     // Identity
-                    componentReferenceId: component.componentReferenceId,
-                    designId: designId,                               // Will be a new id for the restored data
-                    designVersionId: designVersionId,                        // Ditto
-                    componentType: component.componentType,
-                    componentLevel: component.componentLevel,
+                    componentReferenceId:           component.componentReferenceId,
+                    designId:                       designId,                               // Will be a new id for the restored data
+                    designVersionId:                designVersionId,                        // Ditto
+                    componentType:                  component.componentType,
+                    componentLevel:                 component.componentLevel,
 
-                    componentParentReferenceIdOld: component.componentParentReferenceIdOld,
-                    componentParentReferenceIdNew: component.componentParentReferenceIdNew,
+                    componentParentReferenceIdOld:  component.componentParentReferenceIdOld,
+                    componentParentReferenceIdNew:  component.componentParentReferenceIdNew,
                     componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
                     componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
-                    componentIndexOld: component.componentIndexNew,
-                    componentIndexNew: component.componentIndexNew,
+                    componentIndexOld:              component.componentIndexNew,
+                    componentIndexNew:              component.componentIndexNew,
 
                     // Data
-                    componentNameOld: component.componentNameOld,
-                    componentNameNew: component.componentNameNew,
-                    componentNameRawOld: component.componentNameRawOld,
-                    componentNameRawNew: component.componentNameRawNew,
-                    componentNarrativeOld: component.componentNarrativeOld,
-                    componentNarrativeNew: component.componentNarrativeNew,
-                    componentNarrativeRawNew: component.componentNarrativeRawNew,
-                    componentTextRawOld: component.componentTextRawOld,
-                    componentTextRawNew: component.componentTextRawNew,
+                    componentNameOld:               component.componentNameOld,
+                    componentNameNew:               component.componentNameNew,
+                    componentNameRawOld:            component.componentNameRawOld,
+                    componentNameRawNew:            component.componentNameRawNew,
+                    componentNarrativeOld:          component.componentNarrativeOld,
+                    componentNarrativeNew:          component.componentNarrativeNew,
+                    componentNarrativeRawNew:       component.componentNarrativeRawNew,
+                    componentTextRawOld:            component.componentTextRawOld,
+                    componentTextRawNew:            component.componentTextRawNew,
 
                     // State (shared and persistent only)
-                    isNew: component.isNew,
-                    workPackageId: workPackageId,
-                    updateMergeStatus: component.updateMergeStatus,
-                    isDevUpdated: component.isDevUpdated,
-                    isDevAdded: component.isDevAdded,
+                    isNew:                          component.isNew,
+                    workPackageId:                  workPackageId,
+                    updateMergeStatus:              component.updateMergeStatus,
+                    isDevUpdated:                   component.isDevUpdated,
+                    isDevAdded:                     component.isDevAdded,
 
-                    isRemovable: component.isRemovable,
+                    isRemovable:                    component.isRemovable,
+
+                    // Test Expectation
+                    requiresAcceptanceTest:         component.requiresAcceptanceTest,
+                    requiresIntegrationTest:        component.requiresIntegrationTest,
+                    requiresUnitTest:               component.requiresUnitTest
                 }
             );
 
@@ -562,6 +572,20 @@ class DesignComponentData {
                 $set: {
                     componentIndexOld: oldIndex,
                     componentIndexNew: newIndex
+                }
+            }
+        );
+    }
+
+    setTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation){
+
+        return DesignVersionComponents.update(
+            {_id: designComponentId},
+            {
+                $set:{
+                    requiresAcceptanceTest:         accExpectation,
+                    requiresIntegrationTest:        intExpectation,
+                    requiresUnitTest:               unitExpectation
                 }
             }
         );

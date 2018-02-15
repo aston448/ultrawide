@@ -2,6 +2,7 @@
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 
 import { DesignUpdateStatus, DesignUpdateMergeAction, ComponentType, UpdateScopeType, WorkPackageStatus }  from '../../constants/constants.js';
+import {DesignVersionComponents} from "../../collections/design/design_version_components";
 
 class DesignUpdateComponentData{
 
@@ -88,7 +89,12 @@ class DesignUpdateComponentData{
             // Editing state (shared and persistent)
             isRemovable:                    true,           // Note all update items are removable when scoped
             isScopable:                     isScopable,
-            scopeType:                      scopeType
+            scopeType:                      scopeType,
+
+            // Test Expectation
+            requiresAcceptanceTest:         baseComponent.requiresAcceptanceTest,
+            requiresIntegrationTest:        baseComponent.requiresIntegrationTest,
+            requiresUnitTest:               baseComponent.requiresUnitTest
         });
     }
 
@@ -97,46 +103,51 @@ class DesignUpdateComponentData{
         DesignUpdateComponents.insert(
             {
                 // Identity
-                componentReferenceId: component.componentReferenceId,
-                designId: designId,                                           // Restored Design Id
-                designVersionId: designVersionId,                                    // Restored Design Version Id
-                designUpdateId: designUpdateId,                                     // Restored Design Update Id
-                componentType: component.componentType,
-                componentLevel: component.componentLevel,
-                componentParentReferenceIdOld: component.componentParentReferenceIdOld,
-                componentParentReferenceIdNew: component.componentParentReferenceIdNew,
+                componentReferenceId:           component.componentReferenceId,
+                designId:                       designId,                                           // Restored Design Id
+                designVersionId:                designVersionId,                                    // Restored Design Version Id
+                designUpdateId:                 designUpdateId,                                     // Restored Design Update Id
+                componentType:                  component.componentType,
+                componentLevel:                 component.componentLevel,
+                componentParentReferenceIdOld:  component.componentParentReferenceIdOld,
+                componentParentReferenceIdNew:  component.componentParentReferenceIdNew,
                 componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
                 componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
-                componentIndexOld: component.componentIndexOld,
-                componentIndexNew: component.componentIndexNew,
+                componentIndexOld:              component.componentIndexOld,
+                componentIndexNew:              component.componentIndexNew,
 
                 // Data
-                componentNameOld: component.componentNameOld,
-                componentNameNew: component.componentNameNew,
-                componentNameRawOld: component.componentNameRawOld,
-                componentNameRawNew: component.componentNameRawNew,
-                componentNarrativeOld: component.componentNarrativeOld,
-                componentNarrativeNew: component.componentNarrativeNew,
-                componentNarrativeRawOld: component.componentNarrativeRawOld,
-                componentNarrativeRawNew: component.componentNarrativeRawNew,
-                componentTextRawOld: component.componentTextRawOld,
-                componentTextRawNew: component.componentTextRawNew,
+                componentNameOld:               component.componentNameOld,
+                componentNameNew:               component.componentNameNew,
+                componentNameRawOld:            component.componentNameRawOld,
+                componentNameRawNew:            component.componentNameRawNew,
+                componentNarrativeOld:          component.componentNarrativeOld,
+                componentNarrativeNew:          component.componentNarrativeNew,
+                componentNarrativeRawOld:       component.componentNarrativeRawOld,
+                componentNarrativeRawNew:       component.componentNarrativeRawNew,
+                componentTextRawOld:            component.componentTextRawOld,
+                componentTextRawNew:            component.componentTextRawNew,
 
                 // Update State
-                isNew: component.isNew,
-                isChanged: component.isChanged,
-                isTextChanged: component.isTextChanged,
-                isMoved: component.isMoved,
-                isRemoved: component.isRemoved,
-                isDevUpdated: component.isDevUpdated,
-                isDevAdded: component.isDevAdded,
-                workPackageId: workPackageId,
+                isNew:                          component.isNew,
+                isChanged:                      component.isChanged,
+                isTextChanged:                  component.isTextChanged,
+                isMoved:                        component.isMoved,
+                isRemoved:                      component.isRemoved,
+                isDevUpdated:                   component.isDevUpdated,
+                isDevAdded:                     component.isDevAdded,
+                workPackageId:                  workPackageId,
 
                 // Editing state (shared and persistent)
-                isRemovable: component.isRemovable,
-                isScopable: component.isScopable,
-                scopeType: component.scopeType,
-                lockingUser: component.lockingUser
+                isRemovable:                    component.isRemovable,
+                isScopable:                     component.isScopable,
+                scopeType:                      component.scopeType,
+                lockingUser:                    component.lockingUser,
+
+                // Test Expectation
+                requiresAcceptanceTest:         component.requiresAcceptanceTest,
+                requiresIntegrationTest:        component.requiresIntegrationTest,
+                requiresUnitTest:               component.requiresUnitTest
             }
         );
     }
@@ -600,6 +611,20 @@ class DesignUpdateComponentData{
                     componentFeatureReferenceIdNew: newFeatureRefId,
                     componentLevel: newLevel,
                     isMoved: isMoved
+                }
+            }
+        );
+    }
+
+    setTestExpectations(designUpdateComponentId, accExpectation, intExpectation, unitExpectation){
+
+        return DesignUpdateComponents.update(
+            {_id: designUpdateComponentId},
+            {
+                $set:{
+                    requiresAcceptanceTest:         accExpectation,
+                    requiresIntegrationTest:        intExpectation,
+                    requiresUnitTest:               unitExpectation
                 }
             }
         );

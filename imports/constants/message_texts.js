@@ -84,7 +84,8 @@ export const DesignComponentMessages = {
     MSG_FEATURE_NARRATIVE_UPDATED:  'Feature narrative updated',
     MSG_DESIGN_COMPONENT_REMOVED:   'Design Component removed',
     MSG_DESIGN_COMPONENT_MOVED:     'Design Component moved',
-    MSG_DESIGN_COMPONENT_REORDERED: 'Design Component re-ordered'
+    MSG_DESIGN_COMPONENT_REORDERED: 'Design Component re-ordered',
+    MSG_SCENARIO_EXPECTATIONS_UPDATED:  'Scenario test expectations updated'
 };
 
 export const DesignUpdateComponentMessages = {
@@ -101,7 +102,8 @@ export const DesignUpdateComponentMessages = {
     MSG_DESIGN_COMPONENT_MOVED:     'Design Update Component moved',
     MSG_DESIGN_COMPONENT_REORDERED: 'Design Update Component re-ordered',
     MSG_DESIGN_COMPONENT_IN_SCOPE:  'Design Update Component in scope',
-    MSG_DESIGN_COMPONENT_OUT_SCOPE: 'Design Update Component out of scope'
+    MSG_DESIGN_COMPONENT_OUT_SCOPE: 'Design Update Component out of scope',
+    MSG_SCENARIO_EXPECTATIONS_UPDATED: 'Scenario test expectations updated'
 };
 
 export const WorkPackageComponentMessages = {

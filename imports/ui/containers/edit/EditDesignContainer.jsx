@@ -394,7 +394,11 @@ export class DesignApplicationsList extends Component {
 
         if(viewOptions.designShowAllAsTabs){
 
-            // Layout is 6 - 6
+            // Layout is 6 - 6 unless test summary visible
+            if(viewOptions.testSummaryVisible){
+                col1width = 8;
+                col2width = 4;
+            }
 
         } else {
 

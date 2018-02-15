@@ -72,6 +72,8 @@ class ClientLoginServices{
                                     messageText: LoginMessages.MSG_LOGIN_OK
                                 }));
 
+                                // The current role will be set when data is loaded in onAllDataLoaded
+
                                 // Properly logged in as normal user so retrieve user settings - stored to REDUX
                                 const userContext = ClientUserContextServices.getUserContext(userId);
 

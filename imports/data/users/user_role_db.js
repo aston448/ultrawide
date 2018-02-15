@@ -105,6 +105,18 @@ class UserRoleData{
             }
         );
     }
+
+    setCurrentRole(userId, role){
+
+        return UserRoles.update(
+            {userId: userId},
+            {
+                $set:{
+                    currentRole: role
+                }
+            }
+        );
+    }
 }
 
 export default new UserRoleData();

@@ -309,7 +309,7 @@ export const updateFeatureNarrative = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateUpdateFeatureNarrative(view, mode);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.updateFeatureNarrative.failValidation', result)
         }
 
@@ -371,7 +371,7 @@ export const moveDesignComponent = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateMoveDesignComponent(view, mode, displayContext, movingComponentId, targetComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.moveDesignComponent.failValidation', result)
         }
 
@@ -402,13 +402,44 @@ export const reorderDesignComponent = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateReorderDesignComponent(view, mode, displayContext, movingComponentId, targetComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.reorderDesignComponent.failValidation', result)
         }
 
         // Server action
         try {
             DesignComponentServices.reorderDesignComponent(movingComponentId, targetComponentId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
+
+export const setScenarioTestExpectations = new ValidatedMethod({
+
+    name: 'designComponent.setScenarioTestExpectations',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        designComponentId:  {type: String},
+        accExpectation:     {type: Boolean},
+        intExpectation:     {type: Boolean},
+        unitExpectation:    {type: Boolean}
+    }).validator(),
+
+    run({userRole, designComponentId, accExpectation, intExpectation, unitExpectation}){
+
+        // Server validation
+        const result = DesignComponentValidationApi.validateSetScenarioTestExpectations(userRole);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('designComponent.setScenarioTestExpectations.failValidation', result)
+        }
+
+        // Server action
+        try {
+            DesignComponentServices.setScenarioTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.code, e.stack)

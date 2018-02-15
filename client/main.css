@@ -2489,6 +2489,60 @@ input {
     border: 1px solid darkgrey;
 }
 
+.test-not-expected{
+    margin: 10px 0px 5px 0px;
+    padding: 2px;
+    min-width: 18px;
+    color:darkgrey;
+    background-color: lightgrey;
+    border: 1px solid darkgrey;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+}
+
+.acc-expected{
+    margin: 10px 0px 5px 0px;
+    padding: 2px;
+    min-width: 18px;
+    color:black;
+    background-color: lightgreen;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid palegreen;
+    border-bottom: 1px solid palegreen;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+
+}
+
+.int-expected{
+    margin: 10px 0px 5px 0px;
+    padding: 2px;
+    min-width: 18px;
+    color:black;
+    background-color: aquamarine;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid paleturquoise;
+    border-bottom: 1px solid paleturquoise;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+}
+
+.unit-expected{
+    margin: 10px 0px 5px 0px;
+    padding: 2px;
+    min-width: 18px;
+    color:black;
+    background-color: lightsalmon;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid lightpink;
+    border-bottom: 1px solid lightpink;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+}
+
 .mash-linked {
     color: black;
 }

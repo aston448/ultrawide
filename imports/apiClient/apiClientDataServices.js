@@ -170,20 +170,24 @@ class ClientDataServices{
         }
 
         // Set User Role
-        // TODO - Implement default role
         const user = UserRoleData.getRoleByUserId(userContext.userId);
 
-        if(user.isGuestViewer){
-            store.dispatch(setCurrentRole(userContext.userId, RoleType.GUEST_VIEWER))
+        if(user.currentRole !== 'NONE'){
+            store.dispatch(setCurrentRole(userContext.userId, user.currentRole))
         } else {
-            if (user.isDesigner) {
-                store.dispatch(setCurrentRole(userContext.userId, RoleType.DESIGNER))
+            // Pick a role
+            if (user.isGuestViewer) {
+                store.dispatch(setCurrentRole(userContext.userId, RoleType.GUEST_VIEWER))
             } else {
-                if (user.isManager) {
-                    store.dispatch(setCurrentRole(userContext.userId, RoleType.MANAGER))
+                if (user.isDesigner) {
+                    store.dispatch(setCurrentRole(userContext.userId, RoleType.DESIGNER))
                 } else {
-                    if (user.isDeveloper) {
-                        store.dispatch(setCurrentRole(userContext.userId, RoleType.DEVELOPER))
+                    if (user.isManager) {
+                        store.dispatch(setCurrentRole(userContext.userId, RoleType.MANAGER))
+                    } else {
+                        if (user.isDeveloper) {
+                            store.dispatch(setCurrentRole(userContext.userId, RoleType.DEVELOPER))
+                        }
                     }
                 }
             }

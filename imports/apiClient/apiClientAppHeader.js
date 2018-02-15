@@ -498,8 +498,8 @@ class ClientAppHeaderServices{
             store.dispatch(setCurrentUserItemContext(emptyContext, false));
 
 
-            // Clear role and username
-            store.dispatch(setCurrentRole(userContext.userId, RoleType.NONE));
+            // Clear role and username but don't update DB
+            store.dispatch(setCurrentRole(userContext.userId, RoleType.NONE, false));
             store.dispatch(setCurrentUserName(''));
         }
 

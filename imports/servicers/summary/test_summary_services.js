@@ -119,9 +119,17 @@ class TestSummaryServices {
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "Processing Summary Scenario: {} with unit pass count {}", featureScenario.scenarioName, featureScenario.unitPassCount);
 
-                let hasResult = false;
-                let duHasResult = false;
-                let wpHasResult = false;
+                let hasAccResult = false;
+                let hasIntResult = false;
+                let hasUnitResult = false;
+
+                let duHasAccResult = false;
+                let duHasIntResult = false;
+                let duHasUnitResult = false;
+
+                let wpHasAccResult = false;
+                let wpHasIntResult = false;
+                let wpHasUnitResult = false;
 
                 let scenarioPassingTests = 0;
                 let scenarioFailingTests = 0;
@@ -131,40 +139,40 @@ class TestSummaryServices {
                     log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test fail {}", featureScenario.scenarioName);
                     featureFailingTests++;
                     scenarioFailingTests++;
-                    hasResult = true;
+                    hasAccResult = true;
                 }
                 if(featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL){
                     log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test fail {}", featureScenario.scenarioName);
                     featureFailingTests++;
                     scenarioFailingTests++;
-                    hasResult = true;
+                    hasIntResult = true;
                 }
 
                 if(featureScenario.unitFailCount > 0) {
                     log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test fail {}", featureScenario.scenarioName);
                     featureFailingTests += featureScenario.unitFailCount;
                     scenarioFailingTests += featureScenario.unitFailCount;
-                    hasResult = true;
+                    hasUnitResult = true;
                 }
 
                 if(featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS){
                     log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test pass {}", featureScenario.scenarioName);
                     featurePassingTests++;
                     scenarioPassingTests++;
-                    hasResult = true;
+                    hasAccResult = true;
                 }
                 if(featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS){
                     log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pass {}", featureScenario.scenarioName);
                     featurePassingTests++;
                     scenarioPassingTests++;
-                    hasResult = true;
+                    hasIntResult = true;
                 }
 
                 if(featureScenario.unitPassCount > 0) {
                     log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test pass {}", featureScenario.scenarioName);
                     featurePassingTests += featureScenario.unitPassCount;
                     scenarioPassingTests += featureScenario.unitPassCount;
-                    hasResult = true;
+                    hasUnitResult = true;
                 }
 
                 // Any fails is a fail even if passes.  Any passes and no fails is a pass
@@ -176,11 +184,15 @@ class TestSummaryServices {
                     }
                 }
 
-                if(!hasResult) {
+                // Mark as no test if a test is required
+                if(
+                    (!hasAccResult && featureScenario.requiresAcceptanceTest) ||
+                    (!hasIntResult && featureScenario.requiresIntegrationTest) ||
+                    (!hasUnitResult && featureScenario.requiresUnitTest)
+                ) {
                     log((msg) => console.log(msg), LogLevel.TRACE, "  -- Scenario with no test {}", featureScenario.scenarioName);
                     featureNoTestScenarios++;
                     totalScenariosWithoutTests++;
-
                 }
 
                 let duComponent = null;
@@ -200,32 +212,32 @@ class TestSummaryServices {
 
                         if (featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL) {
                             duFailingTests++;
-                            duHasResult = true;
+                            duHasAccResult = true;
                         }
                         if (featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL) {
                             duFailingTests++;
-                            duHasResult = true;
+                            duHasIntResult = true;
                             log((msg) => console.log(msg), LogLevel.TRACE, "Failed INT test.  Count: {}", duFailingTests);
                         }
 
                         if (featureScenario.unitFailCount > 0) {
                             log((msg) => console.log(msg), LogLevel.TRACE, "Failed UNIT tests {}", featureScenario.unitFailCount);
                             duFailingTests += featureScenario.unitFailCount;
-                            duHasResult = true;
+                            duHasUnitResult = true;
                         }
 
                         if (featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS) {
                             duPassingTests++;
-                            duHasResult = true;
+                            duHasAccResult = true;
                         }
                         if (featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS) {
                             duPassingTests++;
-                            duHasResult = true;
+                            duHasIntResult = true;
                         }
 
                         if (featureScenario.unitPassCount > 0) {
                             duPassingTests += featureScenario.unitPassCount;
-                            duHasResult = true;
+                            duHasUnitResult = true;
                         }
 
                         // Any fails is a fail even if passes.  Any passes and no fails is a pass
@@ -237,7 +249,12 @@ class TestSummaryServices {
                             }
                         }
 
-                        if (!duHasResult) {
+                        // DU No tests where tests are expected
+                        if (
+                            (!duHasAccResult && featureScenario.requiresAcceptanceTest) ||
+                            (!duHasIntResult && featureScenario.requiresIntegrationTest) ||
+                            (!duHasUnitResult && featureScenario.requiresUnitTest)
+                        ) {
                             duFeatureNoTestScenarios++;
                         }
                     }
@@ -258,30 +275,30 @@ class TestSummaryServices {
 
                         if (featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL) {
                             wpFailingTests++;
-                            wpHasResult = true;
+                            wpHasAccResult = true;
                         }
                         if (featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL) {
                             wpFailingTests++;
-                            wpHasResult = true;
+                            wpHasIntResult = true;
                         }
 
                         if (featureScenario.unitFailCount > 0) {
                             wpFailingTests += featureScenario.unitFailCount;
-                            wpHasResult = true;
+                            wpHasUnitResult = true;
                         }
 
                         if (featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS) {
                             wpPassingTests++;
-                            wpHasResult = true;
+                            wpHasAccResult = true;
                         }
                         if (featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS) {
                             wpPassingTests++;
-                            wpHasResult = true;
+                            wpHasIntResult = true;
                         }
 
                         if (featureScenario.unitPassCount > 0) {
                             wpPassingTests += featureScenario.unitPassCount;
-                            wpHasResult = true;
+                            wpHasUnitResult = true;
                         }
 
                         // Any fails is a fail even if passes.  Any passes and no fails is a pass
@@ -294,7 +311,12 @@ class TestSummaryServices {
                             }
                         }
 
-                        if (!wpHasResult) {
+                        // WP No tests where tests are expected
+                        if (
+                            (!wpHasAccResult && featureScenario.requiresAcceptanceTest) ||
+                            (!wpHasIntResult && featureScenario.requiresIntegrationTest) ||
+                            (!wpHasUnitResult && featureScenario.requiresUnitTest)
+                        ) {
                             wpFeatureNoTestScenarios++;
                         }
 

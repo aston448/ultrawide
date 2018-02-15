@@ -130,7 +130,8 @@ export const DesignComponentValidationErrors = {
     DESIGN_COMPONENT_NOT_REMOVABLE:                         'A Design Component containing other components is not removable.  Delete from bottom up to remove.',
     DESIGN_COMPONENT_NOT_REMOVABLE_DEV:                     'Only Scenarios or Feature Aspects added by a Developer may be removed in a Work Package',
     DESIGN_COMPONENT_NOT_WP_UPDATABLE:                      'A Design Component is only updatable from a WP if it is a Scenario or is a Feature Aspect added by the Developer',
-    DESIGN_COMPONENT_NOT_WP_ADDABLE:                        'Only Feature Aspects and Scenarios can be added to a Work Package by a Developer'
+    DESIGN_COMPONENT_NOT_WP_ADDABLE:                        'Only Feature Aspects and Scenarios can be added to a Work Package by a Developer',
+    DESIGN_COMPONENT_INVALID_ROLE_TEST_EXPECTATIONS:        'Only a Designer can update Test Expectations'
 };
 
 export const DesignUpdateComponentValidationErrors = {
@@ -181,7 +182,8 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_UPDATABLE_OTHER_DU:             'This component cannot be renamed as it has been renamed in another published Design Update',
     DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE:                   'A Design Component is only updatable from a WP if it is a Scenario or is a Feature Aspect added by the Developer',
     DESIGN_UPDATE_COMPONENT_NOT_WP_ADDABLE:                     'Only Feature Aspects and Scenarios can be added to a Work Package by a Developer',
-    DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE:                       'Only specifically scoped components can be removed from scope'
+    DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE:                       'Only specifically scoped components can be removed from scope',
+    DESIGN_UPDATE_COMPONENT_INVALID_ROLE_TEST_EXPECTATIONS:     'Only a Designer can update Test Expectations'
 };
 
 export const WorkPackageComponentValidationErrors = {

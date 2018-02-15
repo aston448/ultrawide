@@ -19,6 +19,7 @@ import DesignComponentData              from '../data/design/design_component_db
 import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
 import UserViewOptionData               from '../data/context/user_view_option_db.js';
 import UserContextData                  from '../data/context/user_context_db.js';
+import UserRoleData                     from '../data/users/user_role_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -139,7 +140,11 @@ class ClientUserContextServices {
     }
 
     setUserRole(userId, roleType){
+
+        //console.log('Setting user role to ' + roleType);
+
         store.dispatch(setCurrentRole(userId, roleType));
+
     }
 
 

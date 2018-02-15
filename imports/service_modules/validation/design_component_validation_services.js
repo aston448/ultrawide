@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext, ComponentType } from '../../constants/constants.js';
+import { ViewType, ViewMode, DisplayContext, ComponentType, RoleType } from '../../constants/constants.js';
 import { Validation, DesignComponentValidationErrors } from '../../constants/validation_errors.js';
 
 import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js';
@@ -215,6 +215,15 @@ class DesignComponentValidationServices{
         // Moves must be to a valid destination
         if(!reorderDropAllowed(movingComponent, targetComponent)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_REORDER;
+        }
+
+        return Validation.VALID;
+    }
+
+    validateSetScenarioTestExpectations(userRole){
+
+        if(userRole !== RoleType.DESIGNER){
+            return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_ROLE_TEST_EXPECTATIONS;
         }
 
         return Validation.VALID;

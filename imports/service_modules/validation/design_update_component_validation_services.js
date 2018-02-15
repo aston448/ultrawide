@@ -4,6 +4,8 @@ import { ViewType, ViewMode, DisplayContext, ComponentType, UpdateScopeType, Upd
 import { Validation, DesignUpdateComponentValidationErrors } from '../../constants/validation_errors.js';
 
 import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js';
+import {RoleType} from "../../constants/constants";
+import {DesignComponentValidationErrors} from "../../constants/validation_errors";
 
 //======================================================================================================================
 //
@@ -448,6 +450,15 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN;
         }
 
+
+        return Validation.VALID;
+    }
+
+    validateSetScenarioTestExpectations(userRole){
+
+        if(userRole !== RoleType.DESIGNER){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_ROLE_TEST_EXPECTATIONS;
+        }
 
         return Validation.VALID;
     }

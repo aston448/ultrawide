@@ -1333,6 +1333,15 @@ export class DesignComponentHeader extends Component{
                         }
                     }
 
+                    // Pass the scenario into summary for test expectations
+                    let scenario = currentItem;
+                    // But if an update, use the update scenario
+                    if(updateItem){
+                        scenario = updateItem;
+                    }
+
+                    // onClick={ () => this.setCurrentComponent()}
+
                     return(
                         <Grid id="scenarioTestSummary">
                             <Row id={uiContextName} className={rowClass}>
@@ -1341,9 +1350,10 @@ export class DesignComponentHeader extends Component{
                                         {designComponentElement}
                                     </div>
                                 </Col>
-                                <Col md={5} className="close-col" onClick={ () => this.setCurrentComponent()}>
+                                <Col md={5} className="close-col">
                                     <TestSummary
                                         testSummaryData={testSummaryData}
+                                        scenario={scenario}
                                     />
                                 </Col>
                             </Row>

@@ -6,6 +6,8 @@ import { Validation } from '../constants/validation_errors.js'
 import DesignUpdateComponentValidationApi           from '../apiValidation/apiDesignUpdateComponentValidation.js';
 import DesignUpdateComponentServices                from '../servicers/design_update/design_update_component_services.js';
 import DesignComponentModules                       from '../service_modules/design/design_component_service_modules.js';
+import DesignComponentValidationApi from "../apiValidation/apiDesignComponentValidation";
+import DesignComponentServices from "../servicers/design/design_component_services";
 
 //======================================================================================================================
 //
@@ -484,5 +486,36 @@ export const toggleScope = new ValidatedMethod({
         // }
     }
 
+});
+
+export const setUpdateScenarioTestExpectations = new ValidatedMethod({
+
+    name: 'designUpdateComponent.setScenarioTestExpectations',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        designUpdateComponentId:  {type: String},
+        accExpectation:     {type: Boolean},
+        intExpectation:     {type: Boolean},
+        unitExpectation:    {type: Boolean}
+    }).validator(),
+
+    run({userRole, designUpdateComponentId, accExpectation, intExpectation, unitExpectation}){
+
+        // Server validation
+        const result = DesignUpdateComponentValidationApi.validateSetScenarioTestExpectations(userRole);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('designUpdateComponent.setScenarioTestExpectations.failValidation', result)
+        }
+
+        // Server action
+        try {
+            DesignUpdateComponentServices.setScenarioTestExpectations(designUpdateComponentId, accExpectation, intExpectation, unitExpectation);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
 });
 

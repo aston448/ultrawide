@@ -75,5 +75,10 @@ class DesignComponentValidationApi{
         return DesignComponentValidationServices.validateReorderDesignComponent(view, mode, displayContext, movingComponent, targetComponent)
     }
 
+    validateSetScenarioTestExpectations(userRole){
+
+        return DesignComponentValidationServices.validateSetScenarioTestExpectations(userRole);
+    }
+
 }
 export default new DesignComponentValidationApi();

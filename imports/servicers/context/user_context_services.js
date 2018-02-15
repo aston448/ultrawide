@@ -2,6 +2,7 @@
 // Data Access
 import UserContextData          from '../../data/context/user_context_db.js';
 import UserViewOptionData       from '../../data/context/user_view_option_db.js';
+import UserRoleData             from '../../data/users/user_role_db.js';
 
 //======================================================================================================================
 //
@@ -45,6 +46,14 @@ class UserContextServices{
             }
         }
     };
+
+    saveCurrentUserRole(userId, role){
+
+        if(Meteor.isServer){
+
+            UserRoleData.setCurrentRole(userId, role);
+        }
+    }
 
 }
 

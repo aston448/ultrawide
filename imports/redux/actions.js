@@ -78,10 +78,16 @@ export const UPDATE_VIEW_OPTIONS_DATA = 'UPDATE_VIEW_OPTIONS_DATA';
 export const UPDATE_USER_MESSAGE = 'UPDATE_USER_MESSAGE';
 
 // Sets the current user role - one user can change roles if allowed to
-export function setCurrentRole(userId, role) {
+export function setCurrentRole(userId, role, saveToDb=true) {
+
     return function (dispatch) {
         //console.log("ACTIONS: Role to " + role);
         dispatch({type: SET_CURRENT_USER_ROLE, newUserRole: role});
+
+        // And persist to DB if wanted
+        if(saveToDb) {
+            Meteor.call('userContext.setCurrentUserRole', userId, role);
+        }
     };
 }
 

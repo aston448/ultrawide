@@ -32,7 +32,12 @@ let Schema = new SimpleSchema({
     unitTestCount:                  {type: Number, optional: true},
     unitPassCount:                  {type: Number, optional: true},
     unitFailCount:                  {type: Number, optional: true},
-    dataStatus:                     {type: String, defaultValue: MashStatus.MASH_NOT_IMPLEMENTED} // Indicates latest changes to this data
+    dataStatus:                     {type: String, defaultValue: MashStatus.MASH_NOT_IMPLEMENTED}, // Indicates latest changes to this data
+
+    // Test Expectation
+    requiresAcceptanceTest:         {type: Boolean, defaultValue: false},
+    requiresIntegrationTest:        {type: Boolean, defaultValue: false},
+    requiresUnitTest:               {type: Boolean, defaultValue: false}
 });
 
 UserDesignVersionMashScenarios.attachSchema(Schema);

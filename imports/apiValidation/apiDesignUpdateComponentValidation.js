@@ -11,6 +11,7 @@ import DesignVersionData                        from '../data/design/design_vers
 import DesignUpdateData                         from '../data/design_update/design_update_db.js';
 import DesignComponentData                      from '../data/design/design_component_db.js';
 import DesignUpdateComponentData                from '../data/design_update/design_update_component_db.js';
+import DesignComponentValidationServices from "../service_modules/validation/design_component_validation_services";
 
 //======================================================================================================================
 //
@@ -163,6 +164,11 @@ class DesignUpdateComponentValidationApi{
         const componentInOtherDesignUpdates = DesignVersionData.getComponentInOtherDvUpdates(designComponent, designUpdateId);
 
         return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designComponent, updateComponent, componentInOtherDesignUpdates, hasNoNewChildren, newScope);
+    }
+
+    validateSetScenarioTestExpectations(userRole){
+
+        return DesignUpdateComponentValidationServices.validateSetScenarioTestExpectations(userRole);
     }
 
 }
