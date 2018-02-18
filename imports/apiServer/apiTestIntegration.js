@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import {
     refreshTestData,
     updateTestSummaryData,
+    updateTestSummaryDataForFeature,
     exportIntegrationTests
 
 } from '../apiValidatedMethods/test_integration_methods.js'
@@ -32,6 +33,18 @@ class ServerTestIntegrationApi {
     updateTestSummaryData(userContext, callback){
 
         updateTestSummaryData.call(
+            {
+                userContext:    userContext
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateTestSummaryDataForFeature(userContext, callback){
+
+        updateTestSummaryDataForFeature.call(
             {
                 userContext:    userContext
             },

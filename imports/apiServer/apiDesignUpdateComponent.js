@@ -225,10 +225,11 @@ class ServerDesignUpdateComponentApi {
         );
     };
 
-    setScenarioTestExpectations(userRole, designUpdateComponentId, accExpectation, intExpectation, unitExpectation, callback){
+    setScenarioTestExpectations(userId, userRole, designUpdateComponentId, accExpectation, intExpectation, unitExpectation, callback){
 
         setUpdateScenarioTestExpectations.call(
             {
+                userId: userId,
                 userRole: userRole,
                 designUpdateComponentId: designUpdateComponentId,
                 accExpectation: accExpectation,

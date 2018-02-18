@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import {FeatureTestSummaryStatus, ViewType}    from '../../../constants/constants.js';
 
 // Bootstrap
-import {Glyphicon} from 'react-bootstrap';
+import {Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
@@ -45,12 +45,18 @@ export class TestSummary extends Component {
 
         if(testSummaryData){
 
-            let resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-            let resultClassFail = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
+            let resultClassScenarios = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGLIGHT_REQUIRED;
+            let resultClassRequired = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
+            let resultClassFulfilled = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
+            let resultClassPass = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
+            let resultClassFail = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
             let resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
             let resultFeatureSummary = '';
 
             // Get data for view
+            let scenarioCount = 0;
+            let requiredCount = 0;
+            let fulfilledCount = 0;
             let passCount = 0;
             let failCount = 0;
             let noTestCount = 0;
@@ -61,6 +67,9 @@ export class TestSummary extends Component {
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:       // Scope pane
                     // Whole DV
+                    scenarioCount = testSummaryData.featureScenarioCount;
+                    requiredCount = testSummaryData.featureExpectedTestCount;
+                    fulfilledCount = testSummaryData.featureFulfilledTestCount;
                     passCount = testSummaryData.featureTestPassCount;
                     failCount = testSummaryData.featureTestFailCount;
                     noTestCount = testSummaryData.featureNoTestCount;
@@ -68,6 +77,9 @@ export class TestSummary extends Component {
                 case ViewType.DESIGN_UPDATE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:     // Scope pane
                     // DU Only
+                    scenarioCount = testSummaryData.duFeatureScenarioCount;
+                    requiredCount = testSummaryData.duFeatureExpectedTestCount;
+                    fulfilledCount = testSummaryData.duFeatureFulfilledTestCount;
                     passCount = testSummaryData.duFeatureTestPassCount;
                     failCount = testSummaryData.duFeatureTestFailCount;
                     noTestCount = testSummaryData.duFeatureNoTestCount;
@@ -78,6 +90,9 @@ export class TestSummary extends Component {
                 case ViewType.DEVELOP_BASE_WP:
                 case ViewType.DEVELOP_UPDATE_WP:
                     // WP Only
+                    scenarioCount = testSummaryData.wpFeatureScenarioCount;
+                    requiredCount = testSummaryData.wpFeatureExpectedTestCount;
+                    fulfilledCount = testSummaryData.wpFeatureFulfilledTestCount;
                     passCount = testSummaryData.wpFeatureTestPassCount;
                     failCount = testSummaryData.wpFeatureTestFailCount;
                     noTestCount = testSummaryData.wpFeatureNoTestCount;
@@ -93,13 +108,16 @@ export class TestSummary extends Component {
             } else {
                 // If any fails it's a FAIL
                 if (failCount > 0) {
-                    resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-                    resultClassFail = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL;
+                    resultClassPass = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
+                    resultClassFail = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL;
                     resultFeatureSummary = 'feature-summary-bad';
                 } else {
                     // Highlight passes if any and no fails
                     if (passCount > 0) {
-                        resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
+                        resultClassPass = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
+                        if((requiredCount === fulfilledCount) && (requiredCount > 0)){
+                            resultClassFulfilled= 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
+                        }
                     } else {
                         // No passes or failures so highlight number of tests
                         resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_NO_TEST;
@@ -112,26 +130,119 @@ export class TestSummary extends Component {
                         }
                     } else {
                         // All passes and no pending tests
-                        resultFeatureSummary = 'feature-summary-good';
+                        if((requiredCount === fulfilledCount) && (requiredCount > 0)) {
+                            resultFeatureSummary = 'feature-summary-good';
+                        } else {
+                            resultFeatureSummary = 'feature-summary-mmm';
+                        }
                     }
                 }
             }
 
+            // Only show requirements as active if some tests are required
+            if(requiredCount > 0){
+                resultClassRequired = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGLIGHT_REQUIRED;
+            }
+
+            const tooltipDelay = 1000;
+
+            const tooltipScenarios = (
+                <Tooltip id="modal-tooltip">
+                    {'Total Scenarios in Feature'}
+                </Tooltip>
+            );
+
+            const tooltipRequired = (
+                <Tooltip id="modal-tooltip">
+                    {'Number of tests required'}
+                </Tooltip>
+            );
+
+            const tooltipFulfilled = (
+                <Tooltip id="modal-tooltip">
+                    {'Number of required tests passing'}
+                </Tooltip>
+            );
+
+            const tooltipPasses = (
+                <Tooltip id="modal-tooltip">
+                    {'Total pass count'}
+                </Tooltip>
+            );
+
+            const tooltipFails = (
+                <Tooltip id="modal-tooltip">
+                    {'Total fail count'}
+                </Tooltip>
+            );
+
             return(
                 <Grid className="close-grid">
                     <Row>
-                        <Col md={4} className="close-col">
-                            <span className={resultClassPass}>Passing Tests:</span>
-                            <span className={resultClassPass}>{passCount}</span>
+                        <Col md={2} className="close-col">
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>
+                                <div className={resultClassScenarios}>
+                                    <span><Glyphicon glyph="th"/></span>
+                                    <span className="summary-number">{scenarioCount}</span>
+                                </div>
+                            </OverlayTrigger>
                         </Col>
-                        <Col md={4} className="close-col">
-                            <span className={resultClassFail}>Failing Tests:</span>
-                            <span className={resultClassFail}>{failCount}</span>
+                        <Col md={2} className="close-col">
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipRequired}>
+                                <div className={resultClassRequired}>
+                                    <span><Glyphicon glyph="question-sign"/></span>
+                                    <span className="summary-number">{requiredCount}</span>
+                                </div>
+                            </OverlayTrigger>
                         </Col>
-                        <Col md={3} className="close-col">
-                            <span className={resultClassNotTested}>Not Tested:</span>
-                            <span className={resultClassNotTested}>{noTestCount}</span>
+                        <Col md={2} className="close-col">
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipFulfilled}>
+                                <div className={resultClassFulfilled}>
+                                    <span><Glyphicon glyph="ok-sign"/></span>
+                                    <span className="summary-number">{fulfilledCount}</span>
+                                </div>
+                            </OverlayTrigger>
                         </Col>
+                        <Col md={1} className="close-col">
+
+                        </Col>
+                        <Col md={2} className="close-col">
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipPasses}>
+                                <div className={resultClassPass}>
+                                    <span><Glyphicon glyph="ok-circle"/></span>
+                                    <span className="summary-number">{passCount}</span>
+                                </div>
+                            </OverlayTrigger>
+                        </Col>
+                        <Col md={2} className="close-col">
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipFails}>
+                                <div className={resultClassFail}>
+                                    <span><Glyphicon glyph="remove-circle"/></span>
+                                    <span className="summary-number">{failCount}</span>
+                                </div>
+                            </OverlayTrigger>
+                        </Col>
+                        {/*<Col md={11} className="close-col">*/}
+                            {/*<span className={resultClassNotTested}>This feature has</span>*/}
+                            {/*<span className={resultClassRequired}>{scenarioCount}</span>*/}
+                            {/*<span className={resultClassNotTested}>scenarios and</span>*/}
+                            {/*<span className={resultClassRequired}>{requiredCount}</span>*/}
+                            {/*<span className={resultClassNotTested}>tests are required of which</span>*/}
+                            {/*<span className={resultClassPass}>{fulfilledCount}</span>*/}
+                            {/*<span className={resultClassNotTested}>are completed.</span>*/}
+                        {/*</Col>*/}
+                        {/*<Col md={4} className="close-col">*/}
+                            {/*<span className={resultClassRequired}>Tests Required / Completed:</span>*/}
+                            {/*<span className={resultClassRequired}>{requiredCount}</span>*/}
+                            {/*<span className={resultClassRequired}>/</span>*/}
+                            {/*<span className={resultClassRequired}>{fulfilledCount}</span>*/}
+                        {/*</Col>*/}
+                        {/*<Col md={4} className="close-col">*/}
+                            {/*<span className={resultClassPass}>P / F:</span>*/}
+                            {/*<span className={resultClassPass}>{passCount}</span>*/}
+                            {/*<span className={resultClassRequired}>/</span>*/}
+                            {/*<span className={resultClassFail}>{failCount}</span>*/}
+                        {/*</Col>*/}
                         <Col md={1} className="close-col">
                             <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
                         </Col>

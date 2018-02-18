@@ -4,13 +4,14 @@ import { ComponentType, ViewType, LogLevel } from '../../constants/constants.js'
 import { DefaultComponentNames } from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
-import DesignServices           from './design_services.js';
-import DesignComponentModules   from '../../service_modules/design/design_component_service_modules.js';
+import DesignServices               from './design_services.js';
+import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
 
 // DB services
-import DesignVersionData         from '../../data/design/design_version_db.js';
-import DesignComponentData       from '../../data/design/design_component_db.js';
-import DesignUpdateComponentData from "../../data/design_update/design_update_component_db";
+import DesignVersionData            from '../../data/design/design_version_db.js';
+import DesignComponentData          from '../../data/design/design_component_db.js';
+import DesignUpdateComponentData    from "../../data/design_update/design_update_component_db";
+import UserDvMashScenarioData       from '../../data/mash/user_dv_mash_scenario_db.js';
 
 //======================================================================================================================
 //
@@ -345,7 +346,7 @@ class DesignComponentServices{
 
     };
 
-    setScenarioTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation){
+    setScenarioTestExpectations(userId, designComponentId, accExpectation, intExpectation, unitExpectation){
 
         DesignComponentData.setTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation);
 
@@ -359,6 +360,9 @@ class DesignComponentServices{
                 DesignUpdateComponentData.setTestExpectations(component._id, accExpectation, intExpectation, unitExpectation);
             });
         }
+
+        // And update the mash expectations too for this scenario
+        UserDvMashScenarioData.updateMashScenarioExpectations(userId, baseComponent.designVersionId, baseComponent.componentReferenceId, accExpectation, intExpectation, unitExpectation);
 
     }
 }

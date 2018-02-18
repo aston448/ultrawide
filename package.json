@@ -2,7 +2,7 @@
   "name": "ultrawide",
   "private": true,
   "scripts": {
-    "start-dev": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" LOG_LEVEL=DEBUG meteor run",
+    "start-dev": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" LOG_LEVEL=TRACE meteor run",
     "start-ci": "MONGO_URL=mongodb://localhost:27017 ULTRAWIDE_DATA_STORE=\"/home/circleci/data/\" meteor run --production",
     "start-test": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_test/\" meteor -p 3030 run",
     "start-branch": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_branch/\" meteor -p 3040 run",

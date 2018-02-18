@@ -92,6 +92,16 @@ class TestIntegrationServices{
         }
     }
 
+    updateTestSummaryForFeature(userContext){
+
+        // Called if the test summary needs a refresh for just one feature
+
+        if(Meteor.isServer){
+
+            TestSummaryServices.refreshTestSummaryForFeature(userContext)
+        }
+    }
+
     updateWorkPackageCompleteness(userContext){
 
         const dvWorkPackages = DesignVersionData.getAllWorkPackages(userContext.designVersionId);

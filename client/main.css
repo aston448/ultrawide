@@ -2401,14 +2401,24 @@ input {
     background-color: transparent;
 }
 
-.test-summary-result{
+.test-summary-text-ignore{
+    color: lightgrey;
+}
+
+
+
+.feature-test-summary-result{
     margin: 0;
-    padding: 0 5px 0 5px;
+    padding: 5px 5px 0 5px;
     border: none;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  10px;
+    font-size:  12px;
     font-weight: bold;
     background-color: transparent;
+}
+
+.summary-number{
+    margin: 0 0 0 5px;
 }
 
 .scenario-test-row-pass{
@@ -2446,7 +2456,11 @@ input {
 }
 
 .feature-highlight-no-test{
-    color: darkblue;
+     color: darkblue;
+}
+
+.feature-highlight-required{
+    color: black;
 }
 
 .feature-summary-good{
@@ -2489,58 +2503,95 @@ input {
     border: 1px solid darkgrey;
 }
 
+.scenario-test-summary{
+    margin: 5px 0px 5px 0px;
+    padding: 0px;
+}
+
+.scenario-test-requirement{
+    padding: 0;
+}
+
+.test-summary-removed-item{
+    margin: 5px 0px 5px 5px;
+    padding: 0px;
+    color: lightgrey;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+}
+
 .test-not-expected{
-    margin: 10px 0px 5px 0px;
     padding: 2px;
-    min-width: 18px;
+    min-width: 40px;
     color:darkgrey;
     background-color: lightgrey;
-    border: 1px solid darkgrey;
+    border-top: 1px solid darkgrey;
+    border-left: 1px solid darkgrey;
+    border-right: 0px solid darkgrey;
+    border-bottom: 1px solid darkgrey;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
 }
 
 .acc-expected{
-    margin: 10px 0px 5px 0px;
     padding: 2px;
-    min-width: 18px;
+    min-width: 40px;
     color:black;
     background-color: lightgreen;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid palegreen;
-    border-bottom: 1px solid palegreen;
+    border-top: 1px solid darkgreen;
+    border-left: 1px solid darkgreen;
+    border-right: 1px solid darkgreen;
+    border-bottom: 1px solid darkgreen;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
 
 }
 
 .int-expected{
-    margin: 10px 0px 5px 0px;
     padding: 2px;
-    min-width: 18px;
+    min-width: 40px;
     color:black;
     background-color: aquamarine;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid paleturquoise;
-    border-bottom: 1px solid paleturquoise;
+    border-top: 1px solid blue;
+    border-left: 1px solid blue;
+    border-right: 1px solid blue;
+    border-bottom: 1px solid blue;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
 }
 
 .unit-expected{
-    margin: 10px 0px 5px 0px;
     padding: 2px;
-    min-width: 18px;
+    min-width: 40px;
     color:black;
     background-color: lightsalmon;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid lightpink;
-    border-bottom: 1px solid lightpink;
+    border-top: 1px solid darkred;
+    border-left: 1px solid darkred;
+    border-right: 1px solid darkred;
+    border-bottom: 1px solid darkred;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
+}
+
+.test-summary-result{
+    margin: 0;
+    padding: 2px 5px 0 5px;
+    border-top: 1px solid darkgrey;
+    border-left: 0px solid darkgrey;
+    border-right: 1px solid darkgrey;
+    border-bottom: 1px solid darkgrey;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  10px;
+    font-weight: bold;
+    background-color: transparent;
 }
 
 .mash-linked {

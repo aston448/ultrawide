@@ -493,6 +493,7 @@ export const setUpdateScenarioTestExpectations = new ValidatedMethod({
     name: 'designUpdateComponent.setScenarioTestExpectations',
 
     validate: new SimpleSchema({
+        userId:             {type: String},
         userRole:           {type: String},
         designUpdateComponentId:  {type: String},
         accExpectation:     {type: Boolean},
@@ -500,7 +501,7 @@ export const setUpdateScenarioTestExpectations = new ValidatedMethod({
         unitExpectation:    {type: Boolean}
     }).validator(),
 
-    run({userRole, designUpdateComponentId, accExpectation, intExpectation, unitExpectation}){
+    run({userId, userRole, designUpdateComponentId, accExpectation, intExpectation, unitExpectation}){
 
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateSetScenarioTestExpectations(userRole);
@@ -511,7 +512,7 @@ export const setUpdateScenarioTestExpectations = new ValidatedMethod({
 
         // Server action
         try {
-            DesignUpdateComponentServices.setScenarioTestExpectations(designUpdateComponentId, accExpectation, intExpectation, unitExpectation);
+            DesignUpdateComponentServices.setScenarioTestExpectations(userId, designUpdateComponentId, accExpectation, intExpectation, unitExpectation);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.code, e.stack)

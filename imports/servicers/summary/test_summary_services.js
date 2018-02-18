@@ -3,13 +3,18 @@
 import { MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
 
+import TestSummaryModules               from '../../service_modules/dev/test_summary_service_modules.js';
+
 // Data Access
 import DesignVersionData                from '../../data/design/design_version_db.js';
+import DesignComponentData              from '../../data/design/design_component_db.js';
+import DesugnUpdateComponentData        from '../../data/design_update/design_update_component_db.js';
 import UserDevTestSummaryData           from '../../data/summary/user_dev_test_summary_db.js';
 import UserDevDesignSummaryData         from '../../data/summary/user_dev_design_summary_db.js';
 import DesignUpdateComponentData        from '../../data/design_update/design_update_component_db.js';
 import WorkPackageComponentData         from '../../data/work/work_package_component_db.js';
 import UserDvMashScenarioData           from '../../data/mash/user_dv_mash_scenario_db.js'
+import {updateDefaultAspectIncluded} from "../../apiValidatedMethods/design_methods";
 
 //======================================================================================================================
 //
@@ -20,6 +25,80 @@ import UserDvMashScenarioData           from '../../data/mash/user_dv_mash_scena
 //======================================================================================================================
 
 class TestSummaryServices {
+
+    refreshTestSummaryForFeature(userContext){
+
+        let designFeature = {};
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Refresh test summary for feature: DV:{} DU: {} Feature: {}", userContext.designVersionId, userContext.designUpdateId, userContext.featureReferenceId);
+
+
+        if(userContext.designUpdateId !== 'NONE'){
+            designFeature = DesugnUpdateComponentData.getUpdateComponentByRef(userContext.designVersionId, userContext.designUpdateId, userContext.featureReferenceId);
+        } else {
+            designFeature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, userContext.featureReferenceId);
+        }
+
+        const featureScenarios = UserDvMashScenarioData.getFeatureScenarios(userContext.userId, designFeature.designVersionId, designFeature.componentReferenceId);
+
+        let featureGlobalData = {
+            featureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+            featurePassingTests: 0,
+            featureFailingTests: 0,
+            featureScenarioCount: 0,
+            featureExpectedTestCount: 0,
+            featureFulfilledTestCount: 0,
+            featureNoTestScenarios: 0,
+            duFeatureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+            duFeaturePassingTests: 0,
+            duFeatureFailingTests: 0,
+            duFeatureScenarioCount: 0,
+            duFeatureExpectedTestCount: 0,
+            duFeatureFulfilledTestCount: 0,
+            duFeatureNoTestScenarios: 0,
+            wpFeatureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+            wpFeaturePassingTests: 0,
+            wpFeatureFailingTests: 0,
+            wpFeatureScenarioCount: 0,
+            wpFeatureExpectedTestCount: 0,
+            wpFeatureFulfilledTestCount: 0,
+            wpFeatureNoTestScenarios: 0,
+            totalFailingScenarioCount: 0,
+            totalPassingScenarioCount: 0,
+        };
+
+        // Get a local copy of the in context DU / WP components if relevant so we can search from just those
+        let contextDuData = new Mongo.Collection(null);
+        let contextWpData = new Mongo.Collection(null);
+
+        if(userContext.designUpdateId !== 'NONE'){
+
+            const currentContextDuComponents = DesignUpdateComponentData.getCurrentContextComponents(userContext.designVersionId, userContext.designUpdateId);
+
+            if(currentContextDuComponents.length > 0) {
+                contextDuData.batchInsert(currentContextDuComponents);
+            }
+        }
+
+        if(userContext.workPackageId !== 'NONE'){
+
+            const currentContextWpComponents = WorkPackageComponentData.getCurrentWpComponents(userContext.workPackageId);
+
+            if(currentContextWpComponents.length > 0) {
+                contextWpData.batchInsert(currentContextWpComponents);
+            }
+        }
+
+        featureScenarios.forEach((scenario) => {
+
+            featureGlobalData = TestSummaryModules.calculateScenarioSummaryData(userContext, scenario, contextDuData, contextWpData, featureGlobalData);
+        });
+
+        // Now update the relevant test summary data for the feature.
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Updating feature test summary for feature {} with expected tests {}", designFeature.componentReferenceId, featureGlobalData.featureExpectedTestCount);
+        UserDevTestSummaryData.updateFeatureTestSummary(userContext.userId, designFeature.designVersionId, designFeature.componentReferenceId, featureGlobalData);
+
+    }
 
     refreshTestSummaryData(userContext){
 
@@ -98,244 +177,51 @@ class TestSummaryServices {
 
             let featureScenarios = myMashScenarioData.find({designFeatureReferenceId:   designFeature.componentReferenceId}).fetch();
 
-            let featureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
-            let featurePassingTests = 0;
-            let featureFailingTests = 0;
-            let featureNoTestScenarios = 0;
+            let featureGlobalData = {
+                featureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+                featurePassingTests: 0,
+                featureFailingTests: 0,
+                featureScenarioCount: 0,
+                featureExpectedTestCount: 0,
+                featureFulfilledTestCount: 0,
+                featureNoTestScenarios: 0,
+                duFeatureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+                duFeaturePassingTests: 0,
+                duFeatureFailingTests: 0,
+                duFeatureScenarioCount: 0,
+                duFeatureExpectedTestCount: 0,
+                duFeatureFulfilledTestCount: 0,
+                duFeatureNoTestScenarios: 0,
+                wpFeatureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+                wpFeaturePassingTests: 0,
+                wpFeatureFailingTests: 0,
+                wpFeatureScenarioCount: 0,
+                wpFeatureExpectedTestCount: 0,
+                wpFeatureFulfilledTestCount: 0,
+                wpFeatureNoTestScenarios: 0,
+                totalFailingScenarioCount: totalFailingScenarioCount,
+                totalPassingScenarioCount: totalPassingScenarioCount,
+            };
 
-            let duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
-            let duPassingTests = 0;
-            let duFailingTests = 0;
-            let duFeatureNoTestScenarios = 0;
-
-            let wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
-            let wpPassingTests = 0;
-            let wpFailingTests = 0;
-            let wpFeatureNoTestScenarios = 0;
+            totalFailingScenarioCount = featureGlobalData.totalFailingScenarioCount;
+            totalPassingScenarioCount = featureGlobalData.totalPassingScenarioCount;
 
             featureScenarios.forEach((featureScenario)=>{
 
-                totalScenarioCount++;
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Processing Summary Scenario: {} with unit pass count {}", featureScenario.scenarioName, featureScenario.unitPassCount);
-
-                let hasAccResult = false;
-                let hasIntResult = false;
-                let hasUnitResult = false;
-
-                let duHasAccResult = false;
-                let duHasIntResult = false;
-                let duHasUnitResult = false;
-
-                let wpHasAccResult = false;
-                let wpHasIntResult = false;
-                let wpHasUnitResult = false;
-
-                let scenarioPassingTests = 0;
-                let scenarioFailingTests = 0;
-
-
-                if(featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test fail {}", featureScenario.scenarioName);
-                    featureFailingTests++;
-                    scenarioFailingTests++;
-                    hasAccResult = true;
-                }
-                if(featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test fail {}", featureScenario.scenarioName);
-                    featureFailingTests++;
-                    scenarioFailingTests++;
-                    hasIntResult = true;
-                }
-
-                if(featureScenario.unitFailCount > 0) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test fail {}", featureScenario.scenarioName);
-                    featureFailingTests += featureScenario.unitFailCount;
-                    scenarioFailingTests += featureScenario.unitFailCount;
-                    hasUnitResult = true;
-                }
-
-                if(featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test pass {}", featureScenario.scenarioName);
-                    featurePassingTests++;
-                    scenarioPassingTests++;
-                    hasAccResult = true;
-                }
-                if(featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pass {}", featureScenario.scenarioName);
-                    featurePassingTests++;
-                    scenarioPassingTests++;
-                    hasIntResult = true;
-                }
-
-                if(featureScenario.unitPassCount > 0) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test pass {}", featureScenario.scenarioName);
-                    featurePassingTests += featureScenario.unitPassCount;
-                    scenarioPassingTests += featureScenario.unitPassCount;
-                    hasUnitResult = true;
-                }
-
-                // Any fails is a fail even if passes.  Any passes and no fails is a pass
-                if(scenarioFailingTests > 0){
-                    totalFailingScenarioCount ++;
-                } else {
-                    if(scenarioPassingTests > 0){
-                        totalPassingScenarioCount++;
-                    }
-                }
-
-                // Mark as no test if a test is required
-                if(
-                    (!hasAccResult && featureScenario.requiresAcceptanceTest) ||
-                    (!hasIntResult && featureScenario.requiresIntegrationTest) ||
-                    (!hasUnitResult && featureScenario.requiresUnitTest)
-                ) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Scenario with no test {}", featureScenario.scenarioName);
-                    featureNoTestScenarios++;
-                    totalScenariosWithoutTests++;
-                }
-
-                let duComponent = null;
-                let wpComponent = null;
-
-
-                // Get stats for DU if this feature scenario in DU
-                if(userContext.designUpdateId !== 'NONE') {
-
-                    duComponent = contextDuData.findOne({
-                        componentReferenceId: featureScenario.designScenarioReferenceId
-                    });
-
-                    if (duComponent && duComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
-
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Adding DU scenario {}", duComponent.componentNameNew);
-
-                        if (featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL) {
-                            duFailingTests++;
-                            duHasAccResult = true;
-                        }
-                        if (featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL) {
-                            duFailingTests++;
-                            duHasIntResult = true;
-                            log((msg) => console.log(msg), LogLevel.TRACE, "Failed INT test.  Count: {}", duFailingTests);
-                        }
-
-                        if (featureScenario.unitFailCount > 0) {
-                            log((msg) => console.log(msg), LogLevel.TRACE, "Failed UNIT tests {}", featureScenario.unitFailCount);
-                            duFailingTests += featureScenario.unitFailCount;
-                            duHasUnitResult = true;
-                        }
-
-                        if (featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS) {
-                            duPassingTests++;
-                            duHasAccResult = true;
-                        }
-                        if (featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS) {
-                            duPassingTests++;
-                            duHasIntResult = true;
-                        }
-
-                        if (featureScenario.unitPassCount > 0) {
-                            duPassingTests += featureScenario.unitPassCount;
-                            duHasUnitResult = true;
-                        }
-
-                        // Any fails is a fail even if passes.  Any passes and no fails is a pass
-                        if (duFailingTests > 0) {
-                            duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
-                        } else {
-                            if (duPassingTests > 0) {
-                                duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
-                            }
-                        }
-
-                        // DU No tests where tests are expected
-                        if (
-                            (!duHasAccResult && featureScenario.requiresAcceptanceTest) ||
-                            (!duHasIntResult && featureScenario.requiresIntegrationTest) ||
-                            (!duHasUnitResult && featureScenario.requiresUnitTest)
-                        ) {
-                            duFeatureNoTestScenarios++;
-                        }
-                    }
-                }
-
-                // Get stats for WP if this feature scenario in WP
-                if(userContext.workPackageId !== 'NONE') {
-
-                    wpComponent = contextWpData.findOne({componentReferenceId: featureScenario.designScenarioReferenceId});
-
-                    let nonRemovedComponent = true;
-
-                    if(duComponent && duComponent.isRemoved){
-                        nonRemovedComponent = false;
-                    }
-
-                    if (wpComponent && wpComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE && nonRemovedComponent) {
-
-                        if (featureScenario.accMashTestStatus === MashTestStatus.MASH_FAIL) {
-                            wpFailingTests++;
-                            wpHasAccResult = true;
-                        }
-                        if (featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL) {
-                            wpFailingTests++;
-                            wpHasIntResult = true;
-                        }
-
-                        if (featureScenario.unitFailCount > 0) {
-                            wpFailingTests += featureScenario.unitFailCount;
-                            wpHasUnitResult = true;
-                        }
-
-                        if (featureScenario.accMashTestStatus === MashTestStatus.MASH_PASS) {
-                            wpPassingTests++;
-                            wpHasAccResult = true;
-                        }
-                        if (featureScenario.intMashTestStatus === MashTestStatus.MASH_PASS) {
-                            wpPassingTests++;
-                            wpHasIntResult = true;
-                        }
-
-                        if (featureScenario.unitPassCount > 0) {
-                            wpPassingTests += featureScenario.unitPassCount;
-                            wpHasUnitResult = true;
-                        }
-
-                        // Any fails is a fail even if passes.  Any passes and no fails is a pass
-                        if (wpFailingTests > 0) {
-                            wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
-
-                        } else {
-                            if (wpPassingTests > 0) {
-                                wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
-                            }
-                        }
-
-                        // WP No tests where tests are expected
-                        if (
-                            (!wpHasAccResult && featureScenario.requiresAcceptanceTest) ||
-                            (!wpHasIntResult && featureScenario.requiresIntegrationTest) ||
-                            (!wpHasUnitResult && featureScenario.requiresUnitTest)
-                        ) {
-                            wpFeatureNoTestScenarios++;
-                        }
-
-                        log((msg) => console.log(msg), LogLevel.TRACE, "WP Passing Tests =  {}", wpPassingTests);
-                    }
-                }
+                featureGlobalData = TestSummaryModules.calculateScenarioSummaryData(userContext, featureScenario, contextDuData, contextWpData, featureGlobalData);
 
             });
 
-            // Any fails at feature level is a fail even if passes.  Any passes and no fails is a pass
-            if(featureFailingTests > 0){
-                featureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
-            } else {
-                if(featurePassingTests > 0){
-                    featureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
-                }
-            }
+            // // Any fails at feature level is a fail even if passes.  Any passes and no fails is a pass
+            // if(featureGlobalData.featureFailingTests > 0){
+            //     featureGlobalData.featureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
+            // } else {
+            //     if(featureGlobalData.featurePassingTests > 0){
+            //         featureGlobalData.featureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+            //     }
+            // }
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, featurePassingTests, featureFailingTests, featureNoTestScenarios);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, featureGlobalData.featurePassingTests, featureGlobalData.featureFailingTests, featureGlobalData.featureNoTestScenarios);
 
             batchData.push({
                 userId: userContext.userId,
@@ -346,18 +232,27 @@ class TestSummaryServices {
                 intTestStatus: MashTestStatus.MASH_NOT_LINKED,
                 unitTestPassCount: 0,
                 unitTestFailCount: 0,
-                featureSummaryStatus: featureTestStatus,
-                featureTestPassCount: featurePassingTests,
-                featureTestFailCount: featureFailingTests,
-                featureNoTestCount: featureNoTestScenarios,
-                duFeatureSummaryStatus: duFeatureTestStatus,
-                duFeatureTestPassCount: duPassingTests,
-                duFeatureTestFailCount: duFailingTests,
-                duFeatureNoTestCount: duFeatureNoTestScenarios,
-                wpFeatureSummaryStatus: wpFeatureTestStatus,
-                wpFeatureTestPassCount: wpPassingTests,
-                wpFeatureTestFailCount: wpFailingTests,
-                wpFeatureNoTestCount: wpFeatureNoTestScenarios,
+                featureScenarioCount: featureGlobalData.featureScenarioCount,
+                featureExpectedTestCount: featureGlobalData.featureExpectedTestCount,
+                featureFulfilledTestCount: featureGlobalData.featureFulfilledTestCount,
+                featureSummaryStatus: featureGlobalData.featureTestStatus,
+                featureTestPassCount: featureGlobalData.featurePassingTests,
+                featureTestFailCount: featureGlobalData.featureFailingTests,
+                featureNoTestCount: featureGlobalData.featureNoTestScenarios,
+                duFeatureScenarioCount: featureGlobalData.duFeatureScenarioCount,
+                duFeatureExpectedTestCount: featureGlobalData.duFeatureExpectedTestCount,
+                duFeatureFulfilledTestCount: featureGlobalData.duFeatureFulfilledTestCount,
+                duFeatureSummaryStatus: featureGlobalData.duFeatureTestStatus,
+                duFeatureTestPassCount: featureGlobalData.duFeaturePassingTests,
+                duFeatureTestFailCount: featureGlobalData.duFeatureFailingTests,
+                duFeatureNoTestCount: featureGlobalData.duFeatureNoTestScenarios,
+                wpFeatureSummaryStatus: featureGlobalData.wpFeatureTestStatus,
+                wpFeatureTestPassCount: featureGlobalData.wpFeaturePassingTests,
+                wpFeatureTestFailCount: featureGlobalData.wpFeatureFailingTests,
+                wpFeatureScenarioCount: featureGlobalData.wpFeatureScenarioCount,
+                wpFeatureExpectedTestCount: featureGlobalData.wpFeatureExpectedTestCount,
+                wpFeatureFulfilledTestCount: featureGlobalData.wpFeatureFulfilledTestCount,
+                wpFeatureNoTestCount: featureGlobalData.wpFeatureNoTestScenarios,
             });
 
         });

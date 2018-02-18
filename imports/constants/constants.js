@@ -435,7 +435,8 @@ export const FeatureTestSummaryStatus = {
     FEATURE_NO_HIGHLIGHT:       'feature-no-highlight',
     FEATURE_HIGHLIGHT_FAIL:     'feature-highlight-fail',
     FEATURE_HIGHLIGHT_PASS:     'feature-highlight-pass',
-    FEATURE_HIGHLIGHT_NO_TEST:  'feature-highlight-no-test'
+    FEATURE_HIGHLIGHT_NO_TEST:  'feature-highlight-no-test',
+    FEATURE_HIGLIGHT_REQUIRED:  'feature-highlight-required'
 };
 
 export const MessageType = {

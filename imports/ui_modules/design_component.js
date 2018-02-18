@@ -231,6 +231,13 @@ class ComponentUiModules{
             }
         }
 
+        // If test summary data has changed due to changed expectations
+        if(props.testSummaryData) {
+            if (props.testSummaryData.featureExpectedTestCount !== nextProps.testSummaryData.featureExpectedTestCount) {
+                return true;
+            }
+        }
+
         // Check for scope updates in WP Editor
         if(props.view === ViewType.WORK_PACKAGE_BASE_EDIT || props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
 

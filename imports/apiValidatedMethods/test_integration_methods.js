@@ -52,6 +52,25 @@ export const updateTestSummaryData = new ValidatedMethod({
     }
 });
 
+export const updateTestSummaryDataForFeature = new ValidatedMethod({
+
+    name: 'testIntegration.updateTestSummaryDataForFeature',
+
+    validate: new SimpleSchema({
+        userContext:    {type: Object, blackbox: true}
+    }).validator(),
+
+    run({userContext}){
+
+        try {
+            TestIntegrationServices.updateTestSummaryForFeature(userContext);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
+
 export const exportIntegrationTests = new ValidatedMethod({
 
     name: 'testIntegration.exportIntegrationTests',
@@ -67,7 +86,7 @@ export const exportIntegrationTests = new ValidatedMethod({
 
         const result = TestIntegrationValidationApi.validateExportIntegrationTests(userRole, userContext);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('textEditor.exportIntegrationTests.failValidation', result)
         }
 

@@ -16,6 +16,7 @@ import DesignComponentData          from '../../data/design/design_component_db.
 import DesignUpdateData             from '../../data/design_update/design_update_db.js';
 import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
 import WorkPackageData              from '../../data/work/work_package_db.js';
+import UserDvMashScenarioData from "../../data/mash/user_dv_mash_scenario_db";
 
 //======================================================================================================================
 //
@@ -583,7 +584,7 @@ class DesignUpdateComponentServices{
         }
     }
 
-    setScenarioTestExpectations(designUpdateComponentId, accExpectation, intExpectation, unitExpectation){
+    setScenarioTestExpectations(userId, designUpdateComponentId, accExpectation, intExpectation, unitExpectation){
 
         DesignUpdateComponentData.setTestExpectations(designUpdateComponentId, accExpectation, intExpectation, unitExpectation);
 
@@ -593,6 +594,10 @@ class DesignUpdateComponentServices{
         const baseComponent = DesignComponentData.getDesignComponentByRef(updateComponent.designVersionId, updateComponent.componentReferenceId);
 
         DesignComponentData.setTestExpectations(baseComponent._id, accExpectation, intExpectation, unitExpectation);
+
+        // And update the mash expectations too for this scenario
+        UserDvMashScenarioData.updateMashScenarioExpectations(userId, baseComponent.designVersionId, baseComponent.componentReferenceId, accExpectation, intExpectation, unitExpectation);
+
     }
 }
 

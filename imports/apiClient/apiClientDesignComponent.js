@@ -9,6 +9,7 @@ import ServerDesignComponentApi      from '../apiServer/apiDesignComponent.js';
 import DesignComponentValidationApi  from '../apiValidation/apiDesignComponentValidation.js';
 import ClientUserContextServices     from '../apiClient/apiClientUserContext.js';
 import ClientWorkPackageServices     from '../apiClient/apiClientWorkPackage.js';
+import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration.js';
 import ServerWorkPackageApi          from '../apiServer/apiWorkPackage.js';
 
 import {log} from '../common/utils.js';
@@ -526,9 +527,15 @@ class ClientDesignComponentServices{
         return {success: true, message: ''};
     };
 
-    setScenarioTestExpectations(componentId, userRole, accExpectation, intExpectation, unitExpectation){
+    setScenarioTestExpectations(componentId, userRole, userContext, displayContext, accExpectation, intExpectation, unitExpectation){
 
-        //console.log('Setting expectations: A ' + accExpectation +  ' I: ' + intExpectation + ' U: ' + unitExpectation);
+        console.log('Setting expectations: A ' + accExpectation +  ' I: ' + intExpectation + ' U: ' + unitExpectation + ' UC:' + userContext);
+
+        // Set the current design component context to the Feature so that summary data can be updated
+        const scenario = DesignComponentData.getDesignComponentById(componentId);
+        const feature = DesignComponentData.getDesignComponentByRef(scenario.designVersionId, scenario.componentFeatureReferenceIdNew);
+
+        let newUserContext = this.setDesignComponent(feature._id, userContext, displayContext);
 
         // Client validation
         let result = DesignComponentValidationApi.validateSetScenarioTestExpectations(userRole);
@@ -541,6 +548,7 @@ class ClientDesignComponentServices{
 
         // Real action call
         ServerDesignComponentApi.setScenarioTestExpectations(
+            newUserContext.userId,
             userRole,
             componentId,
             accExpectation,
@@ -553,6 +561,9 @@ class ClientDesignComponentServices{
                     // Can't update screen here because of error
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
+
+                    // Update the feature test summary as well to match
+                    ClientTestIntegrationServices.updateTestSummaryDataForFeature(newUserContext);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({

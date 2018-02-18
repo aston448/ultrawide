@@ -9,6 +9,8 @@ import ServerDesignUpdateComponentApi       from '../apiServer/apiDesignUpdateCo
 import ServerWorkPackageApi                 from '../apiServer/apiWorkPackage.js';
 import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpdateComponentValidation.js';
 import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdateSummary.js';
+import ClientTestIntegrationServices        from "./apiClientTestIntegration";
+import ClientDesignComponentServices        from '../apiClient/apiClientDesignComponent.js';
 
 import { log }        from '../common/utils.js';
 
@@ -23,6 +25,7 @@ import {updateDesignComponentName, setCurrentUserOpenDesignUpdateItems, updateUs
 import {DesignComponentMessages} from "../constants/message_texts";
 import DesignComponentValidationApi from "../apiValidation/apiDesignComponentValidation";
 import ServerDesignComponentApi from "../apiServer/apiDesignComponent";
+
 
 // =====================================================================================================================
 // Client API for Design Update Components
@@ -679,7 +682,13 @@ class ClientDesignUpdateComponentServices{
         return {success: true, message: ''};
     };
 
-    setScenarioTestExpectations(componentId, userRole, accExpectation, intExpectation, unitExpectation){
+    setScenarioTestExpectations(componentId, userRole, userContext, displayContext, accExpectation, intExpectation, unitExpectation){
+
+        // Set the current design component context to the Feature so that summary data can be updated
+        const scenario = DesignUpdateComponentData.getUpdateComponentById(componentId);
+        const feature = DesignUpdateComponentData.getUpdateComponentByRef(scenario.designVersionId, scenario.designUpdateId, scenario.componentFeatureReferenceIdNew);
+
+        let newUserContext = ClientDesignComponentServices.setDesignComponent(feature._id, userContext, displayContext);
 
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateSetScenarioTestExpectations(userRole);
@@ -692,6 +701,7 @@ class ClientDesignUpdateComponentServices{
 
         // Real action call
         ServerDesignUpdateComponentApi.setScenarioTestExpectations(
+            newUserContext.userId,
             userRole,
             componentId,
             accExpectation,
@@ -704,6 +714,9 @@ class ClientDesignUpdateComponentServices{
                     // Can't update screen here because of error
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
+
+                    // Update the feature test summary as well to match
+                    ClientTestIntegrationServices.updateTestSummaryDataForFeature(newUserContext);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({

@@ -105,6 +105,34 @@ class ClientTestIntegrationServices {
 
     }
 
+    // Test Summary data needs refreshing for one feature - probably because of changing test expectations
+    updateTestSummaryDataForFeature(userContext){
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST SUMMARY DATA FOR FEATURE");
+
+        store.dispatch(updateUserMessage({
+            messageType: MessageType.INFO,
+            messageText: 'Updating test summary data for feature...'
+        }));
+
+        ServerTestIntegrationApi.updateTestSummaryDataForFeature(userContext, (err, result) => {
+
+            if(err){
+
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                store.dispatch(updateTestDataFlag());
+
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: 'Summary updated'
+                }));
+            }
+        });
+
+    }
+
     // User has requested update of WP / DU progress data
     refreshProgressData(userContext){
 

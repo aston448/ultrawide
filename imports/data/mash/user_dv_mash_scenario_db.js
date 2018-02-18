@@ -71,6 +71,26 @@ class UserDvMashScenarioData {
         }). count() > 0;
     }
 
+    // UPDATE ==========================================================================================================
+
+    updateMashScenarioExpectations(userId, designVersionId, scenarioReferenceId, requiresAcc, requiresInt, requiresUnit){
+
+        return UserDesignVersionMashScenarios.update(
+            {
+                userId: userId,
+                designVersionId: designVersionId,
+                designScenarioReferenceId: scenarioReferenceId
+            },
+            {
+                $set:{
+                    requiresAcceptanceTest:         requiresAcc,
+                    requiresIntegrationTest:        requiresInt,
+                    requiresUnitTest:               requiresUnit
+                }
+            }
+        );
+    }
+
     // REMOVE ==========================================================================================================
 
     removeAllDvScenariosForUser(userId, designVersionId){

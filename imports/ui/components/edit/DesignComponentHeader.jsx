@@ -1354,6 +1354,7 @@ export class DesignComponentHeader extends Component{
                                     <TestSummary
                                         testSummaryData={testSummaryData}
                                         scenario={scenario}
+                                        displayContext={displayContext}
                                     />
                                 </Col>
                             </Row>
