@@ -74,7 +74,7 @@ class UserTestTypeLocationData {
 
     getAllUserTestTypeLocations(){
 
-        UserTestTypeLocations.find({}).fetch();
+        return UserTestTypeLocations.find({}).fetch();
     }
 
     // UPDATE ==========================================================================================================
@@ -114,6 +114,12 @@ class UserTestTypeLocationData {
 
         return UserTestTypeLocations.remove({
             _id: userLocationId
+        });
+    }
+
+    removeAllUserTestTypeLocations(){
+
+        return UserTestTypeLocations.remove({
         });
     }
 

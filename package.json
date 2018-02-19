@@ -2,7 +2,7 @@
   "name": "ultrawide",
   "private": true,
   "scripts": {
-    "start-dev": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" LOG_LEVEL=TRACE meteor run",
+    "start-dev": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" LOG_LEVEL=DEBUG meteor run",
     "start-ci": "MONGO_URL=mongodb://localhost:27017 ULTRAWIDE_DATA_STORE=\"/home/circleci/data/\" meteor run --production",
     "start-test": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_test/\" meteor -p 3030 run",
     "start-branch": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_branch/\" meteor -p 3040 run",
@@ -32,6 +32,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "babel-runtime": "^6.26.0",
+    "bcrypt": "^1.0.3",
     "classnames": "^2.2.5",
     "draft-js": "^0.8.1",
     "meteor-node-stubs": "^0.2.11",

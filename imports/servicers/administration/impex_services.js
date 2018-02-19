@@ -297,6 +297,9 @@ class ImpExServices{
 
                     // Merge user test type locations data
                     if(backupData.userTestTypeLocations) {
+                        // Remove all existing settings first
+                        UserTestTypeLocationData.removeAllUserTestTypeLocations();
+
                         ImpexModules.restoreUserTestTypeLocationsData(backupData.userTestTypeLocations, backupDataVersion, currentDataVersion, usersMapping, locationsMapping);
                     }
 

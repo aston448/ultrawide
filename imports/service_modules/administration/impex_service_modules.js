@@ -282,11 +282,11 @@ class ImpexModules{
 
     };
 
-    restoreUserTestTypeLocationsData(testOutputLocationData, backupDataVersion, currentDataVersion, userMapping, locationsMapping){
+    restoreUserTestTypeLocationsData(testTypeLocationData, backupDataVersion, currentDataVersion, userMapping, locationsMapping){
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring User Test Output Location Settings...");
 
-        const newTestOutputLocationData = this.migrateUserTestTypeLocationData(testOutputLocationData, backupDataVersion, currentDataVersion);
+        const newTestOutputLocationData = this.migrateUserTestTypeLocationData(testTypeLocationData, backupDataVersion, currentDataVersion);
 
         newTestOutputLocationData.forEach((userLocation) => {
 

@@ -222,27 +222,6 @@ export class TestSummary extends Component {
                                 </div>
                             </OverlayTrigger>
                         </Col>
-                        {/*<Col md={11} className="close-col">*/}
-                            {/*<span className={resultClassNotTested}>This feature has</span>*/}
-                            {/*<span className={resultClassRequired}>{scenarioCount}</span>*/}
-                            {/*<span className={resultClassNotTested}>scenarios and</span>*/}
-                            {/*<span className={resultClassRequired}>{requiredCount}</span>*/}
-                            {/*<span className={resultClassNotTested}>tests are required of which</span>*/}
-                            {/*<span className={resultClassPass}>{fulfilledCount}</span>*/}
-                            {/*<span className={resultClassNotTested}>are completed.</span>*/}
-                        {/*</Col>*/}
-                        {/*<Col md={4} className="close-col">*/}
-                            {/*<span className={resultClassRequired}>Tests Required / Completed:</span>*/}
-                            {/*<span className={resultClassRequired}>{requiredCount}</span>*/}
-                            {/*<span className={resultClassRequired}>/</span>*/}
-                            {/*<span className={resultClassRequired}>{fulfilledCount}</span>*/}
-                        {/*</Col>*/}
-                        {/*<Col md={4} className="close-col">*/}
-                            {/*<span className={resultClassPass}>P / F:</span>*/}
-                            {/*<span className={resultClassPass}>{passCount}</span>*/}
-                            {/*<span className={resultClassRequired}>/</span>*/}
-                            {/*<span className={resultClassFail}>{failCount}</span>*/}
-                        {/*</Col>*/}
                         <Col md={1} className="close-col">
                             <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
                         </Col>

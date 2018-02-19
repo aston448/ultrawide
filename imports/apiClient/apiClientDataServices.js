@@ -748,9 +748,9 @@ class ClientDataServices{
                         featureRef:         feature.componentReferenceId,
                         hasTestData:        true,
                         summaryStatus:      mashData.featureSummaryStatus,
-                        testPassCount:      mashData.featureTestPassCount,
-                        testFailCount:      mashData.featureTestFailCount,
-                        noTestCount:        mashData.featureNoTestCount
+                        scenarioCount:      mashData.featureScenarioCount,
+                        expectedCount:      mashData.featureExpectedTestCount,
+                        fulfilledCount:     mashData.featureFulfilledTestCount
                     };
 
                 } else {
@@ -761,9 +761,9 @@ class ClientDataServices{
                         featureRef:         feature.componentReferenceId,
                         hasTestData:        false,
                         summaryStatus:      'NONE',
-                        testPassCount:      0,
-                        testFailCount:      0,
-                        noTestCount:        0
+                        scenarioCount:      0,
+                        expectedCount:      0,
+                        fulfilledCount:     0
                     };
 
                 }

@@ -108,6 +108,10 @@ class DesignVersionModules{
                         isDevUpdated:                   false,
                         isDevAdded:                     false,
 
+                        requiresAcceptanceTest:         previousComponent.requiresAcceptanceTest,
+                        requiresIntegrationTest:        previousComponent.requiresIntegrationTest,
+                        requiresUnitTest:               previousComponent.requiresUnitTest,
+
                         isRemovable:                    previousComponent.isRemovable,
                     }
                 );
