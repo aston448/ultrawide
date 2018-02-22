@@ -529,7 +529,7 @@ class ClientDesignComponentServices{
 
     setScenarioTestExpectations(componentId, userRole, userContext, displayContext, accExpectation, intExpectation, unitExpectation){
 
-        console.log('Setting expectations: A ' + accExpectation +  ' I: ' + intExpectation + ' U: ' + unitExpectation + ' UC:' + userContext);
+        //console.log('Setting expectations: A ' + accExpectation +  ' I: ' + intExpectation + ' U: ' + unitExpectation + ' UC:' + userContext);
 
         // Set the current design component context to the Feature so that summary data can be updated
         const scenario = DesignComponentData.getDesignComponentById(componentId);
@@ -561,9 +561,6 @@ class ClientDesignComponentServices{
                     // Can't update screen here because of error
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
-
-                    // Update the feature test summary as well to match
-                    ClientTestIntegrationServices.updateTestSummaryDataForFeature(newUserContext);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({

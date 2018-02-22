@@ -6,8 +6,8 @@ export const UserDesignVersionMashScenarios = new Mongo.Collection('userDesignVe
 
 let Schema = new SimpleSchema({
     // Design Identity
-    userId:                         {type: String},                         // Meteor user id - must be a user
-    designVersionId:                {type: String},                         // Must be a design version
+    userId:                         {type: String, index: 1},                         // Meteor user id - must be a user
+    designVersionId:                {type: String, index: 1},                         // Must be a design version
     scenarioName:                   {type: String},                         // For Scenarios is the match for the test name
     designFeatureReferenceId:       {type: String, defaultValue: 'NONE'},   // Set if known in Design
     designFeatureAspectReferenceId: {type: String, defaultValue: 'NONE'},   // Set if known in Design and relevant

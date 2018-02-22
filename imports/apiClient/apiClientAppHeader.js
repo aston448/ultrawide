@@ -426,40 +426,11 @@ class ClientAppHeaderServices{
             store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_DESIGNS));
         } else {
 
-            // If we are not remember in a local tab setting...  default it
+            // If we are not remembering local tab setting...  default it to the Summary
             if(store.getState().currentUserHomeTab === HomePageTab.TAB_NOT_SET) {
-                switch (userRole) {
-                    case RoleType.DESIGNER:
-
-                        if (userContext.designUpdateId !== 'NONE') {
-                            // Designer was working on an update so go to Updates
-                            store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_UPDATES));
-                        } else {
-                            if (userContext.designComponentId !== 'NONE') {
-                                // Designer was working on a base component so go to design version
-                                store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_DESIGNS));
-                            } else {
-                                // Nothing specific so go to progress
-                                store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_PROGRESS));
-                            }
-                        }
-                        break;
-                    case RoleType.GUEST_VIEWER:
-                        store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_DESIGNS));
-                        break;
-                    case RoleType.DEVELOPER:
-                    case RoleType.MANAGER:
-                        if (userContext.workPackageId !== 'NONE') {
-                            // Manager / Developer working on a work package to go to work list
-                            store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_WORK));
-                        } else {
-                            store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_PROGRESS));
-                        }
-                        break;
-                }
+                store.dispatch(setCurrentUserHomeTab(HomePageTab.TAB_SUMMARY));
             }
         }
-
         store.dispatch(setCurrentView(ViewType.SELECT));
         return true;
     };

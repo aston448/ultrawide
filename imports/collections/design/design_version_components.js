@@ -55,6 +55,12 @@ let Schema = new SimpleSchema({
 
 DesignVersionComponents.attachSchema(Schema);
 
+DesignVersionComponents.allow({
+    update(requiresAcceptanceTest, requiresIntegrationTest, requiresUnitTest){
+        return true;
+    }
+});
+
 // Publish Design Updates wanted
 if(Meteor.isServer){
     Meteor.publish('designVersionComponents', function designVersionComponentsPublication(designVersionId){

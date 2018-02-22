@@ -218,21 +218,9 @@ class ComponentUiModules{
             return true;
         }
 
-        // If a scenario and test expectations have changed
-        if(props.currentItem.componentType === ComponentType.SCENARIO){
-            if(props.currentItem.requiresAcceptanceTest !== nextProps.currentItem.requiresAcceptanceTest){
-                return true;
-            }
-            if(props.currentItem.requiresIntegrationTest !== nextProps.currentItem.requiresIntegrationTest){
-                return true;
-            }
-            if(props.currentItem.requiresUnitTest !== nextProps.currentItem.requiresUnitTest){
-                return true;
-            }
-        }
 
         // If test summary data has changed due to changed expectations
-        if(props.testSummaryData) {
+        if(props.testSummaryData && props.currentItem.componentType === ComponentType.FEATURE) {
             if (props.testSummaryData.featureExpectedTestCount !== nextProps.testSummaryData.featureExpectedTestCount) {
                 return true;
             }

@@ -13,7 +13,7 @@ import ItemList                 from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
 import ClientDataServices       from '../../../apiClient/apiClientDataServices.js';
-import {HomePageTab}            from "../../../constants/constants";
+import {DisplayContext, HomePageTab} from "../../../constants/constants";
 
 // Bootstrap
 
@@ -61,7 +61,7 @@ export class FeaturesList extends Component {
 
     render() {
 
-        const {featureSummaries, designVersionName, workPackageName, homePageTab, userRole, userContext} = this.props;
+        const {featureSummaries, designVersionName, workPackageName, homePageTab, displayContext, userRole, userContext} = this.props;
 
 
         let hasFooterAction = false;
@@ -76,17 +76,50 @@ export class FeaturesList extends Component {
 
         if(featureSummaries && featureSummaries.length > 0) {
             bodyDataFunction = () => this.renderFeatureList(featureSummaries);
-            headerText = 'Features in ' + locationText;
         } else {
             if(userContext.designVersionId === 'NONE'){
                 bodyDataFunction = () => this.noDesignVersion();
-                headerText = 'Features';
-
             } else{
                 bodyDataFunction = () => this.noFeatures();
-                headerText = 'Features in ' + locationText;
             }
         }
+
+        switch(displayContext){
+
+            case DisplayContext.PROJECT_SUMMARY_NONE:
+
+                headerText = 'Features with no test requirements...';
+                break;
+
+            case DisplayContext.PROJECT_SUMMARY_FAIL:
+
+                headerText = 'Features with failing tests...';
+                break;
+
+            case DisplayContext.PROJECT_SUMMARY_SOME:
+
+                headerText = 'Features with some required tests passing...';
+                break;
+
+            case DisplayContext.PROJECT_SUMMARY_ALL:
+
+                headerText = 'Features with all required tests passing...';
+                break;
+
+            default:
+
+                if(featureSummaries && featureSummaries.length > 0) {
+                    headerText = 'Features in ' + locationText;
+                } else {
+                    if(userContext.designVersionId === 'NONE'){
+                        headerText = 'Features';
+
+                    } else{
+                        headerText = 'Features in ' + locationText;
+                    }
+                }
+        }
+
 
         return(
             <ItemList
@@ -106,7 +139,8 @@ FeaturesList.propTypes = {
     featureSummaries:       PropTypes.array.isRequired,
     designVersionName:      PropTypes.string.isRequired,
     workPackageName:        PropTypes.string.isRequired,
-    homePageTab:            PropTypes.string.isRequired
+    homePageTab:            PropTypes.string.isRequired,
+    displayContext:         PropTypes.string.isRequired
 };
 
 
@@ -122,7 +156,9 @@ function mapStateToProps(state) {
 // Connect the Redux store to this component ensuring that its required state is mapped to props
 export default FeatureSummaryContainer = createContainer(({params}) => {
 
+    //console.log('Feature Summary Container with context ' + params.displayContext);
+
     // Gets the currently saved user context and a list of known Designs
-    return ClientDataServices.getDesignVersionFeatureSummaries(params.userContext, params.homePageTab);
+    return ClientDataServices.getDesignVersionFeatureSummaries(params.userContext, params.homePageTab, params.displayContext);
 
 }, connect(mapStateToProps)(FeaturesList));

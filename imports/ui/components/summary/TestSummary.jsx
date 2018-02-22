@@ -12,6 +12,8 @@ import PropTypes from 'prop-types';
 import {ViewType}    from '../../../constants/constants.js';
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
+import ClientTestIntegrationServices        from '../../../apiClient/apiClientTestIntegration.js';
+
 import TextLookups                  from '../../../common/lookups.js';
 
 // Bootstrap
@@ -19,6 +21,7 @@ import {Grid, Row, Col, InputGroup, Tooltip, OverlayTrigger} from 'react-bootstr
 
 import {connect} from "react-redux";
 import {UpdateMergeStatus} from "../../../constants/constants";
+
 
 // REDUX services
 
@@ -41,8 +44,17 @@ class TestSummary extends Component {
         };
     }
 
-    shouldComponentUpdate(nextProps, nextState){
-        return true;
+
+    shouldComponentUpdate(nextProps, nextState) {
+
+        return (this.state.accExpectation !== nextState.accExpectation || this.state.intExpectation !== nextState.intExpectation || this.state.unitExpectation !== nextState.unitExpectation);
+
+    }
+
+    componentDidUpdate(){
+
+        //console.log('TEST SUMMARY UPDATED');
+        this.updateTestExpectations(this.props.scenario._id, this.props.userRole, this.props.userContext, this.props.displayContext, this.state.accExpectation, this.state.intExpectation, this.state.unitExpectation);
     }
 
     checkForViewOk(){
@@ -68,9 +80,6 @@ class TestSummary extends Component {
 
             this.setState({accExpectation: newAccState});
 
-            console.log('Toggle ACC with userRole ' + userRole + ' and user context ' + userContext);
-
-            this.updateTestExpectations(scenarioId, userRole, userContext, displayContext, newAccState, intState, unitState);
         }
 
     }
@@ -85,7 +94,6 @@ class TestSummary extends Component {
 
             this.setState({intExpectation: newIntState});
 
-            this.updateTestExpectations(scenarioId, userRole, userContext, displayContext, accState, newIntState, unitState);
         }
     }
 
@@ -99,7 +107,6 @@ class TestSummary extends Component {
 
             this.setState({unitExpectation: newUnitState});
 
-            this.updateTestExpectations(scenarioId, userRole, userContext, displayContext, accState, intState, newUnitState);
         }
     }
 
@@ -123,7 +130,7 @@ class TestSummary extends Component {
                 break;
             default:
 
-                console.log('Set expectations ' + userRole + ' and user context ' + userContext);
+                //console.log('Set expectations ' + userRole + ' and user context ' + userContext);
 
                 ClientDesignComponentServices.setScenarioTestExpectations(
                     scenarioId,
@@ -134,6 +141,7 @@ class TestSummary extends Component {
                     intState,
                     unitState
                 );
+
                 break;
         }
 
@@ -143,18 +151,18 @@ class TestSummary extends Component {
 
         const {testSummaryData, scenario, displayContext, userContext, userRole} = this.props;
 
-        console.log('Render Test Summary with userRole ' + userRole + ' and user context ' + userContext);
+        //console.log('Render Test Summary with userRole ' + userRole + ' and user context ' + userContext);
 
         // Display test expectation options controls
-        let testExpectationAcc = scenario.requiresAcceptanceTest ? 'acc-expected' : 'test-not-expected';
-        let testExpectationInt = scenario.requiresIntegrationTest ? 'int-expected' : 'test-not-expected';
-        let testExpectationUnit = scenario.requiresUnitTest ? 'unit-expected' : 'test-not-expected';
+        let testExpectationAcc = this.state.accExpectation ? 'acc-expected' : 'test-not-expected';
+        let testExpectationInt = this.state.intExpectation ? 'int-expected' : 'test-not-expected';
+        let testExpectationUnit = this.state.unitExpectation ? 'unit-expected' : 'test-not-expected';
 
         const tooltipDelay = 1000;
 
-        const tooltipAcceptanceText = scenario.requiresAcceptanceTest ? 'Requires Acceptance test' : 'Click to require Acceptance test';
-        const tooltipIntegrationText = scenario.requiresIntegrationTest ? 'Requires Integration test' : 'Click to require Integration test';
-        const tooltipUnitText = scenario.requiresUnitTest ? 'Requires Unit test' : 'Click to require Unit test';
+        const tooltipAcceptanceText = this.state.accExpectation ? 'Requires Acceptance test' : 'Click to require Acceptance test';
+        const tooltipIntegrationText = this.state.intExpectation ? 'Requires Integration test' : 'Click to require Integration test';
+        const tooltipUnitText = this.state.unitExpectation ? 'Requires Unit test' : 'Click to require Unit test';
 
         const tooltipAcceptance = (
             <Tooltip id="modal-tooltip">

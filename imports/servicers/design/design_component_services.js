@@ -348,22 +348,30 @@ class DesignComponentServices{
 
     setScenarioTestExpectations(userId, designComponentId, accExpectation, intExpectation, unitExpectation){
 
-        DesignComponentData.setTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation);
+        if(Meteor.isServer) {
 
-        // Duplicate the expectations on any updates for this component in the DV
-        const baseComponent = DesignComponentData.getDesignComponentById(designComponentId);
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Setting scenario test expectations...");
 
-        const updateComponents = DesignUpdateComponentData.getAllDuComponentInstancesInDv(baseComponent.designVersionId, baseComponent.componentReferenceId);
+            DesignComponentData.setTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation);
 
-        if(updateComponents.length > 0){
-            updateComponents.forEach((component) => {
-                DesignUpdateComponentData.setTestExpectations(component._id, accExpectation, intExpectation, unitExpectation);
-            });
+            // Duplicate the expectations on any updates for this component in the DV
+            const baseComponent = DesignComponentData.getDesignComponentById(designComponentId);
+
+            const updateComponents = DesignUpdateComponentData.getAllDuComponentInstancesInDv(baseComponent.designVersionId, baseComponent.componentReferenceId);
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Set update expectations...");
+            if (updateComponents.length > 0) {
+                updateComponents.forEach((component) => {
+                    DesignUpdateComponentData.setTestExpectations(component._id, accExpectation, intExpectation, unitExpectation);
+                });
+            }
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Setting mash expectations...");
+            // And update the mash expectations too for this scenario
+            const updated = UserDvMashScenarioData.updateMashScenarioExpectations(userId, baseComponent.designVersionId, baseComponent.componentReferenceId, accExpectation, intExpectation, unitExpectation);
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Set {} mash expectations...", updated);
+
         }
-
-        // And update the mash expectations too for this scenario
-        UserDvMashScenarioData.updateMashScenarioExpectations(userId, baseComponent.designVersionId, baseComponent.componentReferenceId, accExpectation, intExpectation, unitExpectation);
-
     }
 }
 

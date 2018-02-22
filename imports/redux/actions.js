@@ -28,6 +28,7 @@ export const SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID';
 // Indicates the current data item context for a user - i.e. what they are looking at
 export const SET_CURRENT_USER_ITEM_CONTEXT = 'SET_CURRENT_USER_ITEM_CONTEXT';
 export const SET_CURRENT_USER_HOME_TAB = 'SET_CURRENT_USER_HOME_TAB';
+export const SET_CURRENT_USER_SUMMARY_ITEM = 'SET_CURRENT_USER_SUMMARY_ITEM';
 export const SET_CURRENT_USER_TEST_OUTPUT_LOCATION = 'SET_CURRENT_USER_TEST_OUTPUT_LOCATION';
 
 // Indicates the current development context for a developer - i.e. what they are working on
@@ -284,6 +285,15 @@ export function setCurrentUserHomeTab(tab){
     return function (dispatch) {
 
         dispatch({type: SET_CURRENT_USER_HOME_TAB, newTab: tab});
+
+    };
+}
+
+export function setCurrentUserSummaryItem(item){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_SUMMARY_ITEM, newItem: item});
 
     };
 }

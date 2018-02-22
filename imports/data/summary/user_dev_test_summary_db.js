@@ -31,6 +31,43 @@ class UserDevTestSummaryData{
         });
     }
 
+    getFeaturesWithNoTestRequirements(userId, designVersionId){
+
+        return UserDevTestSummary.find({
+            userId:                     userId,
+            designVersionId:            designVersionId,
+            featureExpectedTestCount:   0
+        }).fetch();
+    }
+
+    getFeaturesWithFailingTests(userId, designVersionId){
+
+        return UserDevTestSummary.find({
+            userId:                     userId,
+            designVersionId:            designVersionId,
+            featureTestFailCount:       {$gt: 0}
+        }).fetch();
+    }
+
+    getFeaturesWithSomePassingTests(userId, designVersionId){
+
+        return UserDevTestSummary.find({
+            userId:                     userId,
+            designVersionId:            designVersionId,
+            featureTestFailCount:       0,
+            featureTestPassCount:       {$gt: 0}
+        }).fetch();
+    }
+
+    getFeaturesWithAllTestsPassing(userId, designVersionId){
+
+        return UserDevTestSummary.find({
+            userId:                     userId,
+            designVersionId:            designVersionId,
+            featureAllTestsFulfilled:   true
+        }).fetch();
+    }
+
     // UPDATE ==========================================================================================================
 
     updateFeatureTestSummary(userId, designVersionId, featureRefId, featureData){

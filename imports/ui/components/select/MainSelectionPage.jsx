@@ -12,11 +12,12 @@ import DesignUpdatesContainer               from '../../containers/select/Design
 import WorkPackagesContainer                from '../../containers/select/WorkPackagesContainer.jsx';
 import WorkProgressSummaryContainer         from '../../containers/summary/WorkProgressSummaryContainer.jsx';
 import FeatureSummaryContainer              from '../../containers/select/FeatureSummaryContainer.jsx';
+import ProjectSummaryContainer              from '../../containers/summary/ProjectSummaryContainer.jsx';
 
 
 // Ultrawide Services
 import {DesignVersionStatus, WorkPackageType, HomePageTab}        from '../../../constants/constants.js';
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 
@@ -113,6 +114,10 @@ export class MainSelectionPage extends Component {
                 userContext: userContext
             }}/>;
 
+        const projectSummaryTabLayout =
+            <ProjectSummaryContainer params={{
+                userContext: userContext
+            }}/>;
 
         // Layout ------------------------------------------------------------------------------------------------------
 
@@ -139,6 +144,9 @@ export class MainSelectionPage extends Component {
                             <Row>
                                 <Col md={1}>
                                     <Nav bsStyle="pills" className="side-menu" stacked>
+                                        <NavItem eventKey={HomePageTab.TAB_SUMMARY}>
+                                            SUMMARY
+                                        </NavItem>
                                         <NavItem eventKey={HomePageTab.TAB_DESIGNS}>
                                             DESIGNS
                                         </NavItem>
@@ -152,6 +160,9 @@ export class MainSelectionPage extends Component {
                                 </Col>
                                 <Col className="main-panel" md={11}>
                                     <Tab.Content animation>
+                                        <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_SUMMARY}>
+                                            {projectSummaryTabLayout}
+                                        </Tab.Pane>
                                         <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_DESIGNS}>
                                             {designTabLayout}
                                         </Tab.Pane>
@@ -175,6 +186,9 @@ export class MainSelectionPage extends Component {
                             <Row>
                                 <Col md={1}>
                                     <Nav bsStyle="pills" className="side-menu" stacked>
+                                        <NavItem eventKey={HomePageTab.TAB_SUMMARY}>
+                                            SUMMARY
+                                        </NavItem>
                                         <NavItem eventKey={HomePageTab.TAB_DESIGNS}>
                                             DESIGNS
                                         </NavItem>
@@ -191,6 +205,9 @@ export class MainSelectionPage extends Component {
                                 </Col>
                                 <Col className="main-panel" md={11}>
                                     <Tab.Content animation>
+                                        <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_SUMMARY}>
+                                            {projectSummaryTabLayout}
+                                        </Tab.Pane>
                                         <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_DESIGNS}>
                                             {designTabLayout}
                                         </Tab.Pane>

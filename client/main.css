@@ -621,6 +621,7 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  16px;
     font-weight: normal;
+    margin: 10px 0 0 0;
 }
 
 .top-tabs{
@@ -676,6 +677,67 @@ input {
     margin: 10px 0 10px 0;
     height: 4px;
     background-color: lightgrey;
+}
+
+/* Project Summary -------------------------------------------------------------------------------------------------- */
+
+.project-summary-header{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  24px;
+    font-weight: normal;
+    letter-spacing: 4px;
+    margin: 5px;
+    padding: 10px;
+    color: white;
+    background-color: lightgrey;
+    border: 1px solid lightgrey;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
+}
+
+.project-summary-item-icon{
+    font-size:  28px;
+    padding: 3px 10px 0 0;
+}
+
+.summary-hand{
+    font-size:  20px;
+    padding: 5px 10px 0 0;
+}
+
+.project-summary-item{
+    margin: 10px 5px 20px 5px;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.project-summary-item-active{
+    margin: 10px 5px 20px 5px;
+    padding: 10px;
+    border: 1px solid black;
+    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
+}
+
+.project-summary-bad{
+    color: darkred;
+    background-color: lightpink;
+}
+
+.project-summary-good{
+    color: darkgreen;
+    background-color: palegreen;
+}
+
+.project-summary-ok{
+    color: darkgrey;
+    background-color: ghostwhite;
+}
+
+.project-summary-item-text{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  18px;
+    font-weight: normal;
+    padding: 5px 0 0 0;
 }
 
 /* DESIGN ITEMS ----------------------------------------------------------------------------------------------------- */

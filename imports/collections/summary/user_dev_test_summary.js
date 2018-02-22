@@ -19,6 +19,7 @@ let Schema = new SimpleSchema({
     featureTestPassCount:           {type: Number, defaultValue: 0},        // Number of tests passing in whole feature
     featureTestFailCount:           {type: Number, defaultValue: 0},        // Number of tests failing in whole feature
     featureNoTestCount:             {type: Number, defaultValue: 0},        // Number of scenarios with no tests
+    featureAllTestsFulfilled:       {type: Boolean, defaultValue: false},   // Set to TRUE when expected tests = fulfilled tests
     duFeatureScenarioCount:         {type: Number, defaultValue: 0},
     duFeatureExpectedTestCount:     {type: Number, defaultValue: 0},
     duFeatureFulfilledTestCount:    {type: Number, defaultValue: 0},

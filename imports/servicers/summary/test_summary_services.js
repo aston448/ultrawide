@@ -49,6 +49,7 @@ class TestSummaryServices {
             featureExpectedTestCount: 0,
             featureFulfilledTestCount: 0,
             featureNoTestScenarios: 0,
+            featureAllTestsFulfilled: false,
             duFeatureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
             duFeaturePassingTests: 0,
             duFeatureFailingTests: 0,
@@ -97,6 +98,7 @@ class TestSummaryServices {
         // Now update the relevant test summary data for the feature.
         log((msg) => console.log(msg), LogLevel.DEBUG, "Updating feature test summary for feature {} with expected tests {}", designFeature.componentReferenceId, featureGlobalData.featureExpectedTestCount);
         UserDevTestSummaryData.updateFeatureTestSummary(userContext.userId, designFeature.designVersionId, designFeature.componentReferenceId, featureGlobalData);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Updating complete");
 
     }
 
@@ -185,6 +187,7 @@ class TestSummaryServices {
                 featureExpectedTestCount: 0,
                 featureFulfilledTestCount: 0,
                 featureNoTestScenarios: 0,
+                featureAllTestsFulfilled: false,
                 duFeatureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
                 duFeaturePassingTests: 0,
                 duFeatureFailingTests: 0,
@@ -239,6 +242,7 @@ class TestSummaryServices {
                 featureTestPassCount: featureGlobalData.featurePassingTests,
                 featureTestFailCount: featureGlobalData.featureFailingTests,
                 featureNoTestCount: featureGlobalData.featureNoTestScenarios,
+                featureAllTestsFulfilled: featureGlobalData.featureAllTestsFulfilled,
                 duFeatureScenarioCount: featureGlobalData.duFeatureScenarioCount,
                 duFeatureExpectedTestCount: featureGlobalData.duFeatureExpectedTestCount,
                 duFeatureFulfilledTestCount: featureGlobalData.duFeatureFulfilledTestCount,

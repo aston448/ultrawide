@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import ClientTestIntegrationServices from '../../../apiClient/apiClientTestIntegration.js';
 import {FeatureTestSummaryStatus, ViewType}    from '../../../constants/constants.js';
 
 // Bootstrap
@@ -26,7 +27,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class TestSummary extends Component {
+export class FeatureTestSummary extends Component {
     constructor(props) {
         super(props);
 
@@ -36,10 +37,16 @@ export class TestSummary extends Component {
         return true;
     }
 
+    refreshSummary(userContext){
+
+        // Update the feature test summary as well to match
+        ClientTestIntegrationServices.updateTestSummaryDataForFeature(userContext);
+    }
+
 
     render() {
 
-        const {testSummaryData, view} = this.props;
+        const {testSummaryData, view, userContext} = this.props;
 
         //console.log("Rendering Feature Test Summary data with view = " + view + " and summary data = " + testSummaryData);
 
@@ -223,7 +230,7 @@ export class TestSummary extends Component {
                             </OverlayTrigger>
                         </Col>
                         <Col md={1} className="close-col">
-                            <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
+                            <div className={resultFeatureSummary} onClick={() => this.refreshSummary(userContext)}><Glyphicon glyph="refresh"/></div>
                         </Col>
                     </Row>
                 </Grid>
@@ -243,7 +250,7 @@ export class TestSummary extends Component {
     }
 }
 
-TestSummary.propTypes = {
+FeatureTestSummary.propTypes = {
     testSummaryData: PropTypes.object
 
 };
@@ -251,8 +258,9 @@ TestSummary.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        view:               state.currentAppView
+        view:               state.currentAppView,
+        userContext:        state.currentUserItemContext
     }
 }
 
-export default connect(mapStateToProps)(TestSummary);
+export default connect(mapStateToProps)(FeatureTestSummary);

@@ -62,6 +62,7 @@ export const DetailsViewType = {
     VIEW_ALL_AS_TABS:           'VIEW_ALL_AS_TABS'
 };
 
+
 export const MenuType = {
     MENU_TOP_TEXT:                  'MENU_TOP_TEXT',
     MENU_TOP_ICON:                  'MENU_TOP_ICON',
@@ -128,6 +129,7 @@ export const ViewOptionType = {
 
 // Context specifies how and what information is displayed in common components
 export const DisplayContext = {
+    NONE:                   'NONE',
     BASE_EDIT:              'BASE_EDIT',            // Editable new design
     BASE_VIEW:              'BASE_VIEW',            // Base design version window for design update
     WORKING_VIEW:           'WORKING_VIEW',         // Updatable Design Version progress view
@@ -160,7 +162,11 @@ export const DisplayContext = {
     PROGRESS_SUMMARY:       'PROGRESS_SUMMARY',
     EDITOR_FOOTER:          'EDITOR_FOOTER',
     EDITOR_HEADER:          'EDITOR_HEADER',
-    DETAILS_HEADER:         'DETAILS_HEADER'
+    DETAILS_HEADER:         'DETAILS_HEADER',
+    PROJECT_SUMMARY_NONE:   'PROJECT_SUMMARY_NONE',
+    PROJECT_SUMMARY_FAIL:   'PROJECT_SUMMARY_FAIL',
+    PROJECT_SUMMARY_SOME:   'PROJECT_SUMMARY_SOME',
+    PROJECT_SUMMARY_ALL:    'PROJECT_SUMMARY_ALL',
 };
 
 export const StepContext = {
@@ -330,11 +336,12 @@ export const DesignUpdateSummaryItem = {
 };
 
 export const HomePageTab = {
+    TAB_SUMMARY:                    '0',
     TAB_DESIGNS:                    '1',
     TAB_UPDATES:                    '2',
     TAB_WORK:                       '3',
     TAB_PROGRESS:                   '4',
-    TAB_NOT_SET:                    '0'
+    TAB_NOT_SET:                    '99'
 };
 
 export const ScenarioStepType = {

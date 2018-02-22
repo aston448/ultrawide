@@ -111,6 +111,7 @@ class TestSummaryModules{
         } else {
             if (newGlobalData.featurePassingTests > 0 && newGlobalData.featureExpectedTestCount > 0) {
                 newGlobalData.featureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+                newGlobalData.featureAllTestsFulfilled = (newGlobalData.featureExpectedTestCount === newGlobalData.featureFulfilledTestCount);
             } else {
                 newGlobalData.featureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
             }

@@ -51,6 +51,7 @@ import ClientAppHeaderServices from "./apiClientAppHeader";
 import ClientDesignVersionServices from "./apiClientDesignVersion";
 import ClientUserSettingsServices from "./apiClientUserSettings";
 import ClientDesignUpdateServices from "./apiClientDesignUpdate";
+import PropTypes from "prop-types";
 
 
 // =====================================================================================================================
@@ -686,110 +687,187 @@ class ClientDataServices{
         }
     };
 
-    getDesignVersionFeatureSummaries(userContext, homePageTab){
+    getDesignVersionFeatureSummaries(userContext, homePageTab, displayContext = DisplayContext.NONE){
 
         let featureSummaries = [];
+        let features = [];
+        let featureSummary = {};
 
-        if(userContext.designVersionId === 'NONE'){
+        if(homePageTab === HomePageTab.TAB_SUMMARY){
 
-            return{
-                featureSummaries:   featureSummaries,
-                designVersionName:  'NONE',
-                workPackageName:    'NONE',
-                homePageTab:        HomePageTab.TAB_DESIGNS
-            };
+            // Main Summary Page.  List depends on display context.
+            if (userContext.designVersionId === 'NONE') {
+
+                return {
+                    featureSummaries: featureSummaries,
+                    designVersionName: 'NONE',
+                    workPackageName: 'NONE',
+                    homePageTab: HomePageTab.TAB_SUMMARY,
+                    displayContext: displayContext
+                };
+
+            } else {
+
+                switch(displayContext){
+
+                    case DisplayContext.PROJECT_SUMMARY_NONE:
+
+                        features = UserDevTestSummaryData.getFeaturesWithNoTestRequirements(userContext.userId, userContext.designVersionId);
+                        break;
+
+                    case DisplayContext.PROJECT_SUMMARY_FAIL:
+
+                        features = UserDevTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId);
+                        break;
+
+                    case DisplayContext.PROJECT_SUMMARY_SOME:
+
+                        features = UserDevTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId);
+                        break;
+
+                    case DisplayContext.PROJECT_SUMMARY_ALL:
+
+                        features = UserDevTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId);
+                        break;
+
+                }
+
+                features.forEach((featureTestSummary) => {
+
+                    let feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, featureTestSummary.featureReferenceId);
+
+                    featureSummary = {
+                        _id: feature._id,
+                        featureName: feature.componentNameNew,
+                        featureRef: feature.componentReferenceId,
+                        hasTestData: true,
+                        summaryStatus: featureTestSummary.featureSummaryStatus,
+                        scenarioCount: featureTestSummary.featureScenarioCount,
+                        expectedCount: featureTestSummary.featureExpectedTestCount,
+                        fulfilledCount: featureTestSummary.featureFulfilledTestCount
+                    };
+
+                    featureSummaries.push(featureSummary);
+
+                });
+
+                const dv1 = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+
+                return {
+                    featureSummaries: featureSummaries,
+                    designVersionName: dv1.designVersionName,
+                    workPackageName: 'NONE',
+                    homePageTab: homePageTab,
+                    displayContext: displayContext
+                };
+
+            }
 
         } else {
 
-            let features = [];
-            let wpFeatures = [];
-            if(homePageTab === HomePageTab.TAB_DESIGNS){
+            if (userContext.designVersionId === 'NONE') {
 
-                // Get all features in a Design Version
-                features = DesignVersionData.getNonRemovedFeatures(userContext.designId, userContext.designVersionId);
+                return {
+                    featureSummaries: featureSummaries,
+                    designVersionName: 'NONE',
+                    workPackageName: 'NONE',
+                    homePageTab: HomePageTab.TAB_DESIGNS,
+                    displayContext: displayContext
+                };
 
             } else {
 
-                // Getting features in a WP only
-                wpFeatures = WorkPackageData.getWorkPackageComponentsOfType(userContext.workPackageId, ComponentType.FEATURE);
 
-                wpFeatures.forEach((wpFeature) => {
+                let wpFeatures = [];
+                if (homePageTab === HomePageTab.TAB_DESIGNS) {
 
-                    let dvFeature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, wpFeature.componentReferenceId);
-
-                    if(dvFeature && dvFeature.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED){
-                        features.push(dvFeature);
-                    }
-                });
-            }
-
-
-            const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
-            let wpName = '';
-
-            if(homePageTab === HomePageTab.TAB_WORK && userContext.workPackageId !== 'NONE'){
-                const wp = WorkPackageData.getWorkPackageById(userContext.workPackageId);
-                if(wp){
-                    wpName = wp.workPackageName
-                }
-            }
-
-            features.forEach((feature) => {
-
-                const mashData = UserDevTestSummaryData.getTestSummaryForFeature(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
-
-                let featureSummary = {};
-
-                if(mashData){
-
-                    featureSummary = {
-                        _id:                feature._id,
-                        featureName:        feature.componentNameNew,
-                        featureRef:         feature.componentReferenceId,
-                        hasTestData:        true,
-                        summaryStatus:      mashData.featureSummaryStatus,
-                        scenarioCount:      mashData.featureScenarioCount,
-                        expectedCount:      mashData.featureExpectedTestCount,
-                        fulfilledCount:     mashData.featureFulfilledTestCount
-                    };
+                    // Get all features in a Design Version
+                    features = DesignVersionData.getNonRemovedFeatures(userContext.designId, userContext.designVersionId);
 
                 } else {
 
-                    featureSummary = {
-                        _id:                feature._id,
-                        featureName:        feature.componentNameNew,
-                        featureRef:         feature.componentReferenceId,
-                        hasTestData:        false,
-                        summaryStatus:      'NONE',
-                        scenarioCount:      0,
-                        expectedCount:      0,
-                        fulfilledCount:     0
-                    };
+                    // Getting features in a WP only
+                    wpFeatures = WorkPackageData.getWorkPackageComponentsOfType(userContext.workPackageId, ComponentType.FEATURE);
 
+                    wpFeatures.forEach((wpFeature) => {
+
+                        let dvFeature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, wpFeature.componentReferenceId);
+
+                        if (dvFeature && dvFeature.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED) {
+                            features.push(dvFeature);
+                        }
+                    });
                 }
 
-                featureSummaries.push(featureSummary);
-            });
 
-            if(dv){
+                const dv2 = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+                let wpName = '';
 
-                return{
-                    featureSummaries:   featureSummaries,
-                    designVersionName:  dv.designVersionName,
-                    workPackageName:    wpName,
-                    homePageTab:        homePageTab
-                };
-            } else {
+                if (homePageTab === HomePageTab.TAB_WORK && userContext.workPackageId !== 'NONE') {
+                    const wp = WorkPackageData.getWorkPackageById(userContext.workPackageId);
+                    if (wp) {
+                        wpName = wp.workPackageName
+                    }
+                }
 
-                return{
-                    featureSummaries:   featureSummaries,
-                    designVersionName:  'NONE',
-                    workPackageName:    'NONE',
-                    homePageTab:        HomePageTab.TAB_DESIGNS
-                };
+                features.forEach((feature) => {
+
+                    const mashData = UserDevTestSummaryData.getTestSummaryForFeature(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
+
+
+
+                    if (mashData) {
+
+                        featureSummary = {
+                            _id: feature._id,
+                            featureName: feature.componentNameNew,
+                            featureRef: feature.componentReferenceId,
+                            hasTestData: true,
+                            summaryStatus: mashData.featureSummaryStatus,
+                            scenarioCount: mashData.featureScenarioCount,
+                            expectedCount: mashData.featureExpectedTestCount,
+                            fulfilledCount: mashData.featureFulfilledTestCount
+                        };
+
+                    } else {
+
+                        featureSummary = {
+                            _id: feature._id,
+                            featureName: feature.componentNameNew,
+                            featureRef: feature.componentReferenceId,
+                            hasTestData: false,
+                            summaryStatus: 'NONE',
+                            scenarioCount: 0,
+                            expectedCount: 0,
+                            fulfilledCount: 0
+                        };
+
+                    }
+
+                    featureSummaries.push(featureSummary);
+                });
+
+                if (dv2) {
+
+                    return {
+                        featureSummaries: featureSummaries,
+                        designVersionName: dv2.designVersionName,
+                        workPackageName: wpName,
+                        homePageTab: homePageTab,
+                        displayContext: displayContext
+                    };
+                } else {
+
+                    return {
+                        featureSummaries: featureSummaries,
+                        designVersionName: 'NONE',
+                        workPackageName: 'NONE',
+                        homePageTab: HomePageTab.TAB_DESIGNS,
+                        displayContext: displayContext
+                    };
+                }
+
             }
-
-
         }
     }
 
@@ -2448,6 +2526,37 @@ class ClientDataServices{
     getDefaultFeatureAspects(designId){
 
         return DefaultFeatureAspectData.getDefaultAspectsForDesign(designId);
+    }
+
+    getProjectSummaryData(userContext){
+
+        // Want to return:
+        // Design Version Name
+        // Number of features with no test requirements
+        // Number of features with failing tests
+        // Number of features with some passing tests
+        // Number of features with all required tests passing
+
+        // DV Name
+        let designVersionName = 'No Design Version Selected';
+        const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+
+        if(designVersion){
+            designVersionName = designVersion.designVersionName;
+        }
+
+        const noRequirementsCount = UserDevTestSummaryData.getFeaturesWithNoTestRequirements(userContext.userId, userContext.designVersionId).length;
+        const failingCount = UserDevTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId).length;
+        const somePassingCount = UserDevTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId).length;
+        const allPassingCount = UserDevTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId).length;
+
+        return{
+            designVersionName: designVersionName,
+            noTestRequirementsCount: noRequirementsCount,
+            failingTestsCount: failingCount,
+            someTestsCount: somePassingCount,
+            allTestsCount: allPassingCount
+        };
     }
 
 }

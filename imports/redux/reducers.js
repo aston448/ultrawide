@@ -4,6 +4,7 @@
 
 import * as Actions from './actions'
 import {RoleType, ViewType, ViewMode, MessageType, UserSettingValue, HomePageTab} from '../constants/constants.js'
+import {DisplayContext} from "../constants/constants";
 
 // Creates the initial state container for your application - the same as getInitialState
 const initialState = {
@@ -37,6 +38,7 @@ const initialState = {
     },
     currentUserItemContext:             null,
     currentUserHomeTab:                 HomePageTab.TAB_NOT_SET,
+    currentUserSummaryItem:             DisplayContext.PROJECT_SUMMARY_ALL,
     currentUserTestOutputLocationId:    'NONE',
     currentUserDevContext:              null,
     currentUserOpenDesignItems:         [],
@@ -65,7 +67,13 @@ const initialState = {
     testDataStale:                      true,       // True when new test data is available
     mashDataStale:                      true,       // True when design has changed or mash needs recalculating
     currentViewOptionsDataValue:        0,
-    openItemsFlag:                      false
+    openItemsFlag:                      false,
+    currentFeatureTestExpectations:{
+        featureId:              'NONE',
+        needsUpdate:            false,
+        scenarioExpectations:   []
+
+    }
 
 };
 
@@ -141,6 +149,10 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_CURRENT_USER_HOME_TAB:
             return Object.assign({}, state, {
                 currentUserHomeTab: action.newTab
+            });
+        case Actions.SET_CURRENT_USER_SUMMARY_ITEM:
+            return Object.assign({}, state, {
+                currentUserSummaryItem: action.newItem
             });
         case Actions.SET_CURRENT_USER_TEST_OUTPUT_LOCATION:
             return Object.assign({}, state, {
