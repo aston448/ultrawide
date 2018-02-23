@@ -83,11 +83,13 @@ export function setCurrentRole(userId, role, saveToDb=true) {
 
     return function (dispatch) {
         //console.log("ACTIONS: Role to " + role);
-        dispatch({type: SET_CURRENT_USER_ROLE, newUserRole: role});
+        if(role) {
+            dispatch({type: SET_CURRENT_USER_ROLE, newUserRole: role});
 
-        // And persist to DB if wanted
-        if(saveToDb) {
-            Meteor.call('userContext.setCurrentUserRole', userId, role);
+            // And persist to DB if wanted
+            if (saveToDb) {
+                Meteor.call('userContext.setCurrentUserRole', userId, role);
+            }
         }
     };
 }
