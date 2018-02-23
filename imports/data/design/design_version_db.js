@@ -92,6 +92,18 @@ class DesignVersionData {
         ).fetch();
     }
 
+    getNonRemovedFeatureCount(designId, designVersionId){
+
+        return DesignVersionComponents.find(
+            {
+                designId: designId,
+                designVersionId: designVersionId,
+                componentType: ComponentType.FEATURE,
+                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+            }
+        ).count();
+    }
+
     getAllUpdateComponents(designVersionId){
 
         return DesignUpdateComponents.find({designVersionId: designVersionId}).fetch();

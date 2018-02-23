@@ -59,7 +59,7 @@ export class ProjectSummary extends Component {
 
     render() {
 
-        const {designVersionName, noTestRequirementsCount, failingTestsCount, someTestsCount, allTestsCount, userContext} = this.props;
+        const {designVersionName, totalFeatureCount, noTestRequirementsCount, failingTestsCount, someTestsCount, allTestsCount, testsCount, userContext} = this.props;
 
         const layout =
             <Grid>
@@ -72,22 +72,30 @@ export class ProjectSummary extends Component {
                     <Col md={4}>
                         <ProjectSummaryItem
                             displayContext={DisplayContext.PROJECT_SUMMARY_NONE}
+                            totalFeatureCount={totalFeatureCount}
                             featureCount={noTestRequirementsCount}
+                            testsCount={testsCount}
                             selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_NONE)}
                         />
                         <ProjectSummaryItem
                             displayContext={DisplayContext.PROJECT_SUMMARY_FAIL}
+                            totalFeatureCount={totalFeatureCount}
                             featureCount={failingTestsCount}
+                            testsCount={testsCount}
                             selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_FAIL)}
                         />
                         <ProjectSummaryItem
                             displayContext={DisplayContext.PROJECT_SUMMARY_SOME}
+                            totalFeatureCount={totalFeatureCount}
                             featureCount={someTestsCount}
+                            testsCount={testsCount}
                             selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_SOME)}
                         />
                         <ProjectSummaryItem
                             displayContext={DisplayContext.PROJECT_SUMMARY_ALL}
+                            totalFeatureCount={totalFeatureCount}
                             featureCount={allTestsCount}
+                            testsCount={testsCount}
                             selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_ALL)}
                         />
                     </Col>
@@ -111,10 +119,12 @@ export class ProjectSummary extends Component {
 
 ProjectSummary.propTypes = {
     designVersionName: PropTypes.string.isRequired,
+    totalFeatureCount: PropTypes.number.isRequired,
     noTestRequirementsCount: PropTypes.number.isRequired,
     failingTestsCount: PropTypes.number.isRequired,
     someTestsCount: PropTypes.number.isRequired,
-    allTestsCount: PropTypes.number.isRequired
+    allTestsCount: PropTypes.number.isRequired,
+    testsCount: PropTypes.number.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

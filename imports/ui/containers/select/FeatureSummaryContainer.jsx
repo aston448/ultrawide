@@ -98,7 +98,7 @@ export class FeaturesList extends Component {
 
             case DisplayContext.PROJECT_SUMMARY_SOME:
 
-                headerText = 'Features with some required tests passing...';
+                headerText = 'Features with some tests passing...';
                 break;
 
             case DisplayContext.PROJECT_SUMMARY_ALL:
