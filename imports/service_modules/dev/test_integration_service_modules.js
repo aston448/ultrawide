@@ -61,29 +61,32 @@ class TestIntegrationModules{
                 outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
             }
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
+            if(outputLocation) {
 
-            // Grab any files here marked as integration test outputs
-            const testOutputFiles = TestOutputLocationFileData.getAcceptanceTestFilesForLocation(outputLocation._id);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user acceptance test files", testOutputFiles.length);
+                // Grab any files here marked as integration test outputs
+                const testOutputFiles = TestOutputLocationFileData.getAcceptanceTestFilesForLocation(outputLocation._id);
 
-            testOutputFiles.forEach((file) => {
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user acceptance test files", testOutputFiles.length);
 
-                const testFile = outputLocation.locationFullPath + file.fileName;
+                testOutputFiles.forEach((file) => {
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Acceptance Results from {}", testFile);
+                    const testFile = outputLocation.locationFullPath + file.fileName;
 
-                // Call the appropriate file parser
-                switch (file.testRunner) {
-                    case TestRunner.CHIMP_MOCHA:
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Acceptance Results Data");
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Acceptance Results from {}", testFile);
 
-                        UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.ACCEPTANCE);
-                        break;
+                    // Call the appropriate file parser
+                    switch (file.testRunner) {
+                        case TestRunner.CHIMP_MOCHA:
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Acceptance Results Data");
 
-                }
-            });
+                            UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.ACCEPTANCE);
+                            break;
+
+                    }
+                });
+            }
         });
     }
 
@@ -121,29 +124,31 @@ class TestIntegrationModules{
                 outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
             }
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
+            if(outputLocation) {
+                log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {}", outputLocation.locationName);
 
-            // Grab any files here marked as integration test outputs
-            const testOutputFiles = TestOutputLocationFileData.getIntegrationTestFilesForLocation(outputLocation._id);
+                // Grab any files here marked as integration test outputs
+                const testOutputFiles = TestOutputLocationFileData.getIntegrationTestFilesForLocation(outputLocation._id);
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test files", testOutputFiles.length);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test files", testOutputFiles.length);
 
-            testOutputFiles.forEach((file) => {
+                testOutputFiles.forEach((file) => {
 
-                const testFile = outputLocation.locationFullPath + file.fileName;
+                    const testFile = outputLocation.locationFullPath + file.fileName;
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Integration Results from {}", testFile);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Integration Results from {}", testFile);
 
-                // Call the appropriate file parser
-                switch (file.testRunner) {
-                    case TestRunner.CHIMP_MOCHA:
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Integration Results Data");
+                    // Call the appropriate file parser
+                    switch (file.testRunner) {
+                        case TestRunner.CHIMP_MOCHA:
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Integration Results Data");
 
-                        UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
-                        break;
+                            UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
+                            break;
 
-                }
-            });
+                    }
+                });
+            }
         });
     };
 
@@ -176,25 +181,28 @@ class TestIntegrationModules{
                 outputLocation = TestOutputLocationData.getOutputLocationById(userLocation.locationId);
             }
 
-            // Grab any files here marked as integration test outputs
-            const testOutputFiles = TestOutputLocationFileData.getUnitTestFilesForLocation(outputLocation._id);
+            if(outputLocation) {
 
-            testOutputFiles.forEach((file) => {
+                // Grab any files here marked as integration test outputs
+                const testOutputFiles = TestOutputLocationFileData.getUnitTestFilesForLocation(outputLocation._id);
 
-                const testFile = outputLocation.locationFullPath + file.fileName;
+                testOutputFiles.forEach((file) => {
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Unit Results from {}", testFile);
+                    const testFile = outputLocation.locationFullPath + file.fileName;
 
-                // Call the appropriate file parser
-                switch (file.testRunner) {
-                    case TestRunner.METEOR_MOCHA:
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Getting METEOR_MOCHA Results Data");
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    Getting Unit Results from {}", testFile);
 
-                        UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
-                        break;
+                    // Call the appropriate file parser
+                    switch (file.testRunner) {
+                        case TestRunner.METEOR_MOCHA:
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting METEOR_MOCHA Results Data");
 
-                }
-            });
+                            UltrawideMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
+                            break;
+
+                    }
+                });
+            }
         });
     };
 
