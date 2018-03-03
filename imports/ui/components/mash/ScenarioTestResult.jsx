@@ -8,11 +8,13 @@ import PropTypes from 'prop-types';
 import TestResultDetails    from './TestResultDetails.jsx';
 
 // Ultrawide Services
-import {TestType}       from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 import TextLookups      from '../../../common/lookups.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
+
 
 // REDUX services
 
@@ -40,6 +42,8 @@ export default class ScenarioTestResult extends Component {
 
     render(){
         const { testResult } = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Scenario Test Result {}', testResult.testName);
 
         const testStyle = testResult.testOutcome;
 

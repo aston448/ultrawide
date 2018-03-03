@@ -9,8 +9,8 @@ import WorkProgressCount        from '../../components/summary/WorkProgressCount
 import WorkProgressWpContainer  from '../../containers/summary/WorkProgressWpContainer.jsx';
 
 // Ultrawide Services
-import {WorkPackageStatus, RoleType, WorkSummaryType} from '../../../constants/constants.js';
-
+import {log} from "../../../common/utils";
+import {WorkPackageStatus, RoleType, WorkSummaryType, LogLevel} from '../../../constants/constants.js';
 
 import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
 import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
@@ -21,6 +21,7 @@ import {Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -46,6 +47,8 @@ class WorkProgressItem extends Component {
 
     render(){
         const {item, userRoles, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Work Progress Item');
 
         // Work out the details
         let itemClass = '';

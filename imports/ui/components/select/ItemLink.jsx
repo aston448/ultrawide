@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {RoleType, DesignVersionStatus, DesignUpdateStatus} from '../../../constants/constants.js';
+import {RoleType, DesignVersionStatus, DesignUpdateStatus, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
 
@@ -20,6 +21,7 @@ import {FormControl}                from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // React DnD
 
@@ -82,14 +84,9 @@ export class ItemLink extends Component{
     }
 
     render(){
-        const {currentItemId, currentItemLink, currentItemStatus, currentItemType, itemStatusClass, userRole} = this.props;
+        const {currentItemId, currentItemLink, currentItemStatus, itemStatusClass, userRole} = this.props;
 
-        let refEditorEditing = <div></div>;
-        let refEditorNotEditing = <div></div>;
-        let refReadOnly = <div></div>;
-
-        //console.log("Render DI Header for " + userRole + " with item " + currentItemType + " caled " + currentItemName);
-
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Item Link');
 
         let linkEditorEditing =
             <div>

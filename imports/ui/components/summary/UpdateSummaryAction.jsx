@@ -7,12 +7,14 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {DesignUpdateSummaryType, ComponentType} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {DesignUpdateSummaryType, ComponentType, LogLevel} from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js'
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
+
 
 // REDUX services
 
@@ -31,6 +33,8 @@ class UpdateSummaryAction extends Component {
 
     render(){
         const {actionItem} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Update Summary Action');
 
         const itemHeader = TextLookups.componentTypeHeader(actionItem.itemType);
 

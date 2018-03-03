@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-
-import {DesignUpdateMergeAction}    from '../../../constants/constants.js';
+import {DesignUpdateMergeAction, LogLevel}    from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 // Bootstrap
 
@@ -30,6 +30,8 @@ class UpdateMergeItem extends Component {
 
     render(){
         const {updateItem} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Update Merge Item {}', updateItem.updateName);
 
         let itemClass = '';
 

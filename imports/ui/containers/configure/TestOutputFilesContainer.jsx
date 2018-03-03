@@ -9,6 +9,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
+import {AddActionIds} from "../../../constants/ui_context_ids";
+import {LogLevel} from "../../../constants/constants";
+import {log} from "../../../common/utils";
+
 import TestOutputFile           from '../../components/configure/TestOutputFile.jsx';
 import ItemList                 from '../../components/select/ItemList.jsx';
 
@@ -20,7 +24,7 @@ import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTe
 
 // REDUX services
 import {connect} from 'react-redux';
-import {AddActionIds} from "../../../constants/ui_context_ids";
+
 
 // =====================================================================================================================
 
@@ -70,6 +74,8 @@ class TestOutputFilesScreen extends Component {
     render() {
 
         const {locationFiles, userRole, locationId} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Test Output Files');
 
         let bodyDataFunction = null;
         let hasFooterAction = true;

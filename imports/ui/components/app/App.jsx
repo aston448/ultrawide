@@ -4,13 +4,12 @@
 import React, { Component} from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// Ultrawide Collections
-
-
 // Ultrawide GUI Components
 import AppDataContainer from '../../containers/app/AppDataContainer.jsx';
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
 // Bootstrap
 
@@ -21,6 +20,7 @@ import store from '../../../redux/store'
 // React DnD
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+
 
 // =====================================================================================================================
 
@@ -38,6 +38,9 @@ class App extends Component {
     }
 
     render() {
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render App');
+
         return (
             <Provider store={store}>
                 <AppDataContainer/>

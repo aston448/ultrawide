@@ -10,7 +10,8 @@ import PropTypes from 'prop-types';
 import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
-import {MenuType, RoleType, ViewType, ViewMode, DisplayContext, DetailsViewType, HomePageTab} from '../../../constants/constants.js';
+import {MenuType, RoleType, ViewType, ViewMode, DisplayContext, DetailsViewType, HomePageTab, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
@@ -77,6 +78,8 @@ export class DesignEditorHeader extends Component {
     render() {
 
         const {displayContext, view, mode, userContext, userRole, userViewOptions, currentViewDataValue, domainTermsVisible, userHomeTab} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Editor Header');
 
         // Items -------------------------------------------------------------------------------------------------------
 

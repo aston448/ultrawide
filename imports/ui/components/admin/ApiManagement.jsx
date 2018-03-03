@@ -10,6 +10,8 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 import ClientUserManagementServices     from '../../../apiClient/apiClientUserManagement.js';
 
 // Bootstrap
@@ -17,6 +19,7 @@ import {Grid, Row, Col, Button} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -45,6 +48,7 @@ export class ApiManagement extends Component {
 
     render(){
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render API Management');
 
         return (
             <div>

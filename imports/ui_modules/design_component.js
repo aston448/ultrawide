@@ -220,7 +220,7 @@ class ComponentUiModules{
 
 
         // If test summary data has changed due to changed expectations
-        if(props.testSummaryData && props.currentItem.componentType === ComponentType.FEATURE) {
+        if(props.testSummaryData && nextProps.testSummaryData && props.currentItem.componentType === ComponentType.FEATURE) {
             if (props.testSummaryData.featureExpectedTestCount !== nextProps.testSummaryData.featureExpectedTestCount) {
                 return true;
             }

@@ -13,16 +13,18 @@ import DesignEditorHeader           from '../../components/common/DesignEditorHe
 import DesignEditorFooter           from '../../components/common/DesignEditorFooter.jsx';
 
 // Ultrawide Services
-import {DisplayContext} from '../../../constants/constants.js';
+import {DisplayContext, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
-import {InputGroup, Grid, Row, Col, Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -67,6 +69,8 @@ export class WorkProgressSummaryList extends Component {
     render() {
 
         const {dvAllItem, dvItem, dvWorkPackages, dvDesignUpdates, userRoles, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Work Progress Summary');
 
         // Get correct window height
         const editorClass = this.getEditorClass();

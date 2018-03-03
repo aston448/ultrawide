@@ -13,7 +13,7 @@ import UpdateMergeItem              from './UpdateMergeItem.jsx';
 // Ultrawide Services
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 
-import {RoleType, DesignVersionStatus, ItemType, DesignUpdateMergeAction, ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
+import {RoleType, DesignVersionStatus, ItemType, DesignUpdateMergeAction, LogLevel} from '../../../constants/constants.js';
 import { replaceAll, log } from '../../../common/utils.js';
 
 
@@ -126,6 +126,8 @@ export class DesignVersion extends Component {
     render() {
 
         const {designVersion, statusClass, userRole, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Version');
 
         const uiDesignVersionId = replaceAll(designVersion.designVersionName, ' ', '_');
 

@@ -10,7 +10,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewType} from '../../../constants/constants.js';
+import {log} from '../../../common/utils.js';
+import {ViewType, LogLevel} from '../../../constants/constants.js';
+
 import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
@@ -35,6 +37,8 @@ class AppHeaderData extends Component {
     render() {
 
         const {view, currentDesign, currentDesignVersion, currentDesignUpdate, currentWorkPackage} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER App Header Data');
 
         // What is shown here depends on the current view
         let headerData = '';

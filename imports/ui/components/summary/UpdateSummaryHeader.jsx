@@ -8,12 +8,14 @@ import PropTypes from 'prop-types';
 import UpdateSummaryActionContainer from '../../containers/summary/UpdateSummaryActionContainer.jsx';
 
 // Ultrawide Services
-import {DesignUpdateSummaryType, ComponentType} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {DesignUpdateSummaryType, ComponentType, LogLevel} from '../../../constants/constants.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -30,6 +32,8 @@ class UpdateSummaryHeader extends Component {
 
     render(){
         const {headerItem, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Update Summary Header');
 
         let itemHeader = <div></div>;
         let item = <div></div>;

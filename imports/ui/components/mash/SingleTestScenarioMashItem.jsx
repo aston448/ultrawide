@@ -9,7 +9,8 @@ import TestResultDetails from './TestResultDetails.jsx';
 
 // Ultrawide Services
 import TextLookups  from '../../../common/lookups.js';
-import {TestType, DisplayContext}   from '../../../constants/constants.js'
+import {log} from "../../../common/utils";
+import {TestType, DisplayContext, LogLevel}   from '../../../constants/constants.js'
 
 import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 
@@ -17,6 +18,7 @@ import ClientDataServices      from '../../../apiClient/apiClientDataServices.js
 import {Grid, Row, Col} from 'react-bootstrap';
 import {InputGroup}     from 'react-bootstrap';
 import {Glyphicon}      from 'react-bootstrap';
+
 
 // REDUX services
 
@@ -39,6 +41,25 @@ export default class SingleTestScenarioMashItem extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        // Update if test data has changed
+        if(
+            nextProps.mashItem.accMashTestStatus !== this.props.mashItem.accMashTestStatus  ||
+            nextProps.mashItem.intMashTestStatus !== this.props.mashItem.intMashTestStatus  ||
+            nextProps.mashItem.unitMashTestStatus !== this.props.mashItem.unitMashTestStatus ||
+            nextState.showResultDetails !== this.state.showResultDetails
+        ){
+            shouldUpdate = true;
+        }
+
+        //console.log('Single Test Scenario Mash Item Should Update: ' + shouldUpdate);
+
+        return shouldUpdate;
+    }
+
     toggleOverlay(){
         this.setState({showResultDetails: !this.state.showResultDetails});
     }
@@ -50,6 +71,8 @@ export default class SingleTestScenarioMashItem extends Component {
 
     render(){
         const { mashItem, displayContext } = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Single Test Scenario Mash Item {}', mashItem.scenarioName);
 
         let testStyle = '';
         let testOutcome = '';

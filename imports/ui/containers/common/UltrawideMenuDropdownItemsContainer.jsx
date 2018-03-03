@@ -11,13 +11,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 import UltrawideMenuDropdownItem from '../../components/common/UltrawideMenuDropdownItem.jsx';
 
 // Ultrawide Services
-import { RoleType } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { RoleType, LogLevel } from '../../../constants/constants.js';
 import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // React DnD
 
@@ -59,6 +61,8 @@ export class DropdownItems extends Component {
     render() {
 
         const {itemsList, clickAction, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Ultrawide Menu Dropdown Items');
 
         let background = '';
 

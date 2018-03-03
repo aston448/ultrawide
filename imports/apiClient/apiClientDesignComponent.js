@@ -562,6 +562,9 @@ class ClientDesignComponentServices{
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
 
+                    // Update the feature test summary as well to match
+                    ClientTestIntegrationServices.updateTestSummaryDataForFeature(newUserContext);
+
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
                         messageType: MessageType.INFO,

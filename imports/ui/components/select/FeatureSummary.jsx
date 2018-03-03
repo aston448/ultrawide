@@ -4,19 +4,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-
 // Ultrawide Services
-import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
-import ClientDesignComponentServices    from '../../../apiClient/apiClientDesignComponent.js';
+import {log} from "../../../common/utils";
+import { FeatureTestSummaryStatus, LogLevel } from '../../../constants/constants.js';
 
-import { FeatureTestSummaryStatus } from '../../../constants/constants.js';
+import ClientDesignComponentServices    from '../../../apiClient/apiClientDesignComponent.js';
 
 // Bootstrap
 import {Grid, Row, Col, Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {ViewType} from "../../../constants/constants";
+
 
 // =====================================================================================================================
 
@@ -34,14 +33,32 @@ export class FeatureSummary extends Component {
         };
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        if(
+            nextProps.featureSummary.summaryStatus !== this.props.featureSummary.summaryStatus ||
+            nextProps.featureSummary.expectedCount !== this.props.featureSummary.expectedCount ||
+            nextProps.featureSummary.scenarioCount !== this.props.featureSummary.scenarioCount ||
+            nextProps.featureSummary.fulfilledCount !== this.props.featureSummary.fulfilledCount
+        ){
+            shouldUpdate = true;
+        }
+
+        return shouldUpdate;
+    }
+
     onGoToFeature(userRole, userContext, featureReferenceId){
 
         ClientDesignComponentServices.gotoFeature(featureReferenceId);
-        //ClientDesignVersionServices.viewDesignVersion(userRole, userContext, userContext.designVersionId)
+
     };
 
     render() {
         const {featureSummary, userContext, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Feature Summary');
 
         if(featureSummary.hasTestData){
 

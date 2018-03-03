@@ -13,6 +13,9 @@ import UserTestLocationConfiguration        from '../../components/configure/Use
 import ItemList                             from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+
 import ClientDataServices  from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
@@ -56,6 +59,8 @@ export class UserTestOutputConfiguration extends Component {
     render(){
 
         const {userLocations} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER User Test Outputs');
 
         const headerText = 'My Local Test Output Configuration';
 

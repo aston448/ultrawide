@@ -8,7 +8,8 @@ import PropTypes from 'prop-types';
 import MashScenarioTestContainer        from '../../containers/mash/MashScenarioTestContainer.jsx';
 
 // Ultrawide Services
-import { DisplayContext, MashTestStatus } from '../../../constants/constants.js';
+import { DisplayContext, LogLevel } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 import TextLookups  from '../../../common/lookups.js';
 
 // Bootstrap
@@ -18,6 +19,7 @@ import {Glyphicon}          from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -39,11 +41,27 @@ export class MultiTestScenarioMashItem extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return true;
+
+        let shouldUpdate = false;
+
+        // Update if test data has changed
+        if(
+            nextProps.mashItem.accMashTestStatus !== this.props.mashItem.accMashTestStatus  ||
+            nextProps.mashItem.intMashTestStatus !== this.props.mashItem.intMashTestStatus  ||
+            nextProps.mashItem.unitMashTestStatus !== this.props.mashItem.unitMashTestStatus
+        ){
+            shouldUpdate = true;
+        }
+
+        //console.log('Multi Test Scenario Mash Item Should Update: ' + shouldUpdate);
+
+        return shouldUpdate;
     }
 
     render(){
         const { mashItem, userContext, displayContext } = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Multi Test Scenario Mash Item {}', mashItem.scenarioName);
 
         let testStyle = '';
         let testOutcome = '';

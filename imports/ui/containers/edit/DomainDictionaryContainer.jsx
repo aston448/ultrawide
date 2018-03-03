@@ -13,7 +13,8 @@ import DetailsViewHeader        from '../../components/common/DetailsViewHeader.
 import DetailsViewFooter        from '../../components/common/DetailsViewFooter.jsx';
 
 // Ultrawide Services
-import { DetailsViewType } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { DetailsViewType, LogLevel } from '../../../constants/constants.js';
 
 import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
@@ -21,6 +22,7 @@ import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettin
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -56,6 +58,8 @@ class DomainDictionary extends Component {
 
     render() {
         const {dictionaryTerms, userRole, view, mode, userContext, userViewOptions, viewDataValue} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Domain Dictionary');
 
         // Get correct window height
         const editorClass = this.getEditorClass();

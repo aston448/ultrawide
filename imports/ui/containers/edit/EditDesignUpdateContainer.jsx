@@ -18,7 +18,7 @@ import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx'
 import ScenarioFinder               from '../../components/search/ScenarioFinder.jsx';
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
+import { ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 import { log }                              from '../../../common/utils.js';
 
@@ -136,7 +136,7 @@ export class UpdateApplicationsList extends Component {
 
         const {baseApplications, updateApplications, workingApplications, userContext, view, mode, viewOptions} = this.props;
 
-        //log((msg) => console.log(msg), LogLevel.INFO, "RENDER DESIGN UPDATE CONTAINER {}", view);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Edit Design Update');
 
         // Items -------------------------------------------------------------------------------------------------------
 

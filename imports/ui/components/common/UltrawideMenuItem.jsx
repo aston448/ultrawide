@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {MenuType, RoleType} from '../../../constants/constants.js'
+import {MenuType, RoleType, LogLevel} from '../../../constants/constants.js'
+import {log, replaceAll} from "../../../common/utils";
 
 // Bootstrap
 import {Glyphicon}  from 'react-bootstrap';
@@ -17,7 +18,7 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {replaceAll} from "../../../common/utils";
+
 
 // =====================================================================================================================
 
@@ -38,6 +39,19 @@ export class UltrawideMenuItem extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        if(
+            nextState.isHighlighted !== this.state.isHighlighted
+        ){
+            shouldUpdate = true;
+        }
+
+        return shouldUpdate;
+    }
+
     highlightMe(){
         this.setState({isHighlighted: true})
     }
@@ -53,6 +67,8 @@ export class UltrawideMenuItem extends Component {
     render() {
 
         const {menuType, itemName, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Ultrawide Menu Item {}', itemName);
 
         let className = '';
         let highlight = '';

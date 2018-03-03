@@ -10,7 +10,8 @@ import PropTypes from 'prop-types';
 import UltrawideMenuDropdownItemsContainer from '../../containers/common/UltrawideMenuDropdownItemsContainer.jsx';
 
 // Ultrawide Services
-import {RoleType} from '../../../constants/constants.js'
+import {RoleType, LogLevel} from '../../../constants/constants.js'
+import {log} from "../../../common/utils";
 
 // Bootstrap
 
@@ -62,6 +63,8 @@ export class UltrawideMenuDropdown extends Component {
     render() {
 
         const {itemName, menuType, view, mode, userViewOptions, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Ultrawide Menu Dropdown {}', itemName);
 
         let highlight = '';
 

@@ -9,15 +9,16 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 import FindResultsContainer         from '../../containers/search/FindResultsContainer.jsx';
 
-
 // Ultrawide Services
-import { DetailsType, ViewMode, DisplayContext, ComponentType }      from  '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
 // Bootstrap
 import {InputGroup, FormControl} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -45,6 +46,8 @@ export class ScenarioFinder extends Component {
 
     render() {
         const {displayContext, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Scenario Finder');
 
         // Items -------------------------------------------------------------------------------------------------------
 

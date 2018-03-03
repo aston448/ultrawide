@@ -13,12 +13,15 @@ import ItemList                 from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
 import ClientDataServices       from '../../../apiClient/apiClientDataServices.js';
-import {DisplayContext, HomePageTab} from "../../../constants/constants";
+
+import {DisplayContext, HomePageTab, LogLevel} from "../../../constants/constants";
+import {log} from "../../../common/utils";
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -63,6 +66,7 @@ export class FeaturesList extends Component {
 
         const {featureSummaries, designVersionName, workPackageName, homePageTab, displayContext, userRole, userContext} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Feature Summary');
 
         let hasFooterAction = false;
         let footerActionFunction = null;

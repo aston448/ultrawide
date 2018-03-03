@@ -12,8 +12,8 @@ import ItemStatus       from './ItemStatus.jsx';
 import WorkPackage      from "./WorkPackage.jsx";
 
 // Ultrawide Services
-import { ItemType, DesignUpdateStatus, DesignVersionStatus, WorkPackageStatus, WorkPackageTestStatus } from '../../../constants/constants.js';
-import {replaceAll} from "../../../../imports/common/utils";
+import { ItemType, DesignUpdateStatus, DesignVersionStatus, WorkPackageStatus, WorkPackageTestStatus, LogLevel } from '../../../constants/constants.js';
+import {replaceAll, log} from "../../../../imports/common/utils";
 
 import ClientDesignVersionServices      from "../../../apiClient/apiClientDesignVersion";
 import ClientDesignUpdateServices       from "../../../apiClient/apiClientDesignUpdate";
@@ -76,6 +76,8 @@ export class ItemWrapper extends Component {
 
     render() {
         const {itemType, item, userContext, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Wrapper {}', itemType);
 
         if(!item){
             return(<div></div>);

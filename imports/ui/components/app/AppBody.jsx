@@ -18,7 +18,8 @@ import DevelopWorkPackageContainer          from  '../../containers/edit/Develop
 import WaitMessage                          from  './Wait.jsx';
 
 // Ultrawide Services
-import {ViewType, RoleType} from '../../../constants/constants.js'
+import {log} from "../../../common/utils";
+import {ViewType, LogLevel} from '../../../constants/constants.js'
 
 // Bootstrap
 
@@ -26,6 +27,7 @@ import {ViewType, RoleType} from '../../../constants/constants.js'
 import {connect} from 'react-redux';
 
 import ConfigurationSettings from "../configure/ConfigurationSettings";
+
 
 // React DnD
 
@@ -46,12 +48,24 @@ class AppBody extends Component {
         super(props);
     }
 
-    render() {
-        const {view, mode, userContext, userRole, currentUserMessage, testDataFlag} = this.props;
+    shouldComponentUpdate(nextProps, nextState){
 
-        if(userContext) {
-            //console.log("Rendering App Body.  Current DV = " + userContext.designVersionId);
+        let shouldUpdate = false;
+
+        if(
+            nextProps.view !== this.props.view ||
+            nextProps.mode !== this.props.mode
+        ){
+            shouldUpdate = true;
         }
+
+        return shouldUpdate;
+    }
+
+    render() {
+        const {view, mode, userContext, currentUserMessage} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render App Body for view {}', view);
 
         // The body rendered depends on the current view
         let bodyHtml = '';

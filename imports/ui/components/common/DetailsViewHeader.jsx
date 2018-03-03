@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {DisplayContext, ViewType} from '../../../constants/constants.js';
+import {DisplayContext, ViewType, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
@@ -63,6 +64,8 @@ export class DetailsViewHeader extends Component {
     render() {
 
         const {detailsType, isClosable, titleText, view, mode, userContext, userRole, userViewOptions, currentViewDataValue} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Details View Header');
 
         // Items -------------------------------------------------------------------------------------------------------
 

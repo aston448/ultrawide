@@ -10,8 +10,10 @@ import PropTypes from 'prop-types';
 import DesignComponent      from './DesignComponent.jsx';
 
 // Ultrawide Services
-import {ComponentType, ViewMode, DisplayContext, UpdateScopeType} from '../../../constants/constants.js';
-import {locationMoveDropAllowed} from '../../../common/utils.js';
+import {ComponentType, ViewMode, DisplayContext, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
+import {locationMoveDropAllowed, log, replaceAll} from '../../../common/utils.js';
+
+import ClientDesignComponentServices from "../../../apiClient/apiClientDesignComponent";
 
 // Bootstrap
 
@@ -19,8 +21,7 @@ import {locationMoveDropAllowed} from '../../../common/utils.js';
 
 // React DnD
 import { DropTarget } from 'react-dnd';
-import {replaceAll} from "../../../common/utils";
-import ClientDesignComponentServices from "../../../apiClient/apiClientDesignComponent";
+
 
 // =====================================================================================================================
 
@@ -45,6 +46,9 @@ export class DesignComponentTarget extends Component{
         //console.log("TARGET " + this.props.currentItem.componentType + " - " + this.props.currentItem.componentNameNew + " receiving props Update Item was " + this.props.updateItem + " and now " + newProps.updateItem);
     }
 
+    shouldComponentUpdate(){
+        return true;
+    }
 
     getParentName(currentItem){
 
@@ -65,6 +69,7 @@ export class DesignComponentTarget extends Component{
 
         const {currentItem, updateItem, wpItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData, mode} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Target {}', currentItem.componentNameNew);
 
         const uiItemId = replaceAll(currentItem.componentNameNew, ' ', '_');
         const uiParentId = replaceAll(this.getParentName(currentItem), ' ', '_');

@@ -9,25 +9,25 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
-import WorkPackage                  from '../../components/select/WorkPackage.jsx';
 import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
-import ItemList                from '../../components/select/ItemList.jsx';
+import ItemList                     from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, LogLevel} from '../../../constants/constants.js';
-
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
-import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
+import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, ItemType, LogLevel} from '../../../constants/constants.js';
+import {AddActionIds} from "../../../constants/ui_context_ids";
 import { log } from '../../../common/utils.js';
+
+import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
+import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
+import ClientWorkPackageServices    from "../../../apiClient/apiClientWorkPackage";
+
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import ClientWorkPackageServices from "../../../apiClient/apiClientWorkPackage";
-import {HomePageTab, ItemType} from "../../../constants/constants";
-import {AddActionIds} from "../../../constants/ui_context_ids";
+
 
 // =====================================================================================================================
 
@@ -103,6 +103,7 @@ export class DesignUpdatesList extends Component {
 
         const {incompleteUpdates, assignedUpdates, completeUpdates, updateWorkPackages, designVersionStatus, designUpdateStatus, userRole, userContext, openWpItems} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Updates');
 
         // DU List Header ----------------------------------------------------------------------------------------------
 

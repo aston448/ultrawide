@@ -7,7 +7,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewType, ViewMode} from '../../../constants/constants.js';
+import {ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
 
@@ -22,6 +23,7 @@ import {connect} from 'react-redux';
 
 // Draft JS - definition is text editable
 import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
+
 const {hasCommandModifier} = KeyBindingUtil;
 
 // =====================================================================================================================
@@ -249,6 +251,8 @@ class DomainDictionaryTerm extends Component {
     // RENDER ----------------------------------------------------------------------------------------------------------
     render() {
         const {dictionaryTerm, userRole, view, mode} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Domain Dict Term {}', dictionaryTerm.domainTermNew);
 
         // TODO - add all the tooltips required
         const tooltipEdit = (

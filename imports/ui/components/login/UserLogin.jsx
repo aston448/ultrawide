@@ -8,6 +8,9 @@ import React, { Component } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+
 import ClientLoginServices  from '../../../apiClient/apiClientLogin.js'
 
 // Bootstrap
@@ -15,6 +18,7 @@ import {Well, FormGroup, FormControl, ControlLabel, Button, Grid, Row, Col} from
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // React DnD
 
@@ -56,6 +60,8 @@ export class UserLogin extends Component {
 
     render() {
         const {} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render User Login');
 
         return(
             <Grid>

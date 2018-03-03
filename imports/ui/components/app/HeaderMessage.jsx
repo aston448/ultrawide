@@ -3,16 +3,15 @@
 // Meteor / React Services
 import React, { Component} from 'react';
 
-// Ultrawide Collections
-
-// Ultrawide GUI Components
-
 // Ultrawide Services
-import { MessageType } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { MessageType, LogLevel } from '../../../constants/constants.js';
+
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // React DnD
 
@@ -53,6 +52,8 @@ export class HeaderMessage extends Component {
 
     render() {
         const {message} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Header Message {}', message);
 
         return(
             <div id="headerMessage" className={'header-message ' + this.state.displayClass}>

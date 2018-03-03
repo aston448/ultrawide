@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 import ItemName         from './ItemName.jsx';
 
 // Ultrawide Services
-import { ItemType, RoleType } from '../../../constants/constants.js';
-import {replaceAll} from "../../../common/utils";
+import { ItemType, RoleType, LogLevel } from '../../../constants/constants.js';
+import {log, replaceAll} from "../../../common/utils";
 
 import ClientDesignServices     from '../../../apiClient/apiClientDesign.js';
 import ClientImpExServices     from '../../../apiClient/apiClientImpEx.js';
@@ -62,6 +62,8 @@ export class Design extends Component {
 
     render() {
         const {design, statusClass, userContext, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design');
 
         const uiDesignId = replaceAll(design.designName, ' ', '_');
 

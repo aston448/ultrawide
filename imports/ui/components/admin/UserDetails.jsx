@@ -9,6 +9,10 @@ import PropTypes from 'prop-types';
 
 
 // Ultrawide Services
+import {DesignComponentMessages, UserManagementMessages} from "../../../constants/message_texts";
+import {LogLevel, MessageType} from "../../../constants/constants";
+import {log} from "../../../common/utils";
+
 import ClientUserManagementServices from '../../../apiClient/apiClientUserManagement.js';
 
 // Bootstrap
@@ -19,8 +23,7 @@ import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-
 import {connect} from 'react-redux';
 import {updateUserMessage} from '../../../redux/actions'
 import store from "../../../redux/store";
-import {DesignComponentMessages, UserManagementMessages} from "../../../constants/message_texts";
-import {MessageType} from "../../../constants/constants";
+
 
 // =====================================================================================================================
 
@@ -169,6 +172,8 @@ export class UserDetails extends Component {
     render() {
         try {
             const {user, currentUserId, userContext} = this.props;
+
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render User Details');
 
             const selectedClass = (user.userId === currentUserId ? ' user-selected' : ' user-not-selected');
             const activeClass = (user.isActive ? ' user-active' : ' user-inactive');

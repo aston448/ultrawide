@@ -7,12 +7,10 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 import MashSelectedItemContainer        from '../../containers/mash/MashSelectedItemContainer.jsx';
 import ScenarioTestResultsContainer     from '../../containers/mash/ScenarioTestResultsContainer.jsx';
-import AcceptanceTestScenarioMashItem   from './AcceptanceTestScenarioMashItem.jsx';
-import IntegrationTestScenarioMashItem  from './SingleTestScenarioMashItem.jsx';
-import UnitTestScenarioMashItem         from './MultiTestScenarioMashItem.jsx';
 
 // Ultrawide Services
-import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { ComponentType, LogLevel } from '../../../constants/constants.js';
 
 import ClientTestIntegrationServices        from '../../../apiClient/apiClientTestIntegration.js';
 
@@ -20,6 +18,7 @@ import ClientTestIntegrationServices        from '../../../apiClient/apiClientTe
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -40,6 +39,12 @@ class MashDesignItem extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        // Not sure if this component ever needs to update
+        return false;
+    }
+
     hasScenarios(designItem, userContext){
         return ClientTestIntegrationServices.hasScenarios(designItem, userContext)
     }
@@ -47,12 +52,12 @@ class MashDesignItem extends Component {
     render(){
         const { designItem, displayContext, view, userContext } = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Mash Design Item {}', designItem.componentNameNew);
+
         // What is rendered depends on the item type.  Assume its a Scenario if not a Design Version component
         // with a specified type
 
         let componentType = ComponentType.SCENARIO;
-
-        //console.log("Design Item Component Type: " + designItem.componentType);
 
         if(designItem.componentType){
             componentType = designItem.componentType;

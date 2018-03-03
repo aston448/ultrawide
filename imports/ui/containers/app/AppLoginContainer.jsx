@@ -16,6 +16,8 @@ import UserLogin                from '../../components/login/UserLogin.jsx';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
 
 // =====================================================================================================================
@@ -33,9 +35,17 @@ class LoginScreen extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        // This container should never need to update
+        return false;
+    }
+
     render() {
 
         const {} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Login');
 
         // Show Login
         return(
@@ -62,8 +72,6 @@ LoginScreen = connect(mapStateToProps)(LoginScreen);
 
 
 export default AppLoginContainer = createContainer(({params}) => {
-
-    //console.log("AppLoginContainer");
 
     return{}
 

@@ -9,6 +9,9 @@ import PropTypes from 'prop-types';
 
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+
 import ClientImpExServices          from '../../../apiClient/apiClientImpEx.js';
 
 // Bootstrap
@@ -16,6 +19,7 @@ import {Button, Grid, Row, Col, Modal} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -51,6 +55,8 @@ export class DesignBackup extends Component {
     render() {
 
         const {backup, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Backup');
 
         const modalOkButton =
             <Button onClick={() => this.onRestore(backup, userContext)}>OK</Button>;

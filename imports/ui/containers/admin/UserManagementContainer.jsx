@@ -13,6 +13,9 @@ import ItemList                         from '../../components/select/ItemList.j
 import UserDetails                      from '../../components/admin/UserDetails.jsx';
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+
 import ClientDataServices               from '../../../apiClient/apiClientDataServices.js';
 import ClientUserManagementServices     from '../../../apiClient/apiClientUserManagement.js';
 
@@ -24,6 +27,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 
@@ -94,6 +98,8 @@ class UserManagementScreen extends Component {
     render() {
 
         const {userData} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER User Management');
 
         let bodyDataFunction = null;
 

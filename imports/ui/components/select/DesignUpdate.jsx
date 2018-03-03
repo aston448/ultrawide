@@ -9,16 +9,18 @@ import ItemName                 from './ItemName.jsx';
 import ItemReference            from './ItemReference.jsx';
 
 // Ultrawide Services
-import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
-
-import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType, LogLevel} from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
 
+import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
+
 // Bootstrap
-import {Button, ButtonGroup, FormGroup, Radio, InputGroup, Glyphicon} from 'react-bootstrap';
+import {Button, ButtonGroup, FormGroup, Radio} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -125,6 +127,8 @@ export class DesignUpdate extends Component {
 
     render() {
         const {designUpdate, statusClass, userRole, userContext, viewOptions} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Update');
 
         // Items -------------------------------------------------------------------------------------------------------
 

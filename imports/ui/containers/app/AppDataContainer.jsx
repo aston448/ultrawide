@@ -14,6 +14,9 @@ import AppBody from '../../components/app/AppBody.jsx';
 // Ultrawide Services
 import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
 
+import {log} from '../../../common/utils.js';
+import { LogLevel } from '../../../constants/constants.js';
+
 // Bootstrap
 import {Grid} from 'react-bootstrap';
 import {Row} from 'react-bootstrap';
@@ -38,9 +41,22 @@ class AppData extends Component {
         super(props);
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        if(nextProps.isLoading !== this.props.isLoading){
+            shouldUpdate = true;
+        }
+
+        return shouldUpdate;
+    }
+
     render() {
 
-        const {user, isLoading} = this.props;
+        const {isLoading} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER App Data');
 
         if(isLoading){
             return(

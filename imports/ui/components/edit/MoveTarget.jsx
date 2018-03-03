@@ -41,7 +41,7 @@ class MoveTarget extends Component{
         // When over a droppable area render it as a gap
         let moveTarget = 'move-target';
 
-        //log((msg) => console.log(msg), LogLevel.TRACE, "MOVE TARGET: Mode: {}", mode);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Move Target {}', currentItem.componentNameNew);
 
         if(canDrop && isOverCurrent){
             moveTarget = 'move-target-active'

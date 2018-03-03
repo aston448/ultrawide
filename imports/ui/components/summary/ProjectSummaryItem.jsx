@@ -9,17 +9,12 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import { DisplayContext, RoleType, ItemType, DesignVersionStatus, DesignUpdateStatus} from '../../../constants/constants.js';
-
-import ClientDesignServices             from '../../../apiClient/apiClientDesign.js';
-import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
-import ClientDesignUpdateServices       from '../../../apiClient/apiClientDesignUpdate.js';
-import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
+import {log} from "../../../common/utils";
+import { DisplayContext, LogLevel } from '../../../constants/constants.js';
 
 // Bootstrap
 import {InputGroup, Grid, Row, Col}                 from 'react-bootstrap';
 import {Glyphicon}                  from 'react-bootstrap';
-import {FormControl, ControlLabel}  from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -54,6 +49,8 @@ export class ProjectSummaryItem extends Component{
 
     render(){
         const {displayContext, featureCount, totalFeatureCount, testsCount, currentSummaryItem} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Project Summary Item');
 
         let contextText = '';
         let icon = '';

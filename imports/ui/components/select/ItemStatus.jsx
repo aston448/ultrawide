@@ -9,6 +9,9 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+
 import ClientWorkPackageServices    from "../../../apiClient/apiClientWorkPackage";
 import ItemStatusUiModules          from '../../../ui_modules/item_status.js';
 
@@ -18,6 +21,7 @@ import {}                 from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // React DnD
@@ -44,6 +48,8 @@ export class ItemStatus extends Component{
 
     render(){
         const {currentItemStatus, currentItemType, itemStatusClass, adoptingUserId, wpTestStatus, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Item Status {}', currentItemStatus);
 
         const statusString = ItemStatusUiModules.getStatusString(currentItemType, currentItemStatus, wpTestStatus, this.getAdopterName(adoptingUserId));
 

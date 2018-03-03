@@ -11,14 +11,16 @@ import { createContainer }  from 'meteor/react-meteor-data';
 import ScenarioTestResult           from '../../components/mash/ScenarioTestResult.jsx';
 
 // Ultrawide Services
-import {DisplayContext, TestType} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {DisplayContext, TestType, LogLevel} from '../../../constants/constants.js';
 
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -52,6 +54,8 @@ class MashScenarioTestList extends Component {
     render() {
 
         const {testResults} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Mash Scenario Test');
 
         if(testResults.length > 0) {
             return (

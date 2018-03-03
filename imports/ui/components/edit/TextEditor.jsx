@@ -72,6 +72,10 @@ export class TextEditor extends Component {
         };
     }
 
+    shouldComponentUpdate(){
+        return true;
+    }
+
     // Set the text editor content - this has to change when the design component item changes
     // Passing in props as they could be the current or the new props...
     updateComponentText(props){
@@ -239,9 +243,10 @@ export class TextEditor extends Component {
     }
 
     render() {
-        //console.log("Rendering...");
 
         const {designComponent, detailsType, mode, view, userContext, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Text Editor {}', designComponent.componentNameNew);
 
         let editorHtml = '';
         let editorClass = 'editor-panel-large';

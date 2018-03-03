@@ -7,12 +7,13 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {DesignUpdateSummaryType, ComponentType, WorkSummaryType} from '../../../constants/constants.js';
-import TextLookups from '../../../common/lookups.js'
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
 // Bootstrap
 import {InputGroup, Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
+
 
 // REDUX services
 
@@ -31,6 +32,8 @@ class WorkProgressCount extends Component {
 
     render(){
         const {countValue, glyphicon, valueClass, iconClass, tooltip} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Work Progress Count');
 
         const tooltipDelay = 1000;
 

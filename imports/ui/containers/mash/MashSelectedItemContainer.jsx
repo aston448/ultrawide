@@ -19,14 +19,12 @@ import TextLookups from '../../../common/lookups.js';
 
 import ClientDataServices          from '../../../apiClient/apiClientDataServices.js';
 import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
-import ClientMashDataServices           from '../../../apiClient/apiClientMashData.js';
 import ClientUserSettingsServices       from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
-import user_context_db from "../../../data/context/user_context_db";
 
 // =====================================================================================================================
 
@@ -66,6 +64,8 @@ class MashSelectedItemList extends Component {
     render() {
 
         const {designItems, itemType, displayContext, isTopParent, userContext, view} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Mash Selected Item');
 
         let panelHeader = '';
         let detailsType = '';

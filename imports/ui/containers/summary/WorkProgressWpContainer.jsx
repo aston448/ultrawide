@@ -11,16 +11,16 @@ import { createContainer }  from 'meteor/react-meteor-data';
 import WorkProgressItem             from '../../components/summary/WorkProgressItem.jsx';
 
 // Ultrawide Services
-import {DisplayContext} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
-import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
-import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -63,6 +63,7 @@ export class WorkProgressWpList extends Component {
 
         const {duWorkPackages, userRoles, userContext} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Work Progress WP');
 
         let progressItems = <div></div>;
         if(duWorkPackages.length > 0){

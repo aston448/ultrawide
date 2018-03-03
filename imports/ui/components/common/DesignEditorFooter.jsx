@@ -10,13 +10,16 @@ import PropTypes from 'prop-types';
 import DesignSummary                    from '../../components/edit/DesignSummary.jsx';
 
 // Ultrawide Services
-import {DisplayContext}                 from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {DisplayContext, LogLevel}       from '../../../constants/constants.js';
+
 import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -74,6 +77,8 @@ export class DesignEditorFooter extends Component {
     render() {
 
         const {hasDesignSummary, displayContext, designSummaryData, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Editor Footer');
 
         if(hasDesignSummary && designSummaryData) {
             return (

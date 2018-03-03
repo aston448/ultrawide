@@ -10,14 +10,14 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 import DesignComponentTextContainer         from '../../containers/edit/DesignComponentTextContainer.jsx';
-//import DevFilesContainer                    from '../../containers/dev/DevFilesContainer.jsx';
 import DomainDictionaryContainer            from '../../containers/edit/DomainDictionaryContainer.jsx';
 import DesignEditorHeader                   from '../../components/common/DesignEditorHeader.jsx';
 import DesignEditorFooter                   from '../../components/common/DesignEditorFooter.jsx';
 import MashSelectedItemContainer            from '../../containers/mash/MashSelectedItemContainer.jsx';
 
 // Ultrawide Services
-import { ComponentType, ViewType, DisplayContext } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { ComponentType, ViewType, DisplayContext, LogLevel } from '../../../constants/constants.js';
 
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
@@ -26,10 +26,10 @@ import ClientUserSettingsServices           from '../../../apiClient/apiClientUs
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
-import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -83,6 +83,8 @@ class DevApplicationsList extends Component {
     render() {
 
         const {wpApplications, featureFiles, userContext, currentItemName, view, mode, viewOptions} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Develop Work Package');
 
         let layout = '';
 

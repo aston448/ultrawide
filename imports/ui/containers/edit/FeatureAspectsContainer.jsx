@@ -8,11 +8,13 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 
 // Ultrawide Services
-import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import {log} from "../../../common/utils";
+import { LogLevel, DisplayContext, ComponentType } from '../../../constants/constants.js';
+
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
@@ -20,6 +22,7 @@ import ClientDesignVersionServices          from '../../../apiClient/apiClientDe
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -87,6 +90,9 @@ class FeatureAspectsList extends Component {
     }
 
     render() {
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Feature Aspects');
+
         return (
             <div>
                 {this.renderFeatureAspects()}

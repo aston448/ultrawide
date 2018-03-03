@@ -4,24 +4,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// Ultrawide Collections
-
-// Ultrawide GUI Components
-import TestSummary          from '../summary/TestSummary.jsx';
-import FeatureTestSummary   from '../summary/FeatureTestSummary.jsx';
-
 // Ultrawide Services
 import ClientDesignServices                 from '../../../apiClient/apiClientDesign.js';
-import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
-import ClientTextEditorServices             from '../../../apiClient/apiClientTextEditor.js';
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel,
-    MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
-import {DefaultComponentNames}          from '../../../constants/default_names.js';
-import {getComponentClass, log}         from '../../../common/utils.js';
-import TextLookups                      from '../../../common/lookups.js'
+import {RoleType, LogLevel} from '../../../constants/constants.js';
+import {log}         from '../../../common/utils.js';
 
 // Bootstrap
 import {Grid, Row, Col, InputGroup} from 'react-bootstrap';
@@ -32,12 +19,9 @@ import {Checkbox} from 'react-bootstrap';
 // REDUX services
 import {connect} from 'react-redux';
 
-// React DnD - Component is draggable
-import { DragSource } from 'react-dnd';
-
 // Draft JS - Name is text editable
 import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
-import {RoleType} from "../../../constants/constants";
+
 const {hasCommandModifier} = KeyBindingUtil;
 
 // =====================================================================================================================
@@ -213,6 +197,8 @@ export class DefaultFeatureAspect extends Component{
     // Render the header of the design component - has tools in it depending on context
     render() {
         const {currentItem, userContext, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Default Feature Aspect');
 
         // Items -------------------------------------------------------------------------------------------------------
 

@@ -454,6 +454,7 @@ export const MessageType = {
 };
 
 export const LogLevel = {
+    UI:         'UI',
     TRACE:      'TRACE',
     PERF:       'PERF',
     DEBUG:      'DEBUG',

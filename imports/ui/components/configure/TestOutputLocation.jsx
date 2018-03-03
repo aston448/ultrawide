@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
 
-import {UltrawideDirectory, TestLocationTypes, TestLocationAccessTypes} from '../../../constants/constants.js';
-import { createSelectionList }                  from '../../../common/reactUtils.js';
+import {UltrawideDirectory, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 // Bootstrap
 import {Checkbox, Button, ButtonGroup, Modal} from 'react-bootstrap';
@@ -19,6 +19,7 @@ import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -129,6 +130,8 @@ export class TestOutputLocation extends Component {
 
     render() {
         const {location, dataStore, userRole, userContext, currentLocationId} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Output Location');
 
         const activeClass = (location._id === currentLocationId ? ' location-active' : ' location-inactive');
 

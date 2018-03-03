@@ -390,8 +390,21 @@ export function log(callback, level, message, ...vars){
     let logLevel = process.env.LOG_LEVEL;
 
     if (typeof(logLevel) === 'undefined') {
-        logLevel = LogLevel.INFO;
+
+        // ENV VARS not available to Client so look up client requirements in public settings
+        if(Meteor.isClient){
+            logLevel = Meteor.settings.public.logLevel;
+
+            //console.log('Got log level ' + logLevel);
+
+            if (typeof(logLevel) === 'undefined') {
+                logLevel = LogLevel.INFO;
+            }
+        } else{
+            logLevel = LogLevel.INFO;
+        }
     }
+
 
     let log = false;
 

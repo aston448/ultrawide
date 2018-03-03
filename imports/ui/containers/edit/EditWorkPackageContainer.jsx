@@ -109,6 +109,8 @@ class WorkPackageApplicationsList extends Component {
 
         const {scopeApplications, wpApplications, userContext, viewOptions, currentItemName, view, mode} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Edit Work Package');
+
         let layout = '';
 
         // Get correct window height

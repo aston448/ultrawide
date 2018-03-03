@@ -9,10 +9,11 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewType}    from '../../../constants/constants.js';
+import {ViewType, LogLevel, UpdateMergeStatus}    from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientTestIntegrationServices        from '../../../apiClient/apiClientTestIntegration.js';
 
 import TextLookups                  from '../../../common/lookups.js';
 
@@ -20,7 +21,7 @@ import TextLookups                  from '../../../common/lookups.js';
 import {Grid, Row, Col, InputGroup, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 import {connect} from "react-redux";
-import {UpdateMergeStatus} from "../../../constants/constants";
+
 
 
 // REDUX services
@@ -47,8 +48,16 @@ class TestSummary extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
 
-        return (this.state.accExpectation !== nextState.accExpectation || this.state.intExpectation !== nextState.intExpectation || this.state.unitExpectation !== nextState.unitExpectation);
+        let shouldUpdate = false;
 
+        // Update if test expectation has changed.
+        if(this.state.accExpectation !== nextState.accExpectation || this.state.intExpectation !== nextState.intExpectation || this.state.unitExpectation !== nextState.unitExpectation){
+            shouldUpdate = true;
+        }
+
+        //console.log('Test Summary Should Update: ' + shouldUpdate);
+
+        return shouldUpdate;
     }
 
     componentDidUpdate(){
@@ -75,8 +84,6 @@ class TestSummary extends Component {
         if(this.checkForViewOk()) {
 
             let newAccState = !this.state.accExpectation;
-            let intState = this.state.intExpectation;
-            let unitState = this.state.unitExpectation;
 
             this.setState({accExpectation: newAccState});
 
@@ -88,9 +95,7 @@ class TestSummary extends Component {
 
         if(this.checkForViewOk()) {
 
-            let accState = this.state.accExpectation;
             let newIntState = !this.state.intExpectation;
-            let unitState = this.state.unitExpectation;
 
             this.setState({intExpectation: newIntState});
 
@@ -101,8 +106,6 @@ class TestSummary extends Component {
 
         if(this.checkForViewOk()) {
 
-            let accState = this.state.accExpectation;
-            let intState = this.state.intExpectation;
             let newUnitState = !this.state.unitExpectation;
 
             this.setState({unitExpectation: newUnitState});
@@ -151,7 +154,7 @@ class TestSummary extends Component {
 
         const {testSummaryData, scenario, displayContext, userContext, userRole} = this.props;
 
-        //console.log('Render Test Summary with userRole ' + userRole + ' and user context ' + userContext);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Summary {} ', scenario.componentNameNew);
 
         // Display test expectation options controls
         let testExpectationAcc = this.state.accExpectation ? 'acc-expected' : 'test-not-expected';

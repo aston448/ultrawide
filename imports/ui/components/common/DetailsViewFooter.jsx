@@ -11,8 +11,9 @@ import DesignComponentAdd               from '../../components/common/DesignComp
 import UltrawideMenuItem                from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
-import {ViewType, ViewMode, DetailsViewType, MenuType}  from '../../../constants/constants.js';
+import {ViewType, ViewMode, DetailsViewType, MenuType, LogLevel}  from '../../../constants/constants.js';
 import {AddActionIds}                                   from "../../../constants/ui_context_ids.js";
+import {log} from "../../../common/utils";
 
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
@@ -47,6 +48,8 @@ export class DetailsViewFooter extends Component {
     render() {
 
         const {detailsType, actionsVisible, view, mode, userRole, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Details View Footer');
 
         let footerContent = <div></div>;
         let footerClass = 'design-editor-footer';

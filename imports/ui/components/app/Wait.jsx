@@ -4,18 +4,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// Ultrawide Collections
-
-// Ultrawide GUI Components
-
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
-
-// React DnD
 
 
 // =====================================================================================================================
@@ -37,6 +33,8 @@ class Wait extends Component {
 
     render() {
         const {userMessage, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Wait: {}', userMessage);
 
         return(
             <div>

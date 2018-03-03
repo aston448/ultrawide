@@ -18,7 +18,8 @@ import MashSelectedItemContainer        from '../mash/MashSelectedItemContainer.
 import ScenarioFinder                   from '../../components/search/ScenarioFinder.jsx';
 
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType, WorkPackageType } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType, WorkPackageType, LogLevel } from '../../../constants/constants.js';
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
@@ -32,6 +33,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 
@@ -50,6 +52,10 @@ export class DesignApplicationsList extends Component {
     constructor(props) {
         super(props);
 
+    }
+
+    shouldComponentUpdate(){
+        return true;
     }
 
     onAddApplication(view, mode, designVersionId){
@@ -115,6 +121,8 @@ export class DesignApplicationsList extends Component {
     render() {
 
         const {baseApplications, workingApplications, designSummaryData, userContext, userRole, view, mode, viewOptions} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Edit Design');
 
         let layout = '';
 

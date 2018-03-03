@@ -12,6 +12,8 @@ import UpdateSummaryAction          from '../../components/summary/UpdateSummary
 
 // Ultrawide Services
 import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
 // Bootstrap
 
@@ -56,6 +58,8 @@ export class UpdateSummaryActionList extends Component {
     render() {
 
         const {headerActions} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Update Summary Action');
 
         // There must be actions or we would not have rendered a header...
         return(

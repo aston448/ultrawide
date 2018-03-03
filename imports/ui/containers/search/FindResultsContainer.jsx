@@ -8,19 +8,21 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import FinderResult         from '../../components/search/FinderResult.jsx';
+import FinderResult                 from '../../components/search/FinderResult.jsx';
 
 // Ultrawide Services
-import {} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 import {} from 'react-bootstrap';
 
 // REDUX services
-import {connect} from 'react-redux';
+
+
 
 // =====================================================================================================================
 
@@ -61,6 +63,8 @@ export class FindResultsList extends Component {
     render() {
 
         const {results, displayContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Find Results');
 
         let resultsList = this.noResults();
 

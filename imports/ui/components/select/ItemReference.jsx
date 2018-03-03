@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {RoleType, ItemType, DesignVersionStatus, DesignUpdateStatus} from '../../../constants/constants.js';
+import {RoleType, ItemType, DesignVersionStatus, DesignUpdateStatus, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
 import ClientDesignUpdateServices       from '../../../apiClient/apiClientDesignUpdate.js';
@@ -21,6 +22,7 @@ import {FormControl, ControlLabel}  from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // React DnD
 
@@ -91,8 +93,7 @@ export class ItemReference extends Component{
     render(){
         const {currentItemId, currentItemRef, currentItemStatus, currentItemType, itemStatusClass, userRole} = this.props;
 
-        //console.log("Render DI Header for " + userRole + " with item " + currentItemType + " caled " + currentItemName);
-
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Item Ref {}', currentItemRef);
 
         const refEditorEditing =
             <div>

@@ -52,10 +52,19 @@ export class AppHeader extends Component {
         }
     }
 
-    // onGoToRoles(){
-    //     // Back to Roles Screen
-    //     ClientAppHeaderServices.setViewRoles();
-    // }
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        if(
+            nextProps.view !== this.props.view ||
+            nextProps.userRole !== this.props.userRole
+        ){
+            shouldUpdate = true;
+        }
+
+        return shouldUpdate;
+    }
 
     onGoToSelect(){
         // Back to Selection Screen
@@ -81,7 +90,9 @@ export class AppHeader extends Component {
 
     render() {
 
-        const {mode, view, userRole, userContext, message} = this.props;
+        const {view, userRole, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render App Header for view {}', view);
 
         let logo = ClientIdentityServices.getApplicationName();
 

@@ -11,6 +11,8 @@ import DesignComponentAdd from '../common/DesignComponentAdd.jsx';
 
 // Ultrawide Services
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 
 // Bootstrap
 
@@ -45,6 +47,8 @@ export default class ItemList extends Component {
     render() {
 
         const {headerText, hasFooterAction, footerAction, footerActionUiContext, footerText} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Item List');
 
         const bodyClass = this.getWindowSizeClass();
 

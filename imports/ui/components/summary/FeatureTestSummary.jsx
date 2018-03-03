@@ -10,7 +10,8 @@ import PropTypes from 'prop-types';
 
 // Ultrawide Services
 import ClientTestIntegrationServices from '../../../apiClient/apiClientTestIntegration.js';
-import {FeatureTestSummaryStatus, ViewType}    from '../../../constants/constants.js';
+import {FeatureTestSummaryStatus, ViewType, LogLevel}    from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 // Bootstrap
 import {Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';
@@ -18,6 +19,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -34,7 +36,23 @@ export class FeatureTestSummary extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return true;
+
+        let shouldUpdate = false;
+
+        // Update if test data has changed
+        if(
+            nextProps.testSummaryData.featureScenarioCount !== this.props.testSummaryData.featureScenarioCount ||
+            nextProps.testSummaryData.featureExpectedTestCount !== this.props.testSummaryData.featureExpectedTestCount ||
+            nextProps.testSummaryData.featureFulfilledTestCount !== this.props.testSummaryData.featureFulfilledTestCount ||
+            nextProps.testSummaryData.featureTestPassCount !== this.props.testSummaryData.featureTestPassCount ||
+            nextProps.testSummaryData.featureTestFailCount !== this.props.testSummaryData.featureTestFailCount
+        ){
+            shouldUpdate = true;
+        }
+
+        //console.log('Feature Test Summary Should Update: ' + shouldUpdate);
+
+        return shouldUpdate;
     }
 
     refreshSummary(userContext){
@@ -48,7 +66,7 @@ export class FeatureTestSummary extends Component {
 
         const {testSummaryData, view, userContext} = this.props;
 
-        //console.log("Rendering Feature Test Summary data with view = " + view + " and summary data = " + testSummaryData);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Feature Test Summary');
 
         if(testSummaryData){
 

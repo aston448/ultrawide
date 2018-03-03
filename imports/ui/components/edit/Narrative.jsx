@@ -320,7 +320,7 @@ export default class Narrative extends React.Component {
     render() {
         const {designComponent, updateComponent, wpComponent, mode, displayContext, view, testSummary} = this.props;
 
-        //console.log("Rendering Narrative for " + designComponent.componentNameNew + " with context " + displayContext + " and updateComponent " + updateComponent);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Narrative {}', designComponent.componentNameNew);
 
         let itemStyle = getComponentClass(designComponent, updateComponent, wpComponent, view, displayContext, true);
 

@@ -16,7 +16,8 @@ import ProjectSummaryContainer              from '../../containers/summary/Proje
 
 
 // Ultrawide Services
-import {DesignVersionStatus, WorkPackageType, HomePageTab}        from '../../../constants/constants.js';
+import {DesignVersionStatus, WorkPackageType, HomePageTab, LogLevel, RoleType}        from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
@@ -26,7 +27,7 @@ import {Tabs, Tab, Grid, Row, Col, Nav, NavItem} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {RoleType} from "../../../constants/constants";
+
 
 // =====================================================================================================================
 
@@ -55,6 +56,8 @@ export class MainSelectionPage extends Component {
     render(){
 
         const {userContext, userHomeTab, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Main Selection Page');
 
         // Items -------------------------------------------------------------------------------------------------------
 

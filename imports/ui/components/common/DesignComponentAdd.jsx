@@ -4,25 +4,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import {replaceAll} from "../../../common/utils";
-
-// Ultrawide Collections
-
-
-// Ultrawide GUI Components
-
 
 // Ultrawide Services
-
+import {LogLevel} from "../../../constants/constants";
+import {log} from "../../../common/utils";
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
-
-// REDUX services
-
-
-// React DnD
 
 
 // =====================================================================================================================
@@ -71,6 +60,8 @@ export default class DesignComponentAdd extends Component {
     render() {
 
         const {addText, uiContextId} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Add');
 
         return (
             <div id={uiContextId} onClick={ () => this.clickHandler()}>

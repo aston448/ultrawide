@@ -11,14 +11,14 @@ import TextEditor           from '../../components/edit/TextEditor.jsx';
 import Narrative            from '../../components/edit/Narrative.jsx';
 
 // Ultrawide Services
-import { DetailsType, ViewMode, DisplayContext, ComponentType, UserSettingValue }      from  '../../../constants/constants.js';
+import { DetailsType, ViewMode, DisplayContext, ComponentType, UserSettingValue, LogLevel }      from  '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-
 
 // =====================================================================================================================
 
@@ -34,9 +34,14 @@ export class DetailsItem extends Component {
     }
 
 
+    shouldComponentUpdate(){
+        return false;
+    }
 
     render() {
-        const {itemType, item, displayContext, view, domainTermsVisible, includeNarratives} = this.props;
+        const {itemType, item, view, domainTermsVisible, includeNarratives} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Details Item');
 
         // Items -------------------------------------------------------------------------------------------------------
 

@@ -8,12 +8,13 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 
 // Ultrawide Services
-import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { LogLevel, DisplayContext, ComponentType } from '../../../constants/constants.js';
 
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
@@ -21,6 +22,7 @@ import ClientDesignVersionServices          from '../../../apiClient/apiClientDe
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -36,6 +38,24 @@ class FeaturesList extends Component {
     constructor(props) {
         super(props);
     };
+
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        // Update if new list of Features or change in test data
+        if(
+            nextProps.components.length !== this.props.components.length ||
+            nextProps.testDataFlag !== this.props.testDataFlag ||
+            nextProps.testSummary !== this.props.testSummary
+        ){
+            shouldUpdate = true;
+        }
+
+        //console.log('Features List Should Update: ' + shouldUpdate);
+
+        return shouldUpdate;
+    }
 
     getDesignUpdateItem(feature, displayContext, designUpdateId){
         switch(displayContext){
@@ -64,6 +84,8 @@ class FeaturesList extends Component {
     // A list of Features in a Design Section
     renderFeatures() {
         const {components, displayContext, view, mode, userContext, viewOptions, testSummary} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Features');
 
         if(components) {
 
@@ -95,6 +117,7 @@ class FeaturesList extends Component {
     }
 
     render() {
+        //console.log('Render Features Container');
         return (
             <div>
                 {this.renderFeatures()}
@@ -115,7 +138,8 @@ function mapStateToProps(state) {
         view:           state.currentAppView,
         mode:           state.currentViewMode,
         userContext:    state.currentUserItemContext,
-        viewOptions:    state.currentUserViewOptions
+        viewOptions:    state.currentUserViewOptions,
+        testDataFlag:   state.testDataFlag
     }
 }
 

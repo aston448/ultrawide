@@ -9,6 +9,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
 import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js';
 
 // Bootstrap
@@ -16,6 +18,7 @@ import {Grid, Row, Col, Checkbox} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // React DnD
 
@@ -100,6 +103,8 @@ export class UserTestLocationConfiguration extends Component {
 
     render() {
         const {userLocation, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render User Test Location Config');
 
         return (
             <Grid>

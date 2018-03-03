@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {MenuAction, RoleType} from '../../../constants/constants.js';
+import {MenuAction, RoleType, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
 import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
@@ -56,7 +57,7 @@ export class UltrawideMenuDropdownItem extends Component {
     action(action, viewOptionType, view, userContext, userRole, userViewOptions, currentViewDataValue, testDataFlag){
         event.preventDefault();
 
-        //console.log("Dropdown item action " + action + " with dev int tests set to " + userViewOptions.devIntTestsVisible);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Ultrawide Menu Dropdown Item {}', action);
 
         if(this.props.hasCheckbox) {
             this.setState({checkboxChecked: !this.state.checkboxChecked})

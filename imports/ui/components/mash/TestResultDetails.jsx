@@ -7,7 +7,8 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {MashTestStatus, TestType} from '../../../constants/constants.js';
+import {MashTestStatus, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 // Bootstrap
 
@@ -34,6 +35,8 @@ export default class TestResultDetails extends Component {
 
     render(){
         const { testResult } = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Result Details {}', testResult.testName);
 
         let resultDisplay = '';
 

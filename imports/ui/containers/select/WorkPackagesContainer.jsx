@@ -8,18 +8,18 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemList                     from '../../components/select/ItemList.jsx';
-import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
-import FeatureSummaryContainer      from '../../containers/select/FeatureSummaryContainer.jsx';
+import ItemList                         from '../../components/select/ItemList.jsx';
+import DesignUpdateSummaryContainer     from '../../containers/summary/UpdateSummaryContainer.jsx';
+import FeatureSummaryContainer          from '../../containers/select/FeatureSummaryContainer.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, HomePageTab, LogLevel} from '../../../constants/constants.js';
+import {DesignVersionStatus, DisplayContext, WorkPackageType, RoleType, HomePageTab, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js';
 
 import ClientDataServices               from '../../../apiClient/apiClientDataServices.js';
 import WorkPackageContainerUiModules    from '../../../ui_modules/work_packages_container.js';
 
-
+// Data Access
 import DesignVersionData                from '../../../data/design/design_version_db.js';
 
 // Bootstrap
@@ -27,7 +27,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {DisplayContext, ItemType} from "../../../constants/constants";
+
 
 
 // =====================================================================================================================
@@ -62,6 +62,7 @@ export class WorkPackagesList extends Component {
 
         const {wpType, newWorkPackages, availableWorkPackages, adoptedWorkPackages, completedWorkPackages, designVersionStatus, designUpdateStatus, userRole, userContext, openWpItems} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Work Packages');
 
         // Footer ------------------------------------------------------------------------------------------------------
 

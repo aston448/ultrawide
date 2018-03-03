@@ -13,13 +13,15 @@ import BackupManagementContainer            from '../../containers/admin/BackupM
 import ApiManagement                        from '../../components/admin/ApiManagement.jsx';
 
 // Ultrawide Services
-import { RoleType }                         from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { RoleType, LogLevel }               from '../../../constants/constants.js';
 
 // Bootstrap
 import {Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -38,6 +40,8 @@ import {connect} from 'react-redux';
     render(){
 
         const {userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Ultrawide Admin');
 
         const userContainer = <UserManagementContainer/>;
 

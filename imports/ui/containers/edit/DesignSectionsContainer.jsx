@@ -11,16 +11,18 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import { LogLevel, ComponentType, DisplayContext } from '../../../constants/constants.js';
+
 import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-
-import { ViewType, ComponentType, DisplayContext } from '../../../constants/constants.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -30,10 +32,26 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-// Design Aspects List Container
 class DesignSectionsList extends Component {
     constructor(props) {
         super(props);
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        // Update if new list of design sections
+        if(
+            nextProps.components.length !== this.props.components.length ||
+            nextProps.testSummary !== this.props.testSummary
+        ){
+            shouldUpdate = true;
+        }
+
+        //console.log('Design Sections List Should Update: ' + shouldUpdate);
+
+        return shouldUpdate;
     }
 
     getDesignUpdateItem(designSection, displayContext, designUpdateId){
@@ -92,7 +110,8 @@ class DesignSectionsList extends Component {
 
         const {components, displayContext, view, mode, viewOptions, userContext, testSummary} = this.props;
 
-        //console.log("rendering " + displayContext +  " design sections with list length " + components.length + " and component 0 is " + components[0]);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Sections');
+
         return (
             <div>
                 {this.renderDesignSections(components, displayContext, view, mode, viewOptions, userContext, testSummary)}

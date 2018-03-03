@@ -426,6 +426,8 @@ export class DesignComponentHeader extends Component{
     render() {
         const {currentItem, updateItem, wpItem, uiContextName, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {}', currentItem.componentNameNew);
+
         //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with test summary " + testSummary + " and test summary data " + testSummaryData);
 
         // Determine the look of the item ------------------------------------------------------------------------------

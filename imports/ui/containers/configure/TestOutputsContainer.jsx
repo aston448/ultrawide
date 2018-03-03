@@ -12,16 +12,19 @@ import TestOutputFilesContainer             from '../../containers/configure/Tes
 import ItemList                             from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
+
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js'
-
-import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 
@@ -64,6 +67,8 @@ export class TestOutputsScreen extends Component {
     render() {
 
         const {locationData, dataStore, userRole, userContext, locationId} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Test Outputs');
 
         let bodyDataFunction = null;
 

@@ -10,17 +10,20 @@ import ItemWrapper                  from '../../components/select/ItemWrapper.js
 import ItemList                     from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
+import {ItemType, LogLevel} from "../../../constants/constants";
+import {log} from "../../../common/utils";
+
 import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 
+// Data Access
 import DesignData                   from '../../../data/design/design_db.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {ItemType} from "../../../constants/constants";
+
 
 // =====================================================================================================================
 
@@ -72,6 +75,8 @@ export class DesignVersionsList extends Component {
         // There is no Add Design Version.  One is created by default for a new Design and when Updates are merged into a new Design Version.
 
         const {designVersions, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Versions');
 
         // Design Versions Container -----------------------------------------------------------------------------------
         const headerText = 'Design Versions for ' + this.getDesignName(userContext);

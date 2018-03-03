@@ -11,13 +11,15 @@ import ItemLink                 from './ItemLink.jsx';
 // Ultrawide Services
 import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackage.js';
 
-import {ItemType, WorkPackageStatus, RoleType} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {ItemType, WorkPackageStatus, RoleType, LogLevel} from '../../../constants/constants.js';
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -121,11 +123,13 @@ export class WorkPackage extends Component {
 
         const {workPackage, statusClass, userRole, viewOptions, userContext} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Work Package {}', workPackage.workPackageName);
+
         // Items -------------------------------------------------------------------------------------------------------
 
         // Active if this work package is the current context work package
         let active = workPackage._id === userContext.workPackageId;
-        let activeUpdate = (workPackage.designUpdateId !== 'NONE' && workPackage.designUpdateId === userContext.designUpdateId)
+        let activeUpdate = (workPackage.designUpdateId !== 'NONE' && workPackage.designUpdateId === userContext.designUpdateId);
 
         let itemStyle = (active ? 'design-item di-active' : 'design-item');
 

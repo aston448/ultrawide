@@ -13,7 +13,8 @@ import DesignEditorHeader           from '../../components/common/DesignEditorHe
 import DesignEditorFooter           from '../../components/common/DesignEditorFooter.jsx';
 
 // Ultrawide Services
-import {DisplayContext} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {DisplayContext, LogLevel} from '../../../constants/constants.js';
 
 import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
@@ -22,6 +23,7 @@ import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettin
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -66,10 +68,10 @@ export class DesignUpdateSummaryList extends Component {
 
         const {addOrgHeaders, addFncHeaders, removeHeaders, changeHeaders, moveHeaders, queryHeaders, displayContext, userContext} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Update Summary');
+
         // Get correct window height
         const editorClass = this.getEditorClass();
-
-        //console.log("Render summary headrs with add org: " + addOrgHeaders.length + " and add fnc: " + addFncHeaders.length)
 
         let orgAdditions = <div></div>;
         if(addOrgHeaders.length > 0){

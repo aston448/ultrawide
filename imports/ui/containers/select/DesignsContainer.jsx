@@ -12,7 +12,8 @@ import ItemWrapper          from '../../components/select/ItemWrapper.jsx';
 import ItemList             from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import {ItemType, RoleType}           from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {ItemType, RoleType, LogLevel}           from '../../../constants/constants.js';
 import {AddActionIds}       from "../../../constants/ui_context_ids.js";
 
 import ClientDataServices   from '../../../apiClient/apiClientDataServices.js';
@@ -23,6 +24,7 @@ import {Grid, Col, Row} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -65,6 +67,7 @@ export class DesignsList extends Component {
 
         const {designs, userRole} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Designs');
 
         let hasFooterAction = false;
         let footerActionFunction = null;

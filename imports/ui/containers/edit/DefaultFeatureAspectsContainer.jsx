@@ -11,15 +11,17 @@ import { createContainer }  from 'meteor/react-meteor-data';
 import DefaultFeatureAspect from '../../components/edit/DefaultFeatureAspect.jsx';
 
 // Ultrawide Services
-import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+
 import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
-import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
+
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -59,6 +61,9 @@ class DefaultAspectsList extends Component {
     }
 
     render() {
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Default Feature Aspects');
+
         return (
             <div>
                 {this.renderAspects()}

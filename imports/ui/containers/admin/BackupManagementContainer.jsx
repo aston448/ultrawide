@@ -14,6 +14,9 @@ import DesignBackup         from '../../components/admin/DesignBackup.jsx';
 import DesignsContainer     from '../../containers/select/DesignsContainer.jsx';
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+
 import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
@@ -22,6 +25,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -60,6 +64,8 @@ class BackupManagementScreen extends Component {
     render() {
 
         const {backupData} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Backup Management');
 
         let bodyDataFunction = null;
 

@@ -18,7 +18,7 @@ import MoveTarget               from './MoveTarget.jsx';
 import DesignComponentHeader    from './DesignComponentHeader.jsx';
 
 // Ultrawide Services
-import {ComponentType, ViewMode, ViewType, DisplayContext, WorkPackageType, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
+import {ComponentType, ViewMode, ViewType, DisplayContext, UserSettingValue, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
 import {AddActionIds}   from "../../../constants/ui_context_ids.js";
 
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
@@ -33,7 +33,6 @@ import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {UserSettingValue} from "../../../constants/constants";
 
 // React DnD
 
@@ -501,6 +500,8 @@ export class DesignComponent extends Component{
         const {currentItem, updateItem, wpItem, uiItemId, uiParentId, displayContext, isDragDropHovering, mode, view, userContext,
             testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag,
             workPackageScopeItems, workPackageScopeFlag, domainTermsVisible, includeNarratives} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component {}', currentItem.componentNameNew);
 
         let uiContextName = uiItemId;
 

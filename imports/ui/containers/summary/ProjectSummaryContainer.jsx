@@ -12,13 +12,13 @@ import ProjectSummaryItem           from '../../components/summary/ProjectSummar
 import FeatureSummaryContainer      from '../../containers/select/FeatureSummaryContainer.jsx';
 
 // Ultrawide Services
-import {DisplayContext, HomePageTab} from '../../../constants/constants.js';
+import {DisplayContext, HomePageTab, LogLevel} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
-import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
-import {InputGroup, Grid, Row, Col, Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -26,6 +26,7 @@ import store from '../../../redux/store'
 import {
     setCurrentUserSummaryItem
 } from '../../../redux/actions'
+
 
 // =====================================================================================================================
 
@@ -60,6 +61,8 @@ export class ProjectSummary extends Component {
     render() {
 
         const {designVersionName, totalFeatureCount, noTestRequirementsCount, failingTestsCount, someTestsCount, allTestsCount, testsCount, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Work Packages');
 
         const layout =
             <Grid>

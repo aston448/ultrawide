@@ -9,15 +9,18 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import {log} from "../../../common/utils";
+import {LogLevel} from "../../../constants/constants";
+
 import ClientDesignComponentServices    from '../../../apiClient/apiClientDesignComponent.js';
 
-import { DisplayContext }      from  '../../../constants/constants.js';
 
 // Bootstrap
 import {} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -41,6 +44,8 @@ export class FinderResult extends Component {
 
     render() {
         const {result, displayContext, userContext} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Finder Result {} - {}', result.featureName, result.scenarioName);
 
         // Items -------------------------------------------------------------------------------------------------------
 

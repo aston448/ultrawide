@@ -15,7 +15,8 @@ import ClientUserSettingsServices               from '../../../apiClient/apiClie
 import ClientUserManagementServices             from '../../../apiClient/apiClientUserManagement.js';
 import ClientDocumentServices                   from '../../../apiClient/apiClientDocument.js';
 
-import {UserSettingValue, UserSetting} from '../../../constants/constants.js';
+import {UserSettingValue, UserSetting, LogLevel, RoleType} from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
 
 // Data Services
 import DesignVersionData                        from '../../../data/design/design_version_db.js';
@@ -26,7 +27,7 @@ import {FormGroup, Radio, Checkbox, Grid, Row, Col, Tabs, Tab} from 'react-boots
 
 // REDUX services
 import {connect} from 'react-redux';
-import {RoleType} from "../../../constants/constants";
+
 
 // =====================================================================================================================
 
@@ -206,6 +207,8 @@ export class ConfigurationSettings extends Component {
     render() {
 
         const {userContext, currentWindowSize, userRole} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Config Settings');
 
         // Items -------------------------------------------------------------------------------------------------------
 

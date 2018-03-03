@@ -42,6 +42,7 @@ class DesignComponentText extends Component {
 
         const {currentDesignComponent, displayContext, view, mode, userContext, userRole, userViewOptions, viewDataValue} = this.props;
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Component Text for {}', currentDesignComponent.componentNameNew);
 
         let details = <div></div>;
 

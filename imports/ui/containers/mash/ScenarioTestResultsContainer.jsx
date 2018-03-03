@@ -8,20 +8,20 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import AcceptanceTestScenarioMashItem       from '../../components/mash/AcceptanceTestScenarioMashItem.jsx';
 import SingleTestScenarioMashItem           from '../../components/mash/SingleTestScenarioMashItem.jsx';
 import MultiTestScenarioMashItem            from '../../components/mash/MultiTestScenarioMashItem.jsx';
-import UnitTestScenarioMashItem             from '../../components/mash/MultiTestScenarioMashItem.jsx';
 
 // Ultrawide Services
-import { DisplayContext }    from '../../../constants/constants.js';
+import {log} from "../../../common/utils";
+import { DisplayContext, LogLevel }    from '../../../constants/constants.js';
 
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -116,6 +116,8 @@ class ScenarioTestResultsList extends Component {
     render() {
 
         const {scenarioMashData, displayContext, userContext, view} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Scenario Test Results');
 
         switch(displayContext){
             case DisplayContext.MASH_ACC_TESTS:
