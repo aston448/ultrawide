@@ -33,7 +33,8 @@ class ComponentUiModules{
 
     componentShouldUpdate(props, nextProps, state, nextState){
 
-        if(this.shouldUpdateCommon(props, nextProps, state, nextState)){
+        if(this.shouldUpdateCommon(props, nextProps, state, nextState, 'COMPONENT')){
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of COMMON", props.currentItem.componentNameNew);
             return true;
         }
 
@@ -46,35 +47,22 @@ class ComponentUiModules{
         }
 
         if((nextProps.userContext.designComponentId === currentItemId) && (props.userContext.designComponentId !== currentItemId)){
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of FOCUS", props.currentItem.componentNameNew);
             return true;
         }
 
         if((nextProps.userContext.designComponentId !== currentItemId) && (props.userContext.designComponentId === currentItemId)){
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of FOCUS", props.currentItem.componentNameNew);
             return true;
         }
 
         // If this specific item has been opened or closed...
         if(nextProps.openItemsFlag.item === openItemId){
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of OPEN CLOSE", props.currentItem.componentNameNew);
             return true;
         }
 
-        if(props.view === ViewType.DESIGN_UPDATE_EDIT) {
 
-            // Look for Design Update scoping trigger
-
-            if (nextProps.updateScopeFlag !== props.updateScopeFlag) {
-
-                // If its one of the descoped items
-                if (nextProps.updateScopeItems.removed.includes(nextProps.currentItem.componentReferenceId)) {
-                    return true;
-                }
-
-                // Or its in the update scope
-                if (props.updateItem || nextProps.updateItem) {
-                    return true;
-                }
-            }
-        }
 
         let shouldComponentUpdate = false;
 
@@ -84,7 +72,7 @@ class ComponentUiModules{
             case ViewType.DESIGN_UPDATABLE:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-                shouldComponentUpdate =!(
+                shouldComponentUpdate = !(
                     nextState.open === state.open &&
                     nextState.highlighted === state.highlighted &&
                     nextState.editing === state.editing &&
@@ -96,12 +84,15 @@ class ComponentUiModules{
                     nextProps.mode === props.mode &&
                     nextProps.testDataFlag === props.testDataFlag
                 );
+                if(shouldComponentUpdate){
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of VIEW 1", props.currentItem.componentNameNew);
+                }
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                shouldComponentUpdate =!(
+                shouldComponentUpdate = !(
                     nextState.open === state.open &&
                     nextState.highlighted === state.highlighted &&
                     nextState.editing === state.editing &&
@@ -114,6 +105,9 @@ class ComponentUiModules{
                     nextProps.mode === props.mode &&
                     nextProps.testDataFlag === props.testDataFlag
                 );
+                if(shouldComponentUpdate){
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of VIEW 2", props.currentItem.componentNameNew);
+                }
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
@@ -125,6 +119,9 @@ class ComponentUiModules{
                     nextProps.testDataFlag === props.testDataFlag &&
                     nextProps.testSummary === props.testSummary
                 );
+                if(shouldComponentUpdate){
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of VIEW 3", props.currentItem.componentNameNew);
+                }
         }
 
         return shouldComponentUpdate;
@@ -133,27 +130,12 @@ class ComponentUiModules{
 
     componentHeaderShouldUpdate(props, nextProps, state, nextState){
 
-        if(this.shouldUpdateCommon(props, nextProps, state, nextState)){
+        if(this.shouldUpdateCommon(props, nextProps, state, nextState, 'HEADER')){
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER COMMON", props.currentItem.componentNameNew);
             return true;
         }
 
-        // Check for scope updates in Update Editor
-        if(props.view === ViewType.DESIGN_UPDATE_EDIT) {
-
-            if (nextProps.updateScopeFlag !== props.updateScopeFlag) {
-                // An update has been triggered.  Render if this item is in the update
-
-                // If its one of the descoped items
-                if (nextProps.updateScopeItems.removed.includes(props.currentItem.componentReferenceId)) {
-                    return true;
-                }
-
-                // Or its in the scope
-                if (nextProps.updateItem) {
-                    return true;
-                }
-            }
-        }
+        let shouldComponentUpdate = false;
 
         switch (props.view) {
             case ViewType.DESIGN_NEW:
@@ -161,7 +143,7 @@ class ComponentUiModules{
             case ViewType.DESIGN_UPDATABLE:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-                return !(
+                shouldComponentUpdate =  !(
                     nextState.highlighted === state.highlighted &&
                     nextState.editing === state.editing &&
                     nextState.editorState === state.editorState &&
@@ -174,16 +156,17 @@ class ComponentUiModules{
                     nextProps.isDragging === props.isDragging &&
                     nextProps.testDataFlag === props.testDataFlag
                 );
+                if(shouldComponentUpdate){
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER VIEW 1", props.currentItem.componentNameNew);
+                }
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                return !(
+                shouldComponentUpdate =  !(
                     nextState.highlighted === state.highlighted &&
                     nextState.editing === state.editing &&
-                    nextState.inScope === state.inScope &&
-                    nextState.parentScope === state.parentScope &&
                     nextState.editorState === state.editorState &&
                     nextProps.testSummary === props.testSummary &&
                     nextProps.isOpen === props.isOpen &&
@@ -195,10 +178,13 @@ class ComponentUiModules{
                     nextProps.isDragging === props.isDragging &&
                     nextProps.testDataFlag === props.testDataFlag
                 );
+                if(shouldComponentUpdate){
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER VIEW 2", props.currentItem.componentNameNew);
+                }
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                return !(
+                shouldComponentUpdate =  !(
                     nextState.highlighted === state.highlighted &&
                     nextState.editing === state.editing &&
                     nextState.editorState === state.editorState &&
@@ -208,39 +194,42 @@ class ComponentUiModules{
                     nextProps.testDataFlag === props.testDataFlag &&
                     nextProps.isOpen === props.isOpen
                 );
+                if(shouldComponentUpdate){
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER VIEW 3", props.currentItem.componentNameNew);
+                }
+                break;
         }
+
+        return shouldComponentUpdate;
     }
 
 
-    shouldUpdateCommon(props, nextProps, state, nextState){
+    shouldUpdateCommon(props, nextProps, state, nextState, source){
 
         if(nextProps.domainTermsVisible !== props.domainTermsVisible){
             return true;
         }
 
-
         // If test summary data has changed due to changed expectations
         if(props.testSummaryData && nextProps.testSummaryData && props.currentItem.componentType === ComponentType.FEATURE) {
             if (props.testSummaryData.featureExpectedTestCount !== nextProps.testSummaryData.featureExpectedTestCount) {
+                log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of TEST SUMMARY", props.currentItem.componentNameNew);
                 return true;
             }
         }
 
-        // Check for scope updates in WP Editor
-        if(props.view === ViewType.WORK_PACKAGE_BASE_EDIT || props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
+        // Check for scope updates
+        if(nextProps.updateScopeItems && props.updateScopeItems) {
+            if (nextProps.updateScopeItems.flag !== props.updateScopeItems.flag) {
+                log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of DU SCOPE", props.currentItem.componentNameNew);
+                return true;
+            }
+        }
 
-            if (nextProps.workPackageScopeFlag !== props.workPackageScopeFlag) {
-                // An update has been triggered.  Render if this item is in the WP
-
-                // If its one of the descoped items
-                if (nextProps.workPackageScopeItems.removed.includes(props.currentItem.componentReferenceId)) {
-                    return true;
-                }
-
-                // Or its in the scope
-                if (nextProps.wpItem) {
-                    return true;
-                }
+        if(nextProps.workPackageScopeItems && props.workPackageScopeItems) {
+            if (nextProps.workPackageScopeItems.flag !== props.workPackageScopeItems.flag) {
+                log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of WP SCOPE", props.currentItem.componentNameNew);
+                return true;
             }
         }
 

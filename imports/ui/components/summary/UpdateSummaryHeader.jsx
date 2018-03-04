@@ -30,6 +30,21 @@ class UpdateSummaryHeader extends Component {
         super(props);
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        // Update if changing item or name changes
+        if(
+            nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
+            nextProps.headerItem.itemName !== this.props.headerItem.itemName
+        ){
+            shouldUpdate = true;
+        }
+
+        return shouldUpdate;
+    }
+
     render(){
         const {headerItem, userContext} = this.props;
 

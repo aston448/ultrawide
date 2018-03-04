@@ -428,6 +428,10 @@ export function setCurrentUserOpenWorkPackageItems(openItems, componentId, newSt
 export function setUpdateScopeItems(updateScopeItems) {
     return function (dispatch) {
 
+        if(updateScopeItems.flag > 100){
+            updateScopeItems.flag = 0;
+        }
+
         dispatch({type: SET_UPDATE_SCOPE_ITEMS, newUpdateScopeItems: updateScopeItems});
     };
 }
@@ -440,6 +444,8 @@ export function setUpdateScopeFlag(updateScopeFlag) {
             newFlag = 0;
         }
 
+        console.log('Update scope flag to ' + newFlag);
+
         dispatch({type: SET_UPDATE_SCOPE_FLAG, newUpdateScopeFlag: newFlag});
     };
 }
@@ -447,6 +453,10 @@ export function setUpdateScopeFlag(updateScopeFlag) {
 // Updates the current WP scope data
 export function setWorkPackageScopeItems(wpScopeItems) {
     return function (dispatch) {
+
+        if(wpScopeItems.flag > 100){
+            wpScopeItems.flag = 0;
+        }
 
         dispatch({type: SET_WP_SCOPE_ITEMS, newWpScopeItems: wpScopeItems});
     };

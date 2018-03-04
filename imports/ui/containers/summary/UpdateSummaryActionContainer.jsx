@@ -36,6 +36,11 @@ export class UpdateSummaryActionList extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        return true;
+    }
+
     // A list of Actions under an Update Summary header
 
     renderActions(headerActions) {

@@ -8,20 +8,22 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponent                      from '../../components/edit/DesignComponent.jsx';
 
 // Ultrawide Services
-import {log} from "../../../common/utils";
-import { LogLevel, DisplayContext, ComponentType } from '../../../constants/constants.js';
+import {log, replaceAll} from "../../../common/utils";
+import { LogLevel, DisplayContext, ComponentType, UpdateScopeType } from '../../../constants/constants.js';
 
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
+import ClientDesignComponentServices        from "../../../apiClient/apiClientDesignComponent";
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -59,6 +61,21 @@ class ScenariosList extends Component {
         }
     };
 
+    getParentName(currentItem){
+
+        if(currentItem && currentItem.componentParentReferenceIdNew !== 'NONE') {
+            const parent = ClientDesignComponentServices.getCurrentItemParent(currentItem);
+            if(parent){
+                return parent.componentNameNew;
+            } else {
+                return 'NONE';
+            }
+        } else {
+            return 'NONE';
+        }
+
+    }
+
     shouldComponentUpdate(){
         return true;
     }
@@ -77,24 +94,51 @@ class ScenariosList extends Component {
 
                 let testSummaryData = null;
 
+                const uiItemId = replaceAll(scenario.componentNameNew, ' ', '_');
+                const uiParentId = replaceAll(this.getParentName(scenario), ' ', '_');
+
                 if(testSummary) {
                     testSummaryData = ClientDataServices.getTestSummaryData(scenario);
-                    //console.log('Test summary data: ' + testSummaryData + ' for scenario ' + scenario.componentReferenceId)
                 }
 
+                let updateItem = this.getDesignUpdateItem(scenario, displayContext, userContext.designUpdateId);
+                let wpItem = this.getWpItem(scenario, userContext.workPackageId);
+
+                let updateItemScope = UpdateScopeType.SCOPE_OUT_SCOPE;
+
+                if(updateItem && updateItem.scopeType){
+                    updateItemScope = updateItem.scopeType;
+                }
+
+                // A scenario does not need to be a Target as can't drop anything on it...
                 return (
-                    <DesignComponentTarget
+                    <DesignComponent
                         key={scenario._id}
                         currentItem={scenario}
-                        updateItem={this.getDesignUpdateItem(scenario, displayContext, userContext.designUpdateId)}
-                        wpItem={this.getWpItem(scenario, userContext.workPackageId)}
+                        updateItem={updateItem}
+                        updateItemScope={updateItemScope}
+                        wpItem={wpItem}
+                        uiItemId={uiItemId}
+                        uiParentId={uiParentId}
+                        isDragDropHovering={false}
                         displayContext={displayContext}
-                        view={view}
-                        mode={mode}
                         testSummary={testSummary}
                         testSummaryData={testSummaryData}
                     />
                 );
+                // return (
+                //     <DesignComponentTarget
+                //         key={scenario._id}
+                //         currentItem={scenario}
+                //         updateItem={this.getDesignUpdateItem(scenario, displayContext, userContext.designUpdateId)}
+                //         wpItem={this.getWpItem(scenario, userContext.workPackageId)}
+                //         displayContext={displayContext}
+                //         view={view}
+                //         mode={mode}
+                //         testSummary={testSummary}
+                //         testSummaryData={testSummaryData}
+                //     />
+                // );
             });
         } else {
             //console.log("NULL COMPONENTS FOR SCENARIOS!")

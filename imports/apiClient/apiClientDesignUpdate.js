@@ -407,6 +407,7 @@ class ClientDesignUpdateServices {
 
         store.dispatch(setUpdateScopeItems(
             {
+                flag:       0,
                 current:    updateItemsArr,
                 added:      [],
                 removed:    []

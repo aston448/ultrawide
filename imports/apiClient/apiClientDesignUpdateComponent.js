@@ -523,6 +523,8 @@ class ClientDesignUpdateComponentServices{
         // Real action call
         ServerDesignUpdateComponentApi.toggleScope(view, mode, displayContext, baseComponent._id, designUpdateId, updateComponent, newScope, (err, result) => {
 
+            console.log('SERVER TOGGLE SCOPE');
+
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
@@ -536,44 +538,31 @@ class ClientDesignUpdateComponentServices{
                 // Calculate data used for managing scope rendering efficiently
                 const updateItems = DesignUpdateData.getAllComponents(designUpdateId);
 
-                let addedItems = [];
-                let removedItems = [];
                 let currentItems = [];
-                let designItem = null;
 
                 updateItems.forEach((item) => {
 
-                    designItem = DesignComponentData.getDesignComponentByRef(item.designVersionId, item.componentReferenceId);
+                    const currentItem = {
+                        ref: item.componentReferenceId,
+                        scopeType: item.scopeType
+                    };
 
-                    // The design item won't exist if a new item in a non-merged update
-                    if(designItem) {
-                        currentItems.push(designItem.componentReferenceId);
-                    }
+                    currentItems.push(currentItem);
+
                 });
 
-                const updateScopeItems = store.getState().currentUpdateScopeItems;
+                const scopeItems = store.getState().currentUpdateScopeItems;
 
-                if(!newScope) {
-
-                    // Make a list of anything no longer in DB
-                    updateScopeItems.current.forEach((item) => {
-                        if(!(currentItems.includes(item))){
-                            removedItems.push(item);
-                        }
-                    });
-                }
+                // Trigger update by changing flag
+                const newFlag = scopeItems.flag + 1;
 
                 store.dispatch(setUpdateScopeItems(
                     {
-                        current:    currentItems,
-                        added:      addedItems,
-                        removed:    removedItems
+                        flag:       newFlag,
+                        current:    currentItems
                     }
                 ));
 
-                // Trigger items to update
-                const updateScopeFlag = store.getState().currentUpdateScopeFlag;
-                store.dispatch(setUpdateScopeFlag(updateScopeFlag));
 
                 this.refreshDesignUpdateSummary(true);
 

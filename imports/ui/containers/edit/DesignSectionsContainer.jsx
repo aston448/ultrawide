@@ -9,19 +9,21 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponent                      from '../../components/edit/DesignComponent.jsx';
 
 // Ultrawide Services
-import {log} from "../../../common/utils";
-import { LogLevel, ComponentType, DisplayContext } from '../../../constants/constants.js';
+import {log, replaceAll} from "../../../common/utils";
+import { LogLevel, ComponentType, DisplayContext, UpdateScopeType, ViewMode } from '../../../constants/constants.js';
 
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-
+import ClientDesignComponentServices        from "../../../apiClient/apiClientDesignComponent";
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -44,7 +46,8 @@ class DesignSectionsList extends Component {
         // Update if new list of design sections
         if(
             nextProps.components.length !== this.props.components.length ||
-            nextProps.testSummary !== this.props.testSummary
+            nextProps.testSummary !== this.props.testSummary ||
+            nextProps.updateScopeFlag !== this.props.updateScopeFlag
         ){
             shouldUpdate = true;
         }
@@ -78,27 +81,85 @@ class DesignSectionsList extends Component {
         return ClientWorkPackageComponentServices.getWorkPackageComponent(designSection.componentReferenceId, workPackageId);
     }
 
+    getParentName(currentItem){
+
+        if(currentItem && currentItem.componentParentReferenceIdNew !== 'NONE') {
+            const parent = ClientDesignComponentServices.getCurrentItemParent(currentItem);
+            if(parent){
+                return parent.componentNameNew;
+            } else {
+                return 'NONE';
+            }
+        } else {
+            return 'NONE';
+        }
+
+    }
+
     // A list of top level headings in the design
     renderDesignSections(components, displayContext, view, mode, viewOptions, userContext, testSummary) {
 
         if(components.length > 0) {
 
-            return components.map((designSection) => {
+            let updateItem = {};
+            let wpItem = {};
 
-                //console.log("Design section: " + designSection._id);
-                return (
-                    <DesignComponentTarget
-                        key={designSection._id}
-                        currentItem={designSection}
-                        updateItem={this.getDesignUpdateItem(designSection, displayContext, userContext.designUpdateId)}
-                        wpItem={this.getWpItem(designSection, userContext.workPackageId)}
-                        displayContext={displayContext}
-                        view={view}
-                        mode={mode}
-                        testSummary={testSummary}
-                    />
-                );
-            });
+            // In a view or scope scenario we don't need a Target
+            if(mode === ViewMode.MODE_VIEW || displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.UPDATE_SCOPE){
+
+                return components.map((designSection) => {
+
+                    updateItem = this.getDesignUpdateItem(designSection, displayContext, userContext.designUpdateId);
+                    wpItem = this.getWpItem(designSection, userContext.workPackageId);
+
+                    let updateItemScope = UpdateScopeType.SCOPE_OUT_SCOPE;
+                    if(updateItem && updateItem.scopeType){
+                        updateItemScope = updateItem.scopeType;
+                    }
+
+                    const uiItemId = replaceAll(designSection.componentNameNew, ' ', '_');
+                    const uiParentId = replaceAll(this.getParentName(designSection), ' ', '_');
+
+                    return (
+                        <DesignComponent
+                            key={designSection._id}
+                            currentItem={designSection}
+                            updateItem={updateItem}
+                            updateItemScope={updateItemScope}
+                            wpItem={wpItem}
+                            uiItemId={uiItemId}
+                            uiParentId={uiParentId}
+                            isDragDropHovering={false}
+                            displayContext={displayContext}
+                            testSummary={testSummary}
+                            testSummaryData={null}
+                        />
+                    );
+                });
+
+            } else {
+
+                return components.map((designSection) => {
+
+                    updateItem = this.getDesignUpdateItem(designSection, displayContext, userContext.designUpdateId);
+                    wpItem = this.getWpItem(designSection, userContext.workPackageId);
+
+                    return (
+                        <DesignComponentTarget
+                            key={designSection._id}
+                            currentItem={designSection}
+                            updateItem={updateItem}
+                            wpItem={wpItem}
+                            displayContext={displayContext}
+                            view={view}
+                            mode={mode}
+                            testSummary={testSummary}
+                        />
+                    );
+                });
+            }
+
+
         } else {
             return(
                 <div></div>
@@ -132,7 +193,8 @@ function mapStateToProps(state) {
         view:           state.currentAppView,
         mode:           state.currentViewMode,
         viewOptions:    state.currentUserViewOptions,
-        userContext:    state.currentUserItemContext
+        userContext:    state.currentUserItemContext,
+        updateScopeFlag: state.currentUpdateScopeFlag,
     }
 }
 

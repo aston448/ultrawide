@@ -31,6 +31,21 @@ class UpdateSummaryAction extends Component {
         super(props);
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        if(
+            nextProps.actionItem.itemName !== this.props.actionItem.itemName ||
+            nextProps.actionItem.itemNameOld !== this.props.actionItem.itemNameOld ||
+            nextProps.actionItem.scenarioTestStatus !== this.props.actionItem.scenarioTestStatus
+        ){
+            shouldUpdate = true;
+        }
+
+        return shouldUpdate;
+    }
+
     render(){
         const {actionItem} = this.props;
 

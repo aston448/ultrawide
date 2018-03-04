@@ -9,19 +9,21 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponent                      from '../../components/edit/DesignComponent.jsx';
 
 // Ultrawide Services
-import {log} from "../../../common/utils";
-import { LogLevel, DisplayContext, ComponentType } from '../../../constants/constants.js';
+import {log, replaceAll} from "../../../common/utils";
+import { LogLevel, DisplayContext, ComponentType, UpdateScopeType, ViewMode } from '../../../constants/constants.js';
 
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-
+import ClientDesignComponentServices        from "../../../apiClient/apiClientDesignComponent";
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -47,12 +49,13 @@ class FeaturesList extends Component {
         if(
             nextProps.components.length !== this.props.components.length ||
             nextProps.testDataFlag !== this.props.testDataFlag ||
-            nextProps.testSummary !== this.props.testSummary
+            nextProps.testSummary !== this.props.testSummary ||
+            nextProps.updateScopeFlag !== this.props.updateScopeFlag
         ){
             shouldUpdate = true;
         }
 
-        //console.log('Features List Should Update: ' + shouldUpdate);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Features List Should Update: {} with components length changing from {} to {}', shouldUpdate, this.props.components.length, nextProps.components.length);
 
         return shouldUpdate;
     }
@@ -81,43 +84,106 @@ class FeaturesList extends Component {
         return ClientWorkPackageComponentServices.getWorkPackageComponent(feature.componentReferenceId, workPackageId);
     }
 
+    getParentName(currentItem){
+
+        if(currentItem && currentItem.componentParentReferenceIdNew !== 'NONE') {
+            const parent = ClientDesignComponentServices.getCurrentItemParent(currentItem);
+            if(parent){
+                return parent.componentNameNew;
+            } else {
+                return 'NONE';
+            }
+        } else {
+            return 'NONE';
+        }
+
+    }
+
     // A list of Features in a Design Section
     renderFeatures() {
         const {components, displayContext, view, mode, userContext, viewOptions, testSummary} = this.props;
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Features');
 
         if(components) {
 
-            return components.map((feature) => {
+            let updateItem = {};
+            let wpItem = {};
 
-                let testSummaryData = null;
+            // In a view or scope scenario we don't need a Target
+            if(mode === ViewMode.MODE_VIEW || displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.UPDATE_SCOPE) {
 
-                if(testSummary) {
-                    testSummaryData = ClientDataServices.getTestSummaryFeatureData(feature);
-                }
+                return components.map((feature) => {
 
-                return (
-                    <DesignComponentTarget
-                        key={feature._id}
-                        currentItem={feature}
-                        updateItem={this.getDesignUpdateItem(feature, displayContext, userContext.designUpdateId)}
-                        wpItem={this.getWpItem(feature, userContext.workPackageId)}
-                        displayContext={displayContext}
-                        view={view}
-                        mode={mode}
-                        testSummary={testSummary}
-                        testSummaryData={testSummaryData}
-                    />
-                );
-            });
+                    let testSummaryData = null;
+
+                    if (testSummary) {
+                        testSummaryData = ClientDataServices.getTestSummaryFeatureData(feature);
+                    }
+
+                    updateItem = this.getDesignUpdateItem(feature, displayContext, userContext.designUpdateId);
+                    wpItem = this.getWpItem(feature, userContext.workPackageId);
+
+                    let updateItemScope = UpdateScopeType.SCOPE_OUT_SCOPE;
+                    if(updateItem && updateItem.scopeType){
+                        updateItemScope = updateItem.scopeType;
+                    }
+
+                    const uiItemId = replaceAll(feature.componentNameNew, ' ', '_');
+                    const uiParentId = replaceAll(this.getParentName(feature), ' ', '_');
+
+                    return (
+                        <DesignComponent
+                            key={feature._id}
+                            currentItem={feature}
+                            updateItem={updateItem}
+                            updateItemScope={updateItemScope}
+                            wpItem={wpItem}
+                            uiItemId={uiItemId}
+                            uiParentId={uiParentId}
+                            isDragDropHovering={false}
+                            displayContext={displayContext}
+                            testSummary={testSummary}
+                            testSummaryData={testSummaryData}
+                        />
+                    );
+                });
+            } else {
+
+                return components.map((feature) => {
+
+                    let testSummaryData = null;
+
+                    if (testSummary) {
+                        testSummaryData = ClientDataServices.getTestSummaryFeatureData(feature);
+                    }
+
+                    updateItem = this.getDesignUpdateItem(feature, displayContext, userContext.designUpdateId);
+                    wpItem = this.getWpItem(feature, userContext.workPackageId);
+
+                    return (
+                        <DesignComponentTarget
+                            key={feature._id}
+                            currentItem={feature}
+                            updateItem={updateItem}
+                            wpItem={wpItem}
+                            displayContext={displayContext}
+                            view={view}
+                            mode={mode}
+                            testSummary={testSummary}
+                            testSummaryData={testSummaryData}
+                        />
+                    );
+                });
+            }
         } else {
             //console.log("NULL COMPONENTS FOR FEATURES!")
         }
     }
 
     render() {
-        //console.log('Render Features Container');
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Features');
+
         return (
             <div>
                 {this.renderFeatures()}
@@ -139,7 +205,8 @@ function mapStateToProps(state) {
         mode:           state.currentViewMode,
         userContext:    state.currentUserItemContext,
         viewOptions:    state.currentUserViewOptions,
-        testDataFlag:   state.testDataFlag
+        testDataFlag:   state.testDataFlag,
+        updateScopeFlag: state.currentUpdateScopeFlag,
     }
 }
 

@@ -557,6 +557,8 @@ export class DesignComponent extends Component{
         // Only render the body if the item is open
         if(this.state.open) {
 
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Body for {}', currentItem.componentNameNew);
+
             // Everything is in scope for editing unless its a design update item not in scope...
             let inScope = true;
 
@@ -874,7 +876,8 @@ export class DesignComponent extends Component{
         }
 
         // Each component has a move target above it so we can reorder stuff...
-        if(mode === ViewMode.MODE_VIEW){
+        
+        if(mode === ViewMode.MODE_VIEW || displayContext === DisplayContext.UPDATE_SCOPE || displayContext === DisplayContext.WP_SCOPE){
             return (
                 <div id="designComponent" className={itemStyle}>
                     {headerHtml}

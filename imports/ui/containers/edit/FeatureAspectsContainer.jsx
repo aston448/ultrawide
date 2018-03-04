@@ -9,19 +9,23 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponent                      from '../../components/edit/DesignComponent.jsx';
 
 // Ultrawide Services
-import {log} from "../../../common/utils";
-import { LogLevel, DisplayContext, ComponentType } from '../../../constants/constants.js';
+import {log, replaceAll} from "../../../common/utils";
+import { LogLevel, DisplayContext, ComponentType, ViewMode, UpdateScopeType } from '../../../constants/constants.js';
 
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
+import ClientDesignComponentServices        from "../../../apiClient/apiClientDesignComponent";
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
+
 
 
 // =====================================================================================================================
@@ -38,6 +42,22 @@ class FeatureAspectsList extends Component {
         super(props);
 
     };
+
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        // Update if new list of Features or change in test data
+        if(
+            nextProps.components.length !== this.props.components.length
+        ){
+            shouldUpdate = true;
+        }
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Feature Aspects List Should Update: {} with components length changing from {} to {}', shouldUpdate, this.props.components.length, nextProps.components.length);
+
+        return shouldUpdate;
+    }
 
     getDesignUpdateItem(featureAspect, displayContext, designUpdateId){
         switch(displayContext){
@@ -63,27 +83,85 @@ class FeatureAspectsList extends Component {
         return ClientWorkPackageComponentServices.getWorkPackageComponent(featureAspect.componentReferenceId, workPackageId);
     }
 
+    getParentName(currentItem){
+
+        if(currentItem && currentItem.componentParentReferenceIdNew !== 'NONE') {
+            const parent = ClientDesignComponentServices.getCurrentItemParent(currentItem);
+            if(parent){
+                return parent.componentNameNew;
+            } else {
+                return 'NONE';
+            }
+        } else {
+            return 'NONE';
+        }
+
+    }
+
     // A list of Feature Aspects in a Feature
     renderFeatureAspects() {
         const {components, displayContext, view, mode, userContext, viewOptions, testSummary} = this.props;
 
         if (components) {
 
-            return components.map((featureAspect) => {
+            let updateItem = {};
+            let wpItem = {};
 
-                return (
-                    <DesignComponentTarget
-                        key={featureAspect._id}
-                        currentItem={featureAspect}
-                        updateItem={this.getDesignUpdateItem(featureAspect, displayContext, userContext.designUpdateId)}
-                        wpItem={this.getWpItem(featureAspect, userContext.workPackageId)}
-                        displayContext={displayContext}
-                        view={view}
-                        mode={mode}
-                        testSummary={testSummary}
-                    />
-                );
-            });
+            // In a view or scope scenario we don't need a Target
+            if(mode === ViewMode.MODE_VIEW || displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.UPDATE_SCOPE) {
+
+                return components.map((featureAspect) => {
+
+                    let testSummaryData = null;
+
+                    updateItem = this.getDesignUpdateItem(featureAspect, displayContext, userContext.designUpdateId);
+                    wpItem = this.getWpItem(featureAspect, userContext.workPackageId);
+
+                    let updateItemScope = UpdateScopeType.SCOPE_OUT_SCOPE;
+                    if(updateItem && updateItem.scopeType){
+                        updateItemScope = updateItem.scopeType;
+                    }
+
+                    const uiItemId = replaceAll(featureAspect.componentNameNew, ' ', '_');
+                    const uiParentId = replaceAll(this.getParentName(featureAspect), ' ', '_');
+
+                    return (
+                        <DesignComponent
+                            key={featureAspect._id}
+                            currentItem={featureAspect}
+                            updateItem={updateItem}
+                            updateItemScope={updateItemScope}
+                            wpItem={wpItem}
+                            uiItemId={uiItemId}
+                            uiParentId={uiParentId}
+                            isDragDropHovering={false}
+                            displayContext={displayContext}
+                            testSummary={testSummary}
+                            testSummaryData={testSummaryData}
+                        />
+                    );
+                });
+            } else {
+
+                return components.map((featureAspect) => {
+
+                    updateItem = this.getDesignUpdateItem(featureAspect, displayContext, userContext.designUpdateId);
+                    wpItem = this.getWpItem(featureAspect, userContext.workPackageId);
+
+                    return (
+                        <DesignComponentTarget
+                            key={featureAspect._id}
+                            currentItem={featureAspect}
+                            updateItem={updateItem}
+                            wpItem={wpItem}
+                            displayContext={displayContext}
+                            view={view}
+                            mode={mode}
+                            testSummary={testSummary}
+                        />
+                    );
+                });
+            }
         } else {
             //console.log("NULL COMPONENTS FOR FEATURE ASPECTS!")
         }

@@ -41,6 +41,74 @@ export class ItemWrapper extends Component {
         super(props);
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        // Update if item context is changing and this item is the old or new context
+
+        let updateMe = false;
+        let itemStatusNew = '';
+        let itemStatusOld = '';
+        let itemNameNew = '';
+        let itemNameOld = '';
+        let itemRefNew = '';
+        let itemRefOld = '';
+
+        switch(this.props.itemType){
+            case ItemType.DESIGN:
+                updateMe = this.props.item._id === this.props.userContext.designId || nextProps.item._id === nextProps.userContext.designId;
+                itemStatusNew = nextProps.item.designStatus;
+                itemStatusOld = this.props.item.designStatus;
+                itemNameNew = nextProps.item.designName;
+                itemNameOld = this.props.designName;
+                break;
+            case ItemType.DESIGN_VERSION:
+                updateMe = this.props.item._id === this.props.userContext.designVersionId || nextProps.item._id === nextProps.userContext.designVersionId;
+                itemStatusNew = nextProps.item.designVersionStatus;
+                itemStatusOld = this.props.item.designVersionStatus;
+                itemNameNew = nextProps.item.designVersionName;
+                itemNameOld = this.props.designVersionName;
+                itemRefNew = nextProps.item.designVersionNumber;
+                itemRefOld = this.props.designVersionNumber;
+                break;
+            case ItemType.DESIGN_UPDATE:
+                updateMe = this.props.item._id === this.props.userContext.designUpdateId || nextProps.item._id === nextProps.userContext.designUpdateId;
+                itemStatusNew = nextProps.item.designUpdateStatus;
+                itemStatusOld = this.props.item.designUpdateStatus;
+                itemNameNew = nextProps.item.updateName;
+                itemNameOld = this.props.designVersionName;
+                itemRefNew = nextProps.item.updateName;
+                itemRefOld = this.props.item.updateReference;
+                break;
+            case ItemType.WORK_PACKAGE:
+                updateMe = this.props.item._id === this.props.userContext.workPackageId || nextProps.item._id === nextProps.userContext.workPackageId;
+                itemStatusNew = nextProps.item.workPackageStatus;
+                itemStatusOld = this.props.item.workPackageStatus;
+                itemNameNew = nextProps.item.workPackageName;
+                itemNameOld = this.props.workPackageName;
+                itemRefNew = nextProps.item.workPackageLink;
+                itemRefOld = this.props.item.workPackageLink;
+                break;
+        }
+
+        if(updateMe){
+            if(
+                itemStatusNew !== itemStatusOld ||
+                itemNameNew !== itemNameOld ||
+                itemRefNew !== itemRefOld ||
+                nextProps.userContext.designId !== this.props.userContext.designId ||
+                nextProps.userContext.designVersionId !== this.props.userContext.designVersionId ||
+                nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
+                nextProps.userContext.workPackageId !== this.props.userContext.workPackageId
+            ){
+                shouldUpdate = true;
+            }
+        }
+
+        return shouldUpdate;
+    }
+
     onSelectDesign(userContext, newDesignId){
         ClientDesignServices.setDesign(userContext, newDesignId);
     };

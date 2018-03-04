@@ -42,6 +42,27 @@ export class DesignUpdateSummaryList extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        let shouldUpdate = false;
+
+        // Update when changing to new DU or recalculating content
+        if(
+            nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
+            nextProps.addOrgHeaders.length !== this.props.addOrgHeaders.length ||
+            nextProps.addFncHeaders.length !== this.props.addFncHeaders.length ||
+            nextProps.removeHeaders.length !== this.props.removeHeaders.length ||
+            nextProps.changeHeaders.length !== this.props.changeHeaders.length ||
+            nextProps.moveHeaders.length !== this.props.moveHeaders.length ||
+            nextProps.queryHeaders.length !== this.props.queryHeaders.length
+
+        ){
+            shouldUpdate = true;
+        }
+
+        return shouldUpdate;
+    }
+
     getEditorClass(){
         return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
     }

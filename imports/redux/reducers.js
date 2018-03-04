@@ -4,7 +4,7 @@
 
 import * as Actions from './actions'
 import {RoleType, ViewType, ViewMode, MessageType, UserSettingValue, HomePageTab} from '../constants/constants.js'
-import {DisplayContext} from "../constants/constants";
+import {DisplayContext, UpdateScopeType} from "../constants/constants";
 
 // Creates the initial state container for your application - the same as getInitialState
 const initialState = {
@@ -45,15 +45,23 @@ const initialState = {
     currentUserOpenDesignUpdateItems:   [],
     currentUserOpenWorkPackageItems:    [],
     currentUpdateScopeItems:            {
-        current: [],
-        added: [],
-        removed: []
+        flag:   0,
+        current: [
+            {
+                ref: 'NONE',
+                scopeType:  UpdateScopeType.SCOPE_OUT_SCOPE
+            }
+        ]
     },
     currentUpdateScopeFlag:             0,
     currentWorkPackageScopeItems:       {
-        current: [],
-        added: [],
-        removed: []
+        flag:   0,
+        current: [
+            {
+                ref: 'NONE',
+                scopeType:  UpdateScopeType.SCOPE_OUT_SCOPE
+            }
+        ],
     },
     currentWorkPackageScopeFlag:        0,
     currentDesignComponentName:         'No Component',

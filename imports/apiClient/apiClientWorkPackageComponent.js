@@ -16,7 +16,11 @@ import DesignUpdateComponentData            from '../data/design_update/design_u
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, setWorkPackageScopeItems, setWorkPackageScopeFlag } from '../redux/actions';
+import {
+    setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, setWorkPackageScopeItems,
+    setWorkPackageScopeFlag, setUpdateScopeItems
+} from '../redux/actions';
+import DesignUpdateData from "../data/design_update/design_update_db";
 
 // =====================================================================================================================
 // Client API for Work Package Components
@@ -52,52 +56,33 @@ class ClientWorkPackageComponentServices {
                 // Client actions:
 
                 // Calculate data used for managing scope rendering efficiently
-                const workPackage = WorkPackageData.getWorkPackageById(userContext.workPackageId);
                 const wpItems = WorkPackageData.getAllWorkPackageComponents(userContext.workPackageId);
 
-                let addedItems = [];
-                let removedItems = [];
                 let currentItems = [];
-                let designItem = null;
 
                 wpItems.forEach((item) => {
-                    if(workPackage.workPackageType === WorkPackageType.WP_BASE) {
 
-                        designItem = DesignComponentData.getDesignComponentByRef(workPackage.designVersionId, item.componentReferenceId);
+                    const currentItem = {
+                        ref: item.componentReferenceId,
+                        scopeType: item.scopeType
+                    };
 
-                    } else {
+                    currentItems.push(currentItem);
 
-                        designItem = DesignUpdateComponentData.getUpdateComponentByRef(workPackage.designVersionId, workPackage.designUpdateId, item.componentReferenceId);
-
-                    }
-                    if(designItem) {
-                        currentItems.push(designItem.componentReferenceId);
-                    }
                 });
 
-                const wpScopeItems = store.getState().currentWorkPackageScopeItems;
+                const scopeItems = store.getState().currentWorkPackageScopeItems;
 
-                if(!newScope) {
-
-                    // Make a list of anything no longer in DB
-                    wpScopeItems.current.forEach((item) => {
-                        if(!(currentItems.includes(item))){
-                            removedItems.push(item);
-                        }
-                    });
-                }
+                // Trigger update by changing flag
+                const newFlag = scopeItems.flag + 1;
 
                 store.dispatch(setWorkPackageScopeItems(
                     {
-                        current:    currentItems,
-                        added:      addedItems,
-                        removed:    removedItems
+                        flag:       newFlag,
+                        current:    currentItems
                     }
                 ));
 
-                // Trigger items to update
-                const wpScopeFlag = store.getState().currentWorkPackageScopeFlag;
-                store.dispatch(setWorkPackageScopeFlag(wpScopeFlag));
 
                 // Show action success on screen
                 if(newScope) {

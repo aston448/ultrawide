@@ -106,18 +106,26 @@ export class DesignComponentHeader extends Component{
 
         switch(this.props.displayContext){
             case DisplayContext.WP_SCOPE:
+
                 // Need to get from WP scope for current item
-                this.setState({inScope: this.props.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
-                this.setState({parentScope: this.props.currentItem.scopeType === WorkPackageScopeType.SCOPE_PARENT});
+                this.setState({inScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE});
+                this.setState({parentScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT});
                 break;
+
             case DisplayContext.UPDATE_SCOPE:
-                // if(this.props.updateItem){
-                //     if(this.props.updateItem.isScopable) {
-                //         this.setState({inScope: true});
-                //     } else {
-                //         this.setState({parentScope: true});
-                //     }
-                // }
+
+                if(this.props.updateItem){
+
+                    if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+                        log((msg) => console.log(msg), LogLevel.PERF, "MOUNT: Setting {} as IN SCOPE", this.props.currentItem.componentNameNew);
+                        this.setState({inScope: true});
+                    }
+
+                    if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
+                        log((msg) => console.log(msg), LogLevel.PERF, "MOUNT: Setting {} as PARENT SCOPE", this.props.currentItem.componentNameNew);
+                        this.setState({parentScope: true});
+                    }
+                }
                 break;
             case DisplayContext.UPDATE_EDIT:
                 break;
@@ -154,6 +162,87 @@ export class DesignComponentHeader extends Component{
 
     // If the name of an item has been updated it could be in another view of it so we need to update the local editor
     componentWillReceiveProps(newProps){
+
+        // Set display state for scope items
+        let inScope = false;
+
+
+        switch(this.props.displayContext){
+
+            case DisplayContext.UPDATE_SCOPE:
+
+                // Only if scope has actually changed
+                if(newProps.updateScopeItems.flag !== this.props.updateScopeItems.flag) {
+
+                    newProps.updateScopeItems.current.forEach((nextScopeItem) => {
+
+                        log((msg) => console.log(msg), LogLevel.PERF, "  NEXT DU SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
+
+                        if (nextScopeItem.ref === newProps.currentItem.componentReferenceId) {
+
+                            log((msg) => console.log(msg), LogLevel.PERF, "  MATCHING NEXT DU SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
+
+                            inScope = true;
+
+                            if (nextScopeItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+                                log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as DU IN SCOPE", newProps.currentItem.componentNameNew);
+                                this.setState({inScope: true});
+                                this.setState({parentScope: false});
+                            }
+
+                            if (nextScopeItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE) {
+                                log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as DU PARENT SCOPE", newProps.currentItem.componentNameNew);
+                                this.setState({parentScope: true});
+                                this.setState({inScope: false});
+                            }
+                        }
+                    });
+
+                    if (!inScope) {
+                        log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as DU OUT OF SCOPE", newProps.currentItem.componentNameNew);
+                        this.setState({inScope: false});
+                        this.setState({parentScope: false});
+                    }
+                }
+                break;
+
+            case DisplayContext.WP_SCOPE:
+
+                // Only if scope has actually changed
+                if(newProps.workPackageScopeItems.flag !== this.props.workPackageScopeItems.flag) {
+
+                    newProps.workPackageScopeItems.current.forEach((nextScopeItem) => {
+
+                        log((msg) => console.log(msg), LogLevel.PERF, "  NEXT WP SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
+
+                        if (nextScopeItem.ref === newProps.currentItem.componentReferenceId) {
+
+                            log((msg) => console.log(msg), LogLevel.PERF, "  MATCHING NEXT WP SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
+
+                            inScope = true;
+
+                            if (nextScopeItem.scopeType === WorkPackageScopeType.SCOPE_IN_SCOPE) {
+                                log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as WP IN SCOPE", newProps.currentItem.componentNameNew);
+                                this.setState({inScope: true});
+                                this.setState({parentScope: false});
+                            }
+
+                            if (nextScopeItem.scopeType === WorkPackageScopeType.SCOPE_PARENT_SCOPE) {
+                                log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as WP PARENT SCOPE", newProps.currentItem.componentNameNew);
+                                this.setState({parentScope: true});
+                                this.setState({inScope: false});
+                            }
+                        }
+                    });
+
+                    if (!inScope) {
+                        log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as WP OUT OF SCOPE", newProps.currentItem.componentNameNew);
+                        this.setState({inScope: false});
+                        this.setState({parentScope: false});
+                    }
+                }
+                break;
+        }
 
         // If Domain Text highlighting has changed redraw the text for non-scope items
         if(
@@ -426,7 +515,11 @@ export class DesignComponentHeader extends Component{
     render() {
         const {currentItem, updateItem, wpItem, uiContextName, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {}', currentItem.componentNameNew);
+        if(updateItem) {
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {} with scope {}', currentItem.componentNameNew, updateItem.scopeType);
+        } else {
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {}', currentItem.componentNameNew);
+        }
 
         //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with test summary " + testSummary + " and test summary data " + testSummaryData);
 
@@ -479,14 +572,19 @@ export class DesignComponentHeader extends Component{
             }
         }
 
-        // Scope status ------------------------------------------
+        // Scope status ------------------------------------------------------------------------------------------------
+
+        // The local state mirrors the actual scope status so that scope checkbox updates work across components.
+        // State is updated by looking at next value of overall scope redux state in ComponentWillReceiveProps
 
         switch (displayContext) {
             case DisplayContext.UPDATE_SCOPE:
-                if (updateItem) {
-                    inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
-                    inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
-                } else {
+
+                inScope = this.state.inScope;
+                inParentScope = this.state.parentScope;
+
+                if (!updateItem) {
+
                     // If not in this update indicate if another update is known to have modified it
                     if (!(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE || currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT)) {
                         inScopeElsewhere = true;
@@ -494,39 +592,34 @@ export class DesignComponentHeader extends Component{
                 }
 
                 nextScope = !inScope;
-
-                break;
-
-            case DisplayContext.UPDATE_EDIT:
-            case DisplayContext.UPDATE_VIEW:
-                if (updateItem) {
-                    inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
-                    inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
-                }
                 break;
 
             case DisplayContext.WP_SCOPE:
-                if (wpItem) {
-                    inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
-                    inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
-                }
+
+                inScope = this.state.inScope;
+                inParentScope = this.state.parentScope;
 
                 if ((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)) {
                     // Scenario is in scope in another WP
                     inScopeElsewhere = true;
                 }
 
-                // if(view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
-                //     if (updateItem && updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE) {
-                //         // We don't want to allow scoping of items that are not actually in scope in the update (i.e. parent items)
-                //         updateParentOnly = true;
-                //     }
-                // }
-
                 nextScope = !inScope;
                 break;
 
+            case DisplayContext.UPDATE_EDIT:
+            case DisplayContext.UPDATE_VIEW:
+
+                // This scope can come from the actual object as it is not updating the scope checkboxes
+                if (updateItem) {
+                    inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
+                    inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
+                }
+                break;
+
             case DisplayContext.WP_VIEW:
+
+                // This scope can come from the actual object as it is not updating the scope checkboxes
                 if (wpItem) {
                     inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
                     inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
@@ -534,6 +627,7 @@ export class DesignComponentHeader extends Component{
                 break;
 
             case DisplayContext.DEV_DESIGN:
+
                 // Work package implementation
                 if (updateItem) {
                     // Must be an update WP
