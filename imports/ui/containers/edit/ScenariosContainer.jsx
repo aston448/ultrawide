@@ -18,11 +18,12 @@ import ClientDataServices                   from '../../../apiClient/apiClientDa
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 import ClientDesignComponentServices        from "../../../apiClient/apiClientDesignComponent";
-
+import ComponentUiModules                   from "../../../ui_modules/design_component";
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 
@@ -40,6 +41,12 @@ class ScenariosList extends Component {
         super(props);
 
     };
+
+    shouldComponentUpdate(nextProps){
+
+        return ComponentUiModules.shouldComponentListUpdate('Scenario', nextProps, this.props);
+
+    }
 
     getDesignUpdateItem(scenario, displayContext, designUpdateId){
         switch(displayContext){
@@ -76,9 +83,7 @@ class ScenariosList extends Component {
 
     }
 
-    shouldComponentUpdate(){
-        return true;
-    }
+
 
     getWpItem(scenario, workPackageId){
         return ClientWorkPackageComponentServices.getWorkPackageComponent(scenario.componentReferenceId, workPackageId);

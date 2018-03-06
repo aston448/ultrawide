@@ -37,6 +37,19 @@ export class DetailsViewHeader extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps){
+
+        let shouldUpdate = false;
+
+        if(
+            nextProps.titleText !== this.props.titleText
+        ){
+            shouldUpdate = true;
+        }
+        
+        return shouldUpdate;
+    }
+
     onExportIntTests(){
 
     }

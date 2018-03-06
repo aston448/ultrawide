@@ -23,6 +23,7 @@ import ClientDesignComponentServices        from "../../../apiClient/apiClientDe
 
 // REDUX services
 import {connect} from 'react-redux';
+import ComponentUiModules from "../../../ui_modules/design_component";
 
 
 
@@ -41,21 +42,29 @@ class FeaturesList extends Component {
         super(props);
     };
 
+    shouldComponentUpdate(nextProps){
+
+        return ComponentUiModules.shouldComponentListUpdate('Scenario', nextProps, this.props);
+
+    }
     shouldComponentUpdate(nextProps, nextState){
 
         let shouldUpdate = false;
 
         // Update if new list of Features or change in test data
-        if(
-            nextProps.components.length !== this.props.components.length ||
-            nextProps.testDataFlag !== this.props.testDataFlag ||
-            nextProps.testSummary !== this.props.testSummary ||
-            nextProps.updateScopeFlag !== this.props.updateScopeFlag
-        ){
-            shouldUpdate = true;
-        }
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Features List Should Update: {} with components length changing from {} to {}', shouldUpdate, this.props.components.length, nextProps.components.length);
+        shouldUpdate = ComponentUiModules.shouldComponentListUpdate('Scenario', nextProps, this.props);
+
+        if(!shouldUpdate) {
+            if (
+                nextProps.testDataFlag !== this.props.testDataFlag ||
+                nextProps.testSummary !== this.props.testSummary
+            ) {
+                shouldUpdate = true;
+            }
+
+            log((msg) => console.log(msg), LogLevel.PERF, 'Features List Should Update: {} because of test data', shouldUpdate);
+        }
 
         return shouldUpdate;
     }

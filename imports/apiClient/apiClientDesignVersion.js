@@ -438,7 +438,11 @@ class ClientDesignVersionServices{
 
         store.dispatch(setCurrentView(view));
 
-        ClientTestIntegrationServices.updateTestSummaryData(userContext);
+        // const userOptions = store.getState().currentUserViewOptions;
+        //
+        // if(userOptions.testSummaryVisible) {
+        //     ClientTestIntegrationServices.updateTestSummaryData(userContext);
+        // }
 
         return {success: true, message: ''};
     };

@@ -320,6 +320,7 @@ export const DesignUpdateSummaryType = {
     SUMMARY_REMOVE:                 'SUMMARY_REMOVE',
     SUMMARY_REMOVE_FROM:            'SUMMARY_REMOVE_FROM',
     SUMMARY_CHANGE:                 'SUMMARY_CHANGE',
+    SUMMARY_DETAILS_CHANGE:         'SUMMARY_DETAILS_CHANGE',
     SUMMARY_CHANGE_IN:              'SUMMARY_CHANGE_IN',
     SUMMARY_MOVE:                   'SUMMARY_MOVE',
     SUMMARY_MOVE_FROM:              'SUMMARY_MOVE_FROM',

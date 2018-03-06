@@ -44,7 +44,9 @@ export class UltrawideMenuItem extends Component {
         let shouldUpdate = false;
 
         if(
-            nextState.isHighlighted !== this.state.isHighlighted
+            nextState.isHighlighted !== this.state.isHighlighted ||
+            nextProps.view !== this.state.view ||
+            nextProps.userRole !== this.props.userRole
         ){
             shouldUpdate = true;
         }
@@ -186,7 +188,8 @@ UltrawideMenuItem.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole:           state.currentUserRole
+        userRole:           state.currentUserRole,
+        view:               state.currentAppView
     }
 }
 

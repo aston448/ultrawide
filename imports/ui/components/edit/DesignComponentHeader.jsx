@@ -101,8 +101,7 @@ export class DesignComponentHeader extends Component{
 
     }
 
-    // Set up the view from persisted settings
-    componentDidMount(){
+    componentWillMount(){
 
         switch(this.props.displayContext){
             case DisplayContext.WP_SCOPE:
@@ -117,12 +116,12 @@ export class DesignComponentHeader extends Component{
                 if(this.props.updateItem){
 
                     if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
-                        log((msg) => console.log(msg), LogLevel.PERF, "MOUNT: Setting {} as IN SCOPE", this.props.currentItem.componentNameNew);
+                        log((msg) => console.log(msg), LogLevel.PERF, "WILL MOUNT: Setting {} as IN SCOPE", this.props.currentItem.componentNameNew);
                         this.setState({inScope: true});
                     }
 
                     if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
-                        log((msg) => console.log(msg), LogLevel.PERF, "MOUNT: Setting {} as PARENT SCOPE", this.props.currentItem.componentNameNew);
+                        log((msg) => console.log(msg), LogLevel.PERF, "WILL MOUNT: Setting {} as PARENT SCOPE", this.props.currentItem.componentNameNew);
                         this.setState({parentScope: true});
                     }
                 }
@@ -130,6 +129,37 @@ export class DesignComponentHeader extends Component{
             case DisplayContext.UPDATE_EDIT:
                 break;
         }
+    }
+
+    // Set up the view from persisted settings
+    componentDidMount(){
+
+        // switch(this.props.displayContext){
+        //     case DisplayContext.WP_SCOPE:
+        //
+        //         // Need to get from WP scope for current item
+        //         this.setState({inScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE});
+        //         this.setState({parentScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT});
+        //         break;
+        //
+        //     case DisplayContext.UPDATE_SCOPE:
+        //
+        //         if(this.props.updateItem){
+        //
+        //             if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+        //                 log((msg) => console.log(msg), LogLevel.PERF, "MOUNT: Setting {} as IN SCOPE", this.props.currentItem.componentNameNew);
+        //                 this.setState({inScope: true});
+        //             }
+        //
+        //             if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
+        //                 log((msg) => console.log(msg), LogLevel.PERF, "MOUNT: Setting {} as PARENT SCOPE", this.props.currentItem.componentNameNew);
+        //                 this.setState({parentScope: true});
+        //             }
+        //         }
+        //         break;
+        //     case DisplayContext.UPDATE_EDIT:
+        //         break;
+        // }
 
         // New untouched items are editable by default as they need to be changed
         switch (this.props.view) {

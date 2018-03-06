@@ -37,6 +37,11 @@ export class DetailsViewFooter extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps){
+
+        return false
+    }
+
     onExportIntTests(){
         ClientTestIntegrationServices.exportIntegrationTestFile(this.props.userContext, this.props.userRole);
     }

@@ -19,6 +19,7 @@ import ClientDataServices                   from '../../../apiClient/apiClientDa
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 import ClientDesignComponentServices        from "../../../apiClient/apiClientDesignComponent";
+import ComponentUiModules                   from '../../../ui_modules/design_component.js'
 
 // Bootstrap
 
@@ -43,20 +44,10 @@ class FeatureAspectsList extends Component {
 
     };
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps){
 
-        let shouldUpdate = false;
+        return ComponentUiModules.shouldComponentListUpdate('Feature Aspect', nextProps, this.props);
 
-        // Update if new list of Features or change in test data
-        if(
-            nextProps.components.length !== this.props.components.length
-        ){
-            shouldUpdate = true;
-        }
-
-        log((msg) => console.log(msg), LogLevel.PERF, 'Feature Aspects List Should Update: {} with components length changing from {} to {}', shouldUpdate, this.props.components.length, nextProps.components.length);
-
-        return shouldUpdate;
     }
 
     getDesignUpdateItem(featureAspect, displayContext, designUpdateId){

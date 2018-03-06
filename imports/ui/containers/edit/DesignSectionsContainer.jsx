@@ -23,6 +23,7 @@ import ClientDesignComponentServices        from "../../../apiClient/apiClientDe
 
 // REDUX services
 import {connect} from 'react-redux';
+import ComponentUiModules from "../../../ui_modules/design_component";
 
 
 
@@ -39,22 +40,9 @@ class DesignSectionsList extends Component {
         super(props);
     }
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps){
 
-        let shouldUpdate = false;
-
-        // Update if new list of design sections
-        if(
-            nextProps.components.length !== this.props.components.length ||
-            nextProps.testSummary !== this.props.testSummary ||
-            nextProps.updateScopeFlag !== this.props.updateScopeFlag
-        ){
-            shouldUpdate = true;
-        }
-
-        //console.log('Design Sections List Should Update: ' + shouldUpdate);
-
-        return shouldUpdate;
+        return ComponentUiModules.shouldComponentListUpdate('Design Section', nextProps, this.props);
     }
 
     getDesignUpdateItem(designSection, displayContext, designUpdateId){

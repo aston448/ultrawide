@@ -42,8 +42,10 @@ class DesignUpdateComponentModules{
                 defaultAspect.defaultAspectName,
                 defaultAspect.defaultAspectNameRaw,
                 defaultRawText,
+                true,
+                view,
                 false,
-                view
+                true
             );
 
         });

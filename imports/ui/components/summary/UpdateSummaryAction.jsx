@@ -33,17 +33,20 @@ class UpdateSummaryAction extends Component {
 
     shouldComponentUpdate(nextProps, nextState){
 
-        let shouldUpdate = false;
+        // let shouldUpdate = false;
 
-        if(
-            nextProps.actionItem.itemName !== this.props.actionItem.itemName ||
-            nextProps.actionItem.itemNameOld !== this.props.actionItem.itemNameOld ||
-            nextProps.actionItem.scenarioTestStatus !== this.props.actionItem.scenarioTestStatus
-        ){
-            shouldUpdate = true;
-        }
 
-        return shouldUpdate;
+        // if(
+        //     nextProps.actionItem.itemName !== this.props.actionItem.itemName ||
+        //     nextProps.actionItem.itemNameOld !== this.props.actionItem.itemNameOld ||
+        //     nextProps.actionItem.itemHeaderId !== this.props.actionItem.itemHeaderId ||
+        //     nextProps.actionItem.scenarioTestStatus !== this.props.actionItem.scenarioTestStatus
+        // ){
+        //     shouldUpdate = true;
+        // }
+
+        return true;
+
     }
 
     render(){
@@ -60,65 +63,91 @@ class UpdateSummaryAction extends Component {
             testStatus = 'summary-icon ' + actionItem.scenarioTestStatus;
         }
 
-        if(actionItem.summaryType === DesignUpdateSummaryType.SUMMARY_CHANGE){
-            if(actionItem.itemType === ComponentType.SCENARIO) {
-                item =
-                    <div className="summary-action">
-                        <InputGroup>
-                            <InputGroup.Addon>
-                                <div className="summary-icon invisible"><Glyphicon glyph="th-large"/></div>
-                            </InputGroup.Addon>
-                            <InputGroup.Addon>
-                                <div className="summary-item-type item-old">FROM:</div>
-                            </InputGroup.Addon>
-                            <div className="summary-item">{actionItem.itemNameOld}</div>
-                        </InputGroup>
-                        <InputGroup>
-                            <InputGroup.Addon>
-                                <div className={testStatus}><Glyphicon glyph="th-large"/></div>
-                            </InputGroup.Addon>
-                            <InputGroup.Addon>
-                                <div className="summary-item-type item-new">TO:</div>
-                            </InputGroup.Addon>
-                            <div className="summary-item">{actionItem.itemName}</div>
-                        </InputGroup>
-                    </div>
-            } else {
-                item =
-                    <div className="summary-action">
-                        <InputGroup>
-                            <span className="summary-item-type item-old">FROM:</span>
-                            <span className="summary-item">{actionItem.itemNameOld}</span>
-                        </InputGroup>
-                        <InputGroup>
-                            <span className="summary-item-type item-new">TO:</span>
-                            <span className="summary-item">{actionItem.itemName}</span>
-                        </InputGroup>
-                    </div>
-            }
-        } else {
-            if(actionItem.itemType === ComponentType.SCENARIO) {
-                item =
-                    <div className="summary-action">
-                        <InputGroup>
-                            <InputGroup.Addon>
-                                <div className={testStatus}><Glyphicon glyph="th-large"/></div>
-                            </InputGroup.Addon>
-                            <InputGroup.Addon>
-                                <div className="summary-item-type">{itemHeader}</div>
-                            </InputGroup.Addon>
-                            <div className="summary-item">{actionItem.itemName}</div>
-                        </InputGroup>
-                    </div>;
-            } else {
-                item =
-                    <div className="summary-action">
-                        <InputGroup>
-                            <span className="summary-item-type">{itemHeader}</span>
-                            <span className="summary-item">{actionItem.itemName}</span>
-                        </InputGroup>
-                    </div>;
-            }
+        switch(actionItem.summaryType){
+            case  DesignUpdateSummaryType.SUMMARY_CHANGE:
+                if(actionItem.itemType === ComponentType.SCENARIO) {
+                    item =
+                        <div className="summary-action">
+                            <InputGroup>
+                                <InputGroup.Addon>
+                                    <div className="summary-icon invisible"><Glyphicon glyph="th-large"/></div>
+                                </InputGroup.Addon>
+                                <InputGroup.Addon>
+                                    <div className="summary-item-type item-old">FROM:</div>
+                                </InputGroup.Addon>
+                                <div className="summary-item">{actionItem.itemNameOld}</div>
+                            </InputGroup>
+                            <InputGroup>
+                                <InputGroup.Addon>
+                                    <div className={testStatus}><Glyphicon glyph="th-large"/></div>
+                                </InputGroup.Addon>
+                                <InputGroup.Addon>
+                                    <div className="summary-item-type item-new">TO:</div>
+                                </InputGroup.Addon>
+                                <div className="summary-item">{actionItem.itemName}</div>
+                            </InputGroup>
+                        </div>
+                } else {
+                    item =
+                        <div className="summary-action">
+                            <InputGroup>
+                                <span className="summary-item-type item-old">FROM:</span>
+                                <span className="summary-item">{actionItem.itemNameOld}</span>
+                            </InputGroup>
+                            <InputGroup>
+                                <span className="summary-item-type item-new">TO:</span>
+                                <span className="summary-item">{actionItem.itemName}</span>
+                            </InputGroup>
+                        </div>
+                }
+                break;
+            case DesignUpdateSummaryType.SUMMARY_DETAILS_CHANGE:
+                if(actionItem.itemType === ComponentType.SCENARIO) {
+                    item =
+                        <div className="summary-action">
+                            <InputGroup>
+                                <InputGroup.Addon>
+                                    <div className={testStatus}><Glyphicon glyph="th-large"/></div>
+                                </InputGroup.Addon>
+                                <InputGroup.Addon>
+                                    <div className="summary-item-type">{itemHeader}</div>
+                                </InputGroup.Addon>
+                                <div className="summary-item">{actionItem.itemName + ' (details changed)'}</div>
+                            </InputGroup>
+                        </div>;
+                } else {
+                    item =
+                        <div className="summary-action">
+                            <InputGroup>
+                                <span className="summary-item-type">{itemHeader}</span>
+                                <span className="summary-item">{actionItem.itemName + ' (details changed)'}</span>
+                            </InputGroup>
+                        </div>;
+                }
+                break;
+            default:
+                if(actionItem.itemType === ComponentType.SCENARIO) {
+                    item =
+                        <div className="summary-action">
+                            <InputGroup>
+                                <InputGroup.Addon>
+                                    <div className={testStatus}><Glyphicon glyph="th-large"/></div>
+                                </InputGroup.Addon>
+                                <InputGroup.Addon>
+                                    <div className="summary-item-type">{itemHeader}</div>
+                                </InputGroup.Addon>
+                                <div className="summary-item">{actionItem.itemName}</div>
+                            </InputGroup>
+                        </div>;
+                } else {
+                    item =
+                        <div className="summary-action">
+                            <InputGroup>
+                                <span className="summary-item-type">{itemHeader}</span>
+                                <span className="summary-item">{actionItem.itemName}</span>
+                            </InputGroup>
+                        </div>;
+                }
 
         }
 

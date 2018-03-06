@@ -8,7 +8,7 @@ class DesignUpdateComponentData{
 
     // INSERT ==========================================================================================================
 
-    insertNewUpdateComponent(designId, designVersionId, designUpdateId, componentType, componentLevel, parentRefId, featureRefId, defaultName, defaultRawName, defaultRawText, isNew, isChanged, devAdded, workPackageId, isScopable){
+    insertNewUpdateComponent(designId, designVersionId, designUpdateId, componentType, componentLevel, parentRefId, featureRefId, defaultName, defaultRawName, defaultRawText, isNew, isDefault, isChanged, devAdded, workPackageId, isScopable){
 
         return DesignUpdateComponents.insert(
             {
@@ -35,6 +35,7 @@ class DesignUpdateComponentData{
 
                 // State is a new item
                 isNew:                          isNew,                  // New item added to design
+                isDefault:                      isDefault,
                 isChanged:                      isChanged,              // Usually false
                 isTextChanged:                  false,                  // For now - will go to true when text is edited
                 isMoved:                        false,
@@ -78,6 +79,7 @@ class DesignUpdateComponentData{
 
             // Update State
             isNew:                          false,
+            isDefault:                      false,
             isChanged:                      false,
             isTextChanged:                  false,
             isMoved:                        false,
@@ -130,6 +132,7 @@ class DesignUpdateComponentData{
 
                 // Update State
                 isNew:                          component.isNew,
+                isDefault:                      component.isDefault,
                 isChanged:                      component.isChanged,
                 isTextChanged:                  component.isTextChanged,
                 isMoved:                        component.isMoved,

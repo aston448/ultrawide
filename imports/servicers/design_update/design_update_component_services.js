@@ -29,7 +29,7 @@ import UserDvMashScenarioData from "../../data/mash/user_dv_mash_scenario_db";
 class DesignUpdateComponentServices{
 
     // Add a new design update component to design update
-    addNewComponent(designVersionId, designUpdateId, workPackageId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false){
+    addNewComponent(designVersionId, designUpdateId, workPackageId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false, isDefault = false){
 
         if(Meteor.isServer) {
 
@@ -65,6 +65,7 @@ class DesignUpdateComponentServices{
                 defaultRawName,
                 defaultRawText,
                 isNew,
+                isDefault,
                 isChanged,
                 devAdded,
                 workPackageId,
@@ -106,8 +107,7 @@ class DesignUpdateComponentServices{
                     DesignUpdateComponentModules.updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId);
 
                     // And for Features add the default Feature Aspects
-                    // TODO - that could be user configurable!
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding Default Aspects...');
+                      log((msg) => console.log(msg), LogLevel.DEBUG, '  Adding Default Aspects...');
                     DesignUpdateComponentModules.addDefaultFeatureAspects(dv.designId, designVersionId, designUpdateId, newUpdateComponentId, '', view);
 
                 } else {

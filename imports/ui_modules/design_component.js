@@ -57,14 +57,41 @@ class ComponentUiModules{
         }
 
         // If this specific item has been opened or closed...
-        if(nextProps.openItemsFlag.item === openItemId){
+        if(nextProps.openItemsFlag.item === openItemId && (nextProps.isOpen !== props.isOpen)){
             log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of OPEN CLOSE", props.currentItem.componentNameNew);
             return true;
         }
 
 
+        if(nextState.open !== state.open) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of OPEN state", props.currentItem.componentNameNew);
+            return true;
+        }
 
-        let shouldComponentUpdate = false;
+        if(nextState.highlighted !== state.highlighted) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HIGHLIGHTED state", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.currentItem.isRemovable !== props.currentItem.isRemovable) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of REMOVABLE", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.mode !== props.mode) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of MODE", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.testDataFlag !== props.testDataFlag) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of TEST DATA", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.testSummary !== props.testSummary) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of TEST SUMMARY", props.currentItem.componentNameNew);
+            return true;
+        }
 
         switch (nextProps.view) {
             case ViewType.DESIGN_NEW:
@@ -72,59 +99,64 @@ class ComponentUiModules{
             case ViewType.DESIGN_UPDATABLE:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-                shouldComponentUpdate = !(
-                    nextState.open === state.open &&
-                    nextState.highlighted === state.highlighted &&
-                    nextState.editing === state.editing &&
-                    nextState.editorState === state.editorState &&
-                    nextProps.testSummary === props.testSummary &&
-                    nextProps.currentItem.componentNameNew === props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
-                    nextProps.isDragDropHovering === props.isDragDropHovering &&
-                    nextProps.mode === props.mode &&
-                    nextProps.testDataFlag === props.testDataFlag
-                );
-                if(shouldComponentUpdate){
-                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of VIEW 1", props.currentItem.componentNameNew);
+
+                if(nextState.editing !== state.editing) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of EDIT", props.currentItem.componentNameNew);
+                    return true;
                 }
+
+                if(nextState.editorState !== state.editorState) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of EDITOR STATE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.componentNameNew !== props.currentItem.componentNameNew) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of NAME CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.isDragDropHovering !== props.isDragDropHovering) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of DRAG DROP", props.currentItem.componentNameNew);
+                    return true;
+                }
+
                 break;
+
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                shouldComponentUpdate = !(
-                    nextState.open === state.open &&
-                    nextState.highlighted === state.highlighted &&
-                    nextState.editing === state.editing &&
-                    nextState.editorState === state.editorState &&
-                    nextProps.testSummary === props.testSummary &&
-                    nextProps.currentItem.componentNameNew === props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
-                    nextProps.currentItem.updateMergeStatus === props.currentItem.updateMergeStatus &&
-                    nextProps.isDragDropHovering === props.isDragDropHovering &&
-                    nextProps.mode === props.mode &&
-                    nextProps.testDataFlag === props.testDataFlag
-                );
-                if(shouldComponentUpdate){
-                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of VIEW 2", props.currentItem.componentNameNew);
+
+                if(nextState.editing !== state.editing) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of EDIT", props.currentItem.componentNameNew);
+                    return true;
                 }
+
+                if(nextState.editorState !== state.editorState) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of EDITOR STATE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.componentNameNew !== props.currentItem.componentNameNew) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of NAME CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.isDragDropHovering !== props.isDragDropHovering) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of DRAG DROP", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.updateMergeStatus !== props.currentItem.updateMergeStatus) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of MERGE STATUS", props.currentItem.componentNameNew);
+                    return true;
+                }
+
                 break;
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-                shouldComponentUpdate = !(
-                    nextState.open === state.open &&
-                    nextState.highlighted === state.highlighted &&
-                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
-                    nextProps.mode === props.mode &&
-                    nextProps.testDataFlag === props.testDataFlag &&
-                    nextProps.testSummary === props.testSummary
-                );
-                if(shouldComponentUpdate){
-                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of VIEW 3", props.currentItem.componentNameNew);
-                }
+
         }
 
-        return shouldComponentUpdate;
+        return false;
 
     }
 
@@ -135,7 +167,46 @@ class ComponentUiModules{
             return true;
         }
 
-        let shouldComponentUpdate = false;
+        if(nextState.highlighted !== state.highlighted) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER HIGHLIGHTED state", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextState.editing !== state.editing) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER EDIT", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextState.editorState !== state.editorState) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER EDITOR STATE", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.testSummary !== props.testSummary) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER TEST SUMMARY", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.testDataFlag !== props.testDataFlag) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER TEST DATA", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.isOpen !== props.isOpen) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER IS OPEN", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.mode !== props.mode) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER MODE", props.currentItem.componentNameNew);
+            return true;
+        }
+
+        if(nextProps.currentItem.isRemovable !== props.currentItem.isRemovable) {
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER REMOVABLE", props.currentItem.componentNameNew);
+            return true;
+        }
+
 
         switch (props.view) {
             case ViewType.DESIGN_NEW:
@@ -143,77 +214,78 @@ class ComponentUiModules{
             case ViewType.DESIGN_UPDATABLE:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-                shouldComponentUpdate =  !(
-                    nextState.highlighted === state.highlighted &&
-                    nextState.editing === state.editing &&
-                    nextState.editorState === state.editorState &&
-                    nextProps.testSummary === props.testSummary &&
-                    nextProps.isOpen === props.isOpen &&
-                    nextProps.currentItem.componentNameNew === props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
-                    nextProps.isDragDropHovering === props.isDragDropHovering &&
-                    nextProps.mode === props.mode &&
-                    nextProps.isDragging === props.isDragging &&
-                    nextProps.testDataFlag === props.testDataFlag
-                );
-                if(shouldComponentUpdate){
-                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER VIEW 1", props.currentItem.componentNameNew);
+
+                if(nextProps.currentItem.componentNameNew !== props.currentItem.componentNameNew) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER NAME CHANGE", props.currentItem.componentNameNew);
+                    return true;
                 }
+
+                if(nextProps.isDragDropHovering !== props.isDragDropHovering) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER DRAG DROP", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.isDragging !== props.isDragging) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER DRAG", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.updateMergeStatus !== props.currentItem.updateMergeStatus) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER MERGE STATUS", props.currentItem.componentNameNew);
+                    return true;
+                }
+
                 break;
+
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                shouldComponentUpdate =  !(
-                    nextState.highlighted === state.highlighted &&
-                    nextState.editing === state.editing &&
-                    nextState.editorState === state.editorState &&
-                    nextProps.testSummary === props.testSummary &&
-                    nextProps.isOpen === props.isOpen &&
-                    nextProps.currentItem.componentNameNew === props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
-                    nextProps.currentItem.updateMergeStatus === props.currentItem.updateMergeStatus &&
-                    nextProps.isDragDropHovering === props.isDragDropHovering &&
-                    nextProps.mode === props.mode &&
-                    nextProps.isDragging === props.isDragging &&
-                    nextProps.testDataFlag === props.testDataFlag
-                );
-                if(shouldComponentUpdate){
-                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER VIEW 2", props.currentItem.componentNameNew);
+
+                if(nextProps.currentItem.componentNameNew !== props.currentItem.componentNameNew) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER NAME CHANGE", props.currentItem.componentNameNew);
+                    return true;
                 }
-                break;
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-                shouldComponentUpdate =  !(
-                    nextState.highlighted === state.highlighted &&
-                    nextState.editing === state.editing &&
-                    nextState.editorState === state.editorState &&
-                    nextProps.mode === props.mode &&
-                    nextProps.currentItem.isRemovable === props.currentItem.isRemovable &&
-                    nextProps.testSummary === props.testSummary &&
-                    nextProps.testDataFlag === props.testDataFlag &&
-                    nextProps.isOpen === props.isOpen
-                );
-                if(shouldComponentUpdate){
-                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER VIEW 3", props.currentItem.componentNameNew);
+
+                if(nextProps.isDragDropHovering !== props.isDragDropHovering) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER DRAG DROP", props.currentItem.componentNameNew);
+                    return true;
                 }
+
+                if(nextProps.isDragging !== props.isDragging) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER DRAG", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.updateMergeStatus !== props.currentItem.updateMergeStatus) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER MERGE STATUS", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.updateMergeStatus !== props.currentItem.updateMergeStatus) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER MERGE STATUS", props.currentItem.componentNameNew);
+                    return true;
+                }
+
                 break;
+
         }
 
-        return shouldComponentUpdate;
+        return false;
     }
 
 
     shouldUpdateCommon(props, nextProps, state, nextState, source){
 
         if(nextProps.domainTermsVisible !== props.domainTermsVisible){
+            log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of DOMAIN TERMS", props.currentItem.componentNameNew);
             return true;
         }
 
         // If test summary data has changed due to changed expectations
         if(props.testSummaryData && nextProps.testSummaryData && props.currentItem.componentType === ComponentType.FEATURE) {
             if (props.testSummaryData.featureExpectedTestCount !== nextProps.testSummaryData.featureExpectedTestCount) {
-                log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of TEST SUMMARY", props.currentItem.componentNameNew);
+                log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of TEST SUMMARY DATA", props.currentItem.componentNameNew);
                 return true;
             }
         }
@@ -400,6 +472,35 @@ class ComponentUiModules{
 
     getNewAndOldRawText(newText, oldText){
         return ClientDesignComponentServices.getNewAndOldRawText(newText, oldText);
+    }
+
+
+    shouldComponentListUpdate(type, newProps, oldProps){
+
+        let shouldUpdate = false;
+
+        // Look for movement in the list.  As we are using a decimal index the total will change
+        let oldIndexTotal = 0;
+        let newIndexTotal = 0;
+
+        oldProps.components.forEach((component) => {
+            oldIndexTotal += component.componentIndexNew;
+        });
+
+        newProps.components.forEach((component) => {
+            newIndexTotal += component.componentIndexNew;
+        });
+
+        if(
+            newProps.components.length !== oldProps.components.length ||
+            newIndexTotal !== oldIndexTotal
+        ){
+            shouldUpdate = true;
+        }
+
+        log((msg) => console.log(msg), LogLevel.PERF, '{} List Should Update: {} Len: {} to {}; Index: {} to {}', type, shouldUpdate, oldProps.components.length, newProps.components.length, oldIndexTotal, newIndexTotal);
+
+        return shouldUpdate;
     }
 
 }

@@ -433,7 +433,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 9: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
-                    store.dispatch(updateTestDataFlag());
+                    //store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(true);
 

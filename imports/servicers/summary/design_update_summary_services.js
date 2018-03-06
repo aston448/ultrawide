@@ -126,7 +126,7 @@ class DesignUpdateSummaryServices {
 
                         // Determine the summary action --------------------------------------------------------------------
 
-                        if (item.isNew) {
+                        if (item.isNew && !item.isDefault) {
 
                             // An added item...
                             headerSummaryType = DesignUpdateSummaryType.SUMMARY_ADD_TO;
@@ -149,7 +149,13 @@ class DesignUpdateSummaryServices {
 
                                     // A modified item
                                     headerSummaryType = DesignUpdateSummaryType.SUMMARY_CHANGE_IN;
-                                    summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
+
+                                    if(!item.isChanged && item.isTextChanged){
+                                        summaryType = DesignUpdateSummaryType.SUMMARY_DETAILS_CHANGE;
+                                    } else {
+                                        summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
+                                    }
+
                                     recordChange = true;
 
                                 } else {

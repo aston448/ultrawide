@@ -630,6 +630,7 @@ class ImpexModules{
 
                         // Update State
                         isNew:                          component.isNew,
+                        isDefault:                      component.isDefault ? component.isDefault : false,
                         isChanged:                      component.isChanged,
                         isTextChanged:                  component.isTextChanged,
                         isMoved:                        component.isMoved,
