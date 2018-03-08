@@ -42,7 +42,20 @@ class DesignSectionsList extends Component {
 
     shouldComponentUpdate(nextProps){
 
-        return ComponentUiModules.shouldComponentListUpdate('Design Section', nextProps, this.props);
+        let shouldComponentUpdate = ComponentUiModules.shouldComponentListUpdate('Design Section', nextProps, this.props);
+
+        if(!shouldComponentUpdate){
+
+            shouldComponentUpdate = (
+                nextProps.testSummary !== this.props.testSummary
+            );
+
+            if(shouldComponentUpdate){
+                log((msg) => console.log(msg), LogLevel.PERF, 'Design section list updating due to TEST SUMMARY');
+            }
+        }
+
+        return shouldComponentUpdate;
     }
 
     getDesignUpdateItem(designSection, displayContext, designUpdateId){

@@ -39,6 +39,7 @@ let Schema = new SimpleSchema({
     isNew:                          {type: Boolean, defaultValue: true},                // New item added
     isDefault:                      {type: Boolean, defaultValue: false},               // True if added by default (default Feature Aspect)
     isChanged:                      {type: Boolean, defaultValue: false},               // Significant detail changed in this update - i.e. the name
+    isNarrativeChanged:             {type: Boolean, defaultValue: false},               // Narrative changed for a feature
     isTextChanged:                  {type: Boolean, defaultValue: false},               // Text notes changed in this update
     isMoved:                        {type: Boolean, defaultValue: false},               // Item moved in this update
     isRemoved:                      {type: Boolean, defaultValue: false} ,              // Removed in this update

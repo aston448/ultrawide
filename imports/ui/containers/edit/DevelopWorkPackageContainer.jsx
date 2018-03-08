@@ -426,33 +426,33 @@ class DevApplicationsList extends Component {
 
             }
 
-            if (viewOptions.devFeatureFilesVisible) {
-
-                switch (displayedItems) {
-                    case 2:
-                        // There are now 3 cols so change widths
-                        col1width = 4;
-                        col2width = 4;
-                        col3width = 4;
-                        col4width = 4;
-                        col5width = 4;
-                        col6width = 4;
-                        col7width = 4;
-                        break;
-                    case 3:
-                        // There are now 4 cols so change widths
-                        col1width = 3;
-                        col2width = 3;
-                        col3width = 3;
-                        col4width = 3;
-                        col5width = 3;
-                        col6width = 3;
-                        col7width = 3;
-                        break;
-                }
-
-                displayedItems++;
-            }
+            // if (viewOptions.devFeatureFilesVisible) {
+            //
+            //     switch (displayedItems) {
+            //         case 2:
+            //             // There are now 3 cols so change widths
+            //             col1width = 4;
+            //             col2width = 4;
+            //             col3width = 4;
+            //             col4width = 4;
+            //             col5width = 4;
+            //             col6width = 4;
+            //             col7width = 4;
+            //             break;
+            //         case 3:
+            //             // There are now 4 cols so change widths
+            //             col1width = 3;
+            //             col2width = 3;
+            //             col3width = 3;
+            //             col4width = 3;
+            //             col5width = 3;
+            //             col6width = 3;
+            //             col7width = 3;
+            //             break;
+            //     }
+            //
+            //     displayedItems++;
+            // }
 
             // Integration Tests
             if (viewOptions.devIntTestsVisible) {
@@ -720,13 +720,13 @@ class DevApplicationsList extends Component {
                         </Col>;
                 }
 
-                let col4 = '';
-                if (viewOptions.devFeatureFilesVisible) {
-                    col4 =
-                        <Col md={col4width} className="close-col">
-                            {devFiles}
-                        </Col>;
-                }
+                // let col4 = '';
+                // if (viewOptions.devFeatureFilesVisible) {
+                //     col4 =
+                //         <Col md={col4width} className="close-col">
+                //             {devFiles}
+                //         </Col>;
+                // }
 
                 let col5 = '';
                 if (viewOptions.devIntTestsVisible) {
@@ -745,7 +745,7 @@ class DevApplicationsList extends Component {
                 }
 
                 let col7 = '';
-                if (viewOptions.devDomainDictVisible) {
+                if (viewOptions.designDomainDictVisible) {
                     col7 =
                         <Col md={col7width} className="close-col">
                             {domainDictionary}
@@ -760,7 +760,6 @@ class DevApplicationsList extends Component {
                             {col1}
                             {col2}
                             {col3}
-                            {col4}
                             {col5}
                             {col6}
                             {col7}
@@ -799,7 +798,8 @@ function mapStateToProps(state) {
         currentItemName:    state.currentDesignComponentName,
         view:               state.currentAppView,
         mode:               state.currentViewMode,
-        viewOptions:        state.currentUserViewOptions
+        viewOptions:        state.currentUserViewOptions,
+        viewOptionsFlag:    state.currentViewOptionsDataValue
     }
 }
 

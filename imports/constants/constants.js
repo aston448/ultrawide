@@ -345,6 +345,12 @@ export const HomePageTab = {
     TAB_NOT_SET:                    '99'
 };
 
+export const WorkPackageTab = {
+    TAB_AVAILABLE:                  '1',
+    TAB_ADOPTED:                    '2',
+    TAB_COMPLETE:                   '3'
+};
+
 export const ScenarioStepType = {
     STEP_GIVEN:         'Given',
     STEP_WHEN:          'When',

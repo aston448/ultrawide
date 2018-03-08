@@ -44,7 +44,20 @@ class ScenariosList extends Component {
 
     shouldComponentUpdate(nextProps){
 
-        return ComponentUiModules.shouldComponentListUpdate('Scenario', nextProps, this.props);
+        let shouldUpdate = ComponentUiModules.shouldComponentListUpdate('Scenario', nextProps, this.props);
+
+        if(!shouldUpdate) {
+            if (
+                nextProps.testDataFlag !== this.props.testDataFlag ||
+                nextProps.testSummary !== this.props.testSummary
+            ) {
+                shouldUpdate = true;
+            }
+
+            log((msg) => console.log(msg), LogLevel.PERF, 'Scenarios List Should Update: {} because of test data', shouldUpdate);
+        }
+
+        return shouldUpdate;
 
     }
 

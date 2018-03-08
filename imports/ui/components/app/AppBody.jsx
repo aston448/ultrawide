@@ -54,7 +54,8 @@ class AppBody extends Component {
 
         if(
             nextProps.view !== this.props.view ||
-            nextProps.mode !== this.props.mode
+            nextProps.mode !== this.props.mode ||
+                nextProps.userViewOptions.devUnitTestsVisible !== this.props.userViewOptions.devUnitTestsVisible
         ){
             shouldUpdate = true;
         }

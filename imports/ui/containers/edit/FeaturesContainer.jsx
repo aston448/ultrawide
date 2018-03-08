@@ -42,23 +42,19 @@ class FeaturesList extends Component {
         super(props);
     };
 
-    shouldComponentUpdate(nextProps){
-
-        return ComponentUiModules.shouldComponentListUpdate('Scenario', nextProps, this.props);
-
-    }
     shouldComponentUpdate(nextProps, nextState){
 
         let shouldUpdate = false;
 
         // Update if new list of Features or change in test data
 
-        shouldUpdate = ComponentUiModules.shouldComponentListUpdate('Scenario', nextProps, this.props);
+        shouldUpdate = ComponentUiModules.shouldComponentListUpdate('Feature', nextProps, this.props);
 
         if(!shouldUpdate) {
             if (
                 nextProps.testDataFlag !== this.props.testDataFlag ||
-                nextProps.testSummary !== this.props.testSummary
+                nextProps.testSummary !== this.props.testSummary ||
+                    nextProps.viewOptionsFlag !== this.props.viewOptionsFlag
             ) {
                 shouldUpdate = true;
             }
@@ -216,6 +212,7 @@ function mapStateToProps(state) {
         viewOptions:    state.currentUserViewOptions,
         testDataFlag:   state.testDataFlag,
         updateScopeFlag: state.currentUpdateScopeFlag,
+        viewOptionsFlag:    state.currentViewOptionsDataValue
     }
 }
 

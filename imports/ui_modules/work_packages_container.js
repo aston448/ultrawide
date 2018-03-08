@@ -43,14 +43,6 @@ class WorkPackageContainerUiModules{
         ]
     }
 
-    renderUpdateWorkPackagesLists(availableWorkPackages, adoptedWorkPackages, completedWorkPackages){
-
-        return [
-            this.renderWorkPackagesList(availableWorkPackages),
-            this.renderWorkPackagesList(adoptedWorkPackages),
-            this.renderWorkPackagesList(completedWorkPackages)
-        ]
-    }
 
     getFooterDetails(designVersionName, designVersionStatus, userRole, userContext, wpType, openWpItems){
 

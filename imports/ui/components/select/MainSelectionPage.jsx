@@ -107,7 +107,7 @@ export class MainSelectionPage extends Component {
                     wpType: wpType,
                     designVersionId: userContext.designVersionId,
                     userRole: userRole,
-                    userId: userContext.userId
+                    userContext: userContext
                 }}/>
         }
 

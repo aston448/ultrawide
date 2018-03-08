@@ -55,7 +55,7 @@ export class DetailsItem extends Component {
                 displayContext={DisplayContext.BASE_VIEW}
                 view={view}
                 testSummary={false}
-                displayOldValue={false}
+                displayOldValue={itemType === DetailsType.DETAILS_NAME_OLD}
                 domainTermsVisible={domainTermsVisible}
             />
         }

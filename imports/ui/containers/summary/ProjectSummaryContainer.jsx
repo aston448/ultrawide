@@ -62,7 +62,7 @@ export class ProjectSummary extends Component {
 
         const {designVersionName, totalFeatureCount, noTestRequirementsCount, failingTestsCount, someTestsCount, allTestsCount, testsCount, userContext} = this.props;
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Work Packages');
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Project Summary');
 
         const layout =
             <Grid>

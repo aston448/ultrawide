@@ -102,6 +102,13 @@ class UpdateSummaryAction extends Component {
                 }
                 break;
             case DesignUpdateSummaryType.SUMMARY_DETAILS_CHANGE:
+
+                let additionalNote = ' (details changed)';
+
+                if(actionItem.itemType === ComponentType.FEATURE){
+                    additionalNote = ' (narrative or details changed)';
+                }
+
                 if(actionItem.itemType === ComponentType.SCENARIO) {
                     item =
                         <div className="summary-action">
@@ -112,7 +119,7 @@ class UpdateSummaryAction extends Component {
                                 <InputGroup.Addon>
                                     <div className="summary-item-type">{itemHeader}</div>
                                 </InputGroup.Addon>
-                                <div className="summary-item">{actionItem.itemName + ' (details changed)'}</div>
+                                <div className="summary-item">{actionItem.itemName + additionalNote}</div>
                             </InputGroup>
                         </div>;
                 } else {
@@ -120,7 +127,7 @@ class UpdateSummaryAction extends Component {
                         <div className="summary-action">
                             <InputGroup>
                                 <span className="summary-item-type">{itemHeader}</span>
-                                <span className="summary-item">{actionItem.itemName + ' (details changed)'}</span>
+                                <span className="summary-item">{actionItem.itemName + additionalNote}</span>
                             </InputGroup>
                         </div>;
                 }

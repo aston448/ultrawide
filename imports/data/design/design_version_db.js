@@ -252,6 +252,7 @@ class DesignVersionData {
                 designUpdateId: designUpdateId,
                 isNew: false,
                 isChanged: false,
+                isNarrativeChanged: false,
                 isTextChanged: false,
                 isRemoved: false,
                 isMoved: false,
@@ -266,7 +267,7 @@ class DesignVersionData {
             designVersionId:        designVersionId,
             componentReferenceId:   componentReferenceId,
             isNew:                  false,
-            $or:[{isChanged: true}, {isTextChanged: true}],
+            $or:[{isChanged: true}, {isTextChanged: true}, {isNarrativeChanged: true}],
         }).fetch();
     }
 

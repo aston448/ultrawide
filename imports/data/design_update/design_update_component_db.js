@@ -37,6 +37,7 @@ class DesignUpdateComponentData{
                 isNew:                          isNew,                  // New item added to design
                 isDefault:                      isDefault,
                 isChanged:                      isChanged,              // Usually false
+                isNarrativeChanged:             false,
                 isTextChanged:                  false,                  // For now - will go to true when text is edited
                 isMoved:                        false,
                 isRemoved:                      false,
@@ -81,6 +82,7 @@ class DesignUpdateComponentData{
             isNew:                          false,
             isDefault:                      false,
             isChanged:                      false,
+            isNarrativeChanged:             false,
             isTextChanged:                  false,
             isMoved:                        false,
             isRemoved:                      false,
@@ -134,6 +136,7 @@ class DesignUpdateComponentData{
                 isNew:                          component.isNew,
                 isDefault:                      component.isDefault,
                 isChanged:                      component.isChanged,
+                isNarrativeChanged:             component.isNarrativeChanged,
                 isTextChanged:                  component.isTextChanged,
                 isMoved:                        component.isMoved,
                 isRemoved:                      component.isRemoved,
@@ -486,6 +489,7 @@ class DesignUpdateComponentData{
                 $set: {
                     isRemoved:              true,
                     isChanged:              false,
+                    isNarrativeChanged:     false,
                     isTextChanged:          false,
                     componentNameNew:       componentNameOld,
                     componentNameRawNew:    componentNameRawOld,
@@ -557,7 +561,7 @@ class DesignUpdateComponentData{
                     componentNarrativeNew: componentNarrativeNew,
                     componentNarrativeRawOld: componentNarrativeRawOld,
                     componentNarrativeRawNew: componentNarrativeRawNew,
-                    isChanged
+                    isNarrativeChanged: isChanged
                 }
             }
         );

@@ -133,6 +133,10 @@ export default class Narrative extends React.Component {
         ){
             this.updateNarrativeText(newProps);
         }
+
+        if(newProps.designComponent.componentNarrativeNew !== this.props.designComponent.componentNarrativeNew){
+            this.updateNarrativeText(newProps);
+        }
     }
 
     // Set the text editor content - this has to change when the design component item changes
@@ -194,11 +198,12 @@ export default class Narrative extends React.Component {
         //     case ViewType.WORK_PACKAGE_BASE_EDIT:
         //     case ViewType.DEVELOP_BASE_WP:
         //         //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
-                if(props.displayOldValue){
-                    rawNarrative = props.designComponent.componentNarrativeRawOld;
-                } else {
-                    rawNarrative = props.designComponent.componentNarrativeRawNew;
-                }
+        console.log('Display old value = ' + props.displayOldValue);
+        if(props.displayOldValue){
+            rawNarrative = props.designComponent.componentNarrativeRawOld;
+        } else {
+            rawNarrative = props.designComponent.componentNarrativeRawNew;
+        }
         //         break;
         //     case ViewType.DESIGN_UPDATE_EDIT:
         //     case ViewType.DESIGN_UPDATE_VIEW:

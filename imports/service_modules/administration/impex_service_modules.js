@@ -632,6 +632,7 @@ class ImpexModules{
                         isNew:                          component.isNew,
                         isDefault:                      component.isDefault ? component.isDefault : false,
                         isChanged:                      component.isChanged,
+                        isNarrativeChanged:             component.isNarrativeChanged ? component.isNarrativeChanged : false,
                         isTextChanged:                  component.isTextChanged,
                         isMoved:                        component.isMoved,
                         isRemoved:                      component.isRemoved,

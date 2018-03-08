@@ -115,6 +115,11 @@ class ComponentUiModules{
                     return true;
                 }
 
+                if(nextProps.currentItem.componentNarrativeNew !== props.currentItem.componentNarrativeNew) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of NARRATIVE CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
                 if(nextProps.isDragDropHovering !== props.isDragDropHovering) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of DRAG DROP", props.currentItem.componentNameNew);
                     return true;
@@ -217,6 +222,11 @@ class ComponentUiModules{
 
                 if(nextProps.currentItem.componentNameNew !== props.currentItem.componentNameNew) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER NAME CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.componentNarrativeNew !== props.currentItem.componentNarrativeNew) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of NARRATIVE CHANGE", props.currentItem.componentNameNew);
                     return true;
                 }
 
@@ -482,6 +492,18 @@ class ComponentUiModules{
         // Look for movement in the list.  As we are using a decimal index the total will change
         let oldIndexTotal = 0;
         let newIndexTotal = 0;
+        let oldNarrative = '';
+        let newNarrative = '';
+
+        if(type === 'Feature'){
+            oldProps.components.forEach((component) => {
+                oldNarrative += component.componentNarrativeNew;
+            });
+
+            newProps.components.forEach((component) => {
+                newNarrative += component.componentNarrativeNew;
+            });
+        }
 
         oldProps.components.forEach((component) => {
             oldIndexTotal += component.componentIndexNew;
@@ -493,7 +515,8 @@ class ComponentUiModules{
 
         if(
             newProps.components.length !== oldProps.components.length ||
-            newIndexTotal !== oldIndexTotal
+            newIndexTotal !== oldIndexTotal ||
+            oldNarrative !== newNarrative
         ){
             shouldUpdate = true;
         }

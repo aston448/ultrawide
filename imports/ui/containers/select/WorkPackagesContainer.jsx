@@ -27,6 +27,8 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {WorkPackageTab} from "../../../constants/constants";
+import ClientAppHeaderServices from "../../../apiClient/apiClientAppHeader";
 
 
 
@@ -44,6 +46,17 @@ export class WorkPackagesList extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            currentTab: this.props.defaultTab
+        }
+
+    }
+
+    componentWillReceiveProps(newProps){
+
+        if(newProps.defaultTab !== this.props.defaultTab){
+            this.setState({currentTab: newProps.defaultTab});
+        }
     }
 
     getDesignVersionName(userContext){
@@ -58,11 +71,15 @@ export class WorkPackagesList extends Component {
 
     }
 
+    onSelectTab(eventKey){
+        this.setState({currentTab: eventKey});
+    }
+
     render() {
 
-        const {wpType, newWorkPackages, availableWorkPackages, adoptedWorkPackages, completedWorkPackages, designVersionStatus, designUpdateStatus, userRole, userContext, openWpItems} = this.props;
+        const {wpType, newWorkPackages, availableWorkPackages, adoptedWorkPackages, completedWorkPackages, designVersionStatus, defaultTab, userRole, userContext, openWpItems} = this.props;
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Work Packages');
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Work Packages with default tab {}', defaultTab);
 
         // Footer ------------------------------------------------------------------------------------------------------
 
@@ -106,7 +123,6 @@ export class WorkPackagesList extends Component {
         const tabText2 = bodyData.tabText2;
         const tabText3 = bodyData.tabText3;
 
-
         let wpSummary = <div></div>;
 
         if((designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE || designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE)){
@@ -148,8 +164,8 @@ export class WorkPackagesList extends Component {
             <Grid>
                 <Row>
                     <Col md={6}>
-                        <Tabs className="top-tabs" animation={true} unmountOnExit={true} defaultActiveKey={2} id="main_tabs">
-                            <Tab eventKey={1} title={tabText1}>
+                        <Tabs className="top-tabs" animation={true} unmountOnExit={true} activeKey={this.state.currentTab} id="main_tabs" onSelect={(tab) => this.onSelectTab(tab)}>
+                            <Tab eventKey={WorkPackageTab.TAB_AVAILABLE} title={tabText1}>
                                 <ItemList
                                     headerText={headerText1}
                                     bodyDataFunction={bodyDataFunction1}
@@ -159,7 +175,7 @@ export class WorkPackagesList extends Component {
                                     footerActionFunction={footerActionFunction}
                                 />
                             </Tab>
-                            <Tab eventKey={2} title={tabText2}>
+                            <Tab eventKey={WorkPackageTab.TAB_ADOPTED} title={tabText2}>
                                 <ItemList
                                     headerText={headerText2}
                                     bodyDataFunction={bodyDataFunction2}
@@ -169,7 +185,7 @@ export class WorkPackagesList extends Component {
                                     footerActionFunction={null}
                                 />
                             </Tab>
-                            <Tab eventKey={3} title={tabText3}>
+                            <Tab eventKey={WorkPackageTab.TAB_COMPLETE} title={tabText3}>
                                 <ItemList
                                     headerText={headerText3}
                                     bodyDataFunction={bodyDataFunction3}
@@ -201,7 +217,8 @@ WorkPackagesList.propTypes = {
     availableWorkPackages: PropTypes.array.isRequired,
     adoptedWorkPackages: PropTypes.array.isRequired,
     completedWorkPackages: PropTypes.array.isRequired,
-    designVersionStatus: PropTypes.string.isRequired
+    designVersionStatus: PropTypes.string.isRequired,
+    defaultTab: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -221,14 +238,14 @@ export default WorkPackagesContainer = createContainer(({params}) => {
             return ClientDataServices.getWorkPackagesForCurrentDesignVersion(
                 params.designVersionId,
                 params.userRole,
-                params.userId,
-                WorkPackageType.WP_BASE
+                params.userContext,
+                WorkPackageType.WP_BASE,
             );
         case WorkPackageType.WP_UPDATE:
             return ClientDataServices.getWorkPackagesForCurrentDesignVersion(
                 params.designVersionId,
                 params.userRole,
-                params.userId,
+                params.userContext,
                 WorkPackageType.WP_UPDATE
             );
     }

@@ -385,7 +385,7 @@ class DesignUpdateComponentValidationServices{
                 let alreadyChanged = false;
 
                 componentInOtherUpdates.forEach((instance) => {
-                    if(instance.isChanged){
+                    if(instance.isChanged || instance.isNarrativeChanged){
                         alreadyChanged = true;
                     }
                 });
@@ -440,7 +440,7 @@ class DesignUpdateComponentValidationServices{
 
         // An item cannot be put out of scope if it is modified
         if(!newScope && updateComponent){
-            if(updateComponent.isChanged){
+            if(updateComponent.isChanged || updateComponent.isNarrativeChanged){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_CHANGED;
             }
         }

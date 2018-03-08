@@ -158,7 +158,7 @@ class DesignComponentValidationServices{
     validateUpdateFeatureNarrative(view, mode){
 
         // Updates only allowed in design edit when in edit mode
-        if(view !== ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED){
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_EDIT;
         }
 

@@ -41,12 +41,13 @@ import DefaultFeatureAspectData         from '../data/design/default_feature_asp
 // REDUX services
 import store from '../redux/store'
 import {
-    setCurrentRole, setCurrentView, setCurrentWindowSize, setDesignVersionDataLoadedTo, setDocFeatureTextOption,
+    setCurrentRole, setCurrentUserWpTab, setCurrentView, setCurrentWindowSize, setDesignVersionDataLoadedTo,
+    setDocFeatureTextOption,
     setDocNarrativeTextOption, setDocScenarioTextOption,
     setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
     updateUserMessage
 } from '../redux/actions'
-import {HomePageTab, UpdateMergeStatus, UserSetting, UserSettingValue} from "../constants/constants";
+import {HomePageTab, UpdateMergeStatus, UserSetting, UserSettingValue, WorkPackageTab} from "../constants/constants";
 import ClientAppHeaderServices from "./apiClientAppHeader";
 import ClientDesignVersionServices from "./apiClientDesignVersion";
 import ClientUserSettingsServices from "./apiClientUserSettings";
@@ -872,10 +873,32 @@ class ClientDataServices{
     }
 
     // Get a list of Work Packages for a Design Version
-    getWorkPackagesForCurrentDesignVersion(currentDesignVersionId, userRole, userId, wpType){
+    getWorkPackagesForCurrentDesignVersion(currentDesignVersionId, userRole, userContext, wpType){
 
         // No action if design version not yet set
         if (currentDesignVersionId !== 'NONE') {
+
+            // Set the current tab depending on the current WP
+            let defaultTab = WorkPackageTab.TAB_AVAILABLE;
+
+            if(userContext.workPackageId !== 'NONE'){
+
+                const wp = WorkPackageData.getWorkPackageById(userContext.workPackageId);
+
+                switch(wp.workPackageStatus){
+
+                    case WorkPackageStatus.WP_NEW:
+                    case WorkPackageStatus.WP_AVAILABLE:
+
+                        defaultTab = WorkPackageTab.TAB_AVAILABLE;
+                        break;
+
+                    case WorkPackageStatus.WP_ADOPTED:
+
+                        defaultTab = WorkPackageTab.TAB_ADOPTED;
+                        break;
+                }
+            }
 
             if(wpType === WorkPackageType.WP_BASE) {
 
@@ -893,8 +916,8 @@ class ClientDataServices{
                 if(userRole === RoleType.DEVELOPER){
 
                     // Just get the WPS the developer has adopted
-                    adoptedWorkPackages = DesignVersionData.getBaseUserAdoptedWorkPackages(currentDesignVersionId, userId);
-                    completedWorkPackages = DesignVersionData.getAdoptingUserTestCompletedBaseWorkPackages(currentDesignVersionId, userId);
+                    adoptedWorkPackages = DesignVersionData.getBaseUserAdoptedWorkPackages(currentDesignVersionId, userContext.userId);
+                    completedWorkPackages = DesignVersionData.getAdoptingUserTestCompletedBaseWorkPackages(currentDesignVersionId, userContext.userId);
 
                 } else {
                     adoptedWorkPackages = DesignVersionData.getIncompleteBaseWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
@@ -906,13 +929,22 @@ class ClientDataServices{
 
                 //console.log("Base WPs found found: " + currentWorkPackages.count());
 
-                return {
+                // See if current is completed
+                completedWorkPackages.forEach((wp) => {
+
+                    if(wp._id === userContext.workPackageId){
+                        defaultTab = WorkPackageTab.TAB_COMPLETE;
+                    }
+                });
+
+               return {
                     wpType: WorkPackageType.WP_BASE,
                     newWorkPackages: newWorkPackages,
                     availableWorkPackages: availableWorkPackages,
                     adoptedWorkPackages: adoptedWorkPackages,
                     completedWorkPackages: completedWorkPackages,
-                    designVersionStatus: designVersion.designVersionStatus
+                    designVersionStatus: designVersion.designVersionStatus,
+                    defaultTab: defaultTab
                 };
 
             } else {
@@ -931,8 +963,8 @@ class ClientDataServices{
 
                     // Just get the WPS the developer has adopted
                     // console.log("Getting adopted WPs for user " + userId);
-                    adoptedWorkPackages = DesignVersionData.getUpdateUserAdoptedWorkPackages(currentDesignVersionId, userId);
-                    completedWorkPackages = DesignVersionData.getAdoptingUserTestCompletedUpdateWorkPackages(currentDesignVersionId, userId);
+                    adoptedWorkPackages = DesignVersionData.getUpdateUserAdoptedWorkPackages(currentDesignVersionId, userContext.userId);
+                    completedWorkPackages = DesignVersionData.getAdoptingUserTestCompletedUpdateWorkPackages(currentDesignVersionId, userContext.userId);
 
                 } else {
                     adoptedWorkPackages = DesignVersionData.getIncompleteUpdateWorkPackagesAtStatus(currentDesignVersionId, WorkPackageStatus.WP_ADOPTED);
@@ -943,13 +975,22 @@ class ClientDataServices{
                 // Get the status of the current design version
                 const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
 
-                return {
+                // See if current is completed
+                completedWorkPackages.forEach((wp) => {
+
+                    if(wp._id === userContext.workPackageId){
+                        defaultTab = WorkPackageTab.TAB_COMPLETE;
+                    }
+                });
+
+               return {
                     wpType: WorkPackageType.WP_UPDATE,
                     newWorkPackages: newWorkPackages,
                     availableWorkPackages: availableWorkPackages,
                     adoptedWorkPackages: adoptedWorkPackages,
                     completedWorkPackages: completedWorkPackages,
-                    designVersionStatus: designVersion.designVersionStatus
+                    designVersionStatus: designVersion.designVersionStatus,
+                    defaultTab: defaultTab
                 };
 
             }
@@ -960,7 +1001,8 @@ class ClientDataServices{
                 availableWorkPackages: [],
                 adoptedWorkPackages: [],
                 completedWorkPackages: [],
-                designVersionStatus: null
+                designVersionStatus: null,
+                defaultTab: WorkPackageTab.TAB_AVAILABLE
             };
         }
     };

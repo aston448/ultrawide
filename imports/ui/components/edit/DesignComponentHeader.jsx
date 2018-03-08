@@ -107,8 +107,11 @@ export class DesignComponentHeader extends Component{
             case DisplayContext.WP_SCOPE:
 
                 // Need to get from WP scope for current item
-                this.setState({inScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE});
-                this.setState({parentScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT});
+                if(this.props.wpItem) {
+
+                    this.setState({inScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE});
+                    this.setState({parentScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT});
+                }
                 break;
 
             case DisplayContext.UPDATE_SCOPE:
@@ -251,13 +254,13 @@ export class DesignComponentHeader extends Component{
 
                             inScope = true;
 
-                            if (nextScopeItem.scopeType === WorkPackageScopeType.SCOPE_IN_SCOPE) {
+                            if (nextScopeItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE) {
                                 log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as WP IN SCOPE", newProps.currentItem.componentNameNew);
                                 this.setState({inScope: true});
                                 this.setState({parentScope: false});
                             }
 
-                            if (nextScopeItem.scopeType === WorkPackageScopeType.SCOPE_PARENT_SCOPE) {
+                            if (nextScopeItem.scopeType === WorkPackageScopeType.SCOPE_PARENT) {
                                 log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as WP PARENT SCOPE", newProps.currentItem.componentNameNew);
                                 this.setState({parentScope: true});
                                 this.setState({inScope: false});
@@ -324,17 +327,17 @@ export class DesignComponentHeader extends Component{
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-                if(this.props.displayContext === DisplayContext.WP_SCOPE){
-                    this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
-                }
+                // if(this.props.displayContext === DisplayContext.WP_SCOPE){
+                //     this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
+                // }
                 this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
 
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                if(newProps.displayContext === DisplayContext.WP_SCOPE){
-                    this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
-                }
+                // if(newProps.displayContext === DisplayContext.WP_SCOPE){
+                //     this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
+                // }
                 this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
             case ViewType.DEVELOP_BASE_WP:
@@ -796,7 +799,7 @@ export class DesignComponentHeader extends Component{
                         updateStatusText = "Check Tests";
                     }
                     // Override for other statuses
-                    if (updateItem.isChanged) {
+                    if (updateItem.isChanged || updateItem.isNarrativeChanged) {
                         updateStatusGlyph = 'adjust';
                         updateStatusClass = 'update-merge-status component-modified';
                         updateStatusText = "Modified Item";

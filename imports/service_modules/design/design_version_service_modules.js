@@ -260,7 +260,7 @@ class DesignVersionModules{
         changedComponents.forEach((changedComponent) => {
 
             // Update as modified unless only details changed
-            if(changedComponent.isTextChanged && !(changedComponent.isChanged)){
+            if((changedComponent.isTextChanged || changedComponent.isNarrativeChanged) && !(changedComponent.isChanged)){
 
                 this.updateItemDetailsInDesignVersion(changedComponent);
             } else {
@@ -371,7 +371,7 @@ class DesignVersionModules{
 
         changedComponents.forEach((changedComponent) => {
 
-            if(changedComponent.isTextChanged && !(changedComponent.isChanged)){
+            if((changedComponent.isTextChanged || changedComponent.isNarrativeChanged) && !(changedComponent.isChanged)){
 
                 this.undoUpdateItemDetailsInDesignVersion(changedComponent);
             } else {

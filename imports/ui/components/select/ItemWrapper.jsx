@@ -45,9 +45,7 @@ export class ItemWrapper extends Component {
 
         let shouldUpdate = false;
 
-        // Update if item context is changing and this item is the old or new context
 
-        let updateMe = false;
         let itemStatusNew = '';
         let itemStatusOld = '';
         let itemNameNew = '';
@@ -57,54 +55,51 @@ export class ItemWrapper extends Component {
 
         switch(this.props.itemType){
             case ItemType.DESIGN:
-                updateMe = this.props.item._id === this.props.userContext.designId || nextProps.item._id === nextProps.userContext.designId;
-                itemStatusNew = nextProps.item.designStatus;
+                 itemStatusNew = nextProps.item.designStatus;
                 itemStatusOld = this.props.item.designStatus;
                 itemNameNew = nextProps.item.designName;
-                itemNameOld = this.props.designName;
+                itemNameOld = this.props.item.designName;
                 break;
             case ItemType.DESIGN_VERSION:
-                updateMe = this.props.item._id === this.props.userContext.designVersionId || nextProps.item._id === nextProps.userContext.designVersionId;
                 itemStatusNew = nextProps.item.designVersionStatus;
                 itemStatusOld = this.props.item.designVersionStatus;
                 itemNameNew = nextProps.item.designVersionName;
-                itemNameOld = this.props.designVersionName;
+                itemNameOld = this.props.item.designVersionName;
                 itemRefNew = nextProps.item.designVersionNumber;
-                itemRefOld = this.props.designVersionNumber;
+                itemRefOld = this.props.item.designVersionNumber;
                 break;
             case ItemType.DESIGN_UPDATE:
-                updateMe = this.props.item._id === this.props.userContext.designUpdateId || nextProps.item._id === nextProps.userContext.designUpdateId;
                 itemStatusNew = nextProps.item.designUpdateStatus;
                 itemStatusOld = this.props.item.designUpdateStatus;
                 itemNameNew = nextProps.item.updateName;
-                itemNameOld = this.props.designVersionName;
+                itemNameOld = this.props.item.updateName;
                 itemRefNew = nextProps.item.updateName;
                 itemRefOld = this.props.item.updateReference;
                 break;
             case ItemType.WORK_PACKAGE:
-                updateMe = this.props.item._id === this.props.userContext.workPackageId || nextProps.item._id === nextProps.userContext.workPackageId;
                 itemStatusNew = nextProps.item.workPackageStatus;
                 itemStatusOld = this.props.item.workPackageStatus;
                 itemNameNew = nextProps.item.workPackageName;
-                itemNameOld = this.props.workPackageName;
+                itemNameOld = this.props.item.workPackageName;
                 itemRefNew = nextProps.item.workPackageLink;
                 itemRefOld = this.props.item.workPackageLink;
                 break;
         }
 
-        if(updateMe){
-            if(
-                itemStatusNew !== itemStatusOld ||
-                itemNameNew !== itemNameOld ||
-                itemRefNew !== itemRefOld ||
-                nextProps.userContext.designId !== this.props.userContext.designId ||
-                nextProps.userContext.designVersionId !== this.props.userContext.designVersionId ||
-                nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
-                nextProps.userContext.workPackageId !== this.props.userContext.workPackageId
-            ){
-                shouldUpdate = true;
-            }
+        if(
+            itemStatusNew !== itemStatusOld ||
+            itemNameNew !== itemNameOld ||
+            itemRefNew !== itemRefOld ||
+            nextProps.userContext.designId !== this.props.userContext.designId ||
+            nextProps.userContext.designVersionId !== this.props.userContext.designVersionId ||
+            nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
+            nextProps.userContext.workPackageId !== this.props.userContext.workPackageId
+        ){
+
+            shouldUpdate = true;
         }
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Wrapper {} should update {}', this.props.itemType, shouldUpdate);
 
         return shouldUpdate;
     }

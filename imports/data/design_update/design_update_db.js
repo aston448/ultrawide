@@ -125,6 +125,7 @@ class DesignUpdateData{
             isRemovedElsewhere: false,
             isMoved:        false,
             isChanged:      false,
+            isNarrativeChanged: false,
             isTextChanged:  false,
             scopeType:      UpdateScopeType.SCOPE_IN_SCOPE
         }).fetch();
@@ -135,7 +136,7 @@ class DesignUpdateData{
         return DesignUpdateComponents.find({
             designUpdateId: designUpdateId,
             isNew:          false,
-            $or:[{isChanged: true}, {isTextChanged: true}]
+            $or:[{isChanged: true}, {isTextChanged: true}, {isNarrativeChanged: true}]
         }).fetch();
     }
 

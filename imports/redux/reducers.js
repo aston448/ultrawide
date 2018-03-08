@@ -4,7 +4,7 @@
 
 import * as Actions from './actions'
 import {RoleType, ViewType, ViewMode, MessageType, UserSettingValue, HomePageTab} from '../constants/constants.js'
-import {DisplayContext, UpdateScopeType} from "../constants/constants";
+import {DisplayContext, UpdateScopeType, WorkPackageTab} from "../constants/constants";
 
 // Creates the initial state container for your application - the same as getInitialState
 const initialState = {

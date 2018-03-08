@@ -145,15 +145,25 @@ class DesignUpdateSummaryServices {
 
                             } else {
 
-                                if (item.isChanged || item.isTextChanged) {
+                                if (item.isChanged || item.isTextChanged || item.isNarrativeChanged) {
 
                                     // A modified item
                                     headerSummaryType = DesignUpdateSummaryType.SUMMARY_CHANGE_IN;
 
-                                    if(!item.isChanged && item.isTextChanged){
+                                    if(!item.isChanged && (item.isTextChanged || item.isNarrativeChanged)){
                                         summaryType = DesignUpdateSummaryType.SUMMARY_DETAILS_CHANGE;
                                     } else {
-                                        summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
+                                        // Legacy code hack - older features were marked as changed if just the narrative had changed
+                                        if(featureItem){
+                                            if(featureItem.componentNameNew === featureItem.componentNameOld){
+                                                summaryType = DesignUpdateSummaryType.SUMMARY_DETAILS_CHANGE;
+                                            } else {
+                                                summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
+                                            }
+                                        } else {
+                                            summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
+                                        }
+
                                     }
 
                                     recordChange = true;
