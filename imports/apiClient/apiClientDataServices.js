@@ -1191,7 +1191,7 @@ class ClientDataServices{
         const baseApplicationsArr = DesignVersionData.getExistingApplications(userContext.designVersionId);
 
         // All the existing and new stuff in the Design version - but for completed updatable versions leave out deleted
-        let workingApplicationsArr  = null;
+        let workingApplicationsArr = [];
 
         if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
 
@@ -1267,53 +1267,62 @@ class ClientDataServices{
             designSummaryData = UserDevDesignSummaryData.getUserDesignSummary(userContext);
         }
 
-        switch(view){
-            case ViewType.DESIGN_NEW:
-            case ViewType.DESIGN_PUBLISHED:
-            case ViewType.DESIGN_UPDATABLE:
-                // Just need base design version applications
-                return{
-                    baseApplications:       baseApplicationsArr,
-                    workingApplications:    workingApplicationsArr,
-                    designSummaryData:      designSummaryData
-                };
-            case ViewType.DESIGN_UPDATE_EDIT:
-                // Need base and update apps
-                return{
-                    baseApplications:       baseApplicationsArr,
-                    updateApplications:     updateApplicationsArr,
-                    workingApplications:    workingApplicationsArr
-                };
-            case ViewType.DESIGN_UPDATE_VIEW:
-                // Need design update apps only
-                return{
-                    baseApplications:       [],
-                    updateApplications:     updateApplicationsArr,
-                    workingApplications:    workingApplicationsArr
-                };
 
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-                return {
-                    scopeApplications:  baseApplicationsArr,
-                    wpApplications:     wpApplicationsArr,
-                };
+        return{
+            baseApplications:       baseApplicationsArr,
+            updateApplications:     updateApplicationsArr,
+            wpApplications:         wpApplicationsArr,
+            workingApplications:    workingApplicationsArr,
+            designSummaryData:      designSummaryData
+        };
 
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                // Need base design version apps and WP in scope apps
-                return{
-                    scopeApplications:  updateApplicationsArr,
-                    wpApplications:     wpApplicationsArr,
-                };
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-                // Need just WP apps TODO: get feature files
-                return {
-                    wpApplications: wpApplicationsArr,
-                    featureFiles: []
-                };
-        }
+        // switch(view){
+        //     case ViewType.DESIGN_NEW:
+        //     case ViewType.DESIGN_PUBLISHED:
+        //     case ViewType.DESIGN_UPDATABLE:
+        //         // Just need base design version applications
+        //         return{
+        //             baseApplications:       baseApplicationsArr,
+        //             workingApplications:    workingApplicationsArr,
+        //             designSummaryData:      designSummaryData
+        //         };
+        //     case ViewType.DESIGN_UPDATE_EDIT:
+        //         // Need base and update apps
+        //         return{
+        //             baseApplications:       baseApplicationsArr,
+        //             updateApplications:     updateApplicationsArr,
+        //             workingApplications:    workingApplicationsArr
+        //         };
+        //     case ViewType.DESIGN_UPDATE_VIEW:
+        //         // Need design update apps only
+        //         return{
+        //             baseApplications:       [],
+        //             updateApplications:     updateApplicationsArr,
+        //             workingApplications:    workingApplicationsArr
+        //         };
+        //
+        //     case ViewType.WORK_PACKAGE_BASE_EDIT:
+        //     case ViewType.WORK_PACKAGE_BASE_VIEW:
+        //         return {
+        //             scopeApplications:  baseApplicationsArr,
+        //             wpApplications:     wpApplicationsArr,
+        //         };
+        //
+        //     case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+        //     case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+        //         // Need base design version apps and WP in scope apps
+        //         return{
+        //             scopeApplications:  updateApplicationsArr,
+        //             wpApplications:     wpApplicationsArr,
+        //         };
+        //     case ViewType.DEVELOP_BASE_WP:
+        //     case ViewType.DEVELOP_UPDATE_WP:
+        //         // Need just WP apps TODO: get feature files
+        //         return {
+        //             wpApplications: wpApplicationsArr,
+        //             featureFiles: []
+        //         };
+        // }
     }
 
     getComponent(componentId, userContext){

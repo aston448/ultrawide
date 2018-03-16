@@ -11,10 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
 import UltrawideAdmin                       from  '../../components/admin/UltrawideAdmin.jsx';
 import MainSelectionPage                    from  '../../components/select/MainSelectionPage.jsx';
-import EditDesignContainer                  from  '../../containers/edit/EditDesignContainer.jsx';
-import EditDesignUpdateContainer            from  '../../containers/edit/EditDesignUpdateContainer.jsx';
-import EditWorkPackageContainer             from  '../../containers/edit/EditWorkPackageContainer.jsx';
-import DevelopWorkPackageContainer          from  '../../containers/edit/DevelopWorkPackageContainer.jsx';
+import EditorContainer                      from  '../../containers/edit/EditorContainer.jsx';
 import WaitMessage                          from  './Wait.jsx';
 
 // Ultrawide Services
@@ -96,42 +93,18 @@ class AppBody extends Component {
             case ViewType.DESIGN_NEW:
             case ViewType.DESIGN_PUBLISHED:
             case ViewType.DESIGN_UPDATABLE:
-                bodyHtml =
-                    <EditDesignContainer params={{
-                        userContext: userContext,
-                        mode: mode,
-                        view: view
-                    }}/>;
-                break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                // And when user chooses a new design to edit, a published design to view or to edit a design update...
-                bodyHtml =
-                    <EditDesignUpdateContainer params={{
-                        userContext: userContext,
-                        mode: mode,
-                        view: view
-                    }}/>;
-                break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                // When manager user decides to edit or view a work package
-                bodyHtml =
-                    <EditWorkPackageContainer params={{
-                        userContext: userContext,
-                        mode: mode,
-                        view: view,
-                    }}/>;
-                break;
-            case ViewType.DEVELOP_BASE_WP:
+             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                // When a Developer decides to work on a Work Package
+                // Editing Views
                 bodyHtml =
-                    <DevelopWorkPackageContainer params={{
+                    <EditorContainer params={{
                         userContext: userContext,
-                        mode: mode,
                         view: view,
                     }}/>;
                 break;
