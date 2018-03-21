@@ -11,7 +11,7 @@ import {ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
-
+import DomainDictUiServices             from "../../../ui_modules/domain_dictionary";
 
 // Bootstrap
 import {InputGroup, FormControl, ControlLabel} from 'react-bootstrap';
@@ -23,6 +23,7 @@ import {connect} from 'react-redux';
 
 // Draft JS - definition is text editable
 import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
+
 
 const {hasCommandModifier} = KeyBindingUtil;
 
@@ -72,6 +73,11 @@ class DomainDictionaryTerm extends Component {
     }
 
     // LOCAL -----------------------------------------------------------------------------------------------------------
+
+    shouldComponentUpdate(nextProps, nextState){
+
+        return DomainDictUiServices.shouldDictionaryTermUpdate(this.props, nextProps, this.state, nextState);
+    }
 
     // Set up the view from persisted settings
     componentDidMount(){
@@ -424,7 +430,8 @@ function mapStateToProps(state) {
         view: state.currentAppView,
         mode: state.currentViewMode,
         displayContext: state.displayContext,
-        userContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext,
+        userViewOptions: state.currentUserViewOptions
     }
 }
 

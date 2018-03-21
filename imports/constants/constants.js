@@ -351,6 +351,18 @@ export const WorkPackageTab = {
     TAB_COMPLETE:                   '3'
 };
 
+export const EditorTab = {
+    TAB_NOT_SET:                    '0',
+    TAB_DETAILS:                    '1',
+    TAB_DOMAIN_DICT:                '2',
+    TAB_ACC_TESTS:                  '3',
+    TAB_INT_TESTS:                  '4',
+    TAB_UNIT_TESTS:                 '5',
+    TAB_SCENARIO_SEARCH:            '6',
+    TAB_UPDATE_SUMMARY:             '7',
+    TAB_WORKING_VIEW:               '8'
+};
+
 export const ScenarioStepType = {
     STEP_GIVEN:         'Given',
     STEP_WHEN:          'When',

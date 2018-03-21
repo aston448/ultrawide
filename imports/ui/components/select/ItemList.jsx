@@ -17,6 +17,8 @@ import {LogLevel} from "../../../constants/constants";
 // Bootstrap
 
 // REDUX services
+import {connect} from 'react-redux';
+import {ItemWrapper} from "./ItemWrapper";
 
 // =====================================================================================================================
 
@@ -26,10 +28,20 @@ import {LogLevel} from "../../../constants/constants";
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class ItemList extends Component {
+export class ItemList extends Component {
     constructor(props) {
         super(props);
 
+    }
+
+    shouldComponentUpdate(nextProps){
+        // Only update lists if user context is changing
+        return(
+            nextProps.userContext.designId !== this.props.userContext.designId ||
+            nextProps.userContext.designVersionId !== this.props.userContext.designVersionId ||
+            nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
+            nextProps.userContext.workPackageId !== this.props.userContext.workPackageId
+        );
     }
 
     getWindowSizeClass(){
@@ -97,3 +109,13 @@ ItemList.propTypes = {
     footerActionUiContext: PropTypes.string,
     footerText: PropTypes.string
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        userContext: state.currentUserItemContext
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default connect(mapStateToProps)(ItemList);

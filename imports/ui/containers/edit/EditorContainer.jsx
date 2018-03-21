@@ -7,24 +7,10 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
-// Ultrawide GUI Components
-import DesignEditorHeader           from '../../components/common/DesignEditorHeader.jsx';
-import DesignEditorFooter           from '../../components/common/DesignEditorFooter.jsx';
-import DesignComponentTarget        from '../../components/edit/DesignComponentTarget.jsx';
-import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
-import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
-import DomainDictionaryContainer    from './DomainDictionaryContainer.jsx';
-import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx';
-import MashSelectedItemContainer    from '../mash/MashSelectedItemContainer.jsx';
-import ScenarioFinder               from '../../components/search/ScenarioFinder.jsx';
-
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext, ComponentType, LogLevel } from '../../../constants/constants.js';
-import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
+import { LogLevel } from '../../../constants/constants.js';
 import { log }                              from '../../../common/utils.js';
 
-import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 import EditorContainerUiModules             from '../../../ui_modules/editor_container.js'
@@ -70,14 +56,14 @@ export class EditingWindow extends Component {
 
 
         // Main Editors
-        const editors = EditorContainerUiModules.getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, designSummaryData, userContext, view, mode, viewOptions, editorClass);
+        const editors = EditorContainerUiModules.getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, designSummaryData, userContext, userRole, view, mode, viewOptions, editorClass);
 
 
         // Layout ------------------------------------------------------------------------------------------------------
 
         let colWidths = EditorContainerUiModules.calculateColumnWidths(view, mode, viewOptions);
 
-        let layout = EditorContainerUiModules.getLayout(view, userRole, viewOptions, colWidths, editors, userContext);
+        let layout = EditorContainerUiModules.getLayout(view, mode, userRole, viewOptions, colWidths, editors, userContext);
 
         return (
             <div>
@@ -109,7 +95,11 @@ function mapStateToProps(state) {
         testDataFlag:           state.testDataFlag,
         updateScopeFlag:        state.currentUpdateScopeFlag,
         workPackageScopeFlag:   state.currentWorkPackageScopeFlag,
-        currentViewDataValue:   state.currentViewOptionsDataValue
+        currentViewDataValue:   state.currentViewOptionsDataValue,
+        currentUserDesignTab:   state.currentUserDesignTab,             // Include the tabs so that there is a render when they change
+        currentUserUpdateTab:   state.currentUserUpdateTab,
+        currentUserWpTab:       state.currentUserWpTab,
+        currentUserDevTab:      state.currentUserDevTab
     }
 }
 

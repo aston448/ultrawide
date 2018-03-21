@@ -16,11 +16,13 @@ import {log} from "../../../common/utils";
 import { DisplayContext, LogLevel }    from '../../../constants/constants.js';
 
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
+import TestResultsUiServices                from "../../../ui_modules/test_results";
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -38,8 +40,10 @@ class ScenarioTestResultsList extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return true;
+
+        return TestResultsUiServices.shouldContainerUpdate(this.props, nextProps, 'UPDATE');
     };
+
 
     renderAcceptanceScenarios(mashData){
 
@@ -158,7 +162,8 @@ function mapStateToProps(state) {
     return {
         currentUserRole:    state.currentUserRole,
         userContext:        state.currentUserItemContext,
-        view:               state.currentAppView
+        view:               state.currentAppView,
+        userViewOptions:    state.currentUserViewOptions
     }
 }
 

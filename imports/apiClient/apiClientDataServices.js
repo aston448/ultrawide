@@ -41,7 +41,7 @@ import DefaultFeatureAspectData         from '../data/design/default_feature_asp
 // REDUX services
 import store from '../redux/store'
 import {
-    setCurrentRole, setCurrentUserWpTab, setCurrentView, setCurrentWindowSize, setDesignVersionDataLoadedTo,
+    setCurrentRole, setCurrentView, setCurrentWindowSize, setDesignVersionDataLoadedTo,
     setDocFeatureTextOption,
     setDocNarrativeTextOption, setDocScenarioTextOption,
     setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
@@ -2045,6 +2045,8 @@ class ClientDataServices{
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
                 testSummaryValue = userViewOptions.testSummaryVisible;
+                allAsTabsOption = ViewOptionType.WORK_ALL_AS_TABS;
+                allAsTabsValue = userViewOptions.workShowAllAsTabs;
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
@@ -2341,7 +2343,8 @@ class ClientDataServices{
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
                         return [
                             viewDomainDict,
-                            viewTestSummary
+                            viewTestSummary,
+                            viewAllAsTabs
                         ];
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:

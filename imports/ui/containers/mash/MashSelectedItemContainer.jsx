@@ -17,14 +17,17 @@ import {DetailsViewType, ViewType, DisplayContext, ComponentType, LogLevel}    f
 import {log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js';
 
-import ClientDataServices          from '../../../apiClient/apiClientDataServices.js';
+import ClientDataServices               from '../../../apiClient/apiClientDataServices.js';
 import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
 import ClientUserSettingsServices       from '../../../apiClient/apiClientUserSettings.js';
+import TestResultsUiServices            from '../../../ui_modules/test_results.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
+import {EditorTab} from "../../../constants/constants";
+import store from "../../../redux/store";
 
 // =====================================================================================================================
 
@@ -44,11 +47,7 @@ class MashSelectedItemList extends Component {
 
     shouldComponentUpdate(nextProps, nextState){
 
-       if(nextProps.userContext.designComponentId !== this.props.userContext.designComponentId){
-           return true;
-       }
-
-       return false;
+        return TestResultsUiServices.shouldContainerUpdate(this.props, nextProps, 'UPDATE');
     }
 
     getEditorClass(){
@@ -76,157 +75,167 @@ class MashSelectedItemList extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Mash Selected Item');
 
-        let panelHeader = '';
-        let detailsType = '';
-        let menuVisible = false;
+        // Don't bother to render if not actually visible
+        if(TestResultsUiServices.shouldContainerUpdate(this.props, this.props, 'RENDER')) {
 
-        let itemHeader = '';
-        let panelId = '';
+            let panelHeader = '';
+            let detailsType = '';
+            let menuVisible = false;
 
-
-        if(isTopParent || userContext.designComponentId === 'NONE') {
-
-            const nameData = ClientUserContextServices.getContextNameData(userContext, displayContext);
-
-            switch (displayContext) {
-                case DisplayContext.MASH_ACC_TESTS:
-                    detailsType = DetailsViewType.VIEW_ACC_TESTS;
-                    break;
-                case DisplayContext.MASH_INT_TESTS:
-                    detailsType = DetailsViewType.VIEW_INT_TESTS;
-                    break;
-                case DisplayContext.MASH_UNIT_TESTS:
-                    detailsType = DetailsViewType.VIEW_UNIT_TESTS;
-                    break;
-            }
+            let itemHeader = '';
+            let panelId = '';
 
 
+            if (isTopParent || userContext.designComponentId === 'NONE') {
 
-            switch (itemType) {
-                case ComponentType.APPLICATION:
-                    // Tests not currently displayed for these unless in WP development
-                    panelId = 'featureList';
-                    switch(view){
-                        case ViewType.DEVELOP_BASE_WP:
-                        case ViewType.DEVELOP_UPDATE_WP:
-                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.application;
-                            break;
-                        default:
-                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
-                    }
-                    break;
-                case ComponentType.DESIGN_SECTION:
-                    // Tests not currently displayed for these unless in WP development
-                    panelId = 'featureList';
-                    switch(view){
-                        case ViewType.DEVELOP_BASE_WP:
-                        case ViewType.DEVELOP_UPDATE_WP:
-                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.designSection;
-                            break;
-                        default:
-                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
-                    }
-                    break;
-                case ComponentType.FEATURE:
-                    panelId = 'featureAspectList';
-                    switch (displayContext) {
-                        case DisplayContext.MASH_ACC_TESTS:
-                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                            // Allow feature export to int test file
-                            menuVisible = true;
-                            break;
-                        case DisplayContext.MASH_INT_TESTS:
-                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                            // Allow feature export to int test file
-                            menuVisible = true;
-                            break;
-                        case DisplayContext.MASH_UNIT_TESTS:
-                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                            break;
-                    }
+                const nameData = ClientUserContextServices.getContextNameData(userContext, displayContext);
 
-                    break;
-                case ComponentType.FEATURE_ASPECT:
-                    panelId = 'scenarioList';
-                    panelHeader = nameData.featureAspect + ' ' + TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                    itemHeader = 'Scenario';
-                    break;
-                case ComponentType.SCENARIO:
-                    panelId = 'scenarioTestList';
-                    panelHeader = TextLookups.mashTestTypes(displayContext) + ' test for SCENARIO:';
-                    break;
+                switch (displayContext) {
+                    case DisplayContext.MASH_ACC_TESTS:
+                        detailsType = DetailsViewType.VIEW_ACC_TESTS;
+                        break;
+                    case DisplayContext.MASH_INT_TESTS:
+                        detailsType = DetailsViewType.VIEW_INT_TESTS;
+                        break;
+                    case DisplayContext.MASH_UNIT_TESTS:
+                        detailsType = DetailsViewType.VIEW_UNIT_TESTS;
+                        break;
+                }
 
-                default:
-                    panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
-            }
-        }
 
-        let mainPanel = <div></div>;
-        let noData = false;
+                switch (itemType) {
+                    case ComponentType.APPLICATION:
+                        // Tests not currently displayed for these unless in WP development
+                        panelId = 'featureList';
+                        switch (view) {
+                            case ViewType.DEVELOP_BASE_WP:
+                            case ViewType.DEVELOP_UPDATE_WP:
+                                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.application;
+                                break;
+                            default:
+                                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
+                        }
+                        break;
+                    case ComponentType.DESIGN_SECTION:
+                        // Tests not currently displayed for these unless in WP development
+                        panelId = 'featureList';
+                        switch (view) {
+                            case ViewType.DEVELOP_BASE_WP:
+                            case ViewType.DEVELOP_UPDATE_WP:
+                                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.designSection;
+                                break;
+                            default:
+                                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
+                        }
+                        break;
+                    case ComponentType.FEATURE:
+                        panelId = 'featureAspectList';
+                        switch (displayContext) {
+                            case DisplayContext.MASH_ACC_TESTS:
+                                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                                // Allow feature export to int test file
+                                menuVisible = true;
+                                break;
+                            case DisplayContext.MASH_INT_TESTS:
+                                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                                // Allow feature export to int test file
+                                menuVisible = true;
+                                break;
+                            case DisplayContext.MASH_UNIT_TESTS:
+                                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                                break;
+                        }
 
-        if(designItems.length > 0 ) {
+                        break;
+                    case ComponentType.FEATURE_ASPECT:
+                        panelId = 'scenarioList';
+                        panelHeader = nameData.featureAspect + ' ' + TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                        itemHeader = 'Scenario';
+                        break;
+                    case ComponentType.SCENARIO:
+                        panelId = 'scenarioTestList';
+                        panelHeader = TextLookups.mashTestTypes(displayContext) + ' test for SCENARIO:';
+                        break;
 
-            // Render more design mash or the test results
-            mainPanel =
-                <div id={panelId}>
-                    {this.renderDesignItems(designItems, displayContext)}
-                </div>;
-
-        } else {
-
-            // Show a missing selection message if appropriate
-
-            // This could be if no component selected yet or if a Feature Component is not selected when not in the Develop WP View
-            if (
-                userContext.designComponentId === 'NONE' ||
-                userContext.designComponentType === ComponentType.APPLICATION ||
-                userContext.designComponentType === ComponentType.DESIGN_SECTION
-            ) {
-
-                if(view !== ViewType.DEVELOP_BASE_WP && view !== ViewType.DEVELOP_UPDATE_WP) {
-
-                    mainPanel =
-                        <div className="design-item-note">Select a Feature or Feature item to see test results</div>;
-                    noData = true;
-
-                } else {
-
-                    if(userContext.designComponentId === 'NONE' ){
-                        mainPanel =
-                            <div className="design-item-note">Select a Design Item item to see test results</div>;
-                        noData = true;
-                    }
+                    default:
+                        panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
                 }
             }
 
-        }
+            let mainPanel = <div></div>;
+            let noData = false;
 
-        // Get correct window height
-        const editorClass = this.getEditorClass();
+            if (designItems.length > 0) {
 
-        // Show the main item box if we have a list of items for the original parent or no parent is selected
-        if(((isTopParent && designItems.length > 0) || userContext.designComponentId === 'NONE' || noData) && userContext.designComponentType === itemType){
-            return (
+                // Render more design mash or the test results
+                mainPanel =
+                    <div id={panelId}>
+                        {this.renderDesignItems(designItems, displayContext)}
+                    </div>;
 
-                <div className="design-editor-container">
-                    <DetailsViewHeader
-                        detailsType={detailsType}
-                        isClosable={true}
-                        titleText={panelHeader}
-                    />
-                    <div className={editorClass}>
+            } else {
+
+                // Show a missing selection message if appropriate
+
+                // This could be if no component selected yet or if a Feature Component is not selected when not in the Develop WP View
+                if (
+                    userContext.designComponentId === 'NONE' ||
+                    userContext.designComponentType === ComponentType.APPLICATION ||
+                    userContext.designComponentType === ComponentType.DESIGN_SECTION
+                ) {
+
+                    if (view !== ViewType.DEVELOP_BASE_WP && view !== ViewType.DEVELOP_UPDATE_WP) {
+
+                        mainPanel =
+                            <div className="design-item-note">Select a Feature or Feature item to see test
+                                results</div>;
+                        noData = true;
+
+                    } else {
+
+                        if (userContext.designComponentId === 'NONE') {
+                            mainPanel =
+                                <div className="design-item-note">Select a Design Item item to see test results</div>;
+                            noData = true;
+                        }
+                    }
+                }
+
+            }
+
+            // Get correct window height
+            const editorClass = this.getEditorClass();
+
+            // Show the main item box if we have a list of items for the original parent or no parent is selected
+            if (((isTopParent && designItems.length > 0) || userContext.designComponentId === 'NONE' || noData) && userContext.designComponentType === itemType) {
+                return (
+
+                    <div className="design-editor-container">
+                        <DetailsViewHeader
+                            detailsType={detailsType}
+                            isClosable={true}
+                            titleText={panelHeader}
+                        />
+                        <div className={editorClass}>
+                            {mainPanel}
+                        </div>
+                        <DetailsViewFooter
+                            detailsType={detailsType}
+                            actionsVisible={menuVisible}
+                        />
+                    </div>
+                );
+            } else {
+                return (
+                    <div>
                         {mainPanel}
                     </div>
-                    <DetailsViewFooter
-                        detailsType={detailsType}
-                        actionsVisible={menuVisible}
-                    />
-                </div>
-            );
+                )
+            }
         } else {
+            // Dummy render when not actualy visible
             return (
                 <div>
-                    {mainPanel}
                 </div>
             )
         }
@@ -250,7 +259,9 @@ function mapStateToProps(state) {
         userContext:        state.currentUserItemContext,
         userRole:           state.currentUserRole,
         testDataStale:      state.testDataStale,
-        userViewOptions:    state.currentUserViewOptions
+        userViewOptions:    state.currentUserViewOptions,
+        designTab:          state.currentUserDesignTab,
+        devTab:             state.currentUserDevTab
     }
 }
 

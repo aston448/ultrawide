@@ -18,11 +18,11 @@ import { DetailsViewType, LogLevel } from '../../../constants/constants.js';
 
 import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import DomainDictUiServices         from '../../../ui_modules/domain_dictionary.js';
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
-
 
 // =====================================================================================================================
 
@@ -36,6 +36,12 @@ import {connect} from 'react-redux';
 class DomainDictionary extends Component {
     constructor(props) {
         super(props);
+
+    }
+
+    shouldComponentUpdate(){
+
+        return DomainDictUiServices.shouldDictionaryUpdate(this.props);
 
     }
 
@@ -61,25 +67,40 @@ class DomainDictionary extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Domain Dictionary');
 
-        // Get correct window height
-        const editorClass = this.getEditorClass();
+        // Check to see if actually visible before rendering
+        if(DomainDictUiServices.shouldDictionaryUpdate(this.props)) {
 
-        return (
-            <div className="design-editor-container">
-                <DetailsViewHeader
-                    detailsType={DetailsViewType.VIEW_DOM_DICT}
-                    isClosable={true}
-                    titleText={'Domain Dictionary'}
-                />
-                <div className={editorClass}>
-                    {this.renderDictionaryTerms(dictionaryTerms)}
+            log((msg) => console.log(msg), LogLevel.PERF, ' - FULL Render CONTAINER Domain Dictionary');
+
+            // Get correct window height
+            const editorClass = this.getEditorClass();
+
+            return (
+                <div className="design-editor-container">
+                    <DetailsViewHeader
+                        detailsType={DetailsViewType.VIEW_DOM_DICT}
+                        isClosable={true}
+                        titleText={'Domain Dictionary'}
+                    />
+                    <div className={editorClass}>
+                        {this.renderDictionaryTerms(dictionaryTerms)}
+                    </div>
+                    <DetailsViewFooter
+                        detailsType={DetailsViewType.VIEW_DOM_DICT}
+                        actionsVisible={true}
+                    />
                 </div>
-                <DetailsViewFooter
-                    detailsType={DetailsViewType.VIEW_DOM_DICT}
-                    actionsVisible={true}
-                />
-            </div>
-        );
+            );
+
+        } else {
+            // Dummy render if not actually visible
+
+            log((msg) => console.log(msg), LogLevel.PERF, ' - DUMMY Render CONTAINER Domain Dictionary');
+
+            return(
+                <div></div>
+            );
+        }
     }
 }
 

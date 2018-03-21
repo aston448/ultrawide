@@ -28,6 +28,10 @@ export const SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID';
 // Indicates the current data item context for a user - i.e. what they are looking at
 export const SET_CURRENT_USER_ITEM_CONTEXT = 'SET_CURRENT_USER_ITEM_CONTEXT';
 export const SET_CURRENT_USER_HOME_TAB = 'SET_CURRENT_USER_HOME_TAB';
+export const SET_CURRENT_USER_DESIGN_TAB = 'SET_CURRENT_USER_DESIGN_TAB';
+export const SET_CURRENT_USER_UPDATE_TAB = 'SET_CURRENT_USER_UPDATE_TAB';
+export const SET_CURRENT_USER_WP_TAB = 'SET_CURRENT_USER_WP_TAB';
+export const SET_CURRENT_USER_DEV_TAB = 'SET_CURRENT_USER_DEV_TAB';
 export const SET_CURRENT_USER_SUMMARY_ITEM = 'SET_CURRENT_USER_SUMMARY_ITEM';
 export const SET_CURRENT_USER_TEST_OUTPUT_LOCATION = 'SET_CURRENT_USER_TEST_OUTPUT_LOCATION';
 
@@ -291,6 +295,42 @@ export function setCurrentUserHomeTab(tab){
     };
 }
 
+export function setCurrentUserDesignTab(tab){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_DESIGN_TAB, newTab: tab});
+
+    };
+}
+
+export function setCurrentUserUpdateTab(tab){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_UPDATE_TAB, newTab: tab});
+
+    };
+}
+
+export function setCurrentUserWpTab(tab){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_WP_TAB, newTab: tab});
+
+    };
+}
+
+export function setCurrentUserDevTab(tab){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_DEV_TAB, newTab: tab});
+
+    };
+}
+
 export function setCurrentUserSummaryItem(item){
 
     return function (dispatch) {
@@ -299,6 +339,7 @@ export function setCurrentUserSummaryItem(item){
 
     };
 }
+
 
 // The currently selected user in User Management
 export function setCurrentUserId(userId){

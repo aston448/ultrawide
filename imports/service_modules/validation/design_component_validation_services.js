@@ -172,8 +172,8 @@ class DesignComponentValidationServices{
 
     validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent){
 
-        // Moves only allowed in design edit when in edit mode
-        if(view !== ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED){
+        // Moves only allowed in base design
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_MOVE;
         }
 
@@ -197,8 +197,8 @@ class DesignComponentValidationServices{
 
     validateReorderDesignComponent(view, mode, displayContext, movingComponent, targetComponent){
 
-        // Moves only allowed in design edit when in edit mode
-        if(view !== ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED){
+        // Moves only allowed in base design
+        if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_MOVE;
         }
 

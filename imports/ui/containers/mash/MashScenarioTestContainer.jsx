@@ -20,6 +20,7 @@ import ClientDataServices           from '../../../apiClient/apiClientDataServic
 
 // REDUX services
 import {connect} from 'react-redux';
+import TestResultsUiServices from "../../../ui_modules/test_results";
 
 
 // =====================================================================================================================
@@ -36,6 +37,10 @@ class MashScenarioTestList extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+
+        return TestResultsUiServices.shouldContainerUpdate(this.props, nextProps, 'UPDATE');
+    };
 
     renderTestResults(testResults){
 
@@ -82,8 +87,9 @@ MashScenarioTestList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserRole: state.currentUserRole,
-        userContext: state.currentUserItemContext
+        currentUserRole:    state.currentUserRole,
+        userContext:        state.currentUserItemContext,
+        userViewOptions:    state.currentUserViewOptions
     }
 }
 

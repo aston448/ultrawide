@@ -12,8 +12,12 @@ import UpdateSummaryAction          from '../../components/summary/UpdateSummary
 
 // Ultrawide Services
 import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
+import UpdateSummaryUiServices      from '../../../ui_modules/update_summary.js';
+
 import {log} from "../../../common/utils";
-import {LogLevel} from "../../../constants/constants";
+import {DisplayContext, LogLevel} from "../../../constants/constants";
+import {connect} from "react-redux";
+
 
 // Bootstrap
 
@@ -38,7 +42,8 @@ export class UpdateSummaryActionList extends Component {
 
     shouldComponentUpdate(nextProps, nextState){
 
-        return true;
+        // TODO fix this only needs to update if main container is updating...
+        return UpdateSummaryUiServices.shouldSummaryUpdate(this.props, nextProps, 'ACTION')
     }
 
     // A list of Actions under an Update Summary header
@@ -80,6 +85,15 @@ UpdateSummaryActionList.propTypes = {
     headerActions:  PropTypes.array.isRequired
 };
 
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        userViewOptions: state.currentUserViewOptions,
+        view: state.currentAppView
+    }
+}
+
+
 export default UpdateSummaryActionContainer = createContainer(({params}) => {
 
     let headerActions = [];
@@ -101,4 +115,4 @@ export default UpdateSummaryActionContainer = createContainer(({params}) => {
         }
     )
 
-}, UpdateSummaryActionList);
+}, connect(mapStateToProps)(UpdateSummaryActionList));

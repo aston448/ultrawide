@@ -18,6 +18,7 @@ import {DisplayContext, LogLevel} from '../../../constants/constants.js';
 
 import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import UpdateSummaryUiServices      from '../../../ui_modules/update_summary.js';
 
 // Bootstrap
 
@@ -44,23 +45,7 @@ export class DesignUpdateSummaryList extends Component {
 
     shouldComponentUpdate(nextProps, nextState){
 
-        let shouldUpdate = false;
-
-        // Update when changing to new DU or recalculating content
-        if(
-            nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
-            nextProps.addOrgHeaders.length !== this.props.addOrgHeaders.length ||
-            nextProps.addFncHeaders.length !== this.props.addFncHeaders.length ||
-            nextProps.removeHeaders.length !== this.props.removeHeaders.length ||
-            nextProps.changeHeaders.length !== this.props.changeHeaders.length ||
-            nextProps.moveHeaders.length !== this.props.moveHeaders.length ||
-            nextProps.queryHeaders.length !== this.props.queryHeaders.length
-
-        ){
-            shouldUpdate = true;
-        }
-
-        return shouldUpdate;
+        return UpdateSummaryUiServices.shouldSummaryUpdate(this.props, nextProps, 'SUMMARY');
     }
 
     getEditorClass(){
@@ -216,7 +201,9 @@ DesignUpdateSummaryList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext,
+        userViewOptions: state.currentUserViewOptions,
+        view: state.currentAppView
     }
 }
 

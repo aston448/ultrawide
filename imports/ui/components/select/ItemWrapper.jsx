@@ -19,6 +19,7 @@ import ClientDesignVersionServices      from "../../../apiClient/apiClientDesign
 import ClientDesignUpdateServices       from "../../../apiClient/apiClientDesignUpdate";
 import ClientWorkPackageServices        from "../../../apiClient/apiClientWorkPackage";
 import ClientDesignServices             from '../../../apiClient/apiClientDesign.js';
+import ItemStatusUiModules              from '../../../ui_modules/item_status.js';
 
 // Bootstrap
 import {Grid, Row, Col, Glyphicon, InputGroup} from 'react-bootstrap';
@@ -43,65 +44,7 @@ export class ItemWrapper extends Component {
 
     shouldComponentUpdate(nextProps, nextState){
 
-        let shouldUpdate = false;
-
-
-        let itemStatusNew = '';
-        let itemStatusOld = '';
-        let itemNameNew = '';
-        let itemNameOld = '';
-        let itemRefNew = '';
-        let itemRefOld = '';
-
-        switch(this.props.itemType){
-            case ItemType.DESIGN:
-                 itemStatusNew = nextProps.item.designStatus;
-                itemStatusOld = this.props.item.designStatus;
-                itemNameNew = nextProps.item.designName;
-                itemNameOld = this.props.item.designName;
-                break;
-            case ItemType.DESIGN_VERSION:
-                itemStatusNew = nextProps.item.designVersionStatus;
-                itemStatusOld = this.props.item.designVersionStatus;
-                itemNameNew = nextProps.item.designVersionName;
-                itemNameOld = this.props.item.designVersionName;
-                itemRefNew = nextProps.item.designVersionNumber;
-                itemRefOld = this.props.item.designVersionNumber;
-                break;
-            case ItemType.DESIGN_UPDATE:
-                itemStatusNew = nextProps.item.designUpdateStatus;
-                itemStatusOld = this.props.item.designUpdateStatus;
-                itemNameNew = nextProps.item.updateName;
-                itemNameOld = this.props.item.updateName;
-                itemRefNew = nextProps.item.updateName;
-                itemRefOld = this.props.item.updateReference;
-                break;
-            case ItemType.WORK_PACKAGE:
-                itemStatusNew = nextProps.item.workPackageStatus;
-                itemStatusOld = this.props.item.workPackageStatus;
-                itemNameNew = nextProps.item.workPackageName;
-                itemNameOld = this.props.item.workPackageName;
-                itemRefNew = nextProps.item.workPackageLink;
-                itemRefOld = this.props.item.workPackageLink;
-                break;
-        }
-
-        if(
-            itemStatusNew !== itemStatusOld ||
-            itemNameNew !== itemNameOld ||
-            itemRefNew !== itemRefOld ||
-            nextProps.userContext.designId !== this.props.userContext.designId ||
-            nextProps.userContext.designVersionId !== this.props.userContext.designVersionId ||
-            nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
-            nextProps.userContext.workPackageId !== this.props.userContext.workPackageId
-        ){
-
-            shouldUpdate = true;
-        }
-
-        log((msg) => console.log(msg), LogLevel.PERF, 'Wrapper {} should update {}', this.props.itemType, shouldUpdate);
-
-        return shouldUpdate;
+        return ItemStatusUiModules.shouldItemWrapperUpdate(this.props, nextProps);
     }
 
     onSelectDesign(userContext, newDesignId){
@@ -142,8 +85,8 @@ export class ItemWrapper extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Wrapper {}', itemType);
 
-        if(!item){
-            return(<div></div>);
+        if (!item) {
+            return (<div></div>);
         }
 
         // Type Selection ----------------------------------------------------------------------------------------------
@@ -156,13 +99,13 @@ export class ItemWrapper extends Component {
         let onClickFunction = null;
         let uiName = '';
 
-        switch(itemType){
+        switch (itemType) {
 
             case ItemType.DESIGN:
                 uiName = replaceAll(item.designName, ' ', '_');
                 itemName = item.designName;
                 itemStatus = item.designStatus;
-                if(item.isRemovable){
+                if (item.isRemovable) {
                     statusClass = 'item-status-removable';
                 }
                 selected = item._id === userContext.designId;
@@ -179,7 +122,7 @@ export class ItemWrapper extends Component {
                 uiName = replaceAll(item.designVersionName, ' ', '_');
                 itemName = item.designVersionNumber + ' - ' + item.designVersionName;
                 itemStatus = item.designVersionStatus;
-                switch(item.designVersionStatus){
+                switch (item.designVersionStatus) {
                     case DesignVersionStatus.VERSION_NEW:
                         statusClass = 'item-status-new';
                         break;
@@ -208,7 +151,7 @@ export class ItemWrapper extends Component {
                 uiName = replaceAll(item.updateName, ' ', '_');
                 itemName = item.updateReference + ' - ' + item.updateName;
                 itemStatus = item.updateStatus;
-                switch(item.updateStatus){
+                switch (item.updateStatus) {
                     case DesignUpdateStatus.UPDATE_NEW:
                         statusClass = 'item-status-new';
                         break;
@@ -234,20 +177,22 @@ export class ItemWrapper extends Component {
 
                 statusIcons =
                     <InputGroup>
-                        <InputGroup.Addon >
-                            <div id="updateWpSummary" className={item.updateWpStatus}><Glyphicon glyph='tasks'/></div>
+                        <InputGroup.Addon>
+                            <div id="updateWpSummary" className={item.updateWpStatus}><Glyphicon glyph='tasks'/>
+                            </div>
                         </InputGroup.Addon>
-                        <InputGroup.Addon >
-                            <div id="updateTestSummary" className={item.updateTestStatus}><Glyphicon glyph='th-large'/></div>
+                        <InputGroup.Addon>
+                            <div id="updateTestSummary" className={item.updateTestStatus}><Glyphicon
+                                glyph='th-large'/></div>
                         </InputGroup.Addon>
                         <div></div>
-                    </InputGroup>  ;
+                    </InputGroup>;
                 break;
             case ItemType.WORK_PACKAGE:
                 uiName = replaceAll(item.workPackageName, ' ', '_');
                 itemName = item.workPackageName;
                 itemStatus = item.workPackageStatus;
-                switch(item.workPackageStatus){
+                switch (item.workPackageStatus) {
                     case WorkPackageStatus.WP_NEW:
                         statusClass = 'item-status-new';
                         break;
@@ -260,7 +205,7 @@ export class ItemWrapper extends Component {
                 }
 
                 // Highlight tests complete WPs
-                if(item.workPackageTestStatus === WorkPackageTestStatus.WP_TESTS_COMPLETE){
+                if (item.workPackageTestStatus === WorkPackageTestStatus.WP_TESTS_COMPLETE) {
                     statusClass = 'item-status-complete';
                 }
 
@@ -281,7 +226,7 @@ export class ItemWrapper extends Component {
         let selectedItem = '';
         let unselectedItem = '';
 
-        switch(itemType){
+        switch (itemType) {
             case ItemType.DESIGN:
             case ItemType.DESIGN_VERSION:
                 unselectedItem =
@@ -308,7 +253,8 @@ export class ItemWrapper extends Component {
                                 </div>
                             </Col>
                             <Col className="item-top-right" md={1}>
-                                <div className={'design-item-header header-arrow'}><Glyphicon glyph="hand-right"/></div>
+                                <div className={'design-item-header header-arrow'}><Glyphicon glyph="hand-right"/>
+                                </div>
                             </Col>
                         </Row>
                         <Row>
@@ -318,21 +264,23 @@ export class ItemWrapper extends Component {
                         </Row>
                     </Grid>;
 
-                    break;
+                break;
 
             case ItemType.DESIGN_UPDATE:
 
                 unselectedItem =
                     <Grid className="item-grid" onClick={onClickFunction}>
                         <Row>
-                            <Col  className={'design-item-name ' + statusClass} md={11}>
+                            <Col className={'design-item-name ' + statusClass} md={11}>
                                 <div id="designSummary">
                                     <InputGroup>
-                                        <InputGroup.Addon >
-                                            <div id="updateWpSummary" className={item.updateWpStatus}><Glyphicon glyph='tasks'/></div>
+                                        <InputGroup.Addon>
+                                            <div id="updateWpSummary" className={item.updateWpStatus}><Glyphicon
+                                                glyph='tasks'/></div>
                                         </InputGroup.Addon>
-                                        <InputGroup.Addon >
-                                            <div id="updateTestSummary" className={item.updateTestStatus}><Glyphicon glyph='th-large'/></div>
+                                        <InputGroup.Addon>
+                                            <div id="updateTestSummary" className={item.updateTestStatus}><Glyphicon
+                                                glyph='th-large'/></div>
                                         </InputGroup.Addon>
                                         <div>{itemName}</div>
                                     </InputGroup>
@@ -347,11 +295,13 @@ export class ItemWrapper extends Component {
                         <Row className={statusClass}>
                             <Col className="item-top-left" md={11}>
                                 <InputGroup>
-                                    <InputGroup.Addon >
-                                        <div id="updateWpSummary" className={item.updateWpStatus}><Glyphicon glyph='tasks'/></div>
+                                    <InputGroup.Addon>
+                                        <div id="updateWpSummary" className={item.updateWpStatus}><Glyphicon
+                                            glyph='tasks'/></div>
                                     </InputGroup.Addon>
-                                    <InputGroup.Addon >
-                                        <div id="updateTestSummary" className={item.updateTestStatus}><Glyphicon glyph='th-large'/></div>
+                                    <InputGroup.Addon>
+                                        <div id="updateTestSummary" className={item.updateTestStatus}><Glyphicon
+                                            glyph='th-large'/></div>
                                     </InputGroup.Addon>
                                     <div>
                                         <ItemStatus
@@ -363,7 +313,8 @@ export class ItemWrapper extends Component {
                                 </InputGroup>
                             </Col>
                             <Col className="item-top-right" md={1}>
-                                <div className={'design-item-header header-arrow'}><Glyphicon glyph="hand-right"/></div>
+                                <div className={'design-item-header header-arrow'}><Glyphicon glyph="hand-right"/>
+                                </div>
                             </Col>
                         </Row>
                         <Row>
@@ -373,7 +324,7 @@ export class ItemWrapper extends Component {
                         </Row>
                     </Grid>;
 
-                    break;
+                break;
 
             case ItemType.WORK_PACKAGE:
 
@@ -403,7 +354,8 @@ export class ItemWrapper extends Component {
                                 </div>
                             </Col>
                             <Col className="item-top-right" md={1}>
-                                <div className={'design-item-header header-arrow'}><Glyphicon glyph="hand-right"/></div>
+                                <div className={'design-item-header header-arrow'}><Glyphicon glyph="hand-right"/>
+                                </div>
                             </Col>
                         </Row>
                         <Row>
@@ -418,16 +370,15 @@ export class ItemWrapper extends Component {
 
 
         // Design Updates have additional status icons
-        if(itemType === ItemType.DESIGN_UPDATE){
+        if (itemType === ItemType.DESIGN_UPDATE) {
 
 
         }
 
 
-
         // Layout ------------------------------------------------------------------------------------------------------
 
-        if(item) {
+        if (item) {
             if (selected) {
 
                 return (
@@ -444,7 +395,6 @@ export class ItemWrapper extends Component {
         } else {
             return <div></div>;
         }
-
    }
 }
 

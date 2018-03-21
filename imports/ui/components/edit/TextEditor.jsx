@@ -147,8 +147,12 @@ export class TextEditor extends Component {
     // When the design component related to the text editor changes we need to update the editor state to the new text
     componentWillReceiveProps(newProps){
 
-        // Only if the design component changes or we are changing term highlighting
-        if ((this.props.designComponent._id !== newProps.designComponent._id) || (this.props.domainTermsVisible !== newProps.domainTermsVisible)){
+        // Only if the design component changes or we are changing term highlighting or the text changes
+        if (
+            (this.props.designComponent.componentNameNew !== newProps.designComponent.componentNameNew) ||
+            (this.props.designComponent._id !== newProps.designComponent._id) ||
+            (this.props.domainTermsVisible !== newProps.domainTermsVisible)
+        ){
             this.updateComponentText(newProps);
         }
     }

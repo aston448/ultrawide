@@ -3,8 +3,8 @@
  */
 
 import * as Actions from './actions'
-import {RoleType, ViewType, ViewMode, MessageType, UserSettingValue, HomePageTab} from '../constants/constants.js'
-import {DisplayContext, UpdateScopeType, WorkPackageTab} from "../constants/constants";
+import {RoleType, ViewType, ViewMode, MessageType, UserSettingValue, HomePageTab, EditorTab} from '../constants/constants.js'
+import {DisplayContext, UpdateScopeType} from "../constants/constants";
 
 // Creates the initial state container for your application - the same as getInitialState
 const initialState = {
@@ -38,6 +38,10 @@ const initialState = {
     },
     currentUserItemContext:             null,
     currentUserHomeTab:                 HomePageTab.TAB_NOT_SET,
+    currentUserDesignTab:               EditorTab.TAB_DETAILS,
+    currentUserUpdateTab:               EditorTab.TAB_DETAILS,
+    currentUserWpTab:                   EditorTab.TAB_DETAILS,
+    currentUserDevTab:                  EditorTab.TAB_DETAILS,
     currentUserSummaryItem:             DisplayContext.PROJECT_SUMMARY_ALL,
     currentUserTestOutputLocationId:    'NONE',
     currentUserDevContext:              null,
@@ -157,6 +161,22 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_CURRENT_USER_HOME_TAB:
             return Object.assign({}, state, {
                 currentUserHomeTab: action.newTab
+            });
+        case Actions.SET_CURRENT_USER_DESIGN_TAB:
+            return Object.assign({}, state, {
+                currentUserDesignTab: action.newTab
+            });
+        case Actions.SET_CURRENT_USER_UPDATE_TAB:
+            return Object.assign({}, state, {
+                currentUserUpdateTab: action.newTab
+            });
+        case Actions.SET_CURRENT_USER_WP_TAB:
+            return Object.assign({}, state, {
+                currentUserWpTab: action.newTab
+            });
+        case Actions.SET_CURRENT_USER_DEV_TAB:
+            return Object.assign({}, state, {
+                currentUserDevTab: action.newTab
             });
         case Actions.SET_CURRENT_USER_SUMMARY_ITEM:
             return Object.assign({}, state, {

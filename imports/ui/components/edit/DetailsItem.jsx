@@ -34,8 +34,14 @@ export class DetailsItem extends Component {
     }
 
 
-    shouldComponentUpdate(){
-        return false;
+    shouldComponentUpdate(nextProps){
+        // Only update lists if user context is changing
+        log((msg) => console.log(msg), LogLevel.PERF, 'Should Details Item update for item type {} from {} to {}', nextProps.itemType, this.props.item.componentNameNew, nextProps.item.componentNameNew);
+
+        return(
+            nextProps.userContext.designComponentId !== this.props.userContext.designComponentId ||
+            (nextProps.itemType === DetailsType.DETAILS_NAME && nextProps.item.componentNameNew !== this.props.item.componentNameNew)
+        );
     }
 
     render() {

@@ -13,18 +13,22 @@ import MashSelectedItemContainer    from '../../imports/ui/containers/mash/MashS
 import ScenarioFinder               from '../../imports/ui/components/search/ScenarioFinder.jsx';
 
 // Ultrawide Services
-import {DisplayContext, RoleType, ViewMode, ViewType, WorkPackageType, ComponentType, LogLevel } from "../constants/constants";
+import {DisplayContext, RoleType, ViewMode, ViewType, WorkPackageType, ComponentType, LogLevel, EditorTab } from "../constants/constants";
 import {AddActionIds} from "../constants/ui_context_ids";
 import { log }        from '../common/utils.js';
 
 import ClientWorkPackageComponentServices   from "../apiClient/apiClientWorkPackageComponent";
 import ClientDesignVersionServices          from "../apiClient/apiClientDesignVersion";
+import ClientDesignComponentServices        from "../apiClient/apiClientDesignComponent";
 import ClientDesignUpdateComponentServices  from "../apiClient/apiClientDesignUpdateComponent";
 
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
+// REDUX services
+import store from '../redux/store'
+import {setCurrentUserDesignTab, setCurrentUserUpdateTab, setCurrentUserWpTab, setCurrentUserDevTab} from '../redux/actions'
 
 
 class EditorContainerUiModules{
@@ -58,6 +62,46 @@ class EditorContainerUiModules{
         return ClientWorkPackageComponentServices.getWorkPackageComponent(currentItem.componentReferenceId, workPackageId);
     }
 
+    getCurrentDesignTab(){
+
+        return store.getState().currentUserDesignTab;
+    }
+
+    getCurrentUpdateTab(){
+
+        return store.getState().currentUserUpdateTab;
+    }
+
+    getCurrentWpTab(){
+
+        return store.getState().currentUserWpTab;
+    }
+
+    getCurrentDevTab(){
+
+        return store.getState().currentUserDevTab;
+    }
+
+    setCurrentDesignTab(tab){
+
+        store.dispatch(setCurrentUserDesignTab(tab));
+    }
+
+    setCurrentUpdateTab(tab){
+
+        store.dispatch(setCurrentUserUpdateTab(tab));
+    }
+
+    setCurrentWpTab(tab){
+
+        store.dispatch(setCurrentUserWpTab(tab));
+    }
+
+    setCurrentDevTab(tab){
+
+        store.dispatch(setCurrentUserDevTab(tab));
+    }
+
     // A list of top level applications in the design / design update
     renderApplications(applications, displayContext, userContext, view, mode, testSummary) {
         return applications.map((application) => {
@@ -80,13 +124,17 @@ class EditorContainerUiModules{
 
     onAddApplication(view, mode, designVersionId, designUpdateId){
 
-        // Add a new application to the design update
-        ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, designVersionId, designUpdateId);
+        // Add a new application to the design or design update
+        if(designUpdateId !== 'NONE') {
+            ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, designVersionId, designUpdateId);
+        } else {
+            ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersionId);
+        }
 
     }
 
 
-    getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, designSummaryData, userContext, view, mode, viewOptions, editorClass){
+    getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, designSummaryData, userContext, userRole, view, mode, viewOptions, editorClass){
 
         let displayContext = DisplayContext.NONE;
 
@@ -179,6 +227,20 @@ class EditorContainerUiModules{
                         </div>
                         <DesignEditorFooter
                             displayContext={displayContext}
+                            hasDesignSummary={false}
+                        />
+                    </div>;
+
+                viewEditor =
+                    <div id="editorPaneWorking" className="design-editor-container">
+                        <DesignEditorHeader
+                            displayContext={DisplayContext.WORKING_VIEW}
+                        />
+                        <div className={editorClass}>
+                            {this.renderApplications(workingApplications, DisplayContext.WORKING_VIEW, userContext, view, mode, false)}
+                        </div>
+                        <DesignEditorFooter
+                            displayContext={DisplayContext.WORKING_VIEW}
                             hasDesignSummary={false}
                         />
                     </div>;
@@ -840,10 +902,10 @@ class EditorContainerUiModules{
 
                     return(
                         <Col id={colId} md={colWidth} className="close-col">
-                            <Tabs className="top-tabs" defaultActiveKey={1} id="all-tabs">
-                                <Tab eventKey={1} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                                <Tab eventKey={2} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
-                                <Tab eventKey={3} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
+                            <Tabs className="top-tabs" activeKey={this.getCurrentDesignTab()} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
+                                <Tab eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_SCENARIO_SEARCH} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
                             </Tabs>
                         </Col>
                     );
@@ -852,13 +914,13 @@ class EditorContainerUiModules{
 
                     return(
                         <Col id={colId} md={colWidth} className="close-col">
-                            <Tabs className="top-tabs" defaultActiveKey={1} id="all-tabs">
-                                <Tab eventKey={1} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                                <Tab eventKey={2} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
-                                <Tab eventKey={3} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
-                                <Tab eventKey={4} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>
-                                <Tab eventKey={5} title="UNIT TESTS">{this.getUnitTestsPane(view, userContext)}</Tab>
-                                <Tab eventKey={6} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
+                            <Tabs className="top-tabs" activeKey={this.getCurrentDesignTab()} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
+                                <Tab eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_ACC_TESTS} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_INT_TESTS} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_UNIT_TESTS} title="UNIT TESTS">{this.getUnitTestsPane(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_SCENARIO_SEARCH} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
                             </Tabs>
                         </Col>
                     );
@@ -869,12 +931,12 @@ class EditorContainerUiModules{
 
                 return(
                     <Col id="colId" md={colWidth} className="close-col">
-                        <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
-                            <Tab eventKey={1} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                            <Tab eventKey={2} title="WORKING VIEW">{editors.viewEditor}</Tab>
-                            <Tab eventKey={3} title="SUMMARY">{this.getUpdateSummary(userContext)}</Tab>
-                            <Tab eventKey={4} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
-                            <Tab eventKey={5} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.UPDATE_SCOPE)}</Tab>
+                        <Tabs className="top-tabs" activeKey={this.getCurrentUpdateTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentUpdateTab(tab)}>
+                            <Tab eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_WORKING_VIEW} title="WORKING VIEW">{editors.viewEditor}</Tab>
+                            <Tab eventKey={EditorTab.TAB_UPDATE_SUMMARY} title="SUMMARY">{this.getUpdateSummary(userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_SCENARIO_SEARCH} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.UPDATE_SCOPE)}</Tab>
                         </Tabs>
                     </Col>
                 );
@@ -886,9 +948,9 @@ class EditorContainerUiModules{
 
                 return(
                     <Col id={colId} md={colWidth} className="close-col">
-                        <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
-                            <Tab eventKey={1} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                            <Tab eventKey={2} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
+                        <Tabs className="top-tabs" activeKey={this.getCurrentWpTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentWpTab(tab)}>
+                            <Tab eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
                         </Tabs>
                     </Col>
                 );
@@ -898,12 +960,12 @@ class EditorContainerUiModules{
 
                 return(
                     <Col id={colId} md={colWidth} className="close-col">
-                        <Tabs className="top-tabs" defaultActiveKey={1} id="updatable-view_tabs">
-                            <Tab eventKey={1} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                            <Tab eventKey={2} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
-                            <Tab eventKey={3} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>
-                            <Tab eventKey={4} title="UNIT TESTS">{this.getUnitTestsPane(view, userContext)}</Tab>
-                            <Tab eventKey={5} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
+                        <Tabs className="top-tabs" activeKey={this.getCurrentDevTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentDevTab(tab)}>
+                            <Tab eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_ACC_TESTS} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_INT_TESTS} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_UNIT_TESTS} title="UNIT TESTS">{this.getUnitTestsPane(view, userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
                         </Tabs>
                     </Col>
                 );
@@ -1518,17 +1580,27 @@ class EditorContainerUiModules{
                 col3width = 6;
 
                 // Default - WP
-                displayedItems = 1;
+                displayedItems = 2;
 
-                // Domain Dictionary
-                if(viewOptions.designDomainDictVisible) {
+                if(viewOptions.workShowAllAsTabs){
 
-                    // There are now 3 cols
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
+                    // Always 2 cols only..
+                    col1width = 6;
+                    col2width = 6;
+                    col3width = 6;
 
-                    displayedItems++;
+                } else {
+
+                    // Domain Dictionary
+                    if (viewOptions.designDomainDictVisible) {
+
+                        // There are now 3 cols
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+
+                        displayedItems++;
+                    }
                 }
 
                 // Test Summary - this actually just makes col 1 wider
@@ -1552,6 +1624,7 @@ class EditorContainerUiModules{
                             break;
                     }
                 }
+
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -1829,7 +1902,7 @@ class EditorContainerUiModules{
         }
     }
 
-    getLayout(view, userRole, viewOptions, colWidths, editors, userContext){
+    getLayout(view, mode, userRole, viewOptions, colWidths, editors, userContext){
 
         let layout = '';
         let col1 = '';
@@ -1940,7 +2013,7 @@ class EditorContainerUiModules{
                                 {editors.mainEditor}
                             </Col>;
 
-                        col3 = this.getTabsView(view, userContext, colWidths.col3width, 'tabsCol', editors);
+                        col3 = this.getTabsView(view, userRole, userContext, colWidths.col3width, 'tabsCol', editors);
 
                         layout =
                             <Grid >
@@ -2084,37 +2157,58 @@ class EditorContainerUiModules{
                 // WHAT OPTIONAL COMPONENTS ARE VISIBLE (Besides Scope and WP)
 
                 // Create the layout depending on the current view...
+                if(viewOptions.workShowAllAsTabs){
 
-                // Col 1 - Content
-                col1 =
-                    <Col md={colWidths.col1width} className="close-col">
-                        {editors.mainEditor}
-                    </Col>;
-
-                // Col 2 - Details
-                col2 =
-                    <Col md={colWidths.col2width} className="close-col">
-                        {this.getDesignDetails(userContext, view, editors.displayContext)}
-                    </Col>;
-
-                // Col 3 - Domain Dictionary - Optional
-                if(viewOptions.designDomainDictVisible){
-                    col3 =
-                        <Col md={colWidths.col3width}>
-                            {this.getDomainDictionary(userContext)}
+                    // Col 1 - Content
+                    col1 =
+                        <Col md={colWidths.col1width} className="close-col">
+                            {editors.mainEditor}
                         </Col>;
+
+                    // Col 2 - Tabs
+                    col2 = this.getTabsView(view, userRole, userContext, colWidths.col2width, 'tabsCol', editors);
+
+                    // Make up the layout based on the view options
+                    layout =
+                        <Grid >
+                            <Row>
+                                {col1}
+                                {col2}
+                            </Row>
+                        </Grid>;
+
+                } else {
+
+                    // Col 1 - Content
+                    col1 =
+                        <Col md={colWidths.col1width} className="close-col">
+                            {editors.mainEditor}
+                        </Col>;
+
+                    // Col 2 - Details
+                    col2 =
+                        <Col md={colWidths.col2width} className="close-col">
+                            {this.getDesignDetails(userContext, view, editors.displayContext)}
+                        </Col>;
+
+                    // Col 3 - Domain Dictionary - Optional
+                    if (viewOptions.designDomainDictVisible) {
+                        col3 =
+                            <Col md={colWidths.col3width}>
+                                {this.getDomainDictionary(userContext)}
+                            </Col>;
+                    }
+
+                    // Make up the layout based on the view options
+                    layout =
+                        <Grid>
+                            <Row>
+                                {col1}
+                                {col2}
+                                {col3}
+                            </Row>
+                        </Grid>;
                 }
-
-                // Make up the layout based on the view options
-                layout =
-                    <Grid >
-                        <Row>
-                            {col1}
-                            {col2}
-                            {col3}
-                        </Row>
-                    </Grid>;
-
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -2139,7 +2233,7 @@ class EditorContainerUiModules{
                         </Col>;
 
                     // Col 3 - Tabs
-                    col3 = this.getTabsView(view, userContext, colWidths.col3width, 'tabsCol', editors);
+                    col3 = this.getTabsView(view, userRole, userContext, colWidths.col3width, 'tabsCol', editors);
 
                     // Make up the layout based on the view options
                     layout =
