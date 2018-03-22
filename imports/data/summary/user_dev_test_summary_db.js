@@ -40,6 +40,15 @@ class UserDevTestSummaryData{
         }).fetch();
     }
 
+    getFeaturesWithMissingTestRequirements(userId, designVersionId){
+
+        return UserDevTestSummary.find({
+            userId:                     userId,
+            designVersionId:            designVersionId,
+            featureNoRequirementCount:  {$gt: 0}
+        }).fetch();
+    }
+
     getFeaturesWithFailingTests(userId, designVersionId){
 
         return UserDevTestSummary.find({
@@ -84,10 +93,11 @@ class UserDevTestSummaryData{
                     featureScenarioCount:           featureData.featureScenarioCount,
                     featureExpectedTestCount:       featureData.featureExpectedTestCount,
                     featureFulfilledTestCount:      featureData.featureFulfilledTestCount,
-                    featureSummaryStatus:           featureData.featureTestStatus,                         // Summary of all tests in Feature
-                    featureTestPassCount:           featureData.featurePassingTests,        // Number of tests passing in whole feature
-                    featureTestFailCount:           featureData.featureFailingTests,        // Number of tests failing in whole feature
-                    featureNoTestCount:             featureData.featureNoTestScenarios,        // Number of scenarios with no tests
+                    featureSummaryStatus:           featureData.featureTestStatus,              // Summary of all tests in Feature
+                    featureTestPassCount:           featureData.featurePassingTests,            // Number of tests passing in whole feature
+                    featureTestFailCount:           featureData.featureFailingTests,            // Number of tests failing in whole feature
+                    featureNoTestCount:             featureData.featureNoTestScenarios,         // Number of scenarios with no tests
+                    featureNoRequirementCount:      featureData.featureNoRequirementScenarios,  // Number of scenarios with no test requirements
                     duFeatureScenarioCount:         featureData.duFeatureScenarioCount,
                     duFeatureExpectedTestCount:     featureData.duFeatureExpectedTestCount,
                     duFeatureFulfilledTestCount:    featureData.duFeatureFulfilledTestCount,

@@ -12,13 +12,13 @@ import DesignComponentAdd from '../common/DesignComponentAdd.jsx';
 // Ultrawide Services
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 import {log} from "../../../common/utils";
-import {LogLevel} from "../../../constants/constants";
+import {LogLevel, ViewType} from "../../../constants/constants";
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
-import {ItemWrapper} from "./ItemWrapper";
+
 
 // =====================================================================================================================
 
@@ -42,7 +42,8 @@ export class ItemList extends Component {
             nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
             nextProps.userContext.workPackageId !== this.props.userContext.workPackageId ||
             nextProps.summaryItem !== this.props.summaryItem ||
-            nextProps.testLocation !== this.props.testLocation
+            nextProps.testLocation !== this.props.testLocation ||
+            nextProps.view === ViewType.ADMIN    // To allow update of temp design on design restore
         );
     }
 
@@ -117,7 +118,8 @@ function mapStateToProps(state) {
     return {
         userContext: state.currentUserItemContext,
         summaryItem: state.currentUserSummaryItem,
-        testLocation: state.currentUserTestOutputLocationId
+        testLocation: state.currentUserTestOutputLocationId,
+        view: state.currentAppView
     }
 }
 

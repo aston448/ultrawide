@@ -27,7 +27,7 @@ import {Tabs, Tab, Grid, Row, Col, Nav, NavItem} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-
+import store from '../../../redux/store'
 
 // =====================================================================================================================
 

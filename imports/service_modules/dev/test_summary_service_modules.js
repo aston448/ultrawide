@@ -128,6 +128,14 @@ class TestSummaryModules{
             //newGlobalData.totalScenariosWithoutTests++;
         }
 
+        // Mark as no requirement if no requirements for scenario
+        if(
+            !(featureScenario.requiresAcceptanceTest || featureScenario.requiresIntegrationTest || featureScenario.requiresUnitTest)
+        ){
+            log((msg) => console.log(msg), LogLevel.TRACE, "  -- Scenario with no test requirements {}", featureScenario.scenarioName);
+            newGlobalData.featureNoRequirementScenarios++;
+        }
+
         let duComponent = null;
         let wpComponent = null;
 

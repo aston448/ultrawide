@@ -88,6 +88,31 @@ export class ProjectSummaryItem extends Component{
                 icon = <div className={iconClass}><Glyphicon glyph="ban-circle"/></div>;
                 break;
 
+            case DisplayContext.PROJECT_SUMMARY_MISSING:
+
+                if(featureCount > 0){
+                    contextText = featureCount + ' features out of ' + totalFeatureCount + ' have scenarios with no test requirements!';
+                    statusClass = 'project-summary-bad';
+                } else {
+                    if(totalFeatureCount === 0){
+                        contextText = 'NO FEATURES YET';
+                        statusClass = 'project-summary-ok';
+                    } else {
+                        if (featureCount === totalFeatureCount) {
+                            contextText = 'All features have tests required for all scenarios - good start...';
+                            statusClass = 'project-summary-good';
+                        } else {
+                            contextText = totalFeatureCount + ' features. NO TEST DATA YET';
+                            statusClass = 'project-summary-ok';
+                        }
+                    }
+                }
+
+                iconClass += statusClass;
+                itemClass += statusClass;
+                icon = <div className={iconClass}><Glyphicon glyph="question-sign"/></div>;
+                break;
+
             case DisplayContext.PROJECT_SUMMARY_FAIL:
 
                 if(featureCount > 0){

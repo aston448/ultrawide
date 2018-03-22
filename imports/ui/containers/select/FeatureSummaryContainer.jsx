@@ -95,6 +95,11 @@ export class FeaturesList extends Component {
                 headerText = 'Features with no test requirements...';
                 break;
 
+            case DisplayContext.PROJECT_SUMMARY_MISSING:
+
+                headerText = 'Features with scenarios without test requirements...';
+                break;
+
             case DisplayContext.PROJECT_SUMMARY_FAIL:
 
                 headerText = 'Features with failing tests...';

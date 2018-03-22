@@ -60,7 +60,7 @@ export class ProjectSummary extends Component {
 
     render() {
 
-        const {designVersionName, totalFeatureCount, noTestRequirementsCount, failingTestsCount, someTestsCount, allTestsCount, testsCount, userContext} = this.props;
+        const {designVersionName, totalFeatureCount, noTestRequirementsCount, missingTestRequirementsCount, failingTestsCount, someTestsCount, allTestsCount, testsCount, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Project Summary');
 
@@ -79,6 +79,13 @@ export class ProjectSummary extends Component {
                             featureCount={noTestRequirementsCount}
                             testsCount={testsCount}
                             selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_NONE)}
+                        />
+                        <ProjectSummaryItem
+                            displayContext={DisplayContext.PROJECT_SUMMARY_MISSING}
+                            totalFeatureCount={totalFeatureCount}
+                            featureCount={missingTestRequirementsCount}
+                            testsCount={testsCount}
+                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_MISSING)}
                         />
                         <ProjectSummaryItem
                             displayContext={DisplayContext.PROJECT_SUMMARY_FAIL}
@@ -106,7 +113,7 @@ export class ProjectSummary extends Component {
                         <FeatureSummaryContainer params={{
                             userContext: userContext,
                             homePageTab: HomePageTab.TAB_SUMMARY,
-                            displayContext: this.state.displayContext
+                            displayContext: store.getState().currentUserSummaryItem
                         }}/>
                     </Col>
                 </Row>
@@ -124,6 +131,7 @@ ProjectSummary.propTypes = {
     designVersionName: PropTypes.string.isRequired,
     totalFeatureCount: PropTypes.number.isRequired,
     noTestRequirementsCount: PropTypes.number.isRequired,
+    missingTestRequirementsCount: PropTypes.number.isRequired,
     failingTestsCount: PropTypes.number.isRequired,
     someTestsCount: PropTypes.number.isRequired,
     allTestsCount: PropTypes.number.isRequired,

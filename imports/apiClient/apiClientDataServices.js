@@ -716,6 +716,11 @@ class ClientDataServices{
                         features = UserDevTestSummaryData.getFeaturesWithNoTestRequirements(userContext.userId, userContext.designVersionId);
                         break;
 
+                    case DisplayContext.PROJECT_SUMMARY_MISSING:
+
+                        features = UserDevTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
+                        break;
+
                     case DisplayContext.PROJECT_SUMMARY_FAIL:
 
                         features = UserDevTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId);
@@ -2588,6 +2593,7 @@ class ClientDataServices{
         // Design Version Name
         // Total features in DV
         // Number of features with no test requirements
+        // Number of features with scenarios with no test requirements
         // Number of features with failing tests
         // Number of features with some passing tests
         // Number of features with all required tests passing
@@ -2598,6 +2604,7 @@ class ClientDataServices{
 
         let totalFeatureCount = 0;
         let noRequirementsCount = 0;
+        let missingRequirementsCount = 0;
         let failingCount = 0;
         let somePassingCount = 0;
         let allPassingCount = 0;
@@ -2610,21 +2617,26 @@ class ClientDataServices{
             totalFeatureCount = DesignVersionData.getNonRemovedFeatureCount(userContext.designId, userContext.designVersionId);
 
             noRequirementsCount = UserDevTestSummaryData.getFeaturesWithNoTestRequirements(userContext.userId, userContext.designVersionId).length;
+            missingRequirementsCount = UserDevTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId).length;
             failingCount = UserDevTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId).length;
             somePassingCount = UserDevTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId).length;
             allPassingCount = UserDevTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId).length;
 
             testsCount = failingCount + somePassingCount + allPassingCount;
         }
-        return{
-            designVersionName: designVersionName,
-            totalFeatureCount: totalFeatureCount,
-            noTestRequirementsCount: noRequirementsCount,
-            failingTestsCount: failingCount,
-            someTestsCount: somePassingCount,
-            allTestsCount: allPassingCount,
-            testsCount: testsCount
-        };
+
+        return(
+            {
+                designVersionName: designVersionName,
+                totalFeatureCount: totalFeatureCount,
+                noTestRequirementsCount: noRequirementsCount,
+                missingTestRequirementsCount: missingRequirementsCount,
+                failingTestsCount: failingCount,
+                someTestsCount: somePassingCount,
+                allTestsCount: allPassingCount,
+                testsCount: testsCount
+            }
+        )
     }
 
 }
