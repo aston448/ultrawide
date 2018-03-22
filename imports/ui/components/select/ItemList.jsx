@@ -35,12 +35,14 @@ export class ItemList extends Component {
     }
 
     shouldComponentUpdate(nextProps){
-        // Only update lists if user context is changing
+        // Only update lists if list context item is changing
         return(
             nextProps.userContext.designId !== this.props.userContext.designId ||
             nextProps.userContext.designVersionId !== this.props.userContext.designVersionId ||
             nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
-            nextProps.userContext.workPackageId !== this.props.userContext.workPackageId
+            nextProps.userContext.workPackageId !== this.props.userContext.workPackageId ||
+            nextProps.summaryItem !== this.props.summaryItem ||
+            nextProps.testLocation !== this.props.testLocation
         );
     }
 
@@ -113,7 +115,9 @@ ItemList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext,
+        summaryItem: state.currentUserSummaryItem,
+        testLocation: state.currentUserTestOutputLocationId
     }
 }
 
