@@ -67,8 +67,11 @@ export class ProjectSummary extends Component {
         const layout =
             <Grid>
                 <Row>
-                    <Col md={12}>
+                    <Col md={9}>
                         <div className="project-summary-header">{designVersionName}</div>
+                    </Col>
+                    <Col md={3}>
+                        <div className="project-summary-features">{totalFeatureCount + ' FEATURES'}</div>
                     </Col>
                 </Row>
                 <Row>

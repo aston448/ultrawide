@@ -713,12 +713,12 @@ class ClientDataServices{
 
                     case DisplayContext.PROJECT_SUMMARY_NONE:
 
-                        features = UserDevTestSummaryData.getFeaturesWithNoTestRequirements(userContext.userId, userContext.designVersionId);
+                        features = UserDevTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
                         break;
 
                     case DisplayContext.PROJECT_SUMMARY_MISSING:
 
-                        features = UserDevTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
+                        features = UserDevTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId);
                         break;
 
                     case DisplayContext.PROJECT_SUMMARY_FAIL:
@@ -2592,8 +2592,8 @@ class ClientDataServices{
         // Want to return:
         // Design Version Name
         // Total features in DV
-        // Number of features with no test requirements
         // Number of features with scenarios with no test requirements
+        // Number of features with scenarios required tests missing
         // Number of features with failing tests
         // Number of features with some passing tests
         // Number of features with all required tests passing
@@ -2616,8 +2616,8 @@ class ClientDataServices{
 
             totalFeatureCount = DesignVersionData.getNonRemovedFeatureCount(userContext.designId, userContext.designVersionId);
 
-            noRequirementsCount = UserDevTestSummaryData.getFeaturesWithNoTestRequirements(userContext.userId, userContext.designVersionId).length;
-            missingRequirementsCount = UserDevTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId).length;
+            noRequirementsCount = UserDevTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId).length;
+            missingRequirementsCount = UserDevTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId).length;
             failingCount = UserDevTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId).length;
             somePassingCount = UserDevTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId).length;
             allPassingCount = UserDevTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId).length;

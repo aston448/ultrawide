@@ -8,13 +8,11 @@ import TestSummaryModules               from '../../service_modules/dev/test_sum
 // Data Access
 import DesignVersionData                from '../../data/design/design_version_db.js';
 import DesignComponentData              from '../../data/design/design_component_db.js';
-import DesugnUpdateComponentData        from '../../data/design_update/design_update_component_db.js';
 import UserDevTestSummaryData           from '../../data/summary/user_dev_test_summary_db.js';
 import UserDevDesignSummaryData         from '../../data/summary/user_dev_design_summary_db.js';
 import DesignUpdateComponentData        from '../../data/design_update/design_update_component_db.js';
 import WorkPackageComponentData         from '../../data/work/work_package_component_db.js';
 import UserDvMashScenarioData           from '../../data/mash/user_dv_mash_scenario_db.js'
-import {updateDefaultAspectIncluded} from "../../apiValidatedMethods/design_methods";
 
 //======================================================================================================================
 //
@@ -34,7 +32,7 @@ class TestSummaryServices {
 
 
         if(userContext.designUpdateId !== 'NONE'){
-            designFeature = DesugnUpdateComponentData.getUpdateComponentByRef(userContext.designVersionId, userContext.designUpdateId, userContext.featureReferenceId);
+            designFeature = DesignUpdateComponentData.getUpdateComponentByRef(userContext.designVersionId, userContext.designUpdateId, userContext.featureReferenceId);
         } else {
             designFeature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, userContext.featureReferenceId);
         }
@@ -226,7 +224,7 @@ class TestSummaryServices {
             //     }
             // }
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, featureGlobalData.featurePassingTests, featureGlobalData.featureFailingTests, featureGlobalData.featureNoTestScenarios);
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, featureGlobalData.featurePassingTests, featureGlobalData.featureFailingTests, featureGlobalData.featureNoTestScenarios);
 
             batchData.push({
                 userId: userContext.userId,

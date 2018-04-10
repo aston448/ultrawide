@@ -31,21 +31,21 @@ class UserDevTestSummaryData{
         });
     }
 
-    getFeaturesWithNoTestRequirements(userId, designVersionId){
-
-        return UserDevTestSummary.find({
-            userId:                     userId,
-            designVersionId:            designVersionId,
-            featureExpectedTestCount:   0
-        }).fetch();
-    }
-
     getFeaturesWithMissingTestRequirements(userId, designVersionId){
 
         return UserDevTestSummary.find({
             userId:                     userId,
             designVersionId:            designVersionId,
             featureNoRequirementCount:  {$gt: 0}
+        }).fetch();
+    }
+
+    getFeaturesWithMissingRequiredTests(userId, designVersionId){
+
+        return UserDevTestSummary.find({
+            userId:                     userId,
+            designVersionId:            designVersionId,
+            featureNoTestCount:         {$gt: 0}
         }).fetch();
     }
 

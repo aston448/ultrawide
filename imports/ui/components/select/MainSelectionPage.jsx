@@ -113,9 +113,12 @@ export class MainSelectionPage extends Component {
 
 
         const progressTabLayout =
-            <WorkProgressSummaryContainer params={{
-                userContext: userContext
-            }}/>;
+            <div className="design-item-note">
+                Page Under Construction - opening in the summer
+            </div>;
+            {/*<WorkProgressSummaryContainer params={{*/}
+                {/*userContext: userContext*/}
+            {/*}}/>;*/}
 
         const projectSummaryTabLayout =
             <ProjectSummaryContainer params={{

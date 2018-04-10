@@ -50,14 +50,26 @@ export class ProjectSummaryItem extends Component{
     render(){
         const {displayContext, featureCount, totalFeatureCount, testsCount, currentSummaryItem} = this.props;
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Render Project Summary Item');
+        console.log('Context: ' + displayContext + ' features: ' + featureCount);
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Project Summary Item in context {} with {} features', displayContext, featureCount);
 
         let contextText = '';
         let icon = '';
         let iconClass = 'project-summary-item-icon ';
         let itemClass = 'project-summary-item ';
+        let goodClass = 'project-summary-good';
+        let badClass = 'project-summary-bad';
+        let okClass = 'project-summary-ok';
+
         if(displayContext === currentSummaryItem){
             itemClass = 'project-summary-item-active '
+
+
+        } else {
+            goodClass = 'project-summary-good-inactive';
+            badClass = 'project-summary-bad-inactive';
+            okClass = 'project-summary-ok-inactive';
         }
         let statusClass = '';
 
@@ -66,19 +78,19 @@ export class ProjectSummaryItem extends Component{
             case DisplayContext.PROJECT_SUMMARY_NONE:
 
                 if(featureCount > 0){
-                    contextText = featureCount + ' features out of ' + totalFeatureCount + ' have no tests required at all!';
-                    statusClass = 'project-summary-bad';
+                    contextText = featureCount + ' features have scenarios with no test requirements!';
+                    statusClass = badClass;
                 } else {
                     if(totalFeatureCount === 0){
                         contextText = 'NO FEATURES YET';
-                        statusClass = 'project-summary-ok';
+                        statusClass = okClass;
                     } else {
                         if (featureCount === totalFeatureCount) {
-                            contextText = 'All features have tests required of them - good start...';
-                            statusClass = 'project-summary-good';
+                            contextText = 'All features have tests required for all scenarios - good start...';
+                            statusClass = goodClass;
                         } else {
                             contextText = totalFeatureCount + ' features. NO TEST DATA YET';
-                            statusClass = 'project-summary-ok';
+                            statusClass = okClass;
                         }
                     }
                 }
@@ -91,44 +103,44 @@ export class ProjectSummaryItem extends Component{
             case DisplayContext.PROJECT_SUMMARY_MISSING:
 
                 if(featureCount > 0){
-                    contextText = featureCount + ' features out of ' + totalFeatureCount + ' have scenarios with no test requirements!';
-                    statusClass = 'project-summary-bad';
+                    contextText = featureCount + ' features have scenarios with required tests missing!';
+                    statusClass = badClass;
                 } else {
                     if(totalFeatureCount === 0){
                         contextText = 'NO FEATURES YET';
-                        statusClass = 'project-summary-ok';
+                        statusClass = okClass;
                     } else {
                         if (featureCount === totalFeatureCount) {
-                            contextText = 'All features have tests required for all scenarios - good start...';
-                            statusClass = 'project-summary-good';
+                            contextText = 'All features have required tests missing - buck up.';
+                            statusClass = badClass;
                         } else {
                             contextText = totalFeatureCount + ' features. NO TEST DATA YET';
-                            statusClass = 'project-summary-ok';
+                            statusClass = okClass;
                         }
                     }
                 }
 
                 iconClass += statusClass;
                 itemClass += statusClass;
-                icon = <div className={iconClass}><Glyphicon glyph="question-sign"/></div>;
+                icon = <div className={iconClass}><Glyphicon glyph="exclamation-sign"/></div>;
                 break;
 
             case DisplayContext.PROJECT_SUMMARY_FAIL:
 
                 if(featureCount > 0){
-                    contextText = featureCount + ' features out of ' + totalFeatureCount + ' have failing tests...';
-                    statusClass = 'project-summary-bad';
+                    contextText = featureCount + ' features have failing tests...';
+                    statusClass = badClass;
                 } else {
                     if(totalFeatureCount === 0){
                         contextText = 'NO FEATURES YET';
-                        statusClass = 'project-summary-ok';
+                        statusClass = okClass;
                     } else {
                         if(testsCount === 0){
                             contextText = 'NO TEST DATA YET';
-                            statusClass = 'project-summary-ok';
+                            statusClass = okClass;
                         } else {
                             contextText = 'No failing tests.  Result!';
-                            statusClass = 'project-summary-good';
+                            statusClass = goodClass;
                         }
                     }
                 }
@@ -142,14 +154,14 @@ export class ProjectSummaryItem extends Component{
 
                 if(totalFeatureCount === 0){
                     contextText = 'NO FEATURES YET';
-                    statusClass = 'project-summary-ok';
+                    statusClass = okClass;
                 } else {
                     if(testsCount === 0){
                         contextText = 'NO TEST DATA YET';
-                        statusClass = 'project-summary-ok';
+                        statusClass = okClass;
                     } else {
-                        contextText = featureCount + ' features out of ' + totalFeatureCount + ' have some passing tests';
-                        statusClass = 'project-summary-ok';
+                        contextText = featureCount + ' features have some passing tests';
+                        statusClass = okClass;
                     }
                 }
 
@@ -163,14 +175,14 @@ export class ProjectSummaryItem extends Component{
                 if(featureCount === 0){
                     if(testsCount === 0){
                         contextText = 'NO TEST DATA YET';
-                        statusClass = 'project-summary-ok';
+                        statusClass = okClass;
                     } else {
                         contextText = featureCount + ' features have all tests passing.  Try harder.';
-                        statusClass = 'project-summary-ok';
+                        statusClass = okClass;
                     }
                 } else {
                     contextText = featureCount + ' features have all tests passing.  Good work.';
-                    statusClass = 'project-summary-good';
+                    statusClass = goodClass;
                 }
 
                 iconClass += statusClass;

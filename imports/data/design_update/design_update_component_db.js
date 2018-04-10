@@ -1,8 +1,8 @@
 
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 
-import { DesignUpdateStatus, DesignUpdateMergeAction, ComponentType, UpdateScopeType, WorkPackageStatus }  from '../../constants/constants.js';
-import {DesignVersionComponents} from "../../collections/design/design_version_components";
+import { ComponentType, UpdateScopeType }  from '../../constants/constants.js';
+
 
 class DesignUpdateComponentData{
 

@@ -160,7 +160,7 @@ class TestSummaryModules{
                 if (featureScenario.intMashTestStatus === MashTestStatus.MASH_FAIL) {
                     newGlobalData.duFeatureFailingTests++;
                     duHasIntResult = true;
-                    log((msg) => console.log(msg), LogLevel.TRACE, "Failed INT test.  Count: {}", duFailingTests);
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Failed INT test.  Count: {}", newGlobalData.duFeatureFailingTests);
                 }
 
                 if (featureScenario.unitFailCount > 0) {
@@ -310,7 +310,7 @@ class TestSummaryModules{
                     newGlobalData.wpFeatureNoTestScenarios++;
                 }
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "WP Passing Tests =  {}", newGlobalData.wpPassingTests);
+                log((msg) => console.log(msg), LogLevel.TRACE, "WP Passing Tests =  {}", newGlobalData.wpFeaturePassingTests);
             }
         }
 
