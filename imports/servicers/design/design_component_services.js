@@ -350,7 +350,7 @@ class DesignComponentServices{
 
         if(Meteor.isServer) {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Setting scenario test expectations...");
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Setting scenario test expectations for component " + designComponentId);
 
             DesignComponentData.setTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation);
 

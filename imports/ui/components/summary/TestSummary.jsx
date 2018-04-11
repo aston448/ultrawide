@@ -62,8 +62,8 @@ class TestSummary extends Component {
 
     componentDidUpdate(){
 
-        //console.log('TEST SUMMARY UPDATED');
-        this.updateTestExpectations(this.props.scenario._id, this.props.userRole, this.props.userContext, this.props.displayContext, this.state.accExpectation, this.state.intExpectation, this.state.unitExpectation);
+        //console.log('TEST SUMMARY UPDATED with scenario ' + this.props.scenario);
+        this.updateTestExpectations(this.props.scenario, this.props.userRole, this.props.userContext, this.props.displayContext, this.state.accExpectation, this.state.intExpectation, this.state.unitExpectation);
     }
 
     checkForViewOk(){
@@ -114,7 +114,7 @@ class TestSummary extends Component {
     }
 
 
-    updateTestExpectations(scenarioId, userRole, userContext, displayContext, accState, intState, unitState){
+    updateTestExpectations(scenario, userRole, userContext, displayContext, accState, intState, unitState){
 
         switch(this.props.view){
 
@@ -122,7 +122,7 @@ class TestSummary extends Component {
             case ViewType.DESIGN_UPDATE_VIEW:
 
                 ClientDesignUpdateComponentServices.setScenarioTestExpectations(
-                    scenarioId,
+                    scenario,
                     userRole,
                     userContext,
                     displayContext,
@@ -136,7 +136,7 @@ class TestSummary extends Component {
                 //console.log('Set expectations ' + userRole + ' and user context ' + userContext);
 
                 ClientDesignComponentServices.setScenarioTestExpectations(
-                    scenarioId,
+                    scenario,
                     userRole,
                     userContext,
                     displayContext,

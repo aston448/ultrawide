@@ -1465,7 +1465,7 @@ export class DesignComponentHeader extends Component{
                     // Pass the scenario into summary for test expectations
                     let scenario = currentItem;
                     // But if an update, use the update scenario
-                    if(updateItem){
+                    if(updateItem && view === ViewType.DESIGN_UPDATE_EDIT){
                         scenario = updateItem;
                     }
 

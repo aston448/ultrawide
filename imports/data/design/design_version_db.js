@@ -1,3 +1,4 @@
+
 import { DesignVersions }               from '../../collections/design/design_versions.js';
 import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
 import { DesignUpdates }                from '../../collections/design_update/design_updates.js';
@@ -552,6 +553,5 @@ class DesignVersionData {
         UserWorkProgressSummary.remove({designVersionId: designVersionId});
     }
 }
-
 
 export default new DesignVersionData();

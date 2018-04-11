@@ -64,6 +64,7 @@ class UserDevTestSummaryData{
             userId:                     userId,
             designVersionId:            designVersionId,
             featureTestFailCount:       0,
+            featureAllTestsFulfilled:   false,
             featureTestPassCount:       {$gt: 0}
         }).fetch();
     }
@@ -73,7 +74,8 @@ class UserDevTestSummaryData{
         return UserDevTestSummary.find({
             userId:                     userId,
             designVersionId:            designVersionId,
-            featureAllTestsFulfilled:   true
+            featureAllTestsFulfilled:   true,
+            featureTestFailCount:       0
         }).fetch();
     }
 

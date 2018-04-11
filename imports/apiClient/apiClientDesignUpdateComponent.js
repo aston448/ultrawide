@@ -671,10 +671,9 @@ class ClientDesignUpdateComponentServices{
         return {success: true, message: ''};
     };
 
-    setScenarioTestExpectations(componentId, userRole, userContext, displayContext, accExpectation, intExpectation, unitExpectation){
+    setScenarioTestExpectations(scenario, userRole, userContext, displayContext, accExpectation, intExpectation, unitExpectation){
 
         // Set the current design component context to the Feature so that summary data can be updated
-        const scenario = DesignUpdateComponentData.getUpdateComponentById(componentId);
         const feature = DesignUpdateComponentData.getUpdateComponentByRef(scenario.designVersionId, scenario.designUpdateId, scenario.componentFeatureReferenceIdNew);
 
         let newUserContext = ClientDesignComponentServices.setDesignComponent(feature._id, userContext, displayContext);
@@ -692,7 +691,7 @@ class ClientDesignUpdateComponentServices{
         ServerDesignUpdateComponentApi.setScenarioTestExpectations(
             newUserContext.userId,
             userRole,
-            componentId,
+            scenario._id,
             accExpectation,
             intExpectation,
             unitExpectation,
