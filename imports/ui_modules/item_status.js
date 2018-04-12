@@ -71,11 +71,11 @@ class ItemStatusUiModules{
                 itemRefOld = props.item.designVersionNumber;
                 break;
             case ItemType.DESIGN_UPDATE:
-                itemStatusNew = nextProps.item.designUpdateStatus;
-                itemStatusOld = props.item.designUpdateStatus;
+                itemStatusNew = nextProps.item.updateStatus;
+                itemStatusOld = props.item.updateStatus;
                 itemNameNew = nextProps.item.updateName;
                 itemNameOld = props.item.updateName;
-                itemRefNew = nextProps.item.updateName;
+                itemRefNew = nextProps.item.updateReference;
                 itemRefOld = props.item.updateReference;
                 break;
             case ItemType.WORK_PACKAGE:

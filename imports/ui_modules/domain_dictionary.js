@@ -10,6 +10,8 @@ class DomainDictUiServices{
 
         let shouldUpdate = false;
 
+
+
         const designTab = store.getState().currentUserDesignTab;
         const updateTab = store.getState().currentUserUpdateTab;
         const wpTab = store.getState().currentUserWpTab;
@@ -44,6 +46,8 @@ class DomainDictUiServices{
 
         return(
             (state.editorState !== nextState.editorState) ||
+            (state.termEditable) ||
+            (state.definitionEditable) ||
             (state.termEditable !== nextState.termEditable) ||
             (state.definitionEditable !== nextState.definitionEditable)
         )

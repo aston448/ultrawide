@@ -35,16 +35,8 @@ export class ItemList extends Component {
     }
 
     shouldComponentUpdate(nextProps){
-        // Only update lists if list context item is changing
-        return(
-            nextProps.userContext.designId !== this.props.userContext.designId ||
-            nextProps.userContext.designVersionId !== this.props.userContext.designVersionId ||
-            nextProps.userContext.designUpdateId !== this.props.userContext.designUpdateId ||
-            nextProps.userContext.workPackageId !== this.props.userContext.workPackageId ||
-            nextProps.summaryItem !== this.props.summaryItem ||
-            nextProps.testLocation !== this.props.testLocation ||
-            nextProps.view === ViewType.ADMIN    // To allow update of temp design on design restore
-        );
+        // Need to update list if details of an item in the list change so careful here
+        return true;
     }
 
     getWindowSizeClass(){
