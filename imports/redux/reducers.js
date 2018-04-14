@@ -50,6 +50,8 @@ const initialState = {
     currentUserOpenWorkPackageItems:    [],
     currentUpdateScopeItems:            {
         flag:   0,
+        currentParents: [],
+        changingItemId: 'NONE',
         current: [
             {
                 ref: 'NONE',
@@ -60,6 +62,8 @@ const initialState = {
     currentUpdateScopeFlag:             0,
     currentWorkPackageScopeItems:       {
         flag:   0,
+        currentParents: [],
+        changingItemId: 'NONE',
         current: [
             {
                 ref: 'NONE',

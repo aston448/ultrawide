@@ -13,7 +13,7 @@ import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummary
 import ItemList                     from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, ItemType, LogLevel} from '../../../constants/constants.js';
+import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, ItemType, LogLevel, DesignUpdateTab} from '../../../constants/constants.js';
 import {AddActionIds} from "../../../constants/ui_context_ids";
 import { log } from '../../../common/utils.js';
 
@@ -43,6 +43,16 @@ export class DesignUpdatesList extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            currentTab: this.props.defaultTab
+        }
+    }
+
+    componentWillReceiveProps(newProps){
+
+        if(newProps.defaultTab !== this.props.defaultTab){
+            this.setState({currentTab: newProps.defaultTab});
+        }
     }
 
     renderDesignUpdatesList(designUpdates){
@@ -94,10 +104,9 @@ export class DesignUpdatesList extends Component {
         return ClientDesignUpdateServices.getDesignUpdateRef(designUpdateId);
     }
 
-    onSelectTab(){
-
+    onSelectTab(eventKey){
+        this.setState({currentTab: eventKey});
     }
-
 
     render() {
 
@@ -273,12 +282,15 @@ export class DesignUpdatesList extends Component {
 
                     } else {
 
+                        let activeKey = 2;
+
+
                         layout =
                             <Grid>
                                 <Row>
                                     <Col md={6}>
-                                        <Tabs className="top-tabs" animation={true} unmountOnExit={true} defaultActiveKey={2} id="main_tabs" onSelect={(tab) => this.onSelectTab(tab)}>
-                                            <Tab eventKey={1} title={tabText1}>
+                                        <Tabs className="top-tabs" animation={true} unmountOnExit={true} activeKey={this.state.currentTab} id="main_tabs" onSelect={(tab) => this.onSelectTab(tab)}>
+                                            <Tab eventKey={DesignUpdateTab.TAB_NEW} title={tabText1}>
                                                 <ItemList
                                                     headerText={headerText1}
                                                     bodyDataFunction={bodyDataFunction1}
@@ -288,7 +300,7 @@ export class DesignUpdatesList extends Component {
                                                     footerActionFunction={footerActionFunction}
                                                 />
                                             </Tab>
-                                            <Tab eventKey={2} title={tabText2}>
+                                            <Tab eventKey={DesignUpdateTab.TAB_ASSIGNED} title={tabText2}>
                                                 <ItemList
                                                     headerText={headerText2}
                                                     bodyDataFunction={bodyDataFunction2}
@@ -298,7 +310,7 @@ export class DesignUpdatesList extends Component {
                                                     footerActionFunction={null}
                                                 />
                                             </Tab>
-                                            <Tab eventKey={3} title={tabText3}>
+                                            <Tab eventKey={DesignUpdateTab.TAB_COMPLETE} title={tabText3}>
                                                 <ItemList
                                                     headerText={headerText3}
                                                     bodyDataFunction={bodyDataFunction3}
@@ -341,7 +353,8 @@ DesignUpdatesList.propTypes = {
     completeUpdates:        PropTypes.array.isRequired,
     updateWorkPackages:     PropTypes.array.isRequired,
     designVersionStatus:    PropTypes.string.isRequired,
-    designUpdateStatus:     PropTypes.string.isRequired
+    designUpdateStatus:     PropTypes.string.isRequired,
+    defaultTab:             PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

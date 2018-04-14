@@ -36,7 +36,7 @@ export function getDateTimeStringWithSeconds(dateTime){
 }
 
 
-export function getComponentClass(currentItem, updateItem, wpItem, view, context, isNarrative){
+export function getComponentClass(currentItem, updateItem, wpItem, view, context, isNarrative, inScope){
 
     let main = '';
     let modifier = '';
@@ -96,7 +96,7 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                 switch(context){
                     case DisplayContext.UPDATE_SCOPE:
                         // Scope pane items are greyed out until scoped
-                        if(!updateItem){
+                        if(!inScope){
                             modifier = ' greyed-out';
 
                             // If a removal has been updated in to the main version show it here
@@ -104,10 +104,7 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                                 deleted = ' removed-item';
                             }
                         } else {
-                            if(updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
-                                modifier = ' greyed-out';
-                            }
-                            if(updateItem.isRemoved){
+                            if(updateItem && updateItem.isRemoved){
                                 deleted = ' removed-item';
                             }
                         }

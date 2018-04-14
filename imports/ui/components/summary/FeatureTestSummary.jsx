@@ -40,14 +40,16 @@ export class FeatureTestSummary extends Component {
         let shouldUpdate = false;
 
         // Update if test data has changed
-        if(
-            nextProps.testSummaryData.featureScenarioCount !== this.props.testSummaryData.featureScenarioCount ||
-            nextProps.testSummaryData.featureExpectedTestCount !== this.props.testSummaryData.featureExpectedTestCount ||
-            nextProps.testSummaryData.featureFulfilledTestCount !== this.props.testSummaryData.featureFulfilledTestCount ||
-            nextProps.testSummaryData.featureTestPassCount !== this.props.testSummaryData.featureTestPassCount ||
-            nextProps.testSummaryData.featureTestFailCount !== this.props.testSummaryData.featureTestFailCount
-        ){
-            shouldUpdate = true;
+        if(nextProps.testSummaryData && this.props.testSummaryData) {
+            if (
+                nextProps.testSummaryData.featureScenarioCount !== this.props.testSummaryData.featureScenarioCount ||
+                nextProps.testSummaryData.featureExpectedTestCount !== this.props.testSummaryData.featureExpectedTestCount ||
+                nextProps.testSummaryData.featureFulfilledTestCount !== this.props.testSummaryData.featureFulfilledTestCount ||
+                nextProps.testSummaryData.featureTestPassCount !== this.props.testSummaryData.featureTestPassCount ||
+                nextProps.testSummaryData.featureTestFailCount !== this.props.testSummaryData.featureTestFailCount
+            ) {
+                shouldUpdate = true;
+            }
         }
 
         //console.log('Feature Test Summary Should Update: ' + shouldUpdate);

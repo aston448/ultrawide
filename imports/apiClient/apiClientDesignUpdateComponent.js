@@ -538,7 +538,14 @@ class ClientDesignUpdateComponentServices{
                 // Calculate data used for managing scope rendering efficiently
                 const updateItems = DesignUpdateData.getAllComponents(designUpdateId);
 
+                // Get all parents of changing item so we can update their scope
+
                 let currentItems = [];
+                let currentParents = [];
+
+                currentParents = DesignComponentData.getAllParents(baseComponent, currentParents);
+
+                console.log('Current parents =  %o' + currentParents);
 
                 updateItems.forEach((item) => {
 
@@ -548,7 +555,6 @@ class ClientDesignUpdateComponentServices{
                     };
 
                     currentItems.push(currentItem);
-
                 });
 
                 const scopeItems = store.getState().currentUpdateScopeItems;
@@ -558,8 +564,10 @@ class ClientDesignUpdateComponentServices{
 
                 store.dispatch(setUpdateScopeItems(
                     {
-                        flag:       newFlag,
-                        current:    currentItems
+                        flag:           newFlag,
+                        currentParents: currentParents,
+                        changingItemId: baseComponent._id,
+                        current:        currentItems
                     }
                 ));
 
@@ -674,47 +682,50 @@ class ClientDesignUpdateComponentServices{
     setScenarioTestExpectations(scenario, userRole, userContext, displayContext, accExpectation, intExpectation, unitExpectation){
 
         // Set the current design component context to the Feature so that summary data can be updated
-        const feature = DesignUpdateComponentData.getUpdateComponentByRef(scenario.designVersionId, scenario.designUpdateId, scenario.componentFeatureReferenceIdNew);
+        const feature = DesignComponentData.getDesignComponentByRef(scenario.designVersionId, scenario.componentFeatureReferenceIdNew);
 
-        let newUserContext = ClientDesignComponentServices.setDesignComponent(feature._id, userContext, displayContext);
+        if(feature) {
 
-        // Client validation
-        let result = DesignUpdateComponentValidationApi.validateSetScenarioTestExpectations(userRole);
+            let newUserContext = ClientDesignComponentServices.setDesignComponent(feature._id, userContext, displayContext);
 
-        if(result !== Validation.VALID){
-            // Business validation failed - show error on screen
-            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return {success: false, message: result};
-        }
+            // Client validation
+            let result = DesignUpdateComponentValidationApi.validateSetScenarioTestExpectations(userRole);
 
-        // Real action call
-        ServerDesignUpdateComponentApi.setScenarioTestExpectations(
-            newUserContext.userId,
-            userRole,
-            scenario._id,
-            accExpectation,
-            intExpectation,
-            unitExpectation,
-            (err, result) => {
-
-                if(err){
-                    // Unexpected error as all expected errors already handled - show alert.
-                    // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-                } else {
-
-                    // Update the feature test summary as well to match
-                    ClientTestIntegrationServices.updateTestSummaryDataForFeature(newUserContext);
-
-                    // Show action success on screen
-                    store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
-                        messageText: DesignUpdateComponentMessages.MSG_SCENARIO_EXPECTATIONS_UPDATED
-                    }));
-
-                }
+            if (result !== Validation.VALID) {
+                // Business validation failed - show error on screen
+                store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+                return {success: false, message: result};
             }
-        );
+
+            // Real action call
+            ServerDesignUpdateComponentApi.setScenarioTestExpectations(
+                newUserContext.userId,
+                userRole,
+                scenario._id,
+                accExpectation,
+                intExpectation,
+                unitExpectation,
+                (err, result) => {
+
+                    if (err) {
+                        // Unexpected error as all expected errors already handled - show alert.
+                        // Can't update screen here because of error
+                        alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    } else {
+
+                        // Update the feature test summary as well to match
+                        ClientTestIntegrationServices.updateTestSummaryDataForFeature(newUserContext);
+
+                        // Show action success on screen
+                        store.dispatch(updateUserMessage({
+                            messageType: MessageType.INFO,
+                            messageText: DesignUpdateComponentMessages.MSG_SCENARIO_EXPECTATIONS_UPDATED
+                        }));
+
+                    }
+                }
+            );
+        }
 
         // Indicate that business validation passed
         return {success: true, message: ''};

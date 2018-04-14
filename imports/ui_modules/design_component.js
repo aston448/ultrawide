@@ -277,6 +277,10 @@ class ComponentUiModules{
                     return true;
                 }
 
+                if(nextState.inScope !== state.inScope) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of SCOPE CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
                 break;
 
         }
@@ -301,8 +305,9 @@ class ComponentUiModules{
         }
 
         // Check for scope updates
-        if(nextProps.updateScopeItems && props.updateScopeItems) {
-            if (nextProps.updateScopeItems.flag !== props.updateScopeItems.flag) {
+        // IF: Scope items exist and the display context is SCOPE and the update flag has been triggered and this item is one of the update items or the one that is currently changing
+        if(nextProps.updateScopeItems && props.updateScopeItems && nextProps.displayContext === DisplayContext.UPDATE_SCOPE) {
+            if ((nextProps.updateScopeItems.flag !== props.updateScopeItems.flag) && ((nextProps.updateScopeItems.currentParents.includes(nextProps.currentItem._id)) || (nextProps.currentItem._id === nextProps.updateScopeItems.changingItemId))) {
                 log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of DU SCOPE", props.currentItem.componentNameNew);
                 return true;
             }

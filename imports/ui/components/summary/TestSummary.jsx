@@ -21,6 +21,7 @@ import TextLookups                  from '../../../common/lookups.js';
 import {Grid, Row, Col, InputGroup, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 import {connect} from "react-redux";
+import {UpdateScopeType} from "../../../constants/constants";
 
 
 
@@ -74,14 +75,17 @@ class TestSummary extends Component {
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 return false;
+            case ViewType.DESIGN_UPDATE_EDIT:
+                // OK only for in scope scenarios in DU
+                return (this.props.inScope);
             default:
                 return true;
         }
     }
 
-    toggleAccExpectation(scenarioId, userRole, userContext, displayContext){
+    toggleAccExpectation(){
 
-        if(this.checkForViewOk()) {
+        if (this.checkForViewOk()) {
 
             let newAccState = !this.state.accExpectation;
 
@@ -89,9 +93,10 @@ class TestSummary extends Component {
 
         }
 
+
     }
 
-    toggleIntExpectation(scenarioId, userRole, userContext, displayContext){
+    toggleIntExpectation(){
 
         if(this.checkForViewOk()) {
 
@@ -102,7 +107,7 @@ class TestSummary extends Component {
         }
     }
 
-    toggleUnitExpectation(scenarioId, userRole, userContext, displayContext){
+    toggleUnitExpectation(){
 
         if(this.checkForViewOk()) {
 
@@ -121,15 +126,17 @@ class TestSummary extends Component {
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
 
-                ClientDesignUpdateComponentServices.setScenarioTestExpectations(
-                    scenario,
-                    userRole,
-                    userContext,
-                    displayContext,
-                    accState,
-                    intState,
-                    unitState
-                );
+                if(scenario.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+                    ClientDesignUpdateComponentServices.setScenarioTestExpectations(
+                        scenario,
+                        userRole,
+                        userContext,
+                        displayContext,
+                        accState,
+                        intState,
+                        unitState
+                    );
+                }
                 break;
             default:
 
@@ -281,7 +288,7 @@ class TestSummary extends Component {
                                         <OverlayTrigger delayShow={tooltipDelay} placement="top"
                                                         overlay={tooltipAcceptance}>
                                             <div className={testExpectationAcc}
-                                                 onClick={() => this.toggleAccExpectation(scenario._id, userRole, userContext, displayContext)}>
+                                                 onClick={() => this.toggleAccExpectation()}>
                                                 Acc
                                             </div>
                                         </OverlayTrigger>
@@ -297,7 +304,7 @@ class TestSummary extends Component {
                                         <OverlayTrigger delayShow={tooltipDelay} placement="top"
                                                         overlay={tooltipIntegration}>
                                             <div className={testExpectationInt}
-                                                 onClick={() => this.toggleIntExpectation(scenario._id, userRole, userContext, displayContext)}>
+                                                 onClick={() => this.toggleIntExpectation()}>
                                                 Int
                                             </div>
                                         </OverlayTrigger>
@@ -312,7 +319,7 @@ class TestSummary extends Component {
                                     <InputGroup.Addon className="scenario-test-requirement">
                                         <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipUnit}>
                                             <div className={testExpectationUnit}
-                                                 onClick={() => this.toggleUnitExpectation(scenario._id, userRole, userContext, displayContext)}>
+                                                 onClick={() => this.toggleUnitExpectation()}>
                                                 Unit
                                             </div>
                                         </OverlayTrigger>
@@ -339,7 +346,8 @@ class TestSummary extends Component {
 TestSummary.propTypes = {
     testSummaryData: PropTypes.object,
     scenario: PropTypes.object,
-    displayContext: PropTypes.string
+    displayContext: PropTypes.string,
+    inScope: PropTypes.bool
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

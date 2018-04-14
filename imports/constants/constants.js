@@ -352,6 +352,12 @@ export const WorkPackageTab = {
     TAB_COMPLETE:                   '3'
 };
 
+export const DesignUpdateTab = {
+    TAB_NEW:                        '1',
+    TAB_ASSIGNED:                   '2',
+    TAB_COMPLETE:                   '3'
+};
+
 export const EditorTab = {
     TAB_NOT_SET:                    '0',
     TAB_DETAILS:                    '1',

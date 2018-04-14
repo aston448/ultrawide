@@ -71,7 +71,7 @@ export class DesignComponentHeader extends Component{
         super(...args);
 
         this.state = {
-            inScope: false,
+            inScope: false, //this.props.updateItem ? this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE : false,
             parentScope: false,
             scopeChange: false,
             editing: false,
@@ -549,9 +549,9 @@ export class DesignComponentHeader extends Component{
         const {currentItem, updateItem, wpItem, uiContextName, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
         if(updateItem) {
-            log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {} with scope {}', currentItem.componentNameNew, updateItem.scopeType);
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render Update Design Component Header {} with in scope {} in context {}', currentItem.componentNameNew, this.state.inScope, displayContext);
         } else {
-            log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {}', currentItem.componentNameNew);
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {} with in scope {} in context {}', currentItem.componentNameNew, this.state.inScope, displayContext);
         }
 
         //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with test summary " + testSummary + " and test summary data " + testSummaryData);
@@ -689,8 +689,9 @@ export class DesignComponentHeader extends Component{
         }
 
         // Item main style ------------------------------------------
-        let itemStyle = getComponentClass(currentItem, updateItem, wpItem, view, displayContext, false);
+        let itemStyle = getComponentClass(currentItem, updateItem, wpItem, view, displayContext, false, inScope);
 
+        log((msg) => console.log(msg), LogLevel.PERF, 'Item style is {}', itemStyle);
 
         // Grey out original item when it is being dragged ----------
         if (isDragging) {
@@ -1484,6 +1485,7 @@ export class DesignComponentHeader extends Component{
                                         testSummaryData={testSummaryData}
                                         scenario={scenario}
                                         displayContext={displayContext}
+                                        inScope={inScope}
                                     />
                                 </Col>
                             </Row>

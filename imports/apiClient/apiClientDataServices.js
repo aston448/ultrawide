@@ -47,7 +47,15 @@ import {
     setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
     updateUserMessage
 } from '../redux/actions'
-import {HomePageTab, UpdateMergeStatus, UserSetting, UserSettingValue, WorkPackageTab} from "../constants/constants";
+import {
+    HomePageTab,
+    UpdateMergeStatus,
+    UserSetting,
+    UserSettingValue,
+    WorkPackageTab,
+    DesignUpdateTab,
+    DesignUpdateTestStatus
+} from "../constants/constants";
 import ClientAppHeaderServices from "./apiClientAppHeader";
 import ClientDesignVersionServices from "./apiClientDesignVersion";
 import ClientUserSettingsServices from "./apiClientUserSettings";
@@ -1087,12 +1095,18 @@ class ClientDataServices{
         // No action if design version not yet set
         if (currentDesignVersionId !== 'NONE') {
 
+            let defaultTab = DesignUpdateTab.TAB_NEW;
+
             // Get the selected DU if there is one
+            let currentDu = null;
             let currentDuStatus = '';
             const currentDuId = store.getState().currentUserItemContext.designUpdateId;
 
             if(currentDuId !== 'NONE'){
-                currentDuStatus = DesignUpdateData.getDesignUpdateById(currentDuId).updateStatus;
+                currentDu = DesignUpdateData.getDesignUpdateById(currentDuId);
+                if(currentDu){
+                    currentDuStatus = currentDu.updateStatus;
+                }
             }
 
             // Get all the design updates available for the selected version sorted by type and name
@@ -1120,6 +1134,10 @@ class ClientDataServices{
                 } else {
                     // Must be all assigned
                     assignedUpdates.push(update);
+
+                    if(update._id === currentDu._id){
+                        defaultTab = DesignUpdateTab.TAB_ASSIGNED
+                    }
                 }
             });
 
@@ -1134,6 +1152,10 @@ class ClientDataServices{
                 } else {
                     // Must be all assigned
                     assignedUpdates.push(update);
+
+                    if(update._id === currentDu._id){
+                        defaultTab = DesignUpdateTab.TAB_ASSIGNED
+                    }
                 }
             });
 
@@ -1148,12 +1170,22 @@ class ClientDataServices{
                 } else {
                     // Must be all assigned
                     assignedUpdates.push(update);
+
+                    if(update._id === currentDu._id){
+                        defaultTab = DesignUpdateTab.TAB_ASSIGNED
+                    }
                 }
             });
 
             // Complete updates are where all WPs are completed
             const completeUpdates = DesignVersionData.getWpTestCompleteUpdates(currentDesignVersionId);
 
+            completeUpdates.forEach((update) => {
+
+                if(update._id === currentDu._id){
+                    defaultTab = DesignUpdateTab.TAB_COMPLETE
+                }
+            });
 
             // Get the status of the current design version
             const designVersion = DesignVersionData.getDesignVersionById(currentDesignVersionId);
@@ -1164,13 +1196,16 @@ class ClientDataServices{
                 updateWorkPackages = DesignUpdateData.getAllWorkPackages(store.getState().currentUserItemContext.designUpdateId);
             }
 
+            console.log('Returning default tab for DUs: ' + defaultTab);
+
             return {
                 incompleteUpdates: incompleteUpdates,
                 assignedUpdates: assignedUpdates,
                 completeUpdates: completeUpdates,
                 updateWorkPackages: updateWorkPackages,
                 designVersionStatus: designVersion.designVersionStatus,
-                designUpdateStatus: currentDuStatus
+                designUpdateStatus: currentDuStatus,
+                defaultTab: defaultTab
             };
 
         } else {
@@ -1181,6 +1216,7 @@ class ClientDataServices{
                 pdateWorkPackages: [],
                 designVersionStatus: '',
                 designUpdateStatus: '',
+                defaultTab: DesignUpdateTab.TAB_NEW
             };
         }
     };

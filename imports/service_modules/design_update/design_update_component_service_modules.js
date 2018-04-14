@@ -621,38 +621,43 @@ class DesignUpdateComponentModules{
 
     isNotParentOfNewChildren(designUpdateComponentId){
 
+        log((msg) => console.log(msg), LogLevel.PERF, "Looking for new children for component {}", designUpdateComponentId);
+
         const duComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
-        const children = DesignUpdateComponentData.getScopedChildComponents(duComponent.designVersionId, duComponent.designUpdateId, duComponent.componentReferenceId);
-        let newChild = false;
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for new children for component {}", designUpdateComponentId);
+        if(duComponent) {
+            const children = DesignUpdateComponentData.getScopedChildComponents(duComponent.designVersionId, duComponent.designUpdateId, duComponent.componentReferenceId);
+            let newChild = false;
 
-        if(children.length === 0){
-            // No children so return true
-            log((msg) => console.log(msg), LogLevel.TRACE, "No children found");
-            return true
+            if (children.length === 0) {
+                // No children so return true
+                log((msg) => console.log(msg), LogLevel.TRACE, "No children found");
+                return true
+            } else {
+                // Are any new?
+                log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.length);
+
+                children.forEach((child) => {
+                    if (child.isNew) {
+                        log((msg) => console.log(msg), LogLevel.TRACE, "New child found");
+                        newChild = true;
+                    }
+                });
+
+                // Return false if new child found
+                return !newChild;
+            }
         } else {
-            // Are any new?
-            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.length);
-
-            children.forEach((child) => {
-                if(child.isNew){
-                    log((msg) => console.log(msg), LogLevel.TRACE, "New child found");
-                    newChild = true;
-                }
-            });
-
-            // Return false if new child found
-            return !newChild;
+            return true;
         }
     }
 
     hasNoRemovedChildren(designUpdateComponentId, removedChild){
 
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Looking for removed children for component {}", designUpdateComponentId);
+
         const duComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
         const children = DesignUpdateComponentData.getScopedChildComponents(duComponent.designVersionId, duComponent.designUpdateId, duComponent.componentReferenceId);
-
-        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for removed children for component {}", designUpdateComponentId);
 
         if(children.length === 0){
             // No more children so return what the current findings are

@@ -2,6 +2,8 @@ import { DesignVersionComponents }          from '../../collections/design/desig
 
 import { DefaultComponentNames }            from '../../constants/default_names.js';
 import { UpdateMergeStatus, ComponentType }                from '../../constants/constants.js';
+import DesignUpdateComponentData from "../design_update/design_update_component_db";
+import {UpdateScopeType} from "../../constants/constants";
 
 class DesignComponentData {
 
@@ -320,6 +322,35 @@ class DesignComponentData {
         ).fetch();
     }
 
+    getAllParents(designVersionComponent, parentsList){
+
+        console.log('Looking for parents with list %o ', parentsList);
+
+        let newParentsList = parentsList;
+
+        if(designVersionComponent.componentParentReferenceIdNew !== 'NONE'){
+
+            let parentComponent = this.getDesignComponentByRef(designVersionComponent.designVersionId, designVersionComponent.componentParentReferenceIdNew);
+
+            if(parentComponent) {
+
+                newParentsList.push(parentComponent._id);
+
+                this.getAllParents(parentComponent, newParentsList);
+
+            } else {
+
+                console.log('Returning list 2 %o ', newParentsList);
+                return newParentsList
+            }
+        } else {
+
+            console.log('Returning list 1 %o ', newParentsList);
+            return newParentsList;
+        }
+
+        return newParentsList;
+    }
 
     // UPDATE ==========================================================================================================
 
