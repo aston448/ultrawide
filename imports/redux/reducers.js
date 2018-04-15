@@ -63,6 +63,7 @@ const initialState = {
     currentWorkPackageScopeItems:       {
         flag:   0,
         currentParents: [],
+        currentChildren: [],
         changingItemId: 'NONE',
         current: [
             {

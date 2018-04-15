@@ -20,7 +20,7 @@ import {
     setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, setWorkPackageScopeItems,
     setWorkPackageScopeFlag, setUpdateScopeItems
 } from '../redux/actions';
-import DesignUpdateData from "../data/design_update/design_update_db";
+
 
 // =====================================================================================================================
 // Client API for Work Package Components
@@ -33,10 +33,10 @@ class ClientWorkPackageComponentServices {
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // User put an item in the scope view in or out of scope for a Work Package
-    toggleInScope(view, displayContext, userContext, designComponentId, newScope){
+    toggleInScope(view, displayContext, userContext, designComponent, newScope){
 
         // Client validation
-        let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, userContext, designComponentId);
+        let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, userContext, designComponent._id);
 
         if(result !== Validation.VALID){
 
@@ -46,7 +46,7 @@ class ClientWorkPackageComponentServices {
         }
 
         // Real action call - server actions
-        ServerWorkPackageComponentApi.toggleInScope(view, displayContext, userContext, designComponentId, newScope, (err, result) => {
+        ServerWorkPackageComponentApi.toggleInScope(view, displayContext, userContext, designComponent._id, newScope, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -59,6 +59,23 @@ class ClientWorkPackageComponentServices {
                 const wpItems = WorkPackageData.getAllWorkPackageComponents(userContext.workPackageId);
 
                 let currentItems = [];
+                let currentParents = [];
+                let currentChildren = [];
+
+                // Scoping a WP item puts all children in scope too so will need to redraw them
+                if(userContext.designUpdateId === 'NONE') {
+
+                    // Base design - get stuff from DV
+                    currentParents = DesignComponentData.getAllParents(designComponent, currentParents);
+                    currentChildren = DesignComponentData.getAllChildren(designComponent, currentChildren);
+                } else {
+
+                    // Design Update
+                    currentParents = DesignUpdateComponentData.getAllParents(designComponent, currentParents);
+                    currentChildren = DesignUpdateComponentData.getAllChildren(designComponent, currentChildren);
+                }
+
+                // console.log('WP Current children = %o', currentChildren);
 
                 wpItems.forEach((item) => {
 
@@ -78,11 +95,15 @@ class ClientWorkPackageComponentServices {
 
                 store.dispatch(setWorkPackageScopeItems(
                     {
-                        flag:       newFlag,
-                        current:    currentItems
+                        flag:               newFlag,
+                        currentParents:     currentParents,
+                        currentChildren:    currentChildren,
+                        changingItemId:     designComponent._id,
+                        current:            currentItems
                     }
                 ));
 
+                //store.dispatch(setWorkPackageScopeFlag(newFlag));
 
                 // Show action success on screen
                 if(newScope) {

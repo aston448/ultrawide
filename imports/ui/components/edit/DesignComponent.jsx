@@ -263,26 +263,29 @@ export class DesignComponent extends Component{
     }
 
     setOpenStateIfUpdateItemChanging(newProps){
-        //console.log("Updating open state...?");
-        if (
-            (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.updateItem._id))) ||
-            (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.props.openDesignUpdateItems.includes(this.props.updateItem._id)) ||
-            (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !this.state.open) ||
-            (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.state.open)
-        ) {
-            //console.log("YES. Updating open state...");
-            this.setOpenState(newProps);
+        if(this.props.updateItem) {
+            if (
+                (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.updateItem._id))) ||
+                (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.props.openDesignUpdateItems.includes(this.props.updateItem._id)) ||
+                (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !this.state.open) ||
+                (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.state.open)
+            ) {
+                //console.log("YES. Updating open state...");
+                this.setOpenState(newProps);
+            }
         }
     }
 
     setOpenStateIfWorkPackageItemChanging(newProps){
-        if (
-            (newProps.openWorkPackageItems.includes(this.props.wpItem._id) && !(this.props.openWorkPackageItems.includes(this.props.wpItem._id))) ||
-            (!(newProps.openWorkPackageItems.includes(this.props.wpItem._id)) && this.props.openWorkPackageItems.includes(this.props.wpItem._id)) ||
-            (newProps.openWorkPackageItems.includes(this.props.wpItem._id) && !this.state.open) ||
-            (!(newProps.openWorkPackageItems.includes(this.props.wpItem._id)) && this.state.open)
-        ) {
-            this.setOpenState(newProps);
+        if(this.props.wpItem) {
+            if (
+                (newProps.openWorkPackageItems.includes(this.props.wpItem._id) && !(this.props.openWorkPackageItems.includes(this.props.wpItem._id))) ||
+                (!(newProps.openWorkPackageItems.includes(this.props.wpItem._id)) && this.props.openWorkPackageItems.includes(this.props.wpItem._id)) ||
+                (newProps.openWorkPackageItems.includes(this.props.wpItem._id) && !this.state.open) ||
+                (!(newProps.openWorkPackageItems.includes(this.props.wpItem._id)) && this.state.open)
+            ) {
+                this.setOpenState(newProps);
+            }
         }
     }
 

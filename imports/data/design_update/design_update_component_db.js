@@ -290,6 +290,16 @@ class DesignUpdateComponentData{
         ).fetch();
     }
 
+    getChildComponents(designUpdateId, componentParentReferenceId) {
+
+        return DesignUpdateComponents.find(
+            {
+                componentParentReferenceIdNew: componentParentReferenceId,
+                designUpdateId: designUpdateId
+            }
+        ).fetch();
+    }
+
     getNonPeerScopeChildComponentsOfType(designUpdateId, childComponentType, parentRefId){
 
         return DesignUpdateComponents.find(
@@ -365,6 +375,59 @@ class DesignUpdateComponentData{
                 componentType:                  {$ne:(ComponentType.SCENARIO)}
             }
         ).fetch();
+    }
+
+    getAllParents(designUpdateComponent, parentsList){
+
+        //console.log('Looking for parents with list %o ', parentsList);
+
+        let newParentsList = parentsList;
+
+        if(designUpdateComponent.componentParentReferenceIdNew !== 'NONE'){
+
+            let parentComponent = this.getUpdateComponentByRef(designUpdateComponent.designVersionId, designUpdateComponent.designUpdateId, designUpdateComponent.componentParentReferenceIdNew);
+
+            if(parentComponent) {
+
+                newParentsList.push(parentComponent._id);
+
+                this.getAllParents(parentComponent, newParentsList);
+
+            } else {
+
+                //console.log('Returning list 2 %o ', newParentsList);
+                return newParentsList
+            }
+        } else {
+
+            //console.log('Returning list 1 %o ', newParentsList);
+            return newParentsList;
+        }
+
+        return newParentsList;
+    }
+
+    getAllChildren(parentComponent, childrenList){
+
+        let newChildrenList = childrenList;
+
+        if(parentComponent.componentType !== ComponentType.SCENARIO){
+
+            let children = this.getChildComponents(parentComponent.designUpdateId, parentComponent.componentReferenceId);
+
+            children.forEach((child) => {
+
+                newChildrenList.push(child._id);
+
+                this.getAllChildren(child, newChildrenList);
+            });
+
+        } else {
+
+            return newChildrenList;
+        }
+
+        return newChildrenList;
     }
 
     // CHECKS ==========================================================================================================

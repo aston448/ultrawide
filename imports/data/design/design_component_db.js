@@ -324,7 +324,7 @@ class DesignComponentData {
 
     getAllParents(designVersionComponent, parentsList){
 
-        console.log('Looking for parents with list %o ', parentsList);
+        //console.log('Looking for parents with list %o ', parentsList);
 
         let newParentsList = parentsList;
 
@@ -340,16 +340,39 @@ class DesignComponentData {
 
             } else {
 
-                console.log('Returning list 2 %o ', newParentsList);
+                //console.log('Returning list 2 %o ', newParentsList);
                 return newParentsList
             }
         } else {
 
-            console.log('Returning list 1 %o ', newParentsList);
+            //console.log('Returning list 1 %o ', newParentsList);
             return newParentsList;
         }
 
         return newParentsList;
+    }
+
+    getAllChildren(parentComponent, childrenList){
+
+        let newChildrenList = childrenList;
+
+        if(parentComponent.componentType !== ComponentType.SCENARIO){
+
+            let children = this.getChildComponents(parentComponent.designVersionId, parentComponent.componentReferenceId);
+
+            children.forEach((child) => {
+
+                newChildrenList.push(child._id);
+
+                this.getAllChildren(child, newChildrenList);
+            });
+
+        } else {
+
+            return newChildrenList;
+        }
+
+        return newChildrenList;
     }
 
     // UPDATE ==========================================================================================================

@@ -305,7 +305,9 @@ class ComponentUiModules{
         }
 
         // Check for scope updates
-        // IF: Scope items exist and the display context is SCOPE and the update flag has been triggered and this item is one of the update items or the one that is currently changing
+
+        // IF: Scope items exist and the display context is SCOPE and the update flag has been triggered and this item is one of the update items or the one that is currently changing or a parent of the changing item
+
         if(nextProps.updateScopeItems && props.updateScopeItems && nextProps.displayContext === DisplayContext.UPDATE_SCOPE) {
             if ((nextProps.updateScopeItems.flag !== props.updateScopeItems.flag) && ((nextProps.updateScopeItems.currentParents.includes(nextProps.currentItem._id)) || (nextProps.currentItem._id === nextProps.updateScopeItems.changingItemId))) {
                 log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of DU SCOPE", props.currentItem.componentNameNew);
@@ -313,8 +315,14 @@ class ComponentUiModules{
             }
         }
 
-        if(nextProps.workPackageScopeItems && props.workPackageScopeItems) {
-            if (nextProps.workPackageScopeItems.flag !== props.workPackageScopeItems.flag) {
+        // console.log('Update Common %s: current item is %s; children are %o ', nextProps.currentItem.componentNameNew, nextProps.currentItem._id, nextProps.workPackageScopeItems.currentChildren);
+
+        if(nextProps.workPackageScopeItems && props.workPackageScopeItems && nextProps.displayContext === DisplayContext.WP_SCOPE) {
+            if ((nextProps.workPackageScopeItems.flag !== props.workPackageScopeItems.flag) && (
+                (nextProps.workPackageScopeItems.currentParents.includes(nextProps.currentItem._id)) ||
+                (nextProps.workPackageScopeItems.currentChildren.includes(nextProps.currentItem._id)) ||
+                (nextProps.currentItem._id === nextProps.workPackageScopeItems.changingItemId)
+            )) {
                 log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of WP SCOPE", props.currentItem.componentNameNew);
                 return true;
             }

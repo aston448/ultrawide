@@ -545,7 +545,7 @@ class ClientDesignUpdateComponentServices{
 
                 currentParents = DesignComponentData.getAllParents(baseComponent, currentParents);
 
-                console.log('Current parents =  %o' + currentParents);
+                //console.log('Current parents =  %o' + currentParents);
 
                 updateItems.forEach((item) => {
 

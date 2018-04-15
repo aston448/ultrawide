@@ -518,7 +518,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
 
                 // Update the WP component(s)
-                const wpResult = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, currentItem._id, newScope);
+                const wpResult = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, currentItem, newScope);
 
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -549,9 +549,9 @@ export class DesignComponentHeader extends Component{
         const {currentItem, updateItem, wpItem, uiContextName, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
         if(updateItem) {
-            log((msg) => console.log(msg), LogLevel.PERF, 'Render Update Design Component Header {} with in scope {} in context {}', currentItem.componentNameNew, this.state.inScope, displayContext);
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render Update Design Component Header {} {} with in scope {} in context {}', currentItem._id, currentItem.componentNameNew, this.state.inScope, displayContext);
         } else {
-            log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {} with in scope {} in context {}', currentItem.componentNameNew, this.state.inScope, displayContext);
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component Header {} {} with in scope {} in context {}', currentItem._id, currentItem.componentNameNew, this.state.inScope, displayContext);
         }
 
         //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with test summary " + testSummary + " and test summary data " + testSummaryData);

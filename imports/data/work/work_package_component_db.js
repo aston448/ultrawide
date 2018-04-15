@@ -1,6 +1,7 @@
 
 import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
 
+import DesignComponentData              from '../../data/design/design_component_db.js';
 
 import { ComponentType, WorkPackageScopeType, LogLevel }      from '../../constants/constants.js';
 
@@ -126,6 +127,16 @@ class WorkPackageComponentData {
         });
     }
 
+    getChildComponents(workPackageId, parentRefId){
+
+        return WorkPackageComponents.find(
+            {
+                workPackageId: workPackageId,
+                componentParentReferenceId: parentRefId
+            }
+        ).fetch();
+    }
+
     getChildComponentsOfType(workPackageId, childComponentType, parentRefId){
 
         return WorkPackageComponents.find(
@@ -182,6 +193,7 @@ class WorkPackageComponentData {
             componentType:                  {$ne:(ComponentType.SCENARIO)}
         }).fetch();
     }
+
 
     // UPDATE ==========================================================================================================
 
