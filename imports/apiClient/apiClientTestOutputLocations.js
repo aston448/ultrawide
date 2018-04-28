@@ -9,7 +9,7 @@ import ServerTestOutputLocationApi          from '../apiServer/apiTestOutputLoca
 import TestOutputLocationValidationApi      from '../apiValidation/apiTestOutputLocationValidation.js';
 
 // Data Access
-import TestOutputLocationData               from '../data/configure/test_output_location_db.js';
+import { TestOutputLocationData }               from '../data/configure/test_output_location_db.js';
 
 // REDUX services
 import store from '../redux/store'

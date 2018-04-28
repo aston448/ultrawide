@@ -1,5 +1,5 @@
 
-class RestoreActions{
+class RestoreActionsClass{
 
     adminRestoresBackup(expectation){
 
@@ -7,4 +7,4 @@ class RestoreActions{
     };
 }
 
-export default new RestoreActions();
+export const RestoreActions = new RestoreActionsClass();

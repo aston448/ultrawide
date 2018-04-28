@@ -3,9 +3,9 @@
 import WorkPackageValidationServices    from '../service_modules/validation/work_package_validation_services.js';
 
 // Data Access
-import DesignVersionData                from '../data/design/design_version_db.js';
-import DesignUpdateData                 from '../data/design_update/design_update_db.js';
-import WorkPackageData                  from '../data/work/work_package_db.js';
+import { DesignVersionData }                from '../data/design/design_version_db.js';
+import { DesignUpdateData }                 from '../data/design_update/design_update_db.js';
+import { WorkPackageData }                  from '../data/work/work_package_db.js';
 import {Validation} from "../constants/validation_errors";
 
 //======================================================================================================================

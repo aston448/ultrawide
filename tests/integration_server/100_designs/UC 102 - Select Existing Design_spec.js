@@ -1,7 +1,7 @@
 
-import TestFixtures from '../../../test_framework/test_wrappers/test_fixtures.js';
-import DesignActions from '../../../test_framework/test_wrappers/design_actions.js';
-import UserContextVerifications from '../../../test_framework/test_wrappers/user_context_verifications.js';
+import { TestFixtures } from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignActions } from '../../../test_framework/test_wrappers/design_actions.js';
+import { UserContextVerifications } from '../../../test_framework/test_wrappers/user_context_verifications.js';
 
 import {RoleType} from '../../../imports/constants/constants.js'
 

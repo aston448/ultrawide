@@ -6,7 +6,7 @@ import { UltrawideDirectory, LogLevel } from '../../constants/constants.js';
 import { log }              from '../../common/utils.js';
 
 // Data Access
-import AppGlobalData        from '../../data/app/app_global_db.js';
+import { AppGlobalData }        from '../../data/app/app_global_db.js';
 
 //======================================================================================================================
 //

@@ -1,9 +1,9 @@
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-import TestFixtures from './test_fixtures.js';
+import { TestFixtures } from './test_fixtures.js';
 
-class TestResultVerifications {
+class TestResultVerificationsClass {
 
     // INTEGRATION -----------------------------------------------------------------------------------------------------
     // Check test result
@@ -171,4 +171,4 @@ class TestResultVerifications {
 
 }
 
-export default new TestResultVerifications();
+export const TestResultVerifications = new TestResultVerificationsClass();

@@ -1,6 +1,6 @@
-import TestFixtures                     from '../../../test_framework/test_wrappers/test_fixtures.js';
-import UserManagementActions            from '../../../test_framework/test_wrappers/user_management_actions.js';
-import UserManagementVerifications      from '../../../test_framework/test_wrappers/user_management_verifications.js';
+import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { UserManagementActions }            from '../../../test_framework/test_wrappers/user_management_actions.js';
+import { UserManagementVerifications }      from '../../../test_framework/test_wrappers/user_management_verifications.js';
 
 import { UserManagementValidationErrors } from '../../../imports/constants/validation_errors.js'
 import { DefaultUserDetails }           from '../../../imports/constants/default_names.js'

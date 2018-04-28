@@ -1,23 +1,18 @@
-import TestFixtures                     from '../../../test_framework/test_wrappers/test_fixtures.js';
-import DesignActions                from '../../../test_framework/test_wrappers/design_actions.js';
-import DesignVersionActions         from '../../../test_framework/test_wrappers/design_version_actions.js';
-import DesignComponentActions       from '../../../test_framework/test_wrappers/design_component_actions.js';
-import WorkPackageActions           from '../../../test_framework/test_wrappers/work_package_actions.js';
-import WpComponentActions           from '../../../test_framework/test_wrappers/work_package_component_actions.js';
-import OutputLocationsActions       from '../../../test_framework/test_wrappers/output_locations_actions.js';
-import TestResultActions            from '../../../test_framework/test_wrappers/test_integration_actions.js';
-import TestResultVerifications      from '../../../test_framework/test_wrappers/test_result_verifications.js';
-import ViewOptionsActions           from '../../../test_framework/test_wrappers/view_options_actions.js';
-import ViewOptionsVerifications     from '../../../test_framework/test_wrappers/view_options_verifications.js';
-import TestIntegrationActions       from '../../../test_framework/test_wrappers/test_integration_actions.js';
-import TestSummaryVerifications     from '../../../test_framework/test_wrappers/test_summary_verifications.js';
-import DesignUpdateActions          from '../../../test_framework/test_wrappers/design_update_actions.js';
-import UpdateComponentActions       from '../../../test_framework/test_wrappers/design_update_component_actions.js';
+import { TestFixtures }                 from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignActions }                from '../../../test_framework/test_wrappers/design_actions.js';
+import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
+import { WorkPackageActions }           from '../../../test_framework/test_wrappers/work_package_actions.js';
+import { WpComponentActions }           from '../../../test_framework/test_wrappers/work_package_component_actions.js';
+import { OutputLocationsActions }       from '../../../test_framework/test_wrappers/output_locations_actions.js';
+import { TestIntegrationActions }       from '../../../test_framework/test_wrappers/test_integration_actions.js';
+import { ViewOptionsActions }           from '../../../test_framework/test_wrappers/view_options_actions.js';
+import { TestSummaryVerifications }     from '../../../test_framework/test_wrappers/test_summary_verifications.js';
+import { DesignUpdateActions }          from '../../../test_framework/test_wrappers/design_update_actions.js';
+import { UpdateComponentActions }       from '../../../test_framework/test_wrappers/design_update_component_actions.js';
 
 import {DefaultLocationText} from '../../../imports/constants/default_names.js';
-import {DefaultItemNames, DefaultComponentNames} from '../../../imports/constants/default_names.js';
-import {TestOutputLocationValidationErrors}   from '../../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, ComponentType, FeatureTestSummaryStatus} from '../../../imports/constants/constants.js';
+import {DefaultItemNames} from '../../../imports/constants/default_names.js';
+import {TestLocationFileType, TestRunner, MashTestStatus} from '../../../imports/constants/constants.js';
 
 describe('UC 401 - View Test Progress Summary', function(){
 
@@ -180,7 +175,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         // Feature1: Expect Passes = 1 int tests + 4 unit tests
         expect(TestSummaryVerifications.designerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 5));
@@ -197,7 +192,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         // Feature1: Expect Fails = 1 int tests + 1 unit tests
         expect(TestSummaryVerifications.designerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 2));
@@ -214,7 +209,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         // This includes anything with no test result above or not even included in the test run: Scenario7 and ExtraScenario
         expect(TestSummaryVerifications.designerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 2));
@@ -234,7 +229,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario1', MashTestStatus.MASH_PASS));
         expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_FAIL));
@@ -253,7 +248,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario1', 1));
         expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestPassCountIs('Conditions', 'Scenario2', 3));
@@ -272,7 +267,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestFailCountIs('Actions', 'Scenario1', 1));
         expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestFailCountIs('Conditions', 'Scenario2', 0));
@@ -309,7 +304,7 @@ describe('UC 401 - View Test Progress Summary', function(){
 
         DesignUpdateActions.designerViewsUpdate('DesignUpdate1');
         ViewOptionsActions.designerTogglesDesignUpdateTestSummary();
-        TestResultActions.designerRefreshesTestResultsForDesignUpdateView();
+        TestIntegrationActions.designerRefreshesTestResultsForDesignUpdateView();
 
         // Feature1 totals should only include Scenario2 results
         expect(TestSummaryVerifications.designerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 3));
@@ -336,7 +331,7 @@ describe('UC 401 - View Test Progress Summary', function(){
 
         // Display the Test Summary
         ViewOptionsActions.developerTogglesWorkPackageTestSummary();
-        TestResultActions.developerRefreshesTestResults();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Feature 1 should reflect Scenario1 results only
         expect(TestSummaryVerifications.developerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 2));

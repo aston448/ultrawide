@@ -1,8 +1,6 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageType} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {ComponentType,} from '../../imports/constants/constants.js';
 
-
-class WpComponentActions{
+class WpComponentActionsClass{
 
     // Generic scoping
     managerAddComponentToScopeForCurrentBaseWp(type, parentName, name, expectation){
@@ -119,4 +117,4 @@ class WpComponentActions{
 
 }
 
-export default new WpComponentActions();
+export const WpComponentActions = new WpComponentActionsClass();

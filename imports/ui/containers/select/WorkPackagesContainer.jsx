@@ -20,7 +20,7 @@ import ClientDataServices               from '../../../apiClient/apiClientDataSe
 import WorkPackageContainerUiModules    from '../../../ui_modules/work_packages_container.js';
 
 // Data Access
-import DesignVersionData                from '../../../data/design/design_version_db.js';
+import { DesignVersionData }                from '../../../data/design/design_version_db.js';
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';

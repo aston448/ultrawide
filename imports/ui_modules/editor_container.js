@@ -19,7 +19,7 @@ import { log }        from '../common/utils.js';
 
 import ClientWorkPackageComponentServices   from "../apiClient/apiClientWorkPackageComponent";
 import ClientDesignVersionServices          from "../apiClient/apiClientDesignVersion";
-import ClientDesignComponentServices        from "../apiClient/apiClientDesignComponent";
+import { ClientDesignComponentServices }        from "../apiClient/apiClientDesignComponent";
 import ClientDesignUpdateComponentServices  from "../apiClient/apiClientDesignUpdateComponent";
 
 

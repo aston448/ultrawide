@@ -9,10 +9,10 @@ import WorkPackageComponentValidationApi    from '../apiValidation/apiWorkPackag
 import ServerWorkPackageComponentApi        from '../apiServer/apiWorkPackageComponent.js';
 
 // Data Access
-import WorkPackageData                      from '../data/work/work_package_db.js';
-import WorkPackageComponentData             from '../data/work/work_package_component_db.js';
-import DesignComponentData                  from '../data/design/design_component_db.js';
-import DesignUpdateComponentData            from '../data/design_update/design_update_component_db.js';
+import { WorkPackageData }                      from '../data/work/work_package_db.js';
+import { WorkPackageComponentData }            from '../data/work/work_package_component_db.js';
+import { DesignComponentData }                  from '../data/design/design_component_db.js';
+import { DesignUpdateComponentData }            from '../data/design_update/design_update_component_db.js';
 
 // REDUX services
 import store from '../redux/store'

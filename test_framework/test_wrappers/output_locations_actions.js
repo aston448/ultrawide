@@ -2,7 +2,7 @@
 import {RoleType, TestType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-class OutputLocationActions{
+class OutputLocationsActionsClass{
 
     // LOCATIONS -------------------------------------------------------------------------------------------------------
 
@@ -195,4 +195,4 @@ class OutputLocationActions{
 
 }
 
-export default new OutputLocationActions();
+export const OutputLocationsActions = new OutputLocationsActionsClass();

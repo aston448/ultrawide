@@ -13,7 +13,7 @@ import DesignComponent      from './DesignComponent.jsx';
 import {ComponentType, ViewMode, DisplayContext, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
 import {locationMoveDropAllowed, log, replaceAll} from '../../../common/utils.js';
 
-import ClientDesignComponentServices from "../../../apiClient/apiClientDesignComponent";
+import { ClientDesignComponentServices } from "../../../apiClient/apiClientDesignComponent";
 
 // Bootstrap
 

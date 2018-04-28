@@ -1,7 +1,7 @@
 
 import { DesignBackups }                from '../../collections/backups/design_backups.js';
 
-class DesignBackupData{
+class DesignBackupDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -58,4 +58,4 @@ class DesignBackupData{
 
 }
 
-export default new DesignBackupData();
+export const DesignBackupData = new DesignBackupDataClass();

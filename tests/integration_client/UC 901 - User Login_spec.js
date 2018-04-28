@@ -1,10 +1,7 @@
-import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
-import TextLookups                      from '../../imports/common/lookups.js'
+import { TestFixtures }                     from '../../test_framework/test_wrappers/test_fixtures.js';
+import { BrowserActions }                   from '../../test_framework/browser_actions/browser_actions.js';
+import { BrowserChecks }                    from '../../test_framework/browser_actions/browser_checks.js';
 
-import BrowserActions                   from '../../test_framework/browser_actions/browser_actions.js';
-import BrowserChecks                    from '../../test_framework/browser_actions/browser_checks.js';
-
-import { ViewType }           from '../../imports/constants/constants.js';
 import { LoginMessages }      from '../../imports/constants/message_texts.js';
 
 describe('UC 901 - User Login', function(){

@@ -2,9 +2,9 @@
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-import TestFixtures from './test_fixtures.js';
+import { TestFixtures } from './test_fixtures.js';
 
-class ViewOptionsVerifications {
+class ViewOptionsVerificationsClass {
 
     developerViewOption_IsVisible(viewOption) {
 
@@ -47,4 +47,4 @@ class ViewOptionsVerifications {
     };
 }
 
-export default new ViewOptionsVerifications();
+export const ViewOptionsVerifications = new ViewOptionsVerificationsClass();

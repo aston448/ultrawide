@@ -6,7 +6,7 @@ import { UserTestTypeLocations }    from '../../imports/collections/configure/us
 
 import { ViewOptionType } from '../../imports/constants/constants.js';
 
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

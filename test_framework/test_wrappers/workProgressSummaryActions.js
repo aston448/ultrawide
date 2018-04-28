@@ -1,8 +1,7 @@
-import {WorkSummaryType, RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageType} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {WorkSummaryType, RoleType} from '../../imports/constants/constants.js'
 
 
-class WorkProgressSummaryActions {
+class WorkProgressSummaryActionsClass {
 
     // Goto DVs
 
@@ -70,4 +69,4 @@ class WorkProgressSummaryActions {
         server.call('testWorkProgress.gotoWorkItem', WorkSummaryType.WORK_SUMMARY_UPDATE_WP, workPackageName, RoleType.MANAGER, 'miles', expectation);
     }
 }
-export default new WorkProgressSummaryActions()
+export const WorkProgressSummaryActions = new WorkProgressSummaryActionsClass();

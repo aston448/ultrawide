@@ -1,8 +1,5 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-
-class DomainDictionaryVerifications{
+class DomainDictionaryVerificationsClass {
 
     termExistsForDesignerCalled(termName){
         server.call('verifyDomainDictionary.termExistsCalled', termName, 'gloria',
@@ -30,4 +27,4 @@ class DomainDictionaryVerifications{
 
 }
 
-export default new DomainDictionaryVerifications();
+export const DomainDictionaryVerifications = new DomainDictionaryVerificationsClass();

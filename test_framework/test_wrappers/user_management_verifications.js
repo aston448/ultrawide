@@ -1,10 +1,5 @@
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
-
-import TestFixtures from './test_fixtures.js';
-
-class UserManagementVerifications {
+class UserManagementVerificationsClass {
 
     ultrawideUserExistsCalled(userName) {
 
@@ -52,4 +47,4 @@ class UserManagementVerifications {
     };
 }
 
-export default new UserManagementVerifications();
+export const UserManagementVerifications = new UserManagementVerificationsClass();

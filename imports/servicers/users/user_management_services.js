@@ -5,7 +5,7 @@ import { LogLevel}                  from '../../constants/constants.js';
 import { DefaultUserDetails }       from '../../constants/default_names.js'
 
 // Data Access
-import UserRoleData                 from '../../data/users/user_role_db.js';
+import { UserRoleData }                 from '../../data/users/user_role_db.js';
 
 //======================================================================================================================
 //

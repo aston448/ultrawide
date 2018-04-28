@@ -3,7 +3,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class TestFixtures{
+class TestFixturesClass {
 
     getUserForRole(role){
 
@@ -110,4 +110,4 @@ class TestFixtures{
 
 }
 
-export default new TestFixtures();
+export const TestFixtures =  new TestFixturesClass();

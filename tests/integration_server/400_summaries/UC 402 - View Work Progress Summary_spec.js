@@ -1,26 +1,19 @@
-import TestFixtures                     from '../../../test_framework/test_wrappers/test_fixtures.js';
-import DesignActions                from '../../../test_framework/test_wrappers/design_actions.js';
-import DesignVersionActions         from '../../../test_framework/test_wrappers/design_version_actions.js';
-import DesignComponentActions       from '../../../test_framework/test_wrappers/design_component_actions.js';
-import WorkPackageActions           from '../../../test_framework/test_wrappers/work_package_actions.js';
-import WpComponentActions           from '../../../test_framework/test_wrappers/work_package_component_actions.js';
-import OutputLocationsActions       from '../../../test_framework/test_wrappers/output_locations_actions.js';
-import TestResultActions            from '../../../test_framework/test_wrappers/test_integration_actions.js';
-import TestResultVerifications      from '../../../test_framework/test_wrappers/test_result_verifications.js';
-import ViewOptionsActions           from '../../../test_framework/test_wrappers/view_options_actions.js';
-import ViewOptionsVerifications     from '../../../test_framework/test_wrappers/view_options_verifications.js';
-import TestIntegrationActions       from '../../../test_framework/test_wrappers/test_integration_actions.js';
-import TestSummaryVerifications     from '../../../test_framework/test_wrappers/test_summary_verifications.js';
-import DesignUpdateActions          from '../../../test_framework/test_wrappers/design_update_actions.js';
-import UpdateComponentActions       from '../../../test_framework/test_wrappers/design_update_component_actions.js';
-import WorkProgressSummaryActions   from '../../../test_framework/test_wrappers/workProgressSummaryActions.js';
-import WorkProgressSummaryVerifications from '../../../test_framework/test_wrappers/workProgressSummaryVerifications.js';
-import UserContextVerifications     from '../../../test_framework/test_wrappers/user_context_verifications.js';
+import { TestFixtures }                 from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignActions }                from '../../../test_framework/test_wrappers/design_actions.js';
+import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
+import { WorkPackageActions }           from '../../../test_framework/test_wrappers/work_package_actions.js';
+import { WpComponentActions }           from '../../../test_framework/test_wrappers/work_package_component_actions.js';
+import { OutputLocationsActions }       from '../../../test_framework/test_wrappers/output_locations_actions.js';
+import { TestIntegrationActions }       from '../../../test_framework/test_wrappers/test_integration_actions.js';
+import { DesignUpdateActions }          from '../../../test_framework/test_wrappers/design_update_actions.js';
+import { UpdateComponentActions }       from '../../../test_framework/test_wrappers/design_update_component_actions.js';
+import { WorkProgressSummaryActions }   from '../../../test_framework/test_wrappers/workProgressSummaryActions.js';
+import { WorkProgressSummaryVerifications } from '../../../test_framework/test_wrappers/workProgressSummaryVerifications.js';
+import { UserContextVerifications }     from '../../../test_framework/test_wrappers/user_context_verifications.js';
 
 import {DefaultLocationText} from '../../../imports/constants/default_names.js';
-import {DefaultItemNames, DefaultComponentNames} from '../../../imports/constants/default_names.js';
-import {TestOutputLocationValidationErrors}   from '../../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, DesignUpdateMergeAction, RoleType, FeatureTestSummaryStatus} from '../../../imports/constants/constants.js';
+import {DefaultItemNames} from '../../../imports/constants/default_names.js';
+import {TestLocationFileType, TestRunner, MashTestStatus, DesignUpdateMergeAction, RoleType} from '../../../imports/constants/constants.js';
 
 describe('UC 402 - View Work Progress Summary', function(){
 
@@ -229,7 +222,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV1);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         // Verify test pass count
@@ -252,7 +245,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV1);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         // Verify test fail count
@@ -274,7 +267,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV1);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         // Verify test fail count
@@ -308,7 +301,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
@@ -328,7 +321,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
@@ -348,7 +341,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
@@ -368,7 +361,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
@@ -388,7 +381,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
@@ -427,7 +420,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV1);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
@@ -454,7 +447,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         // Run the tests
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         summary = {
@@ -474,7 +467,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV1);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
@@ -501,7 +494,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         // Run the tests
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         summary = {
@@ -520,7 +513,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV1);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
@@ -547,7 +540,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         // Run the tests
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         summary = {
@@ -566,7 +559,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV1);
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
@@ -593,7 +586,7 @@ describe('UC 402 - View Work Progress Summary', function(){
         // Run the tests
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
 
-        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         summary = {

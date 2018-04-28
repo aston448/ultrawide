@@ -1,4 +1,4 @@
-import TestFixtures                     from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
 
 describe('UC 320 - View Acceptance Test Results', function(){
 

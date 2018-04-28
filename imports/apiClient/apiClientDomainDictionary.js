@@ -10,7 +10,7 @@ import DomainDictionaryValidationApi    from '../apiValidation/apiDomainDictiona
 import ServerDomainDictionaryApi        from '../apiServer/apiDomainDictionary.js';
 
 // Data Access
-import DesignVersionData                from '../data/design/design_version_db.js';
+import { DesignVersionData }                from '../data/design/design_version_db.js';
 
 // REDUX services
 import store from '../redux/store'

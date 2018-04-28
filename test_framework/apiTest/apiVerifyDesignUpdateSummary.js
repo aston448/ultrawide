@@ -4,7 +4,7 @@ import { Designs }                  from '../../imports/collections/design/desig
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
 import { UserDesignUpdateSummary }      from '../../imports/collections/summary/user_design_update_summary.js'
 
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 import { DesignUpdateSummaryType, DesignUpdateSummaryItem, ComponentType } from '../../imports/constants/constants.js';
 

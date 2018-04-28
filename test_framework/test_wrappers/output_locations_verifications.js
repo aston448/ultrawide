@@ -1,8 +1,5 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-
-class OutputLocationsVerifications{
+class OutputLocationsVerificationsClass{
 
     // LOCATIONS -------------------------------------------------------------------------------------------------------
 
@@ -179,4 +176,4 @@ class OutputLocationsVerifications{
     }
 }
 
-export default new OutputLocationsVerifications();
+export const OutputLocationsVerifications = new OutputLocationsVerificationsClass();

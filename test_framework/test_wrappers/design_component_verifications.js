@@ -3,7 +3,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class DesignComponentVerifications{
+class DesignComponentVerificationsClass{
 
     componentOfType_Called_DoesNotExist(type, name){
         server.call('verifyDesignComponents.componentDoesNotExistCalled', type, name,
@@ -129,4 +129,4 @@ class DesignComponentVerifications{
 
 }
 
-export default new DesignComponentVerifications();
+export const DesignComponentVerifications = new DesignComponentVerificationsClass();

@@ -1,10 +1,7 @@
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import { TestFixtures } from './test_fixtures.js';
 
-import TestFixtures from './test_fixtures.js';
-
-class UserContextVerifications{
+class UserContextVerificationsClass{
 
     // Positive Checks -------------------------------------------------------------------------------------------------
     userContextForRole_DesignIs(userRole, designName){
@@ -150,4 +147,4 @@ class UserContextVerifications{
     };
 }
 
-export default new UserContextVerifications();
+export const UserContextVerifications = new UserContextVerificationsClass();

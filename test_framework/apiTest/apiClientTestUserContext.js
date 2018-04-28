@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { UserContext }   from '../../imports/collections/context/user_context.js';
 
-import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

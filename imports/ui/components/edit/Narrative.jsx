@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import {ViewMode, ViewType, DisplayContext, UpdateScopeType, WorkPackageScopeType, LogLevel} from '../../../constants/constants.js';
 
-import ClientDesignComponentServices            from '../../../apiClient/apiClientDesignComponent.js';
+import { ClientDesignComponentServices }            from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices      from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDomainDictionaryApi                from '../../../apiClient/apiClientDomainDictionary.js';
 import {getComponentClass, log}                 from '../../../common/utils.js';

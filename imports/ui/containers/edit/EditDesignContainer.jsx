@@ -22,7 +22,7 @@ import {log} from "../../../common/utils";
 import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType, WorkPackageType, LogLevel } from '../../../constants/constants.js';
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
-import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
+import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';

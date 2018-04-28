@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 
 import ClientWorkPackageServices    from '../../imports/apiClient/apiClientWorkPackage.js';
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

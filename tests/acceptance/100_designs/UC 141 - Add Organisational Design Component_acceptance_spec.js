@@ -1,8 +1,8 @@
-import TestFixtures                     from '../../../test_framework/test_wrappers/test_fixtures.js';
-import DesignComponentVerifications     from '../../../test_framework/test_wrappers/design_component_verifications.js';
+import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignComponentVerifications }     from '../../../test_framework/test_wrappers/design_component_verifications.js';
 
-import BrowserActions                   from '../../../test_framework/browser_actions/browser_actions.js';
-import BrowserChecks                    from '../../../test_framework/browser_actions/browser_checks.js';
+import { BrowserActions }                   from '../../../test_framework/browser_actions/browser_actions.js';
+import { BrowserChecks }                    from '../../../test_framework/browser_actions/browser_checks.js';
 
 import { ComponentType }                from '../../../imports/constants/constants.js'
 import { DefaultComponentNames }        from '../../../imports/constants/default_names.js';

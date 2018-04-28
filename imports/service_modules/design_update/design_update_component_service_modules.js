@@ -2,7 +2,7 @@
 // Ultrawide Services
 import { ComponentType, LogLevel, DesignUpdateMergeAction, UpdateScopeType }      from '../../constants/constants.js';
 import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
-import DesignComponentModules           from '../../service_modules/design/design_component_service_modules.js';
+import { DesignComponentModules }           from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateModules              from '../../service_modules/design_update/design_update_service_modules.js';
 import DesignVersionModules             from '../../service_modules/design/design_version_service_modules.js';
 import WorkPackageModules               from '../../service_modules/work/work_package_service_modules.js';
@@ -10,11 +10,11 @@ import WorkPackageModules               from '../../service_modules/work/work_pa
 import { log }                          from '../../common/utils.js'
 
 // Data Access
-import DesignComponentData          from '../../data/design/design_component_db.js';
-import DesignUpdateData             from '../../data/design_update/design_update_db.js';
-import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
-import WorkPackageData              from '../../data/work/work_package_db.js';
-import DefaultFeatureAspectData     from '../../data/design/default_feature_aspect_db.js';
+import { DesignComponentData }          from '../../data/design/design_component_db.js';
+import { DesignUpdateData }             from '../../data/design_update/design_update_db.js';
+import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
+import { WorkPackageData }              from '../../data/work/work_package_db.js';
+import { DefaultFeatureAspectData }     from '../../data/design/default_feature_aspect_db.js';
 
 //======================================================================================================================
 //

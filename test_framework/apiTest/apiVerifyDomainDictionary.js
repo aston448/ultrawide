@@ -7,7 +7,7 @@ import { DomainDictionary }         from '../../imports/collections/design/domai
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
 import { ComponentType }            from '../../imports/constants/constants.js';
 
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

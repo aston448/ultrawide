@@ -7,7 +7,7 @@ import { WorkPackages }             from '../../imports/collections/work/work_pa
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
 import ClientDesignVersionServices    from '../../imports/apiClient/apiClientDesignVersion.js';
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 
 import {RoleType, WorkSummaryType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';

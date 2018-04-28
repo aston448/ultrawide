@@ -3,7 +3,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class UpdateComponentActions{
+class UpdateComponentActionsClass {
 
     // Component additions
     designerAddsApplicationToCurrentUpdate(expectation){
@@ -193,4 +193,4 @@ class UpdateComponentActions{
 
 }
 
-export default new UpdateComponentActions();
+export const UpdateComponentActions = new UpdateComponentActionsClass();

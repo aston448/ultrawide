@@ -1,7 +1,7 @@
 
 import { UserRoles }                    from '../../collections/users/user_roles.js';
 
-class UserRoleData{
+class UserRoleDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -119,4 +119,4 @@ class UserRoleData{
     }
 }
 
-export default new UserRoleData();
+export const UserRoleData = new UserRoleDataClass();

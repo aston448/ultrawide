@@ -7,10 +7,10 @@ import {convertFromRaw} from 'draft-js';
 
 import WordExportModules from './word_export_modules.js';
 
-import DesignData           from '../../../imports/data/design/design_db.js';
-import DesignVersionData    from '../../../imports/data/design/design_version_db.js';
-import DesignComponentData  from '../../../imports/data/design/design_component_db.js';
-import DomainDictionaryData from '../../../imports/data/design/domain_dictionary_db.js';
+import { DesignData }           from '../../../imports/data/design/design_db.js';
+import { DesignVersionData }    from '../../../imports/data/design/design_version_db.js';
+import { DesignComponentData }  from '../../../imports/data/design/design_component_db.js';
+import { DomainDictionaryData }from '../../../imports/data/design/domain_dictionary_db.js';
 
 import { log } from '../../../imports/common/utils.js';
 

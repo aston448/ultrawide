@@ -4,7 +4,7 @@ import {DesignUpdateComponents}         from '../../collections/design_update/de
 import { ComponentType, UpdateScopeType }  from '../../constants/constants.js';
 
 
-class DesignUpdateComponentData{
+class DesignUpdateComponentDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -745,4 +745,4 @@ class DesignUpdateComponentData{
     }
 }
 
-export default new DesignUpdateComponentData();
+export const DesignUpdateComponentData = new DesignUpdateComponentDataClass();

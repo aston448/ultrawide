@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import ClientTestOutputLocationServices from '../../imports/apiClient/apiClientTestOutputLocations';
 
-import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 
 import {RoleType, TestType, UltrawideDirectory} from '../../imports/constants/constants.js';
 

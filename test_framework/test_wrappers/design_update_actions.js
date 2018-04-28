@@ -3,7 +3,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class DesignUpdateActions{
+class DesignUpdateActionsClass {
 
     // Add
     designerAddsAnUpdate(expectation){
@@ -136,4 +136,4 @@ class DesignUpdateActions{
     }
 }
 
-export default new DesignUpdateActions();
+export const DesignUpdateActions = new DesignUpdateActionsClass();

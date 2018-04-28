@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Designs }                  from '../../imports/collections/design/designs.js';
 
 import ClientBackupServices         from '../../imports/apiClient/apiClientImpEx.js'
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 import {RoleType} from '../../imports/constants/constants.js';
 

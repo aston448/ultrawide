@@ -6,13 +6,13 @@ import {log}        from '../../common/utils.js'
 import TestSummaryModules               from '../../service_modules/dev/test_summary_service_modules.js';
 
 // Data Access
-import DesignVersionData                from '../../data/design/design_version_db.js';
-import DesignComponentData              from '../../data/design/design_component_db.js';
-import UserDevTestSummaryData           from '../../data/summary/user_dev_test_summary_db.js';
-import UserDevDesignSummaryData         from '../../data/summary/user_dev_design_summary_db.js';
-import DesignUpdateComponentData        from '../../data/design_update/design_update_component_db.js';
-import WorkPackageComponentData         from '../../data/work/work_package_component_db.js';
-import UserDvMashScenarioData           from '../../data/mash/user_dv_mash_scenario_db.js'
+import { DesignVersionData }                from '../../data/design/design_version_db.js';
+import { DesignComponentData }              from '../../data/design/design_component_db.js';
+import { UserDevTestSummaryData }           from '../../data/summary/user_dev_test_summary_db.js';
+import { UserDevDesignSummaryData }         from '../../data/summary/user_dev_design_summary_db.js';
+import { DesignUpdateComponentData }        from '../../data/design_update/design_update_component_db.js';
+import { WorkPackageComponentData }        from '../../data/work/work_package_component_db.js';
+import { UserDvMashScenarioData }           from '../../data/mash/user_dv_mash_scenario_db.js'
 
 //======================================================================================================================
 //

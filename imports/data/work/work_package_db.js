@@ -5,7 +5,7 @@ import {WorkPackageComponents}          from '../../collections/work/work_packag
 import { WorkPackageStatus, WorkPackageTestStatus, WorkPackageType, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, UpdateMergeStatus, LogLevel }      from '../../constants/constants.js';
 import { DefaultItemNames } from "../../constants/default_names";
 
-class WorkPackageData {
+class WorkPackageDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -200,4 +200,4 @@ class WorkPackageData {
     }
 }
 
-export default new WorkPackageData();
+export const WorkPackageData = new WorkPackageDataClass();

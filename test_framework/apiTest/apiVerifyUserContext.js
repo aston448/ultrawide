@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

@@ -3,8 +3,8 @@
 import DomainDictionaryValidationServices   from '../service_modules/validation/domain_dictionary_validation_services.js';
 
 // Data Access
-import DesignVersionData                    from '../data/design/design_version_db.js';
-import DomainDictionaryData                 from '../data/design/domain_dictionary_db.js';
+import { DesignVersionData }                    from '../data/design/design_version_db.js';
+import { DomainDictionaryData }                from '../data/design/domain_dictionary_db.js';
 
 
 //======================================================================================================================

@@ -11,11 +11,11 @@ import TestSummary          from '../summary/TestSummary.jsx';
 import FeatureTestSummary   from '../summary/FeatureTestSummary.jsx';
 
 // Ultrawide Services
-import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
+import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
-import ClientTextEditorServices             from '../../../apiClient/apiClientTextEditor.js';
+import { ClientTextEditorServices }             from '../../../apiClient/apiClientTextEditor.js';
 import ComponentUiModules                   from '../../../ui_modules/design_component.js'
 
 import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel,

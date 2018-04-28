@@ -6,7 +6,7 @@ import { WorkPackages }             from '../../imports/collections/work/work_pa
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType, WorkPackageScopeType, UpdateScopeType} from '../../imports/constants/constants.js';
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import {TestDataHelpers}             from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

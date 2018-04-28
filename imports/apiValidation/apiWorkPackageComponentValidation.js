@@ -5,8 +5,8 @@ import { ViewType } from '../constants/constants.js';
 import WorkPackageComponentValidationServices   from '../service_modules/validation/work_package_component_validation_services.js';
 
 // Data Access
-import DesignComponentData                      from '../data/design/design_component_db.js';
-import DesignUpdateComponentData                from '../data/design_update/design_update_component_db.js';
+import { DesignComponentData }                      from '../data/design/design_component_db.js';
+import { DesignUpdateComponentData }                from '../data/design_update/design_update_component_db.js';
 
 //======================================================================================================================
 //

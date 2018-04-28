@@ -1,9 +1,5 @@
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
-
-
-class WpComponentVerifications{
+class WpComponentVerificationsClass{
 
     // This means a component is available to add to the WP scope (unless it has already been added to another WP)
     componentIsAvailableForManagerCurrentWp(type, parentName, name){
@@ -115,4 +111,4 @@ class WpComponentVerifications{
     }
 }
 
-export default new WpComponentVerifications();
+export const WpComponentVerifications = new WpComponentVerificationsClass();

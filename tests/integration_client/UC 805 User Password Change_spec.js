@@ -1,12 +1,9 @@
-import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
-import TextLookups                      from '../../imports/common/lookups.js'
+import { TestFixtures }                     from '../../test_framework/test_wrappers/test_fixtures.js';
 
-import BrowserActions                   from '../../test_framework/browser_actions/browser_actions.js';
-import BrowserChecks                    from '../../test_framework/browser_actions/browser_checks.js';
+import { BrowserActions }                   from '../../test_framework/browser_actions/browser_actions.js';
+import { BrowserChecks }                    from '../../test_framework/browser_actions/browser_checks.js';
 
-import { ViewType, RoleType, UltrawideAction }           from '../../imports/constants/constants.js';
-import { LoginMessages }      from '../../imports/constants/message_texts.js';
-import {MenuAction} from "../../imports/constants/constants";
+import { ViewType, MenuAction }           from '../../imports/constants/constants.js';
 
 describe('UC 805 User Password Change', function(){
 

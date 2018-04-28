@@ -4,10 +4,10 @@ import { ComponentType, DesignUpdateSummaryCategory, DesignUpdateSummaryType, Up
 import { log } from '../../common/utils.js';
 
 // Data Access
-import DesignData                   from '../../data/design/design_db.js';
-import DesignUpdateData             from '../../data/design_update/design_update_db.js';
-import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
-import UserDvMashScenarioData       from '../../data/mash/user_dv_mash_scenario_db.js'
+import { DesignData }                   from '../../data/design/design_db.js';
+import { DesignUpdateData }             from '../../data/design_update/design_update_db.js';
+import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
+import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scenario_db.js'
 import UserUpdateSummaryData        from '../../data/summary/user_design_update_summary_db.js';
 
 //======================================================================================================================

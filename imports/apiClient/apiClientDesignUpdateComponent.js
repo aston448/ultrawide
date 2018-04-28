@@ -10,14 +10,14 @@ import ServerWorkPackageApi                 from '../apiServer/apiWorkPackage.js
 import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpdateComponentValidation.js';
 import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdateSummary.js';
 import ClientTestIntegrationServices        from "./apiClientTestIntegration";
-import ClientDesignComponentServices        from '../apiClient/apiClientDesignComponent.js';
+import { ClientDesignComponentServices }        from '../apiClient/apiClientDesignComponent.js';
 
 import { log }        from '../common/utils.js';
 
 // Data Access
-import DesignUpdateData                 from '../data/design_update/design_update_db.js';
-import DesignComponentData              from '../data/design/design_component_db.js';
-import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
+import { DesignUpdateData }                 from '../data/design_update/design_update_db.js';
+import { DesignComponentData }              from '../data/design/design_component_db.js';
+import { DesignUpdateComponentData }        from '../data/design_update/design_update_component_db.js';
 
 // REDUX services
 import store from '../redux/store'

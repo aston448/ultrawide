@@ -4,7 +4,7 @@ import { TestOutputLocationFiles}           from "../../collections/configure/te
 
 import { DefaultLocationText }              from "../../constants/default_names";
 
-class TestOutputLocationData{
+class TestOutputLocationDataClass{
 
     // INSERT ==========================================================================================================
 
@@ -127,4 +127,4 @@ class TestOutputLocationData{
     }
 }
 
-export default new TestOutputLocationData();
+export const TestOutputLocationData = new TestOutputLocationDataClass();

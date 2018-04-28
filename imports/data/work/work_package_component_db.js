@@ -1,11 +1,9 @@
 
 import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
 
-import DesignComponentData              from '../../data/design/design_component_db.js';
-
 import { ComponentType, WorkPackageScopeType, LogLevel }      from '../../constants/constants.js';
 
-class WorkPackageComponentData {
+class WorkPackageComponentDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -221,4 +219,4 @@ class WorkPackageComponentData {
     }
 }
 
-export default new WorkPackageComponentData();
+export const WorkPackageComponentData = new WorkPackageComponentDataClass();

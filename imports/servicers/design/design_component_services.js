@@ -5,13 +5,13 @@ import { DefaultComponentNames } from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
 import DesignServices               from './design_services.js';
-import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
+import { DesignComponentModules }       from '../../service_modules/design/design_component_service_modules.js';
 
 // DB services
-import DesignVersionData            from '../../data/design/design_version_db.js';
-import DesignComponentData          from '../../data/design/design_component_db.js';
-import DesignUpdateComponentData    from "../../data/design_update/design_update_component_db";
-import UserDvMashScenarioData       from '../../data/mash/user_dv_mash_scenario_db.js';
+import { DesignVersionData }            from '../../data/design/design_version_db.js';
+import { DesignComponentData }          from '../../data/design/design_component_db.js';
+import { DesignUpdateComponentData }    from "../../data/design_update/design_update_component_db";
+import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scenario_db.js';
 
 //======================================================================================================================
 //

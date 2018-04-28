@@ -4,7 +4,7 @@ import UserManagementValidationServices from '../service_modules/validation/user
 import { Validation, UserManagementValidationErrors } from '../constants/validation_errors.js';
 
 // Data Access
-import UserRoleData                     from '../data/users/user_role_db.js';
+import { UserRoleData }                     from '../data/users/user_role_db.js';
 
 //======================================================================================================================
 //

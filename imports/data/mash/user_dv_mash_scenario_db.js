@@ -1,7 +1,7 @@
 
 import {UserDesignVersionMashScenarios} from '../../collections/mash/user_dv_mash_scenarios.js';
 
-class UserDvMashScenarioData {
+class UserDvMashScenarioDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -103,4 +103,4 @@ class UserDvMashScenarioData {
     }
 }
 
-export default new UserDvMashScenarioData();
+export const UserDvMashScenarioData = new UserDvMashScenarioDataClass();

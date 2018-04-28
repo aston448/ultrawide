@@ -2,7 +2,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class WorkPackageVerifications{
+class WorkPackageVerificationsClass{
 
     workPackageExistsForManagerCalled(wpName){
         server.call('verifyWorkPackages.workPackageExistsCalled', wpName, 'miles',
@@ -183,4 +183,4 @@ class WorkPackageVerifications{
 
 }
 
-export default new WorkPackageVerifications();
+export const WorkPackageVerifications = new WorkPackageVerificationsClass();

@@ -6,7 +6,7 @@ import {WorkPackages}                   from '../../collections/work/work_packag
 import { DesignUpdateStatus, DesignUpdateMergeAction, ComponentType, UpdateScopeType, WorkPackageStatus, WorkPackageType }  from '../../constants/constants.js';
 import { DefaultItemNames} from "../../constants/default_names";
 
-class DesignUpdateData{
+class DesignUpdateDataClass{
 
     // INSERT ==========================================================================================================
 
@@ -409,4 +409,4 @@ class DesignUpdateData{
     }
 }
 
-export default new DesignUpdateData();
+export const DesignUpdateData = new DesignUpdateDataClass();

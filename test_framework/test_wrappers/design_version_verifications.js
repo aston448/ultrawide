@@ -3,7 +3,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class DesignVersionVerifications{
+class DesignVersionVerificationsClass {
 
     defaultNewDesignVersionExistsForDesign(designName){
         server.call('verifyDesignVersions.designVersionExistsCalled', designName, DefaultItemNames.NEW_DESIGN_VERSION_NAME,
@@ -87,4 +87,4 @@ class DesignVersionVerifications{
 
 }
 
-export default new DesignVersionVerifications();
+export const DesignVersionVerifications = new DesignVersionVerificationsClass();

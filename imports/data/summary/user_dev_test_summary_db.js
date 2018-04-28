@@ -1,6 +1,6 @@
 import { UserDevTestSummary }       from '../../collections/summary/user_dev_test_summary.js';
 
-class UserDevTestSummaryData{
+class UserDevTestSummaryDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -130,4 +130,4 @@ class UserDevTestSummaryData{
     }
 }
 
-export default new UserDevTestSummaryData();
+export const UserDevTestSummaryData = new UserDevTestSummaryDataClass();

@@ -1,20 +1,18 @@
-import TestFixtures                     from '../../../test_framework/test_wrappers/test_fixtures.js';
-import DesignActions                from '../../../test_framework/test_wrappers/design_actions.js';
-import DesignVersionActions         from '../../../test_framework/test_wrappers/design_version_actions.js';
-import DesignComponentActions       from '../../../test_framework/test_wrappers/design_component_actions.js';
-import WorkPackageActions           from '../../../test_framework/test_wrappers/work_package_actions.js';
-import WpComponentActions           from '../../../test_framework/test_wrappers/work_package_component_actions.js';
-import OutputLocationsActions       from '../../../test_framework/test_wrappers/output_locations_actions.js';
-import TestResultActions            from '../../../test_framework/test_wrappers/test_integration_actions.js';
-import TestResultVerifications      from '../../../test_framework/test_wrappers/test_result_verifications.js';
-import ViewOptionsActions           from '../../../test_framework/test_wrappers/view_options_actions.js';
-import ViewOptionsVerifications     from '../../../test_framework/test_wrappers/view_options_verifications.js';
-import TestIntegrationActions       from '../../../test_framework/test_wrappers/test_integration_actions.js';
-import TestSummaryVerifications     from '../../../test_framework/test_wrappers/test_summary_verifications.js';
+import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignActions }                from '../../../test_framework/test_wrappers/design_actions.js';
+import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
+import { DesignComponentActions }       from '../../../test_framework/test_wrappers/design_component_actions.js';
+import { WorkPackageActions }           from '../../../test_framework/test_wrappers/work_package_actions.js';
+import { WpComponentActions }           from '../../../test_framework/test_wrappers/work_package_component_actions.js';
+import { OutputLocationsActions }       from '../../../test_framework/test_wrappers/output_locations_actions.js';
+import { TestResultVerifications }      from '../../../test_framework/test_wrappers/test_result_verifications.js';
+import { ViewOptionsActions }           from '../../../test_framework/test_wrappers/view_options_actions.js';
+import { ViewOptionsVerifications }     from '../../../test_framework/test_wrappers/view_options_verifications.js';
+import { TestIntegrationActions }       from '../../../test_framework/test_wrappers/test_integration_actions.js';
+import { TestSummaryVerifications }     from '../../../test_framework/test_wrappers/test_summary_verifications.js';
 
 import {DefaultLocationText} from '../../../imports/constants/default_names.js';
-import {TestOutputLocationValidationErrors}   from '../../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, ComponentType, FeatureTestSummaryStatus} from '../../../imports/constants/constants.js';
+import {TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, ComponentType, FeatureTestSummaryStatus} from '../../../imports/constants/constants.js';
 
 describe('UC 310 - Refresh Test Data', function(){
 
@@ -263,7 +261,7 @@ describe('UC 310 - Refresh Test Data', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newIntResults);
 
         // Execute - refresh data
-        TestResultActions.developerRefreshesTestResults();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify - new results
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
@@ -294,7 +292,7 @@ describe('UC 310 - Refresh Test Data', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newIntResults);
 
         // Execute - refresh data
-        TestResultActions.developerRefreshesTestResults();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify - new results
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
@@ -453,7 +451,7 @@ describe('UC 310 - Refresh Test Data', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', modifiedIntResults);
 
         // Execute - refresh data
-        TestResultActions.developerRefreshesTestResults();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify - new results
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('NewScenario', MashTestStatus.MASH_PASS));
@@ -492,7 +490,7 @@ describe('UC 310 - Refresh Test Data', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', modifiedIntResults);
 
         DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
-        TestResultActions.developerRefreshesTestResults();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify - new results with new Scenario name
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('NewScenario', MashTestStatus.MASH_PASS));

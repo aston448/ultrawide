@@ -3,7 +3,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class UpdateComponentVerifications{
+class UpdateComponentVerificationsClass {
 
     componentExistsForDesignerCurrentUpdate(type, parentName, name){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', type, parentName, name, 'gloria',
@@ -214,4 +214,4 @@ class UpdateComponentVerifications{
     }
 }
 
-export default new UpdateComponentVerifications();
+export const UpdateComponentVerifications = new UpdateComponentVerificationsClass();

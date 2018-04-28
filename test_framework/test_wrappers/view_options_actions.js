@@ -1,6 +1,6 @@
 import {RoleType, ViewOptionType, ViewType} from '../../imports/constants/constants.js'
 
-class ViewOptionsActions {
+class ViewOptionsActionsClass {
 
     // Turn all options off - use for initialisation only
     setAllViewOptionsHidden(userName){
@@ -45,4 +45,4 @@ class ViewOptionsActions {
 
 }
 
-export default new ViewOptionsActions();
+export const ViewOptionsActions = new ViewOptionsActionsClass();

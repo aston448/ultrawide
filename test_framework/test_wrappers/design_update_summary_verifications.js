@@ -1,7 +1,6 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {ComponentType} from '../../imports/constants/constants.js'
 
-class DesignUpdateSummaryVerifications {
+class DesignUpdateSummaryVerificationsClass {
 
     // Additions
     feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner(featureName) {
@@ -120,4 +119,4 @@ class DesignUpdateSummaryVerifications {
     };
 }
 
-export default new DesignUpdateSummaryVerifications();
+export const DesignUpdateSummaryVerifications = new DesignUpdateSummaryVerificationsClass();

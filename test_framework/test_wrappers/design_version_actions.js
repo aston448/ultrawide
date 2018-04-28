@@ -3,7 +3,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class DesignVersionActions{
+class DesignVersionActionsClass{
 
     // Select
     designerSelectsDesignVersion(versionName){
@@ -149,4 +149,4 @@ class DesignVersionActions{
 
 }
 
-export default new DesignVersionActions();
+export const DesignVersionActions = new DesignVersionActionsClass();

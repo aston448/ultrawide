@@ -35,9 +35,9 @@ import { DefaultItemNames, DefaultComponentNames }         from '../../imports/c
 import { log } from '../../imports/common/utils.js';
 import ClientIdentityServices from '../../imports/apiClient/apiIdentity.js';
 
-import ClientDesignComponentServices    from '../../imports/apiClient/apiClientDesignComponent.js';
-import DesignComponentModules           from '../../imports/service_modules/design/design_component_service_modules.js';
-import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
+import { ClientDesignComponentServices }    from '../../imports/apiClient/apiClientDesignComponent.js';
+import { DesignComponentModules }           from '../../imports/service_modules/design/design_component_service_modules.js';
+import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 import ImpexServiceModules              from '../../imports/service_modules/administration/impex_service_modules.js';
 
 Meteor.methods({

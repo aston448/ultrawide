@@ -8,7 +8,7 @@ import ClientUserContextServices    from './apiClientUserContext.js';
 import ClientDataServices           from './apiClientDataServices.js';
 
 // Data Access
-import UserRoleData                     from '../data/users/user_role_db.js';
+import { UserRoleData }                     from '../data/users/user_role_db.js';
 
 // REDUX services
 import store from '../redux/store'

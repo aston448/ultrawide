@@ -18,7 +18,7 @@ import { LogLevel, DisplayContext, ComponentType, ViewMode, UpdateScopeType } fr
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-import ClientDesignComponentServices        from "../../../apiClient/apiClientDesignComponent";
+import { ClientDesignComponentServices }        from "../../../apiClient/apiClientDesignComponent";
 import ComponentUiModules                   from '../../../ui_modules/design_component.js'
 
 // Bootstrap

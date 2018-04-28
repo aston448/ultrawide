@@ -17,7 +17,7 @@ import {updateUserMessage} from '../redux/actions'
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientTextEditorServices{
+class ClientTextEditorServicesClass{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -120,4 +120,4 @@ class ClientTextEditorServices{
     }
 }
 
-export default new ClientTextEditorServices();
+export const ClientTextEditorServices = new ClientTextEditorServicesClass();

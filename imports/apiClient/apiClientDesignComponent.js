@@ -15,10 +15,10 @@ import ServerWorkPackageApi          from '../apiServer/apiWorkPackage.js';
 import {log} from '../common/utils.js';
 
 // Data Access
-import DesignVersionData                from '../data/design/design_version_db.js';
-import WorkPackageData                  from '../data/work/work_package_db.js';
-import DesignComponentData              from '../data/design/design_component_db.js';
-import DesignUpdateComponentData        from '../data/design_update/design_update_component_db.js';
+import { DesignVersionData }                from '../data/design/design_version_db.js';
+import { WorkPackageData }                  from '../data/work/work_package_db.js';
+import { DesignComponentData }              from '../data/design/design_component_db.js';
+import { DesignUpdateComponentData }        from '../data/design_update/design_update_component_db.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -34,7 +34,7 @@ import {HomePageTab} from "../constants/constants";
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientDesignComponentServices{
+class ClientDesignComponentServicesClass{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -962,4 +962,4 @@ class ClientDesignComponentServices{
 
 }
 
-export default new ClientDesignComponentServices();
+export const ClientDesignComponentServices = new ClientDesignComponentServicesClass();

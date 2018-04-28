@@ -5,7 +5,7 @@ import { DesignUpdateComponents }           from '../../imports/collections/desi
 
 import { ComponentType, UpdateMergeStatus, UpdateScopeType, DesignUpdateMergeAction }            from '../../imports/constants/constants.js';
 
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 
-import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

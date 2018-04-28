@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import {ViewType, LogLevel, UpdateMergeStatus}    from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
+import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 
 import TextLookups                  from '../../../common/lookups.js';

@@ -6,17 +6,17 @@ import { log }        from '../../common/utils.js';
 
 import DesignServices               from '../design/design_services.js';
 import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
-import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
+import { DesignComponentModules }       from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
 import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
 
 // Data Access
-import DesignVersionData            from '../../data/design/design_version_db.js';
-import DesignComponentData          from '../../data/design/design_component_db.js';
-import DesignUpdateData             from '../../data/design_update/design_update_db.js';
-import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
-import WorkPackageData              from '../../data/work/work_package_db.js';
-import UserDvMashScenarioData from "../../data/mash/user_dv_mash_scenario_db";
+import { DesignVersionData }            from '../../data/design/design_version_db.js';
+import { DesignComponentData }          from '../../data/design/design_component_db.js';
+import { DesignUpdateData }             from '../../data/design_update/design_update_db.js';
+import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
+import { WorkPackageData }              from '../../data/work/work_package_db.js';
+import { UserDvMashScenarioData } from "../../data/mash/user_dv_mash_scenario_db";
 
 //======================================================================================================================
 //

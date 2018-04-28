@@ -2,7 +2,7 @@ import {ComponentType, MenuAction}      from "../../imports/constants/constants"
 import {replaceAll}                     from "../../imports/common/utils";
 import {AddActionIds}                   from "../../imports/constants/ui_context_ids";
 
-class BrowserActions{
+class BrowserActionsClass{
 
     loginAs(userName, password){
 
@@ -227,4 +227,4 @@ class BrowserActions{
     }
 }
 
-export default new BrowserActions();
+export const BrowserActions = new BrowserActionsClass();

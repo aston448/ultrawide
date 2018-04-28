@@ -1,8 +1,8 @@
 
-import TestFixtures from '../../../test_framework/test_wrappers/test_fixtures.js';
-import DesignActions from '../../../test_framework/test_wrappers/design_actions.js';
-import DesignVerifications from '../../../test_framework/test_wrappers/design_verifications.js';
-import DesignVersionVerifications from '../../../test_framework/test_wrappers/design_version_verifications.js';
+import { TestFixtures } from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignActions } from '../../../test_framework/test_wrappers/design_actions.js';
+import { DesignVerifications } from '../../../test_framework/test_wrappers/design_verifications.js';
+import { DesignVersionVerifications } from '../../../test_framework/test_wrappers/design_version_verifications.js';
 
 import {RoleType} from '../../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../../imports/constants/default_names.js';

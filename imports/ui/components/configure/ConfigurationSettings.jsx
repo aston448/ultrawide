@@ -19,7 +19,7 @@ import {UserSettingValue, UserSetting, LogLevel, RoleType} from '../../../consta
 import {log} from "../../../common/utils";
 
 // Data Services
-import DesignVersionData                        from '../../../data/design/design_version_db.js';
+import { DesignVersionData }                        from '../../../data/design/design_version_db.js';
 
 // Bootstrap
 import {Well, ControlLabel, FormControl, Button, InputGroup}     from 'react-bootstrap';

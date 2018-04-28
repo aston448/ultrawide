@@ -5,9 +5,9 @@ import { WorkPackages }             from '../../imports/collections/work/work_pa
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType} from '../../imports/constants/constants.js';
 import ClientWorkPackageComponentServices   from '../../imports/apiClient/apiClientWorkPackageComponent.js';
-import ClientDesignComponentServices        from '../../imports/apiClient/apiClientDesignComponent.js';
+import { ClientDesignComponentServices }        from '../../imports/apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../imports/apiClient/apiClientDesignUpdateComponent.js';
-import TestDataHelpers                      from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }                      from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 

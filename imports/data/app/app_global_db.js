@@ -1,7 +1,7 @@
 
 import { AppGlobal }                    from '../../collections/app/app_global.js';
 
-class AppGlobalData{
+class AppGlobalDataClass{
 
     // INSERT ==========================================================================================================
 
@@ -48,4 +48,4 @@ class AppGlobalData{
     }
 }
 
-export default new AppGlobalData()
+export const AppGlobalData = new AppGlobalDataClass()

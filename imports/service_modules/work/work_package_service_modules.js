@@ -4,10 +4,10 @@ import { WorkPackageType, ComponentType, WorkPackageScopeType, LogLevel } from '
 import { log }        from '../../common/utils.js';
 
 // Data Access
-import DesignComponentData          from '../../data/design/design_component_db.js';
-import DesignUpdateComponentData    from '../../data/design_update/design_update_component_db.js';
-import WorkPackageData              from '../../data/work/work_package_db.js';
-import WorkPackageComponentData     from '../../data/work/work_package_component_db.js';
+import { DesignComponentData }          from '../../data/design/design_component_db.js';
+import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
+import { WorkPackageData }              from '../../data/work/work_package_db.js';
+import { WorkPackageComponentData }    from '../../data/work/work_package_component_db.js';
 
 //======================================================================================================================
 //

@@ -1,7 +1,7 @@
 
 import { UserMashScenarioTests }            from '../../collections/mash/user_mash_scenario_tests.js';
 
-class UserMashScenarioTestData{
+class UserMashScenarioTestDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -45,4 +45,4 @@ class UserMashScenarioTestData{
     }
 }
 
-export default new UserMashScenarioTestData();
+export const UserMashScenarioTestData = new UserMashScenarioTestDataClass();

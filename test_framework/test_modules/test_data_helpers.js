@@ -26,7 +26,7 @@ import ClientAppHeaderServices      from '../../imports/apiClient/apiClientAppHe
 
 import {RoleType, WorkSummaryType, UltrawideDirectory, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
-class TestDataHelpers {
+class TestDataHelpersClass {
 
     getStore(){
         return ClientAppHeaderServices.getStore();
@@ -876,4 +876,4 @@ class TestDataHelpers {
 
 }
 
-export default new TestDataHelpers();
+export const TestDataHelpers = new TestDataHelpersClass();

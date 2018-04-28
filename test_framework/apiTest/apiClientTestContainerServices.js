@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import ClientDataServices               from '../../imports/apiClient/apiClientDataServices.js';
-import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 

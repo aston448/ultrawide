@@ -1,10 +1,8 @@
 import TextLookups from "../../imports/common/lookups";
-import {ViewType} from "../../imports/constants/constants";
-import {LoginMessages} from "../../imports/constants/message_texts";
 
 import {replaceAll} from "../../imports/common/utils";
 
-class BrowserChecks{
+class BrowserChecksClass{
 
 
     isLoggedIn(){
@@ -56,4 +54,4 @@ class BrowserChecks{
 
 }
 
-export default new BrowserChecks();
+export const BrowserChecks = new BrowserChecksClass();

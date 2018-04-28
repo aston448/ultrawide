@@ -5,7 +5,7 @@ import { Validation } from '../constants/validation_errors.js'
 
 import DesignComponentValidationApi         from '../apiValidation/apiDesignComponentValidation.js';
 import DesignComponentServices              from '../servicers/design/design_component_services.js';
-import DesignComponentModules               from '../service_modules/design/design_component_service_modules.js';
+import { DesignComponentModules }               from '../service_modules/design/design_component_service_modules.js';
 
 //======================================================================================================================
 //

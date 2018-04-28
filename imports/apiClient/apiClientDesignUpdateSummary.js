@@ -8,7 +8,7 @@ import { log }        from '../common/utils.js';
 import DesignUpdateSummaryServices from '../apiServer/apiDesignUpdateSummary.js';
 
 // Data Access
-import WorkPackageComponentData         from '../data/work/work_package_component_db.js';
+import { WorkPackageComponentData }        from '../data/work/work_package_component_db.js';
 import UserDesignUpdateSummaryData      from '../data/summary/user_design_update_summary_db.js';
 import {DisplayContext} from "../constants/constants";
 

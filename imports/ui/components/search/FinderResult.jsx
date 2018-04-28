@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
 
-import ClientDesignComponentServices    from '../../../apiClient/apiClientDesignComponent.js';
+import { ClientDesignComponentServices }    from '../../../apiClient/apiClientDesignComponent.js';
 
 
 // Bootstrap

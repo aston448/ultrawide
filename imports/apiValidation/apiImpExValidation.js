@@ -3,7 +3,7 @@
 import ImpExValidationServices          from '../service_modules/validation/impex_validation_services.js';
 
 // Data Access
-import UserRoleData                     from '../data/users/user_role_db.js';
+import { UserRoleData }                     from '../data/users/user_role_db.js';
 
 //======================================================================================================================
 //

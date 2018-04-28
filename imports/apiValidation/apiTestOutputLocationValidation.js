@@ -3,7 +3,7 @@
 import TestOutputLocationValidationServices from '../service_modules/validation/test_output_location_validation_services.js';
 
 // Data Access
-import TestOutputLocationData               from '../data/configure/test_output_location_db.js';
+import { TestOutputLocationData }               from '../data/configure/test_output_location_db.js';
 
 //======================================================================================================================
 //

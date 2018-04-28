@@ -1,9 +1,6 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkSummaryType} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {WorkSummaryType} from '../../imports/constants/constants.js'
 
-import TestFixtures from './test_fixtures.js';
-
-class WorkProgressSummaryVerifications {
+class WorkProgressSummaryVerificationsClass {
 
     // Contains Initial DV ---------------------------------------------------------------------------------------------
 
@@ -423,4 +420,4 @@ class WorkProgressSummaryVerifications {
     };
 }
 
-export default new WorkProgressSummaryVerifications();
+export const WorkProgressSummaryVerifications = new WorkProgressSummaryVerificationsClass();

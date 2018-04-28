@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import {log} from "../../../common/utils";
 import { FeatureTestSummaryStatus, LogLevel } from '../../../constants/constants.js';
 
-import ClientDesignComponentServices    from '../../../apiClient/apiClientDesignComponent.js';
+import { ClientDesignComponentServices }    from '../../../apiClient/apiClientDesignComponent.js';
 
 // Bootstrap
 import {Grid, Row, Col, Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstrap';

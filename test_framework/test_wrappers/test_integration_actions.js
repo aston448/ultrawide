@@ -2,7 +2,7 @@
 import {RoleType, ViewType, TestType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-class TestIntegrationActions {
+class TestIntegrationActionsClass {
 
     // REFRESH ---------------------------------------------------------------------------------------------------------
 
@@ -22,4 +22,4 @@ class TestIntegrationActions {
     };
 
 }
- export default new TestIntegrationActions();
+ export const TestIntegrationActions = new TestIntegrationActionsClass();

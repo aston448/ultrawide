@@ -1,6 +1,5 @@
-import {RoleType, ViewOptionType, ViewType} from '../../imports/constants/constants.js'
 
-class UserManagementActions {
+class UserManagementActionsClass {
 
     // Add user
     adminAddsNewUser(expectation){
@@ -90,4 +89,4 @@ class UserManagementActions {
 
 }
 
-export default new UserManagementActions();
+export const UserManagementActions = new UserManagementActionsClass();

@@ -18,7 +18,7 @@ import { LogLevel, DisplayContext, ComponentType, UpdateScopeType, ViewMode } fr
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-import ClientDesignComponentServices        from "../../../apiClient/apiClientDesignComponent";
+import { ClientDesignComponentServices }        from "../../../apiClient/apiClientDesignComponent";
 // Bootstrap
 
 // REDUX services

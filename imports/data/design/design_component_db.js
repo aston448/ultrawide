@@ -2,10 +2,10 @@ import { DesignVersionComponents }          from '../../collections/design/desig
 
 import { DefaultComponentNames }            from '../../constants/default_names.js';
 import { UpdateMergeStatus, ComponentType }                from '../../constants/constants.js';
-import DesignUpdateComponentData from "../design_update/design_update_component_db";
+import { DesignUpdateComponentData } from "../design_update/design_update_component_db";
 import {UpdateScopeType} from "../../constants/constants";
 
-class DesignComponentData {
+class DesignComponentDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -657,4 +657,4 @@ class DesignComponentData {
 
 }
 
-export default new DesignComponentData();
+export const DesignComponentData = new DesignComponentDataClass();

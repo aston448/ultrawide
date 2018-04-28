@@ -2,7 +2,7 @@ import {UserWorkProgressSummary}        from '../../collections/summary/user_wor
 
 import { WorkSummaryType }              from "../../constants/constants";
 
-class UserWorkProgressSummaryData {
+class UserWorkProgressSummaryDataClass {
 
     // INSERT ==========================================================================================================
     bulkInsert(batchData){
@@ -59,4 +59,4 @@ class UserWorkProgressSummaryData {
     }
 }
 
-export default new UserWorkProgressSummaryData();
+export const UserWorkProgressSummaryData = new UserWorkProgressSummaryDataClass();

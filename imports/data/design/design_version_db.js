@@ -14,7 +14,7 @@ import { UserWorkProgressSummary }      from "../../collections/summary/user_wor
 
 import { ComponentType, UpdateMergeStatus, WorkPackageStatus, WorkPackageTestStatus, DesignUpdateStatus, DuWorkPackageTestStatus, DesignUpdateMergeAction, WorkPackageType } from '../../constants/constants.js';
 
-class DesignVersionData {
+class DesignVersionDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -554,4 +554,4 @@ class DesignVersionData {
     }
 }
 
-export default new DesignVersionData();
+export const DesignVersionData = new DesignVersionDataClass();

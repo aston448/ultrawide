@@ -1,7 +1,7 @@
 import {DefaultFeatureAspects}              from '../../collections/design/default_feature_aspects.js'
 
 
-class DefaultFeatureAspectData{
+class DefaultFeatureAspectDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -88,4 +88,4 @@ class DefaultFeatureAspectData{
 
 }
 
-export default new DefaultFeatureAspectData();
+export const DefaultFeatureAspectData = new DefaultFeatureAspectDataClass();

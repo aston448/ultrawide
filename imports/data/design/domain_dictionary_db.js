@@ -3,7 +3,7 @@ import { DomainDictionary } from '../../collections/design/domain_dictionary.js'
 
 import { DefaultComponentNames, DefaultDetailsText }      from '../../constants/default_names.js';
 
-class DomainDictionaryData{
+class DomainDictionaryDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -117,4 +117,4 @@ class DomainDictionaryData{
     }
 }
 
-export default new DomainDictionaryData();
+export const DomainDictionaryData = new DomainDictionaryDataClass();

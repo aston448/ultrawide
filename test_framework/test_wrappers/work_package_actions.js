@@ -1,8 +1,8 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageType} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {RoleType, WorkPackageType} from '../../imports/constants/constants.js'
+import {DefaultItemNames} from '../../imports/constants/default_names.js';
 
 
-class WorkPackageActions{
+class WorkPackageActionsClass{
 
     // Add
     managerAddsBaseDesignWorkPackage(expectation){
@@ -151,4 +151,4 @@ class WorkPackageActions{
 
 }
 
-export default new WorkPackageActions();
+export const WorkPackageActions = new WorkPackageActionsClass();

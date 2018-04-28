@@ -1,9 +1,5 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-import TestFixtures from './test_fixtures.js';
-
-class TestSummaryVerifications {
+class TestSummaryVerificationsClass {
 
     // Feature Summary -------------------------------------------------------------------------------------------------
 
@@ -226,4 +222,4 @@ class TestSummaryVerifications {
     }
 }
 
-export default new TestSummaryVerifications();
+export const TestSummaryVerifications = new TestSummaryVerificationsClass();

@@ -1,7 +1,7 @@
 
 import { UserTestTypeLocations }            from '../../collections/configure/user_test_type_locations.js';
 
-class UserTestTypeLocationData {
+class UserTestTypeLocationDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -125,4 +125,4 @@ class UserTestTypeLocationData {
 
 }
 
-export default new UserTestTypeLocationData();
+export const UserTestTypeLocationData = new UserTestTypeLocationDataClass();

@@ -4,7 +4,7 @@ import { UserCurrentViewOptions }   from '../../imports/collections/context/user
 
 import ClientAppHeaderServices          from '../../imports/apiClient/apiClientAppHeader';
 
-import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
+import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 import { ViewOptionType } from '../../imports/constants/constants.js';
 
 Meteor.methods({

@@ -14,8 +14,8 @@ import ClientUserContextServices        from '../apiClient/apiClientUserContext.
 import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
 
 // Data Access
-import DesignUpdateData                 from '../data/design_update/design_update_db.js';
-import DesignComponentData              from '../data/design/design_component_db.js';
+import { DesignUpdateData }                 from '../data/design_update/design_update_db.js';
+import { DesignComponentData }              from '../data/design/design_component_db.js';
 
 // REDUX services
 import store from '../redux/store'

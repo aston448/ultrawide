@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
-import { DesignVersionComponents }         from '../../imports/collections/design/design_version_components.js';
+import { DesignVersionComponents }          from '../../imports/collections/design/design_version_components.js';
 
-import ClientDesignComponentServices    from '../../imports/apiClient/apiClientDesignComponent.js';
-import ClientTextEditorServices         from '../../imports/apiClient/apiClientTextEditor.js';
-import DesignComponentModules           from '../../imports/service_modules/design/design_component_service_modules.js';
-import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
+import { ClientDesignComponentServices }    from '../../imports/apiClient/apiClientDesignComponent.js';
+import { ClientTextEditorServices }         from '../../imports/apiClient/apiClientTextEditor.js';
+import { DesignComponentModules }           from '../../imports/service_modules/design/design_component_service_modules.js';
+import {TestDataHelpers}                    from '../test_modules/test_data_helpers.js'
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 

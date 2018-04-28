@@ -1,9 +1,8 @@
 
-import {RoleType, ViewType, ViewMode, DisplayContext, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {ViewType, DisplayContext, ComponentType} from '../../imports/constants/constants.js'
 
 
-class ContainerDataVerifications {
+class ContainerDataVerificationsClass {
 
 
     designSectionIsSeenInUpdateEditorForDesigner(parentName, sectionName) {
@@ -122,4 +121,4 @@ class ContainerDataVerifications {
         );
     }
 }
-export default new ContainerDataVerifications();
+export const ContainerDataVerifications = new ContainerDataVerificationsClass();

@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import {ViewMode, ViewType, UpdateScopeType, DetailsType, LogLevel} from '../../../constants/constants.js';
 
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
-import ClientTextEditorServices         from '../../../apiClient/apiClientTextEditor.js';
+import { ClientTextEditorServices }         from '../../../apiClient/apiClientTextEditor.js';
 import { log }                          from '../../../common/utils.js'
 
 // Bootstrap

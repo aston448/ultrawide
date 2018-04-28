@@ -17,7 +17,7 @@ import ClientDataServices           from '../../../apiClient/apiClientDataServic
 import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 
 // Data Access
-import DesignData                   from '../../../data/design/design_db.js';
+import { DesignData }                   from '../../../data/design/design_db.js';
 
 // Bootstrap
 

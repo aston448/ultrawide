@@ -3,8 +3,8 @@
 import DesignVersionValidationServices  from '../service_modules/validation/design_version_validation_services.js';
 
 // Data Access
-import DesignData                       from '../data/design/design_db.js';
-import DesignVersionData                from '../data/design/design_version_db.js';
+import { DesignData }                       from '../data/design/design_db.js';
+import { DesignVersionData }                from '../data/design/design_version_db.js';
 
 //======================================================================================================================
 //

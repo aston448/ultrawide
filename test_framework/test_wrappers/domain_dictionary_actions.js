@@ -1,9 +1,5 @@
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
-
-
-class DomainDictionaryActions{
+class DomainDictionaryActionsClass {
 
     designerAddsNewTerm(expectation){
         server.call('testDomainDictionary.addNewDomainTerm', 'gloria', expectation);
@@ -23,4 +19,4 @@ class DomainDictionaryActions{
 
 }
 
-export default new DomainDictionaryActions();
+export const DomainDictionaryActions = new DomainDictionaryActionsClass();

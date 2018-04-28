@@ -4,10 +4,10 @@ import { DesignVersionStatus }      from '../../constants/constants.js';
 import { DefaultItemNames }         from '../../constants/default_names.js';
 
 import DesignVersionServices        from './design_version_services.js';
-import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
+import { DesignComponentModules }       from '../../service_modules/design/design_component_service_modules.js';
 
-import DesignData                   from '../../data/design/design_db.js';
-import DefaultFeatureAspectData     from '../../data/design/default_feature_aspect_db.js'
+import { DesignData }                   from '../../data/design/design_db.js';
+import { DefaultFeatureAspectData }     from '../../data/design/default_feature_aspect_db.js'
 
 //======================================================================================================================
 //

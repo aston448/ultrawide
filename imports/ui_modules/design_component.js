@@ -11,7 +11,7 @@ import {
 } from "../constants/constants";
 
 import ClientDomainDictionaryServices from "../apiClient/apiClientDomainDictionary";
-import ClientDesignComponentServices from "../apiClient/apiClientDesignComponent";
+import { ClientDesignComponentServices } from "../apiClient/apiClientDesignComponent";
 
 
 const styles = {

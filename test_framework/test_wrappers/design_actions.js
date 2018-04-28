@@ -3,7 +3,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class DesignActions{
+class DesignActionsClass {
 
     addNewDesignAsRole(userRole, expectation){
         server.call('testDesigns.addNewDesign', userRole, expectation);
@@ -84,4 +84,4 @@ class DesignActions{
 
 }
 
-export default new DesignActions();
+export const DesignActions = new DesignActionsClass();
