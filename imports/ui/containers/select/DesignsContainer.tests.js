@@ -14,27 +14,27 @@ import { Designs } from '../../../collections/design/designs.js'
 
 describe('JSX: DesignsList', () => {
 
+    function testDesignsList(designs, userRole){
+
+        return shallow(
+            <DesignsList designs={designs} userRole={userRole}/>
+        );
+    }
+
     describe('The Designs list has an "Add Design" option at the end of the list', () => {
 
         it('the Add Design component exists when a Design exists', () => {
 
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
+            const design1 = { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE};
             let designs = [];
-            designs.push(design);
+            designs.push(design1);
 
             const userRole = RoleType.DESIGNER;
-            const userContext = {
-                designId: design._id
-            };
 
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
+            const item = testDesignsList(designs, userRole);
 
-            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
-            chai.assert(item.find('ItemList').props().hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemList').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
+            chai.assert(item.find('Connect(ItemList)').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
 
         });
 
@@ -45,19 +45,12 @@ describe('JSX: DesignsList', () => {
         it('the Add Design component exists when no Designs', () => {
 
             let designs = [];
-
             const userRole = RoleType.DESIGNER;
-            const userContext = {
-                designId: 'NONE'
-            };
 
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
+            const item = testDesignsList(designs, userRole);
 
-            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
-            chai.assert(item.find('ItemList').props().hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemList').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
+            chai.assert(item.find('Connect(ItemList)').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
 
         });
 
@@ -67,37 +60,43 @@ describe('JSX: DesignsList', () => {
 
         it('Add Design not visible to Manager', () => {
 
+            const design1 = { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE};
             let designs = [];
+            designs.push(design1);
 
             const userRole = RoleType.MANAGER;
-            const userContext = {
-                designId: 'NONE'
-            };
 
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
+            const item = testDesignsList(designs, userRole);
 
-            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemList').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.isFalse(item.find('Connect(ItemList)').props().hasFooterAction, 'Expecting no footer action');
 
         });
 
         it('Add Design not visible to Developer', () => {
 
+            const design1 = { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE};
             let designs = [];
+            designs.push(design1);
 
             const userRole = RoleType.DEVELOPER;
-            const userContext = {
-                designId: 'NONE'
-            };
 
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
+            const item = testDesignsList(designs, userRole);
 
-            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemList').props().hasFooterAction, 'Expecting no footer action');
+            chai.assert.isFalse(item.find('Connect(ItemList)').props().hasFooterAction, 'Expecting no footer action');
+
+        });
+
+        it('Add Design not visible to Guest Viewer', () => {
+
+            const design1 = { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE};
+            let designs = [];
+            designs.push(design1);
+
+            const userRole = RoleType.GUEST_VIEWER;
+
+            const item = testDesignsList(designs, userRole);
+
+            chai.assert.isFalse(item.find('Connect(ItemList)').props().hasFooterAction, 'Expecting no footer action');
 
         });
 
@@ -108,43 +107,43 @@ describe('JSX: DesignsList', () => {
 
         it('is also visible to Manager', () => {
 
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
+            const design1 = { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE};
             let designs = [];
-            designs.push(design);
+            designs.push(design1);
 
             const userRole = RoleType.MANAGER;
-            const userContext = {
-                designId: design._id
-            };
 
+            const item = testDesignsList(designs, userRole);
 
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
-
-            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 1, 'Item Container not found');
 
         });
 
         it('is also visible to Developer', () => {
 
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
+            const design1 = { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE};
             let designs = [];
-            designs.push(design);
+            designs.push(design1);
 
             const userRole = RoleType.DEVELOPER;
-            const userContext = {
-                designId: design._id
-            };
 
+            const item = testDesignsList(designs, userRole);
 
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
+            chai.assert.equal(item.find('Connect(ItemList)').length, 1, 'Item Container not found');
 
-            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
+        });
+
+        it('is also visible to Guest Viewer', () => {
+
+            const design1 = { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE};
+            let designs = [];
+            designs.push(design1);
+
+            const userRole = RoleType.GUEST_VIEWER;
+
+            const item = testDesignsList(designs, userRole);
+
+            chai.assert.equal(item.find('Connect(ItemList)').length, 1, 'Item Container not found');
 
         });
 

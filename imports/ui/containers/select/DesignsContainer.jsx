@@ -86,14 +86,16 @@ export class DesignsList extends Component {
         }
 
         return(
-            <ItemList
-                headerText={'Designs'}
-                bodyDataFunction={bodyDataFunction}
-                hasFooterAction={hasFooterAction}
-                footerAction={'Add Design'}
-                footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_DESIGN}
-                footerActionFunction={footerActionFunction}
-            />
+            <div id="Design_List">
+                <ItemList
+                    headerText={'Designs'}
+                    bodyDataFunction={bodyDataFunction}
+                    hasFooterAction={hasFooterAction}
+                    footerAction={'Add Design'}
+                    footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_DESIGN}
+                    footerActionFunction={footerActionFunction}
+                />
+            </div>
         )
 
     }

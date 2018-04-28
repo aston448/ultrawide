@@ -4,11 +4,8 @@ import React from 'react';
 import { shallow, mount} from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-import ItemList                 from './ItemList.jsx'
+import { ItemList }             from './ItemList.jsx'           // Non Redux
 import { ItemWrapper }          from './ItemWrapper.jsx';       // Non Redux
-import { Design }               from './Design.jsx';            // Non Redux
-import { DesignVersion }        from './DesignVersion.jsx';     // Non Redux
-import { DesignUpdate }         from './DesignUpdate.jsx';      // Non Redux
 
 import { DesignStatus, RoleType, ItemType} from '../../../constants/constants.js'
 

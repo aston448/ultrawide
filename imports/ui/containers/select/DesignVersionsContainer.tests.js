@@ -5,81 +5,66 @@ import { shallow, mount} from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
 import { DesignVersionsList } from './DesignVersionsContainer.jsx';  // Non container wrapped
-//import { Design } from '../../components/select/Design.jsx'; // Non Redux
 
 import { DesignStatus, DesignVersionStatus, RoleType } from '../../../constants/constants.js'
-
-import { Designs } from '../../../collections/design/designs.js'
-import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 
 describe('JSX: DesignVersionsList', () => {
 
-    Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
-    const design = Factory.create('design');
+    function testDesignVersionsList(userRole){
 
-    Factory.define('designVersionUpdatable', DesignVersions, {
-        designId: design._id,
-        designVersionName: 'Updatable',
-        designVersionNumber: '1.0',
-        designVersionStatus: DesignVersionStatus.VERSION_UPDATABLE
-    });
-    const designVersionUpdatable = Factory.create('designVersionUpdatable');
+        let designVersions = [];
 
-    Factory.define('designVersionDraftComplete', DesignVersions, {
-        designId: design._id,
-        designVersionName: 'Draft Complete',
-        designVersionNumber: '1.0',
-        designVersionStatus: DesignVersionStatus.VERSION_DRAFT_COMPLETE
-    });
-    const designVersionDraftComplete = Factory.create('designVersionDraftComplete');
+        const designVersionUpdatable = {
+            designId: 'DESIGN_1',
+            designVersionName: 'Updatable',
+            designVersionNumber: '1.0',
+            designVersionStatus: DesignVersionStatus.VERSION_UPDATABLE
+        };
+        designVersions.push(designVersionUpdatable);
 
-    Factory.define('designVersionUpdatableComplete', DesignVersions, {
-        designId: design._id,
-        designVersionName: 'Draft Complete',
-        designVersionNumber: '1.0',
-        designVersionStatus: DesignVersionStatus.VERSION_UPDATABLE_COMPLETE
-    });
+        const userContext = {
+            designId: 'DESIGN_1',
+            designVersionId: designVersionUpdatable._id
+        };
+
+        return shallow(
+            <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
+        );
+
+    }
 
      describe('A list of Design Versions is visible for the current Design', () => {
 
         it('is also visible to Manager', () => {
 
-            let designVersions = [];
-            designVersions.push(designVersionUpdatable);
-
             const userRole = RoleType.MANAGER;
-            const userContext = {
-                designId: design._id,
-                designVersionId: designVersionUpdatable._id
-            };
 
-            const item = shallow(
-                <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
-            );
+            const item = testDesignVersionsList(userRole);
 
-            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 1, 'Item Container not found');
 
         });
 
         it('is also visible to Developer', () => {
 
-            let designVersions = [];
-            designVersions.push(designVersionUpdatable);
-
             const userRole = RoleType.DEVELOPER;
-            const userContext = {
-                designId: design._id,
-                designVersionId: designVersionUpdatable._id
-            };
 
-            const item = shallow(
-                <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
-            );
+            const item = testDesignVersionsList(userRole);
 
-            chai.assert.equal(item.find('ItemList').length, 1, 'Item Container not found');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 1, 'Item Container not found');
 
         });
+
+         it('is also visible to Guest Viewer', () => {
+
+             const userRole = RoleType.GUEST_VIEWER;
+
+             const item = testDesignVersionsList(userRole);
+
+             chai.assert.equal(item.find('Connect(ItemList)').length, 1, 'Item Container not found');
+
+         });
 
     });
 

@@ -6,13 +6,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { DesignUpdatesList } from './DesignUpdatesContainer.jsx';  // Non container wrapped
 
-import { DesignStatus, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction, RoleType } from '../../../constants/constants.js'
-
-import { Designs } from '../../../collections/design/designs.js'
-import { DesignVersions } from '../../../collections/design/design_versions.js'
-import {WorkPackageType} from "../../../constants/constants";
-import PropTypes from "prop-types";
-
+import { DesignUpdateTab, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction, RoleType } from '../../../constants/constants.js'
 
 
 describe('JSX: DesignUpdatesList', () => {
@@ -138,7 +132,8 @@ describe('JSX: DesignUpdatesList', () => {
                 designVersionStatus={designVersionStatus}
                 designUpdateStatus={designUpdateStatus}
                 userRole={userRole}
-                userContext={userContext}/>
+                userContext={userContext}
+                defaultTab={DesignUpdateTab.TAB_NEW}/>
         );
     }
 
@@ -154,7 +149,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 3, 'Item Containers not found');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 3, 'Item Containers not found');
         });
 
         it('also visible to Manager', () => {
@@ -166,7 +161,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 4, 'Item Container not found');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 4, 'Item Container not found');
         });
 
     });
@@ -184,9 +179,9 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 3, 'Item Containers not found');
-            chai.assert.isTrue(item.find('ItemList').nodes[0].props.hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemList').nodes[0].props.footerAction, 'Add Design Update', 'Expecting Add Design Update footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 3, 'Item Containers not found');
+            chai.assert.isTrue(item.find('Connect(ItemList)').nodes[0].props.hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').nodes[0].props.footerAction, 'Add Design Update', 'Expecting Add Design Update footer action');
         });
     });
 
@@ -201,8 +196,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 3, 'Item Containers not found');
-            chai.assert.isFalse(item.find('ItemList').nodes[0].props.hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 3, 'Item Containers not found');
+            chai.assert.isFalse(item.find('Connect(ItemList)').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
 
         it('no add option for Manager', () => {
@@ -214,8 +209,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 4, 'Item Containers not found');
-            chai.assert.isFalse(item.find('ItemList').nodes[0].props.hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 4, 'Item Containers not found');
+            chai.assert.isFalse(item.find('Connect(ItemList)').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -230,8 +225,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 3, 'Item Container not found');
-            chai.assert.isFalse(item.find('ItemList').nodes[0].props.hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 3, 'Item Container not found');
+            chai.assert.isFalse(item.find('Connect(ItemList)').nodes[0].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -248,9 +243,9 @@ describe('JSX: DesignUpdatesList', () => {
 
             const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 4, 'Item Containers not found');
-            chai.assert.isTrue(item.find('ItemList').nodes[3].props.hasFooterAction, 'Expecting a footer action');
-            chai.assert.equal(item.find('ItemList').nodes[3].props.footerAction, 'Add Work Package', 'Expecting Add Work Package footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 4, 'Item Containers not found');
+            chai.assert.isTrue(item.find('Connect(ItemList)').nodes[3].props.hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').nodes[3].props.footerAction, 'Add Work Package', 'Expecting Add Work Package footer action');
         });
     });
 
@@ -265,7 +260,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.isUndefined(item.find('ItemList').nodes[4], 3, 'WP List was found');
+            chai.assert.isUndefined(item.find('Connect(ItemList)').nodes[4], 3, 'WP List was found');
         });
 
         it('is not available for Developer', () => {
@@ -277,7 +272,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.isUndefined(item.find('ItemList').nodes[4], 3, 'WP List was found');
+            chai.assert.isUndefined(item.find('Connect(ItemList)').nodes[4], 3, 'WP List was found');
         });
     });
 
@@ -292,8 +287,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 4, 'Item Containers not found');
-            chai.assert.isFalse(item.find('ItemList').nodes[3].props.hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 4, 'Item Containers not found');
+            chai.assert.isFalse(item.find('Connect(ItemList)').nodes[3].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -308,8 +303,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             const item = testDesignUpdatesContainer(designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('ItemList').length, 4, 'Item Containers not found');
-            chai.assert.isFalse(item.find('ItemList').nodes[3].props.hasFooterAction, 'Expecting no footer action');
+            chai.assert.equal(item.find('Connect(ItemList)').length, 4, 'Item Containers not found');
+            chai.assert.isFalse(item.find('Connect(ItemList)').nodes[3].props.hasFooterAction, 'Expecting no footer action');
         });
     });
 
