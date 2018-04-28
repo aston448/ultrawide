@@ -78,7 +78,11 @@ export class FeatureSummary extends Component {
                     resultClassFulfilled = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
                 } else {
                     if(featureSummary.expectedCount > 0){
-                        resultFeatureSummary = 'feature-summary-mmm';
+                        if(featureSummary.fulfilledCount > 0) {
+                            resultFeatureSummary = 'feature-summary-mmm';
+                        } else {
+                            resultFeatureSummary = 'feature-summary-meh';
+                        }
                     } else {
                         resultFeatureSummary = 'feature-summary-meh';
                     }
@@ -110,7 +114,7 @@ export class FeatureSummary extends Component {
 
             return(
                 <Grid className="close-grid">
-                    <Row>
+                    <Row className="feature-summary-row">
                         <Col md={8} className="close-col">
                             <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
                         </Col>
