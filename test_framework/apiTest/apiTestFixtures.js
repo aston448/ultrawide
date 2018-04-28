@@ -2,43 +2,44 @@ import { Meteor } from 'meteor/meteor';
 
 import fs from 'fs';
 
-import { UserRoles }                from '../../imports/collections/users/user_roles.js';
-import { UserContext }              from '../../imports/collections/context/user_context.js';
-import { UserCurrentViewOptions}    from '../../imports/collections/context/user_current_view_options.js';
-import { Designs }                  from '../../imports/collections/design/designs.js';
-import { DefaultFeatureAspects}     from '../../imports/collections/design/default_feature_aspects.js';
-import { DesignBackups }            from '../../imports/collections/backups/design_backups.js';
-import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
-import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
-import { UserDesignUpdateSummary }  from '../../imports/collections/summary/user_design_update_summary.js';
-import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
-import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
-import { DesignVersionComponents }  from '../../imports/collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
-import { FeatureBackgroundSteps }   from '../../imports/collections/design/feature_background_steps.js';
-import { ScenarioSteps }            from '../../imports/collections/design/scenario_steps.js';
-import { DomainDictionary }         from '../../imports/collections/design/domain_dictionary.js';
-import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
-import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
-import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
+import { UserRoles }                    from '../../imports/collections/users/user_roles.js';
+import { UserContext }                  from '../../imports/collections/context/user_context.js';
+import { UserCurrentViewOptions}        from '../../imports/collections/context/user_current_view_options.js';
+import { Designs }                      from '../../imports/collections/design/designs.js';
+import { DefaultFeatureAspects}         from '../../imports/collections/design/default_feature_aspects.js';
+import { DesignBackups }                from '../../imports/collections/backups/design_backups.js';
+import { DesignVersions }               from '../../imports/collections/design/design_versions.js';
+import { DesignUpdates }                from '../../imports/collections/design_update/design_updates.js';
+import { UserDesignUpdateSummary }      from '../../imports/collections/summary/user_design_update_summary.js';
+import { WorkPackages }                 from '../../imports/collections/work/work_packages.js';
+import { WorkPackageComponents }        from '../../imports/collections/work/work_package_components.js';
+import { DesignVersionComponents }      from '../../imports/collections/design/design_version_components.js';
+import { DesignUpdateComponents }       from '../../imports/collections/design_update/design_update_components.js';
+import { FeatureBackgroundSteps }       from '../../imports/collections/design/feature_background_steps.js';
+import { ScenarioSteps }                from '../../imports/collections/design/scenario_steps.js';
+import { DomainDictionary }             from '../../imports/collections/design/domain_dictionary.js';
+import { TestOutputLocations }          from '../../imports/collections/configure/test_output_locations.js'
+import { TestOutputLocationFiles }      from '../../imports/collections/configure/test_output_location_files.js'
+import { UserTestTypeLocations }        from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserDesignVersionMashScenarios } from '../../imports/collections/mash/user_dv_mash_scenarios.js';
-import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
-import { UserIntegrationTestResults } from '../../imports/collections/test_results/user_ultrawide_test_results.js';
-import { UserUnitTestResults }      from '../../imports/collections/test_results/user_ultrawide_test_results.js';
-import { UserDevTestSummary }       from '../../imports/collections/summary/user_dev_test_summary.js';
-import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
+import { UserMashScenarioTests }        from '../../imports/collections/mash/user_mash_scenario_tests.js';
+import { UserIntegrationTestResults }   from '../../imports/collections/test_results/user_ultrawide_test_results.js';
+import { UserUnitTestResults }          from '../../imports/collections/test_results/user_ultrawide_test_results.js';
+import { UserDevTestSummary }           from '../../imports/collections/summary/user_dev_test_summary.js';
+import { UserWorkProgressSummary }      from '../../imports/collections/summary/user_work_progress_summary.js';
+import { DefaultFeatureAspectData }     from '../../imports/data/design/default_feature_aspect_db.js';
+import { ImpexModules}                  from "../../imports/service_modules/administration/impex_service_modules";
 
-import DefaultFeatureAspectData     from '../../imports/data/design/default_feature_aspect_db.js';
-
-import { RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
-import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
+import { ViewType, ViewMode, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
+import { DefaultComponentNames }         from '../../imports/constants/default_names.js';
 import { log } from '../../imports/common/utils.js';
-import ClientIdentityServices from '../../imports/apiClient/apiIdentity.js';
+
+import { ClientIdentityServices } from '../../imports/apiClient/apiIdentity.js';
 
 import { ClientDesignComponentServices }    from '../../imports/apiClient/apiClientDesignComponent.js';
 import { DesignComponentModules }           from '../../imports/service_modules/design/design_component_service_modules.js';
 import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
-import ImpexServiceModules              from '../../imports/service_modules/administration/impex_service_modules.js';
+
 
 Meteor.methods({
 
@@ -67,8 +68,6 @@ Meteor.methods({
             console.log('Test Fixtures: NOT TEST INSTANCE!!!');
 
         } else {
-
-            console.log('Clearing test data...');
 
             // For testing we clear the DB and start from scratch
             //console.log('Clearing down DB Data...');
@@ -648,7 +647,7 @@ Meteor.methods({
 
     'testFixtures.clearBackupFiles'(){
 
-        const location = ImpexServiceModules.getBackupLocation();
+        const location = ImpexModules.getBackupLocation();
 
         if(location) {
             const backupFiles = fs.readdirSync(location);

@@ -6,7 +6,7 @@ import { UserContextVerifications }     from '../../../test_framework/test_wrapp
 import { WorkPackageActions }           from '../../../test_framework/test_wrappers/work_package_actions.js';
 import { WpComponentActions }           from '../../../test_framework/test_wrappers/work_package_component_actions.js';
 
-import {RoleType} from '../../../imports/constants/constants.js'
+import {RoleType, ComponentType} from '../../../imports/constants/constants.js'
 import {DefaultItemNames} from '../../../imports/constants/default_names.js';
 
 describe('UC 222 - Select Work Package Component', function(){

@@ -36,7 +36,7 @@ import { DefaultFeatureAspectData }         from '../../data/design/default_feat
 //
 //======================================================================================================================
 
-class ImpexModules{
+class ImpexModulesClass{
 
     markAllBackupsAsUnconfirmed(){
 
@@ -1079,5 +1079,5 @@ class ImpexModules{
 
 }
 
-export default new ImpexModules();
+export const ImpexModules = new ImpexModulesClass();
 

@@ -18,7 +18,7 @@
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientIdentityServices{
+class ClientIdentityServicesClass {
 
     getApplicationName(){
         return 'ULTRAWIDE';
@@ -26,4 +26,4 @@ class ClientIdentityServices{
 
 }
 
-export default new ClientIdentityServices();
+export const ClientIdentityServices = new ClientIdentityServicesClass();

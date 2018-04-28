@@ -17,10 +17,10 @@ import {DisplayContext, RoleType, ViewMode, ViewType, WorkPackageType, Component
 import {AddActionIds} from "../constants/ui_context_ids";
 import { log }        from '../common/utils.js';
 
-import ClientWorkPackageComponentServices   from "../apiClient/apiClientWorkPackageComponent";
+import { ClientWorkPackageComponentServices }   from "../apiClient/apiClientWorkPackageComponent";
 import ClientDesignVersionServices          from "../apiClient/apiClientDesignVersion";
 import { ClientDesignComponentServices }        from "../apiClient/apiClientDesignComponent";
-import ClientDesignUpdateComponentServices  from "../apiClient/apiClientDesignUpdateComponent";
+import { ClientDesignUpdateComponentServices }  from "../apiClient/apiClientDesignUpdateComponent";
 
 
 // Bootstrap

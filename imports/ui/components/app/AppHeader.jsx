@@ -18,7 +18,7 @@ import TextLookups                      from '../../../common/lookups.js';
 import { log }                          from '../../../common/utils.js'
 
 import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
-import ClientIdentityServices           from '../../../apiClient/apiIdentity';
+import { ClientIdentityServices }           from '../../../apiClient/apiIdentity';
 import ClientUserContextServices        from "../../../apiClient/apiClientUserContext";
 
  // Bootstrap

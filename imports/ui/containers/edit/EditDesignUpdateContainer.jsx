@@ -22,7 +22,7 @@ import { ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 import { log }                              from '../../../common/utils.js';
 
-import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
+import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';

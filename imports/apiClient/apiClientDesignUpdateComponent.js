@@ -32,7 +32,7 @@ import ServerDesignComponentApi from "../apiServer/apiDesignComponent";
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientDesignUpdateComponentServices{
+class ClientDesignUpdateComponentServicesClass{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -523,8 +523,6 @@ class ClientDesignUpdateComponentServices{
         // Real action call
         ServerDesignUpdateComponentApi.toggleScope(view, mode, displayContext, baseComponent._id, designUpdateId, updateComponent, newScope, (err, result) => {
 
-            console.log('SERVER TOGGLE SCOPE');
-
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
@@ -858,4 +856,4 @@ class ClientDesignUpdateComponentServices{
 
 }
 
-export default new ClientDesignUpdateComponentServices();
+export const ClientDesignUpdateComponentServices = new ClientDesignUpdateComponentServicesClass();

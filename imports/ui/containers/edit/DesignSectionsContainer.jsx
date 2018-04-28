@@ -16,7 +16,7 @@ import {log, replaceAll} from "../../../common/utils";
 import { LogLevel, ComponentType, DisplayContext, UpdateScopeType, ViewMode } from '../../../constants/constants.js';
 
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
-import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 import { ClientDesignComponentServices }        from "../../../apiClient/apiClientDesignComponent";
 // Bootstrap

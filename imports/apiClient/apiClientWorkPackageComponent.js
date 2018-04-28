@@ -28,7 +28,7 @@ import {
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
 
-class ClientWorkPackageComponentServices {
+class ClientWorkPackageComponentServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -51,6 +51,7 @@ class ClientWorkPackageComponentServices {
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
+                console.log('%o', err);
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
@@ -245,5 +246,5 @@ class ClientWorkPackageComponentServices {
 
 }
 
-export default new ClientWorkPackageComponentServices();
+export const ClientWorkPackageComponentServices = new ClientWorkPackageComponentServicesClass();
 

@@ -13,7 +13,7 @@ import {ViewType, LogLevel, UpdateMergeStatus}    from '../../../constants/const
 import {log} from "../../../common/utils";
 
 import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
-import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
+import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 
 import TextLookups                  from '../../../common/lookups.js';
 

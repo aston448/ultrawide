@@ -12,7 +12,7 @@ import { TestIntegrationActions }       from '../../../test_framework/test_wrapp
 
 
 import {DefaultLocationText} from '../../../imports/constants/default_names.js';
-import {estLocationFileType, TestRunner, MashTestStatus, ViewOptionType} from '../../../imports/constants/constants.js';
+import {TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType} from '../../../imports/constants/constants.js';
 
 describe('UC 312 - View Unit Test Results', function(){
 

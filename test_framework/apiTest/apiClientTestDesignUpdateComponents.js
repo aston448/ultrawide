@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
 
-import ClientDesignUpdateComponentServices      from '../../imports/apiClient/apiClientDesignUpdateComponent.js';
+import { ClientDesignUpdateComponentServices }      from '../../imports/apiClient/apiClientDesignUpdateComponent.js';
 import { ClientDesignComponentServices }            from '../../imports/apiClient/apiClientDesignComponent.js';
 import { DesignComponentModules }                   from '../../imports/service_modules/design/design_component_service_modules.js';
 import { TestDataHelpers }                          from '../test_modules/test_data_helpers.js'

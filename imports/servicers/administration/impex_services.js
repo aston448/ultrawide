@@ -5,7 +5,7 @@ import fs from 'fs';
 import { padDigits, replaceAll, log }               from '../../common/utils.js';
 import { LogLevel }                     from '../../constants/constants.js';
 
-import ImpexModules                     from '../../service_modules/administration/impex_service_modules.js';
+import { ImpexModules }                     from '../../service_modules/administration/impex_service_modules.js';
 import DesignServices                   from '../../servicers/design/design_services.js';
 
 // Data Access

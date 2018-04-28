@@ -4,7 +4,7 @@ import fs from 'fs';
 import { log } from '../../common/utils.js';
 import { TestLocationFileStatus, UltrawideDirectory, LogLevel} from '../../constants/constants.js';
 
-import ImpexModules                     from '../../service_modules/administration/impex_service_modules.js';
+import { ImpexModules }                     from '../../service_modules/administration/impex_service_modules.js';
 
 // Data Access
 import { UserTestTypeLocationData }         from '../../data/configure/user_test_type_location_db.js';

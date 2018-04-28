@@ -24,7 +24,7 @@ import {AddActionIds}                       from "../../../constants/ui_context_
 
 import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
-import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 

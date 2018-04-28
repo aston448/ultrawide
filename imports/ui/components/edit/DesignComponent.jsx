@@ -22,8 +22,8 @@ import {ComponentType, ViewMode, ViewType, DisplayContext, UserSettingValue, Upd
 import {AddActionIds}   from "../../../constants/ui_context_ids.js";
 
 import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
-import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
+import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ComponentUiModules                   from '../../../ui_modules/design_component.js'
 
 import { log }              from '../../../common/utils.js';

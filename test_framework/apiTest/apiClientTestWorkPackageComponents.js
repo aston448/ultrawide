@@ -1,12 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
-import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 
+import {ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType} from '../../imports/constants/constants.js';
 
-import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType} from '../../imports/constants/constants.js';
-import ClientWorkPackageComponentServices   from '../../imports/apiClient/apiClientWorkPackageComponent.js';
+import { ClientWorkPackageComponentServices }   from '../../imports/apiClient/apiClientWorkPackageComponent.js';
 import { ClientDesignComponentServices }        from '../../imports/apiClient/apiClientDesignComponent.js';
-import ClientDesignUpdateComponentServices  from '../../imports/apiClient/apiClientDesignUpdateComponent.js';
+import { ClientDesignUpdateComponentServices }  from '../../imports/apiClient/apiClientDesignUpdateComponent.js';
 import { TestDataHelpers }                      from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
@@ -30,7 +29,7 @@ Meteor.methods({
         }
 
 
-        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent._id, true);
+        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent, true);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Component In Scope for ' + componentName);
     },
@@ -53,7 +52,7 @@ Meteor.methods({
             designComponent =  TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
         }
 
-        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent._id, false);
+        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent, false);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Component Out Scope');
     },

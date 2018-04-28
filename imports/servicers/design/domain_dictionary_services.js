@@ -1,10 +1,8 @@
 
-// Ultrawide Collections
-import { DomainDictionary } from '../../collections/design/domain_dictionary.js';
-
 // Ultrawide services
-import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js'
-import DesignComponentServices  from '../../service_modules/design/design_component_service_modules.js';
+import { DefaultDetailsText } from '../../constants/default_names.js'
+
+import { DesignComponentModules }  from '../../service_modules/design/design_component_service_modules.js';
 
 import { DomainDictionaryData }    from '../../data/design/domain_dictionary_db.js';
 
@@ -24,7 +22,7 @@ class DomainDictionaryServices{
 
             const now = new Date().getTime();
 
-            return DomainDictionaryData.insertNewDictionaryTerm(designId, designVersionId, DesignComponentServices.getRawTextFor(DefaultDetailsText.NEW_DICTIONARY_ENTRY_TEXT));
+            return DomainDictionaryData.insertNewDictionaryTerm(designId, designVersionId, DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DICTIONARY_ENTRY_TEXT));
         }
 
     };

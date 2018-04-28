@@ -31,8 +31,6 @@ class DesignComponentServices{
             //let parentRefId = 'NONE';
             let featureRefId = 'NONE';
 
-            console.log('New ' + componentType + ' added...');
-
             let parent = DesignComponentData.getDesignComponentByRef(designVersionId, parentRefId);
 
             if(parent){

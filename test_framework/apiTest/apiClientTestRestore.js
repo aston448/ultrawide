@@ -6,7 +6,7 @@ import { Designs }                  from '../../imports/collections/design/desig
 
 import ClientBackupServices         from '../../imports/apiClient/apiClientImpEx.js'
 import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
-import ImpexModules                 from '../../imports/service_modules/administration/impex_service_modules.js';
+import { ImpexModules }                 from '../../imports/service_modules/administration/impex_service_modules.js';
 
 import {RoleType} from '../../imports/constants/constants.js';
 

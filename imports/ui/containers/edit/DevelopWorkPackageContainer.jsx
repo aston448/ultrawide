@@ -19,7 +19,7 @@ import MashSelectedItemContainer            from '../../containers/mash/MashSele
 import {log} from "../../../common/utils";
 import { ComponentType, ViewType, DisplayContext, LogLevel } from '../../../constants/constants.js';
 
-import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
