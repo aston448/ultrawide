@@ -13,7 +13,7 @@ import {
 // In this class we can change what is displayed without buggering up the existing data.
 // Could be changed to source from stored data ...
 
-class TextLookups {
+class TextLookupsClass {
 
     designStatus(status){
 
@@ -336,4 +336,4 @@ class TextLookups {
 
 }
 
-export default new TextLookups();
+export const TextLookups = new TextLookupsClass();

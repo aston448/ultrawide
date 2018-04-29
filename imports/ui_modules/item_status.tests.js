@@ -8,7 +8,7 @@ import { ItemStatusUiModules } from '../ui_modules/item_status.js';
 
 import { chai } from 'meteor/practicalmeteor:chai';
 import {shallow} from "enzyme/build/index";
-import TextLookups from "../common/lookups";
+import { TextLookups } from "../common/lookups";
 
 describe('UI: Item Status', () => {
 

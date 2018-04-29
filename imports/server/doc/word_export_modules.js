@@ -1,7 +1,7 @@
 
 import { WordFonts }    from '../../../imports/constants/constants.js';
 
-class WordExportModules {
+class WordExportModulesClass {
 
     newPage(document){
 
@@ -71,4 +71,4 @@ class WordExportModules {
     }
 }
 
-export default new WordExportModules();
+export const WordExportModules = new WordExportModulesClass();

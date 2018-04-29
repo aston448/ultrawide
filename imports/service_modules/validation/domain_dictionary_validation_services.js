@@ -10,7 +10,7 @@ import { Validation, DomainDictionaryValidationErrors } from '../../constants/va
 // All services should make no data-access calls so as to be module testable
 //
 //======================================================================================================================
-class DomainDictionaryValidationServices{
+class DomainDictionaryValidationServicesClass {
 
     validateAddNewTerm(userRole, view, mode){
 
@@ -107,4 +107,4 @@ class DomainDictionaryValidationServices{
 
 
 }
-export default new DomainDictionaryValidationServices();
+export const DomainDictionaryValidationServices = new DomainDictionaryValidationServicesClass();

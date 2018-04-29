@@ -5,8 +5,8 @@ import { WorkPackageType, ComponentType, MessageType } from '../constants/consta
 import { Validation }                       from '../constants/validation_errors.js';
 import { WorkPackageComponentMessages }     from '../constants/message_texts.js';
 
-import WorkPackageComponentValidationApi    from '../apiValidation/apiWorkPackageComponentValidation.js';
-import ServerWorkPackageComponentApi        from '../apiServer/apiWorkPackageComponent.js';
+import { WorkPackageComponentValidationApi }    from '../apiValidation/apiWorkPackageComponentValidation.js';
+import { ServerWorkPackageComponentApi }        from '../apiServer/apiWorkPackageComponent.js';
 
 // Data Access
 import { WorkPackageData }                      from '../data/work/work_package_db.js';

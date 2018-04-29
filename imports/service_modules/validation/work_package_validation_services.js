@@ -11,7 +11,7 @@ import { Validation, WorkPackageValidationErrors } from '../../constants/validat
 //
 //======================================================================================================================
 
-class WorkPackageValidationServices{
+class WorkPackageValidationServicesClass {
 
     validateAddWorkPackage(userRole, designVersion, designUpdate, workPackageType){
 
@@ -191,4 +191,4 @@ class WorkPackageValidationServices{
     };
 }
 
-export default new WorkPackageValidationServices();
+export const WorkPackageValidationServices = new WorkPackageValidationServicesClass();

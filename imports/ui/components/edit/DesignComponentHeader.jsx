@@ -14,7 +14,7 @@ import FeatureTestSummary   from '../summary/FeatureTestSummary.jsx';
 import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import { ClientDomainDictionaryServices }       from '../../../apiClient/apiClientDomainDictionary.js';
+import { ClientDomainDictionaryServiceModules }       from '../../../apiClient/apiClientDomainDictionary.js';
 import { ClientTextEditorServices }             from '../../../apiClient/apiClientTextEditor.js';
 import { ComponentUiModules }                   from '../../../ui_modules/design_component.js'
 
@@ -22,7 +22,7 @@ import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, Work
     MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
 import {DefaultComponentNames}          from '../../../constants/default_names.js';
 import {getComponentClass, replaceAll, log}         from '../../../common/utils.js';
-import TextLookups                      from '../../../common/lookups.js'
+import { TextLookups }                      from '../../../common/lookups.js'
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';

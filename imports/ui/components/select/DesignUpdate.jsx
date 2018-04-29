@@ -11,7 +11,7 @@ import ItemReference            from './ItemReference.jsx';
 // Ultrawide Services
 import {log} from "../../../common/utils";
 import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType, LogLevel} from '../../../constants/constants.js';
-import TextLookups from '../../../common/lookups.js';
+import { TextLookups } from '../../../common/lookups.js';
 
 import { ClientDesignUpdateServices }   from '../../../apiClient/apiClientDesignUpdate.js';
 

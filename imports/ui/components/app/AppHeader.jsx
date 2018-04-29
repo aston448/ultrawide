@@ -14,7 +14,7 @@ import HeaderMessage            from '../app/HeaderMessage.jsx';
 // Ultrawide Services
 import {MenuType, MenuDropdown, ViewType, RoleType, LogLevel} from '../../../constants/constants.js';
 
-import TextLookups                      from '../../../common/lookups.js';
+import { TextLookups }                      from '../../../common/lookups.js';
 import { log }                          from '../../../common/utils.js'
 
 import { ClientAppHeaderServices }          from '../../../apiClient/apiClientAppHeader.js';

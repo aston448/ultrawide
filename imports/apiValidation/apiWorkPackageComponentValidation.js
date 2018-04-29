@@ -2,7 +2,7 @@
 // Ultrawide Services
 import { ViewType } from '../constants/constants.js';
 
-import WorkPackageComponentValidationServices   from '../service_modules/validation/work_package_component_validation_services.js';
+import { WorkPackageComponentValidationServices }   from '../service_modules/validation/work_package_component_validation_services.js';
 
 // Data Access
 import { DesignComponentData }                      from '../data/design/design_component_db.js';
@@ -14,7 +14,7 @@ import { DesignUpdateComponentData }                from '../data/design_update/
 //
 //======================================================================================================================
 
-class WorkPackageComponentValidationApi {
+class WorkPackageComponentValidationApiClass {
 
     validateToggleInScope(view, displayContext, userContext, designComponentId){
 
@@ -38,4 +38,4 @@ class WorkPackageComponentValidationApi {
     };
 }
 
-export default new WorkPackageComponentValidationApi();
+export const WorkPackageComponentValidationApi = new WorkPackageComponentValidationApiClass();

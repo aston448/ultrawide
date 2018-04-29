@@ -12,7 +12,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Services
 import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
-import ClientUserManagementServices     from '../../../apiClient/apiClientUserManagement.js';
+import { ClientUserManagementServices }     from '../../../apiClient/apiClientUserManagement.js';
 
 // Bootstrap
 import {Grid, Row, Col, Button} from 'react-bootstrap';

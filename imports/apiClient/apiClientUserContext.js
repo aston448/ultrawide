@@ -3,7 +3,7 @@
 // Ultrawide Services
 import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, DisplayContext, HomePageTab } from '../constants/constants.js';
 import { log }                          from '../common/utils.js';
-import TextLookups                      from '../common/lookups.js'
+import { TextLookups }                      from '../common/lookups.js'
 
 import { ClientDesignVersionServices }      from '../apiClient/apiClientDesignVersion.js';
 import { ClientDesignUpdateServices }       from '../apiClient/apiClientDesignUpdate.js';

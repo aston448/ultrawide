@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import UserManagementValidationServices from '../service_modules/validation/user_management_validation_services.js';
+import { UserManagementValidationServices } from '../service_modules/validation/user_management_validation_services.js';
 import { Validation, UserManagementValidationErrors } from '../constants/validation_errors.js';
 
 // Data Access
@@ -12,7 +12,7 @@ import { UserRoleData }                     from '../data/users/user_role_db.js'
 //
 //======================================================================================================================
 
-class UserManagementValidationApi{
+class UserManagementValidationApiClass{
 
     validateAddUser(actionUserId){
 
@@ -79,4 +79,4 @@ class UserManagementValidationApi{
     }
 }
 
-export default new UserManagementValidationApi();
+export const UserManagementValidationApi = new UserManagementValidationApiClass();

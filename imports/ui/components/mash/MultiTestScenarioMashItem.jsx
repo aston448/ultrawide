@@ -10,7 +10,7 @@ import MashScenarioTestContainer        from '../../containers/mash/MashScenario
 // Ultrawide Services
 import { DisplayContext, LogLevel } from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
-import TextLookups  from '../../../common/lookups.js';
+import { TextLookups }  from '../../../common/lookups.js';
 
 // Bootstrap
 import {Grid, Row, Col}     from 'react-bootstrap';

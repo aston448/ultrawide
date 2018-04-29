@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import DomainDictionaryValidationServices   from '../service_modules/validation/domain_dictionary_validation_services.js';
+import { DomainDictionaryValidationServices }   from '../service_modules/validation/domain_dictionary_validation_services.js';
 
 // Data Access
 import { DesignVersionData }                    from '../data/design/design_version_db.js';

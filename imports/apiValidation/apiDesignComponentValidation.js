@@ -2,7 +2,7 @@
 // Ultrawide Services
 import { DesignComponentValidationErrors, Validation } from '../constants/validation_errors.js';
 
-import DesignComponentValidationServices    from '../service_modules/validation/design_component_validation_services.js';
+import { DesignComponentValidationServices }    from '../service_modules/validation/design_component_validation_services.js';
 import { DesignComponentModules }               from '../service_modules/design/design_component_service_modules.js';
 
 // Data Access

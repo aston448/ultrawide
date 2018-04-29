@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import WorkPackageValidationServices    from '../service_modules/validation/work_package_validation_services.js';
+import { WorkPackageValidationServices }    from '../service_modules/validation/work_package_validation_services.js';
 
 // Data Access
 import { DesignVersionData }                from '../data/design/design_version_db.js';

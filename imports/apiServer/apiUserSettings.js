@@ -9,7 +9,7 @@ import {
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
 
-class ServerUserSettingsApi {
+class ServerUserSettingsApiClass {
 
     saveSetting(userId, settingName, newValue, callback) {
 
@@ -26,5 +26,5 @@ class ServerUserSettingsApi {
     };
 }
 
-export default new ServerUserSettingsApi();
+export const ServerUserSettingsApi = new ServerUserSettingsApiClass();
 

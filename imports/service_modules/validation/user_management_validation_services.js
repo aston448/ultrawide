@@ -12,7 +12,7 @@ import { isAlphaNumeric } from '../../common/utils.js'
 //
 //======================================================================================================================
 
-class UserManagementValidationServices {
+class UserManagementValidationServicesClass {
 
 
     validateAddUser(actionUser) {
@@ -115,6 +115,6 @@ class UserManagementValidationServices {
     };
 }
 
-export default new UserManagementValidationServices();
+export const UserManagementValidationServices = new UserManagementValidationServicesClass();
 
 

@@ -11,7 +11,7 @@ import { Validation, ImpExValidationErrors } from '../../constants/validation_er
 //
 //======================================================================================================================
 
-class ImpExValidationServices{
+class ImpExValidationServicesClass{
 
     validateBackupDesign(userRole){
 
@@ -45,4 +45,4 @@ class ImpExValidationServices{
     }
 }
 
-export default new ImpExValidationServices();
+export const ImpExValidationServices = new ImpExValidationServicesClass();

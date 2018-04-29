@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import TestIntegrationValidationServices    from '../service_modules/validation/test_integration_validation_services.js';
+import { TestIntegrationValidationServices }    from '../service_modules/validation/test_integration_validation_services.js';
 
 // Data Access
 import { DesignComponentData }                  from '../data/design/design_component_db.js';
@@ -12,7 +12,7 @@ import { DesignUpdateComponentData }            from '../data/design_update/desi
 //
 //======================================================================================================================
 
-class TestIntegrationValidationApi{
+class TestIntegrationValidationApiClass{
 
     validateExportIntegrationTests(userRole, userContext){
 
@@ -31,4 +31,4 @@ class TestIntegrationValidationApi{
         return TestIntegrationValidationServices.validateExportIntegrationTests(userRole, designComponent);
     };
 }
-export default new TestIntegrationValidationApi();
+export const TestIntegrationValidationApi = new TestIntegrationValidationApiClass();

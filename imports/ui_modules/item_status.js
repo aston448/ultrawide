@@ -1,5 +1,5 @@
 import {ItemType, LogLevel, WorkPackageStatus, WorkPackageTestStatus} from "../constants/constants";
-import TextLookups from '../common/lookups.js';
+import { TextLookups } from '../common/lookups.js';
 import {log} from "../common/utils";
 
 class ItemStatusUiModulesClass {

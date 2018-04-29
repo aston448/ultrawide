@@ -1,4 +1,4 @@
-import TextLookups from "../../imports/common/lookups";
+import { TextLookups } from "../../imports/common/lookups";
 
 import {replaceAll} from "../../imports/common/utils";
 

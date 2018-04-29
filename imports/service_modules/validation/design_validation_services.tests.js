@@ -1,5 +1,5 @@
 
-import DesignValidationServices from '../../service_modules/validation/design_validation_services.js';
+import { DesignValidationServices } from '../../service_modules/validation/design_validation_services.js';
 
 import { RoleType, DesignStatus }     from '../../constants/constants.js';
 import { Validation, DesignValidationErrors }   from '../../constants/validation_errors.js';

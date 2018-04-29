@@ -50,33 +50,6 @@ class DesignUpdateComponentModulesClass{
         });
     }
 
-    // updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId){
-    //
-    //     // See if any update WPs affected by this update
-    //     const workPackages = WorkPackageData.getActiveWorkPackagesForDesignUpdate(designVersionId, designUpdateId);
-    //
-    //     if(workPackages.length > 0) {
-    //
-    //         const component = DesignUpdateComponentData.getUpdateComponentById(newUpdateComponentId);
-    //
-    //         // Application will not have parent
-    //         let componentParentId = 'NONE';
-    //
-    //         const componentParent = DesignUpdateComponentData.getUpdateComponentByRef(designVersionId, designUpdateId, component.componentParentReferenceIdNew);
-    //
-    //         if (componentParent) {
-    //             componentParentId = componentParent._id;
-    //         }
-    //
-    //         // If the parent is in the WP actual scope, add in this component too
-    //         workPackages.forEach((wp) => {
-    //
-    //             WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParentId, designVersionId);
-    //
-    //         });
-    //     }
-    // };
-
     updateCurrentDesignVersionWithScopedScenario(designUpdateId, scenario){
 
         const designUpdate = DesignUpdateData.getDesignUpdateById(designUpdateId);

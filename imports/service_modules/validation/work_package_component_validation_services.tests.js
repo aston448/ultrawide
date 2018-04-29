@@ -3,7 +3,7 @@
 import {DesignVersions} from '../../collections/design/design_versions.js';
 import {DesignUpdates} from '../../collections/design_update/design_updates.js';
 
-import WorkPackageComponentValidationServices from '../../service_modules/validation/work_package_component_validation_services.js';
+import { WorkPackageComponentValidationServices } from '../../service_modules/validation/work_package_component_validation_services.js';
 
 import { RoleType, ViewType, ViewMode, DisplayContext, ComponentType, DesignVersionStatus, UpdateScopeType }     from '../../constants/constants.js';
 import { Validation, WorkPackageComponentValidationErrors }   from '../../constants/validation_errors.js';

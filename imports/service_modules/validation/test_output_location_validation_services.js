@@ -11,7 +11,7 @@ import { Validation, TestOutputLocationValidationErrors, TestOutputLocationFileV
 //
 //======================================================================================================================
 
-class TestOutputLocationValidationServices{
+class TestOutputLocationValidationServicesClass {
 
     // LOCATIONS -------------------------------------------------------------------------------------------------------
 
@@ -102,4 +102,4 @@ class TestOutputLocationValidationServices{
 
 
 }
-export default new TestOutputLocationValidationServices();
+export const TestOutputLocationValidationServices = new TestOutputLocationValidationServicesClass();

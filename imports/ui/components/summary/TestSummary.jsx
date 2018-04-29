@@ -15,7 +15,7 @@ import {log} from "../../../common/utils";
 import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 
-import TextLookups                  from '../../../common/lookups.js';
+import { TextLookups }                  from '../../../common/lookups.js';
 
 // Bootstrap
 import {Grid, Row, Col, InputGroup, Tooltip, OverlayTrigger} from 'react-bootstrap';

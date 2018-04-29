@@ -2,7 +2,7 @@
 import { Validation } from '../constants/validation_errors.js'
 
 import { WorkPackageComponentServices }         from '../servicers/work/work_package_component_services.js';
-import WorkPackageComponentValidationApi    from '../apiValidation/apiWorkPackageComponentValidation.js';
+import { WorkPackageComponentValidationApi }    from '../apiValidation/apiWorkPackageComponentValidation.js';
 
 //======================================================================================================================
 //

@@ -17,7 +17,7 @@ import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
 
 import { ClientDataServices }               from '../../../apiClient/apiClientDataServices.js';
-import ClientUserManagementServices     from '../../../apiClient/apiClientUserManagement.js';
+import { ClientUserManagementServices }     from '../../../apiClient/apiClientUserManagement.js';
 
 import {AddActionIds}                   from "../../../constants/ui_context_ids.js";
 

@@ -16,7 +16,7 @@ import {
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerTestOutputLocationApi {
+class ServerTestOutputLocationApiClass {
 
     addLocation(userRole, userId,  callback){
 
@@ -135,8 +135,6 @@ class ServerTestOutputLocationApi {
         )
     }
 
-
-
 }
 
-export default new ServerTestOutputLocationApi();
+export const ServerTestOutputLocationApi = new ServerTestOutputLocationApiClass();

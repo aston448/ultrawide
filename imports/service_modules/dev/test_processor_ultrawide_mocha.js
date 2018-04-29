@@ -9,7 +9,7 @@ import { UserIntegrationTestResultData }        from '../../data/test_results/us
 import { UserAcceptanceTestResultData }         from '../../data/test_results/user_acceptance_test_result_db.js';
 
 // Plugin class to read test results from an ultrawide-mocha-reporter JSON file
-class UltrawideMochaTestServices{
+class UltrawideMochaTestServicesClass{
 
     getJsonTestResults(resultsFile, userId, testType){
 
@@ -149,4 +149,4 @@ class UltrawideMochaTestServices{
 
 }
 
-export default new UltrawideMochaTestServices();
+export const UltrawideMochaTestServices = new UltrawideMochaTestServicesClass();

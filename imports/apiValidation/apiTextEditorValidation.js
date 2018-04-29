@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import TextEditorValidationServices from '../service_modules/validation/text_editor_validation_services.js';
+import { TextEditorValidationServices } from '../service_modules/validation/text_editor_validation_services.js';
 
 //======================================================================================================================
 //
@@ -8,7 +8,7 @@ import TextEditorValidationServices from '../service_modules/validation/text_edi
 //
 //======================================================================================================================
 
-class TextEditorValidationApi{
+class TextEditorValidationApiClass {
 
     validateSaveDesignComponentDetails(userRole){
 
@@ -21,4 +21,4 @@ class TextEditorValidationApi{
     };
 
 }
-export default new TextEditorValidationApi();
+export const TextEditorValidationApi = new TextEditorValidationApiClass();

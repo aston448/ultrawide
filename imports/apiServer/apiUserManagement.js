@@ -14,7 +14,7 @@ import {
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
 
-class ServerUserManagementApi {
+class ServerUserManagementApiClass {
 
     addUser(actionUserId, callback) {
 
@@ -95,4 +95,4 @@ class ServerUserManagementApi {
 
 }
 
-export default new ServerUserManagementApi();
+export const ServerUserManagementApi = new ServerUserManagementApiClass();

@@ -27,7 +27,7 @@ import {setCurrentUserName, setCurrentView, setCurrentRole, updateUserMessage} f
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientLoginServices{
+class ClientLoginServicesClass{
 
     userLogin(userName, password){
 
@@ -106,5 +106,5 @@ class ClientLoginServices{
 
 }
 
-export default new ClientLoginServices();
+export const ClientLoginServices = new ClientLoginServicesClass();
 

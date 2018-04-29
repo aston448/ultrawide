@@ -5,7 +5,7 @@ import { MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DomainDictionaryMessages } from '../constants/message_texts.js';
 
-import { ClientDomainDictionaryServices }   from '../service_modules/design/client_domain_dictionary.js';
+import { ClientDomainDictionaryServiceModules }   from '../service_modules/design/client_domain_dictionary.js';
 import { DomainDictionaryValidationApi }    from '../apiValidation/apiDomainDictionaryValidation.js';
 import { ServerDomainDictionaryApi }        from '../apiServer/apiDomainDictionary.js';
 
@@ -22,7 +22,7 @@ import {updateUserMessage} from '../redux/actions';
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
 
-class ClientDomainDictionaryApiClass {
+class ClientDomainDictionaryServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -171,7 +171,7 @@ class ClientDomainDictionaryApiClass {
     // Get function to decorate Feature Narratives
     getNarrativeDecoratorFunction(){
 
-        return ClientDomainDictionaryServices.getNarrativeDecoratorFunction();
+        return ClientDomainDictionaryServiceModules.getNarrativeDecoratorFunction();
 
     }
 
@@ -181,10 +181,10 @@ class ClientDomainDictionaryApiClass {
         // Get the current list of Domain Terms
         const domainTerms = DesignVersionData.getDomainDictionaryEntries(designVersionId);
 
-        return ClientDomainDictionaryServices.getDomainTermDecoratorFunction(domainTerms)
+        return ClientDomainDictionaryServiceModules.getDomainTermDecoratorFunction(domainTerms)
 
     };
 
 }
 
-export const ClientDomainDictionaryApi = new ClientDomainDictionaryApiClass();
+export const ClientDomainDictionaryServices = new ClientDomainDictionaryServicesClass();

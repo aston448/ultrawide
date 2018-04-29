@@ -15,7 +15,7 @@ import {ViewType, ViewMode, DetailsViewType, MenuType, LogLevel}  from '../../..
 import {AddActionIds}                                   from "../../../constants/ui_context_ids.js";
 import {log} from "../../../common/utils";
 
-import { ClientDomainDictionaryServices }   from '../../../apiClient/apiClientDomainDictionary.js';
+import { ClientDomainDictionaryServiceModules }   from '../../../apiClient/apiClientDomainDictionary.js';
 import { ClientTestIntegrationServices }    from '../../../apiClient/apiClientTestIntegration.js';
 
 // Bootstrap

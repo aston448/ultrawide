@@ -2,11 +2,11 @@
 import { saveDesignComponentText, saveDesignUpdateComponentText } from '../apiValidatedMethods/text_editor_methods.js'
 
 // =====================================================================================================================
-// Server API for teh Text Editor
+// Server API for the Text Editor
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerTextEditorApi {
+class ServerTextEditorApiClass {
 
     saveDesignComponentText(userRole, designComponentId, newRawText, callback){
 
@@ -39,4 +39,4 @@ class ServerTextEditorApi {
 
 }
 
-export default new ServerTextEditorApi();
+export const ServerTextEditorApi = new ServerTextEditorApiClass();

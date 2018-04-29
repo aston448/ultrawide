@@ -1,6 +1,4 @@
 
-import { Meteor } from 'meteor/meteor';
-
 import {
     refreshTestData,
     updateTestSummaryData,
@@ -14,7 +12,7 @@ import {
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerTestIntegrationApi {
+class ServerTestIntegrationApiClass {
 
     refreshTestData(userContext, fullRefresh, callback){
 
@@ -71,33 +69,5 @@ class ServerTestIntegrationApi {
 
 }
 
-export default new ServerTestIntegrationApi();
-
-
-// Meteor methods
-Meteor.methods({
-
-    'mash.loadUserFeatureFileData'(userContext){
-        TestIntegrationServices.loadUserFeatureFileData(userContext);
-    },
-
-    'mash.updateMovedDesignStep'(designMashItemId){
-        TestIntegrationServices.updateMovedDesignStep(designMashItemId);
-    },
-
-    'mash.updateMovedDevStep'(devMashItemId, targetMashItemId, userContext){
-        TestIntegrationServices.updateMovedDevStep(devMashItemId, targetMashItemId, userContext);
-    },
-
-    'mash.exportScenario'(scenarioReferenceId, userContext){
-        TestIntegrationServices.exportScenario(scenarioReferenceId, userContext)
-    },
-
-    'mash.exportFeatureConfiguration'(userContext){
-        TestIntegrationServices.exportFeatureConfiguration(userContext);
-    },
-
-
-
-});
+export const ServerTestIntegrationApi = new ServerTestIntegrationApiClass();
 

@@ -15,7 +15,7 @@ import {DesignComponentValidationErrors} from "../../constants/validation_errors
 //
 //======================================================================================================================
 
-class DesignUpdateComponentValidationServices{
+class DesignUpdateComponentValidationServicesClass{
 
     validateAddDesignUpdateComponent(view, mode, componentType, parentComponent){
 
@@ -464,4 +464,4 @@ class DesignUpdateComponentValidationServices{
     }
 }
 
-export default new DesignUpdateComponentValidationServices();
+export const DesignUpdateComponentValidationServices = new DesignUpdateComponentValidationServicesClass();

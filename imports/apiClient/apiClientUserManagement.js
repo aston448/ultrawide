@@ -1,12 +1,12 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import { ViewType, MessageType }            from '../constants/constants.js';
-import { Validation }                       from '../constants/validation_errors.js';
-import { UserManagementMessages }           from '../constants/message_texts.js'
+import { MessageType }                          from '../constants/constants.js';
+import { Validation }                           from '../constants/validation_errors.js';
+import { UserManagementMessages }               from '../constants/message_texts.js'
 
-import ServerUserManagementApi              from '../apiServer/apiUserManagement';
-import UserManagementValidationApi          from '../apiValidation/apiUserManagementValidation.js';
+import { ServerUserManagementApi }              from '../apiServer/apiUserManagement';
+import { UserManagementValidationApi }          from '../apiValidation/apiUserManagementValidation.js';
 import { ClientAppHeaderServices }              from '../apiClient/apiClientAppHeader.js';
 
 // Data Access
@@ -21,7 +21,7 @@ import {setCurrentUserId, updateUserMessage} from '../redux/actions'
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientUserManagementServices{
+class ClientUserManagementServicesClass{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -335,4 +335,4 @@ class ClientUserManagementServices{
 
 }
 
-export default new ClientUserManagementServices();
+export const ClientUserManagementServices = new ClientUserManagementServicesClass();

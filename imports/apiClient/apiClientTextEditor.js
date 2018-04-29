@@ -5,8 +5,8 @@ import { MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { TextEditorMessages } from '../constants/message_texts.js'
 
-import ServerTextEditorApi      from '../apiServer/apiTextEditor.js';
-import TextEditorValidationApi  from '../apiValidation/apiTextEditorValidation.js';
+import { ServerTextEditorApi }      from '../apiServer/apiTextEditor.js';
+import { TextEditorValidationApi }  from '../apiValidation/apiTextEditorValidation.js';
 
 // REDUX services
 import store from '../redux/store'

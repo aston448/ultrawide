@@ -1,7 +1,7 @@
 
 import { Validation } from '../constants/validation_errors.js'
 
-import UserManagementValidationApi      from '../apiValidation/apiUserManagementValidation.js';
+import { UserManagementValidationApi }      from '../apiValidation/apiUserManagementValidation.js';
 import { UserManagementServices }           from '../servicers/users/user_management_services.js';
 
 //======================================================================================================================

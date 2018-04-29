@@ -4,7 +4,7 @@
 import { UserSettingValue, MessageType }    from '../constants/constants.js';
 import { UserSettingMessages }              from '../constants/message_texts.js'
 
-import ServerUserSettingsApi                from '../apiServer/apiUserSettings';
+import { ServerUserSettingsApi }                from '../apiServer/apiUserSettings';
 
 // Data Access
 import UserSettingsData                     from '../data/configure/user_setting_db.js';
@@ -18,7 +18,7 @@ import {setCurrentWindowSize, setIntTestOutputDir, setIncludeNarratives, updateU
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientUserSettingServices {
+class ClientUserSettingsServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -109,6 +109,6 @@ class ClientUserSettingServices {
     }
 }
 
-export default new ClientUserSettingServices();
+export const ClientUserSettingsServices = new ClientUserSettingsServicesClass();
 
 

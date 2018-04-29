@@ -13,7 +13,7 @@ import {ViewMode, ViewType, DisplayContext, UpdateScopeType, WorkPackageScopeTyp
 
 import { ClientDesignComponentServices }            from '../../../apiClient/apiClientDesignComponent.js';
 import { ClientDesignUpdateComponentServices }      from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import { ClientDomainDictionaryApi }                from '../../../apiClient/apiClientDomainDictionary.js';
+import { ClientDomainDictionaryServices }                from '../../../apiClient/apiClientDomainDictionary.js';
 import {getComponentClass, log}                 from '../../../common/utils.js';
 
 // Bootstrap
@@ -153,7 +153,7 @@ export default class Narrative extends React.Component {
                 // The narrative will be decorated as greyed out and no syntax highlighting...
                 compositeDecorator = new CompositeDecorator([
                     {
-                        strategy: ClientDomainDictionaryApi.getNarrativeDecoratorFunction(),
+                        strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
                         component: NarrativeGreySpan
                     }
                 ]);
@@ -161,19 +161,19 @@ export default class Narrative extends React.Component {
                 if(props.domainTermsVisible){
                     compositeDecorator = new CompositeDecorator([
                         {
-                            strategy: ClientDomainDictionaryApi.getDomainTermDecoratorFunction(props.designComponent.designVersionId),
+                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(props.designComponent.designVersionId),
                             component: DomainSpan
                         },
 
                         {
-                            strategy: ClientDomainDictionaryApi.getNarrativeDecoratorFunction(),
+                            strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
                             component: NarrativeSpan
                         }
                     ]);
                 } else {
                     compositeDecorator = new CompositeDecorator([
                         {
-                            strategy: ClientDomainDictionaryApi.getNarrativeDecoratorFunction(),
+                            strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
                             component: NarrativeSpan
                         }
                     ]);

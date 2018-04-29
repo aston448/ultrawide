@@ -1,7 +1,7 @@
 import {DesignVersions} from '../../collections/design/design_versions.js';
 import {DesignUpdates} from '../../collections/design_update/design_updates.js';
 
-import DesignUpdateValidationServices from '../../service_modules/validation/design_update_validation_services.js';
+import { DesignUpdateValidationServices } from '../../service_modules/validation/design_update_validation_services.js';
 
 import { RoleType, DesignVersionStatus, DesignUpdateStatus }     from '../../constants/constants.js';
 import { Validation, DesignUpdateValidationErrors }   from '../../constants/validation_errors.js';

@@ -13,7 +13,7 @@ import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js
 //
 //======================================================================================================================
 
-class DesignComponentValidationServices{
+class DesignComponentValidationServicesClass{
 
     validateAddDesignComponent(view, mode, componentType){
 
@@ -229,4 +229,4 @@ class DesignComponentValidationServices{
         return Validation.VALID;
     }
 }
-export default new DesignComponentValidationServices();
+export const DesignComponentValidationServices = new DesignComponentValidationServicesClass();

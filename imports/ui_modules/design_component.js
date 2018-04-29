@@ -10,7 +10,7 @@ import {
     ViewType, WorkPackageScopeType
 } from "../constants/constants";
 
-import { ClientDomainDictionaryServices } from "../apiClient/apiClientDomainDictionary";
+import { ClientDomainDictionaryServiceModules } from "../apiClient/apiClientDomainDictionary";
 import { ClientDesignComponentServices } from "../apiClient/apiClientDesignComponent";
 
 

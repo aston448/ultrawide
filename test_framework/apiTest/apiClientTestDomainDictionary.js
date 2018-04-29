@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { ClientDomainDictionaryApi }   from '../../imports/apiClient/apiClientDomainDictionary.js'
+import { ClientDomainDictionaryServices }   from '../../imports/apiClient/apiClientDomainDictionary.js'
 import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 
 import {ViewType, ViewMode, RoleType} from '../../imports/constants/constants.js';
@@ -17,7 +17,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
 
-        const outcome = ClientDomainDictionaryApi.addNewDictionaryTerm(userRole, view, mode, userContext.designId, userContext.designVersionId);
+        const outcome = ClientDomainDictionaryServices.addNewDictionaryTerm(userRole, view, mode, userContext.designId, userContext.designVersionId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Dictionary Term');
 
@@ -33,7 +33,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const dictionaryEntry = TestDataHelpers.getDomainDictionaryTerm(userContext.designId, userContext.designVersionId, oldName);
 
-        const outcome = ClientDomainDictionaryApi.updateDictionaryTerm(userRole, view, mode, dictionaryEntry._id, newName);
+        const outcome = ClientDomainDictionaryServices.updateDictionaryTerm(userRole, view, mode, dictionaryEntry._id, newName);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Term Name');
     },
@@ -50,7 +50,7 @@ Meteor.methods({
 
         const rawText = TestDataHelpers.getRawTextFor(newDef);
 
-        const outcome = ClientDomainDictionaryApi.updateDictionaryTermDefinition(userRole, view, mode, dictionaryEntry._id, rawText);
+        const outcome = ClientDomainDictionaryServices.updateDictionaryTermDefinition(userRole, view, mode, dictionaryEntry._id, rawText);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Term Def');
     },
@@ -66,7 +66,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const dictionaryEntry = TestDataHelpers.getDomainDictionaryTerm(userContext.designId, userContext.designVersionId, termName);
 
-        const outcome = ClientDomainDictionaryApi.removeDictionaryTerm(userRole, view, mode, dictionaryEntry._id);
+        const outcome = ClientDomainDictionaryServices.removeDictionaryTerm(userRole, view, mode, dictionaryEntry._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Dictionary Term');
     },

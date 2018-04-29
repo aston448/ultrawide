@@ -15,7 +15,7 @@ import DetailsViewFooter    from '../../components/common/DetailsViewFooter.jsx'
 // Ultrawide Services
 import {DetailsViewType, ViewType, DisplayContext, ComponentType, LogLevel}    from '../../../constants/constants.js';
 import {log} from '../../../common/utils.js';
-import TextLookups from '../../../common/lookups.js';
+import { TextLookups } from '../../../common/lookups.js';
 
 import { ClientDataServices }               from '../../../apiClient/apiClientDataServices.js';
 import { ClientUserContextServices }        from '../../../apiClient/apiClientUserContext.js';

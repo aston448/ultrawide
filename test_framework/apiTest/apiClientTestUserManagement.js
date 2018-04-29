@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { UserRoles }   from '../../imports/collections/users/user_roles.js';
 
-import ClientUserManagementServices     from '../../imports/apiClient/apiClientUserManagement.js';
+import { ClientUserManagementServices }     from '../../imports/apiClient/apiClientUserManagement.js';
 import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 
 

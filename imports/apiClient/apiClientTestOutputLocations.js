@@ -5,8 +5,8 @@ import { MessageType }                      from '../constants/constants.js';
 import { Validation }                       from '../constants/validation_errors.js';
 import { TestOutputLocationMessages }       from '../constants/message_texts.js'
 
-import ServerTestOutputLocationApi          from '../apiServer/apiTestOutputLocations';
-import TestOutputLocationValidationApi      from '../apiValidation/apiTestOutputLocationValidation.js';
+import { ServerTestOutputLocationApi }          from '../apiServer/apiTestOutputLocations';
+import { TestOutputLocationValidationApi }      from '../apiValidation/apiTestOutputLocationValidation.js';
 
 // Data Access
 import { TestOutputLocationData }               from '../data/configure/test_output_location_db.js';

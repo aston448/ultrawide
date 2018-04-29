@@ -6,14 +6,19 @@ import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Services
 import { RoleType, ComponentType, ViewType, ViewOptionType, DisplayContext, DesignVersionStatus, DesignUpdateStatus,
-     WorkPackageType, WorkPackageStatus, LogLevel,
-     UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, WorkSummaryType } from '../constants/constants.js';
+        WorkPackageType, WorkPackageStatus, LogLevel, HomePageTab, UpdateMergeStatus, UserSetting, UserSettingValue,
+        WorkPackageTab, DesignUpdateTab, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, WorkSummaryType
+} from '../constants/constants.js';
+
+import { log } from '../common/utils.js';
+import { TextLookups } from '../common/lookups.js';
 
 import { ClientTestOutputLocationServices } from '../apiClient/apiClientTestOutputLocations.js';
 import { ClientUserContextServices }        from '../apiClient/apiClientUserContext.js';
-
-import { log } from '../common/utils.js';
-import TextLookups from '../common/lookups.js';
+import { ClientAppHeaderServices }          from '../apiClient/apiClientAppHeader.js';
+import { ClientDesignVersionServices }      from '../apiClient/apiClientDesignVersion.js';
+import { ClientUserSettingsServices }       from '../apiClient/apiClientUserSettings.js';
+import { ClientDesignUpdateServices }       from '../apiClient/apiClientDesignUpdate.js';
 
 // Data Access
 import { AppGlobalData }                    from '../data/app/app_global_db.js';
@@ -46,20 +51,6 @@ import {
     setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
     updateUserMessage
 } from '../redux/actions'
-import {
-    HomePageTab,
-    UpdateMergeStatus,
-    UserSetting,
-    UserSettingValue,
-    WorkPackageTab,
-    DesignUpdateTab,
-    DesignUpdateTestStatus
-} from "../constants/constants";
-import { ClientAppHeaderServices } from "./apiClientAppHeader";
-import { ClientDesignVersionServices } from "./apiClientDesignVersion";
-import ClientUserSettingsServices from "./apiClientUserSettings";
-import { ClientDesignUpdateServices } from "./apiClientDesignUpdate";
-import PropTypes from "prop-types";
 
 
 // =====================================================================================================================

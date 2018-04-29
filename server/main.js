@@ -47,14 +47,11 @@ import '../imports/apiServer/apiDesignUpdate.js';
 import '../imports/apiServer/apiDesignUpdateSummary.js';
 import '../imports/apiServer/apiWorkPackage.js';
 import '../imports/apiServer/apiWorkPackageComponent.js';
-import '../imports/apiServer/apiScenario.js';
 import '../imports/apiServer/apiTextEditor.js';
 import '../imports/apiServer/apiUserContext.js';
 import '../imports/apiServer/apiDomainDictionary.js';
 import '../imports/apiServer/apiImpEx.js';
-import '../imports/apiServer/apiFeatureFiles.js';
 import '../imports/apiServer/apiTestIntegration.js';
-import '../imports/apiServer/apiFixtures.js';
 import '../imports/apiServer/apiTestOutputLocations.js';
 import '../imports/apiServer/apiUserManagement.js';
 

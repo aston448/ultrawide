@@ -11,7 +11,7 @@ import { Validation, DesignValidationErrors } from '../../constants/validation_e
 //
 //======================================================================================================================
 
-class DesignValidationServices{
+class DesignValidationServicesClass{
 
     validateAddDesign(userRole){
 
@@ -92,4 +92,4 @@ class DesignValidationServices{
     }
 
 }
-export default new DesignValidationServices();
+export const DesignValidationServices = new DesignValidationServicesClass();

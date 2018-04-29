@@ -3,7 +3,7 @@
 import {ComponentType} from '../constants/constants.js';
 import { DesignUpdateComponentValidationErrors } from '../constants/validation_errors.js';
 
-import DesignUpdateComponentValidationServices  from '../service_modules/validation/design_update_component_validation_services.js';
+import { DesignUpdateComponentValidationServices }  from '../service_modules/validation/design_update_component_validation_services.js';
 import { DesignUpdateComponentModules }             from '../service_modules/design_update/design_update_component_service_modules.js';
 
 // Data Access
@@ -11,7 +11,7 @@ import { DesignVersionData }                        from '../data/design/design_
 import { DesignUpdateData }                         from '../data/design_update/design_update_db.js';
 import { DesignComponentData }                      from '../data/design/design_component_db.js';
 import { DesignUpdateComponentData }                from '../data/design_update/design_update_component_db.js';
-import DesignComponentValidationServices from "../service_modules/validation/design_component_validation_services";
+import { DesignComponentValidationServices } from "../service_modules/validation/design_component_validation_services";
 
 //======================================================================================================================
 //

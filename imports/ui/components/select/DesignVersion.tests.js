@@ -7,7 +7,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { DesignVersion } from './DesignVersion.jsx';  // Non Redux wrapped
 
 import { DesignVersionStatus, RoleType } from '../../../constants/constants.js'
-import TextLookups from '../../../common/lookups.js';
+import { TextLookups } from '../../../common/lookups.js';
 
 import { DesignVersions } from '../../../collections/design/design_versions.js'
 

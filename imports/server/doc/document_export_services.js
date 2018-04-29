@@ -5,7 +5,7 @@ import fs from 'fs';
 import async from 'async';
 import {convertFromRaw} from 'draft-js';
 
-import WordExportModules from './word_export_modules.js';
+import { WordExportModules } from './word_export_modules.js';
 
 import { DesignData }           from '../../../imports/data/design/design_db.js';
 import { DesignVersionData }    from '../../../imports/data/design/design_version_db.js';
@@ -17,7 +17,7 @@ import { log } from '../../../imports/common/utils.js';
 import { ComponentType, UpdateMergeStatus, LogLevel, UltrawideDirectory } from "../../constants/constants";
 import { DefaultDetailsText } from "../../constants/default_names";
 
-class DocumentExportServices{
+class DocumentExportServicesClass{
 
     exportWordDocument(designId, designVersionId, options){
 
@@ -277,4 +277,4 @@ class DocumentExportServices{
 
 }
 
-export default new DocumentExportServices();
+export const DocumentExportServices = new DocumentExportServicesClass();

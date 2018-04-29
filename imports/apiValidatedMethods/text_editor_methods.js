@@ -1,6 +1,6 @@
 import { Validation } from '../constants/validation_errors.js'
 
-import TextEditorValidationApi      from '../apiValidation/apiTextEditorValidation.js';
+import { TextEditorValidationApi }      from '../apiValidation/apiTextEditorValidation.js';
 import { TextEditorServices }           from '../servicers/design/text_editor_services.js';
 
 //======================================================================================================================

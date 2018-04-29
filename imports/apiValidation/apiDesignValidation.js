@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import DesignValidationServices         from '../service_modules/validation/design_validation_services.js';
+import { DesignValidationServices }         from '../service_modules/validation/design_validation_services.js';
 
 // Data Access
 import { DesignData }                       from '../data/design/design_db.js';

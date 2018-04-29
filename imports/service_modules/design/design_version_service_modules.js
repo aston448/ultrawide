@@ -20,39 +20,6 @@ import { DomainDictionaryData }        from '../../data/design/domain_dictionary
 
 class DesignVersionModulesClass {
 
-    // // Create a final version of the working design version before completeing it for good
-    // finaliseCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId){
-    //
-    //     // Delete all design components from current version
-    //     this.deleteCurrentVersionComponents(currentDesignVersionId);
-    //
-    //     // Copy previous version to current
-    //     this.copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId);
-    //
-    //     // Merge updates as FINAL
-    //     this.mergeUpdates(currentDesignVersionId, true);
-    //
-    // };
-    //
-    // // Create a progress update for the working design version
-    // updateCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId){
-    //
-    //     // Delete all design components from current version
-    //     this.deleteCurrentVersionComponents(currentDesignVersionId);
-    //
-    //     // Copy previous version to current
-    //     this.copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId);
-    //
-    //     // Merge updates as CHANGES
-    //     this.mergeUpdates(currentDesignVersionId, false);
-    // };
-
-
-    // deleteCurrentVersionComponents(currentDesignVersionId){
-    //
-    //     DesignVersionComponents.remove({designVersionId: currentDesignVersionId});
-    // };
-
     copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId){
 
         // Abort if current version has not been cleared

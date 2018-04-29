@@ -12,7 +12,7 @@ import DefaultAspectsListContainer              from '../../containers/edit/Defa
 
 // Ultrawide Services
 import ClientUserSettingsServices               from '../../../apiClient/apiClientUserSettings.js';
-import ClientUserManagementServices             from '../../../apiClient/apiClientUserManagement.js';
+import { ClientUserManagementServices }             from '../../../apiClient/apiClientUserManagement.js';
 import { ClientDocumentServices }                   from '../../../apiClient/apiClientDocument.js';
 
 import {UserSettingValue, UserSetting, LogLevel, RoleType} from '../../../constants/constants.js';

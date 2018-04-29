@@ -6,7 +6,7 @@ import { toggleInScope } from '../apiValidatedMethods/work_package_component_met
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerWorkPackageComponentApi {
+class ServerWorkPackageComponentApiClass {
 
     toggleInScope(view, displayContext, userContext, designComponentId, newScope, callback){
         toggleInScope.call(
@@ -24,4 +24,4 @@ class ServerWorkPackageComponentApi {
     };
 }
 
-export default new ServerWorkPackageComponentApi();
+export const ServerWorkPackageComponentApi = new ServerWorkPackageComponentApiClass();

@@ -10,7 +10,7 @@ import TestResultDetails    from './TestResultDetails.jsx';
 // Ultrawide Services
 import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
-import TextLookups      from '../../../common/lookups.js';
+import { TextLookups }      from '../../../common/lookups.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';

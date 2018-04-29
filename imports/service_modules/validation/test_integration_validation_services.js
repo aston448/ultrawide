@@ -11,7 +11,7 @@ import { Validation, TestIntegrationValidationErrors } from '../../constants/val
 //
 //======================================================================================================================
 
-class TestIntegrationValidationServices{
+class TestIntegrationValidationServicesClass{
 
     validateExportIntegrationTests(userRole, designComponent){
 
@@ -34,4 +34,4 @@ class TestIntegrationValidationServices{
     };
 
 }
-export default new TestIntegrationValidationServices();
+export const TestIntegrationValidationServices = new TestIntegrationValidationServicesClass();

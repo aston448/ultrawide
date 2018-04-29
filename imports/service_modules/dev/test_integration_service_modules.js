@@ -3,7 +3,7 @@
 import { TestType, TestRunner, MashStatus, MashTestStatus, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
-import UltrawideMochaTestServices       from '../../service_modules/dev/test_processor_ultrawide_mocha.js';
+import { UltrawideMochaTestServices }       from '../../service_modules/dev/test_processor_ultrawide_mocha.js';
 
 // Data Access
 import { DesignComponentData }              from '../../data/design/design_component_db.js';

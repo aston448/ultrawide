@@ -4,7 +4,7 @@ import {ComponentType, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType}
 
 import {ViewType,DisplayContext, LogLevel} from '../constants/constants.js';
 
-import TextLookups   from '../common/lookups.js';
+import { TextLookups }   from '../common/lookups.js';
 
 export function padDigits(number, digits) {
     return new Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;

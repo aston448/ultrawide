@@ -1,7 +1,7 @@
 
 import { Validation } from '../constants/validation_errors.js'
 
-import TestIntegrationValidationApi         from '../apiValidation/apiTestIntegrationValidation.js';
+import { TestIntegrationValidationApi }         from '../apiValidation/apiTestIntegrationValidation.js';
 import TestIntegrationServices              from '../servicers/dev/test_integration_services.js';
 
 //======================================================================================================================

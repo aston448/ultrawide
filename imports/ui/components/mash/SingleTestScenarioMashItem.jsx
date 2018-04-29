@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import TestResultDetails from './TestResultDetails.jsx';
 
 // Ultrawide Services
-import TextLookups  from '../../../common/lookups.js';
+import { TextLookups }  from '../../../common/lookups.js';
 import {log} from "../../../common/utils";
 import {TestType, DisplayContext, LogLevel}   from '../../../constants/constants.js'
 

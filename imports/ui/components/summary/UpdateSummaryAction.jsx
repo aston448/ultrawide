@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import {log} from "../../../common/utils";
 import {DesignUpdateSummaryType, ComponentType, LogLevel} from '../../../constants/constants.js';
-import TextLookups from '../../../common/lookups.js'
+import { TextLookups } from '../../../common/lookups.js'
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';

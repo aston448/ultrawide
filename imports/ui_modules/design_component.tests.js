@@ -1,6 +1,6 @@
 import {ComponentType, DisplayContext, ViewMode, ViewType} from "../constants/constants";
 import {DesignComponentValidationErrors} from "../constants/validation_errors";
-import DesignComponentValidationServices from "../service_modules/validation/design_component_validation_services";
+import { DesignComponentValidationServices } from "../service_modules/validation/design_component_validation_services";
 import { DesignComponentModules } from '../service_modules/design/design_component_service_modules.js';
 import { ComponentUiModules } from '../ui_modules/design_component.js';
 import {EditorState, convertFromRaw} from "draft-js";

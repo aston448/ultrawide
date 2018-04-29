@@ -4,7 +4,7 @@ import { MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageS
 import {log}        from '../../common/utils.js'
 
 
-class TestSummaryModules{
+class TestSummaryModulesClass{
 
     calculateScenarioSummaryData(userContext, featureScenario, contextDuData, contextWpData, globalData){
 
@@ -318,4 +318,4 @@ class TestSummaryModules{
     }
 }
 
-export default new TestSummaryModules();
+export const TestSummaryModules = new TestSummaryModulesClass();

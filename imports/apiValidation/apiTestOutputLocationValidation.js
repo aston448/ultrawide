@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import TestOutputLocationValidationServices from '../service_modules/validation/test_output_location_validation_services.js';
+import { TestOutputLocationValidationServices } from '../service_modules/validation/test_output_location_validation_services.js';
 
 // Data Access
 import { TestOutputLocationData }               from '../data/configure/test_output_location_db.js';
@@ -11,7 +11,7 @@ import { TestOutputLocationData }               from '../data/configure/test_out
 //
 //======================================================================================================================
 
-class TestOutputLocationValidationApi{
+class TestOutputLocationValidationApiClass {
 
     validateAddLocation(userRole){
 
@@ -54,4 +54,4 @@ class TestOutputLocationValidationApi{
     }
 
 }
-export default new TestOutputLocationValidationApi();
+export const TestOutputLocationValidationApi = new TestOutputLocationValidationApiClass();

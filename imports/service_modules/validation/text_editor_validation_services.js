@@ -11,7 +11,7 @@ import { Validation, TextEditorValidationErrors } from '../../constants/validati
 //
 //======================================================================================================================
 
-class TextEditorValidationServices{
+class TextEditorValidationServicesClass {
 
     validateSaveDesignComponentDetails(userRole){
 
@@ -32,4 +32,4 @@ class TextEditorValidationServices{
 
 
 }
-export default new TextEditorValidationServices();
+export const TextEditorValidationServices = new TextEditorValidationServicesClass();

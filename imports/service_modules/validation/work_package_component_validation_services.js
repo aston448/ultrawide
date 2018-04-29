@@ -11,7 +11,7 @@ import { Validation, WorkPackageComponentValidationErrors } from '../../constant
 //
 //======================================================================================================================
 
-class WorkPackageComponentValidationServices{
+class WorkPackageComponentValidationServicesClass {
 
     validateToggleInScope(view, displayContext, userContext, designComponent) {
 
@@ -49,4 +49,4 @@ class WorkPackageComponentValidationServices{
     }
 }
 
-export default new WorkPackageComponentValidationServices();
+export const WorkPackageComponentValidationServices = new WorkPackageComponentValidationServicesClass();

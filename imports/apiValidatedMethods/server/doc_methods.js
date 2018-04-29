@@ -1,7 +1,7 @@
 import { Validation } from '../../constants/validation_errors.js'
 
 
-import DocumentExportServices   from '../../server/doc/document_export_services.js';
+import { DocumentExportServices }   from '../../server/doc/document_export_services.js';
 
 //======================================================================================================================
 //

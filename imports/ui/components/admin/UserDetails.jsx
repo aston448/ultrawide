@@ -13,7 +13,7 @@ import {DesignComponentMessages, UserManagementMessages} from "../../../constant
 import {LogLevel, MessageType} from "../../../constants/constants";
 import {log} from "../../../common/utils";
 
-import ClientUserManagementServices from '../../../apiClient/apiClientUserManagement.js';
+import { ClientUserManagementServices } from '../../../apiClient/apiClientUserManagement.js';
 
 // Bootstrap
 import {Checkbox, Button} from 'react-bootstrap';
