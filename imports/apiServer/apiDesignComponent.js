@@ -19,7 +19,7 @@ import {
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerDesignComponentApi {
+class ServerDesignComponentApiClass {
 
     addApplicationToDesignVersion(view, mode, designVersionId, callback){
 
@@ -211,5 +211,5 @@ class ServerDesignComponentApi {
 
 }
 
-export default new ServerDesignComponentApi();
+export const ServerDesignComponentApi = new ServerDesignComponentApiClass();
 

@@ -23,7 +23,7 @@ import {setScenarioTestExpectations} from "../apiValidatedMethods/design_compone
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerDesignUpdateComponentApi {
+class ServerDesignUpdateComponentApiClass {
 
     addApplicationToDesignVersion(view, mode, designVersionId, designUpdateId, callback){
 
@@ -244,6 +244,6 @@ class ServerDesignUpdateComponentApi {
 
 }
 
-export default new ServerDesignUpdateComponentApi();
+export const ServerDesignUpdateComponentApi = new ServerDesignUpdateComponentApiClass();
 
 

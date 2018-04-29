@@ -1,7 +1,7 @@
 
 import { UserSettings }                 from '../../collections/configure/user_settings.js';
 
-class UserSettingData{
+class UserSettingDataClass{
 
     // INSERT ==========================================================================================================
 
@@ -60,4 +60,4 @@ class UserSettingData{
     }
 }
 
-export default new UserSettingData();
+export const UserSettingData = new UserSettingDataClass();

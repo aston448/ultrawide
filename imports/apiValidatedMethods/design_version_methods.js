@@ -1,8 +1,8 @@
 
 import { Validation } from '../constants/validation_errors.js'
 
-import DesignVersionValidationApi   from '../apiValidation/apiDesignVersionValidation.js';
-import DesignVersionServices        from '../servicers/design/design_version_services.js';
+import { DesignVersionValidationApi }   from '../apiValidation/apiDesignVersionValidation.js';
+import { DesignVersionServices }        from '../servicers/design/design_version_services.js';
 
 //======================================================================================================================
 //

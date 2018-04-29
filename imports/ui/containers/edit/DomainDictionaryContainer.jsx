@@ -16,9 +16,9 @@ import DetailsViewFooter        from '../../components/common/DetailsViewFooter.
 import {log} from "../../../common/utils";
 import { DetailsViewType, LogLevel } from '../../../constants/constants.js';
 
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }      from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
-import DomainDictUiServices         from '../../../ui_modules/domain_dictionary.js';
+import { DomainDictUiServices }         from '../../../ui_modules/domain_dictionary.js';
 // Bootstrap
 
 // REDUX services

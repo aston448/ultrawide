@@ -12,7 +12,7 @@ import TextLookups  from '../../../common/lookups.js';
 import {log} from "../../../common/utils";
 import {TestType, DisplayContext, LogLevel}   from '../../../constants/constants.js'
 
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';

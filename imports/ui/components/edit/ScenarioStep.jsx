@@ -12,7 +12,7 @@
 // import {ViewType, ComponentType, ViewMode, DisplayContext, ScenarioStepStatus, ScenarioStepType, StepContext, MashTestStatus } from '../../../constants/constants.js';
 //
 // import ClientScenarioStepServices       from '../../../apiClient/apiClientScenarioStep.js';
-// import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
+// import { ClientDomainDictionaryServices }   from '../../../apiClient/apiClientDomainDictionary.js';
 // import ClientMashDataServices           from '../../../apiClient/apiClientMashData.js';
 //
 //

@@ -15,7 +15,7 @@ import { UserRoleData }                 from '../../data/users/user_role_db.js';
 //
 //======================================================================================================================
 
-class UserManagementServices {
+class UserManagementServicesClass {
 
     // Add a new Ultrawide User
     addUser(){
@@ -122,5 +122,5 @@ class UserManagementServices {
 
 }
 
-export default new UserManagementServices();
+export const UserManagementServices = new UserManagementServicesClass();
 

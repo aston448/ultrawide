@@ -16,8 +16,8 @@ import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
-import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
-import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js'
+import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
+import { ClientTestOutputLocationServices }     from '../../../apiClient/apiClientTestOutputLocations.js'
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';

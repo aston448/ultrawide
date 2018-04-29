@@ -20,7 +20,7 @@ import {setCurrentUserTestOutputLocation, updateUserMessage} from '../redux/acti
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientTestOutputLocationServices{
+class ClientTestOutputLocationServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -375,5 +375,5 @@ class ClientTestOutputLocationServices{
     };
 }
 
-export default new ClientTestOutputLocationServices();
+export const ClientTestOutputLocationServices = new ClientTestOutputLocationServicesClass();
 

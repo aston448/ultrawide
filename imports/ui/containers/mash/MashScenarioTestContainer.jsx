@@ -14,13 +14,13 @@ import ScenarioTestResult           from '../../components/mash/ScenarioTestResu
 import {log} from "../../../common/utils";
 import {DisplayContext, TestType, LogLevel} from '../../../constants/constants.js';
 
-import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
-import TestResultsUiServices from "../../../ui_modules/test_results";
+import { TestResultsUiServices } from "../../../ui_modules/test_results";
 
 
 // =====================================================================================================================

@@ -7,7 +7,7 @@ import { UserManagementMessages }           from '../constants/message_texts.js'
 
 import ServerUserManagementApi              from '../apiServer/apiUserManagement';
 import UserManagementValidationApi          from '../apiValidation/apiUserManagementValidation.js';
-import ClientAppHeaderServices              from '../apiClient/apiClientAppHeader.js';
+import { ClientAppHeaderServices }              from '../apiClient/apiClientAppHeader.js';
 
 // Data Access
 import { UserRoleData }                         from '../data/users/user_role_db.js';

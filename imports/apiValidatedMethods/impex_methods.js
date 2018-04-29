@@ -1,6 +1,6 @@
 
-import BackupValidationApi      from '../apiValidation/apiImpExValidation.js';
-import ImpExServices            from '../servicers/administration/impex_services.js';
+import { ImpExValidationApi }      from '../apiValidation/apiImpExValidation.js';
+import { ImpexServices }            from '../servicers/administration/impex_services.js';
 
 import { Validation } from '../constants/validation_errors.js'
 
@@ -21,7 +21,7 @@ export const backupDesign = new ValidatedMethod({
 
     run({designId, userRole}){
 
-        const result = BackupValidationApi.validateBackupDesign(userRole);
+        const result = ImpExValidationApi.validateBackupDesign(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('impex.backupDesign.failValidation', result)
@@ -47,7 +47,7 @@ export const restoreDesign = new ValidatedMethod({
 
     run({backupFileName, userId}){
 
-        const result = BackupValidationApi.validateRestoreDesign(userId);
+        const result = ImpExValidationApi.validateRestoreDesign(userId);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('impex.restoreDesign.failValidation', result)
@@ -73,7 +73,7 @@ export const archiveDesign = new ValidatedMethod({
 
     run({designId, userId}){
 
-        const result = BackupValidationApi.validateArchiveDesign(userId);
+        const result = ImpExValidationApi.validateArchiveDesign(userId);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('impex.archiveDesign.failValidation', result)

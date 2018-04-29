@@ -17,9 +17,9 @@ import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, Disp
 import {AddActionIds} from "../../../constants/ui_context_ids";
 import { log } from '../../../common/utils.js';
 
-import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
-import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
-import ClientWorkPackageServices    from "../../../apiClient/apiClientWorkPackage";
+import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
+import { ClientDesignUpdateServices }   from '../../../apiClient/apiClientDesignUpdate.js';
+import { ClientWorkPackageServices }    from "../../../apiClient/apiClientWorkPackage";
 
 
 // Bootstrap

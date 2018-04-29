@@ -14,7 +14,7 @@ import FinderResult                 from '../../components/search/FinderResult.j
 import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
 
-import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap

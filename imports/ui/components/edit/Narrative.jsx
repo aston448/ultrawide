@@ -13,7 +13,7 @@ import {ViewMode, ViewType, DisplayContext, UpdateScopeType, WorkPackageScopeTyp
 
 import { ClientDesignComponentServices }            from '../../../apiClient/apiClientDesignComponent.js';
 import { ClientDesignUpdateComponentServices }      from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientDomainDictionaryApi                from '../../../apiClient/apiClientDomainDictionary.js';
+import { ClientDomainDictionaryApi }                from '../../../apiClient/apiClientDomainDictionary.js';
 import {getComponentClass, log}                 from '../../../common/utils.js';
 
 // Bootstrap

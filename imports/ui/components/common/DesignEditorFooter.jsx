@@ -13,7 +13,7 @@ import DesignSummary                    from '../../components/edit/DesignSummar
 import {log} from "../../../common/utils";
 import {DisplayContext, LogLevel}       from '../../../constants/constants.js';
 
-import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
+import { ClientUserContextServices }        from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
 

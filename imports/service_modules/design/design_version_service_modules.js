@@ -18,7 +18,7 @@ import { DomainDictionaryData }        from '../../data/design/domain_dictionary
 //
 //======================================================================================================================
 
-class DesignVersionModules{
+class DesignVersionModulesClass {
 
     // // Create a final version of the working design version before completeing it for good
     // finaliseCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId){
@@ -891,5 +891,5 @@ class DesignVersionModules{
     }
 }
 
-export default new DesignVersionModules()
+export const DesignVersionModules = new DesignVersionModulesClass()
 

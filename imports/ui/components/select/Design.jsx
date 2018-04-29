@@ -13,8 +13,8 @@ import ItemName         from './ItemName.jsx';
 import { ItemType, RoleType, LogLevel } from '../../../constants/constants.js';
 import {log, replaceAll} from "../../../common/utils";
 
-import ClientDesignServices     from '../../../apiClient/apiClientDesign.js';
-import ClientImpExServices     from '../../../apiClient/apiClientImpEx.js';
+import { ClientDesignServices }     from '../../../apiClient/apiClientDesign.js';
+import { ClientImpExServices }     from '../../../apiClient/apiClientImpEx.js';
 
 // Bootstrap
 import {Button, ButtonGroup, Modal} from 'react-bootstrap';

@@ -13,9 +13,9 @@ import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
 import {MenuType, RoleType, ViewType, ViewMode, DisplayContext, DetailsViewType, HomePageTab, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
-import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
-import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+import { ClientAppHeaderServices }      from '../../../apiClient/apiClientAppHeader.js';
+import { ClientUserContextServices }    from '../../../apiClient/apiClientUserContext.js';
+import { ClientDataServices }      from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Col, Row} from 'react-bootstrap';

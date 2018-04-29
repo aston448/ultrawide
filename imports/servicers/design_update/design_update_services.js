@@ -1,10 +1,9 @@
 
 // Ultrawide Services
 import { DesignUpdateStatus, DesignUpdateMergeAction, DesignUpdateTestStatus, DesignUpdateWpStatus, DuWorkPackageTestStatus, MashTestStatus, WorkPackageTestStatus, LogLevel } from '../../constants/constants.js';
-import { DefaultItemNames }         from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
-import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
+import { DesignUpdateModules }          from '../../service_modules/design_update/design_update_service_modules.js';
 
 // Data Access
 import { DesignVersionData }            from '../../data/design/design_version_db.js';
@@ -20,7 +19,7 @@ import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scena
 //
 //======================================================================================================================
 
-class DesignUpdateServices{
+class DesignUpdateServicesClass {
 
     // Add a new design update
     addNewDesignUpdate(designVersionId){
@@ -231,4 +230,4 @@ class DesignUpdateServices{
     }
 }
 
-export default new DesignUpdateServices();
+export const DesignUpdateServices = new DesignUpdateServicesClass();

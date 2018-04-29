@@ -17,8 +17,8 @@ import TestOutputFile           from '../../components/configure/TestOutputFile.
 import ItemList                 from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
-import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js'
+import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
+import { ClientTestOutputLocationServices }     from '../../../apiClient/apiClientTestOutputLocations.js'
 
 // Bootstrap
 

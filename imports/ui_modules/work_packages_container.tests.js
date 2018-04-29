@@ -3,7 +3,7 @@ import {
     WorkPackageType
 } from "../constants/constants";
 
-import WorkPackageContainerUiModules from '../ui_modules/work_packages_container';
+import { WorkPackageContainerUiModules } from '../ui_modules/work_packages_container';
 
 import { chai } from 'meteor/practicalmeteor:chai';
 

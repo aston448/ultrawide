@@ -5,11 +5,11 @@
 import { DesignUpdateSummaryCategory, DesignUpdateSummaryType, ViewType, LogLevel} from '../constants/constants.js';
 import { log }        from '../common/utils.js';
 
-import DesignUpdateSummaryServices from '../apiServer/apiDesignUpdateSummary.js';
+import { ServerDesignUpdateSummaryApi} from '../apiServer/apiDesignUpdateSummary.js';
 
 // Data Access
 import { WorkPackageComponentData }        from '../data/work/work_package_component_db.js';
-import UserDesignUpdateSummaryData      from '../data/summary/user_design_update_summary_db.js';
+import { UserDesignUpdateSummaryData }      from '../data/summary/user_design_update_summary_db.js';
 import {DisplayContext} from "../constants/constants";
 
 // =====================================================================================================================
@@ -20,7 +20,7 @@ import {DisplayContext} from "../constants/constants";
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientDesignUpdateSummary{
+class ClientDesignUpdateSummaryClass {
 
     getDesignUpdateSummary(updateChanged){
 
@@ -40,7 +40,7 @@ class ClientDesignUpdateSummary{
         ) {
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Client: Refreshing DU Summary...");
-            DesignUpdateSummaryServices.refreshDesignUpdateSummary(userContext, updateChanged, (err, result) => {
+            ServerDesignUpdateSummaryApi.refreshDesignUpdateSummary(userContext, updateChanged, (err, result) => {
 
                 if (err) {
                     // Unexpected error as all expected errors already handled - show alert.
@@ -290,4 +290,4 @@ class ClientDesignUpdateSummary{
 
 }
 
-export default new ClientDesignUpdateSummary();
+export const ClientDesignUpdateSummary = new ClientDesignUpdateSummaryClass();

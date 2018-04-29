@@ -12,8 +12,8 @@ import PropTypes from 'prop-types';
 import {MenuAction, RoleType, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
-import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
+import { ClientAppHeaderServices }          from '../../../apiClient/apiClientAppHeader.js';
+import { ClientTestIntegrationServices }    from '../../../apiClient/apiClientTestIntegration.js';
 
 // Bootstrap
 import {InputGroup, Glyphicon} from 'react-bootstrap';

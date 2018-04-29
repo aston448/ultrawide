@@ -15,11 +15,11 @@ import WorkPackage      from "./WorkPackage.jsx";
 import { ItemType, DesignUpdateStatus, DesignVersionStatus, WorkPackageStatus, WorkPackageTestStatus, LogLevel } from '../../../constants/constants.js';
 import {replaceAll, log} from "../../../../imports/common/utils";
 
-import ClientDesignVersionServices      from "../../../apiClient/apiClientDesignVersion";
-import ClientDesignUpdateServices       from "../../../apiClient/apiClientDesignUpdate";
-import ClientWorkPackageServices        from "../../../apiClient/apiClientWorkPackage";
-import ClientDesignServices             from '../../../apiClient/apiClientDesign.js';
-import ItemStatusUiModules              from '../../../ui_modules/item_status.js';
+import { ClientDesignVersionServices }      from "../../../apiClient/apiClientDesignVersion";
+import { ClientDesignUpdateServices }       from "../../../apiClient/apiClientDesignUpdate";
+import { ClientWorkPackageServices }        from "../../../apiClient/apiClientWorkPackage";
+import { ClientDesignServices }             from '../../../apiClient/apiClientDesign.js';
+import { ItemStatusUiModules }              from '../../../ui_modules/item_status.js';
 
 // Bootstrap
 import {Grid, Row, Col, Glyphicon, InputGroup} from 'react-bootstrap';

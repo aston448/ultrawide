@@ -12,7 +12,7 @@ import AppHeader from '../../components/app/AppHeader.jsx';
 import AppBody from '../../components/app/AppBody.jsx';
 
 // Ultrawide Services
-import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices } from '../../../apiClient/apiClientDataServices.js';
 
 import {log} from '../../../common/utils.js';
 import { LogLevel } from '../../../constants/constants.js';

@@ -14,7 +14,7 @@ import {Validation} from "../constants/validation_errors";
 //
 //======================================================================================================================
 
-class WorkPackageValidationApi {
+class WorkPackageValidationApiClass {
 
     validateAddWorkPackage(userRole, designVersionId, designUpdateId, workPackageType){
 
@@ -100,4 +100,4 @@ class WorkPackageValidationApi {
     };
 }
 
-export default new WorkPackageValidationApi();
+export const WorkPackageValidationApi = new WorkPackageValidationApiClass();

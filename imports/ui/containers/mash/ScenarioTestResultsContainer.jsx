@@ -15,8 +15,8 @@ import MultiTestScenarioMashItem            from '../../components/mash/MultiTes
 import {log} from "../../../common/utils";
 import { DisplayContext, LogLevel }    from '../../../constants/constants.js';
 
-import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
-import TestResultsUiServices                from "../../../ui_modules/test_results";
+import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
+import { TestResultsUiServices }                from "../../../ui_modules/test_results";
 
 // Bootstrap
 

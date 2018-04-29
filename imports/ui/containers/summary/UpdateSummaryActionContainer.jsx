@@ -11,8 +11,8 @@ import { createContainer }  from 'meteor/react-meteor-data';
 import UpdateSummaryAction          from '../../components/summary/UpdateSummaryAction.jsx';
 
 // Ultrawide Services
-import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
-import UpdateSummaryUiServices      from '../../../ui_modules/update_summary.js';
+import { ClientDesignUpdateSummary }    from '../../../apiClient/apiClientDesignUpdateSummary.js';
+import { UpdateSummaryUiServices }      from '../../../ui_modules/update_summary.js';
 
 import {log} from "../../../common/utils";
 import {DisplayContext, LogLevel} from "../../../constants/constants";

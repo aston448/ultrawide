@@ -2,7 +2,7 @@
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType, DisplayContext, HomePageTab } from '../constants/constants.js';
-import ClientDesignUpdateServices   from '../apiClient/apiClientDesignUpdate.js';
+import { ClientDesignUpdateServices }   from '../apiClient/apiClientDesignUpdate.js';
 
 // Data Access
 import { DesignData }                       from '../data/design/design_db.js';
@@ -33,7 +33,7 @@ import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurren
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientAppHeaderServices{
+class ClientAppHeaderServicesClass{
 
     getStore(){
         return store.getState();
@@ -485,4 +485,4 @@ class ClientAppHeaderServices{
 
 }
 
-export default new ClientAppHeaderServices();
+export const ClientAppHeaderServices = new ClientAppHeaderServicesClass();

@@ -5,9 +5,9 @@ import { MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DomainDictionaryMessages } from '../constants/message_texts.js';
 
-import ClientDomainDictionaryServices   from '../service_modules/design/client_domain_dictionary.js';
-import DomainDictionaryValidationApi    from '../apiValidation/apiDomainDictionaryValidation.js';
-import ServerDomainDictionaryApi        from '../apiServer/apiDomainDictionary.js';
+import { ClientDomainDictionaryServices }   from '../service_modules/design/client_domain_dictionary.js';
+import { DomainDictionaryValidationApi }    from '../apiValidation/apiDomainDictionaryValidation.js';
+import { ServerDomainDictionaryApi }        from '../apiServer/apiDomainDictionary.js';
 
 // Data Access
 import { DesignVersionData }                from '../data/design/design_version_db.js';
@@ -22,7 +22,7 @@ import {updateUserMessage} from '../redux/actions';
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
 
-class ClientDomainDictionaryApi {
+class ClientDomainDictionaryApiClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -187,4 +187,4 @@ class ClientDomainDictionaryApi {
 
 }
 
-export default new ClientDomainDictionaryApi();
+export const ClientDomainDictionaryApi = new ClientDomainDictionaryApiClass();

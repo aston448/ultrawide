@@ -12,7 +12,7 @@ import FeatureSummary           from '../../components/select/FeatureSummary.jsx
 import ItemList                 from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
-import ClientDataServices       from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }       from '../../../apiClient/apiClientDataServices.js';
 
 import {DisplayContext, HomePageTab, LogLevel} from "../../../constants/constants";
 import {log} from "../../../common/utils";

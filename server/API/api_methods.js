@@ -1,8 +1,8 @@
 
 // == IMPORTS ==========================================================================================================
 
-import TestOutputLocationServices           from '../../imports/servicers/configure/test_output_location_services.js';
-import UserManagementServices               from '../../imports/servicers/users/user_management_services.js';
+import { TestOutputLocationServices }           from '../../imports/servicers/configure/test_output_location_services.js';
+import { UserManagementServices }               from '../../imports/servicers/users/user_management_services.js';
 
 // =====================================================================================================================
 

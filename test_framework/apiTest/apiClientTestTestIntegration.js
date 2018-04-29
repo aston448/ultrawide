@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import ClientTestIntegrationServices from '../../imports/apiClient/apiClientTestIntegration';
+import { ClientTestIntegrationServices } from '../../imports/apiClient/apiClientTestIntegration';
 
 import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 

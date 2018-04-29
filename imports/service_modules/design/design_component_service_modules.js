@@ -3,8 +3,8 @@
 import { ComponentType, LogLevel }  from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
-import DesignComponentServices      from '../../servicers/design/design_component_services.js';
-import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
+import { DesignComponentServices }      from '../../servicers/design/design_component_services.js';
+import { WorkPackageModules }           from '../../service_modules/work/work_package_service_modules.js';
 
 // Data Access
 import { DesignVersionData }            from '../../data/design/design_version_db.js';

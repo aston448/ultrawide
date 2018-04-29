@@ -14,7 +14,7 @@ import {setDocSectionTextOption, setDocFeatureTextOption, setDocNarrativeTextOpt
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientDocumentServices {
+class ClientDocumentServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -78,4 +78,4 @@ class ClientDocumentServices {
     };
 }
 
-export default new ClientDocumentServices();
+export const ClientDocumentServices = new ClientDocumentServicesClass();

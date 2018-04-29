@@ -5,10 +5,10 @@ import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentT
 import { log }                          from '../common/utils.js';
 import TextLookups                      from '../common/lookups.js'
 
-import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
-import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
-import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
-import ClientAppHeaderServices          from '../apiClient/apiClientAppHeader.js';
+import { ClientDesignVersionServices }      from '../apiClient/apiClientDesignVersion.js';
+import { ClientDesignUpdateServices }       from '../apiClient/apiClientDesignUpdate.js';
+import { ClientWorkPackageServices }        from '../apiClient/apiClientWorkPackage.js';
+import { ClientAppHeaderServices }          from '../apiClient/apiClientAppHeader.js';
 
 // Data Access
 import { DesignData }                       from '../data/design/design_db.js';
@@ -17,8 +17,8 @@ import { DesignUpdateData }                 from '../data/design_update/design_u
 import { WorkPackageData }                  from '../data/work/work_package_db.js';
 import { DesignComponentData }              from '../data/design/design_component_db.js';
 import { DesignUpdateComponentData }        from '../data/design_update/design_update_component_db.js';
-import UserViewOptionData               from '../data/context/user_view_option_db.js';
-import UserContextData                  from '../data/context/user_context_db.js';
+import { UserViewOptionData }               from '../data/context/user_view_option_db.js';
+import { UserContextData }                  from '../data/context/user_context_db.js';
 import { UserRoleData }                     from '../data/users/user_role_db.js';
 
 // REDUX services
@@ -44,7 +44,7 @@ import {
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientUserContextServices {
+class ClientUserContextServicesClass {
 
     getUserContext(userId){
 
@@ -750,4 +750,4 @@ class ClientUserContextServices {
     };
 }
 
-export default new ClientUserContextServices();
+export const ClientUserContextServices = new ClientUserContextServicesClass();

@@ -15,11 +15,11 @@ import DesignComponent                      from '../../components/edit/DesignCo
 import {log, replaceAll} from "../../../common/utils";
 import { LogLevel, DisplayContext, ComponentType, ViewMode, UpdateScopeType } from '../../../constants/constants.js';
 
-import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
+import { ClientDesignVersionServices }          from '../../../apiClient/apiClientDesignVersion.js'
 import { ClientDesignComponentServices }        from "../../../apiClient/apiClientDesignComponent";
-import ComponentUiModules                   from '../../../ui_modules/design_component.js'
+import { ComponentUiModules }                   from '../../../ui_modules/design_component.js'
 
 // Bootstrap
 

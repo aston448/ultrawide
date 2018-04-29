@@ -17,9 +17,9 @@ import {MenuType, MenuDropdown, ViewType, RoleType, LogLevel} from '../../../con
 import TextLookups                      from '../../../common/lookups.js';
 import { log }                          from '../../../common/utils.js'
 
-import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
+import { ClientAppHeaderServices }          from '../../../apiClient/apiClientAppHeader.js';
 import { ClientIdentityServices }           from '../../../apiClient/apiIdentity';
-import ClientUserContextServices        from "../../../apiClient/apiClientUserContext";
+import { ClientUserContextServices }        from "../../../apiClient/apiClientUserContext";
 
  // Bootstrap
 

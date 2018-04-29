@@ -7,9 +7,9 @@ import { ViewType, MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignMessages } from '../constants/message_texts.js'
 
-import ServerDesignApi      from '../apiServer/apiDesign.js';
-import DesignValidationApi  from '../apiValidation/apiDesignValidation.js';
-import ClientUserContextServices from '../apiClient/apiClientUserContext.js';
+import { ServerDesignApi }      from '../apiServer/apiDesign.js';
+import { DesignValidationApi }  from '../apiValidation/apiDesignValidation.js';
+import { ClientUserContextServices } from '../apiClient/apiClientUserContext.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -20,7 +20,7 @@ import {setCurrentUserItemContext, setCurrentView, updateUserMessage} from '../r
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientDesignServices{
+class ClientDesignServicesClass{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -263,4 +263,4 @@ class ClientDesignServices{
 
 }
 
-export default new ClientDesignServices();
+export const ClientDesignServices = new ClientDesignServicesClass();

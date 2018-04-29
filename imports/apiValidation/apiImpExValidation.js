@@ -11,7 +11,7 @@ import { UserRoleData }                     from '../data/users/user_role_db.js'
 //
 //======================================================================================================================
 
-class ImpExValidationApi{
+class ImpExValidationApiClass{
 
     validateBackupDesign(userRole){
 
@@ -35,4 +35,4 @@ class ImpExValidationApi{
     }
 
 }
-export default new ImpExValidationApi();
+export const ImpExValidationApi = new ImpExValidationApiClass();

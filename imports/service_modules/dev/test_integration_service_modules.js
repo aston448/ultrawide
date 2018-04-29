@@ -7,12 +7,12 @@ import UltrawideMochaTestServices       from '../../service_modules/dev/test_pro
 
 // Data Access
 import { DesignComponentData }              from '../../data/design/design_component_db.js';
-import UserAcceptanceTestResultData     from '../../data/test_results/user_acceptance_test_result_db.js';
-import UserIntegrationTestResultData    from '../../data/test_results/user_integration_test_result_db.js';
-import UserUnitTestResultData           from '../../data/test_results/user_unit_test_result_db.js';
+import { UserAcceptanceTestResultData }     from '../../data/test_results/user_acceptance_test_result_db.js';
+import { UserIntegrationTestResultData }    from '../../data/test_results/user_integration_test_result_db.js';
+import { UserUnitTestResultData }           from '../../data/test_results/user_unit_test_result_db.js';
 import { UserTestTypeLocationData }         from '../../data/configure/user_test_type_location_db.js';
 import { TestOutputLocationData }           from '../../data/configure/test_output_location_db.js';
-import TestOutputLocationFileData       from '../../data/configure/test_output_location_file_db.js';
+import { TestOutputLocationFileData }       from '../../data/configure/test_output_location_file_db.js';
 import { UserDvMashScenarioData }           from '../../data/mash/user_dv_mash_scenario_db.js'
 import { UserMashScenarioTestData }         from '../../data/mash/user_mash_scenario_test_db.js';
 import { UserRoleData }                     from '../../data/users/user_role_db.js';
@@ -25,7 +25,7 @@ import { UserRoleData }                     from '../../data/users/user_role_db.
 //
 //======================================================================================================================
 
-class TestIntegrationModules{
+class TestIntegrationModulesClass {
 
     getAcceptanceTestResults(userContext){
 
@@ -766,4 +766,4 @@ class TestIntegrationModules{
 
 }
 
-export default new TestIntegrationModules();
+export const TestIntegrationModules = new TestIntegrationModulesClass();

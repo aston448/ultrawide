@@ -17,7 +17,7 @@ import { WorkPackageComponentData }    from '../../data/work/work_package_compon
 //
 //======================================================================================================================
 
-class WorkPackageModules {
+class WorkPackageModulesClass {
 
     addWorkPackageComponent(userContext, wpType, component, scopeType){
 
@@ -334,4 +334,4 @@ class WorkPackageModules {
     };
 }
 
-export default new WorkPackageModules();
+export const WorkPackageModules = new WorkPackageModulesClass();

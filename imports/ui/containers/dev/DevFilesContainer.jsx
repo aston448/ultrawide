@@ -11,7 +11,7 @@
 // import DevFeatureFile from '../../components/dev/DevFeatureFile.jsx';
 //
 // // Ultrawide Services
-// import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
+// import { ClientDataServices } from '../../../apiClient/apiClientDataServices.js';
 //
 // // Bootstrap
 // import {Panel} from 'react-bootstrap';

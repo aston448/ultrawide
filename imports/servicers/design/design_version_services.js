@@ -4,7 +4,7 @@ import { DesignVersionStatus, WorkSummaryType, MashTestStatus, LogLevel }      f
 import { DefaultItemNames }         from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
-import DesignVersionModules         from '../../service_modules/design/design_version_service_modules.js';
+import { DesignVersionModules }         from '../../service_modules/design/design_version_service_modules.js';
 
 // Data Access
 import { DesignVersionData }            from '../../data/design/design_version_db.js';
@@ -25,7 +25,7 @@ import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scena
 //
 //======================================================================================================================
 
-class DesignVersionServices{
+class DesignVersionServicesClass {
 
     addNewDesignVersion(designId, designVersionName, designVersionNumber, designVersionStatus) {
 
@@ -452,4 +452,4 @@ class DesignVersionServices{
     }
 }
 
-export default new DesignVersionServices();
+export const DesignVersionServices = new DesignVersionServicesClass();

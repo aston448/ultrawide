@@ -4,7 +4,7 @@ import { TestOutputLocationFiles }                  from '../../collections/conf
 import { TestLocationFileType, TestLocationFileStatus } from '../../constants/constants.js';
 import { DefaultLocationText }                      from "../../constants/default_names";
 
-class TestOutputLocationFileData{
+class TestOutputLocationFileDataClass{
 
     // INSERT ==========================================================================================================
 
@@ -146,4 +146,4 @@ class TestOutputLocationFileData{
     }
 }
 
-export default new TestOutputLocationFileData();
+export const TestOutputLocationFileData = new TestOutputLocationFileDataClass();

@@ -10,7 +10,7 @@ import {
     ViewType, WorkPackageScopeType
 } from "../constants/constants";
 
-import ClientDomainDictionaryServices from "../apiClient/apiClientDomainDictionary";
+import { ClientDomainDictionaryServices } from "../apiClient/apiClientDomainDictionary";
 import { ClientDesignComponentServices } from "../apiClient/apiClientDesignComponent";
 
 
@@ -29,7 +29,7 @@ const DomainSpan = (props) => {
 };
 
 
-class ComponentUiModules{
+class ComponentUiModulesClass{
 
     componentShouldUpdate(props, nextProps, state, nextState){
 
@@ -540,4 +540,4 @@ class ComponentUiModules{
     }
 
 }
- export default new ComponentUiModules()
+ export const ComponentUiModules = new ComponentUiModulesClass();

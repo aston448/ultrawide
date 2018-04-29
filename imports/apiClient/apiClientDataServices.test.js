@@ -4,7 +4,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { ViewMode, ViewType, RoleType, MenuDropdown, MenuAction} from '../constants/constants.js'
 
-import ClientDataServices from './apiClientDataServices.js';
+import { ClientDataServices } from './apiClientDataServices.js';
 
 describe('API: ClientData', () => {
 

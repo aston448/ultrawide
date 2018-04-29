@@ -4,7 +4,7 @@ import {log} from "../common/utils";
 import store from "../redux/store";
 
 
-class DomainDictUiServices{
+class DomainDictUiServicesClass{
 
     shouldDictionaryUpdate(props){
 
@@ -55,4 +55,4 @@ class DomainDictUiServices{
     }
 }
 
-export default new DomainDictUiServices();
+export const DomainDictUiServices = new DomainDictUiServicesClass();

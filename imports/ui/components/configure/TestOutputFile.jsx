@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
+import { ClientTestOutputLocationServices }         from '../../../apiClient/apiClientTestOutputLocations.js';
 import { TestLocationFileTypes, TestRunners, TestLocationFileStatus, LogLevel}    from '../../../constants/constants.js';
 import { createSelectionList}                   from '../../../common/reactUtils.js';
 import TextLookups                              from '../../../common/lookups.js';

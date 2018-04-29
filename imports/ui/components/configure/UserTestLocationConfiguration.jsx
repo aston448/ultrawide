@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
-import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js';
+import { ClientTestOutputLocationServices }     from '../../../apiClient/apiClientTestOutputLocations.js';
 
 // Bootstrap
 import {Grid, Row, Col, Checkbox} from 'react-bootstrap';

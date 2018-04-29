@@ -15,7 +15,7 @@ import FeatureSummaryContainer      from '../../containers/select/FeatureSummary
 import {DisplayContext, HomePageTab, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';

@@ -22,7 +22,7 @@ import { UserMashScenarioTests }    from '../../imports/collections/mash/user_ma
 import { UserDevTestSummary }       from '../../imports/collections/summary/user_dev_test_summary.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
-import ClientAppHeaderServices      from '../../imports/apiClient/apiClientAppHeader.js';
+import { ClientAppHeaderServices }      from '../../imports/apiClient/apiClientAppHeader.js';
 
 import {RoleType, WorkSummaryType, UltrawideDirectory, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 

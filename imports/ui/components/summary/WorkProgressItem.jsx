@@ -12,8 +12,8 @@ import WorkProgressWpContainer  from '../../containers/summary/WorkProgressWpCon
 import {log} from "../../../common/utils";
 import {WorkPackageStatus, RoleType, WorkSummaryType, LogLevel} from '../../../constants/constants.js';
 
-import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
-import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
+import { ClientDesignVersionServices }      from '../../../apiClient/apiClientDesignVersion.js';
+import { ClientWorkPackageServices }        from '../../../apiClient/apiClientWorkPackage.js';
 
 // Bootstrap
 import {InputGroup, Grid, Row, Col, Tooltip, OverlayTrigger} from 'react-bootstrap';

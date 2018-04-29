@@ -14,7 +14,7 @@
 // // Ultrawide Services
 // import {ViewMode, ViewType, DisplayContext}    from '../../../constants/constants.js';
 //
-// import ClientDataServices      from '../../../apiClient/apiClientDataServices.js';
+// import { ClientDataServices }      from '../../../apiClient/apiClientDataServices.js';
 //
 // // Bootstrap
 // import {Panel} from 'react-bootstrap';

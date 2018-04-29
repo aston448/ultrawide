@@ -11,7 +11,7 @@ import ItemReference                from './ItemReference.jsx';
 import UpdateMergeItem              from './UpdateMergeItem.jsx';
 
 // Ultrawide Services
-import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
+import { ClientDesignVersionServices }  from '../../../apiClient/apiClientDesignVersion.js';
 
 import {RoleType, DesignVersionStatus, ItemType, DesignUpdateMergeAction, LogLevel} from '../../../constants/constants.js';
 import { replaceAll, log } from '../../../common/utils.js';

@@ -1,7 +1,7 @@
 
 import { UserDesignUpdateSummary }          from '../../collections/summary/user_design_update_summary.js';
 
-class UserDesignUpdateSummaryData{
+class UserDesignUpdateSummaryDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -87,4 +87,4 @@ class UserDesignUpdateSummaryData{
     }
 }
 
-export default new UserDesignUpdateSummaryData();
+export const UserDesignUpdateSummaryData = new UserDesignUpdateSummaryDataClass();

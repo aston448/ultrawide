@@ -5,12 +5,12 @@ import { RoleType, ViewType, ViewMode, ComponentType, WorkPackageType, WorkPacka
 import { Validation } from '../constants/validation_errors.js';
 import { WorkPackageMessages } from '../constants/message_texts.js';
 
-import WorkPackageValidationApi         from '../apiValidation/apiWorkPackageValidation.js';
-import ServerWorkPackageApi             from '../apiServer/apiWorkPackage.js';
-import ClientTestIntegrationServices    from './apiClientTestIntegration';
-import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
-import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
-import ClientDesignUpdateSummary        from '../apiClient/apiClientDesignUpdateSummary.js';
+import { WorkPackageValidationApi }         from '../apiValidation/apiWorkPackageValidation.js';
+import { ServerWorkPackageApi }             from '../apiServer/apiWorkPackage.js';
+import { ClientTestIntegrationServices }    from './apiClientTestIntegration';
+import { ClientUserContextServices }        from '../apiClient/apiClientUserContext.js';
+import { ClientDesignVersionServices }      from '../apiClient/apiClientDesignVersion.js';
+import { ClientDesignUpdateSummary }        from '../apiClient/apiClientDesignUpdateSummary.js';
 
 // Data Access
 import { UserRoleData }                     from '../data/users/user_role_db.js';
@@ -28,7 +28,7 @@ import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUse
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
 
-class ClientWorkPackageServices {
+class ClientWorkPackageServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -598,4 +598,4 @@ class ClientWorkPackageServices {
 
 }
 
-export default new ClientWorkPackageServices();
+export const ClientWorkPackageServices = new ClientWorkPackageServicesClass();

@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import DesignUpdateComponentModules         from '../../service_modules/design_update/design_update_component_service_modules.js';
+import { DesignUpdateComponentModules }         from '../../service_modules/design_update/design_update_component_service_modules.js';
 
 // Data Access
 import { DesignComponentData }                  from '../../data/design/design_component_db.js';
@@ -14,7 +14,7 @@ import { DesignUpdateComponentData }            from '../../data/design_update/d
 //
 //======================================================================================================================
 
-class TextEditorServices{
+class TextEditorServicesClass {
 
     // Save text for a component in the base design (initial edit only)
     saveText(designComponentId, rawText){
@@ -39,4 +39,4 @@ class TextEditorServices{
     };
 }
 
-export default new TextEditorServices();
+export const TextEditorServices = new TextEditorServicesClass();

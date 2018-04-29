@@ -1,11 +1,10 @@
 
 // Ultrawide Services
 import { ComponentType, LogLevel, DesignUpdateMergeAction, UpdateScopeType }      from '../../constants/constants.js';
-import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
-import { DesignComponentModules }           from '../../service_modules/design/design_component_service_modules.js';
-import DesignUpdateModules              from '../../service_modules/design_update/design_update_service_modules.js';
-import DesignVersionModules             from '../../service_modules/design/design_version_service_modules.js';
-import WorkPackageModules               from '../../service_modules/work/work_package_service_modules.js';
+import { DesignUpdateComponentServices }    from '../../servicers/design_update/design_update_component_services.js';
+import { DesignUpdateModules }              from '../../service_modules/design_update/design_update_service_modules.js';
+import { DesignVersionModules }             from '../../service_modules/design/design_version_service_modules.js';
+import { WorkPackageModules }               from '../../service_modules/work/work_package_service_modules.js';
 
 import { log }                          from '../../common/utils.js'
 
@@ -24,7 +23,7 @@ import { DefaultFeatureAspectData }     from '../../data/design/default_feature_
 //
 //======================================================================================================================
 
-class DesignUpdateComponentModules{
+class DesignUpdateComponentModulesClass{
 
     addDefaultFeatureAspects(designId, designVersionId, designUpdateId, featureId, defaultRawText, view){
 
@@ -779,4 +778,4 @@ class DesignUpdateComponentModules{
     };
 }
 
-export default new DesignUpdateComponentModules()
+export const DesignUpdateComponentModules = new DesignUpdateComponentModulesClass();

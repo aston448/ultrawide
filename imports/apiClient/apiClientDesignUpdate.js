@@ -6,12 +6,12 @@ import { Validation } from '../constants/validation_errors.js';
 import { DesignUpdateMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
 
-import DesignUpdateValidationApi        from '../apiValidation/apiDesignUpdateValidation.js';
-import ServerDesignUpdateApi            from '../apiServer/apiDesignUpdate.js';
-import ClientDesignUpdateSummary        from '../apiClient/apiClientDesignUpdateSummary.js';
-import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegration.js';
-import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
-import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
+import { DesignUpdateValidationApi }        from '../apiValidation/apiDesignUpdateValidation.js';
+import { ServerDesignUpdateApi }            from '../apiServer/apiDesignUpdate.js';
+import { ClientDesignUpdateSummary }        from '../apiClient/apiClientDesignUpdateSummary.js';
+import { ClientTestIntegrationServices }    from '../apiClient/apiClientTestIntegration.js';
+import { ClientUserContextServices }        from '../apiClient/apiClientUserContext.js';
+import { ClientDesignVersionServices }      from '../apiClient/apiClientDesignVersion.js';
 
 // Data Access
 import { DesignUpdateData }                 from '../data/design_update/design_update_db.js';
@@ -26,7 +26,7 @@ import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUse
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientDesignUpdateServices {
+class ClientDesignUpdateServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -466,4 +466,4 @@ class ClientDesignUpdateServices {
 
 }
 
-export default new ClientDesignUpdateServices();
+export const ClientDesignUpdateServices = new ClientDesignUpdateServicesClass();

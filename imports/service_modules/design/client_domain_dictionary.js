@@ -15,7 +15,7 @@
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientDomainDictionaryServices {
+class ClientDomainDictionaryServicesClass {
 
 
     getDomainTermDecoratorFunction(domainTerms) {
@@ -180,4 +180,4 @@ class ClientDomainDictionaryServices {
 
 }
 
-export default new ClientDomainDictionaryServices();
+export const ClientDomainDictionaryServices = new ClientDomainDictionaryServicesClass();

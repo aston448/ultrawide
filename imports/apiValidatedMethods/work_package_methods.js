@@ -1,8 +1,8 @@
 
 import { Validation } from '../constants/validation_errors.js'
 
-import WorkPackageServices         from '../servicers/work/work_package_services.js';
-import WorkPackageValidationApi    from '../apiValidation/apiWorkPackageValidation.js';
+import { WorkPackageServices }         from '../servicers/work/work_package_services.js';
+import { WorkPackageValidationApi }    from '../apiValidation/apiWorkPackageValidation.js';
 
 //======================================================================================================================
 //

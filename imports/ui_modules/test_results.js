@@ -3,7 +3,7 @@ import store from "../redux/store";
 import {log} from "../common/utils";
 
 
-class TestResultsUiServices{
+class TestResultsUiServicesClass {
     
     shouldContainerUpdate(props, nextProps, context){
 
@@ -54,4 +54,4 @@ class TestResultsUiServices{
     
 }
 
-export default new TestResultsUiServices();
+export const TestResultsUiServices = new TestResultsUiServicesClass();

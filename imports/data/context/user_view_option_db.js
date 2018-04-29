@@ -1,6 +1,6 @@
 import {UserCurrentViewOptions} from '../../collections/context/user_current_view_options.js'
 
-class UserViewOptionData{
+class UserViewOptionDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -56,4 +56,4 @@ class UserViewOptionData{
     }
 }
 
-export default new UserViewOptionData();
+export const UserViewOptionData = new UserViewOptionDataClass();

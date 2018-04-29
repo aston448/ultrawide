@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import DesignUpdateServices         from '../../servicers/design_update/design_update_services.js';
+import { DesignUpdateServices }         from '../../servicers/design_update/design_update_services.js';
 import { WorkPackageStatus, WorkPackageTestStatus, UpdateMergeStatus, WorkPackageReviewType, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js'
 
@@ -18,7 +18,7 @@ import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scena
 // Methods called directly by Server API
 //
 //======================================================================================================================
-class WorkPackageServices{
+class WorkPackageServicesClass {
 
     // Add a new Work Package
     addNewWorkPackage(designVersionId, designUpdateId, wpType, populateWp){
@@ -195,4 +195,4 @@ class WorkPackageServices{
 
 }
 
-export default new WorkPackageServices();
+export const WorkPackageServices = new WorkPackageServicesClass();

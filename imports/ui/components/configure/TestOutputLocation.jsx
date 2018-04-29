@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import ClientTestOutputLocationServices         from '../../../apiClient/apiClientTestOutputLocations.js';
+import { ClientTestOutputLocationServices }         from '../../../apiClient/apiClientTestOutputLocations.js';
 
 import {UltrawideDirectory, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";

@@ -7,7 +7,7 @@ import {
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerDesignUpdateSummaryApi {
+class ServerDesignUpdateSummaryApiClass {
 
      refreshDesignUpdateSummary(userContext, forceUpdate, callback) {
 
@@ -22,5 +22,5 @@ class ServerDesignUpdateSummaryApi {
         );
     };
 }
-export default new ServerDesignUpdateSummaryApi();
+export const ServerDesignUpdateSummaryApi = new ServerDesignUpdateSummaryApiClass();
 

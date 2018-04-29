@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
 
-import ClientImpExServices          from '../../../apiClient/apiClientImpEx.js';
+import { ClientImpExServices }          from '../../../apiClient/apiClientImpEx.js';
 
 // Bootstrap
 import {Button, Grid, Row, Col, Modal} from 'react-bootstrap';

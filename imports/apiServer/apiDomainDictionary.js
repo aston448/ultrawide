@@ -6,7 +6,7 @@ import { addNewTerm, updateTermName, updateTermDefinition, removeTerm } from '..
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerDomainDictionaryApi {
+class ServerDomainDictionaryApiClass {
 
     addNewTerm(userRole, view, mode, designId, designVersionId, callback){
         addNewTerm.call(
@@ -68,5 +68,5 @@ class ServerDomainDictionaryApi {
     };
 }
 
-export default new ServerDomainDictionaryApi();
+export const ServerDomainDictionaryApi = new ServerDomainDictionaryApiClass();
 

@@ -12,7 +12,7 @@ import ScenarioTestResultsContainer     from '../../containers/mash/ScenarioTest
 import {log} from "../../../common/utils";
 import { ComponentType, LogLevel } from '../../../constants/constants.js';
 
-import ClientTestIntegrationServices        from '../../../apiClient/apiClientTestIntegration.js';
+import { ClientTestIntegrationServices }        from '../../../apiClient/apiClientTestIntegration.js';
 
 // Bootstrap
 

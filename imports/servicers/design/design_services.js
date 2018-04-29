@@ -3,7 +3,7 @@
 import { DesignVersionStatus }      from '../../constants/constants.js';
 import { DefaultItemNames }         from '../../constants/default_names.js';
 
-import DesignVersionServices        from './design_version_services.js';
+import { DesignVersionServices }        from './design_version_services.js';
 import { DesignComponentModules }       from '../../service_modules/design/design_component_service_modules.js';
 
 import { DesignData }                   from '../../data/design/design_db.js';
@@ -17,7 +17,7 @@ import { DefaultFeatureAspectData }     from '../../data/design/default_feature_
 //
 //======================================================================================================================
 
-class DesignServices{
+class DesignServicesClass{
 
     // Add a new design an its default draft design version
     addDesign(createDesignVersion){
@@ -174,4 +174,4 @@ class DesignServices{
 
 }
 
-export default new DesignServices();
+export const DesignServices = new DesignServicesClass();

@@ -4,7 +4,7 @@ import { log } from '../../common/utils.js';
 import { LogLevel} from '../../constants/constants.js';
 
 // Data Access
-import UserSettingData from '../../data/configure/user_setting_db.js';
+import { UserSettingData } from '../../data/configure/user_setting_db.js';
 
 //======================================================================================================================
 //
@@ -14,7 +14,7 @@ import UserSettingData from '../../data/configure/user_setting_db.js';
 //
 //======================================================================================================================
 
-class UserSettingServices {
+class UserSettingServicesClass {
 
 
     saveUserSetting(userId, settingName, newValue){
@@ -39,4 +39,4 @@ class UserSettingServices {
     }
 }
 
-export default new UserSettingServices();
+export const UserSettingServices = new UserSettingServicesClass();

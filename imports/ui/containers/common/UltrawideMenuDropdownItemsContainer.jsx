@@ -13,7 +13,7 @@ import UltrawideMenuDropdownItem from '../../components/common/UltrawideMenuDrop
 // Ultrawide Services
 import {log} from "../../../common/utils";
 import { RoleType, LogLevel } from '../../../constants/constants.js';
-import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices } from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

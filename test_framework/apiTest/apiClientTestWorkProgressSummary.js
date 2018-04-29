@@ -6,7 +6,7 @@ import { DesignUpdates }            from '../../imports/collections/design_updat
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
-import ClientDesignVersionServices    from '../../imports/apiClient/apiClientDesignVersion.js';
+import { ClientDesignVersionServices }    from '../../imports/apiClient/apiClientDesignVersion.js';
 import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 
 

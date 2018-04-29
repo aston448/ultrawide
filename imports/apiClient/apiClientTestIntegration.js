@@ -9,8 +9,8 @@ import { log } from '../common/utils.js';
 
 import ServerTestIntegrationApi         from '../apiServer/apiTestIntegration.js';
 import TestIntegrationValidationApi     from '../apiValidation/apiTestIntegrationValidation.js';
-import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
-import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
+import { ClientDesignVersionServices }      from '../apiClient/apiClientDesignVersion.js';
+import { ClientDesignUpdateServices }       from '../apiClient/apiClientDesignUpdate.js';
 
 // Data Access
 import { DesignComponentData }              from '../data/design/design_component_db.js';
@@ -25,7 +25,7 @@ import {updateUserMessage, updateTestDataFlag, setCurrentView} from '../redux/ac
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientTestIntegrationServices {
+class ClientTestIntegrationServicesClass {
 
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
@@ -250,5 +250,5 @@ class ClientTestIntegrationServices {
     }
 }
 
-export default new ClientTestIntegrationServices();
+export const ClientTestIntegrationServices = new ClientTestIntegrationServicesClass();
 

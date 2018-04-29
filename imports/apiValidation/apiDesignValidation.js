@@ -13,7 +13,7 @@ import { DefaultFeatureAspectData }         from '../data/design/default_feature
 //
 //======================================================================================================================
 
-class DesignValidationApi{
+class DesignValidationApiClass{
 
     validateAddDesign(userRole){
 
@@ -48,4 +48,4 @@ class DesignValidationApi{
     }
 
 }
-export default new DesignValidationApi();
+export const DesignValidationApi = new DesignValidationApiClass();

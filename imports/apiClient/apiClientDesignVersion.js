@@ -7,13 +7,13 @@ import { Validation, UserRolesValidationErrors} from '../constants/validation_er
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
 
-import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegration.js';
-import ClientDataServices               from './apiClientDataServices.js';
-import DesignVersionValidationApi       from '../apiValidation/apiDesignVersionValidation.js';
-import ServerDesignVersionApi           from '../apiServer/apiDesignVersion.js';
-import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
-import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
-import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
+import { ClientTestIntegrationServices }    from '../apiClient/apiClientTestIntegration.js';
+import { ClientDataServices }               from './apiClientDataServices.js';
+import { DesignVersionValidationApi }       from '../apiValidation/apiDesignVersionValidation.js';
+import { ServerDesignVersionApi }           from '../apiServer/apiDesignVersion.js';
+import { ClientUserContextServices }        from '../apiClient/apiClientUserContext.js';
+import { ClientDesignUpdateServices }       from '../apiClient/apiClientDesignUpdate.js';
+import { ClientWorkPackageServices }        from '../apiClient/apiClientWorkPackage.js';
 
 // Data Access
 
@@ -31,7 +31,7 @@ import {setCurrentUserItemContext, setCurrentView, setCurrentRole, setCurrentVie
 //
 // Calls validation for client and then, if required, server API to update server data
 // =====================================================================================================================
-class ClientDesignVersionServices{
+class ClientDesignVersionServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -578,4 +578,4 @@ class ClientDesignVersionServices{
     }
 }
 
-export default new ClientDesignVersionServices();
+export const ClientDesignVersionServices = new ClientDesignVersionServicesClass();

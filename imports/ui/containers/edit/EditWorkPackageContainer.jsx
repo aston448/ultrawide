@@ -18,9 +18,9 @@ import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
 import { ViewType, DisplayContext, LogLevel } from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js'
 
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }              from '../../../apiClient/apiClientDataServices.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
+import { ClientDesignVersionServices }          from '../../../apiClient/apiClientDesignVersion.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap

@@ -9,7 +9,7 @@ import ItemName                 from './ItemName.jsx';
 import ItemLink                 from './ItemLink.jsx';
 
 // Ultrawide Services
-import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackage.js';
+import { ClientWorkPackageServices }    from '../../../apiClient/apiClientWorkPackage.js';
 
 import {log} from "../../../common/utils";
 import {ItemType, WorkPackageStatus, RoleType, LogLevel} from '../../../constants/constants.js';

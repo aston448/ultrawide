@@ -2,8 +2,8 @@
 // Ultrawide Services
 import { ViewType, WorkPackageType, WorkPackageScopeType }            from '../../constants/constants.js';
 
-import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
-import WorkPackageServices          from '../../servicers/work/work_package_services.js';
+import { WorkPackageModules }           from '../../service_modules/work/work_package_service_modules.js';
+import { WorkPackageServices }          from '../../servicers/work/work_package_services.js';
 
 // Data Access
 import { DesignComponentData }          from '../../data/design/design_component_db.js';
@@ -17,7 +17,7 @@ import { DesignUpdateComponentData }    from '../../data/design_update/design_up
 //
 //======================================================================================================================
 
-class WorkPackageComponentServices{
+class WorkPackageComponentServicesClass{
 
     // Store the scope state of a WP component
 
@@ -85,5 +85,5 @@ class WorkPackageComponentServices{
 
 }
 
-export default new WorkPackageComponentServices();
+export const WorkPackageComponentServices = new WorkPackageComponentServicesClass();
 

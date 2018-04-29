@@ -23,8 +23,8 @@ import {AddActionIds}                       from "../../../constants/ui_context_
 import { log }                              from '../../../common/utils.js';
 
 import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
-import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
+import { ClientDesignVersionServices }          from '../../../apiClient/apiClientDesignVersion.js'
+import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap

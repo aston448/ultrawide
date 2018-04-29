@@ -1,11 +1,11 @@
 import {DesignVersionStatus, ItemType, LogLevel, RoleType, WorkPackageType} from "../constants/constants";
 import {AddActionIds} from "../constants/ui_context_ids";
-import ClientWorkPackageServices from "../apiClient/apiClientWorkPackage";
+import { ClientWorkPackageServices } from "../apiClient/apiClientWorkPackage";
 import {log} from "../common/utils";
 import React, { Component } from 'react';
 import ItemWrapper                  from '../../imports/ui/components/select/ItemWrapper.jsx';
 
-class WorkPackageContainerUiModules{
+class WorkPackageContainerUiModulesClass{
 
     onAddWorkPackage(userRole, userContext, wpType, openWpItems){
 
@@ -190,4 +190,4 @@ class WorkPackageContainerUiModules{
     }
 }
 
-export default new WorkPackageContainerUiModules();
+export const WorkPackageContainerUiModules = new WorkPackageContainerUiModulesClass();

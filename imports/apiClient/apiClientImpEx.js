@@ -1,8 +1,8 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import ServerImpExApi      from '../apiServer/apiImpEx.js';
-import BackupValidationApi  from '../apiValidation/apiImpExValidation.js';
+import { ServerImpExApi }     from '../apiServer/apiImpEx.js';
+import { ImpExValidationApi }  from '../apiValidation/apiImpExValidation.js';
 
 import { MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
@@ -25,7 +25,7 @@ import {setCurrentUserItemContext, setCurrentView, updateUserMessage} from '../r
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientImpExServices{
+class ClientImpExServicesClass{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
@@ -33,7 +33,7 @@ class ClientImpExServices{
     backupDesign(designId, userRole){
 
         // Client validation
-        let result = BackupValidationApi.validateBackupDesign(userRole);
+        let result = ImpExValidationApi.validateBackupDesign(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -67,7 +67,7 @@ class ClientImpExServices{
     restoreDesign(backupFileName, userId){
 
         // Client validation
-        let result = BackupValidationApi.validateRestoreDesign(userId);
+        let result = ImpExValidationApi.validateRestoreDesign(userId);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -101,7 +101,7 @@ class ClientImpExServices{
     archiveDesign(designId, userId){
 
         // Client validation
-        let result = BackupValidationApi.validateArchiveDesign(userId);
+        let result = ImpExValidationApi.validateArchiveDesign(userId);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -138,5 +138,5 @@ class ClientImpExServices{
 
 }
 
-export default new ClientImpExServices();
+export const ClientImpExServices = new ClientImpExServicesClass();
 

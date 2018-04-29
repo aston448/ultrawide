@@ -1,7 +1,7 @@
 
 // Data Access
-import UserContextData          from '../../data/context/user_context_db.js';
-import UserViewOptionData       from '../../data/context/user_view_option_db.js';
+import { UserContextData }          from '../../data/context/user_context_db.js';
+import { UserViewOptionData }       from '../../data/context/user_view_option_db.js';
 import { UserRoleData }             from '../../data/users/user_role_db.js';
 
 //======================================================================================================================
@@ -12,7 +12,7 @@ import { UserRoleData }             from '../../data/users/user_role_db.js';
 //
 //======================================================================================================================
 
-class UserContextServices{
+class UserContextServicesClass {
 
     // Save
     saveUserContext(context){
@@ -57,4 +57,4 @@ class UserContextServices{
 
 }
 
-export default new UserContextServices();
+export const UserContextServices = new UserContextServicesClass();

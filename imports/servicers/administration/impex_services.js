@@ -6,7 +6,7 @@ import { padDigits, replaceAll, log }               from '../../common/utils.js'
 import { LogLevel }                     from '../../constants/constants.js';
 
 import { ImpexModules }                     from '../../service_modules/administration/impex_service_modules.js';
-import DesignServices                   from '../../servicers/design/design_services.js';
+import { DesignServices }                   from '../../servicers/design/design_services.js';
 
 // Data Access
 import { DesignBackupData }                 from '../../data/backups/design_backup_db.js';
@@ -14,10 +14,10 @@ import { DesignData }                       from '../../data/design/design_db.js
 import { DesignVersionData }                from '../../data/design/design_version_db.js';
 import { WorkPackageData }                  from '../../data/work/work_package_db.js';
 import { UserRoleData }                     from '../../data/users/user_role_db.js';
-import UserSettingData                  from '../../data/configure/user_setting_db.js';
+import { UserSettingData }                  from '../../data/configure/user_setting_db.js';
 import { UserTestTypeLocationData }         from '../../data/configure/user_test_type_location_db.js';
 import { TestOutputLocationData }           from '../../data/configure/test_output_location_db.js';
-import TestOutputLocationFileData       from '../../data/configure/test_output_location_file_db.js';
+import { TestOutputLocationFileData }       from '../../data/configure/test_output_location_file_db.js';
 import { DefaultFeatureAspectData }         from '../../data/design/default_feature_aspect_db.js';
 
 //======================================================================================================================
@@ -28,7 +28,7 @@ import { DefaultFeatureAspectData }         from '../../data/design/default_feat
 //
 //======================================================================================================================
 
-class ImpExServices{
+class ImpExServicesClass{
 
     // Functions called directly from APIs =============================================================================
 
@@ -1170,4 +1170,4 @@ class ImpExServices{
 
 }
 
-export default new ImpExServices();
+export const ImpExServices = new ImpExServicesClass();

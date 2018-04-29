@@ -13,7 +13,7 @@ import {log} from "../../../common/utils";
 import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType, LogLevel} from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
 
-import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
+import { ClientDesignUpdateServices }   from '../../../apiClient/apiClientDesignUpdate.js';
 
 // Bootstrap
 import {Button, ButtonGroup, FormGroup, Radio} from 'react-bootstrap';

@@ -22,7 +22,7 @@ import { UserDvMashScenarioData }           from '../../data/mash/user_dv_mash_s
 //
 //======================================================================================================================
 
-class TestSummaryServices {
+class TestSummaryServicesClass {
 
     refreshTestSummaryForFeature(userContext){
 
@@ -292,4 +292,4 @@ class TestSummaryServices {
 
 }
 
-export default new TestSummaryServices();
+export const TestSummaryServices = new TestSummaryServicesClass();

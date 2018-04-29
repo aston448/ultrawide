@@ -16,7 +16,7 @@ import {
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerWorkPackageApi {
+class ServerWorkPackageApiClass {
 
     addWorkPackage(userRole, designVersionId, designUpdateId, workPackageType, callback){
         addWorkPackage.call(
@@ -132,4 +132,4 @@ class ServerWorkPackageApi {
     };
 }
 
-export default new ServerWorkPackageApi();
+export const ServerWorkPackageApi = new ServerWorkPackageApiClass();

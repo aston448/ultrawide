@@ -1,8 +1,8 @@
 
 import { Validation } from '../constants/validation_errors.js'
 
-import DomainDictionaryServices         from '../servicers/design/domain_dictionary_services.js';
-import DomainDictionaryValidationApi    from '../apiValidation/apiDomainDictionaryValidation.js';
+import { DomainDictionaryServices }         from '../servicers/design/domain_dictionary_services.js';
+import { DomainDictionaryValidationApi }    from '../apiValidation/apiDomainDictionaryValidation.js';
 
 //======================================================================================================================
 //

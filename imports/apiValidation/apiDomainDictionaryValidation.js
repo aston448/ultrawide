@@ -13,7 +13,7 @@ import { DomainDictionaryData }                from '../data/design/domain_dicti
 //
 //======================================================================================================================
 
-class DomainDictionaryValidationApi{
+class DomainDictionaryValidationApiClass {
 
     validateAddNewTerm(userRole, view, mode){
 
@@ -44,4 +44,4 @@ class DomainDictionaryValidationApi{
         return DomainDictionaryValidationServices.validateRemoveTerm(userRole, view, mode);
     }
 }
-export default new DomainDictionaryValidationApi();
+export const DomainDictionaryValidationApi = new DomainDictionaryValidationApiClass();

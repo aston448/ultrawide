@@ -2,7 +2,7 @@
 import { Validation } from '../constants/validation_errors.js'
 
 import TestOutputLocationValidationApi      from '../apiValidation/apiTestOutputLocationValidation.js';
-import TestOutputLocationServices           from '../servicers/configure/test_output_location_services.js';
+import { TestOutputLocationServices }           from '../servicers/configure/test_output_location_services.js';
 
 //======================================================================================================================
 //

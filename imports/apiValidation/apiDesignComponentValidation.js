@@ -15,7 +15,7 @@ import { DesignComponentData }                  from '../data/design/design_comp
 //
 //======================================================================================================================
 
-class DesignComponentValidationApi{
+class DesignComponentValidationApiClass {
 
     validateAddDesignComponent(view, mode, componentType){
 
@@ -81,4 +81,4 @@ class DesignComponentValidationApi{
     }
 
 }
-export default new DesignComponentValidationApi();
+export const DesignComponentValidationApi = new DesignComponentValidationApiClass();

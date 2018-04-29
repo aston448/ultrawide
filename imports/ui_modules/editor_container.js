@@ -18,7 +18,7 @@ import {AddActionIds} from "../constants/ui_context_ids";
 import { log }        from '../common/utils.js';
 
 import { ClientWorkPackageComponentServices }   from "../apiClient/apiClientWorkPackageComponent";
-import ClientDesignVersionServices          from "../apiClient/apiClientDesignVersion";
+import { ClientDesignVersionServices }          from "../apiClient/apiClientDesignVersion";
 import { ClientDesignComponentServices }        from "../apiClient/apiClientDesignComponent";
 import { ClientDesignUpdateComponentServices }  from "../apiClient/apiClientDesignUpdateComponent";
 
@@ -31,7 +31,7 @@ import store from '../redux/store'
 import {setCurrentUserDesignTab, setCurrentUserUpdateTab, setCurrentUserWpTab, setCurrentUserDevTab} from '../redux/actions'
 
 
-class EditorContainerUiModules{
+class EditorContainerUiModulesClass{
 
     getDesignItem(application, displayContext, userContext){
         // Design Item needed only in WP context (otherwise we already have it as the current item)
@@ -2374,4 +2374,4 @@ class EditorContainerUiModules{
     }
 }
 
-export default new EditorContainerUiModules();
+export const EditorContainerUiModules = new EditorContainerUiModulesClass();

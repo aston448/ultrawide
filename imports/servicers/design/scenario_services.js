@@ -7,9 +7,9 @@ import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_wor
 
 // Ultrawide Services
 import { ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../../constants/constants.js';
-import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js';
 
-import MashDataModules                  from '../../service_modules/dev/test_integration_service_modules.js';
+
+import { TestIntegrationModules }                  from '../../service_modules/dev/test_integration_service_modules.js';
 
 //======================================================================================================================
 //
@@ -19,7 +19,7 @@ import MashDataModules                  from '../../service_modules/dev/test_int
 //
 //======================================================================================================================
 
-class ScenarioServices{
+class ScenarioServicesClass {
 
 
     getDefaultRawStepText(stepText){
@@ -452,7 +452,7 @@ class ScenarioServices{
 
     deleteMashStepItem(mashItemId){
 
-        MashDataModules.removeMashStep(mashItemId);
+        TestIntegrationModules.removeMashStep(mashItemId);
 
     };
 
@@ -572,4 +572,4 @@ class ScenarioServices{
 
 }
 
-export default new ScenarioServices();
+export const ScenarioServices = new ScenarioServicesClass();

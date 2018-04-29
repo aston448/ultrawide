@@ -16,8 +16,8 @@ import {log} from "../../../common/utils";
 import {ItemType, RoleType, LogLevel}           from '../../../constants/constants.js';
 import {AddActionIds}       from "../../../constants/ui_context_ids.js";
 
-import ClientDataServices   from '../../../apiClient/apiClientDataServices.js';
-import ClientDesignServices from  '../../../apiClient/apiClientDesign.js';
+import { ClientDataServices }   from '../../../apiClient/apiClientDataServices.js';
+import { ClientDesignServices } from  '../../../apiClient/apiClientDesign.js';
 
 // Bootstrap
 import {Grid, Col, Row} from 'react-bootstrap';

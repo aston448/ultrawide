@@ -9,7 +9,7 @@ import { ImpexModules }                     from '../../service_modules/administ
 // Data Access
 import { UserTestTypeLocationData }         from '../../data/configure/user_test_type_location_db.js';
 import { TestOutputLocationData }           from '../../data/configure/test_output_location_db.js';
-import TestOutputLocationFileData       from '../../data/configure/test_output_location_file_db.js';
+import { TestOutputLocationFileData }       from '../../data/configure/test_output_location_file_db.js';
 
 //======================================================================================================================
 //
@@ -19,7 +19,7 @@ import TestOutputLocationFileData       from '../../data/configure/test_output_l
 //
 //======================================================================================================================
 
-class TestOutputLocationServices {
+class TestOutputLocationServicesClass {
 
     // Add a new location with default details
     addLocation(userId) {
@@ -342,4 +342,4 @@ class TestOutputLocationServices {
     }
 }
 
-export default new TestOutputLocationServices();
+export const TestOutputLocationServices = new TestOutputLocationServicesClass();

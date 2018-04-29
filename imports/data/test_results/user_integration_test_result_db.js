@@ -1,7 +1,7 @@
 
 import { UserIntegrationTestResults }       from '../../collections/test_results/user_ultrawide_test_results.js';
 
-class UserIntegrationTestResultData {
+class UserIntegrationTestResultDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -37,4 +37,4 @@ class UserIntegrationTestResultData {
     }
 }
 
-export default new UserIntegrationTestResultData();
+export const UserIntegrationTestResultData = new UserIntegrationTestResultDataClass();

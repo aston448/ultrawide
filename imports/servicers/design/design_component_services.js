@@ -4,7 +4,7 @@ import { ComponentType, ViewType, LogLevel } from '../../constants/constants.js'
 import { DefaultComponentNames } from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
-import DesignServices               from './design_services.js';
+import { DesignServices }               from './design_services.js';
 import { DesignComponentModules }       from '../../service_modules/design/design_component_service_modules.js';
 
 // DB services
@@ -21,7 +21,7 @@ import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scena
 //
 //======================================================================================================================
 
-class DesignComponentServices{
+class DesignComponentServicesClass {
 
     // Add a new design component
     addNewComponent(designVersionId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, workPackageId='NONE'){
@@ -373,4 +373,4 @@ class DesignComponentServices{
     }
 }
 
-export default new DesignComponentServices();
+export const DesignComponentServices = new DesignComponentServicesClass();

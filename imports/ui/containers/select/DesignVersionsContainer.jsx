@@ -13,8 +13,8 @@ import ItemList                     from '../../components/select/ItemList.jsx';
 import {ItemType, LogLevel} from "../../../constants/constants";
 import {log} from "../../../common/utils";
 
-import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
-import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
+import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
+import { ClientDesignVersionServices }  from '../../../apiClient/apiClientDesignVersion.js';
 
 // Data Access
 import { DesignData }                   from '../../../data/design/design_db.js';

@@ -14,7 +14,7 @@ import { DomainDictionaryData }    from '../../data/design/domain_dictionary_db.
 //
 //======================================================================================================================
 
-class DomainDictionaryServices{
+class DomainDictionaryServicesClass{
 
     addNewTerm(designId, designVersionId){
 
@@ -89,4 +89,4 @@ class DomainDictionaryServices{
     };
 }
 
-export default new DomainDictionaryServices();
+export const DomainDictionaryServices = new DomainDictionaryServicesClass();

@@ -16,9 +16,9 @@ import DesignEditorFooter           from '../../components/common/DesignEditorFo
 import {log} from "../../../common/utils";
 import {DisplayContext, LogLevel} from '../../../constants/constants.js';
 
-import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
+import { ClientDesignUpdateSummary }    from '../../../apiClient/apiClientDesignUpdateSummary.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
-import UpdateSummaryUiServices      from '../../../ui_modules/update_summary.js';
+import { UpdateSummaryUiServices }      from '../../../ui_modules/update_summary.js';
 
 // Bootstrap
 

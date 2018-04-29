@@ -3,11 +3,11 @@ import { ComponentType } from '../constants/constants.js'
 import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
 import { Validation } from '../constants/validation_errors.js'
 
-import DesignUpdateComponentValidationApi           from '../apiValidation/apiDesignUpdateComponentValidation.js';
-import DesignUpdateComponentServices                from '../servicers/design_update/design_update_component_services.js';
+import { DesignUpdateComponentValidationApi }           from '../apiValidation/apiDesignUpdateComponentValidation.js';
+import { DesignUpdateComponentServices }                from '../servicers/design_update/design_update_component_services.js';
 import { DesignComponentModules }                       from '../service_modules/design/design_component_service_modules.js';
-import DesignComponentValidationApi from "../apiValidation/apiDesignComponentValidation";
-import DesignComponentServices from "../servicers/design/design_component_services";
+import { DesignComponentValidationApi } from "../apiValidation/apiDesignComponentValidation";
+import { DesignComponentServices } from "../servicers/design/design_component_services";
 
 //======================================================================================================================
 //

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
-import ClientDesignUpdateServices       from '../../imports/apiClient/apiClientDesignUpdate.js';
-import ClientDesignUpdateSummary        from '../../imports/apiClient/apiClientDesignUpdateSummary.js';
+import { ClientDesignUpdateServices }       from '../../imports/apiClient/apiClientDesignUpdate.js';
+import { ClientDesignUpdateSummary }        from '../../imports/apiClient/apiClientDesignUpdateSummary.js';
 import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 
 import {RoleType} from '../../imports/constants/constants.js';

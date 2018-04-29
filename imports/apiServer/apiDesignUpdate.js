@@ -15,7 +15,7 @@ import {
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerDesignUpdateApi {
+class ServerDesignUpdateApiClass {
 
     addDesignUpdate(userRole, designVersionId, callback){
 
@@ -126,5 +126,5 @@ class ServerDesignUpdateApi {
 
 }
 
-export default new ServerDesignUpdateApi();
+export const ServerDesignUpdateApi = new ServerDesignUpdateApiClass();
 

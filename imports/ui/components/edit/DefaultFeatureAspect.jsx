@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide Services
-import ClientDesignServices                 from '../../../apiClient/apiClientDesign.js';
+import { ClientDesignServices }                 from '../../../apiClient/apiClientDesign.js';
 
 import {RoleType, LogLevel} from '../../../constants/constants.js';
 import {log}         from '../../../common/utils.js';

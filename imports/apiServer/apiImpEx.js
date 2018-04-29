@@ -8,7 +8,7 @@ import {
 } from '../apiValidatedMethods/impex_methods.js'
 
 
-class ServerBackupApi {
+class ServerImpExApiClass {
 
     backupDesign(designId, userRole, callback){
 
@@ -50,4 +50,4 @@ class ServerBackupApi {
     };
 }
 
-export default new ServerBackupApi();
+export const ServerImpExApi = new ServerImpExApiClass();

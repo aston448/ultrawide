@@ -12,8 +12,8 @@ import PropTypes from 'prop-types';
 import {RoleType, ItemType, DesignVersionStatus, DesignUpdateStatus, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
-import ClientDesignUpdateServices       from '../../../apiClient/apiClientDesignUpdate.js';
+import { ClientDesignVersionServices }      from '../../../apiClient/apiClientDesignVersion.js';
+import { ClientDesignUpdateServices }       from '../../../apiClient/apiClientDesignUpdate.js';
 
 // Bootstrap
 import {InputGroup}                 from 'react-bootstrap';

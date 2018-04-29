@@ -2,7 +2,7 @@ import {ItemType, LogLevel, WorkPackageStatus, WorkPackageTestStatus} from "../c
 import TextLookups from '../common/lookups.js';
 import {log} from "../common/utils";
 
-class ItemStatusUiModules{
+class ItemStatusUiModulesClass {
 
     getStatusString(currentItemType, currentItemStatus, wpTestStatus, adopterName){
 
@@ -107,4 +107,4 @@ class ItemStatusUiModules{
     }
 }
 
-export default new ItemStatusUiModules();
+export const ItemStatusUiModules = new ItemStatusUiModulesClass();

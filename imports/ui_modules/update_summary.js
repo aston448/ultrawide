@@ -2,7 +2,7 @@ import {EditorTab, LogLevel, ViewType} from "../constants/constants";
 import {log} from "../common/utils";
 import store from "../redux/store";
 
-class UpdateSummaryUiServices {
+class UpdateSummaryUiServicesClass {
 
 
     shouldSummaryUpdate(props, nextProps, context){
@@ -49,4 +49,4 @@ class UpdateSummaryUiServices {
     }
 }
 
-export default new UpdateSummaryUiServices();
+export const UpdateSummaryUiServices = new UpdateSummaryUiServicesClass();

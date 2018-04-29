@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 import {ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
-import DomainDictUiServices             from "../../../ui_modules/domain_dictionary";
+import { ClientDomainDictionaryServices }   from '../../../apiClient/apiClientDomainDictionary.js';
+import { DomainDictUiServices }             from "../../../ui_modules/domain_dictionary";
 
 // Bootstrap
 import {InputGroup, FormControl, ControlLabel} from 'react-bootstrap';

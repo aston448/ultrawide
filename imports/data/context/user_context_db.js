@@ -1,7 +1,7 @@
 
 import { UserContext }       from '../../collections/context/user_context.js';
 
-class UserContextData{
+class UserContextDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -104,4 +104,4 @@ class UserContextData{
     }
 }
 
-export default new UserContextData();
+export const UserContextData = new UserContextDataClass();

@@ -11,9 +11,9 @@ import { createContainer }  from 'meteor/react-meteor-data';
 import { LogLevel } from '../../../constants/constants.js';
 import { log }                              from '../../../common/utils.js';
 
-import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
-import EditorContainerUiModules             from '../../../ui_modules/editor_container.js'
+import { EditorContainerUiModules }             from '../../../ui_modules/editor_container.js'
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';

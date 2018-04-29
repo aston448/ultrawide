@@ -2,8 +2,8 @@
 // Ultrawide Services
 import { UltrawideDirectory, LogLevel } from '../../constants/constants.js';
 
-import ImpexServices                    from '../../servicers/administration/impex_services.js';
-import StartupModules                   from '../../service_modules/administration/startup_service_modules.js';
+import { ImpExServices }                    from '../../servicers/administration/impex_services.js';
+import { StartupModules }                   from '../../service_modules/administration/startup_service_modules.js';
 
 // Data Access
 import { UserRoleData }                     from '../../data/users/user_role_db.js';
@@ -33,7 +33,7 @@ class StartupServices{
                 // Create the Admin user so that work can be started
                 console.log("Creating admin user...");
 
-                ImpexServices.createAdminUser();
+                ImpExServices.createAdminUser();
             }
 
             // Also make sure the global App data exists and is up to date for the current release
@@ -46,7 +46,7 @@ class StartupServices{
             const backupLocation = dataStore + UltrawideDirectory.BACKUP_DIR;
 
             // Get and populate backup file data.  This will allow new files to be picked up and removed ones to disappear
-            ImpexServices.checkAndPopulateBackupFileData(backupLocation);
+            ImpExServices.checkAndPopulateBackupFileData(backupLocation);
 
         }
     }

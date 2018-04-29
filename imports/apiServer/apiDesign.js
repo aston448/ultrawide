@@ -12,7 +12,7 @@ import {
 //
 // Calls Meteor Validated Methods and returns asynchronous results to callback
 // =====================================================================================================================
-class ServerDesignApi {
+class ServerDesignApiClass {
 
     addDesign(userRole, callback){
 
@@ -85,4 +85,4 @@ class ServerDesignApi {
 
 }
 
-export default new ServerDesignApi();
+export const ServerDesignApi = new ServerDesignApiClass();

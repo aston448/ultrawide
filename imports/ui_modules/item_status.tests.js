@@ -3,7 +3,7 @@ import {
     DesignUpdateStatus, DesignVersionStatus, WorkPackageStatus, WorkPackageTestStatus
 } from "../constants/constants";
 
-import ItemStatusUiModules from '../ui_modules/item_status.js';
+import { ItemStatusUiModules } from '../ui_modules/item_status.js';
 
 
 import { chai } from 'meteor/practicalmeteor:chai';

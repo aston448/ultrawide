@@ -1,16 +1,16 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import { ComponentType, DisplayContext, ViewType, LogLevel, MessageType, DesignVersionStatus} from '../constants/constants.js';
+import { ComponentType, DisplayContext, ViewType, LogLevel, MessageType, DesignVersionStatus, HomePageTab} from '../constants/constants.js';
 import { DesignComponentMessages } from '../constants/message_texts.js';
 import { Validation } from '../constants/validation_errors.js';
 
-import ServerDesignComponentApi      from '../apiServer/apiDesignComponent.js';
-import DesignComponentValidationApi  from '../apiValidation/apiDesignComponentValidation.js';
-import ClientUserContextServices     from '../apiClient/apiClientUserContext.js';
-import ClientWorkPackageServices     from '../apiClient/apiClientWorkPackage.js';
-import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration.js';
-import ServerWorkPackageApi          from '../apiServer/apiWorkPackage.js';
+import { ServerDesignComponentApi }      from '../apiServer/apiDesignComponent.js';
+import { DesignComponentValidationApi }  from '../apiValidation/apiDesignComponentValidation.js';
+import { ClientUserContextServices }     from '../apiClient/apiClientUserContext.js';
+import { ClientWorkPackageServices }     from '../apiClient/apiClientWorkPackage.js';
+import { ClientTestIntegrationServices } from '../apiClient/apiClientTestIntegration.js';
+import { ServerWorkPackageApi }          from '../apiServer/apiWorkPackage.js';
 
 import {log} from '../common/utils.js';
 
@@ -26,8 +26,7 @@ import {
     setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage,
     updateOpenItemsFlag, setCurrentView, setCurrentUserHomeTab
 } from '../redux/actions'
-import apiWorkPackage from "../apiServer/apiWorkPackage";
-import {HomePageTab} from "../constants/constants";
+
 
 // =====================================================================================================================
 // Client API for Design Components

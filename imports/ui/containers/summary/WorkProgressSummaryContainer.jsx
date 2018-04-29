@@ -16,7 +16,7 @@ import DesignEditorFooter           from '../../components/common/DesignEditorFo
 import {DisplayContext, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientDataServices           from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
 import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap

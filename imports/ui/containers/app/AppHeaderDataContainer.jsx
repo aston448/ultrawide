@@ -13,7 +13,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import {log} from '../../../common/utils.js';
 import {ViewType, LogLevel} from '../../../constants/constants.js';
 
-import ClientDataServices from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices } from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

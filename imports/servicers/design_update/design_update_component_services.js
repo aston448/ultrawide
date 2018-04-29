@@ -4,11 +4,11 @@ import { ComponentType, ViewType, UpdateScopeType, LogLevel }  from '../../const
 import { DefaultComponentNames }    from '../../constants/default_names.js';
 import { log }        from '../../common/utils.js';
 
-import DesignServices               from '../design/design_services.js';
-import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
+import { DesignServices }               from '../design/design_services.js';
+import { DesignUpdateModules }          from '../../service_modules/design_update/design_update_service_modules.js';
 import { DesignComponentModules }       from '../../service_modules/design/design_component_service_modules.js';
-import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
-import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
+import { DesignUpdateComponentModules } from '../../service_modules/design_update/design_update_component_service_modules.js';
+import { WorkPackageModules }           from '../../service_modules/work/work_package_service_modules.js';
 
 // Data Access
 import { DesignVersionData }            from '../../data/design/design_version_db.js';
@@ -26,7 +26,7 @@ import { UserDvMashScenarioData } from "../../data/mash/user_dv_mash_scenario_db
 //
 //======================================================================================================================
 
-class DesignUpdateComponentServices{
+class DesignUpdateComponentServicesClass {
 
     // Add a new design update component to design update
     addNewComponent(designVersionId, designUpdateId, workPackageId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false, isDefault = false){
@@ -601,4 +601,4 @@ class DesignUpdateComponentServices{
     }
 }
 
-export default new DesignUpdateComponentServices();
+export const DesignUpdateComponentServices = new DesignUpdateComponentServicesClass();

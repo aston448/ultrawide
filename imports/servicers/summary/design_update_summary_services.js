@@ -8,7 +8,7 @@ import { DesignData }                   from '../../data/design/design_db.js';
 import { DesignUpdateData }             from '../../data/design_update/design_update_db.js';
 import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
 import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scenario_db.js'
-import UserUpdateSummaryData        from '../../data/summary/user_design_update_summary_db.js';
+import { UserDesignUpdateSummaryData }  from '../../data/summary/user_design_update_summary_db.js';
 
 //======================================================================================================================
 //
@@ -18,7 +18,7 @@ import UserUpdateSummaryData        from '../../data/summary/user_design_update_
 //
 //======================================================================================================================
 
-class DesignUpdateSummaryServices {
+class DesignUpdateSummaryServicesClass {
 
     recreateDesignUpdateSummaryData(userContext, forceUpdate){
 
@@ -36,7 +36,7 @@ class DesignUpdateSummaryServices {
 
             log((message) => console.log(message), LogLevel.DEBUG, 'Data stale is {}', designUpdate.summaryDataStale);
 
-            const summaryData = UserUpdateSummaryData.getUserUpdateSummary(userContext.userId, userContext.designUpdateId);
+            const summaryData = UserDesignUpdateSummaryData.getUserUpdateSummary(userContext.userId, userContext.designUpdateId);
 
             log((message) => console.log(message), LogLevel.DEBUG, 'Data length is {}', summaryData.length);
 
@@ -44,7 +44,7 @@ class DesignUpdateSummaryServices {
             if(forceUpdate || designUpdate.summaryDataStale || summaryData.length === 0){
 
                 // Clear the data for this user update
-                UserUpdateSummaryData.clearUserUpdateSummary(userContext.userId, userContext.designUpdateId);
+                UserDesignUpdateSummaryData.clearUserUpdateSummary(userContext.userId, userContext.designUpdateId);
 
                 // Get all significant items in the update.  Anything added, removed or changed must be in scope.
                 const updateItems = DesignUpdateData.getInScopeComponents(userContext.designUpdateId);
@@ -230,7 +230,7 @@ class DesignUpdateSummaryServices {
 
                             if(parentItem) {
 
-                                actionHeader = UserUpdateSummaryData.getHeaderItem(
+                                actionHeader = UserDesignUpdateSummaryData.getHeaderItem(
                                     userContext.userId,
                                     item.designUpdateId,
                                     headerSummaryType,
@@ -247,7 +247,7 @@ class DesignUpdateSummaryServices {
                                     itemHeaderName = featureName;
                                 }
 
-                                headerId = UserUpdateSummaryData.insertNewSummary(
+                                headerId = UserDesignUpdateSummaryData.insertNewSummary(
                                     userContext.userId,
                                     item,
                                     summaryCategory,
@@ -294,7 +294,7 @@ class DesignUpdateSummaryServices {
 
                 // Bulk insert the body data for efficiency
                 if(batchData.length > 0) {
-                    UserUpdateSummaryData.bulkInsertData(batchData);
+                    UserDesignUpdateSummaryData.bulkInsertData(batchData);
                 }
 
                 // No longer stale
@@ -304,5 +304,5 @@ class DesignUpdateSummaryServices {
     }
 }
 
-export default new DesignUpdateSummaryServices();
+export const DesignUpdateSummaryServices = new DesignUpdateSummaryServicesClass();
 

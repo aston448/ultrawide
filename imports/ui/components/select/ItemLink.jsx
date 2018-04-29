@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import {RoleType, DesignVersionStatus, DesignUpdateStatus, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
+import { ClientWorkPackageServices }        from '../../../apiClient/apiClientWorkPackage.js';
 
 // Bootstrap
 import {InputGroup}                 from 'react-bootstrap';

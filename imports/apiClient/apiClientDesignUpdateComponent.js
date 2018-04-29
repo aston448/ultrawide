@@ -5,11 +5,11 @@ import { ComponentType, MessageType, UpdateScopeType, LogLevel}        from '../
 import { DesignUpdateComponentMessages }    from '../constants/message_texts.js';
 import { Validation }                       from '../constants/validation_errors.js';
 
-import ServerDesignUpdateComponentApi       from '../apiServer/apiDesignUpdateComponent.js';
-import ServerWorkPackageApi                 from '../apiServer/apiWorkPackage.js';
-import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpdateComponentValidation.js';
-import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdateSummary.js';
-import ClientTestIntegrationServices        from "./apiClientTestIntegration";
+import { ServerDesignUpdateComponentApi }       from '../apiServer/apiDesignUpdateComponent.js';
+import { ServerWorkPackageApi }                 from '../apiServer/apiWorkPackage.js';
+import { DesignUpdateComponentValidationApi }   from '../apiValidation/apiDesignUpdateComponentValidation.js';
+import { ClientDesignUpdateSummary }            from '../apiClient/apiClientDesignUpdateSummary.js';
+import { ClientTestIntegrationServices }        from "./apiClientTestIntegration";
 import { ClientDesignComponentServices }        from '../apiClient/apiClientDesignComponent.js';
 
 import { log }        from '../common/utils.js';
@@ -23,8 +23,8 @@ import { DesignUpdateComponentData }        from '../data/design_update/design_u
 import store from '../redux/store'
 import {updateDesignComponentName, setCurrentUserOpenDesignUpdateItems, updateUserMessage, updateOpenItemsFlag, updateTestDataFlag, setUpdateScopeFlag, setUpdateScopeItems} from '../redux/actions'
 import {DesignComponentMessages} from "../constants/message_texts";
-import DesignComponentValidationApi from "../apiValidation/apiDesignComponentValidation";
-import ServerDesignComponentApi from "../apiServer/apiDesignComponent";
+import { DesignComponentValidationApi } from "../apiValidation/apiDesignComponentValidation";
+import { ServerDesignComponentApi } from "../apiServer/apiDesignComponent";
 
 
 // =====================================================================================================================
@@ -850,7 +850,7 @@ class ClientDesignUpdateComponentServicesClass{
     // marked as stale on the server...
     refreshDesignUpdateSummary(updateChanged){
 
-        ClientDesignUpdateServices.getDesignUpdateSummary(updateChanged);
+        ClientDesignUpdateSummary.getDesignUpdateSummary(updateChanged);
 
     }
 

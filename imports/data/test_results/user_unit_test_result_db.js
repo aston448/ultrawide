@@ -1,7 +1,7 @@
 
 import { UserUnitTestResults }       from '../../collections/test_results/user_ultrawide_test_results.js';
 
-class UserUnitTestResultData {
+class UserUnitTestResultDataClass {
 
     // INSERT ==========================================================================================================
 
@@ -37,4 +37,4 @@ class UserUnitTestResultData {
     }
 }
 
-export default new UserUnitTestResultData();
+export const UserUnitTestResultData = new UserUnitTestResultDataClass();

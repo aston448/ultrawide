@@ -16,8 +16,8 @@ import FeatureSummaryContainer          from '../../containers/select/FeatureSum
 import {DesignVersionStatus, DisplayContext, WorkPackageType, RoleType, HomePageTab, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js';
 
-import ClientDataServices               from '../../../apiClient/apiClientDataServices.js';
-import WorkPackageContainerUiModules    from '../../../ui_modules/work_packages_container.js';
+import { ClientDataServices }               from '../../../apiClient/apiClientDataServices.js';
+import { WorkPackageContainerUiModules }    from '../../../ui_modules/work_packages_container.js';
 
 // Data Access
 import { DesignVersionData }                from '../../../data/design/design_version_db.js';
@@ -28,7 +28,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 // REDUX services
 import {connect} from 'react-redux';
 import {WorkPackageTab} from "../../../constants/constants";
-import ClientAppHeaderServices from "../../../apiClient/apiClientAppHeader";
+import { ClientAppHeaderServices } from "../../../apiClient/apiClientAppHeader";
 
 
 

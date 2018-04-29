@@ -4,9 +4,9 @@ import { MashTestStatus, TestType, LogLevel} from '../../constants/constants.js'
 import {log} from '../../common/utils.js';
 
 // Data Access
-import UserUnitTestResultData               from '../../data/test_results/user_unit_test_result_db.js';
-import UserIntegrationTestResultData        from '../../data/test_results/user_integration_test_result_db.js';
-import UserAcceptanceTestResultData         from '../../data/test_results/user_acceptance_test_result_db.js';
+import { UserUnitTestResultData }               from '../../data/test_results/user_unit_test_result_db.js';
+import { UserIntegrationTestResultData }        from '../../data/test_results/user_integration_test_result_db.js';
+import { UserAcceptanceTestResultData }         from '../../data/test_results/user_acceptance_test_result_db.js';
 
 // Plugin class to read test results from an ultrawide-mocha-reporter JSON file
 class UltrawideMochaTestServices{

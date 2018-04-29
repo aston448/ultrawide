@@ -9,8 +9,8 @@ import { RoleType, ComponentType, ViewType, ViewOptionType, DisplayContext, Desi
      WorkPackageType, WorkPackageStatus, LogLevel,
      UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, WorkSummaryType } from '../constants/constants.js';
 
-import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
-import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
+import { ClientTestOutputLocationServices } from '../apiClient/apiClientTestOutputLocations.js';
+import { ClientUserContextServices }        from '../apiClient/apiClientUserContext.js';
 
 import { log } from '../common/utils.js';
 import TextLookups from '../common/lookups.js';
@@ -55,10 +55,10 @@ import {
     DesignUpdateTab,
     DesignUpdateTestStatus
 } from "../constants/constants";
-import ClientAppHeaderServices from "./apiClientAppHeader";
-import ClientDesignVersionServices from "./apiClientDesignVersion";
+import { ClientAppHeaderServices } from "./apiClientAppHeader";
+import { ClientDesignVersionServices } from "./apiClientDesignVersion";
 import ClientUserSettingsServices from "./apiClientUserSettings";
-import ClientDesignUpdateServices from "./apiClientDesignUpdate";
+import { ClientDesignUpdateServices } from "./apiClientDesignUpdate";
 import PropTypes from "prop-types";
 
 
@@ -70,7 +70,7 @@ import PropTypes from "prop-types";
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ClientDataServices{
+class ClientDataServicesClass{
 
     loadMainData(userContext){
 
@@ -2676,4 +2676,4 @@ class ClientDataServices{
 
 }
 
-export default new ClientDataServices();
+export const ClientDataServices = new ClientDataServicesClass();

@@ -16,7 +16,7 @@ import { AppGlobalData }        from '../../data/app/app_global_db.js';
 //
 //======================================================================================================================
 
-class StartupModules{
+class StartupModulesClass {
 
     setUltrawideVersionData(){
 
@@ -91,4 +91,4 @@ class StartupModules{
 
 }
 
-export default new StartupModules();
+export const StartupModules = new StartupModulesClass();

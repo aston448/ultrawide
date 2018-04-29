@@ -11,7 +11,7 @@ import { Validation, DesignVersionValidationErrors } from '../../constants/valid
 //
 //======================================================================================================================
 
-class DesignVersionValidationServices{
+class DesignVersionValidationServicesClass {
 
     validateUpdateDesignVersionName(userRole, newName, otherVersions){
 
@@ -142,5 +142,5 @@ class DesignVersionValidationServices{
     }
 
 }
-export default new DesignVersionValidationServices();
+export const DesignVersionValidationServices = new DesignVersionValidationServicesClass();
 

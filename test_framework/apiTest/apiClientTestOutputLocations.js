@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import ClientTestOutputLocationServices from '../../imports/apiClient/apiClientTestOutputLocations';
+import { ClientTestOutputLocationServices } from '../../imports/apiClient/apiClientTestOutputLocations';
 
 import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 

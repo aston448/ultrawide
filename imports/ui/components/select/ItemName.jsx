@@ -12,10 +12,10 @@ import PropTypes from 'prop-types';
 import {RoleType, ItemType, DesignVersionStatus, DesignUpdateStatus, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientDesignServices             from '../../../apiClient/apiClientDesign.js';
-import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
-import ClientDesignUpdateServices       from '../../../apiClient/apiClientDesignUpdate.js';
-import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
+import { ClientDesignServices }             from '../../../apiClient/apiClientDesign.js';
+import { ClientDesignVersionServices }      from '../../../apiClient/apiClientDesignVersion.js';
+import { ClientDesignUpdateServices }       from '../../../apiClient/apiClientDesignUpdate.js';
+import { ClientWorkPackageServices }        from '../../../apiClient/apiClientWorkPackage.js';
 
 // Bootstrap
 import {InputGroup}                 from 'react-bootstrap';

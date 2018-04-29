@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import DesignVersionValidationServices  from '../service_modules/validation/design_version_validation_services.js';
+import { DesignVersionValidationServices }  from '../service_modules/validation/design_version_validation_services.js';
 
 // Data Access
 import { DesignData }                       from '../data/design/design_db.js';
@@ -12,7 +12,7 @@ import { DesignVersionData }                from '../data/design/design_version_
 //
 //======================================================================================================================
 
-class DesignVersionValidationApi{
+class DesignVersionValidationApiClass{
 
     validateUpdateDesignVersionName(userRole, designVersionId, newName){
 
@@ -66,4 +66,4 @@ class DesignVersionValidationApi{
         return DesignVersionValidationServices.validateCreateNextDesignVersion(userRole, thisVersion, mergeIncludeUpdatesCount);
     }
 }
-export default new DesignVersionValidationApi();
+export const DesignVersionValidationApi = new DesignVersionValidationApiClass();

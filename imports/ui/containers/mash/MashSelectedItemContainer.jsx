@@ -17,10 +17,10 @@ import {DetailsViewType, ViewType, DisplayContext, ComponentType, LogLevel}    f
 import {log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js';
 
-import ClientDataServices               from '../../../apiClient/apiClientDataServices.js';
-import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
+import { ClientDataServices }               from '../../../apiClient/apiClientDataServices.js';
+import { ClientUserContextServices }        from '../../../apiClient/apiClientUserContext.js';
 import ClientUserSettingsServices       from '../../../apiClient/apiClientUserSettings.js';
-import TestResultsUiServices            from '../../../ui_modules/test_results.js';
+import { TestResultsUiServices }            from '../../../ui_modules/test_results.js';
 
 // Bootstrap
 

@@ -13,7 +13,7 @@ import { DesignUpdateData }                 from '../data/design_update/design_u
 //
 //======================================================================================================================
 
-class DesignUpdateValidationApi{
+class DesignUpdateValidationApiClass{
 
     validateAddDesignUpdate(userRole, designVersionId){
 
@@ -87,4 +87,4 @@ class DesignUpdateValidationApi{
     }
 
 }
-export default new DesignUpdateValidationApi();
+export const DesignUpdateValidationApi = new DesignUpdateValidationApiClass();

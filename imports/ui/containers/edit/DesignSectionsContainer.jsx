@@ -15,15 +15,15 @@ import DesignComponent                      from '../../components/edit/DesignCo
 import {log, replaceAll} from "../../../common/utils";
 import { LogLevel, ComponentType, DisplayContext, UpdateScopeType, ViewMode } from '../../../constants/constants.js';
 
-import ClientDataServices                   from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
+import { ClientDesignVersionServices }          from '../../../apiClient/apiClientDesignVersion.js'
 import { ClientDesignComponentServices }        from "../../../apiClient/apiClientDesignComponent";
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
-import ComponentUiModules from "../../../ui_modules/design_component";
+import { ComponentUiModules } from "../../../ui_modules/design_component";
 
 
 

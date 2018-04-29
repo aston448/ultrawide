@@ -17,7 +17,7 @@ import DesignsContainer     from '../../containers/select/DesignsContainer.jsx';
 import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
 
-import ClientDataServices              from '../../../apiClient/apiClientDataServices.js';
+import { ClientDataServices }              from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
 

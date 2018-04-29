@@ -19,8 +19,8 @@ import ProjectSummaryContainer              from '../../containers/summary/Proje
 import {DesignVersionStatus, WorkPackageType, HomePageTab, LogLevel, RoleType}        from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
-import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
+import { ClientDesignVersionServices }  from '../../../apiClient/apiClientDesignVersion.js';
+import { ClientAppHeaderServices }      from '../../../apiClient/apiClientAppHeader.js';
 
 // Bootstrap
 import {Tabs, Tab, Grid, Row, Col, Nav, NavItem} from 'react-bootstrap';

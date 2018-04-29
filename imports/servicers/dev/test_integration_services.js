@@ -1,22 +1,22 @@
 
 
 // Ultrawide Services
-import DesignUpdateSummaryServices      from '../summary/design_update_summary_services.js';
+import { DesignUpdateSummaryServices }      from '../summary/design_update_summary_services.js';
 
 import { TestRunner, LogLevel}          from '../../constants/constants.js';
 import {log}                            from '../../common/utils.js';
 
-import WorkPackageServices              from '../../servicers/work/work_package_services.js';
-import MashDataModules                  from '../../service_modules/dev/test_integration_service_modules.js';
-import TestSummaryServices              from '../summary/test_summary_services.js';
-import ChimpMochaTestServices           from '../../service_modules/dev/test_processor_chimp_mocha.js';
+import { WorkPackageServices }              from '../../servicers/work/work_package_services.js';
+import { TestIntegrationModules }           from '../../service_modules/dev/test_integration_service_modules.js';
+import { TestSummaryServices }              from '../summary/test_summary_services.js';
+import { ChimpMochaTestServices }           from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
 // Data Access
 import { DesignUpdateData }                 from '../../data/design_update/design_update_db.js';
 import { DesignVersionData }                from '../../data/design/design_version_db.js';
-import UserAcceptanceTestResultData     from '../../data/test_results/user_acceptance_test_result_db.js';
-import UserIntegrationTestResultData    from '../../data/test_results/user_integration_test_result_db.js';
-import UserUnitTestResultData           from '../../data/test_results/user_unit_test_result_db.js';
+import { UserAcceptanceTestResultData }     from '../../data/test_results/user_acceptance_test_result_db.js';
+import { UserIntegrationTestResultData }    from '../../data/test_results/user_integration_test_result_db.js';
+import { UserUnitTestResultData }           from '../../data/test_results/user_unit_test_result_db.js';
 
 //======================================================================================================================
 //
@@ -44,12 +44,12 @@ class TestIntegrationServices{
             log((msg) => console.log(msg), LogLevel.PERF, "    Old data removed.");
 
             // Get latest results
-            MashDataModules.getAcceptanceTestResults(userContext);
-            MashDataModules.getIntegrationTestResults(userContext);
-            MashDataModules.getUnitTestResults(userContext);
+            TestIntegrationModules.getAcceptanceTestResults(userContext);
+            TestIntegrationModules.getIntegrationTestResults(userContext);
+            TestIntegrationModules.getUnitTestResults(userContext);
 
             // Recalculate the design-test mash
-            MashDataModules.recreateUserScenarioTestMashData(userContext);
+            TestIntegrationModules.recreateUserScenarioTestMashData(userContext);
 
             log((msg) => console.log(msg), LogLevel.PERF, "    Updating WP completeness...");
 
@@ -128,7 +128,7 @@ class TestIntegrationServices{
     //
     //     if(Meteor.isServer){
     //         // Mark this step as linked
-    //         MashDataModules.setTestStepMashStatus(mashDataItemId, MashStatus.MASH_LINKED, MashTestStatus.MASH_PENDING);
+    //         TestIntegrationModules.setTestStepMashStatus(mashDataItemId, MashStatus.MASH_LINKED, MashTestStatus.MASH_PENDING);
     //     }
     //
     // };

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import ClientTestIntegrationServices from '../../../apiClient/apiClientTestIntegration.js';
+import { ClientTestIntegrationServices } from '../../../apiClient/apiClientTestIntegration.js';
 import {FeatureTestSummaryStatus, ViewType, LogLevel}    from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 

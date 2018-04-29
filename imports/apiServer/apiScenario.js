@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import {ComponentType} from '../constants/constants.js'
-import  ScenarioServices        from '../servicers/design/scenario_services.js';
+import { ScenarioServices }        from '../servicers/design/scenario_services.js';
 
 
 // Meteor methods
