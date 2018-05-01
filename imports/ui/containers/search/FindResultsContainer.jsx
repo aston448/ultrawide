@@ -15,7 +15,7 @@ import {log} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
 
 import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
-import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 import {} from 'react-bootstrap';

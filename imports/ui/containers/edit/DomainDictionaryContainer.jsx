@@ -17,7 +17,7 @@ import {log} from "../../../common/utils";
 import { DetailsViewType, LogLevel } from '../../../constants/constants.js';
 
 import { ClientDataServices }      from '../../../apiClient/apiClientDataServices.js';
-import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }   from '../../../apiClient/apiClientUserSettings.js';
 import { DomainDictUiServices }         from '../../../ui_modules/domain_dictionary.js';
 // Bootstrap
 

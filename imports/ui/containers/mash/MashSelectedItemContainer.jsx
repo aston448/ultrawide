@@ -19,7 +19,7 @@ import { TextLookups } from '../../../common/lookups.js';
 
 import { ClientDataServices }               from '../../../apiClient/apiClientDataServices.js';
 import { ClientUserContextServices }        from '../../../apiClient/apiClientUserContext.js';
-import ClientUserSettingsServices       from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }       from '../../../apiClient/apiClientUserSettings.js';
 import { TestResultsUiServices }            from '../../../ui_modules/test_results.js';
 
 // Bootstrap

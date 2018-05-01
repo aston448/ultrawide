@@ -22,7 +22,7 @@ import { ComponentType, ViewType, DisplayContext, LogLevel } from '../../../cons
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
 import { ClientDesignVersionServices }          from '../../../apiClient/apiClientDesignVersion.js';
-import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';

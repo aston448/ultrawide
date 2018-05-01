@@ -26,7 +26,7 @@ import { ClientDesignComponentServices }        from '../../../apiClient/apiClie
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import { ClientDesignVersionServices }          from '../../../apiClient/apiClientDesignVersion.js';
-import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }           from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';

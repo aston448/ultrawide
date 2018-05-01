@@ -17,7 +17,7 @@ import {DisplayContext, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
 import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
-import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }   from '../../../apiClient/apiClientUserSettings.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';

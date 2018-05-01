@@ -336,7 +336,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Feature 1 should reflect Scenario1 results only
         expect(TestSummaryVerifications.developerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 2));
         expect(TestSummaryVerifications.developerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 1));
-        expect(TestSummaryVerifications.developerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 0));
+        //expect(TestSummaryVerifications.developerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 0));
     });
 
 });
