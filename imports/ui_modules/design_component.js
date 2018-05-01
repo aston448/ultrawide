@@ -10,7 +10,7 @@ import {
     ViewType, WorkPackageScopeType
 } from "../constants/constants";
 
-import { ClientDomainDictionaryServiceModules } from "../apiClient/apiClientDomainDictionary";
+import { ClientDomainDictionaryServices } from "../apiClient/apiClientDomainDictionary";
 import { ClientDesignComponentServices } from "../apiClient/apiClientDesignComponent";
 
 
@@ -507,6 +507,8 @@ class ComponentUiModulesClass{
         let newIndexTotal = 0;
         let oldNarrative = '';
         let newNarrative = '';
+        let oldNames = '';
+        let newNames = '';
 
         if(type === 'Feature'){
             oldProps.components.forEach((component) => {
@@ -520,16 +522,19 @@ class ComponentUiModulesClass{
 
         oldProps.components.forEach((component) => {
             oldIndexTotal += component.componentIndexNew;
+            oldNames += component.componentNameNew;
         });
 
         newProps.components.forEach((component) => {
             newIndexTotal += component.componentIndexNew;
+            newNames += component.componentNameNew;
         });
 
         if(
             newProps.components.length !== oldProps.components.length ||
             newIndexTotal !== oldIndexTotal ||
-            oldNarrative !== newNarrative
+            oldNarrative !== newNarrative ||
+            oldNames !== newNames
         ){
             shouldUpdate = true;
         }

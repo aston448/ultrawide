@@ -2,7 +2,7 @@
 //import { Validation } from '../constants/validation_errors.js'
 
 //import UserSettingsValidationApi        from '../apiValidation/apiUserSettingsValidation.js';
-import UserSettingsServices             from '../servicers/configure/user_setting_services.js';
+import { UserSettingsServices }            from '../servicers/configure/user_setting_services.js';
 
 //======================================================================================================================
 //

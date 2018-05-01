@@ -14,7 +14,7 @@ import { DesignComponentModules }           from '../../service_modules/design/d
 import { AppGlobalData }                    from '../../data/app/app_global_db.js';
 import { UserContextData }                  from '../../data/context/user_context_db.js';
 import { UserRoleData }                     from '../../data/users/user_role_db.js';
-import { UserSettingData }                  from '../../data/configure/user_setting_db.js';
+import { UserSettingsData }                  from '../../data/configure/user_setting_db.js';
 import { DesignData }                       from '../../data/design/design_db.js';
 import { DesignVersionData }                from '../../data/design/design_version_db.js';
 import { DesignUpdateData }                 from '../../data/design_update/design_update_db.js';

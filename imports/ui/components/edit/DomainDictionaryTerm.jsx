@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import {ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
-import { ClientDomainDictionaryServiceModules }   from '../../../apiClient/apiClientDomainDictionary.js';
+import { ClientDomainDictionaryServices }   from '../../../apiClient/apiClientDomainDictionary.js';
 import { DomainDictUiServices }             from "../../../ui_modules/domain_dictionary";
 
 // Bootstrap

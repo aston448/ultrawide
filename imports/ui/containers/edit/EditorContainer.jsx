@@ -12,7 +12,7 @@ import { LogLevel } from '../../../constants/constants.js';
 import { log }                              from '../../../common/utils.js';
 
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
-import ClientUserSettingsServices           from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }           from '../../../apiClient/apiClientUserSettings.js';
 import { EditorContainerUiModules }             from '../../../ui_modules/editor_container.js'
 
 // Bootstrap

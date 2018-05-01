@@ -14,7 +14,7 @@ import { DesignData }                       from '../../data/design/design_db.js
 import { DesignVersionData }                from '../../data/design/design_version_db.js';
 import { WorkPackageData }                  from '../../data/work/work_package_db.js';
 import { UserRoleData }                     from '../../data/users/user_role_db.js';
-import { UserSettingData }                  from '../../data/configure/user_setting_db.js';
+import { UserSettingsData }                  from '../../data/configure/user_setting_db.js';
 import { UserTestTypeLocationData }         from '../../data/configure/user_test_type_location_db.js';
 import { TestOutputLocationData }           from '../../data/configure/test_output_location_db.js';
 import { TestOutputLocationFileData }       from '../../data/configure/test_output_location_file_db.js';

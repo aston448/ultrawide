@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import DesignComponentAdd from '../common/DesignComponentAdd.jsx';
 
 // Ultrawide Services
-import ClientUserSettingsServices   from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }  from '../../../apiClient/apiClientUserSettings.js';
 import {log} from "../../../common/utils";
 import {LogLevel, ViewType} from "../../../constants/constants";
 

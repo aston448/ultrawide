@@ -4,7 +4,7 @@ import { log } from '../../common/utils.js';
 import { LogLevel} from '../../constants/constants.js';
 
 // Data Access
-import { UserSettingData } from '../../data/configure/user_setting_db.js';
+import { UserSettingsData } from '../../data/configure/user_setting_db.js';
 
 //======================================================================================================================
 //
@@ -14,7 +14,7 @@ import { UserSettingData } from '../../data/configure/user_setting_db.js';
 //
 //======================================================================================================================
 
-class UserSettingServicesClass {
+class UserSettingsServicesClass {
 
 
     saveUserSetting(userId, settingName, newValue){
@@ -23,20 +23,20 @@ class UserSettingServicesClass {
 
             //console.log('Saving setting ' + settingName + ' as ' + newValue);
 
-            const setting = UserSettingData.getUserSettingByName(userId, settingName);
+            const setting = UserSettingsData.getUserSettingByName(userId, settingName);
 
 
             if(setting){
 
-                UserSettingData.updateUserSettingValue(setting._id, newValue);
+                UserSettingsData.updateUserSettingValue(setting._id, newValue);
 
             } else {
 
-                UserSettingData.insertNewUserSetting(userId, settingName, newValue);
+                UserSettingsData.insertNewUserSetting(userId, settingName, newValue);
 
             }
         }
     }
 }
 
-export const UserSettingServices = new UserSettingServicesClass();
+export const UserSettingsServices = new UserSettingsServicesClass();

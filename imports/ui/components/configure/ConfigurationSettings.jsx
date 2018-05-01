@@ -11,7 +11,7 @@ import UserTestOutputsContainer                 from '../../containers/configure
 import DefaultAspectsListContainer              from '../../containers/edit/DefaultFeatureAspectsContainer.jsx';
 
 // Ultrawide Services
-import ClientUserSettingsServices               from '../../../apiClient/apiClientUserSettings.js';
+import { ClientUserSettingsServices }               from '../../../apiClient/apiClientUserSettings.js';
 import { ClientUserManagementServices }             from '../../../apiClient/apiClientUserManagement.js';
 import { ClientDocumentServices }                   from '../../../apiClient/apiClientDocument.js';
 
