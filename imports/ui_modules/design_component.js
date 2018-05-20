@@ -33,6 +33,8 @@ class ComponentUiModulesClass{
 
     componentShouldUpdate(props, nextProps, state, nextState){
 
+        console.log('Component Removed going from ' + nextProps.isRemoved + ' to ' + props.isRemoved);
+
         if(this.shouldUpdateCommon(props, nextProps, state, nextState, 'COMPONENT')){
             log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of COMMON", props.currentItem.componentNameNew);
             return true;
@@ -134,6 +136,12 @@ class ComponentUiModulesClass{
 
                 if(nextState.editing !== state.editing) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of EDIT", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.isRemoved !== props.currentItem.isRemoved) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of LOGICAL DELETE", props.currentItem.componentNameNew);
+                    console.log('HEADER SHOULD UPDATE');
                     return true;
                 }
 
@@ -254,6 +262,12 @@ class ComponentUiModulesClass{
 
                 if(nextProps.currentItem.componentNameNew !== props.currentItem.componentNameNew) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER NAME CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.isRemoved !== props.currentItem.isRemoved) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER LOGICAL DELETE", props.currentItem.componentNameNew);
+                    console.log('HEADER SHOULD UPDATE');
                     return true;
                 }
 
@@ -509,6 +523,8 @@ class ComponentUiModulesClass{
         let newNarrative = '';
         let oldNames = '';
         let newNames = '';
+        let oldRemoved = 0;
+        let newRemoved = 0;
 
         if(type === 'Feature'){
             oldProps.components.forEach((component) => {
@@ -523,23 +539,30 @@ class ComponentUiModulesClass{
         oldProps.components.forEach((component) => {
             oldIndexTotal += component.componentIndexNew;
             oldNames += component.componentNameNew;
+            if(component.isRemoved){
+                oldRemoved++;
+            }
         });
 
         newProps.components.forEach((component) => {
             newIndexTotal += component.componentIndexNew;
             newNames += component.componentNameNew;
+            if(component.isRemoved){
+                newRemoved++;
+            }
         });
 
         if(
             newProps.components.length !== oldProps.components.length ||
             newIndexTotal !== oldIndexTotal ||
             oldNarrative !== newNarrative ||
-            oldNames !== newNames
+            oldNames !== newNames ||
+            oldRemoved !== newRemoved
         ){
             shouldUpdate = true;
         }
 
-        log((msg) => console.log(msg), LogLevel.PERF, '{} List Should Update: {} Len: {} to {}; Index: {} to {}', type, shouldUpdate, oldProps.components.length, newProps.components.length, oldIndexTotal, newIndexTotal);
+        log((msg) => console.log(msg), LogLevel.PERF, '{} List Should Update: {} Len: {} to {}; Index: {} to {}; Removed {} tp {}', type, shouldUpdate, oldProps.components.length, newProps.components.length, oldIndexTotal, newIndexTotal, oldRemoved, newRemoved);
 
         return shouldUpdate;
     }

@@ -406,6 +406,8 @@ class ClientDesignUpdateComponentServicesClass{
             designUpdateComponent.componentParentReferenceIdNew
         );
 
+        console.log('Removing component %o', designUpdateComponent);
+
         let parentId = 'NONE';
 
         if(parent){
@@ -473,6 +475,8 @@ class ClientDesignUpdateComponentServicesClass{
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
         }
+
+        console.log('Restoring component %o', designUpdateComponent);
 
         // Real action call
         ServerDesignUpdateComponentApi.restoreDesignComponent(

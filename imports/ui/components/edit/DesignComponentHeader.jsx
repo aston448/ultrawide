@@ -76,6 +76,7 @@ export class DesignComponentHeader extends Component{
             scopeChange: false,
             editing: false,
             highlighted: false,
+            removed: this.props.currentItem.isRemoved ? this.props.currentItem.isRemoved : false,
             name: '',
             editorState: EditorState.createEmpty(),
             progressData: {
@@ -493,9 +494,11 @@ export class DesignComponentHeader extends Component{
                 if(item.isRemoved){
                     // Restore!
                     ClientDesignUpdateComponentServices.restoreComponent(view, mode, item);
+                    this.setState({removed: false})
                 } else {
                     // Logicaly delete
                     ClientDesignUpdateComponentServices.removeComponent(view, mode, item);
+                    this.setState({removed: true})
                 }
                 break;
             case ViewType.DEVELOP_UPDATE_WP:
@@ -992,6 +995,7 @@ export class DesignComponentHeader extends Component{
                 </OverlayTrigger>
             </InputGroup.Addon>;
 
+        // TODO Removal - Show Modal for non-logical deletes if user has this setting enabled.
 
         let deleteAction =
             <InputGroup.Addon>
@@ -1001,6 +1005,8 @@ export class DesignComponentHeader extends Component{
                     </div>
                 </OverlayTrigger>
             </InputGroup.Addon>;
+
+
 
         let moveAction =
             <InputGroup.Addon>

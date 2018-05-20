@@ -315,13 +315,13 @@ class ImpexModulesClass{
 
             const userId = getIdFromMap(userMapping, userSetting.userId);
 
-            const existingUserSetting = UserSettingData.getUserSettingByName(userId, userSetting.settingName);
+            const existingUserSetting = UserSettingsData.getUserSettingByName(userId, userSetting.settingName);
 
             if(!existingUserSetting) {
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Setting: {}", userSetting.settingName);
 
-                UserSettingData.importUserSetting(userSetting, userId);
+                UserSettingsData.importUserSetting(userSetting, userId);
             }
         });
     }

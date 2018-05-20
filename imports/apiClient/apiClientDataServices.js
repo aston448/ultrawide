@@ -1125,7 +1125,7 @@ class ClientDataServicesClass{
                     // Must be all assigned
                     assignedUpdates.push(update);
 
-                    if(update._id === currentDu._id){
+                    if(currentDu && update._id === currentDu._id){
                         defaultTab = DesignUpdateTab.TAB_ASSIGNED
                     }
                 }
@@ -1143,7 +1143,7 @@ class ClientDataServicesClass{
                     // Must be all assigned
                     assignedUpdates.push(update);
 
-                    if(update._id === currentDu._id){
+                    if(currentDu && update._id === currentDu._id){
                         defaultTab = DesignUpdateTab.TAB_ASSIGNED
                     }
                 }
@@ -1161,7 +1161,7 @@ class ClientDataServicesClass{
                     // Must be all assigned
                     assignedUpdates.push(update);
 
-                    if(update._id === currentDu._id){
+                    if(currentDu && update._id === currentDu._id){
                         defaultTab = DesignUpdateTab.TAB_ASSIGNED
                     }
                 }
@@ -1172,7 +1172,7 @@ class ClientDataServicesClass{
 
             completeUpdates.forEach((update) => {
 
-                if(update._id === currentDu._id){
+                if(currentDu && update._id === currentDu._id){
                     defaultTab = DesignUpdateTab.TAB_COMPLETE
                 }
             });

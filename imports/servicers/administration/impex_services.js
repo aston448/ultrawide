@@ -153,7 +153,7 @@ class ImpExServicesClass{
             const userTestTypeLocations = UserTestTypeLocationData.getAllUserTestTypeLocations();
 
             // Store all user settings
-            const userSettings = UserSettingData.getAllUserSettings();
+            const userSettings = UserSettingsData.getAllUserSettings();
 
 
             // Data stored for this Design -----------------------------------------------------------------------------
