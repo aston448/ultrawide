@@ -1973,7 +1973,7 @@ class ClientDataServicesClass{
 
         const userContext = store.getState().currentUserItemContext;
 
-        return UserDesignVersionMashScenariosData.getScenario(userContext, scenario.componentReferenceId);
+        return UserDvMashScenarioData.getScenario(userContext, scenario.componentReferenceId);
     }
 
     getTestSummaryFeatureData(feature){
