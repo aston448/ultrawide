@@ -2,13 +2,9 @@ import { Meteor } from 'meteor/meteor';
 
 import fs from 'fs';
 
-import { Designs }                  from '../../imports/collections/design/designs.js';
-
-import ClientBackupServices         from '../../imports/apiClient/apiClientImpEx.js'
+import { ClientImpExServices }          from '../../imports/apiClient/apiClientImpEx.js'
 import { TestDataHelpers }              from '../test_modules/test_data_helpers.js'
 import { ImpexModules }                 from '../../imports/service_modules/administration/impex_service_modules.js';
-
-import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
@@ -31,7 +27,7 @@ Meteor.methods({
 
             const backupFile = backupFiles[0];
 
-            const outcome = ClientBackupServices.restoreDesign(backupFile, user.userId);
+            const outcome = ClientImpExServices.restoreDesign(backupFile, user.userId);
 
             //console.log("Called restore Design with backup file " + backupFile);
 

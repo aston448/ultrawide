@@ -67,10 +67,12 @@ export class FeatureSummary extends Component {
             let resultClassFulfilled = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
             let resultFeatureSummary = '';
 
+            let testPassFailCount = 0;
 
             if(featureSummary.summaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS){
                 resultFeatureSummary = 'feature-summary-bad';
-                resultClassFulfilled = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL
+                resultClassFulfilled = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL;
+                testPassFailCount = featureSummary.failedCount;
             } else {
                 if((featureSummary.expectedCount === featureSummary.fulfilledCount) && (featureSummary.expectedCount > 0)){
                     resultFeatureSummary = 'feature-summary-good';
@@ -87,6 +89,7 @@ export class FeatureSummary extends Component {
                         resultFeatureSummary = 'feature-summary-meh';
                     }
                 }
+                testPassFailCount = featureSummary.fulfilledCount;
             }
 
 
@@ -110,6 +113,19 @@ export class FeatureSummary extends Component {
                 </Tooltip>
             );
 
+            const tooltipFailed = (
+                <Tooltip id="modal-tooltip">
+                    {'Number of tests failing'}
+                </Tooltip>
+            );
+
+            let passFailTooltip = tooltipFulfilled;
+            let passFailIcon = 'ok-sign';
+
+            if(featureSummary.summaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS){
+                passFailTooltip = tooltipFailed;
+                passFailIcon = 'remove-circle'
+            }
 
 
             return(
@@ -135,10 +151,10 @@ export class FeatureSummary extends Component {
                             </OverlayTrigger>
                         </Col>
                         <Col md={1} className="close-col">
-                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipFulfilled}>
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={passFailTooltip}>
                                 <div className={resultClassFulfilled}>
-                                    <span><Glyphicon glyph="ok-sign"/></span>
-                                    <span className="summary-number">{featureSummary.fulfilledCount}</span>
+                                    <span><Glyphicon glyph={passFailIcon}/></span>
+                                    <span className="summary-number">{testPassFailCount}</span>
                                 </div>
                             </OverlayTrigger>
                         </Col>

@@ -748,7 +748,8 @@ class ClientDataServicesClass{
                         summaryStatus: featureTestSummary.featureSummaryStatus,
                         scenarioCount: featureTestSummary.featureScenarioCount,
                         expectedCount: featureTestSummary.featureExpectedTestCount,
-                        fulfilledCount: featureTestSummary.featureFulfilledTestCount
+                        fulfilledCount: featureTestSummary.featureFulfilledTestCount,
+                        failedCount: featureTestSummary.featureTestFailCount
                     };
 
                     featureSummaries.push(featureSummary);
