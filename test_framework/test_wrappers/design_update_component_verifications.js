@@ -189,6 +189,13 @@ class UpdateComponentVerificationsClass {
         );
     }
 
+    componentIsNarrativeChangedForDesigner(componentType, parentName, componentName){
+        server.call('verifyDesignUpdateComponents.componentIsNarrativeChanged', componentType, parentName, componentName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
     componentIsExistingForDesigner(componentType, parentName, componentName){
         server.call('verifyDesignUpdateComponents.componentIsExisting', componentType, parentName, componentName, 'gloria',
             (function(error, result){

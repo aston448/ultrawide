@@ -120,7 +120,7 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
         // Verify
         expect(UpdateComponentVerifications.designerSelectedOldFeatureNarrativeIs(DefaultComponentNames.NEW_NARRATIVE_TEXT));
         expect(UpdateComponentVerifications.designerSelectedFeatureNarrativeIs(newNarrative));
-        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNarrativeChangedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
     });
 
     it('When an existing component Narrative is changed in a Design Update to be included in the current Design Version the Feature becomes visible as a changed item in the Design Version', function(){

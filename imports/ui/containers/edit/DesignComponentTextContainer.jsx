@@ -153,8 +153,8 @@ class DesignComponentText extends Component {
                             }
                         }
                     } else {
-                        if (designItem.isChanged) {
-                            if (designItem.isTextChanged) {
+                        if (designItem.isChanged || designItem.isNarrativeChanged) {
+                            if (designItem.isTextChanged && designItem.isNarrativeChanged) {
                                 details =
                                     <div>
                                         {newNameItem}
@@ -165,13 +165,25 @@ class DesignComponentText extends Component {
 
                                     </div>;
                             } else {
-                                details =
-                                    <div>
-                                        {newNameItem}
-                                        {oldNameItem}
-                                        {divider}
-                                        {textItem}
-                                    </div>;
+                                if (designItem.isTextChanged) {
+                                    details =
+                                        <div>
+                                            {newNameItem}
+                                            {oldNameItem}
+                                            {divider}
+                                            {newTextItem}
+                                            {oldTextItem}
+
+                                        </div>;
+                                } else {
+                                    details =
+                                        <div>
+                                            {newNameItem}
+                                            {oldNameItem}
+                                            {divider}
+                                            {textItem}
+                                        </div>;
+                                }
                             }
                         } else {
                             if (designItem.isTextChanged && !designItem.isNew) {

@@ -492,6 +492,25 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdateComponents.componentIsNarrativeChanged'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designUpdateComponent.isNarrativeChanged){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be Narrative Changed");
+        }
+    },
+
     'verifyDesignUpdateComponents.componentIsExisting'(componentType, componentParentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
