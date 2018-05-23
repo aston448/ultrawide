@@ -154,8 +154,8 @@ class DesignUpdateSummaryServicesClass {
                                         summaryType = DesignUpdateSummaryType.SUMMARY_DETAILS_CHANGE;
                                     } else {
                                         // Legacy code hack - older features were marked as changed if just the narrative had changed
-                                        if(featureItem){
-                                            if(featureItem.componentNameNew === featureItem.componentNameOld){
+                                        if(item.componentType === ComponentType.FEATURE){
+                                            if(item.componentNameNew === item.componentNameOld){
                                                 summaryType = DesignUpdateSummaryType.SUMMARY_DETAILS_CHANGE;
                                             } else {
                                                 summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
