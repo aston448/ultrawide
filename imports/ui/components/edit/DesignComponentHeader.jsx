@@ -71,7 +71,7 @@ export class DesignComponentHeader extends Component{
         super(...args);
 
         this.state = {
-            inScope: false, //this.props.updateItem ? this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE : false,
+            inScope: this.props.updateItem ? this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE : false,
             parentScope: false,
             scopeChange: false,
             editing: false,

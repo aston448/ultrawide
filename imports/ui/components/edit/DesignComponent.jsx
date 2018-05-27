@@ -52,7 +52,7 @@ export class DesignComponent extends Component{
 
         this.state = {
             open: false,
-            highlighted: false,
+            highlighted: false
         };
     }
 
@@ -129,6 +129,7 @@ export class DesignComponent extends Component{
                     break;
             }
         }
+
     }
 
     setOpenStateIfDesignItemChanging(newProps){
@@ -521,19 +522,20 @@ export class DesignComponent extends Component{
             // Adding stuff is not allowed in these contexts
 
 
-            let notEditable = (
-                mode === ViewMode.MODE_VIEW ||
-                displayContext === DisplayContext.UPDATE_SCOPE ||
-                displayContext === DisplayContext.WORKING_VIEW ||
-                displayContext === DisplayContext.BASE_VIEW ||
-                displayContext === DisplayContext.WP_SCOPE ||
-                displayContext === DisplayContext.WP_VIEW ||
-                (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.APPLICATION) ||
-                (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.DESIGN_SECTION) ||
-                (updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE) ||
-                (updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE) ||
-                (updateItem && updateItem.isRemoved)
-            );
+            // Decide if this item is editable
+            const notEditable = (
+                    mode === ViewMode.MODE_VIEW ||
+                    displayContext === DisplayContext.UPDATE_SCOPE ||
+                    displayContext === DisplayContext.WORKING_VIEW ||
+                    displayContext === DisplayContext.BASE_VIEW ||
+                    displayContext === DisplayContext.WP_SCOPE ||
+                    displayContext === DisplayContext.WP_VIEW ||
+                    (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.APPLICATION) ||
+                    (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.DESIGN_SECTION) ||
+                    (updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE) ||
+                    (updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE) ||
+                    (updateItem && updateItem.isRemoved)
+                );
 
             let uiContextId1 = '';
             let uiContextId2 = '';

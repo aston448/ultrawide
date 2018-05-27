@@ -33,7 +33,7 @@ class ComponentUiModulesClass{
 
     componentShouldUpdate(props, nextProps, state, nextState){
 
-        console.log('Component Removed going from ' + nextProps.isRemoved + ' to ' + props.isRemoved);
+        log((msg) => console.log(msg), LogLevel.PERF, "COMPONENT {} SHOULD UPDATE FOR CONTEXT {}", props.currentItem.componentNameNew, props.displayContext);
 
         if(this.shouldUpdateCommon(props, nextProps, state, nextState, 'COMPONENT')){
             log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of COMMON", props.currentItem.componentNameNew);
@@ -165,6 +165,21 @@ class ComponentUiModulesClass{
                     return true;
                 }
 
+                if(nextProps.updateItem){
+
+                    if (nextProps.updateItem.scopeType !== props.updateItem.scopeType) {
+                        log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of UPDATE SCOPE CHANGE", props.currentItem.componentNameNew);
+                        return true;
+                    }
+
+                    if(nextProps.updateItem.isRemovable !== props.updateItem.isRemovable) {
+                        log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of UPDATE REMOVABLE", props.currentItem.componentNameNew);
+                        return true;
+                    }
+                }
+
+
+
                 break;
 
         }
@@ -174,6 +189,8 @@ class ComponentUiModulesClass{
     }
 
     componentHeaderShouldUpdate(props, nextProps, state, nextState){
+
+        log((msg) => console.log(msg), LogLevel.PERF, "HEADER SHOULD UPDATE FOR CONTEXT {}", props.displayContext);
 
         if(this.shouldUpdateCommon(props, nextProps, state, nextState, 'HEADER')){
             log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER COMMON", props.currentItem.componentNameNew);
@@ -292,8 +309,21 @@ class ComponentUiModulesClass{
                 }
 
                 if(nextState.inScope !== state.inScope) {
-                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of SCOPE CHANGE", props.currentItem.componentNameNew);
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER SCOPE CHANGE", props.currentItem.componentNameNew);
                     return true;
+                }
+
+                if(nextProps.updateItem){
+
+                    if (nextProps.updateItem.scopeType !== props.updateItem.scopeType) {
+                        log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER UPDATE SCOPE CHANGE", props.currentItem.componentNameNew);
+                        return true;
+                    }
+
+                    if(nextProps.updateItem.isRemovable !== props.updateItem.isRemovable) {
+                        log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER UPDATE REMOVABLE", props.currentItem.componentNameNew);
+                        return true;
+                    }
                 }
                 break;
 
@@ -525,6 +555,10 @@ class ComponentUiModulesClass{
         let newNames = '';
         let oldRemoved = 0;
         let newRemoved = 0;
+        let oldScope = 0;
+        let newScope = 0;
+        let newRemovable = 0;
+        let oldRemovable = 0;
 
         if(type === 'Feature'){
             oldProps.components.forEach((component) => {
@@ -542,6 +576,12 @@ class ComponentUiModulesClass{
             if(component.isRemoved){
                 oldRemoved++;
             }
+            if(component.isRemovable){
+                oldRemovable++;
+            }
+            if(component.scopeType === UpdateScopeType.SCOPE_IN_SCOPE){
+                oldScope++;
+            }
         });
 
         newProps.components.forEach((component) => {
@@ -550,6 +590,12 @@ class ComponentUiModulesClass{
             if(component.isRemoved){
                 newRemoved++;
             }
+            if(component.isRemovable){
+                newRemovable++;
+            }
+            if(component.scopeType === UpdateScopeType.SCOPE_IN_SCOPE){
+                newScope++;
+            }
         });
 
         if(
@@ -557,12 +603,14 @@ class ComponentUiModulesClass{
             newIndexTotal !== oldIndexTotal ||
             oldNarrative !== newNarrative ||
             oldNames !== newNames ||
-            oldRemoved !== newRemoved
+            oldRemoved !== newRemoved ||
+            oldRemovable !== newRemovable ||
+            oldScope !== newScope
         ){
             shouldUpdate = true;
         }
 
-        log((msg) => console.log(msg), LogLevel.PERF, '{} List Should Update: {} Len: {} to {}; Index: {} to {}; Removed {} tp {}', type, shouldUpdate, oldProps.components.length, newProps.components.length, oldIndexTotal, newIndexTotal, oldRemoved, newRemoved);
+        log((msg) => console.log(msg), LogLevel.PERF, '{} List Should Update: {} Len: {} to {}; Index: {} to {}; Removed {} to {}; Scope {} to {}', type, shouldUpdate, oldProps.components.length, newProps.components.length, oldIndexTotal, newIndexTotal, oldRemoved, newRemoved, oldScope, newScope);
 
         return shouldUpdate;
     }

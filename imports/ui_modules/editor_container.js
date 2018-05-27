@@ -354,7 +354,7 @@ class EditorContainerUiModulesClass{
 
     getAddComponent(view, mode, userContext){
 
-        let addComponent = '';
+        let addComponent = <div></div>;
 
         if ((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED) && mode === ViewMode.MODE_EDIT) {
             // Editing a design or design update so include the Add Application
@@ -930,7 +930,7 @@ class EditorContainerUiModulesClass{
             case ViewType.DESIGN_UPDATE_EDIT:
 
                 return(
-                    <Col id="colId" md={colWidth} className="close-col">
+                    <Col id={colId} md={colWidth} className="close-col">
                         <Tabs className="top-tabs" activeKey={this.getCurrentUpdateTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentUpdateTab(tab)}>
                             <Tab eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
                             <Tab eventKey={EditorTab.TAB_WORKING_VIEW} title="WORKING VIEW">{editors.viewEditor}</Tab>
@@ -1357,12 +1357,12 @@ class EditorContainerUiModulesClass{
 
                             switch (displayedItems) {
                                 case 2:
-                                    col1width = 6;
-                                    col2width = 6;
-                                    col3width = 6;
-                                    col4width = 6;
-                                    col5width = 6;
-                                    col6width = 6;
+                                    col1width = 7;
+                                    col2width = 5;
+                                    col3width = 5;
+                                    col4width = 5;
+                                    col5width = 5;
+                                    col6width = 5;
                                     break;
                                 case 3:
                                     col1width = 6;

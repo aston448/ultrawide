@@ -515,6 +515,8 @@ class ClientDesignUpdateComponentServicesClass{
     // User put a scopable item in the scope view in or out of scope for a Design Update -------------------------------
     toggleInScope(view, mode, displayContext, baseComponent, designUpdateId, updateComponent, newScope){
 
+        console.log('toggling scope for update item %o', updateComponent );
+
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext, baseComponent._id, designUpdateId, updateComponent, newScope);
 
