@@ -85,7 +85,7 @@ export class ProjectSummaryItem extends Component{
                         contextText = 'NO FEATURES YET';
                         statusClass = okClass;
                     } else {
-                        if (featureCount === totalFeatureCount) {
+                        if (featureCount === 0  && totalFeatureCount > 0) {
                             contextText = 'All features have tests required for all scenarios - good start...';
                             statusClass = goodClass;
                         } else {
