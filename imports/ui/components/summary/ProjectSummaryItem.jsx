@@ -78,7 +78,11 @@ export class ProjectSummaryItem extends Component{
             case DisplayContext.PROJECT_SUMMARY_NONE:
 
                 if(featureCount > 0){
-                    contextText = featureCount + ' features have scenarios with no test requirements!';
+                    if(featureCount === 1){
+                        contextText = featureCount + ' feature has scenarios with no test requirements!';
+                    } else {
+                        contextText = featureCount + ' features have scenarios with no test requirements!';
+                    }
                     statusClass = badClass;
                 } else {
                     if(totalFeatureCount === 0){
@@ -103,7 +107,12 @@ export class ProjectSummaryItem extends Component{
             case DisplayContext.PROJECT_SUMMARY_MISSING:
 
                 if(featureCount > 0){
-                    contextText = featureCount + ' features have scenarios with required tests missing!';
+                    if(featureCount === 1){
+                        contextText = featureCount + ' feature has scenarios with required tests missing!';
+                    } else {
+                        contextText = featureCount + ' features have scenarios with required tests missing!';
+                    }
+
                     statusClass = badClass;
                 } else {
                     if(totalFeatureCount === 0){
@@ -128,7 +137,11 @@ export class ProjectSummaryItem extends Component{
             case DisplayContext.PROJECT_SUMMARY_FAIL:
 
                 if(featureCount > 0){
-                    contextText = featureCount + ' features have failing tests...';
+                    if(featureCount === 1) {
+                        contextText = featureCount + ' feature has failing tests...';
+                    } else {
+                        contextText = featureCount + ' features have failing tests...';
+                    }
                     statusClass = badClass;
                 } else {
                     if(totalFeatureCount === 0){
@@ -181,8 +194,13 @@ export class ProjectSummaryItem extends Component{
                         statusClass = okClass;
                     }
                 } else {
-                    contextText = featureCount + ' features have all tests passing.  Good work.';
+                    if(featureCount === 1) {
+                        contextText = featureCount + ' feature has all tests passing.  Good work.';
+                    } else {
+                        contextText = featureCount + ' features have all tests passing.  Good work.';
+                    }
                     statusClass = goodClass;
+
                 }
 
                 iconClass += statusClass;
