@@ -165,7 +165,7 @@ class ComponentUiModulesClass{
                     return true;
                 }
 
-                if(nextProps.updateItem){
+                if(nextProps.updateItem && props.updateItem){
 
                     if (nextProps.updateItem.scopeType !== props.updateItem.scopeType) {
                         log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of UPDATE SCOPE CHANGE", props.currentItem.componentNameNew);
@@ -313,7 +313,7 @@ class ComponentUiModulesClass{
                     return true;
                 }
 
-                if(nextProps.updateItem){
+                if(nextProps.updateItem && props.updateItem){
 
                     if (nextProps.updateItem.scopeType !== props.updateItem.scopeType) {
                         log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER UPDATE SCOPE CHANGE", props.currentItem.componentNameNew);
