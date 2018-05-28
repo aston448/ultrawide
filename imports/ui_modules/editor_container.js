@@ -46,15 +46,23 @@ class EditorContainerUiModulesClass{
         }
     }
 
-    getDesignUpdateItem(application, displayContext, designUpdateId){
+    getDesignUpdateItem(item, displayContext, designUpdateId){
+
         switch(displayContext){
             case  DisplayContext.WORKING_VIEW:
-                return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(application);
+                return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(item);
             case DisplayContext.UPDATE_SCOPE:
                 // See if this item is in scope - i.e. in the DU
-                return ClientDesignVersionServices.getDesignUpdateItemForUpdate(application, designUpdateId);
+                return ClientDesignVersionServices.getDesignUpdateItemForUpdate(item, designUpdateId);
+            case DisplayContext.WP_SCOPE:
+            case DisplayContext.DEV_DESIGN:
+                if(designUpdateId !== 'NONE'){
+                    return ClientDesignVersionServices.getDesignUpdateItemForUpdate(item, designUpdateId);
+                } else {
+                    return item;
+                }
             default:
-                return application;
+                return item;
         }
     }
 
@@ -110,7 +118,7 @@ class EditorContainerUiModulesClass{
                     key={application._id}
                     currentItem={application}
                     designItem={this.getDesignItem(application, displayContext, userContext)}
-                    updateItem={this.getDesignUpdateItem(application, displayContext)}
+                    updateItem={this.getDesignUpdateItem(application, displayContext, userContext.designUpdateId)}
                     wpItem={this.getWpItem(application, userContext.workPackageId)}
                     displayContext={displayContext}
                     view={view}

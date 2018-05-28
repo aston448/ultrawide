@@ -112,6 +112,7 @@ export class DesignComponent extends Component{
                     switch(this.props.displayContext){
                         case DisplayContext.WP_SCOPE:
                             // Scope is Update Items
+                            //console.log("Updating open state for WP scope...");
                             this.setOpenStateIfUpdateItemChanging(newProps);
                             break;
                         case DisplayContext.WP_VIEW:
@@ -144,6 +145,9 @@ export class DesignComponent extends Component{
     }
 
     setOpenStateIfUpdateItemChanging(newProps){
+        // console.log("Update item: %o", this.props.updateItem);
+        // console.log("Open DU Items %o", this.props.openDesignUpdateItems);
+        // console.log("New Open DU Items %o", newProps.openDesignUpdateItems);
         if(this.props.updateItem) {
             if (
                 (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.updateItem._id))) ||
@@ -207,7 +211,10 @@ export class DesignComponent extends Component{
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 switch(this.props.displayContext){
                     case DisplayContext.WP_SCOPE:
-                        this.setState({open: props.openDesignUpdateItems.includes(props.currentItem._id)});
+                        if(props.updateItem) {
+                            this.setState({open: props.openDesignUpdateItems.includes(props.updateItem._id)});
+                            //console.log("Set state for " + props.currentItem.componentNameNew + " to " + this.state.open);
+                        }
                         break;
                     case DisplayContext.WP_VIEW:
 

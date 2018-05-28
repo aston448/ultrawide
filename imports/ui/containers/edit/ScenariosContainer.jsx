@@ -14,17 +14,18 @@ import DesignComponent                      from '../../components/edit/DesignCo
 import {log, replaceAll} from "../../../common/utils";
 import { LogLevel, DisplayContext, ComponentType, UpdateScopeType } from '../../../constants/constants.js';
 
+import { EditorContainerUiModules }             from "../../../ui_modules/editor_container";
+
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import { ClientDesignVersionServices }          from '../../../apiClient/apiClientDesignVersion.js'
 import { ClientDesignComponentServices }        from "../../../apiClient/apiClientDesignComponent";
 import { ComponentUiModules }                   from "../../../ui_modules/design_component";
+
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
-
-
 
 
 // =====================================================================================================================
@@ -62,23 +63,8 @@ class ScenariosList extends Component {
     }
 
     getDesignUpdateItem(scenario, displayContext, designUpdateId){
-        switch(displayContext){
-            case  DisplayContext.WORKING_VIEW:
-                return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(scenario);
-            case DisplayContext.UPDATE_SCOPE:
-                // See if this item is in scope - i.e. in the DU
-                return ClientDesignVersionServices.getDesignUpdateItemForUpdate(scenario, designUpdateId);
-            case DisplayContext.WP_SCOPE:
-            case DisplayContext.DEV_DESIGN:
-                // For WP scoping or Development get the update item if WP is based on an update
-                if(designUpdateId !== 'NONE'){
-                    return ClientDesignVersionServices.getDesignUpdateItemForUpdate(scenario, designUpdateId);
-                } else {
-                    return scenario
-                }
-            default:
-                return scenario;
-        }
+
+        return EditorContainerUiModules.getDesignUpdateItem(scenario, displayContext, designUpdateId);
     };
 
     getParentName(currentItem){
@@ -96,9 +82,8 @@ class ScenariosList extends Component {
 
     }
 
-
-
     getWpItem(scenario, workPackageId){
+
         return ClientWorkPackageComponentServices.getWorkPackageComponent(scenario.componentReferenceId, workPackageId);
     }
 
@@ -144,19 +129,6 @@ class ScenariosList extends Component {
                         testSummaryData={testSummaryData}
                     />
                 );
-                // return (
-                //     <DesignComponentTarget
-                //         key={scenario._id}
-                //         currentItem={scenario}
-                //         updateItem={this.getDesignUpdateItem(scenario, displayContext, userContext.designUpdateId)}
-                //         wpItem={this.getWpItem(scenario, userContext.workPackageId)}
-                //         displayContext={displayContext}
-                //         view={view}
-                //         mode={mode}
-                //         testSummary={testSummary}
-                //         testSummaryData={testSummaryData}
-                //     />
-                // );
             });
         } else {
             //console.log("NULL COMPONENTS FOR SCENARIOS!")

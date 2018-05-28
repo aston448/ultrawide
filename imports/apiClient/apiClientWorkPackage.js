@@ -473,35 +473,43 @@ class ClientWorkPackageServicesClass {
                 break;
         }
 
-        // Set up the scope items as the current in scope items
-        const workPackage = WorkPackageData.getWorkPackageById(workPackageToEditId);
-        const wpItems = WorkPackageData.getAllWorkPackageComponents(workPackageToEditId);
-
-        let wpItemsArr = [];
-        let designItem = null;
-
-        wpItems.forEach((item) => {
-            if(wpType === WorkPackageType.WP_BASE) {
-
-                designItem = DesignComponentData.getDesignComponentByRef(workPackage.designVersionId, item.componentReferenceId);
-
-            } else {
-
-                designItem = DesignUpdateComponentData.getUpdateComponentByRef(workPackage.designVersionId, workPackage.designUpdateId, item.componentReferenceId);
-
-            }
-            if(designItem) {
-                wpItemsArr.push(designItem._id);
-            }
-        });
-
-        store.dispatch(setWorkPackageScopeItems(
-            {
-                current:    wpItemsArr,
-                added:      [],
-                removed:    []
-            }
-        ));
+        // // Set up the scope items as the current in scope items
+        // const workPackage = WorkPackageData.getWorkPackageById(workPackageToEditId);
+        // const wpItems = WorkPackageData.getAllWorkPackageComponents(workPackageToEditId);
+        //
+        // let wpItemsArr = [];
+        // let designItem = null;
+        //
+        // wpItems.forEach((item) => {
+        //     if(wpType === WorkPackageType.WP_BASE) {
+        //
+        //         designItem = DesignComponentData.getDesignComponentByRef(workPackage.designVersionId, item.componentReferenceId);
+        //
+        //     } else {
+        //
+        //         designItem = DesignUpdateComponentData.getUpdateComponentByRef(workPackage.designVersionId, workPackage.designUpdateId, item.componentReferenceId);
+        //
+        //     }
+        //     if(designItem) {
+        //
+        //         const currentItem = {
+        //             ref: designItem.componentReferenceId,
+        //             scopeType: designItem.scopeType
+        //         };
+        //
+        //         wpItemsArr.push(currentItem);
+        //     }
+        // });
+        //
+        // store.dispatch(setWorkPackageScopeItems(
+        //     {
+        //         flag:               1,
+        //         currentParents:     [],
+        //         currentChildren:    [],
+        //         changingItemId:     'NONE',
+        //         current:            []
+        //     }
+        // ));
 
         return {success: true, message: ''};
 

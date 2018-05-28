@@ -15,6 +15,9 @@ import DesignComponent                      from '../../components/edit/DesignCo
 import {log, replaceAll} from "../../../common/utils";
 import { LogLevel, DisplayContext, ComponentType, UpdateScopeType, ViewMode } from '../../../constants/constants.js';
 
+import { ComponentUiModules }                   from "../../../ui_modules/design_component";
+import { EditorContainerUiModules }             from "../../../ui_modules/editor_container";
+
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import { ClientDesignVersionServices }          from '../../../apiClient/apiClientDesignVersion.js'
@@ -23,7 +26,7 @@ import { ClientDesignComponentServices }        from "../../../apiClient/apiClie
 
 // REDUX services
 import {connect} from 'react-redux';
-import { ComponentUiModules } from "../../../ui_modules/design_component";
+
 
 
 
@@ -66,23 +69,9 @@ class FeaturesList extends Component {
     }
 
     getDesignUpdateItem(feature, displayContext, designUpdateId){
-        switch(displayContext){
-            case  DisplayContext.WORKING_VIEW:
-                return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(feature);
-            case DisplayContext.UPDATE_SCOPE:
-                // See if this item is in scope - i.e. in the DU
-                return ClientDesignVersionServices.getDesignUpdateItemForUpdate(feature, designUpdateId);
-            case DisplayContext.WP_SCOPE:
-            case DisplayContext.DEV_DESIGN:
-                // For WP scoping or Development get the update item if WP is based on an update
-                if(designUpdateId !== 'NONE'){
-                    return ClientDesignVersionServices.getDesignUpdateItemForUpdate(feature, designUpdateId);
-                } else {
-                    return feature
-                }
-            default:
-                return feature;
-        }
+
+        return EditorContainerUiModules.getDesignUpdateItem(feature, displayContext, designUpdateId);
+
     };
 
     getWpItem(feature, workPackageId){

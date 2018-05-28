@@ -101,7 +101,7 @@ class ClientAppHeaderServicesClass{
 
     setViewLevelFeatures(userContext, displayContext){
 
-        //console.log("Setting to Features for user context WP: " + userContext.workPackageId);
+        //console.log("Setting to Features for user context WP: " + userContext.workPackageId + " DU " + userContext.designUpdateId);
 
         // Open everything down to the Feature level - i.e. all Applications and Design Sections and close everything else
         let componentArray = [];

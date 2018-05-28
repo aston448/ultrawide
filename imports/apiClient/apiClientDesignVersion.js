@@ -455,7 +455,7 @@ class ClientDesignVersionServicesClass {
             currentComponent.componentReferenceId
         );
 
-        //console.log("getting update component returning " + updateComponent);
+        //console.log("getting DU %s update component for %o returning %o", designUpdateId, currentComponent, updateComponent);
 
         if(updateComponent){
             return updateComponent;
