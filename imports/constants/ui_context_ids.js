@@ -51,4 +51,10 @@ export const UI = {
     STATE_COMPONENT_SELECTED:           'component-selected-',
     STATE_COMPONENT_UNSELECTED:         'component-unselected-',
     LINK_ITEM_LINK_LABEL:               'link-label-',
+    MODAL_NEXT_VERSION:                 'modal-next-dv-',
+    MODAL_DV_OK:                        'modal-dv-ok-',
+    MODAL_DV_CANCEL:                    'modal-dv-cancel-',
+    MODAL_DV_UPDATES_MERGE:             'modal-dv-upd-merge-',
+    MODAL_DV_UPDATES_ROLL:              'modal-dv-upd-roll-',
+    MODAL_DV_UPDATES_IGNORE:            'modal-dv-upd-ignore-',
 };

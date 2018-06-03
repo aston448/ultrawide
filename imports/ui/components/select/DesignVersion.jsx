@@ -173,10 +173,10 @@ export default class DesignVersion extends Component {
             <Button id={getID(UI.BUTTON_CREATE_NEXT, uiName)} bsSize="xs" onClick={ () => this.onShowModal(userRole, designVersion)}>Create Next</Button>;
 
         const modalOkButton =
-            <Button onClick={() => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>OK</Button>;
+            <Button id={getID(UI.MODAL_DV_OK, uiName)} onClick={() => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>OK</Button>;
 
         const modalCancelButton =
-            <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
+            <Button id={getID(UI.MODAL_DV_CANCEL, uiName)} onClick={() => this.onCloseModal()}>Cancel</Button>;
 
 
         // Popup shown when user wants to create next Design Version
@@ -186,7 +186,7 @@ export default class DesignVersion extends Component {
             case DesignVersionStatus.VERSION_DRAFT:
 
                 confirmNextModal =
-                    <Modal show={this.state.showModal} onHide={() => this.onCloseModal()}>
+                    <Modal id={getID(UI.MODAL_NEXT_VERSION, uiName)} show={this.state.showModal} onHide={() => this.onCloseModal()}>
                         <Modal.Header closeButton>
                             <Modal.Title>Create Next Design Version</Modal.Title>
                         </Modal.Header>
@@ -206,7 +206,7 @@ export default class DesignVersion extends Component {
             case DesignVersionStatus.VERSION_UPDATABLE:
 
                 confirmNextModal =
-                    <Modal show={this.state.showModal} onHide={() => this.onCloseModal()}>
+                    <Modal id={getID(UI.MODAL_NEXT_VERSION, uiName)} show={this.state.showModal} onHide={() => this.onCloseModal()}>
                         <Modal.Header closeButton>
                             <Modal.Title>Create Next Design Version</Modal.Title>
                         </Modal.Header>
@@ -214,15 +214,15 @@ export default class DesignVersion extends Component {
                             <p className="merge-alert">You are about to complete this Design Version and create a new one</p>
                             <p className="merge-normal">The new Design Version will include Design Updates as follows:</p>
                             <p className="merge-header">These updates will be merged into the new Design Version:</p>
-                            <div>
+                            <div id={getID(UI.MODAL_DV_UPDATES_MERGE, uiName)}>
                                 {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_INCLUDE, uiName)}
                             </div>
                             <p className="merge-header">These updates will be carried forward as Updates to the new Design Version:</p>
-                            <div>
+                            <div id={getID(UI.MODAL_DV_UPDATES_ROLL, uiName)}>
                                 {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_ROLL, uiName)}
                             </div>
                             <p className="merge-header">These updates will be ignored and lost forever:</p>
-                            <div>
+                            <div id={getID(UI.MODAL_DV_UPDATES_IGNORE, uiName)}>
                                 {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_IGNORE, uiName)}
                             </div>
                             <p className="merge-alert">This action cannot be undone.  Are you sure you want to proceed?</p>
