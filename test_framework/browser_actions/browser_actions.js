@@ -21,6 +21,10 @@ class BrowserActionsClass{
         this.loginAs('gloria', 'gloria123');
     }
 
+    loginAsManager(){
+        this.loginAs('miles', 'miles123');
+    }
+
 
     selectMenuItem(menuAction){
 
@@ -72,6 +76,23 @@ class BrowserActionsClass{
         browser.click('#main-page-tab-1');
     }
 
+    selectWorkPackagesTab(){
+
+        browser.waitForExist('#main-page-tab-3', 1000);
+        browser.click('#main-page-tab-3');
+    }
+
+    selectAvailableWpsTab(){
+
+        browser.waitForExist('#main_tabs-tab-1', 1000);
+        browser.click('#main_tabs-tab-1');
+    }
+
+    selectWorkPackage(wpName){
+        browser.waitForExist('#' + wpName + '_Unselected', 1000);
+        browser.click('#' + wpName + '_Unselected');
+    }
+
     addNewDesign(){
 
         const uiComponentId = '#' + AddActionIds.UI_CONTEXT_ADD_DESIGN;
@@ -80,6 +101,7 @@ class BrowserActionsClass{
         browser.click(uiComponentId);
 
     }
+
 
     selectNamedItem(itemName){
 

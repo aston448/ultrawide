@@ -368,7 +368,7 @@ class ClientDesignUpdateServicesClass {
     };
 
     // User chose to edit a design update ------------------------------------------------------------------------------
-    editDesignUpdate(userRole, userContext, viewOptions, designUpdateToEditId){
+    editDesignUpdate(userRole, userContext, designUpdateToEditId){
 
         // Client validation
         let result = DesignUpdateValidationApi.validateEditDesignUpdate(userRole, designUpdateToEditId);
@@ -419,7 +419,7 @@ class ClientDesignUpdateServicesClass {
     };
 
     // User chose to view a Design Update ------------------------------------------------------------------------------
-    viewDesignUpdate(userRole, userContext, viewOptions, designUpdateToViewId, testDataFlag, testIntegrationDataContext){
+    viewDesignUpdate(userRole, userContext, designUpdateToViewId){
 
         // Client validation
         let result = DesignUpdateValidationApi.validateViewDesignUpdate(userRole, designUpdateToViewId);

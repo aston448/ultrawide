@@ -6,7 +6,7 @@ import PropTypes            from 'prop-types';
 import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
+import UltrawideItem        from '../../components/select/UltrawideItem.jsx';
 import ItemList                     from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
@@ -45,7 +45,7 @@ export class DesignVersionsList extends Component {
         if (designVersions) {
             return designVersions.map((designVersion) => {
                 return (
-                    <ItemWrapper
+                    <UltrawideItem
                         key={designVersion._id}
                         itemType={ItemType.DESIGN_VERSION}
                         item={designVersion}

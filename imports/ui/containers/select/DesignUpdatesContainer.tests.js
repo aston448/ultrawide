@@ -297,7 +297,7 @@ describe('JSX: DesignUpdatesList', () => {
         it('is not available for a merged design update', () => {
 
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
-            const designUpdateStatus = DesignUpdateStatus.UPDATE_COMPLETE
+            const designUpdateStatus = DesignUpdateStatus.UPDATE_MERGED;
             const userRole = RoleType.MANAGER;
             const userContext = {designVersionId: 'DV1', designUpdateId: '1'};
 

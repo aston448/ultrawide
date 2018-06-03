@@ -16,6 +16,16 @@ export function replaceAll(string, find, replace){
     return string.replace(new RegExp(find, 'g'), replace);
 }
 
+export function getID(item, uiName){
+
+    return item + uiName;
+}
+
+export function hashID(item, uiName){
+
+    return '#' + item + uiName;
+}
+
 export function getDateTimeString(dateTime){
 
     return dateTime.getFullYear() + '-' +

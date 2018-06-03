@@ -5,21 +5,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import ItemName                 from './ItemName.jsx';
-import ItemReference            from './ItemReference.jsx';
+import UltrawideItemEditableField   from "../common/UltrawideItemEditableField";
 
 // Ultrawide Services
-import {log} from "../../../common/utils";
-import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType, LogLevel} from '../../../constants/constants.js';
+import {log, getID} from "../../../common/utils";
+import { UI } from '../../../constants/ui_context_ids';
+import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType, FieldType, LogLevel} from '../../../constants/constants.js';
 import { TextLookups } from '../../../common/lookups.js';
 
 import { ClientDesignUpdateServices }   from '../../../apiClient/apiClientDesignUpdate.js';
 
 // Bootstrap
 import {Button, ButtonGroup, FormGroup, Radio} from 'react-bootstrap';
-
-// REDUX services
-import {connect} from 'react-redux';
 
 
 // =====================================================================================================================
@@ -31,7 +28,7 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 // Unit test export
-export class DesignUpdate extends Component {
+export default class DesignUpdate extends Component {
     constructor(props) {
         super(props);
 
@@ -42,12 +39,11 @@ export class DesignUpdate extends Component {
     }
 
 
-    onEditDesignUpdate(userRole, userContext, viewOptions, du){
+    onEditDesignUpdate(userRole, userContext, du){
 
         ClientDesignUpdateServices.editDesignUpdate(
             userRole,
             userContext,
-            viewOptions,
             du._id
         );
     };
@@ -79,15 +75,12 @@ export class DesignUpdate extends Component {
         );
     };
 
-    onViewDesignUpdate(userRole, userContext, viewOptions, du){
+    onViewDesignUpdate(userRole, userContext, du){
 
         ClientDesignUpdateServices.viewDesignUpdate(
             userRole,
             userContext,
-            viewOptions,
             du._id,
-            this.props.testDataFlag,
-            this.getTestIntegrationDataContext()
         );
     }
 
@@ -104,16 +97,6 @@ export class DesignUpdate extends Component {
         );
     };
 
-    getTestIntegrationDataContext(){
-
-        return {
-            designVersionDataLoaded:        this.props.dvDataLoaded,
-            testIntegrationDataLoaded:      this.props.testDataLoaded,
-            testSummaryDataLoaded:          this.props.summaryDataLoaded,
-            mashDataStale:                  this.props.mashDataStale,
-            testDataStale:                  this.props.testDataStale
-        };
-    }
 
     onMergeActionChange(userRole, du, newAction){
 
@@ -126,48 +109,54 @@ export class DesignUpdate extends Component {
     }
 
     render() {
-        const {designUpdate, statusClass, userRole, userContext, viewOptions} = this.props;
+        const {designUpdate, statusClass, userRole, userContext, uiName} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Update');
 
         // Items -------------------------------------------------------------------------------------------------------
 
         const name =
-            <ItemName
-                currentItemStatus={designUpdate.updateStatus}
+            <UltrawideItemEditableField
+                fieldType={FieldType.NAME}
                 currentItemType={ItemType.DESIGN_UPDATE}
                 currentItemId={designUpdate._id}
-                currentItemName={designUpdate.updateName}
+                currentItemStatus={designUpdate.updateStatus}
+                currentFieldValue={designUpdate.updateName}
                 statusClass={statusClass}
+                userRole={userRole}
+                uiName={uiName}
             />;
 
         const body =
-            <ItemReference
+            <UltrawideItemEditableField
+                fieldType={FieldType.REFERENCE}
                 currentItemType={ItemType.DESIGN_UPDATE}
                 currentItemId={designUpdate._id}
                 currentItemStatus={designUpdate.updateStatus}
-                currentItemRef={designUpdate.updateReference}
-                itemStatusClass={statusClass}
+                currentFieldValue={designUpdate.updateReference}
+                statusClass={statusClass}
+                userRole={userRole}
+                uiName={uiName}
             />;
 
-        const editButton = <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>;
-        const deleteButton = <Button id="butDelete" bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>;
-        const publishButton = <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>;
-        const withdrawButton = <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>;
-        const viewButton = <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>;
+        const editButton = <Button id={getID(UI.BUTTON_EDIT, uiName)} bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, designUpdate)}>Edit</Button>;
+        const deleteButton = <Button id={getID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>;
+        const publishButton = <Button id={getID(UI.BUTTON_PUBLISH, uiName)} bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>;
+        const withdrawButton = <Button id={getID(UI.BUTTON_WITHDRAW, uiName)} bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>;
+        const viewButton = <Button id={getID(UI.BUTTON_VIEW, uiName)} bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>;
 
         const mergeOptions =
             <div className={'merge-options'}>
-                <FormGroup id="mergeOptions">
-                    <Radio inline id="optionMerge" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
+                <FormGroup id={getID(UI.ITEM_MERGE_OPTIONS, uiName)}>
+                    <Radio inline id={getID(UI.MERGE_OPTION_INCLUDE, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_INCLUDE)}
                     </Radio>
-                    <Radio inline id="optionRoll" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
+                    <Radio inline id={getID(UI.MERGE_OPTION_ROLL, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_ROLL)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_ROLL)}
                     </Radio>
-                    <Radio inline id="optionIgnore" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
+                    <Radio inline id={getID(UI.MERGE_OPTION_IGNORE, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_IGNORE)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_IGNORE)}
                     </Radio>
@@ -178,9 +167,6 @@ export class DesignUpdate extends Component {
 
         let buttons = '';
         let options = '';
-
-        //console.log("Render DU Item.  Status = " + designUpdate.updateStatus)
-
 
         switch(designUpdate.updateStatus){
             case DesignUpdateStatus.UPDATE_NEW:
@@ -251,7 +237,7 @@ export class DesignUpdate extends Component {
         }
 
         return (
-            <div id="designUpdate">
+            <div id={getID(UI.ITEM_DESIGN_UPDATE, uiName)}>
                 {name}
                 {body}
                 <div className={statusClass}>
@@ -266,23 +252,8 @@ export class DesignUpdate extends Component {
 
 DesignUpdate.propTypes = {
     designUpdate: PropTypes.object.isRequired,
-    statusClass: PropTypes.string.isRequired
+    statusClass: PropTypes.string.isRequired,
+    userContext: PropTypes.object.isRequired,
+    userRole: PropTypes.string.isRequired,
+    uiName: PropTypes.string.isRequired
 };
-
-// Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-    return {
-        userRole:                   state.currentUserRole,
-        userContext:                state.currentUserItemContext,
-        viewOptions:                state.currentUserViewOptions,
-        testDataFlag:               state.testDataFlag,
-        dvDataLoaded:               state.designVersionDataLoaded,
-        testDataLoaded:             state.testIntegrationDataLoaded,
-        summaryDataLoaded:          state.testSummaryDataLoaded,
-        mashDataStale:              state.mashDataStale,
-        testDataStale:              state.testDataStale
-    }
-}
-
-// Default export including REDUX
-export default connect(mapStateToProps)(DesignUpdate);

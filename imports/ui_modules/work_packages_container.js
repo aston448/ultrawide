@@ -3,7 +3,7 @@ import {AddActionIds} from "../constants/ui_context_ids";
 import { ClientWorkPackageServices } from "../apiClient/apiClientWorkPackage";
 import {log} from "../common/utils";
 import React, { Component } from 'react';
-import ItemWrapper                  from '../../imports/ui/components/select/ItemWrapper.jsx';
+import UltrawideItem        from '../ui/components/select/UltrawideItem.jsx';
 
 class WorkPackageContainerUiModulesClass{
 
@@ -25,7 +25,7 @@ class WorkPackageContainerUiModulesClass{
         if(workPackages.length > 0) {
             return workPackages.map((workPackage) => {
                 return (
-                    <ItemWrapper
+                    <UltrawideItem
                         key={workPackage._id}
                         itemType={ItemType.WORK_PACKAGE}
                         item={workPackage}

@@ -1,5 +1,5 @@
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {RoleType, WorkPackageType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
@@ -81,6 +81,26 @@ class TestFixturesClass {
         // Add Basic Data to the Design Version
         server.call('testDesignVersions.editDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria', expectation);
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1', expectation);
+    }
+
+    addBaseDesignWorkPackages(expectation){
+
+        // Call this only after adding Default Data
+        const workPackageType = WorkPackageType.WP_BASE;
+        const userRole = RoleType.MANAGER;
+        const userName = 'miles';
+
+        // Add two WPS
+        server.call('testWorkPackages.addNewWorkPackage', workPackageType, userRole, userName, expectation);
+        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles', expectation);
+        server.call('testWorkPackages.publishSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
+
+        server.call('testWorkPackages.addNewWorkPackage', workPackageType, userRole, userName, expectation);
+        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage2', RoleType.MANAGER, 'miles', expectation);
+        server.call('testWorkPackages.publishSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
+
     }
 
     writeIntegrationTestResults_ChimpMocha(locationName, results){

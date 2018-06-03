@@ -29,7 +29,7 @@ class UpdateMergeItem extends Component {
     }
 
     render(){
-        const {updateItem} = this.props;
+        const {updateItem, uiName} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Update Merge Item {}', updateItem.updateName);
 
@@ -48,14 +48,15 @@ class UpdateMergeItem extends Component {
         }
 
         return(
-            <div className={itemClass}>{updateItem.updateName}</div>
+            <div id={uiName + '-' + itemClass} className={itemClass}>{updateItem.updateName}</div>
         )
 
     }
 }
 
 UpdateMergeItem.propTypes = {
-    updateItem: PropTypes.object.isRequired
+    updateItem: PropTypes.object.isRequired,
+    uiName: PropTypes.string.isRequired
 };
 
 export default UpdateMergeItem;

@@ -6,22 +6,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import ItemName                     from './ItemName.jsx';
-import ItemReference                from './ItemReference.jsx';
+import UltrawideItemEditableField   from "../common/UltrawideItemEditableField";
 import UpdateMergeItem              from './UpdateMergeItem.jsx';
 
 // Ultrawide Services
 import { ClientDesignVersionServices }  from '../../../apiClient/apiClientDesignVersion.js';
 
-import {RoleType, DesignVersionStatus, ItemType, DesignUpdateMergeAction, LogLevel} from '../../../constants/constants.js';
-import { replaceAll, log } from '../../../common/utils.js';
+import {RoleType, DesignVersionStatus, ItemType, FieldType, DesignUpdateMergeAction, LogLevel} from '../../../constants/constants.js';
+import { UI } from '../../../constants/ui_context_ids';
+import { getID, log } from '../../../common/utils.js';
 
 
 // Bootstrap
 import {Button, ButtonGroup, Modal} from 'react-bootstrap';
 
-// REDUX services
-import {connect} from 'react-redux';
 
 // =====================================================================================================================
 
@@ -31,7 +29,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class DesignVersion extends Component {
+export default class DesignVersion extends Component {
     constructor(props) {
         super(props);
 
@@ -93,7 +91,7 @@ export class DesignVersion extends Component {
 
 
 
-    getUpdates(designVersionId, updateMergeStatus){
+    getUpdates(designVersionId, updateMergeStatus, uiName){
 
         const updatesToMerge = ClientDesignVersionServices.getDesignUpdatesForVersion(designVersionId, updateMergeStatus);
 
@@ -103,6 +101,7 @@ export class DesignVersion extends Component {
                <UpdateMergeItem
                    key={update._id}
                    updateItem={update}
+                   uiName={uiName}
                />
             );
         });
@@ -125,55 +124,59 @@ export class DesignVersion extends Component {
 
     render() {
 
-        const {designVersion, statusClass, userRole, userContext} = this.props;
+        const {designVersion, statusClass, userRole, userContext, uiName} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Version');
-
-        const uiDesignVersionId = replaceAll(designVersion.designVersionName, ' ', '_');
 
         // Items -------------------------------------------------------------------------------------------------------
 
 
         const name =
-            <ItemName
-                currentItemStatus={designVersion.designVersionStatus}
+            <UltrawideItemEditableField
+                fieldType={FieldType.NAME}
                 currentItemType={ItemType.DESIGN_VERSION}
                 currentItemId={designVersion._id}
-                currentItemName={designVersion.designVersionName}
+                currentItemStatus={designVersion.designVersionStatus}
+                currentFieldValue={designVersion.designVersionName}
                 statusClass={statusClass}
+                userRole={userRole}
+                uiName={uiName}
+            />;
+
+        const version =
+            <UltrawideItemEditableField
+                fieldType={FieldType.VERSION}
+                currentItemType={ItemType.DESIGN_VERSION}
+                currentItemId={designVersion._id}
+                currentItemStatus={designVersion.designVersionStatus}
+                currentFieldValue={designVersion.designVersionNumber}
+                statusClass={statusClass}
+                userRole={userRole}
+                uiName={uiName}
             />;
 
         let buttons = '';
 
         const editButton =
-            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, userContext, designVersion)}>Edit</Button>;
+            <Button id={getID(UI.BUTTON_EDIT, uiName)} bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, userContext, designVersion)}>Edit</Button>;
 
         const viewButton =
-            <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, userContext, designVersion)}>View</Button>;
+            <Button id={getID(UI.BUTTON_VIEW, uiName)} bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, userContext, designVersion)}>View</Button>;
 
         const publishButton =
-            <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishDesignVersion(userRole, userContext, designVersion)}>Publish</Button>;
+            <Button id={getID(UI.BUTTON_PUBLISH, uiName)} bsSize="xs" onClick={ () => this.onPublishDesignVersion(userRole, userContext, designVersion)}>Publish</Button>;
 
         const withdrawButton =
-            <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawDesignVersion(userRole, userContext, designVersion)}>Withdraw</Button>;
+            <Button id={getID(UI.BUTTON_WITHDRAW, uiName)} bsSize="xs" onClick={ () => this.onWithdrawDesignVersion(userRole, userContext, designVersion)}>Withdraw</Button>;
 
         const createNextButton =
-            <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onShowModal(userRole, designVersion)}>Create Next</Button>;
+            <Button id={getID(UI.BUTTON_CREATE_NEXT, uiName)} bsSize="xs" onClick={ () => this.onShowModal(userRole, designVersion)}>Create Next</Button>;
 
         const modalOkButton =
             <Button onClick={() => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>OK</Button>;
 
         const modalCancelButton =
             <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
-
-        const body =
-            <ItemReference
-                currentItemType={ItemType.DESIGN_VERSION}
-                currentItemId={designVersion._id}
-                currentItemStatus={designVersion.designVersionStatus}
-                currentItemRef={designVersion.designVersionNumber}
-                itemStatusClass={statusClass}
-            />;
 
 
         // Popup shown when user wants to create next Design Version
@@ -212,15 +215,15 @@ export class DesignVersion extends Component {
                             <p className="merge-normal">The new Design Version will include Design Updates as follows:</p>
                             <p className="merge-header">These updates will be merged into the new Design Version:</p>
                             <div>
-                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_INCLUDE)}
+                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_INCLUDE, uiName)}
                             </div>
                             <p className="merge-header">These updates will be carried forward as Updates to the new Design Version:</p>
                             <div>
-                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_ROLL)}
+                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_ROLL, uiName)}
                             </div>
                             <p className="merge-header">These updates will be ignored and lost forever:</p>
                             <div>
-                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_IGNORE)}
+                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_IGNORE, uiName)}
                             </div>
                             <p className="merge-alert">This action cannot be undone.  Are you sure you want to proceed?</p>
                         </Modal.Body>
@@ -328,9 +331,9 @@ export class DesignVersion extends Component {
 
 
         return (
-            <div id={uiDesignVersionId}>
+            <div id={getID(UI.ITEM_DESIGN_VERSION, uiName)}>
                 {name}
-                {body}
+                {version}
                 <div className={statusClass}>
                     {buttons}
                 </div>
@@ -343,18 +346,10 @@ export class DesignVersion extends Component {
 
 DesignVersion.propTypes = {
     designVersion: PropTypes.object.isRequired,
-    statusClass: PropTypes.string.isRequired
+    statusClass: PropTypes.string.isRequired,
+    userContext: PropTypes.object.isRequired,
+    userRole: PropTypes.string.isRequired,
+    uiName: PropTypes.string.isRequired
 };
 
-// Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-
-    return {
-        userRole:                   state.currentUserRole,
-        userContext:                state.currentUserItemContext
-    }
-}
-
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-export default connect(mapStateToProps)(DesignVersion);
 

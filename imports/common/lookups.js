@@ -52,8 +52,6 @@ class TextLookupsClass {
                 return 'MERGED';
             case DesignUpdateStatus.UPDATE_IGNORED:
                 return 'IGNORED';
-            case DesignUpdateStatus.UPDATE_COMPLETE:
-                return 'COMPLETE';
         }
     }
 

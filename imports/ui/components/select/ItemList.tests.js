@@ -5,12 +5,12 @@ import { shallow, mount} from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
 import { ItemList }             from './ItemList.jsx'           // Non Redux
-import { ItemWrapper }          from './ItemWrapper.jsx';       // Non Redux
+import { UltrawideItem }        from './UltrawideItem';       // Non Redux
 
-import { DesignStatus, RoleType, ItemType} from '../../../constants/constants.js'
+import { ItemType} from '../../../constants/constants.js'
 
 import { Designs } from '../../../collections/design/designs.js'
-import {DesignVersionStatus, WorkPackageType} from "../../../constants/constants";
+
 
 
 
@@ -20,7 +20,7 @@ describe('JSX: ItemList', () => {
 
         return designs.map((design) => {
             return (
-                <ItemWrapper
+                <UltrawideItem
                     key={design._id}
                     itemType={ItemType.DESIGN}
                     item={design}
@@ -34,7 +34,7 @@ describe('JSX: ItemList', () => {
         if (designVersions) {
             return designVersions.map((designVersion) => {
                 return (
-                    <ItemWrapper
+                    <UltrawideItem
                         key={designVersion._id}
                         itemType={ItemType.DESIGN_VERSION}
                         item={designVersion}
@@ -50,7 +50,7 @@ describe('JSX: ItemList', () => {
         if(designUpdates.length > 0) {
             return designUpdates.map((designUpdate) => {
                 return (
-                    <ItemWrapper
+                    <UltrawideItem
                         key={designUpdate._id}
                         itemType={ItemType.DESIGN_UPDATE}
                         item={designUpdate}
@@ -64,7 +64,7 @@ describe('JSX: ItemList', () => {
         if(workPackages.length > 0) {
             return workPackages.map((workPackage) => {
                 return (
-                    <ItemWrapper
+                    <UltrawideItem
                         key={workPackage._id}
                         itemType={ItemType.WORK_PACKAGE}
                         item={workPackage}
@@ -73,8 +73,6 @@ describe('JSX: ItemList', () => {
             });
         }
     }
-
-
 
     function testItemContainer(itemType, itemList,  headerText, hasFooterAction, footerAction){
 
@@ -119,7 +117,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN, designs, 'Designs', false, '');
 
-            chai.assert.equal(item.find('ItemWrapper').length, 0, 'Expecting no Designs');
+            chai.assert.equal(item.find('UltrawideItem').length, 0, 'Expecting no Designs');
         });
 
         it('one design in list', () => {
@@ -133,7 +131,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN, designs, 'Designs', false, '');
 
-            chai.assert.equal(item.find('ItemWrapper').length, 1, 'Expecting 1 Design');
+            chai.assert.equal(item.find('UltrawideItem').length, 1, 'Expecting 1 Design');
         });
 
         it('two designs in list', () => {
@@ -151,7 +149,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN, designs, 'Designs', false, '');
 
-            chai.assert.equal(item.find('ItemWrapper').length, 2, 'Expecting 2 Designs');
+            chai.assert.equal(item.find('UltrawideItem').length, 2, 'Expecting 2 Designs');
         });
     });
 
@@ -170,7 +168,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN_VERSION, designVersions, 'Design Versions', false, '');
 
-            chai.assert.equal(item.find('ItemWrapper').length, 1, 'Expecting 1 Design Version');
+            chai.assert.equal(item.find('UltrawideItem').length, 1, 'Expecting 1 Design Version');
         });
 
         it('two design versions in list', () => {
@@ -188,7 +186,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN_VERSION, designVersions, 'Design Versions', false, '');
 
-            chai.assert.equal(item.find('ItemWrapper').length, 2, 'Expecting 2 Design Versions');
+            chai.assert.equal(item.find('UltrawideItem').length, 2, 'Expecting 2 Design Versions');
         });
     });
 
@@ -211,7 +209,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN_UPDATE, designUpdates, 'Design Updates', false, '');
 
-            chai.assert.equal(item.find('ItemWrapper').length, 2, 'Expecting 2 Design Updates');
+            chai.assert.equal(item.find('UltrawideItem').length, 2, 'Expecting 2 Design Updates');
         });
 
         it('design version with three updates has three in list', () => {
@@ -233,7 +231,7 @@ describe('JSX: ItemList', () => {
 
             const item = testItemContainer(ItemType.DESIGN_UPDATE, designUpdates, 'Design Updates', false, '');
 
-            chai.assert.equal(item.find('ItemWrapper').length, 3, 'Expecting 3 Design Updates');
+            chai.assert.equal(item.find('UltrawideItem').length, 3, 'Expecting 3 Design Updates');
         });
     });
 

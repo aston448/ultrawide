@@ -5,21 +5,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import ItemName                 from './ItemName.jsx';
-import ItemLink                 from './ItemLink.jsx';
+import UltrawideItemEditableField   from "../common/UltrawideItemEditableField";
+
 
 // Ultrawide Services
 import { ClientWorkPackageServices }    from '../../../apiClient/apiClientWorkPackage.js';
 
-import {log} from "../../../common/utils";
-import {ItemType, WorkPackageStatus, RoleType, LogLevel} from '../../../constants/constants.js';
+import { getID, log } from "../../../common/utils";
+import { UI } from '../../../constants/ui_context_ids';
+import {ItemType, WorkPackageStatus, RoleType, FieldType, LogLevel} from '../../../constants/constants.js';
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
-
-// REDUX services
-import {connect} from 'react-redux';
-
 
 
 // =====================================================================================================================
@@ -30,7 +27,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class WorkPackage extends Component {
+export default class WorkPackage extends Component {
     constructor(props) {
         super(props);
 
@@ -121,7 +118,7 @@ export class WorkPackage extends Component {
 
     render() {
 
-        const {workPackage, statusClass, userRole, viewOptions, userContext} = this.props;
+        const {workPackage, statusClass, userRole, userContext, uiName} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Work Package {}', workPackage.workPackageName);
 
@@ -140,46 +137,52 @@ export class WorkPackage extends Component {
         let buttons = '';
 
         const name =
-            <ItemName
-                currentItemStatus={workPackage.workPackageStatus}
+            <UltrawideItemEditableField
+                fieldType={FieldType.NAME}
                 currentItemType={ItemType.WORK_PACKAGE}
                 currentItemId={workPackage._id}
-                currentItemName={workPackage.workPackageName}
+                currentItemStatus={workPackage.workPackageStatus}
+                currentFieldValue={workPackage.workPackageName}
                 statusClass={statusClass}
+                userRole={userRole}
+                uiName={uiName}
             />;
 
         const body =
-            <ItemLink
+            <UltrawideItemEditableField
+                fieldType={FieldType.LINK}
                 currentItemType={ItemType.WORK_PACKAGE}
                 currentItemId={workPackage._id}
                 currentItemStatus={workPackage.workPackageStatus}
-                currentItemLink={workPackage.workPackageLink}
-                itemStatusClass={statusClass}
+                currentFieldValue={workPackage.workPackageName}
+                statusClass={statusClass}
+                userRole={userRole}
+                uiName={uiName}
             />;
 
         const buttonEdit =
-            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>;
+            <Button id={getID(UI.BUTTON_EDIT, uiName)} bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>;
 
         const buttonView =
-            <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>;
+            <Button id={getID(UI.BUTTON_VIEW, uiName)} bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>;
 
         const buttonRemove =
-            <Button id="butRemove" bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userRole, userContext, workPackage)}>Remove</Button>;
+            <Button id={getID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userRole, userContext, workPackage)}>Remove</Button>;
 
         const buttonPublish =
-            <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishWorkPackage(userRole, userContext, workPackage)}>Publish</Button>;
+            <Button id={getID(UI.BUTTON_PUBLISH, uiName)} bsSize="xs" onClick={ () => this.onPublishWorkPackage(userRole, userContext, workPackage)}>Publish</Button>;
 
         const buttonWithdraw =
-            <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawWorkPackage(userRole, userContext, workPackage)}>Withdraw</Button>;
+            <Button id={getID(UI.BUTTON_WITHDRAW, uiName)} bsSize="xs" onClick={ () => this.onWithdrawWorkPackage(userRole, userContext, workPackage)}>Withdraw</Button>;
 
         const buttonAdopt =
-            <Button id="butAdopt" bsSize="xs" onClick={ () => this.onAdoptWorkPackage(userRole, userContext, workPackage)}>Adopt</Button>;
+            <Button id={getID(UI.BUTTON_ADOPT, uiName)} bsSize="xs" onClick={ () => this.onAdoptWorkPackage(userRole, userContext, workPackage)}>Adopt</Button>;
 
         const buttonRelease =
-            <Button id="butRelease" bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>;
+            <Button id={getID(UI.BUTTON_RELEASE, uiName)} bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>;
 
         const buttonDevelop =
-            <Button id="butDevelop" bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, workPackage)}>Develop</Button>;
+            <Button id={getID(UI.BUTTON_DEVELOP, uiName)} bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, workPackage)}>Develop</Button>;
 
 
         // Layout ------------------------------------------------------------------------------------------------------
@@ -267,7 +270,7 @@ export class WorkPackage extends Component {
         }
 
         return (
-            <div id="workPackageItem">
+            <div id={getID(UI.ITEM_WORK_PACKAGE, uiName)}>
                 {name}
                 {body}
                 <div className={statusClass}>
@@ -281,23 +284,9 @@ export class WorkPackage extends Component {
 
 WorkPackage.propTypes = {
     workPackage: PropTypes.object.isRequired,
-    statusClass: PropTypes.string.isRequired
+    statusClass: PropTypes.string.isRequired,
+    userContext: PropTypes.object.isRequired,
+    userRole: PropTypes.string.isRequired,
+    uiName: PropTypes.string.isRequired
 };
 
-// Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-    return {
-        userRole:               state.currentUserRole,
-        viewOptions:            state.currentUserViewOptions,
-        userContext:            state.currentUserItemContext,
-        testDataFlag:           state.testDataFlag,
-        dvDataLoaded:           state.designVersionDataLoaded,
-        testDataLoaded:         state.testIntegrationDataLoaded,
-        summaryDataLoaded:      state.testSummaryDataLoaded,
-        mashDataStale:          state.mashDataStale,
-        testDataStale:          state.testDataStale
-    }
-}
-
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-export default connect(mapStateToProps)(WorkPackage);

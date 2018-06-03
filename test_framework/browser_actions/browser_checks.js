@@ -31,6 +31,14 @@ class BrowserChecksClass{
         browser.waitForExist('#' + uiComponentName, 1000)
     }
 
+    componentIsNotVisible(componentName){
+
+        if(browser.isVisible(componentName)){
+
+            return false;
+        }
+    }
+
     componentExists(componentName){
 
         const uiComponentId = '#' + replaceAll(componentName, ' ', '_');

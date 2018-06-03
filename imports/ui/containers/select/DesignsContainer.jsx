@@ -8,7 +8,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemWrapper          from '../../components/select/ItemWrapper.jsx';
+import UltrawideItem        from '../../components/select/UltrawideItem.jsx';
 import ItemList             from '../../components/select/ItemList.jsx';
 
 // Ultrawide Services
@@ -19,8 +19,6 @@ import {AddActionIds}       from "../../../constants/ui_context_ids.js";
 import { ClientDataServices }   from '../../../apiClient/apiClientDataServices.js';
 import { ClientDesignServices } from  '../../../apiClient/apiClientDesign.js';
 
-// Bootstrap
-import {Grid, Col, Row} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -48,7 +46,7 @@ export class DesignsList extends Component {
     renderDesignList(designs){
         return designs.map((design) => {
             return (
-                <ItemWrapper
+                <UltrawideItem
                     key={design._id}
                     itemType={ItemType.DESIGN}
                     item={design}

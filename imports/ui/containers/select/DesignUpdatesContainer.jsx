@@ -8,7 +8,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemWrapper                  from '../../components/select/ItemWrapper.jsx';
+import UltrawideItem        from '../../components/select/UltrawideItem.jsx';
 import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
 import ItemList                     from '../../components/select/ItemList.jsx';
 
@@ -60,7 +60,7 @@ export class DesignUpdatesList extends Component {
         if(designUpdates.length > 0) {
             return designUpdates.map((designUpdate) => {
                 return (
-                    <ItemWrapper
+                    <UltrawideItem
                         key={designUpdate._id}
                         itemType={ItemType.DESIGN_UPDATE}
                         item={designUpdate}
@@ -74,7 +74,7 @@ export class DesignUpdatesList extends Component {
         if(workPackages.length > 0) {
             return workPackages.map((workPackage) => {
                 return (
-                    <ItemWrapper
+                    <UltrawideItem
                         key={workPackage._id}
                         itemType={ItemType.WORK_PACKAGE}
                         item={workPackage}

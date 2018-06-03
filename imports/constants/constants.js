@@ -184,6 +184,13 @@ export const ItemType = {
     WORK_PACKAGE:   'WORK_PACKAGE'
 };
 
+export const FieldType = {
+    NAME:           'NAME',
+    VERSION:        'VERSION',
+    REFERENCE:      'REFERENCE',
+    LINK:           'LINK'
+};
+
 // Types of components in a design
 export const ComponentType = {
     DESIGN:             'AAAA',
@@ -235,9 +242,8 @@ export const UpdateMergeStatus = {
 export const DesignUpdateStatus = {
     UPDATE_NEW:             'NEW',              // Designer can edit this update.  Cannot be adopted yet
     UPDATE_PUBLISHED_DRAFT: 'DRAFT',            // Can be adopted.  Can still be edited...
-    UPDATE_MERGED:          'MERGED',           // Merged into a new design version
+    UPDATE_MERGED:          'MERGED',           // Merged into a new design version (aka Complete)
     UPDATE_IGNORED:         'IGNORED',          // Neither merged nor carried forward in a change to the next design version
-    UPDATE_COMPLETE:        'COMPLETE'
 };
 
 export const DesignUpdateWpStatus = {

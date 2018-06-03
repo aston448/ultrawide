@@ -7,11 +7,12 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemName         from './ItemName.jsx';
+import UltrawideItemEditableField from "../common/UltrawideItemEditableField";
 
 // Ultrawide Services
-import { ItemType, RoleType, LogLevel } from '../../../constants/constants.js';
-import {log, replaceAll} from "../../../common/utils";
+import { ItemType, DesignStatus, RoleType, FieldType, LogLevel } from '../../../constants/constants.js';
+import { UI } from '../../../constants/ui_context_ids';
+import {log, getID} from "../../../common/utils";
 
 import { ClientDesignServices }     from '../../../apiClient/apiClientDesign.js';
 import { ClientImpExServices }     from '../../../apiClient/apiClientImpEx.js';
@@ -19,8 +20,6 @@ import { ClientImpExServices }     from '../../../apiClient/apiClientImpEx.js';
 // Bootstrap
 import {Button, ButtonGroup, Modal} from 'react-bootstrap';
 
-// REDUX services
-import {connect} from 'react-redux';
 
 // =====================================================================================================================
 
@@ -30,7 +29,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class Design extends Component {
+export default class Design extends Component {
     constructor(props) {
         super(props);
 
@@ -61,11 +60,9 @@ export class Design extends Component {
     }
 
     render() {
-        const {design, statusClass, userContext, userRole} = this.props;
+        const {design, statusClass, userContext, userRole, uiName} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Design');
-
-        const uiDesignId = replaceAll(design.designName, ' ', '_');
 
 
         // Items -------------------------------------------------------------------------------------------------------
@@ -73,13 +70,13 @@ export class Design extends Component {
         let buttons = '';
 
         const removeButton =
-            <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
+            <Button id={getID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
 
         const backupButton =
-            <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>;
+            <Button id={getID(UI.BUTTON_BACKUP, uiName)} bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>;
 
         const archiveButton =
-            <Button id="butBackup" bsSize="xs" onClick={ () => this.onShowModal()} >Archive Design</Button>;
+            <Button id={getID(UI.BUTTON_ARCHIVE, uiName)} bsSize="xs" onClick={ () => this.onShowModal()} >Archive Design</Button>;
 
         const modalOkButton =
             <Button onClick={ () => this.onArchiveDesign(userContext, design._id)}>OK</Button>;
@@ -88,12 +85,15 @@ export class Design extends Component {
             <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
 
         const name =
-            <ItemName
+            <UltrawideItemEditableField
+                fieldType={FieldType.NAME}
                 currentItemStatus={design.designStatus}
                 currentItemType={ItemType.DESIGN}
                 currentItemId={design._id}
-                currentItemName={design.designName}
+                currentFieldValue={design.designName}
                 statusClass={statusClass}
+                userRole={userRole}
+                uiName={uiName}
             />;
 
         const confirmArchiveModal =
@@ -131,11 +131,14 @@ export class Design extends Component {
                             </ButtonGroup>
                     } else {
 
-                        buttons =
-                            <ButtonGroup className="button-group-left">
-                                {backupButton}
-                            </ButtonGroup>
+                        if(design.designStatus === DesignStatus.DESIGN_LIVE){
 
+                            buttons =
+                                <ButtonGroup className="button-group-left">
+                                    {backupButton}
+                                </ButtonGroup>
+
+                        }
                     }
                 } else {
 
@@ -149,28 +152,31 @@ export class Design extends Component {
                                 </ButtonGroup>
                         } else {
 
-                            buttons =
-                                <ButtonGroup className="button-group-left">
-                                    {backupButton}
-                                    {archiveButton}
-                                    {confirmArchiveModal}
-                                </ButtonGroup>
+                            if(design.designStatus === DesignStatus.DESIGN_LIVE) {
+                                buttons =
+                                    <ButtonGroup className="button-group-left">
+                                        {backupButton}
+                                        {archiveButton}
+                                        {confirmArchiveModal}
+                                    </ButtonGroup>
+                            }
                         }
 
                     } else {
 
                         // Other users can just work on a Design or back it up
-                        buttons =
-                            <ButtonGroup className="button-group-left">
-                                {backupButton}
-                            </ButtonGroup>
+                        if(design.designStatus === DesignStatus.DESIGN_LIVE) {
+                            buttons =
+                                <ButtonGroup className="button-group-left">
+                                    {backupButton}
+                                </ButtonGroup>
+                        }
                     }
                 }
             }
 
-
             return (
-                <div id={uiDesignId}>
+                <div id={getID(UI.ITEM_DESIGN, uiName)}>
                     {name}
                     <div className={statusClass}>
                         {buttons}
@@ -186,19 +192,22 @@ export class Design extends Component {
 
 Design.propTypes = {
     design: PropTypes.object.isRequired,
-    statusClass: PropTypes.string.isRequired
+    statusClass: PropTypes.string.isRequired,
+    userContext: PropTypes.object.isRequired,
+    userRole: PropTypes.string.isRequired,
+    uiName: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-    return {
-        userContext: state.currentUserItemContext,
-        userRole: state.currentUserRole
-    }
-}
-
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-export default connect(mapStateToProps)(Design);
+// function mapStateToProps(state) {
+//     return {
+//         userContext: state.currentUserItemContext,
+//         userRole: state.currentUserRole
+//     }
+// }
+//
+// // Connect the Redux store to this component ensuring that its required state is mapped to props
+// export default connect(mapStateToProps)(Design);
 
 
 
