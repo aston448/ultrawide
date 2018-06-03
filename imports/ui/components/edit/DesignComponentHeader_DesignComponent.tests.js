@@ -97,6 +97,54 @@ describe('JSX: DesCompHdr DC', () => {
 
     });
 
+    describe('There is no option to remove a Design Component in View Only mode', () => {
+
+        it('does not have delete option', () => {
+
+            const currentItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            // No delete option
+            chai.assert(item.find('#Remove_ComponentName').length === 0, 'Delete option found!');
+        });
+    });
+
+    describe('There is no move option for a Design Component in View Only mode', () => {
+
+        it('does not have move option', () => {
+
+            const currentItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            // No move option
+            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+        });
+    });
+
+    describe('There is no reorder option for a Design Component in View Only mode', () => {
+
+        it('does not have move option', () => {
+
+            const currentItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            // No move option
+            chai.assert(item.find('#Move_ComponentName').length === 0, 'Reorder option found!');
+        });
+    });
+
     describe('All editing features are restored when View Only mode is cancelled', () => {
 
         it('has edit option', () => {

@@ -67,7 +67,7 @@ class DesignUpdateValidationServicesClass{
     validateEditDesignUpdate(userRole, designUpdateStatus){
 
         // Only a designer can edit Design Updates
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_EDIT;
         }
 

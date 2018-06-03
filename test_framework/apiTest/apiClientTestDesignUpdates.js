@@ -59,10 +59,9 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userContext.userId);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
-        const outcome = ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
+        const outcome = ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, designUpdate._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Update');
     },
@@ -72,18 +71,9 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userContext.userId);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
-        const testIntegrationDataContext = {
-            designVersionDataLoaded:        true,
-            testIntegrationDataLoaded:      true,
-            testSummaryDataLoaded:          true,
-            mashDataStale:                  false,
-            testDataStale:                  false
-        };
-
-        const outcome = ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, viewOptions, designUpdate._id, false, testIntegrationDataContext);
+        const outcome = ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, designUpdate._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'View Update');
     },

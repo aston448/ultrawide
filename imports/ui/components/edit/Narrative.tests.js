@@ -9,120 +9,155 @@ import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, Comp
 
 describe('JSX: Narrative', () => {
 
-    describe('A Narrative has an option to edit it', () => {
+    describe('Interface', () => {
 
-        it('has an edit option', () => {
+        describe('A Narrative has an option to edit it', () => {
 
-            const designComponent = {};
-            const wpItem = {};
-            const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW;
-            const displayContext = DisplayContext.BASE_EDIT;
-            const testSummary = false;
-            const domainTermsVisible = true;
+            it('has an edit option', () => {
 
-            const item = shallow(
-                <Narrative
-                    designComponent={designComponent}
-                    wpComponent={wpItem}
-                    mode={mode}
-                    view={view}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    domainTermsVisible={domainTermsVisible}
-                />
-            );
+                const designComponent = {};
+                const wpItem = {};
+                const mode = ViewMode.MODE_EDIT;
+                const view = ViewType.DESIGN_NEW;
+                const displayContext = DisplayContext.BASE_EDIT;
+                const testSummary = false;
+                const domainTermsVisible = true;
 
-            chai.assert(item.find('#actionEditNarrative').length === 1, 'Edit option not found!');
+                const item = shallow(
+                    <Narrative
+                        designComponent={designComponent}
+                        wpComponent={wpItem}
+                        mode={mode}
+                        view={view}
+                        displayContext={displayContext}
+                        testSummary={testSummary}
+                        domainTermsVisible={domainTermsVisible}
+                    />
+                );
+
+                chai.assert(item.find('#actionEditNarrative').length === 1, 'Edit option not found!');
+            });
+        });
+
+        describe('A Narrative being edited has an option to save changes', () => {
+
+            it('has a save option', () => {
+
+                const designComponent = {};
+                const wpItem = {};
+                const mode = ViewMode.MODE_EDIT;
+                const view = ViewType.DESIGN_NEW;
+                const displayContext = DisplayContext.BASE_EDIT;
+                const testSummary = false;
+                const domainTermsVisible = true;
+
+                const item = shallow(
+                    <Narrative
+                        designComponent={designComponent}
+                        wpComponent={wpItem}
+                        mode={mode}
+                        view={view}
+                        displayContext={displayContext}
+                        testSummary={testSummary}
+                        domainTermsVisible={domainTermsVisible}
+                    />
+                );
+
+                item.setState({editing: true});
+
+                chai.assert(item.find('#actionSaveNarrative').length === 1, 'Save option not found!');
+            });
+        });
+
+        describe('A Narrative being edited has an option to discard any changes', () => {
+
+            it('has an undo option', () => {
+
+                const designComponent = {};
+                const wpItem = {};
+                const mode = ViewMode.MODE_EDIT;
+                const view = ViewType.DESIGN_NEW;
+                const displayContext = DisplayContext.BASE_EDIT;
+                const testSummary = false;
+                const domainTermsVisible = true;
+
+                const item = shallow(
+                    <Narrative
+                        designComponent={designComponent}
+                        wpComponent={wpItem}
+                        mode={mode}
+                        view={view}
+                        displayContext={displayContext}
+                        testSummary={testSummary}
+                        domainTermsVisible={domainTermsVisible}
+                    />
+                );
+
+                item.setState({editing: true});
+
+                chai.assert(item.find('#actionUndoEditNarrative').length === 1, 'Undo option not found!');
+            });
+        });
+
+        describe('There is no option to edit a Feature Narrative in View Only mode', () => {
+
+            it('has no edit option in view only', () => {
+
+                const designComponent = {};
+                const wpItem = {};
+                const mode = ViewMode.MODE_VIEW;
+                const view = ViewType.DESIGN_NEW;
+                const displayContext = DisplayContext.BASE_EDIT;
+                const testSummary = false;
+                const domainTermsVisible = true;
+
+                const item = shallow(
+                    <Narrative
+                        designComponent={designComponent}
+                        wpComponent={wpItem}
+                        mode={mode}
+                        view={view}
+                        displayContext={displayContext}
+                        testSummary={testSummary}
+                        domainTermsVisible={domainTermsVisible}
+                    />
+                );
+
+                chai.assert(item.find('#actionEditNarrative').length === 0, 'Edit option found!');
+            });
         });
     });
 
-    describe('A Narrative being edited has an option to save changes', () => {
+    describe('Conditions', () => {
 
-        it('has a save option', () => {
+        describe('A Feature Narrative can only be edited when in edit mode', () => {
 
-            const designComponent = {};
-            const wpItem = {};
-            const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW;
-            const displayContext = DisplayContext.BASE_EDIT;
-            const testSummary = false;
-            const domainTermsVisible = true;
+            it('has no edit option in view only', () => {
 
-            const item = shallow(
-                <Narrative
-                    designComponent={designComponent}
-                    wpComponent={wpItem}
-                    mode={mode}
-                    view={view}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    domainTermsVisible={domainTermsVisible}
-                />
-            );
+                const designComponent = {};
+                const wpItem = {};
+                const mode = ViewMode.MODE_VIEW;
+                const view = ViewType.DESIGN_NEW;
+                const displayContext = DisplayContext.BASE_EDIT;
+                const testSummary = false;
+                const domainTermsVisible = true;
 
-            item.setState({editing: true});
+                const item = shallow(
+                    <Narrative
+                        designComponent={designComponent}
+                        wpComponent={wpItem}
+                        mode={mode}
+                        view={view}
+                        displayContext={displayContext}
+                        testSummary={testSummary}
+                        domainTermsVisible={domainTermsVisible}
+                    />
+                );
 
-            chai.assert(item.find('#actionSaveNarrative').length === 1, 'Save option not found!');
+                chai.assert(item.find('#actionEditNarrative').length === 0, 'Edit option found!');
+            });
         });
     });
 
-    describe('A Narrative being edited has an option to discard any changes', () => {
-
-        it('has an undo option', () => {
-
-            const designComponent = {};
-            const wpItem = {};
-            const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_NEW;
-            const displayContext = DisplayContext.BASE_EDIT;
-            const testSummary = false;
-            const domainTermsVisible = true;
-
-            const item = shallow(
-                <Narrative
-                    designComponent={designComponent}
-                    wpComponent={wpItem}
-                    mode={mode}
-                    view={view}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    domainTermsVisible={domainTermsVisible}
-                />
-            );
-
-            item.setState({editing: true});
-
-            chai.assert(item.find('#actionUndoEditNarrative').length === 1, 'Undo option not found!');
-        });
-    });
-
-    describe('A Feature Narrative can only be edited when in edit mode', () => {
-
-        it('has no edit option in view only', () => {
-
-            const designComponent = {};
-            const wpItem = {};
-            const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_NEW;
-            const displayContext = DisplayContext.BASE_EDIT;
-            const testSummary = false;
-            const domainTermsVisible = true;
-
-            const item = shallow(
-                <Narrative
-                    designComponent={designComponent}
-                    wpComponent={wpItem}
-                    mode={mode}
-                    view={view}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    domainTermsVisible={domainTermsVisible}
-                />
-            );
-
-            chai.assert(item.find('#actionEditNarrative').length === 0, 'Edit option found!');
-        });
-    });
 
 });
