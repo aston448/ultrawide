@@ -4,8 +4,9 @@ import { DesignComponentVerifications }     from '../../../test_framework/test_w
 import { BrowserActions }                   from '../../../test_framework/browser_actions/browser_actions.js';
 import { BrowserChecks }                    from '../../../test_framework/browser_actions/browser_checks.js';
 
-import {ComponentType,} from '../../../imports/constants/constants.js'
-import {DefaultComponentNames}    from '../../../imports/constants/default_names.js';
+import {ComponentType}                  from '../../../imports/constants/constants.js'
+import {DefaultComponentNames}          from '../../../imports/constants/default_names.js';
+import { UI }                           from "../../../imports/constants/ui_context_ids";
 
 describe('UC 142 - Add Functional Design Component', function(){
 
@@ -27,10 +28,10 @@ describe('UC 142 - Add Functional Design Component', function(){
         BrowserActions.loginAs('gloria', 'gloria123');
 
         BrowserActions.selectDesignsTab();
-        BrowserActions.selectNamedItem('Design1');
-        BrowserActions.selectNamedItem('DesignVersion1');
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN, 'Design1');
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN_VERSION, 'DesignVersion1');
 
-        BrowserActions.editItem();
+        BrowserActions.buttonClick(UI.BUTTON_EDIT, 'DesignVersion1');
 
     });
 
@@ -47,7 +48,7 @@ describe('UC 142 - Add Functional Design Component', function(){
         BrowserActions.addFeatureTo('Application1 Section1');
 
         // Verify
-        BrowserChecks.componentIsVisible(DefaultComponentNames.NEW_FEATURE_NAME);
+        BrowserChecks.componentIsVisible(UI.DESIGN_COMPONENT, DefaultComponentNames.NEW_FEATURE_NAME);
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Design1', 'DesignVersion1', 'Section1'));
     });
@@ -67,7 +68,7 @@ describe('UC 142 - Add Functional Design Component', function(){
         BrowserActions.addScenarioTo('Feature1 Actions');
 
         // Verify
-        BrowserChecks.componentIsVisible(DefaultComponentNames.NEW_SCENARIO_NAME);
+        BrowserChecks.componentIsVisible(UI.DESIGN_COMPONENT, DefaultComponentNames.NEW_SCENARIO_NAME);
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1', 'Actions'));
     });

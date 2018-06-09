@@ -36,6 +36,34 @@ class UltrawideItemUiModulesClass {
     // This function is fully module testable with enzyme render().  It has no REDUX sub-components.
     getComponentLayout(uwItemType, itemData, userContext, userRole){
 
+        let uiName = '';
+
+        switch(uwItemType){
+            case ItemType.DESIGN:
+                uiName = getID(UI.ITEM_DESIGN, itemData.designName);
+                break;
+            case ItemType.DESIGN_VERSION:
+                uiName = getID(UI.ITEM_DESIGN_VERSION, itemData.designVersionName);
+                break;
+            case ItemType.DESIGN_UPDATE:
+                uiName = getID(UI.ITEM_DESIGN_UPDATE, itemData.updateName);
+                break;
+            case ItemType.WORK_PACKAGE:
+                uiName = getID(UI.ITEM_WORK_PACKAGE, itemData.workPackageName);
+                break;
+        }
+
+        // Return a generically named item
+        return (
+            <div id={uiName}>
+                {this.getSelectedUnselectedLayout(uwItemType, itemData, userContext, userRole)}
+            </div>
+        );
+
+    }
+
+    getSelectedUnselectedLayout(uwItemType, itemData, userContext, userRole){
+
         // Get the visualisation data required for this component in its current state
         const viewData = this.getVisualisationData(uwItemType, itemData, userContext, userRole);
 
@@ -46,7 +74,7 @@ class UltrawideItemUiModulesClass {
         if(viewData.selected){
 
             return(
-                <div id={getID(UI.STATE_ITEM_SELECTED, viewData.uiName)}>
+                <div id={getID(UI.UW_ITEM_SELECTED, viewData.uiName)}>
                     {this.selectedLayout(uwItemType, selectFunction, viewData.statusClass, viewData.itemName, itemData, userContext, userRole, viewData.uiName)}
                 </div>
             );
@@ -54,7 +82,7 @@ class UltrawideItemUiModulesClass {
         } else {
 
             return(
-                <div id={getID(UI.STATE_ITEM_UNSELECTED, viewData.uiName)}>
+                <div id={getID(UI.UW_ITEM_UNSELECTED, viewData.uiName)}>
                     {this.unselectedLayout(uwItemType, selectFunction, viewData.statusClass, viewData.itemName, itemData, viewData.uiName)}
                 </div>
             )

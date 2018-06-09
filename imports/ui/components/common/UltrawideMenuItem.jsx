@@ -10,7 +10,8 @@ import PropTypes from 'prop-types';
 
 // Ultrawide Services
 import {MenuType, RoleType, LogLevel} from '../../../constants/constants.js'
-import {log, replaceAll} from "../../../common/utils";
+import {UI} from "../../../constants/ui_context_ids";
+import {log, getID, replaceAll} from "../../../common/utils";
 
 // Bootstrap
 import {Glyphicon}  from 'react-bootstrap';
@@ -18,6 +19,7 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 
 // =====================================================================================================================
@@ -164,13 +166,13 @@ export class UltrawideMenuItem extends Component {
             case MenuType.MENU_TOP_ICON:
                 return(
                     <OverlayTrigger delayShow={tooltipDelay} placement="bottom" overlay={tooltipIcon}>
-                        <div id={'Option_' + uiContextId} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+                        <div id={getID(UI.OPTION_MENU_ICON, uiContextId)} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
                     </OverlayTrigger>
                 );
             case MenuType.MENU_EDITOR:
                 return(
                     <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipIcon}>
-                        <div id={'Option_' + uiContextId} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+                        <div id={getID(UI.OPTION_MENU_ICON, uiContextId)} className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
                     </OverlayTrigger>
                 );
 

@@ -10,7 +10,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import {shallow} from "enzyme/build/index";
 import { TextLookups } from "../common/lookups";
 
-describe('UI: Item Status', () => {
+describe('UI Mods: Item Status', () => {
 
     // Design Status
 

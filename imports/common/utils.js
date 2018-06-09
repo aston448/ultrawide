@@ -16,14 +16,19 @@ export function replaceAll(string, find, replace){
     return string.replace(new RegExp(find, 'g'), replace);
 }
 
-export function getID(item, uiName){
+export function uiName(name){
 
-    return item + uiName;
+    return replaceAll(name, ' ', '_');
 }
 
-export function hashID(item, uiName){
+export function getID(item, name){
 
-    return '#' + item + uiName;
+    return item + uiName(name);
+}
+
+export function hashID(item, name){
+
+    return '#' + item + uiName(name);
 }
 
 export function getDateTimeString(dateTime){

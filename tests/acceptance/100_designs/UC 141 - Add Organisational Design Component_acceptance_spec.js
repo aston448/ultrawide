@@ -6,6 +6,9 @@ import { BrowserChecks }                    from '../../../test_framework/browse
 
 import { ComponentType }                from '../../../imports/constants/constants.js'
 import { DefaultComponentNames }        from '../../../imports/constants/default_names.js';
+
+import { UI }                           from "../../../imports/constants/ui_context_ids";
+
 import {MenuAction} from "../../../imports/constants/constants";
 
 describe('UC 141 - Add Organisational Design Component', function(){
@@ -29,10 +32,10 @@ describe('UC 141 - Add Organisational Design Component', function(){
         BrowserActions.loginAs('gloria', 'gloria123');
 
         BrowserActions.selectDesignsTab();
-        BrowserActions.selectNamedItem('Design1');
-        BrowserActions.selectNamedItem('DesignVersion1');
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN, 'Design1');
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN_VERSION, 'DesignVersion1');
 
-        BrowserActions.editItem();
+        BrowserActions.buttonClick(UI.BUTTON_EDIT, 'DesignVersion1');
 
     });
 
@@ -79,7 +82,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         BrowserActions.addDesignSectionTo('Application1 Section1');
 
         // Verify - new component added with parent Section1
-        BrowserChecks.componentIsVisible('Section1 ' + DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        BrowserChecks.componentWithParentIsVisible(UI.DESIGN_COMPONENT, 'Section1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Design1', 'DesignVersion1', 'Section1'));
     });
@@ -96,7 +99,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         BrowserActions.addFeatureAspectTo('Feature1');
 
         // Verify - new component added
-        BrowserChecks.componentIsVisible('Feature1 ' + DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        BrowserChecks.componentWithParentIsVisible(UI.DESIGN_COMPONENT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Design1', 'DesignVersion1', 'Feature1'));
     });

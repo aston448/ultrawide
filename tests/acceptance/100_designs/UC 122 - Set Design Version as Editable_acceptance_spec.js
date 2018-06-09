@@ -8,6 +8,7 @@ import { BrowserChecks }                    from '../../../test_framework/browse
 import {MenuAction}                     from "../../../imports/constants/constants";
 import {DefaultItemNames}               from "../../../imports/constants/default_names";
 
+import { UI }           from "../../../imports/constants/ui_context_ids";
 
 describe('UC 122 - Set Design Version as Editable', function() {
 
@@ -35,23 +36,23 @@ describe('UC 122 - Set Design Version as Editable', function() {
     it('A Design Version in View Only mode may be switched back to edit mode', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
-        BrowserActions.selectNamedItem('Design1');
-        BrowserActions.selectNamedItem('DesignVersion1');
-        BrowserActions.editItem();
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN, 'Design1');
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN_VERSION, 'DesignVersion1');
+        BrowserActions.buttonClick(UI.BUTTON_EDIT, 'DesignVersion1');
 
         // Verify Not View Only
-        BrowserChecks.componentIsVisible('Edit Application1');
+        BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'Application1');
 
         // Set in View Mode
-        BrowserActions.selectNamedItem('Option View Mode');
-        assert.isFalse(BrowserChecks.componentExists('Edit Application1'));
+        BrowserActions.selectNamedItem(UI.OPTION_MENU_ICON, 'View Mode');
+        assert.isFalse(BrowserChecks.componentExists(UI.OPTION_EDIT, 'Application1'));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        BrowserActions.selectNamedItem('Option Edit Mode');
+        BrowserActions.selectNamedItem(UI.OPTION_MENU_ICON, 'Edit Mode');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        assert.isTrue(BrowserChecks.componentExists('Edit Application1'));
-        BrowserChecks.componentIsVisible('Edit Application1');
+        assert.isTrue(BrowserChecks.componentExists(UI.OPTION_EDIT, 'Application1'));
+        BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'Application1');
     });
 });
 

@@ -20,8 +20,10 @@ import { ComponentUiModules }                   from '../../../ui_modules/design
 
 import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel,
     MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
+
+import { UI }                           from "../../../constants/ui_context_ids";
 import {DefaultComponentNames}          from '../../../constants/default_names.js';
-import {getComponentClass, replaceAll, log}         from '../../../common/utils.js';
+import {getComponentClass, getID, replaceAll, log}         from '../../../common/utils.js';
 import { TextLookups }                      from '../../../common/lookups.js'
 
 // Bootstrap
@@ -989,7 +991,7 @@ export class DesignComponentHeader extends Component{
         let editAction =
             <InputGroup.Addon >
                 <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipEdit}>
-                    <div id={'Edit_' + uiContextName} onClick={ () => this.editComponentName()}>
+                    <div id={getID(UI.OPTION_EDIT, uiContextName)} onClick={ () => this.editComponentName()}>
                         <div className="blue"><Glyphicon glyph="edit"/></div>
                     </div>
                 </OverlayTrigger>
@@ -1000,7 +1002,7 @@ export class DesignComponentHeader extends Component{
         let deleteAction =
             <InputGroup.Addon>
                 <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipDelete}>
-                    <div id={'Remove_' + uiContextName} onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
+                    <div id={getID(UI.OPTION_REMOVE, uiContextName)} onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
                         <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
                     </div>
                 </OverlayTrigger>
@@ -1012,7 +1014,7 @@ export class DesignComponentHeader extends Component{
             <InputGroup.Addon>
                 <div className="lgrey">
                     <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMove}>
-                        <div id={'Move_' + uiContextName}>
+                        <div id={getID(UI.OPTION_MOVE, uiContextName)}>
                             <Glyphicon glyph="move"/>
                         </div>
                     </OverlayTrigger>
@@ -1027,7 +1029,7 @@ export class DesignComponentHeader extends Component{
                     {connectDragSource(
                         <div className="lgrey">
                             <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMove}>
-                                <div id={'Move_' + uiContextName}>
+                                <div id={getID(UI.OPTION_MOVE, uiContextName)}>
                                     <Glyphicon glyph="move"/>
                                 </div>
                             </OverlayTrigger>
@@ -1039,7 +1041,7 @@ export class DesignComponentHeader extends Component{
         let saveAction =
             <InputGroup.Addon>
                 <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipSave}>
-                    <div id={'Save_' + uiContextName} onClick={ () => this.saveComponentName(view, mode)}>
+                    <div id={getID(UI.OPTION_SAVE, uiContextName)} onClick={ () => this.saveComponentName(view, mode)}>
                         <div className="green"><Glyphicon glyph="ok"/></div>
                     </div>
                 </OverlayTrigger>
@@ -1048,7 +1050,7 @@ export class DesignComponentHeader extends Component{
         let undoAction =
             <InputGroup.Addon id="actionUndo">
                 <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipCancel}>
-                    <div id={'Undo_' + uiContextName} onClick={ () => this.undoComponentNameChange()}>
+                    <div id={getID(UI.OPTION_UNDO, uiContextName)} onClick={ () => this.undoComponentNameChange()}>
                         <div className="red"><Glyphicon glyph="arrow-left"/></div>
                     </div>
                 </OverlayTrigger>

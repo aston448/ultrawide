@@ -7,7 +7,7 @@ import {EditorState, convertFromRaw} from "draft-js";
 
 import { chai } from 'meteor/practicalmeteor:chai';
 
-describe('UI: Design Component', () => {
+describe('UI Mods: Design Component', () => {
 
     describe('A Design Component name can be edited but then the changes discarded', () => {
 

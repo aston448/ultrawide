@@ -20,13 +20,14 @@ import DesignComponentHeader    from './DesignComponentHeader.jsx';
 // Ultrawide Services
 import {ComponentType, ViewMode, ViewType, DisplayContext, UserSettingValue, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
 import {AddActionIds}   from "../../../constants/ui_context_ids.js";
+import { UI }           from "../../../constants/ui_context_ids";
 
 import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import { ComponentUiModules }                   from '../../../ui_modules/design_component.js'
 
-import { log }              from '../../../common/utils.js';
+import { getID, log }              from '../../../common/utils.js';
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
@@ -767,11 +768,26 @@ export class DesignComponent extends Component{
             }
         }
 
+        // Give the component ID some test context
+        let uiItem = '';
+        switch(displayContext){
+            case DisplayContext.WP_SCOPE:
+            case DisplayContext.UPDATE_SCOPE:
+                uiItem = UI.SCOPE_COMPONENT;
+                break;
+            case DisplayContext.WORKING_VIEW:
+                uiItem = UI.WORKING_COMPONENT;
+                break;
+            default:
+                uiItem = UI.DESIGN_COMPONENT;
+                break;
+        }
+
         // Each component has a move target above it so we can reorder stuff...
         
         if(mode === ViewMode.MODE_VIEW || displayContext === DisplayContext.UPDATE_SCOPE || displayContext === DisplayContext.WP_SCOPE){
             return (
-                <div id="designComponent" className={itemStyle}>
+                <div id={getID(uiItem, uiContextName)} className={itemStyle}>
                     {headerHtml}
                     {bodyHtml}
                 </div>
@@ -784,7 +800,7 @@ export class DesignComponent extends Component{
                         displayContext={displayContext}
                         mode={mode}
                     />
-                    <div id="designComponent" className={itemStyle}>
+                    <div id={getID(uiItem, uiContextName)} className={itemStyle}>
                         {headerHtml}
                         {bodyHtml}
                     </div>

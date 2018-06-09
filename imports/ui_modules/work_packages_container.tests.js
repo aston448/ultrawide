@@ -7,7 +7,7 @@ import { WorkPackageContainerUiModules } from '../ui_modules/work_packages_conta
 
 import { chai } from 'meteor/practicalmeteor:chai';
 
-describe('UI: Work Packages Container', () => {
+describe('UI Mods: Work Packages Container', () => {
 
     describe('The Work Package list for an Initial Design Version has an option to add a new Work Package', () => {
 

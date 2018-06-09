@@ -7,6 +7,7 @@ import { BrowserActions }                   from '../../../test_framework/browse
 import { BrowserChecks }                    from '../../../test_framework/browser_actions/browser_checks.js';
 
 import { ComponentType }                from '../../../imports/constants/constants.js'
+import { UI }                           from "../../../imports/constants/ui_context_ids";
 
 describe('UC 143 - Edit Design Component Name', function(){
 
@@ -28,10 +29,10 @@ describe('UC 143 - Edit Design Component Name', function(){
         BrowserActions.loginAs('gloria', 'gloria123');
 
         BrowserActions.selectDesignsTab();
-        BrowserActions.selectNamedItem('Design1');
-        BrowserActions.selectNamedItem('DesignVersion1');
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN, 'Design1');
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN_VERSION, 'DesignVersion1');
 
-        BrowserActions.editItem();
+        BrowserActions.buttonClick(UI.BUTTON_EDIT, 'DesignVersion1');
     });
 
     it('A Design Component name can be edited and saved', function(){
@@ -41,21 +42,21 @@ describe('UC 143 - Edit Design Component Name', function(){
         BrowserActions.openComponent('Application1');
         BrowserActions.openComponent('Application1 Section1');
 
-        BrowserChecks.componentIsVisible('Edit Feature1');
+        BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'Feature1');
         BrowserChecks.editorIsPassive('Feature1');
 
         // Execute
-        BrowserActions.editComponent('Feature1');
+        BrowserActions.optionClick(UI.OPTION_EDIT, 'Feature1');
 
-        BrowserChecks.componentIsVisible('Save Feature1');
-        BrowserChecks.componentIsVisible('Undo Feature1');
+        BrowserChecks.componentIsVisible(UI.OPTION_SAVE, 'Feature1');
+        BrowserChecks.componentIsVisible(UI.OPTION_UNDO, 'Feature1');
         BrowserChecks.editorIsActive('Feature1');
 
         // Unfortunately no way of automating input to DraftJs Editor?
         DesignComponentActions.designerUpdatesSelectedComponentNameTo('My Feature');
 
-        BrowserActions.saveComponent('My Feature');
-        BrowserChecks.componentIsVisible('Edit My Feature');
+        BrowserActions.optionClick(UI.OPTION_SAVE, 'My Feature');
+        BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'My Feature');
 
         // Verify
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'My Feature', 'Design1', 'DesignVersion1'));
@@ -69,21 +70,21 @@ describe('UC 143 - Edit Design Component Name', function(){
         BrowserActions.openComponent('Application1');
         BrowserActions.openComponent('Application1 Section1');
 
-        BrowserChecks.componentIsVisible('Edit Feature1');
+        BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'Feature1');
         BrowserChecks.editorIsPassive('Feature1');
 
         // Execute
-        BrowserActions.editComponent('Feature1');
+        BrowserActions.optionClick(UI.OPTION_EDIT, 'Feature1');
 
-        BrowserChecks.componentIsVisible('Save Feature1');
-        BrowserChecks.componentIsVisible('Undo Feature1');
+        BrowserChecks.componentIsVisible(UI.OPTION_SAVE, 'Feature1');
+        BrowserChecks.componentIsVisible(UI.OPTION_UNDO, 'Feature1');
         BrowserChecks.editorIsActive('Feature1');
 
         // Unfortunately no way of automating input to DraftJs Editor?
         // So this is only really testing that the buttons are there and clickable
 
-        BrowserActions.undoComponent('Feature1');
-        BrowserChecks.componentIsVisible('Edit Feature1');
+        BrowserActions.optionClick(UI.OPTION_UNDO, 'Feature1');
+        BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'Feature1');
 
         // Verify
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1'));

@@ -8,6 +8,8 @@ import { BrowserChecks }                    from '../../../test_framework/browse
 import {MenuAction}                     from "../../../imports/constants/constants";
 import {DefaultItemNames}               from "../../../imports/constants/default_names";
 
+import { UI }           from "../../../imports/constants/ui_context_ids";
+
 
 describe('UC 121 - Set Design Version as View Only', function() {
 
@@ -35,19 +37,18 @@ describe('UC 121 - Set Design Version as View Only', function() {
     it('A Design Version being edited may be switched to View Only mode', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
-        BrowserActions.selectNamedItem('Design1');
-        BrowserActions.selectNamedItem('DesignVersion1');
-        BrowserActions.editItem();
+        BrowserActions.selectNamedItem(UI.ITEM_DESIGN_VERSION, 'DesignVersion1');
+        BrowserActions.buttonClick(UI.BUTTON_EDIT, 'DesignVersion1');
 
         // Verify Not View Only
-        BrowserChecks.componentIsVisible('Edit Application1');
+        BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'Application1');
 
 
         // Execute -----------------------------------------------------------------------------------------------------
-        BrowserActions.selectNamedItem('Option View Mode');
+        BrowserActions.selectNamedItem(UI.OPTION_MENU_ICON, 'View Mode');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        assert.isFalse(BrowserChecks.componentExists('Edit Application1'));
+        assert.isFalse(BrowserChecks.componentExists(UI.OPTION_EDIT, 'Application1'));
     });
 });
 

@@ -1,8 +1,36 @@
 import {ComponentType, MenuAction}      from "../../imports/constants/constants";
-import {replaceAll}                     from "../../imports/common/utils";
+import {hashID, uiName, replaceAll}                     from "../../imports/common/utils";
 import {AddActionIds}                   from "../../imports/constants/ui_context_ids";
 
 class BrowserActionsClass{
+
+    // Generic Actions -------------------------------------------------------------------------------------------------
+
+    buttonClick(buttonType, itemName){
+
+        const uiItemName = hashID(buttonType, uiName(itemName));
+
+        browser.waitForExist(uiItemName);
+        browser.click(uiItemName);
+    }
+
+    optionClick(optionType, itemName){
+
+        const uiItemName = hashID(optionType, uiName(itemName));
+
+        browser.waitForExist(uiItemName);
+        browser.click(uiItemName);
+    }
+
+    optionClickWithParent(optionType, parentName, itemName){
+
+        const uiItemName = hashID(optionType, uiName(parentName + ' ' + itemName));
+
+        browser.waitForExist(uiItemName);
+        browser.click(uiItemName);
+    }
+
+    // Specific Actions ------------------------------------------------------------------------------------------------
 
     loginAs(userName, password){
 
@@ -103,19 +131,15 @@ class BrowserActionsClass{
     }
 
 
-    selectNamedItem(itemName){
+    selectNamedItem(item, itemName){
 
-        const uiItemId = replaceAll(itemName, ' ', '_');
+        const uiItemId = hashID(item, uiName(itemName));
 
-        browser.waitForExist('#' + uiItemId);
-        browser.click('#' + uiItemId);
+        browser.waitForExist(uiItemId);
+        browser.click(uiItemId);
     }
 
-    editItem(){
 
-        browser.waitForExist('#butEdit');
-        browser.click('#butEdit');
-    }
 
 
     addApplication(){
@@ -197,10 +221,7 @@ class BrowserActionsClass{
 
     editComponent(componentName){
 
-        const editButtonId = '#Edit_' + replaceAll(componentName, ' ', '_');
 
-        browser.waitForVisible(editButtonId);
-        browser.click(editButtonId);
 
     }
 

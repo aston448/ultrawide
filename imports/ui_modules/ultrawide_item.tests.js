@@ -23,7 +23,7 @@ import { UltrawideItemUiModules } from '../ui_modules/ultrawide_item.js';
 import { shallow, render } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-describe('UI: UW Item', () => {
+describe('UI Mods: UW Item', () => {
 
     function testLayout(itemType, itemData, userContext, userRole) {
 
@@ -32,6 +32,747 @@ describe('UI: UW Item', () => {
         return render(layout);
 
     }
+
+    function testUpdate(itemType, oldItem, newItem, oldContext, newContext){
+
+        const oldProps = {
+            itemType:       itemType,
+            item:           oldItem,
+            userContext:    oldContext
+        };
+
+        const newProps = {
+            itemType:       itemType,
+            item:           newItem,
+            userContext:    newContext
+        };
+
+        return UltrawideItemUiModules.updateRequired(newProps, oldProps, null, null);
+    }
+
+    // Performance Tests (Component Update) ----------------------------------------------------------------------------
+
+    describe('NFR', () => {
+
+        // DESIGN
+
+        describe('Component update is allowed for Design when details change', () => {
+
+            it('update allowed on name change', () => {
+
+                const itemType = ItemType.DESIGN;
+
+                const oldItem = {
+                    _id:            'DESIGN_01',
+                    designStatus:   DesignStatus.DESIGN_LIVE,
+                    designName:     'Design1'
+                };
+
+                const newItem = {
+                    _id:            'DESIGN_01',
+                    designStatus:   DesignStatus.DESIGN_LIVE,
+                    designName:     'Design11'
+                };
+
+                const oldContext = {
+                    designId:       'DESIGN_01'
+                };
+
+                const newContext = {
+                    designId:       'DESIGN_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on status change', () => {
+
+                const itemType = ItemType.DESIGN;
+
+                const oldItem = {
+                    _id:            'DESIGN_01',
+                    designStatus:   DesignStatus.DESIGN_LIVE,
+                    designName:     'Design1'
+                };
+
+                const newItem = {
+                    _id:            'DESIGN_01',
+                    designStatus:   DesignStatus.DESIGN_ARCHIVED,
+                    designName:     'Design1'
+                };
+
+                const oldContext = {
+                    designId:       'DESIGN_01'
+                };
+
+                const newContext = {
+                    designId:       'DESIGN_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+        });
+
+        describe('Component update is allowed for Design when it is selected or deselected', () => {
+
+            it('update allowed on selection', () => {
+
+                const itemType = ItemType.DESIGN;
+
+                const oldItem = {
+                    _id:            'DESIGN_01',
+                    designStatus:   DesignStatus.DESIGN_LIVE,
+                    designName:     'Design1'
+                };
+
+                const newItem = {
+                    _id:            'DESIGN_01',
+                    designStatus:   DesignStatus.DESIGN_LIVE,
+                    designName:     'Design1'
+                };
+
+                const oldContext = {
+                    designId:       'DESIGN_02'
+                };
+
+                const newContext = {
+                    designId:       'DESIGN_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on de-selection', () => {
+
+                const itemType = ItemType.DESIGN;
+
+                const oldItem = {
+                    _id:            'DESIGN_01',
+                    designStatus:   DesignStatus.DESIGN_LIVE,
+                    designName:     'Design1'
+                };
+
+                const newItem = {
+                    _id:            'DESIGN_01',
+                    designStatus:   DesignStatus.DESIGN_LIVE,
+                    designName:     'Design1'
+                };
+
+                const oldContext = {
+                    designId:       'DESIGN_01'
+                };
+
+                const newContext = {
+                    designId:       'DESIGN_02'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+        });
+
+        // DESIGN VERSION
+
+        describe('Component update is allowed for Design Version when details change', () => {
+
+            it('update allowed on name change', () => {
+
+                const itemType = ItemType.DESIGN_VERSION;
+
+                const oldItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '01'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion11',
+                    designVersionNumber:    '01'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on version change', () => {
+
+                const itemType = ItemType.DESIGN_VERSION;
+
+                const oldItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '01'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '011'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on status change', () => {
+
+                const itemType = ItemType.DESIGN_VERSION;
+
+                const oldItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_NEW,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '01'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '01'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+        });
+
+        describe('Component update is allowed for Design Version when it is selected or deselected', () => {
+
+            it('update allowed on selection', () => {
+
+                const itemType = ItemType.DESIGN_VERSION;
+
+                const oldItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '01'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '01'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_02'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on de-selection', () => {
+
+                const itemType = ItemType.DESIGN_VERSION;
+
+                const oldItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '01'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_VERSION_01',
+                    designId:               'DESIGN_01',
+                    designVersionStatus:    DesignVersionStatus.VERSION_DRAFT,
+                    designVersionName:      'DesignVersion1',
+                    designVersionNumber:    '01'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_02'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+        });
+
+        // DESIGN UPDATE
+
+        describe('Component update is allowed for Design Update when details change', () => {
+
+            it('update allowed on name change', () => {
+
+                const itemType = ItemType.DESIGN_UPDATE;
+
+                const oldItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR001'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate11',
+                    updateReference:        'CR001'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on reference change', () => {
+
+                const itemType = ItemType.DESIGN_UPDATE;
+
+                const oldItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR001'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR002'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on status change', () => {
+
+                const itemType = ItemType.DESIGN_UPDATE;
+
+                const oldItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_NEW,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR001'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR001'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+        });
+
+        describe('Component update is allowed for Design Update when it is selected or deselected', () => {
+
+            it('update allowed on selection', () => {
+
+                const itemType = ItemType.DESIGN_UPDATE;
+
+                const oldItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR001'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR001'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_02'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on de-selection', () => {
+
+                const itemType = ItemType.DESIGN_UPDATE;
+
+                const oldItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR001'
+                };
+
+                const newItem = {
+                    _id:                    'DESIGN_UPDATE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    updateStatus:           DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                    updateName:             'DesignUpdate1',
+                    updateReference:        'CR001'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_02'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+        });
+
+        // WORK PACKAGE
+
+        describe('Component update is allowed for Work Package when details change', () => {
+
+            it('update allowed on name change', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const oldItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'NONE'
+                };
+
+                const newItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage11',
+                    workPackageLink:        'NONE'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on link change', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const oldItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'NONE'
+                };
+
+                const newItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'www.hen.com'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on status change', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const oldItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'NONE'
+                };
+
+                const newItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_ADOPTED,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'NONE'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+        });
+
+        describe('Component update is allowed for Work Package when it is selected or deselected', () => {
+
+            it('update allowed on selection', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const oldItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'NONE'
+                };
+
+                const newItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'NONE'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_02'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_01'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+
+            it('update allowed on de-selection', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const oldItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'NONE'
+                };
+
+                const newItem = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'DESIGN_UPDATE_01',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageLink:        'NONE'
+                };
+
+                const oldContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_01'
+                };
+
+                const newContext = {
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'DESIGN_UPDATE_01',
+                    workPackageId:      'WORK_PACKAGE_02'
+                };
+
+                const shouldUpdate = testUpdate(itemType, oldItem, newItem, oldContext, newContext);
+
+                chai.assert.isTrue(shouldUpdate, 'Update was expected');
+            });
+        });
+
+    });
+
 
     // DESIGN TESTS ----------------------------------------------------------------------------------------------------
 
@@ -61,7 +802,7 @@ describe('UI: UW Item', () => {
                 const userRole = RoleType.DESIGNER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                const expectedUiItem = hashID(UI.STATE_ITEM_SELECTED, 'Design1');
+                const expectedUiItem = hashID(UI.UW_ITEM_SELECTED, 'Design1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' was not found');
 
@@ -91,7 +832,7 @@ describe('UI: UW Item', () => {
                 const userRole = RoleType.DESIGNER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                const expectedUiItem = hashID(UI.STATE_ITEM_UNSELECTED, 'Design1');
+                const expectedUiItem = hashID(UI.UW_ITEM_UNSELECTED, 'Design1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' was not found');
 
@@ -484,7 +1225,7 @@ describe('UI: UW Item', () => {
                 const userRole = RoleType.DESIGNER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                const expectedUiItem = hashID(UI.STATE_ITEM_SELECTED, 'DesignVersion1');
+                const expectedUiItem = hashID(UI.UW_ITEM_SELECTED, 'DesignVersion1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' was not found');
 
@@ -512,7 +1253,7 @@ describe('UI: UW Item', () => {
                 const userRole = RoleType.DESIGNER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                const expectedUiItem = hashID(UI.STATE_ITEM_UNSELECTED, 'DesignVersion1');
+                const expectedUiItem = hashID(UI.UW_ITEM_UNSELECTED, 'DesignVersion1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' was not found');
 
@@ -2172,7 +2913,7 @@ describe('UI: UW Item', () => {
                 const userRole = RoleType.DESIGNER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                const expectedUiItem = hashID(UI.STATE_ITEM_SELECTED, 'DesignUpdate1');
+                const expectedUiItem = hashID(UI.UW_ITEM_SELECTED, 'DesignUpdate1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
             });
@@ -2204,7 +2945,7 @@ describe('UI: UW Item', () => {
                 const userRole = RoleType.DESIGNER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                const expectedUiItem = hashID(UI.STATE_ITEM_UNSELECTED, 'DesignUpdate1');
+                const expectedUiItem = hashID(UI.UW_ITEM_UNSELECTED, 'DesignUpdate1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
             });
@@ -5276,7 +6017,7 @@ describe('UI: UW Item', () => {
                 const userRole = RoleType.MANAGER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                const expectedUiItem = hashID(UI.STATE_ITEM_SELECTED, 'WorkPackage1');
+                const expectedUiItem = hashID(UI.UW_ITEM_SELECTED, 'WorkPackage1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
             });
@@ -5308,7 +6049,7 @@ describe('UI: UW Item', () => {
                 const userRole = RoleType.MANAGER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                const expectedUiItem = hashID(UI.STATE_ITEM_UNSELECTED, 'WorkPackage1');
+                const expectedUiItem = hashID(UI.UW_ITEM_UNSELECTED, 'WorkPackage1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
             });
@@ -6576,6 +7317,276 @@ describe('UI: UW Item', () => {
                 const expectedUiItem = hashID(UI.BUTTON_VIEW, 'WorkPackage1');
 
                 chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');
+            });
+        });
+
+        // WP Adopt
+        describe('An Available Work Package has an option to adopt it', () => {
+
+            it('has an adopt option for a Developer', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const itemData = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'NONE',
+                    workPackageType:        WorkPackageType.WP_BASE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageTestStatus:  WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
+                    adoptingUserId:         'NONE',
+                    workPackageLink:        'NONE'
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'WORK_PACKAGE_01',
+                };
+
+                const userRole = RoleType.DEVELOPER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ADOPT, 'WorkPackage1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
+            });
+        });
+
+        describe('Only a Developer can adopt a Work Package', () => {
+
+            it('has no adopt option for a Designer', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const itemData = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'NONE',
+                    workPackageType:        WorkPackageType.WP_BASE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageTestStatus:  WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
+                    adoptingUserId:         'NONE',
+                    workPackageLink:        'NONE'
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'WORK_PACKAGE_01',
+                };
+
+                const userRole = RoleType.DESIGNER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ADOPT, 'WorkPackage1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');
+            });
+
+            it('has no adopt option for a Manager', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const itemData = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'NONE',
+                    workPackageType:        WorkPackageType.WP_BASE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageTestStatus:  WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
+                    adoptingUserId:         'NONE',
+                    workPackageLink:        'NONE'
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'WORK_PACKAGE_01',
+                };
+
+                const userRole = RoleType.MANAGER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ADOPT, 'WorkPackage1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');
+            });
+
+            it('has no adopt option for a Guest', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const itemData = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'NONE',
+                    workPackageType:        WorkPackageType.WP_BASE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+                    workPackageTestStatus:  WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
+                    adoptingUserId:         'NONE',
+                    workPackageLink:        'NONE'
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'WORK_PACKAGE_01',
+                };
+
+                const userRole = RoleType.GUEST_VIEWER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ADOPT, 'WorkPackage1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');
+            });
+        });
+
+        describe('Only an Available Work Package can be adopted', () => {
+
+            it('has no adopt option when new', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const itemData = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'NONE',
+                    workPackageType:        WorkPackageType.WP_BASE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageStatus:      WorkPackageStatus.WP_NEW,
+                    workPackageTestStatus:  WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
+                    adoptingUserId:         'NONE',
+                    workPackageLink:        'NONE'
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'WORK_PACKAGE_01',
+                };
+
+                const userRole = RoleType.DEVELOPER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ADOPT, 'WorkPackage1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');
+            });
+
+            it('has no adopt option when adopted', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const itemData = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'NONE',
+                    workPackageType:        WorkPackageType.WP_BASE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageStatus:      WorkPackageStatus.WP_ADOPTED,
+                    workPackageTestStatus:  WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
+                    adoptingUserId:         'NONE',
+                    workPackageLink:        'NONE'
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'WORK_PACKAGE_01',
+                };
+
+                const userRole = RoleType.DEVELOPER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ADOPT, 'WorkPackage1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');
+            });
+        });
+
+        // WP Release
+        describe('An Adopted Work Package has an option to release it', () => {
+
+            it('has a release option for a Developer', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const itemData = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'NONE',
+                    workPackageType:        WorkPackageType.WP_BASE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageStatus:      WorkPackageStatus.WP_ADOPTED,
+                    workPackageTestStatus:  WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
+                    adoptingUserId:         'NONE',
+                    workPackageLink:        'NONE'
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'WORK_PACKAGE_01',
+                };
+
+                const userRole = RoleType.DEVELOPER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_RELEASE, 'WorkPackage1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
+            });
+
+            it('has a release option for a Manager', () => {
+
+                const itemType = ItemType.WORK_PACKAGE;
+
+                const itemData = {
+                    _id:                    'WORK_PACKAGE_01',
+                    designVersionId:        'DESIGN_VERSION_01',
+                    designUpdateId:         'NONE',
+                    workPackageType:        WorkPackageType.WP_BASE,
+                    workPackageName:        'WorkPackage1',
+                    workPackageStatus:      WorkPackageStatus.WP_ADOPTED,
+                    workPackageTestStatus:  WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE,
+                    adoptingUserId:         'NONE',
+                    workPackageLink:        'NONE'
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'DESIGN_VERSION_01',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'WORK_PACKAGE_01',
+                };
+
+                const userRole = RoleType.MANAGER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_RELEASE, 'WorkPackage1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
             });
         });
     });

@@ -9,7 +9,7 @@ import { EditorContainerUiModules } from '../ui_modules/editor_container.js';
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-describe('UI: Editor Container', () => {
+describe('UI Mods: Editor Container', () => {
 
     function testLayout (view, mode, userRole, viewOptions, userContext){
 

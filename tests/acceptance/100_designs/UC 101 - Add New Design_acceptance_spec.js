@@ -7,6 +7,8 @@ import { BrowserChecks }                    from '../../../test_framework/browse
 import {MenuAction}                     from "../../../imports/constants/constants";
 import {DefaultItemNames}               from "../../../imports/constants/default_names";
 
+import { UI }           from "../../../imports/constants/ui_context_ids";
+import { hashID }    from "../../../imports/common/utils";
 
 describe('UC 101 - Add New Design', function() {
 
@@ -36,7 +38,7 @@ describe('UC 101 - Add New Design', function() {
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Created a new Design
-        BrowserChecks.componentIsVisible(DefaultItemNames.NEW_DESIGN_NAME);
+        BrowserChecks.componentIsVisible(UI.ITEM_DESIGN, DefaultItemNames.NEW_DESIGN_NAME);
 
         expect(DesignVerifications.defaultNewDesignExists());
 
