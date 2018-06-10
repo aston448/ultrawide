@@ -6,12 +6,13 @@ import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap
 import {log} from "../common/utils";
 
 import {
-    ComponentType, DisplayContext, LogLevel, UpdateMergeStatus, UpdateScopeType,
+    ComponentType, DisplayContext, LogLevel, UpdateMergeStatus, UpdateScopeType, ViewMode,
     ViewType, WorkPackageScopeType
 } from "../constants/constants";
 
 import { ClientDomainDictionaryServices } from "../apiClient/apiClientDomainDictionary";
 import { ClientDesignComponentServices } from "../apiClient/apiClientDesignComponent";
+import {DefaultComponentNames} from "../constants/default_names";
 
 
 const styles = {
@@ -368,6 +369,27 @@ class ComponentUiModulesClass{
                 (nextProps.currentItem._id === nextProps.workPackageScopeItems.changingItemId)
             )) {
                 log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of WP SCOPE", props.currentItem.componentNameNew);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    isNewAdded(props){
+
+        if(props.mode === ViewMode.MODE_EDIT) {
+            const item = props.currentItem;
+            if (item.componentType === ComponentType.APPLICATION && item.componentNameNew === DefaultComponentNames.NEW_APPLICATION_NAME) {
+                return true;
+            }
+            if (item.componentType === ComponentType.DESIGN_SECTION && item.componentNameNew === DefaultComponentNames.NEW_DESIGN_SECTION_NAME) {
+                return true;
+            }
+            if (item.componentType === ComponentType.FEATURE && item.componentNameNew === DefaultComponentNames.NEW_FEATURE_NAME) {
+                return true;
+            }
+            if (item.componentType === ComponentType.SCENARIO && item.componentNameNew === DefaultComponentNames.NEW_SCENARIO_NAME) {
                 return true;
             }
         }

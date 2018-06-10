@@ -38,7 +38,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 import { DragSource } from 'react-dnd';
 
 // Draft JS - Name is text editable
-import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
+import {Editor, EditorState, SelectionState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
 const {hasCommandModifier} = KeyBindingUtil;
 
 // =====================================================================================================================
@@ -74,9 +74,11 @@ export class DesignComponentHeader extends Component{
 
         this.state = {
             inScope: false,
+            domEditor: null,
             parentScope: false,
             scopeChange: false,
             editing: false,
+            autoSelect: ComponentUiModules.isNewAdded(this.props),
             highlighted: false,
             removed: this.props.currentItem.isRemoved ? this.props.currentItem.isRemoved : false,
             name: '',
@@ -91,8 +93,8 @@ export class DesignComponentHeader extends Component{
 
         this.onTitleChange = (editorState) => this.setState({editorState});
         this.handleTitleKeyCommand = this.handleTitleKeyCommand.bind(this);
-        this.focus = () => {if(this.refs.editor){this.refs.editor.focus()}};
-
+        //this.focus = () => {if(this.refs.editor){this.refs.editor.focus()}};
+        this.setDomEditorRef = ref => this.state.domEditor = ref;
         this.updateComponentEditorText(this.props);
 
     }
@@ -176,28 +178,15 @@ export class DesignComponentHeader extends Component{
             case ViewType.DEVELOP_UPDATE_WP:
 
                 // A new component not yet changed is automatically editable
-                if(this.props.mode === ViewMode.MODE_EDIT) {
-                    const item = this.props.currentItem;
-                    if (item.componentType === ComponentType.APPLICATION && item.componentNameNew === DefaultComponentNames.NEW_APPLICATION_NAME) {
-                        this.editComponentName();
-                    }
-                    if (item.componentType === ComponentType.DESIGN_SECTION && item.componentNameNew === DefaultComponentNames.NEW_DESIGN_SECTION_NAME) {
-                        this.editComponentName();
-                    }
-                    if (item.componentType === ComponentType.FEATURE && item.componentNameNew === DefaultComponentNames.NEW_FEATURE_NAME) {
-                        this.editComponentName();
-                    }
-                    if (item.componentType === ComponentType.SCENARIO && item.componentNameNew === DefaultComponentNames.NEW_SCENARIO_NAME) {
-                        this.editComponentName();
-                    }
+                if(this.state.autoSelect) {
+                    this.editComponentName();
                 }
-
                 break;
         }
     }
 
     // If the name of an item has been updated it could be in another view of it so we need to update the local editor
-    componentWillReceiveProps(newProps){
+    componentWillReceiveProps(newProps, newState){
 
         // Set display state for scope items
         let inScope = false;
@@ -353,7 +342,11 @@ export class DesignComponentHeader extends Component{
         }
     }
 
-
+    componentDidUpdate(){
+        if(this.state.editing){
+            this.state.domEditor.focus();
+        }
+    }
 
     getNewAndOldRawText(newText, oldText){
         return ClientDesignComponentServices.getNewAndOldRawText(newText, oldText);
@@ -430,7 +423,45 @@ export class DesignComponentHeader extends Component{
         this.setCurrentComponent();
 
         log((msg) => console.log(msg), LogLevel.TRACE, "EDIT COMPONENT NAME");
+
         this.setState({editing: true});
+
+        // Cursor and selection.  If a new item, select all default text.  Otherwise just put cursor at end.
+        // NOTE Bug to fix - IsNew does not work properly for DUs.
+        const content = this.state.editorState.getCurrentContent();
+        const blockMap = content.getBlockMap();
+
+        let key = null;
+        let anchorOffset = 0;
+        let focusOffset = 0;
+
+        // const newAddition = (
+        //     (this.props.view === ViewType.DESIGN_UPDATE_EDIT && this.props.updateItem.isJustAdded) ||
+        //     ((this.props.view === ViewType.DESIGN_NEW || this.props.view === ViewType.DESIGN_PUBLISHED) && this.props.currentItem.isNew) ||
+        //     (this.props.view === ViewType.DEVELOP_UPDATE_WP && this.props.updateItem.isJustAdded) ||
+        //     (this.props.view === ViewType.DEVELOP_BASE_WP && this.props.currentItem.isNew)
+        // );
+
+        if(this.state.autoSelect){
+            // New so select all the text
+            key = blockMap.first().getKey();
+            focusOffset = blockMap.last().getLength();
+            anchorOffset = 0;
+        } else {
+            // Just move focus to end
+            key = blockMap.last().getKey();
+            focusOffset = blockMap.last().getLength();
+            anchorOffset = blockMap.last().getLength();
+        }
+
+        const selection = new SelectionState({
+            anchorKey: key,
+            anchorOffset: anchorOffset,
+            focusKey: key,
+            focusOffset: focusOffset,
+        });
+
+        this.setState({editorState: EditorState.forceSelection(this.state.editorState, selection)});
     }
 
     // Cancel editing the component name
@@ -447,6 +478,8 @@ export class DesignComponentHeader extends Component{
         if (typeof this.props.onSelectItem === 'function') {
             this.props.onSelectItem();
         }
+
+
     }
 
     // Save changes to the design component name
@@ -938,7 +971,7 @@ export class DesignComponentHeader extends Component{
                         keyBindingFn={this.keyBindings}
                         onChange={this.onTitleChange}
                         spellCheck={true}
-                        ref="editor"
+                        ref={this.setDomEditorRef}
                         readOnly={false}
                     />
                 </div>

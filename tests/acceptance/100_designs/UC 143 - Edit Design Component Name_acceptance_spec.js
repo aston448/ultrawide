@@ -53,9 +53,10 @@ describe('UC 143 - Edit Design Component Name', function(){
         BrowserChecks.editorIsActive('Feature1');
 
         // Unfortunately no way of automating input to DraftJs Editor?
+        //BrowserActions.addTextToEditor('Feature1', 'My Feature');
         DesignComponentActions.designerUpdatesSelectedComponentNameTo('My Feature');
 
-        BrowserActions.optionClick(UI.OPTION_SAVE, 'My Feature');
+        BrowserActions.optionClick(UI.OPTION_SAVE, 'Feature1');
         BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'My Feature');
 
         // Verify
@@ -82,6 +83,7 @@ describe('UC 143 - Edit Design Component Name', function(){
 
         // Unfortunately no way of automating input to DraftJs Editor?
         // So this is only really testing that the buttons are there and clickable
+        //BrowserActions.addTextToEditor('Feature1', 'NewFeatureName');
 
         BrowserActions.optionClick(UI.OPTION_UNDO, 'Feature1');
         BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'Feature1');

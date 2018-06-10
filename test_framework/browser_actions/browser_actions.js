@@ -2,6 +2,14 @@ import {ComponentType, MenuAction}      from "../../imports/constants/constants"
 import {hashID, uiName, replaceAll}                     from "../../imports/common/utils";
 import {AddActionIds}                   from "../../imports/constants/ui_context_ids";
 
+import {
+    ContentState,
+    EditorState,
+} from 'draft-js';
+
+import ReactTestUtils from 'react-dom/test-utils';
+
+
 class BrowserActionsClass{
 
     // Generic Actions -------------------------------------------------------------------------------------------------
@@ -28,6 +36,23 @@ class BrowserActionsClass{
 
         browser.waitForExist(uiItemName);
         browser.click(uiItemName);
+    }
+
+    addTextToEditor(editorName, text){
+
+        const draftEditorContent = ReactTestUtils.findRenderedDOMComponentWithClass(browser.element('#' + editorName), "public-DraftEditor-content");
+
+        ReactTestUtils.Simulate.beforeInput(draftEditorContent, {data: text});
+
+        // const editorHtml = browser.element(hashID(editorName, ''));
+        //
+        // console.log('html: %o', editorHtml);
+
+        // const input = browser.element('DraftEditor-root');
+        //
+        // console.log('input: %o', input);
+        //
+        // input.instance().update(EditorState.createWithContent(ContentState.createFromText(text)));
     }
 
     // Specific Actions ------------------------------------------------------------------------------------------------
