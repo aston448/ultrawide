@@ -7,6 +7,9 @@ import { DesignComponentHeader } from './DesignComponentHeader.jsx';  // Non Red
 
 import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, ComponentType, UpdateMergeStatus} from '../../../constants/constants.js'
 
+import { UI }           from "../../../constants/ui_context_ids";
+import { hashID }       from "../../../common/utils";
+
 describe('JSX: DesCompHdr DC', () => {
 
     // Design Components -----------------------------------------------------------------------------------------------
@@ -66,7 +69,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // No edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Edit option found!');
         });
 
         it('does not have delete option', () => {
@@ -79,7 +82,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // No delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 0, 'Delete option found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 0, 'Delete option found!');
         });
 
         it('does not have move option', () => {
@@ -92,7 +95,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // No move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
     });
@@ -109,7 +112,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // No delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 0, 'Delete option found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 0, 'Delete option found!');
         });
     });
 
@@ -125,7 +128,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // No move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
     });
 
@@ -141,7 +144,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // No move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Reorder option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Reorder option found!');
         });
     });
 
@@ -157,7 +160,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 1, 'Edit option not found');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 1, 'Edit option not found');
         });
 
         it('has delete option', () => {
@@ -170,7 +173,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 1, 'Delete option not found');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 1, 'Delete option not found');
         });
 
         it('has move option', () => {
@@ -183,7 +186,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found');
         });
     });
 
@@ -345,7 +348,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 1, 'Edit option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 1, 'Edit option not found!');
         });
 
         it('design section has edit option', () => {
@@ -358,7 +361,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 1, 'Edit option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 1, 'Edit option not found!');
         });
 
         it('feature has edit option', () => {
@@ -371,7 +374,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 1, 'Edit option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 1, 'Edit option not found!');
         });
 
         it('feature aspect has edit option', () => {
@@ -384,7 +387,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 1, 'Edit option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 1, 'Edit option not found!');
         });
 
         it('scenario has edit option', () => {
@@ -397,7 +400,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 1, 'Edit option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 1, 'Edit option not found!');
         });
 
     });
@@ -414,7 +417,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Edit option found!');
         });
 
         it('design section has no edit option', () => {
@@ -427,7 +430,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Edit option found!');
         });
 
         it('feature has no edit option', () => {
@@ -440,7 +443,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Edit option found!');
         });
 
         it('feature aspect has no edit option', () => {
@@ -453,7 +456,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Edit option found!');
         });
 
         it('scenario has no edit option', () => {
@@ -466,7 +469,7 @@ describe('JSX: DesCompHdr DC', () => {
             const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Edit option found!');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Edit option found!');
         });
     });
 
@@ -485,7 +488,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has save option
-            chai.assert(item.find('#Save_ComponentName').length === 1, 'Save option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_SAVE, 'ComponentName')).length === 1, 'Save option not found!');
         });
 
         it('design section has a save option when being edited', () => {
@@ -501,7 +504,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has save option
-            chai.assert(item.find('#Save_ComponentName').length === 1, 'Save option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_SAVE, 'ComponentName')).length === 1, 'Save option not found!');
         });
 
         it('feature has a save option when being edited', () => {
@@ -517,7 +520,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has save option
-            chai.assert(item.find('#Save_ComponentName').length === 1, 'Save option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_SAVE, 'ComponentName')).length === 1, 'Save option not found!');
         });
 
         it('feature aspect has a save option when being edited', () => {
@@ -533,7 +536,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has save option
-            chai.assert(item.find('#Save_ComponentName').length === 1, 'Save option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_SAVE, 'ComponentName')).length === 1, 'Save option not found!');
         });
 
         it('scenario has a save option when being edited', () => {
@@ -549,7 +552,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has save option
-            chai.assert(item.find('#Save_ComponentName').length === 1, 'Save option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_SAVE, 'ComponentName')).length === 1, 'Save option not found!');
         });
     });
 
@@ -568,7 +571,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has undo option
-            chai.assert(item.find('#Undo_ComponentName').length === 1, 'Undo option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_UNDO, 'ComponentName')).length === 1, 'Undo option not found!');
         });
 
         it('design section has undo option when being edited', () => {
@@ -584,7 +587,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has undo option
-            chai.assert(item.find('#Undo_ComponentName').length === 1, 'Undo option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_UNDO, 'ComponentName')).length === 1, 'Undo option not found!');
         });
 
         it('feature has undo option when being edited', () => {
@@ -600,7 +603,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has undo option
-            chai.assert(item.find('#Undo_ComponentName').length === 1, 'Undo option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_UNDO, 'ComponentName')).length === 1, 'Undo option not found!');
         });
 
         it('feature aspect has undo option when being edited', () => {
@@ -616,7 +619,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has undo option
-            chai.assert(item.find('#Undo_ComponentName').length === 1, 'Undo option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_UNDO, 'ComponentName')).length === 1, 'Undo option not found!');
         });
 
         it('scenario has undo option when being edited', () => {
@@ -632,7 +635,7 @@ describe('JSX: DesCompHdr DC', () => {
             item.setState({editing: true});
 
             // Has undo option
-            chai.assert(item.find('#Undo_ComponentName').length === 1, 'Undo option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_UNDO, 'ComponentName')).length === 1, 'Undo option not found!');
         });
     });
 
@@ -649,7 +652,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Has edit option');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Has edit option');
         });
 
         it('design section has no edit option', () => {
@@ -662,7 +665,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Has edit option');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Has edit option');
         });
 
         it('feature has no edit option', () => {
@@ -675,7 +678,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Has edit option');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Has edit option');
         });
 
         it('feature aspect has no edit option', () => {
@@ -688,7 +691,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Has edit option');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Has edit option');
         });
 
         it('scenario has no edit option', () => {
@@ -701,7 +704,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no edit option
-            chai.assert(item.find('#Edit_ComponentName').length === 0, 'Has edit option');
+            chai.assert(item.find(hashID(UI.OPTION_EDIT, 'ComponentName')).length === 0, 'Has edit option');
         });
     });
 
@@ -717,7 +720,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 1, 'Remove option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 1, 'Remove option not found!');
         });
 
         it('design section has remove option', () => {
@@ -730,7 +733,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 1, 'Remove option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 1, 'Remove option not found!');
         });
 
         it('feature has remove option', () => {
@@ -743,7 +746,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 1, 'Remove option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 1, 'Remove option not found!');
         });
 
         it('feature aspect has remove option', () => {
@@ -756,7 +759,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 1, 'Remove option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 1, 'Remove option not found!');
         });
 
         it('scenario has remove option', () => {
@@ -769,7 +772,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 1, 'Remove option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 1, 'Remove option not found!');
         });
 
 
@@ -787,7 +790,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 0, 'Remove option found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 0, 'Remove option found!');
         });
 
         it('view only design section has no remove option', () => {
@@ -800,7 +803,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 0, 'Remove option found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 0, 'Remove option found!');
         });
 
         it('view only feature has no remove option', () => {
@@ -813,7 +816,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 0, 'Remove option found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 0, 'Remove option found!');
         });
 
         it('view only feature aspect has no remove option', () => {
@@ -826,7 +829,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 0, 'Remove option found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 0, 'Remove option found!');
         });
 
         it('view only scenario has no remove option', () => {
@@ -839,7 +842,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no delete option
-            chai.assert(item.find('#Remove_ComponentName').length === 0, 'Remove option found!');
+            chai.assert(item.find(hashID(UI.OPTION_REMOVE, 'ComponentName')).length === 0, 'Remove option found!');
         });
     });
 
@@ -855,7 +858,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
         it('design section has move option', () => {
@@ -868,7 +871,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
         it('feature has move option', () => {
@@ -881,7 +884,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
         it('feature aspect has move option', () => {
@@ -894,7 +897,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
         it('scenario has move option', () => {
@@ -907,7 +910,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
 
@@ -925,7 +928,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
         it('view only design section has no move option', () => {
@@ -938,7 +941,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
         it('view only feature has no move option', () => {
@@ -951,7 +954,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
         it('view only feature aspect has no move option', () => {
@@ -964,7 +967,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
         it('view only scenario has no move option', () => {
@@ -977,7 +980,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
     });
 
@@ -993,7 +996,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
         it('design section has move option', () => {
@@ -1006,7 +1009,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
         it('feature has move option', () => {
@@ -1019,7 +1022,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
         it('feature aspect has move option', () => {
@@ -1032,7 +1035,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
 
         it('scenario has move option', () => {
@@ -1045,7 +1048,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
-            chai.assert(item.find('#Move_ComponentName').length === 1, 'Move option not found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 1, 'Move option not found!');
         });
     });
 
@@ -1061,7 +1064,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
         it('view only design section has no move option', () => {
@@ -1074,7 +1077,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
         it('view only feature has no move option', () => {
@@ -1087,7 +1090,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
         it('view only feature aspect has no move option', () => {
@@ -1100,7 +1103,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
 
         it('view only scenario has no move option', () => {
@@ -1113,7 +1116,7 @@ describe('JSX: DesCompHdr DC', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has no move option
-            chai.assert(item.find('#Move_ComponentName').length === 0, 'Move option found!');
+            chai.assert(item.find(hashID(UI.OPTION_MOVE, 'ComponentName')).length === 0, 'Move option found!');
         });
     });
 

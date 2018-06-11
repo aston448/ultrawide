@@ -93,7 +93,6 @@ export class DesignComponentHeader extends Component{
 
         this.onTitleChange = (editorState) => this.setState({editorState});
         this.handleTitleKeyCommand = this.handleTitleKeyCommand.bind(this);
-        //this.focus = () => {if(this.refs.editor){this.refs.editor.focus()}};
         this.setDomEditorRef = ref => this.state.domEditor = ref;
         this.updateComponentEditorText(this.props);
 
@@ -343,8 +342,12 @@ export class DesignComponentHeader extends Component{
     }
 
     componentDidUpdate(){
-        if(this.state.editing){
-            this.state.domEditor.focus();
+
+        if(!Meteor.isTest) {
+
+            if (this.state.editing) {
+                this.state.domEditor.focus();
+            }
         }
     }
 
@@ -443,7 +446,7 @@ export class DesignComponentHeader extends Component{
         // );
 
         if(this.state.autoSelect){
-            // New so select all the text
+            // New so select all the textf
             key = blockMap.first().getKey();
             focusOffset = blockMap.last().getLength();
             anchorOffset = 0;
