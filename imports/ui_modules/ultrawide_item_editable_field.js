@@ -114,7 +114,19 @@ class UltrawideItemEditableFieldUiModulesClass {
                         titleClass = 'design-item-header greyed-out'
                     }
 
-                    return (<div className={titleClass + ' ' + statusClass}>{fieldReadOnly}</div>);
+                    if(fieldType === FieldType.LINK){
+
+                        // Designers can edit WP links
+                        if(editing){
+                            return (<div className={titleClass + ' ' + statusClass}>{fieldEditing}</div>);
+                        } else {
+                            return (<div className={titleClass + ' ' + statusClass}>{fieldNotEditing}</div>);
+                        }
+
+                    } else {
+                        // But other WP stuff is read only
+                        return (<div className={titleClass + ' ' + statusClass}>{fieldReadOnly}</div>);
+                    }
 
                 } else {
 

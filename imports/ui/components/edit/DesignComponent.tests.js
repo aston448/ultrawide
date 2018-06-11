@@ -7,9 +7,9 @@ import { DesignComponent } from './DesignComponent.jsx';  // Non Redux wrapped
 
 import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, ComponentType, UpdateScopeType} from '../../../constants/constants.js'
 
-import { DesignVersions } from '../../../collections/design/design_versions.js'
-import PropTypes from "prop-types";
-import {AddActionIds} from "../../../constants/ui_context_ids";
+import { UI, AddActionIds }           from "../../../constants/ui_context_ids";
+import { hashID }                    from "../../../common/utils";
+
 
 describe('JSX: DesignComponent', () => {
 
@@ -65,7 +65,7 @@ describe('JSX: DesignComponent', () => {
             let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
-            chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
+            chai.assert.equal(item.find(hashID(UI.DESIGN_COMPONENT, 'ComponentName')).props().className, 'design-component dc-active', 'Expected component to be active');
 
         });
 
@@ -82,7 +82,7 @@ describe('JSX: DesignComponent', () => {
             let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
-            chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
+            chai.assert.equal(item.find(hashID(UI.DESIGN_COMPONENT, 'ComponentName')).props().className, 'design-component', 'Expected component NOT to be active');
         });
 
     });
@@ -103,8 +103,8 @@ describe('JSX: DesignComponent', () => {
             let item1 = testDesignComponent(currentItem1, updateItem, wpItem, mode, view, displayContext, userContext);
             let item2 = testDesignComponent(currentItem2, updateItem, wpItem, mode, view, displayContext, userContext);
 
-            chai.assert.equal(item1.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
-            chai.assert.equal(item2.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
+            chai.assert.equal(item1.find(hashID(UI.DESIGN_COMPONENT, 'ComponentName')).props().className, 'design-component dc-active', 'Expected component to be active');
+            chai.assert.equal(item2.find(hashID(UI.DESIGN_COMPONENT, 'ComponentName')).props().className, 'design-component', 'Expected component NOT to be active');
         });
     });
 
@@ -507,7 +507,7 @@ describe('JSX: DesignComponent', () => {
             let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
-            chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
+            chai.assert.equal(item.find(hashID(UI.DESIGN_COMPONENT, 'ComponentName')).props().className, 'design-component dc-active', 'Expected component to be active');
 
         });
 
@@ -524,7 +524,7 @@ describe('JSX: DesignComponent', () => {
             let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
-            chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
+            chai.assert.equal(item.find(hashID(UI.DESIGN_COMPONENT, 'ComponentName')).props().className, 'design-component', 'Expected component NOT to be active');
         });
 
     });
@@ -546,7 +546,7 @@ describe('JSX: DesignComponent', () => {
             let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
-            chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
+            chai.assert.equal(item.find(hashID(UI.DESIGN_COMPONENT, 'ComponentName')).props().className, 'design-component dc-active', 'Expected component to be active');
 
         });
 
@@ -563,7 +563,7 @@ describe('JSX: DesignComponent', () => {
             let item = testDesignComponent(currentItem, updateItem, wpItem, mode, view, displayContext, userContext);
 
             // Component has active style
-            chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
+            chai.assert.equal(item.find(hashID(UI.DESIGN_COMPONENT, 'ComponentName')).props().className, 'design-component', 'Expected component NOT to be active');
         });
     });
 

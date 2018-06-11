@@ -1486,7 +1486,7 @@ describe('JSX: Field: LINK', () => {
                 item.setState({fieldEditable: false});
                 const expectedUiItem = hashID(UI.LINK_ITEM_LINK_LABEL, uiName);
 
-                chai.assert.equal(item.find(expectedUiItem).children().text(), 'Open Link');
+                chai.assert.equal(item.find(expectedUiItem).children().text(), 'Link Not Set');
             });
         });
     });
