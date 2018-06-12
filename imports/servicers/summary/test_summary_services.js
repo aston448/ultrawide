@@ -209,11 +209,18 @@ class TestSummaryServicesClass {
             totalFailingScenarioCount = featureGlobalData.totalFailingScenarioCount;
             totalPassingScenarioCount = featureGlobalData.totalPassingScenarioCount;
 
+
+
+
             featureScenarios.forEach((featureScenario)=>{
 
                 featureGlobalData = TestSummaryModules.calculateScenarioSummaryData(userContext, featureScenario, contextDuData, contextWpData, featureGlobalData);
 
             });
+
+            totalScenarioCount += featureScenarios.length;
+
+            totalScenariosWithoutTests += featureGlobalData.featureNoTestScenarios;
 
             // // Any fails at feature level is a fail even if passes.  Any passes and no fails is a pass
             // if(featureGlobalData.featureFailingTests > 0){
