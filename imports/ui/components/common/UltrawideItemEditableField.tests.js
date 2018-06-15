@@ -1373,7 +1373,7 @@ describe('JSX: Field: LINK', () => {
 
                 item.setState({fieldEditable: true});
 
-                chai.assert.equal(item.state().linkValue, fieldValue);
+                chai.assert.equal(item.state().fieldValue, fieldValue);
             });
         });
 

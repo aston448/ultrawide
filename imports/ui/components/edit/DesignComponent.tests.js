@@ -9,6 +9,7 @@ import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, Comp
 
 import { UI, AddActionIds }           from "../../../constants/ui_context_ids";
 import { hashID }                    from "../../../common/utils";
+import {ItemType} from "../../../constants/constants";
 
 
 describe('JSX: DesignComponent', () => {
@@ -54,7 +55,7 @@ describe('JSX: DesignComponent', () => {
 
         it('is highlighted if selected', () => {
 
-            const currentItem = {_id: 'componentId'};
+            const currentItem = {_id: 'componentId'}; //, componentType: ComponentType.SCENARIO
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;
@@ -71,7 +72,7 @@ describe('JSX: DesignComponent', () => {
 
         it('another component is not highlighted', () => {
 
-            const currentItem = {_id: 'componentId'};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.SCENARIO};
             const updateItem = {};
             const wpItem = {};
             const mode = ViewMode.MODE_VIEW;

@@ -56,7 +56,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         //BrowserActions.addTextToEditor('Feature1', 'My Feature');
         DesignComponentActions.designerUpdatesSelectedComponentNameTo('My Feature');
 
-        BrowserActions.optionClick(UI.OPTION_SAVE, 'Feature1');
+        BrowserActions.optionClick(UI.OPTION_SAVE, 'My Feature');
         BrowserChecks.componentIsVisible(UI.OPTION_EDIT, 'My Feature');
 
         // Verify
