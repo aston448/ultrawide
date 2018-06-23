@@ -174,6 +174,10 @@ class TestSummary extends Component {
         const tooltipIntegrationText = this.state.intExpectation ? 'Requires Integration test' : 'Click to require Integration test';
         const tooltipUnitText = this.state.unitExpectation ? 'Requires Unit test' : 'Click to require Unit test';
 
+        const accStatusText = this.state.accExpectation ? TextLookups.mashTestStatus(testSummaryData.accMashTestStatus) : 'Not required';
+        const intStatusText = this.state.intExpectation ? TextLookups.mashTestStatus(testSummaryData.intMashTestStatus) : 'Not required';
+        const unitStatusText = this.state.unitExpectation ? ('Pass: ' + testSummaryData.unitPassCount + ' Fail: ' + testSummaryData.unitFailCount) : 'Not required';
+
         const tooltipAcceptance = (
             <Tooltip id="modal-tooltip">
                 {tooltipAcceptanceText}
@@ -223,7 +227,7 @@ class TestSummary extends Component {
                                     </OverlayTrigger>
                                 </InputGroup.Addon>
                                 <div className={accResultClass}>
-                                    {TextLookups.mashTestStatus(testSummaryData.accMashTestStatus)}
+                                    {accStatusText}
                                 </div>
                             </InputGroup>
                         </Col>
@@ -238,7 +242,7 @@ class TestSummary extends Component {
                                     </OverlayTrigger>
                                 </InputGroup.Addon>
                                 <div className={intResultClass}>
-                                    {TextLookups.mashTestStatus(testSummaryData.intMashTestStatus)}
+                                    {intStatusText}
                                 </div>
                             </InputGroup>
                         </Col>
@@ -252,7 +256,7 @@ class TestSummary extends Component {
                                     </OverlayTrigger>
                                 </InputGroup.Addon>
                                 <div className={unitResultClass}>
-                                    {'Pass: ' + testSummaryData.unitPassCount + ' Fail: ' + testSummaryData.unitFailCount}
+                                    {unitStatusText}
                                 </div>
                             </InputGroup>
                         </Col>
