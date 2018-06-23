@@ -2632,10 +2632,26 @@ input {
     font-size:  12px;
 }
 
-.acc-expected{
+.test-expected{
     padding: 2px;
     min-width: 40px;
     color:black;
+    background-color: yellow;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+
+}
+
+.test-pass{
+    padding: 2px;
+    min-width: 40px;
+    color: darkgreen;
     background-color: lightgreen;
     border-top: 1px solid darkgreen;
     border-left: 1px solid darkgreen;
@@ -2648,26 +2664,11 @@ input {
 
 }
 
-.int-expected{
+.test-fail{
     padding: 2px;
     min-width: 40px;
-    color:black;
-    background-color: aquamarine;
-    border-top: 1px solid blue;
-    border-left: 1px solid blue;
-    border-right: 1px solid blue;
-    border-bottom: 1px solid blue;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  12px;
-}
-
-.unit-expected{
-    padding: 2px;
-    min-width: 40px;
-    color:black;
-    background-color: lightsalmon;
+    color: darkred;
+    background-color: lightpink;
     border-top: 1px solid darkred;
     border-left: 1px solid darkred;
     border-right: 1px solid darkred;

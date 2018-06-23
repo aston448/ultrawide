@@ -21,7 +21,7 @@ import { TextLookups }                  from '../../../common/lookups.js';
 import {Grid, Row, Col, InputGroup, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 import {connect} from "react-redux";
-import {UpdateScopeType} from "../../../constants/constants";
+import {MashTestStatus, UpdateScopeType} from "../../../constants/constants";
 
 
 
@@ -164,9 +164,9 @@ class TestSummary extends Component {
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Summary {} ', scenario.componentNameNew);
 
         // Display test expectation options controls
-        let testExpectationAcc = this.state.accExpectation ? 'acc-expected' : 'test-not-expected';
-        let testExpectationInt = this.state.intExpectation ? 'int-expected' : 'test-not-expected';
-        let testExpectationUnit = this.state.unitExpectation ? 'unit-expected' : 'test-not-expected';
+        let testExpectationAcc = this.state.accExpectation ? 'test-expected' : 'test-not-expected';
+        let testExpectationInt = this.state.intExpectation ? 'test-expected' : 'test-not-expected';
+        let testExpectationUnit = this.state.unitExpectation ? 'test-expected' : 'test-not-expected';
 
         const tooltipDelay = 1000;
 
@@ -176,7 +176,14 @@ class TestSummary extends Component {
 
         const accStatusText = this.state.accExpectation ? TextLookups.mashTestStatus(testSummaryData.accMashTestStatus) : 'Not required';
         const intStatusText = this.state.intExpectation ? TextLookups.mashTestStatus(testSummaryData.intMashTestStatus) : 'Not required';
-        const unitStatusText = this.state.unitExpectation ? ('Pass: ' + testSummaryData.unitPassCount + ' Fail: ' + testSummaryData.unitFailCount) : 'Not required';
+
+        // Unit test shows number of tests if there are any
+        let unitText = 'No tests';
+
+        if(testSummaryData.unitPassCount > 0 || testSummaryData.unitFailCount > 0){
+            unitText = 'Pass: ' + testSummaryData.unitPassCount + ' Fail: ' + testSummaryData.unitFailCount;
+        }
+        const unitStatusText = this.state.unitExpectation ? unitText : 'Not required';
 
         const tooltipAcceptance = (
             <Tooltip id="modal-tooltip">
@@ -199,6 +206,34 @@ class TestSummary extends Component {
 
         if(testSummaryData) {
 
+            // Update the expectations to pass / fail if a test done
+            if(this.state.accExpectation && testSummaryData.accMashTestStatus === MashTestStatus.MASH_PASS){
+                testExpectationAcc = 'test-pass';
+            }
+
+            if(this.state.intExpectation && testSummaryData.intMashTestStatus === MashTestStatus.MASH_PASS){
+                testExpectationInt = 'test-pass';
+            }
+
+            if(this.state.accExpectation && testSummaryData.accMashTestStatus === MashTestStatus.MASH_FAIL){
+                testExpectationAcc = 'test-fail';
+            }
+
+            if(this.state.intExpectation && testSummaryData.intMashTestStatus === MashTestStatus.MASH_FAIL){
+                testExpectationInt = 'test-fail';
+            }
+
+            if(this.state.unitExpectation) {
+                if (testSummaryData.unitFailCount > 0) {
+                    testExpectationUnit = 'test-fail';
+                } else {
+                    if (testSummaryData.unitPassCount > 0) {
+                        testExpectationUnit = 'test-pass';
+                    }
+                }
+            }
+
+            // And the actual result text
             let accResultClass = 'test-summary-result ' + testSummaryData.accMashTestStatus;
             let intResultClass = 'test-summary-result ' + testSummaryData.intMashTestStatus;
 
