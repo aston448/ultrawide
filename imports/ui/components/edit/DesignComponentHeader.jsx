@@ -93,7 +93,7 @@ export class DesignComponentHeader extends Component{
 
         this.onTitleChange = (editorState) => this.setState({editorState});
         this.handleTitleKeyCommand = this.handleTitleKeyCommand.bind(this);
-        this.setDomEditorRef = ref => this.state.domEditor = ref;
+        this.setDomEditorRef = (ref) => this.state.domEditor = ref;
         this.updateComponentEditorText(this.props);
 
     }
@@ -141,34 +141,7 @@ export class DesignComponentHeader extends Component{
     // Set up the view from persisted settings
     componentDidMount(){
 
-        // switch(this.props.displayContext){
-        //     case DisplayContext.WP_SCOPE:
-        //
-        //         // Need to get from WP scope for current item
-        //         this.setState({inScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE});
-        //         this.setState({parentScope: this.props.wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT});
-        //         break;
-        //
-        //     case DisplayContext.UPDATE_SCOPE:
-        //
-        //         if(this.props.updateItem){
-        //
-        //             if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
-        //                 log((msg) => console.log(msg), LogLevel.PERF, "MOUNT: Setting {} as IN SCOPE", this.props.currentItem.componentNameNew);
-        //                 this.setState({inScope: true});
-        //             }
-        //
-        //             if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
-        //                 log((msg) => console.log(msg), LogLevel.PERF, "MOUNT: Setting {} as PARENT SCOPE", this.props.currentItem.componentNameNew);
-        //                 this.setState({parentScope: true});
-        //             }
-        //         }
-        //         break;
-        //     case DisplayContext.UPDATE_EDIT:
-        //         break;
-        // }
-
-        // New untouched items are editable by default as they need to be changed
+         // New untouched items are editable by default as they need to be changed
         switch (this.props.view) {
             case ViewType.DESIGN_NEW:
             case ViewType.DESIGN_PUBLISHED:
@@ -285,23 +258,12 @@ export class DesignComponentHeader extends Component{
                     this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 }
 
-                // if(newProps.currentProgressDataValue != this.props.currentProgressDataValue) {
-                //     this.getProgressData(newProps.currentItem, newProps.userContext, newProps.view);
-                // }
-
                 break;
 
             case ViewType.DESIGN_UPDATE_EDIT:
-                if(this.props.displayContext === DisplayContext.UPDATE_SCOPE){
-                    // Base view.  Should not be updating
-                    // if (newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew) {
-                    //     this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
-                    // }
 
-                    // // Reflect any changes in scope
-                    // this.setState({inScope: (newProps.updateItem !== null)});
+                if(this.props.displayContext !== DisplayContext.UPDATE_SCOPE){
 
-                } else {
                     // For updates we use the new name.  Also update if scope changes so decoration is redone.
                     if(
                         newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew ||
@@ -309,18 +271,12 @@ export class DesignComponentHeader extends Component{
                     ){
                         this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                     }
-
-
-                    //this.setState({parentScope: newProps.currentItem.isParentScope});
-
                 }
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-                // if(this.props.displayContext === DisplayContext.WP_SCOPE){
-                //     this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
-                // }
+
                 this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
 
@@ -343,11 +299,9 @@ export class DesignComponentHeader extends Component{
 
     componentDidUpdate(){
 
-        if(!Meteor.isTest) {
-
-            if (this.state.editing) {
-                this.state.domEditor.focus();
-            }
+        // Set focus on the editor component when editing
+        if (this.state.editing && this.state.domEditor) {
+            this.state.domEditor.focus();
         }
     }
 
@@ -358,10 +312,7 @@ export class DesignComponentHeader extends Component{
     // Refresh the component name text
     updateComponentEditorText(props, newRawText){
 
-        // Don't call this if unit testing this component as it will set the state to NULL
-        if(!Meteor.isTest) {
-            this.state = ComponentUiModules.setComponentNameEditorText(this.state, props, newRawText);
-        }
+        this.state = ComponentUiModules.setComponentNameEditorText(this.state, props, newRawText);
 
     }
 
@@ -438,15 +389,8 @@ export class DesignComponentHeader extends Component{
         let anchorOffset = 0;
         let focusOffset = 0;
 
-        // const newAddition = (
-        //     (this.props.view === ViewType.DESIGN_UPDATE_EDIT && this.props.updateItem.isJustAdded) ||
-        //     ((this.props.view === ViewType.DESIGN_NEW || this.props.view === ViewType.DESIGN_PUBLISHED) && this.props.currentItem.isNew) ||
-        //     (this.props.view === ViewType.DEVELOP_UPDATE_WP && this.props.updateItem.isJustAdded) ||
-        //     (this.props.view === ViewType.DEVELOP_BASE_WP && this.props.currentItem.isNew)
-        // );
-
         if(this.state.autoSelect){
-            // New so select all the textf
+            // New so select all the text
             key = blockMap.first().getKey();
             focusOffset = blockMap.last().getLength();
             anchorOffset = 0;

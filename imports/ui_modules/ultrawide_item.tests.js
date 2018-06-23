@@ -3179,7 +3179,7 @@ describe('UI Mods: UW Item', () => {
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
             });
 
-            it('has a view option for published update for guest', () => {
+            it('has no view option for published update for guest', () => {
 
                 const itemType = ItemType.DESIGN_UPDATE;
 
@@ -3208,7 +3208,7 @@ describe('UI Mods: UW Item', () => {
                 const item = testLayout(itemType, itemData, userContext, userRole);
                 const expectedUiItem = hashID(UI.BUTTON_VIEW, 'DesignUpdate1');
 
-                chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' not found');
+                chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was  found');
             });
 
             it('has a view option for merged update for guest', () => {

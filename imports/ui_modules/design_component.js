@@ -542,7 +542,7 @@ class ComponentUiModulesClass{
                 currentContent = convertFromRaw(existingRawText, compositeDecorator);
             } else {
                 state = {editorState: EditorState.createEmpty(compositeDecorator)};
-                return;
+                return state;
             }
 
         }
