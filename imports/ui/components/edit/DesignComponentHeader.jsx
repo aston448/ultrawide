@@ -168,29 +168,33 @@ export class DesignComponentHeader extends Component{
 
             case DisplayContext.UPDATE_SCOPE:
 
+                //console.log(' as DU UPDATE SCOPE');
+
                 // Only if scope has actually changed
                 if(newProps.updateScopeItems.flag !== this.props.updateScopeItems.flag) {
 
+                    //console.log(' as DU UPDATE SCOPE Flag Changed');
+
                     newProps.updateScopeItems.current.forEach((nextScopeItem) => {
 
-                        log((msg) => console.log(msg), LogLevel.PERF, "  NEXT DU SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
+                        //log((msg) => console.log(msg), LogLevel.PERF, "  NEXT DU SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
 
                         if (nextScopeItem.ref === newProps.currentItem.componentReferenceId) {
 
                             log((msg) => console.log(msg), LogLevel.PERF, "  MATCHING NEXT DU SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
 
-                            inScope = true;
-
                             if (nextScopeItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
                                 log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as DU IN SCOPE", newProps.currentItem.componentNameNew);
                                 this.setState({inScope: true});
                                 this.setState({parentScope: false});
+                                inScope = true;
                             }
 
                             if (nextScopeItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE) {
                                 log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as DU PARENT SCOPE", newProps.currentItem.componentNameNew);
                                 this.setState({parentScope: true});
                                 this.setState({inScope: false});
+                                inScope = true;
                             }
                         }
                     });
@@ -216,18 +220,18 @@ export class DesignComponentHeader extends Component{
 
                             log((msg) => console.log(msg), LogLevel.PERF, "  MATCHING NEXT WP SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
 
-                            inScope = true;
-
                             if (nextScopeItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE) {
                                 log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as WP IN SCOPE", newProps.currentItem.componentNameNew);
                                 this.setState({inScope: true});
                                 this.setState({parentScope: false});
+                                inScope = true;
                             }
 
                             if (nextScopeItem.scopeType === WorkPackageScopeType.SCOPE_PARENT) {
                                 log((msg) => console.log(msg), LogLevel.PERF, "  Setting {} as WP PARENT SCOPE", newProps.currentItem.componentNameNew);
                                 this.setState({parentScope: true});
                                 this.setState({inScope: false});
+                                inScope = true;
                             }
                         }
                     });
@@ -1038,7 +1042,18 @@ export class DesignComponentHeader extends Component{
 
         // Major --------------------------
 
-        let headerWithCheckbox =
+        let headerWithCheckboxUpdate =
+            <div id="scopeHeaderItem">
+                <InputGroup>
+                    {updateStatus}
+                    {openClose}
+                    {indent}
+                    {scopeToggle}
+                    {readOnlyEditor}
+                </InputGroup>
+            </div>;
+
+        let headerWithCheckboxWp =
             <div id="scopeHeaderItem">
                 <InputGroup>
                     {openClose}
@@ -1230,11 +1245,11 @@ export class DesignComponentHeader extends Component{
         switch (displayContext){
             case DisplayContext.WP_SCOPE:
                 // All WP scope items are checkable
-                designComponentElement = headerWithCheckbox;
+                designComponentElement = headerWithCheckboxWp;
                 break;
             case DisplayContext.UPDATE_SCOPE:
                 // Component displayed as part of Scope Selection
-                designComponentElement = headerWithCheckbox;
+                designComponentElement = headerWithCheckboxUpdate;
                 break;
             case DisplayContext.BASE_VIEW:
                 // View only

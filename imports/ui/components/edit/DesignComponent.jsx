@@ -194,7 +194,7 @@ export class DesignComponent extends Component{
                     this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
                 } else {
                     if(props.updateItem) {
-                        console.log("Setting open state for " + props.updateItem.componentNameNew + " to " + props.openDesignUpdateItems.includes(props.updateItem._id));
+                        //console.log("Setting open state for " + props.updateItem.componentNameNew + " to " + props.openDesignUpdateItems.includes(props.updateItem._id));
                         this.setState({open: props.openDesignUpdateItems.includes(props.updateItem._id)});
                     }
                 }
@@ -277,7 +277,7 @@ export class DesignComponent extends Component{
                     case DisplayContext.WP_SCOPE:
                         // Scope is Design Update Items
                         if(this.props.updateItem.scopeType !== UpdateScopeType.SCOPE_PEER_SCOPE) {
-                            ClientDesignUpdateComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignUpdateItems, !this.state.open);
+                            ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, !this.state.open);
                         }
                         break;
                     case DisplayContext.WP_VIEW:
@@ -836,7 +836,7 @@ function mapStateToProps(state) {
         testDataFlag:               state.testDataFlag,
         openItemsFlag:              state.openItemsFlag,
         updateScopeItems:           state.currentUpdateScopeItems,
-        updateScopeFlag:            state.currentUpdateScopeFlag,
+        updateScopeFlag:            state.currentUpdateScopeItems.flag,
         workPackageScopeItems:      state.currentWorkPackageScopeItems,
         workPackageScopeFlag:       state.currentWorkPackageScopeFlag,
         domainTermsVisible:         state.domainTermsVisible,

@@ -265,7 +265,7 @@ class DesignComponentDataClass {
                 designVersionId:                designVersionId,
                 componentType:                  childComponentType,
                 componentParentReferenceIdOld:  parentRefId,
-                updateMergeStatus:              {$ne: UpdateMergeStatus.COMPONENT_ADDED}
+                //updateMergeStatus:              {$ne: UpdateMergeStatus.COMPONENT_ADDED}
             },
             {sort:{componentIndexOld: 1}}
         ).fetch();

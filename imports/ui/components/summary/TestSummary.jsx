@@ -180,11 +180,6 @@ class TestSummary extends Component {
         // Unit test shows number of tests if there are any
         let unitText = 'No tests';
 
-        if(testSummaryData.unitPassCount > 0 || testSummaryData.unitFailCount > 0){
-            unitText = 'Pass: ' + testSummaryData.unitPassCount + ' Fail: ' + testSummaryData.unitFailCount;
-        }
-        const unitStatusText = this.state.unitExpectation ? unitText : 'Not required';
-
         const tooltipAcceptance = (
             <Tooltip id="modal-tooltip">
                 {tooltipAcceptanceText}
@@ -205,6 +200,12 @@ class TestSummary extends Component {
 
 
         if(testSummaryData) {
+
+            if(testSummaryData.unitPassCount > 0 || testSummaryData.unitFailCount > 0){
+                unitText = 'Pass: ' + testSummaryData.unitPassCount + ' Fail: ' + testSummaryData.unitFailCount;
+            }
+
+            const unitStatusText = this.state.unitExpectation ? unitText : 'Not required';
 
             // Update the expectations to pass / fail if a test done
             if(this.state.accExpectation && testSummaryData.accMashTestStatus === MashTestStatus.MASH_PASS){

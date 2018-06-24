@@ -14,6 +14,7 @@ import { ClientDomainDictionaryServices } from "../apiClient/apiClientDomainDict
 import { ClientDesignComponentServices } from "../apiClient/apiClientDesignComponent";
 import {DefaultComponentNames} from "../constants/default_names";
 
+import store from '../redux/store'
 
 const styles = {
     domainTerm: {
@@ -34,7 +35,7 @@ class ComponentUiModulesClass{
 
     componentShouldUpdate(props, nextProps, state, nextState){
 
-        log((msg) => console.log(msg), LogLevel.PERF, "COMPONENT {} SHOULD UPDATE FOR CONTEXT {}", props.currentItem.componentNameNew, props.displayContext);
+        //log((msg) => console.log(msg), LogLevel.PERF, "COMPONENT {} SHOULD UPDATE FOR CONTEXT {}", props.currentItem.componentNameNew, props.displayContext);
 
         if(this.shouldUpdateCommon(props, nextProps, state, nextState, 'COMPONENT')){
             log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of COMMON", props.currentItem.componentNameNew);
@@ -166,6 +167,11 @@ class ComponentUiModulesClass{
                     return true;
                 }
 
+                if(store.getState().currentUpdateScopeItems.changingItemId === nextProps.currentItem._id){
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of SCOPE CHANGE ITEM", props.currentItem.componentNameNew);
+                    return true;
+                }
+
                 if(nextProps.updateItem && props.updateItem){
 
                     if (nextProps.updateItem.scopeType !== props.updateItem.scopeType) {
@@ -191,7 +197,7 @@ class ComponentUiModulesClass{
 
     componentHeaderShouldUpdate(props, nextProps, state, nextState){
 
-        log((msg) => console.log(msg), LogLevel.PERF, "HEADER SHOULD UPDATE FOR CONTEXT {}", props.displayContext);
+        //log((msg) => console.log(msg), LogLevel.PERF, "HEADER SHOULD UPDATE FOR CONTEXT {}", props.displayContext);
 
         if(this.shouldUpdateCommon(props, nextProps, state, nextState, 'HEADER')){
             log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER COMMON", props.currentItem.componentNameNew);
@@ -311,6 +317,11 @@ class ComponentUiModulesClass{
 
                 if(nextState.inScope !== state.inScope) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER SCOPE CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(store.getState().currentUpdateScopeItems.changingItemId === nextProps.currentItem._id){
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER SCOPE CHANGE ITEM", props.currentItem.componentNameNew);
                     return true;
                 }
 
@@ -579,6 +590,7 @@ class ComponentUiModulesClass{
         let newRemoved = 0;
         let oldScope = 0;
         let newScope = 0;
+        let scopeChangeInList = false;
         let newRemovable = 0;
         let oldRemovable = 0;
 
@@ -618,6 +630,9 @@ class ComponentUiModulesClass{
             if(component.scopeType === UpdateScopeType.SCOPE_IN_SCOPE){
                 newScope++;
             }
+            if(store.getState().currentUpdateScopeItems.changingItemId === component._id){
+                scopeChangeInList = true;
+            }
         });
 
         if(
@@ -627,7 +642,8 @@ class ComponentUiModulesClass{
             oldNames !== newNames ||
             oldRemoved !== newRemoved ||
             oldRemovable !== newRemovable ||
-            oldScope !== newScope
+            oldScope !== newScope ||
+            scopeChangeInList
         ){
             shouldUpdate = true;
         }

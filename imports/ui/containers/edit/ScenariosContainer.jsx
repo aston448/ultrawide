@@ -95,6 +95,7 @@ class ScenariosList extends Component {
 
             return components.map((scenario) => {
 
+                console.log('Rendering Scenario %s', scenario.componentNameNew);
                 let testSummaryData = null;
 
                 const uiItemId = replaceAll(scenario.componentNameNew, ' ', '_');

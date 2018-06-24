@@ -155,7 +155,7 @@ class ClientWorkPackageComponentServicesClass {
     // User opened or closed a WP component
     setOpenClosed(wpComponent, currentList, setOpen){
 
-        //console.log("WP toggle: open = " + setOpen);
+        //console.log("WP toggle: open = %s for %o", setOpen, wpComponent);
 
         // Note - the component passed in here is either a Design Version Component - for base WP or Design Update Component - for Update WP
         const userContext = store.getState().currentUserItemContext;
