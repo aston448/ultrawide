@@ -466,10 +466,7 @@ class ComponentUiModulesClass{
             // Immediate update of latest text
             log((msg) => console.log(msg), LogLevel.TRACE, "Updating title editor with {}", newRawText);
 
-            // Don't want to update SCOPE in DU when content is edited
-            if(!(props.view === ViewType.DESIGN_UPDATE_EDIT && props.displayContext === DisplayContext.UPDATE_SCOPE)){
-                currentContent = convertFromRaw(newRawText);
-            }
+            currentContent = convertFromRaw(newRawText);
 
         } else {
             // Getting stored text

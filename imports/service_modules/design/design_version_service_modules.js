@@ -660,8 +660,12 @@ class DesignVersionModulesClass {
 
             //console.log('Updating component name to ' + updateItem.componentNameNew + ' in DV');
 
-            // Update the name to the latest value
-            DesignComponentData.updateNameFromDesignUpdate(designVersionItem._id, updateItem, updateMergeStatus);
+            // Update the name to the latest value.  If a new item, don't keep 'old' name.
+            if(updateMergeStatus === UpdateMergeStatus.COMPONENT_ADDED){
+                DesignComponentData.updateNewItemNameFromDesignUpdate(designVersionItem._id, updateItem, updateMergeStatus);
+            } else {
+                DesignComponentData.updateNameFromDesignUpdate(designVersionItem._id, updateItem, updateMergeStatus);
+            }
 
             // Need to get the component again to get the latest update merge status
             const child = DesignComponentData.getDesignComponentById(designVersionItem._id);

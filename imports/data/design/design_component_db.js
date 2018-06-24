@@ -574,6 +574,22 @@ class DesignComponentDataClass {
         );
     }
 
+    updateNewItemNameFromDesignUpdate(designComponentId, updateItem, updateMergeStatus){
+
+        return DesignVersionComponents.update(
+            {_id: designComponentId},
+            {
+                $set:{
+                    componentNameOld:               updateItem.componentNameNew,
+                    componentNameRawOld:            updateItem.componentNameRawNew,
+                    componentNameNew:               updateItem.componentNameNew,
+                    componentNameRawNew:            updateItem.componentNameRawNew,
+                    updateMergeStatus:              updateMergeStatus
+                }
+            }
+        );
+    }
+
     undoUpdateNameFromDesignUpdate(designComponentId, updateItem, updateMergeStatus){
 
         return DesignVersionComponents.update(

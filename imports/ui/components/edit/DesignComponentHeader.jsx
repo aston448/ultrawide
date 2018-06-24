@@ -205,6 +205,8 @@ export class DesignComponentHeader extends Component{
                         this.setState({parentScope: false});
                     }
                 }
+
+                // console.log('Will receive props, scope state is %s for %s', this.state.inScope, newProps.displayContext);
                 break;
 
             case DisplayContext.WP_SCOPE:
@@ -266,16 +268,21 @@ export class DesignComponentHeader extends Component{
 
             case ViewType.DESIGN_UPDATE_EDIT:
 
-                if(this.props.displayContext !== DisplayContext.UPDATE_SCOPE){
+                //if(this.props.displayContext !== DisplayContext.UPDATE_SCOPE){
 
                     // For updates we use the new name.  Also update if scope changes so decoration is redone.
                     if(
                         newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew ||
                         newProps.currentItem.scopeType !== this.props.currentItem.scopeType
                     ){
-                        this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
+                        console.log('Updating editor with %o', newProps.currentItem);
+                        if(this.props.displayContext === DisplayContext.UPDATE_SCOPE){
+                            this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawOld);
+                        } else {
+                            this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawNew);
+                        }
                     }
-                }
+                //}
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
