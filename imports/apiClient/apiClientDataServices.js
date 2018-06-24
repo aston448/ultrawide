@@ -1219,8 +1219,7 @@ class ClientDataServicesClass{
 
         const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
-        // Just get the original base items, not any new stuff
-        const baseApplicationsArr = DesignVersionData.getExistingApplications(userContext.designVersionId);
+        const baseApplicationsArr = DesignVersionData.getAllApplications(userContext.designVersionId);
 
         // All the existing and new stuff in the Design version - but for completed updatable versions leave out deleted
         let workingApplicationsArr = [];

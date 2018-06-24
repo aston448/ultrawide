@@ -162,7 +162,7 @@ export class DesignEditorHeader extends Component {
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_SCOPE:
-                        description = nameData.designUpdate + ' - BASELINE';
+                        description = nameData.designUpdate + ' - SCOPE';
                         break;
                     case DisplayContext.UPDATE_EDIT:
                         description = nameData.designUpdate + ' - CHANGES';
@@ -186,10 +186,10 @@ export class DesignEditorHeader extends Component {
 
                 switch(displayContext){
                     case DisplayContext.WP_SCOPE:
-                        description = nameData.workPackage + ' (SCOPE)';
+                        description = nameData.workPackage + ' - SCOPE';
                         break;
                     case  DisplayContext.WP_VIEW:
-                        description = nameData.workPackage + ' (CONTENT)';
+                        description = nameData.workPackage + ' - CONTENT';
                         break;
                     default:
                         description = nameData.workPackage;
