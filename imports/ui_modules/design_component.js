@@ -157,6 +157,11 @@ class ComponentUiModulesClass{
                     return true;
                 }
 
+                if(nextProps.currentItem.componentNarrativeNew !== props.currentItem.componentNarrativeNew) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of NARRATIVE CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
                 if(nextProps.isDragDropHovering !== props.isDragDropHovering) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of DRAG DROP", props.currentItem.componentNameNew);
                     return true;
@@ -286,6 +291,11 @@ class ComponentUiModulesClass{
 
                 if(nextProps.currentItem.componentNameNew !== props.currentItem.componentNameNew) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER NAME CHANGE", props.currentItem.componentNameNew);
+                    return true;
+                }
+
+                if(nextProps.currentItem.componentNarrativeNew !== props.currentItem.componentNarrativeNew) {
+                    log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of NARRATIVE CHANGE", props.currentItem.componentNameNew);
                     return true;
                 }
 
