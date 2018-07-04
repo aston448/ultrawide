@@ -26,7 +26,7 @@ import { UserUnitTestResultData }           from '../../data/test_results/user_u
 //
 //======================================================================================================================
 
-class TestIntegrationServices{
+class TestIntegrationServicesClass{
 
     refreshTestData(userContext){
 
@@ -250,4 +250,4 @@ class TestIntegrationServices{
 
 }
 
-export default new TestIntegrationServices();
+export const TestIntegrationServices = new TestIntegrationServicesClass();
