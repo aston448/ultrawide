@@ -216,7 +216,7 @@ export class DesignComponentHeader extends Component{
 
                     newProps.workPackageScopeItems.current.forEach((nextScopeItem) => {
 
-                        log((msg) => console.log(msg), LogLevel.PERF, "  NEXT WP SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
+                        //log((msg) => console.log(msg), LogLevel.PERF, "  NEXT WP SCOPE ITEM: {} {}", nextScopeItem.ref, nextScopeItem.scopeType);
 
                         if (nextScopeItem.ref === newProps.currentItem.componentReferenceId) {
 

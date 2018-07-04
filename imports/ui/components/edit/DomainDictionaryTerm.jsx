@@ -8,7 +8,8 @@ import PropTypes from 'prop-types';
 
 // Ultrawide Services
 import {ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
-import {log} from "../../../common/utils";
+import {UI} from "../../../constants/ui_context_ids";
+import {log, getID} from "../../../common/utils";
 
 import { ClientDomainDictionaryServices }   from '../../../apiClient/apiClientDomainDictionary.js';
 import { DomainDictUiServices }             from "../../../ui_modules/domain_dictionary";
@@ -52,7 +53,7 @@ const DomainSpan = (props) => {
 
 // -- DECORATOR CODE ---------------------------------------------------------------------------------------------------
 
-class DomainDictionaryTerm extends Component {
+export class DomainDictionaryTerm extends Component {
     constructor(props) {
         super(props);
 
@@ -79,20 +80,9 @@ class DomainDictionaryTerm extends Component {
         return DomainDictUiServices.shouldDictionaryTermUpdate(this.props, nextProps, this.state, nextState);
     }
 
-    // Set up the view from persisted settings
     componentDidMount(){
 
-        // New untouched items are editable...
-        switch (this.props.view) {
-            case ViewType.DESIGN_NEW:
-            case ViewType.DESIGN_PUBLISHED:
-            case ViewType.DESIGN_UPDATE_EDIT:
-                // A new component not yet changed is automatically editable
-                if (this.props.mode === ViewMode.MODE_EDIT &&  this.props.dictionaryTerm.isNew && !this.props.dictionaryTerm.isChanged) {
-                    this.editTermName();
-                }
-                break;
-        }
+        this.setState({termEditable: DomainDictUiServices.isTermAutoEditable(this.props.dictionaryTerm, this.props.view, this.props.mode)});
     }
 
     // Refresh the definition text
@@ -268,7 +258,7 @@ class DomainDictionaryTerm extends Component {
         );
 
         let nameEditorEditing =
-            <div>
+            <div id={getID(UI.EDITABLE_FIELD_EDITING, dictionaryTerm.domainTermNew)}>
                 <InputGroup>
                     <div className="editableItem domain-term">
                         <FormControl
@@ -289,7 +279,7 @@ class DomainDictionaryTerm extends Component {
             </div>;
 
         let nameEditorNotEditing =
-            <div onClick={ () => this.setCurrentTerm()}>
+            <div id={getID(UI.EDITABLE_FIELD, dictionaryTerm.domainTermNew)} onClick={ () => this.setCurrentTerm()}>
                 <InputGroup>
                     <div className={"readOnlyItem domain-term"}>
                         <ControlLabel>{this.state.termNameValue}</ControlLabel>
@@ -305,7 +295,7 @@ class DomainDictionaryTerm extends Component {
 
 
         let definitionEditorEditing =
-            <div>
+            <div id={getID(UI.EDITABLE_FIELD_EDITING, 'definition')}>
                 <InputGroup>
                     <div className="editableItem domain-definition">
                         <Editor
@@ -330,7 +320,7 @@ class DomainDictionaryTerm extends Component {
 
         let definitionEditorNotEditing =
 
-                <div className={"readOnlyItem  domain-definition"}>
+                <div id={getID(UI.EDITABLE_FIELD, 'definition')} className={"readOnlyItem  domain-definition"}>
                     <InputGroup>
 
                         <div  onClick={ () => this.setCurrentTerm()}>
@@ -353,7 +343,7 @@ class DomainDictionaryTerm extends Component {
                 </div>;
 
         let viewOnlyTerm =
-            <div onClick={ () => this.setCurrentTerm()}>
+            <div id={getID(UI.READ_ONLY_FIELD, dictionaryTerm.domainTermNew)} onClick={ () => this.setCurrentTerm()}>
                 <InputGroup>
                     <div className={"readOnlyItem  domain-term"}>
                         <ControlLabel>{this.state.termNameValue}</ControlLabel>
@@ -362,10 +352,9 @@ class DomainDictionaryTerm extends Component {
             </div>;
 
         let viewOnlyDefinition =
-            <div className={"readOnlyItem domain-definition"}>
+            <div id={getID(UI.READ_ONLY_FIELD, 'definition')} className={"readOnlyItem domain-definition"}>
                 <InputGroup>
-                    <div  onClick={ () => this.setCurrentStep()}>
-
+                    <div  onClick={ () => this.setCurrentTerm()}>
                         <div>
                             <Editor
                                 editorState={this.state.editorState}
@@ -390,6 +379,7 @@ class DomainDictionaryTerm extends Component {
             )
         } else {
             // Editing allowed - only one of the items can be edited at a time...
+
             if (this.state.termEditable) {
                 return (
                     <div className="domain-item">
@@ -426,16 +416,12 @@ DomainDictionaryTerm.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole: state.currentUserRole,
         view: state.currentAppView,
         mode: state.currentViewMode,
-        displayContext: state.displayContext,
+        userRole: state.currentUserRole,
         userContext: state.currentUserItemContext,
-        userViewOptions: state.currentUserViewOptions
     }
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-DomainDictionaryTerm = connect(mapStateToProps)(DomainDictionaryTerm);
-
-export default DomainDictionaryTerm;
+export default connect(mapStateToProps)(DomainDictionaryTerm);

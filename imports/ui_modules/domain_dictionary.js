@@ -53,6 +53,23 @@ class DomainDictUiServicesClass{
         )
 
     }
+
+    isTermAutoEditable(term, view, mode){
+
+        // New untouched items are editable...
+        switch (view) {
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATE_EDIT:
+                // A new component not yet changed is automatically editable
+                if (mode === ViewMode.MODE_EDIT && term.isNew && !term.isChanged) {
+                    return true
+                }
+                break;
+        }
+
+        return false;
+    }
 }
 
 export const DomainDictUiServices = new DomainDictUiServicesClass();

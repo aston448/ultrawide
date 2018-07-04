@@ -13,7 +13,7 @@ import UltrawideMenuItem                from '../common/UltrawideMenuItem.jsx';
 // Ultrawide Services
 import {ViewType, ViewMode, DetailsViewType, MenuType, LogLevel}  from '../../../constants/constants.js';
 import {AddActionIds}                                   from "../../../constants/ui_context_ids.js";
-import {log} from "../../../common/utils";
+import {log, getID} from "../../../common/utils";
 
 import { ClientDomainDictionaryServices }   from '../../../apiClient/apiClientDomainDictionary.js';
 import { ClientTestIntegrationServices }    from '../../../apiClient/apiClientTestIntegration.js';
@@ -87,7 +87,7 @@ export class DetailsViewFooter extends Component {
                 // Add Dict item available if in editing view
                 if((view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT) {
                     footerContent =
-                        <div id="addDomainTerm">
+                        <div id={getID(AddActionIds.UI_CONTEXT_ADD_DOMAIN_TERM, '')}>
                             <DesignComponentAdd
                                 uiContextId={AddActionIds.UI_CONTEXT_ADD_DOMAIN_TERM}
                                 addText="Add new Domain Term"
