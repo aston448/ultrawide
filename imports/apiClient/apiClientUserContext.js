@@ -671,7 +671,9 @@ class ClientUserContextServicesClass {
                 if(currentItem) {
                     let parentItem = DesignComponentData.getDesignComponentByRef(currentItem.designVersionId, currentItem.componentParentReferenceIdNew);
 
-                    log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
+                    if(parentItem) {
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
+                    }
 
                     while (parentItem && (parentItem.componentType !== parentType) && (currentItem.componentParentReferenceIdNew !== 'NONE')) {
                         currentItem = parentItem;
