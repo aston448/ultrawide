@@ -70,6 +70,24 @@ class DomainDictUiServicesClass{
 
         return false;
     }
+
+    isDefinitionAutoEditable(term, view, mode){
+
+        // Definition is editable for a new term once term has been set
+        switch (view) {
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATE_EDIT:
+
+                if (mode === ViewMode.MODE_EDIT && term.isNew) {
+                    return true
+                }
+                break;
+        }
+
+        return false;
+
+    }
 }
 
 export const DomainDictUiServices = new DomainDictUiServicesClass();

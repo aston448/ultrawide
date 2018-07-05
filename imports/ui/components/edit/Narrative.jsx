@@ -25,6 +25,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 // Draft JS - Narrative is text editable
 import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
+import {ComponentUiModules} from "../../../ui_modules/design_component";
 const {hasCommandModifier} = KeyBindingUtil;
 
 // =====================================================================================================================
@@ -38,41 +39,41 @@ const {hasCommandModifier} = KeyBindingUtil;
 // -- DECORATOR CODE ---------------------------------------------------------------------------------------------------
 
 
-const styles = {
-    domainTerm: {
-        color: 'rgba(96, 96, 255, 1.0)',
-        fontWeight: 'normal'
-    },
+// const styles = {
+//     domainTerm: {
+//         color: 'rgba(96, 96, 255, 1.0)',
+//         fontWeight: 'normal'
+//     },
+//
+//     narrativePart:
+//     {
+//         color: 'rgba(192, 0, 0, 1.0)',
+//         fontWeight: 'normal'
+//     },
+//
+//     narrativePartGrey:
+//     {
+//         color: 'rgba(192, 192, 192, 1.0)',
+//         fontWeight: 'normal'
+//     },
+// };
 
-    narrativePart:
-    {
-        color: 'rgba(192, 0, 0, 1.0)',
-        fontWeight: 'normal'
-    },
-
-    narrativePartGrey:
-    {
-        color: 'rgba(192, 192, 192, 1.0)',
-        fontWeight: 'normal'
-    },
-};
-
-const DomainSpan = (props) => {
-    const {properties} = props;
-    return <span {...properties} style={styles.domainTerm}>{props.children}</span>;
-};
-
-const NarrativeSpan = (props) => {
-    const {properties} = props;
-    return <span {...properties} style={styles.narrativePart}>{props.children}</span>;
-
-};
-
-const NarrativeGreySpan= (props) => {
-    const {properties} = props;
-    return <span {...properties} style={styles.narrativePartGrey}>{props.children}</span>;
-
-};
+// const DomainSpan = (props) => {
+//     const {properties} = props;
+//     return <span {...properties} style={styles.domainTerm}>{props.children}</span>;
+// };
+//
+// const NarrativeSpan = (props) => {
+//     const {properties} = props;
+//     return <span {...properties} style={styles.narrativePart}>{props.children}</span>;
+//
+// };
+//
+// const NarrativeGreySpan= (props) => {
+//     const {properties} = props;
+//     return <span {...properties} style={styles.narrativePartGrey}>{props.children}</span>;
+//
+// };
 
 
 // -- DECORATOR CODE ---------------------------------------------------------------------------------------------------
@@ -97,39 +98,12 @@ export default class Narrative extends React.Component {
 
     }
 
-    // Set the editor text when it is first created...
-    componentDidMount(){
-        //console.log("Mounting...");
-        //this.updateNarrativeText(this.props);
-    }
-
-    componentDidUpdate() {
-
-        // Focus on the component when editable
-        // if(this.state.editing) {
-        //     this.focus();
-        // }
-        //this.updateNarrativeText(this.props);
-    }
-
-    narrativeIsGreyedOut(props){
-
-        return(
-            ((props.displayContext === DisplayContext.WP_SCOPE) && (!props.wpComponent || (props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
-            ((props.displayContext === DisplayContext.UPDATE_SCOPE) && (!props.updateComponent || props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
-            ((props.displayContext === DisplayContext.WP_VIEW) && props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
-            ((props.displayContext === DisplayContext.UPDATE_EDIT && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
-            ((props.displayContext === DisplayContext.UPDATE_VIEW && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
-            ((props.displayContext === DisplayContext.DEV_DESIGN && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE))
-        );
-    }
-
     componentWillReceiveProps(newProps){
 
         // Update if toggling Domain Highlighting
         if(
             (newProps.domainTermsVisible !== this.props.domainTermsVisible) &&
-            (!this.narrativeIsGreyedOut(newProps))
+            (!ComponentUiModules.narrativeIsGreyedOut(newProps.displayContext, newProps.wpComponent, newProps.updateComponent))
         ){
             this.updateNarrativeText(newProps);
         }
@@ -143,47 +117,12 @@ export default class Narrative extends React.Component {
     // Passing in props as they could be the current or the new props...
     updateNarrativeText(props){
 
-        let compositeDecorator = null;
-
+        const compositeDecorator = ComponentUiModules.getDecoratorForNarrative(props.displayContext, props.domainTermsVisible, props.designComponent, props.wpComponent, props.updateComponent);
 
         if(props.designComponent) {
 
-            if(this.narrativeIsGreyedOut(props)){
-
-                // The narrative will be decorated as greyed out and no syntax highlighting...
-                compositeDecorator = new CompositeDecorator([
-                    {
-                        strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
-                        component: NarrativeGreySpan
-                    }
-                ]);
-            } else {
-                if(props.domainTermsVisible){
-                    compositeDecorator = new CompositeDecorator([
-                        {
-                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(props.designComponent.designVersionId),
-                            component: DomainSpan
-                        },
-
-                        {
-                            strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
-                            component: NarrativeSpan
-                        }
-                    ]);
-                } else {
-                    compositeDecorator = new CompositeDecorator([
-                        {
-                            strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
-                            component: NarrativeSpan
-                        }
-                    ]);
-                }
-
-            }
-
             EditorState.set(this.state.editorState, {decorator: compositeDecorator});
-        } else {
-            //console.log("Design Component NULL");
+
         }
 
         let currentContent = {};

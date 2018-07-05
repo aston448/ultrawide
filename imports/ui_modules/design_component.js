@@ -16,18 +16,43 @@ import {DefaultComponentNames} from "../constants/default_names";
 
 import store from '../redux/store'
 
+// DECORATOR CONSTANTS -------------------------------------------------------------------------------------------------
 const styles = {
     domainTerm: {
         color: 'rgba(96, 96, 255, 1.0)',
         //backgroundColor: 'rgba(240, 255, 240, 1.0)',
         fontWeight: 300,
         //textDecoration: 'underline'
-    }
+    },
+
+    narrativePart:
+        {
+            color: 'rgba(192, 0, 0, 1.0)',
+            fontWeight: 'normal'
+        },
+
+    narrativePartGrey:
+        {
+            color: 'rgba(192, 192, 192, 1.0)',
+            fontWeight: 'normal'
+        },
 };
 
 const DomainSpan = (props) => {
     const {properties} = props;
     return <span {...properties} style={styles.domainTerm}>{props.children}</span>;  //
+};
+
+const NarrativeSpan = (props) => {
+    const {properties} = props;
+    return <span {...properties} style={styles.narrativePart}>{props.children}</span>;
+
+};
+
+const NarrativeGreySpan= (props) => {
+    const {properties} = props;
+    return <span {...properties} style={styles.narrativePartGrey}>{props.children}</span>;
+
 };
 
 
@@ -418,25 +443,19 @@ class ComponentUiModulesClass{
         return false;
     }
 
-    setComponentNameEditorText(state, props, newRawText){
+    getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem){
 
-        let currentContent = null;
         let compositeDecorator = null;
-        let item = props.currentItem;
-
-        if(!item){
-            return state;
-        }
 
         // Decoration for Scenarios only - and not if greyed out in WP scope
-        if(item.componentType === ComponentType.SCENARIO) {
+        if(item.componentType === ComponentType.SCENARIO && domainTermsVisible) {
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Decorator check: Component: {} Context: {}", item.componentType, props.displayContext);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Decorator check: Component: {} Context: {}", item.componentType, displayContext);
 
             // Item is a Scenario
-            if(props.displayContext === DisplayContext.WP_SCOPE || props.displayContext === DisplayContext.UPDATE_SCOPE){
+            if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.UPDATE_SCOPE){
                 // We are in a WP or Update Scope context
-                if((props.displayContext === DisplayContext.WP_SCOPE) && item.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
+                if((displayContext === DisplayContext.WP_SCOPE) && item.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
                     // The WP Scenario is active
                     compositeDecorator = new CompositeDecorator([
                         {
@@ -446,7 +465,7 @@ class ComponentUiModulesClass{
                     ]);
                 }
 
-                if(props.domainTermsVisible && (props.displayContext === DisplayContext.UPDATE_SCOPE) && (item.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
+                if((displayContext === DisplayContext.UPDATE_SCOPE) && (item.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
                     // The Update Scenario is active
                     compositeDecorator = new CompositeDecorator([
                         {
@@ -458,7 +477,7 @@ class ComponentUiModulesClass{
 
             } else {
                 // We are not in WP scope context so OK for all Scenarios as long as not inserted as peers in an update
-                if(props.domainTermsVisible && !(props.updateItem && props.updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE)) {
+                if(!(updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE)) {
                     compositeDecorator = new CompositeDecorator([
                         {
                             strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
@@ -467,9 +486,23 @@ class ComponentUiModulesClass{
                     ]);
                 }
             }
-
-            EditorState.set(state.editorState, {decorator: compositeDecorator});
         }
+
+        return compositeDecorator;
+    }
+
+    setComponentNameEditorText(state, props, newRawText){
+
+        let currentContent = null;
+        let item = props.currentItem;
+
+        if(!item){
+            return state;
+        }
+
+        // Get text decoration for Domain Terms if required
+        const compositeDecorator = this.getDomainTermDecorator(item, props.displayContext, props.domainTermsVisible, props.updateItem);
+        EditorState.set(state.editorState, {decorator: compositeDecorator});
 
         if(newRawText){
 
@@ -581,6 +614,57 @@ class ComponentUiModulesClass{
         return ClientDesignComponentServices.getNewAndOldRawText(newText, oldText);
     }
 
+
+    narrativeIsGreyedOut(displayContext, wpComponent, updateComponent){
+
+        return(
+            ((displayContext === DisplayContext.WP_SCOPE) && (!wpComponent || (wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
+                ((displayContext === DisplayContext.UPDATE_SCOPE) && (!updateComponent || updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+                ((displayContext === DisplayContext.WP_VIEW) && wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
+            ((displayContext === DisplayContext.UPDATE_EDIT && updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+            ((displayContext === DisplayContext.UPDATE_VIEW && updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+            ((displayContext === DisplayContext.DEV_DESIGN && updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE))
+        );
+    }
+
+    getDecoratorForNarrative(displayContext, domainTermsVisible, designComponent, wpComponent, updateComponent){
+
+        let compositeDecorator = null;
+
+        if(this.narrativeIsGreyedOut(displayContext, wpComponent, updateComponent)){
+
+            // The narrative will be decorated as greyed out and no syntax highlighting...
+            compositeDecorator = new CompositeDecorator([
+                {
+                    strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
+                    component: NarrativeGreySpan
+                }
+            ]);
+        } else {
+            if(domainTermsVisible){
+                compositeDecorator = new CompositeDecorator([
+                    {
+                        strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(designComponent.designVersionId),
+                        component: DomainSpan
+                    },
+
+                    {
+                        strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
+                        component: NarrativeSpan
+                    }
+                ]);
+            } else {
+                compositeDecorator = new CompositeDecorator([
+                    {
+                        strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
+                        component: NarrativeSpan
+                    }
+                ]);
+            }
+        }
+
+        return compositeDecorator;
+    }
 
     shouldComponentListUpdate(type, newProps, oldProps){
 

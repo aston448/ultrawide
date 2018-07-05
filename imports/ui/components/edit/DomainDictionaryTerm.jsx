@@ -24,6 +24,7 @@ import {connect} from 'react-redux';
 
 // Draft JS - definition is text editable
 import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
+import {RoleType} from "../../../constants/constants";
 
 
 const {hasCommandModifier} = KeyBindingUtil;
@@ -216,7 +217,7 @@ export class DomainDictionaryTerm extends Component {
             this.setState({termEditable: false});
 
             // On saving a new term name open the def editor
-            if(term.isNew){
+            if(DomainDictUiServices.isDefinitionAutoEditable(term, view, mode)){
                 this.editTermDefinition()
             }
         }
@@ -248,6 +249,9 @@ export class DomainDictionaryTerm extends Component {
     render() {
         const {dictionaryTerm, userRole, view, mode} = this.props;
 
+        const uiContextNameTerm = dictionaryTerm.domainTermNew + '-term';
+        const uiContextNameDef = dictionaryTerm.domainTermNew + '-def';
+
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Domain Dict Term {}', dictionaryTerm.domainTermNew);
 
         // TODO - add all the tooltips required
@@ -270,10 +274,10 @@ export class DomainDictionaryTerm extends Component {
                         />
                     </div>
                     <InputGroup.Addon onClick={ () => this.onSaveTermName(userRole, view, mode, dictionaryTerm, this.state.termNameValue)}>
-                        <div className="green"><Glyphicon glyph="ok"/></div>
+                        <div id={getID(UI.OPTION_SAVE, uiContextNameTerm)} className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoTermEdit()}>
-                        <div className="red"><Glyphicon glyph="arrow-left"/></div>
+                        <div id={getID(UI.OPTION_UNDO, uiContextNameTerm)} className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
@@ -285,10 +289,10 @@ export class DomainDictionaryTerm extends Component {
                         <ControlLabel>{this.state.termNameValue}</ControlLabel>
                     </div>
                     <InputGroup.Addon onClick={ () => this.editTermName()}>
-                        <div className="blue"><Glyphicon glyph="edit"/></div>
+                        <div id={getID(UI.OPTION_EDIT, uiContextNameTerm)} className="blue"><Glyphicon glyph="edit"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.onDeleteTerm(userRole, view, mode, dictionaryTerm)}>
-                        <div className="red"><Glyphicon glyph="remove"/></div>
+                        <div id={getID(UI.OPTION_REMOVE, uiContextNameTerm)} className="red"><Glyphicon glyph="remove"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
@@ -310,10 +314,10 @@ export class DomainDictionaryTerm extends Component {
                     </div>
 
                     <InputGroup.Addon onClick={ () => this.onSaveTermDefinition(userRole, view, mode, dictionaryTerm)}>
-                        <div className="green"><Glyphicon glyph="ok"/></div>
+                        <div id={getID(UI.OPTION_SAVE, uiContextNameDef)} className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoTermDefinitionEdit()}>
-                        <div className="red"><Glyphicon glyph="arrow-left"/></div>
+                        <div id={getID(UI.OPTION_UNDO, uiContextNameDef)} className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
@@ -335,7 +339,7 @@ export class DomainDictionaryTerm extends Component {
                         <InputGroup.Addon onClick={ () => this.editTermDefinition()}>
                             <OverlayTrigger overlay={tooltipEdit}>
                                 <a href="#">
-                                    <div className="blue"><Glyphicon glyph="edit"/></div>
+                                    <div id={getID(UI.OPTION_EDIT, uiContextNameDef)} className="blue"><Glyphicon glyph="edit"/></div>
                                 </a>
                             </OverlayTrigger>
                         </InputGroup.Addon>
@@ -369,7 +373,7 @@ export class DomainDictionaryTerm extends Component {
             </div>;
 
 
-        if(mode === ViewMode.MODE_VIEW){
+        if(mode === ViewMode.MODE_VIEW || (userRole !== RoleType.DESIGNER)){
             // View mode on
             return (
                 <div className="domain-item">

@@ -1,4 +1,4 @@
-import {ComponentType, DisplayContext, ViewMode, ViewType} from "../constants/constants";
+import {ComponentType, DisplayContext, UpdateScopeType, WorkPackageScopeType, ViewMode, ViewType} from "../constants/constants";
 import {DesignComponentValidationErrors} from "../constants/validation_errors";
 import { DesignComponentValidationServices } from "../service_modules/validation/design_component_validation_services";
 import { DesignComponentModules } from '../service_modules/design/design_component_service_modules.js';
@@ -75,4 +75,360 @@ describe('UI Mods: Design Component', () => {
             chai.assert.equal(result, expectation);
         });
     });
+
+    describe('Ultrawide will highlight any Domain Dictionary term found in a Feature Narrative', () => {
+
+        it('highlights a base design narrative', () => {
+
+            const designComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const wpComponent = null;
+            const updateComponent = null;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDecoratorForNarrative(displayContext, domainTermsVisible, designComponent, wpComponent, updateComponent);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+
+        it('highlights a scoped update narrative in edit pane', () => {
+
+            const designComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const wpComponent = null;
+            const updateComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDecoratorForNarrative(displayContext, domainTermsVisible, designComponent, wpComponent, updateComponent);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+
+        it('highlights a scoped update narrative in scope pane', () => {
+
+            const designComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const wpComponent = null;
+            const updateComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+            const displayContext = DisplayContext.UPDATE_SCOPE;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDecoratorForNarrative(displayContext, domainTermsVisible, designComponent, wpComponent, updateComponent);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+
+        it('highlights a scoped wp narrative in view pane', () => {
+
+            const designComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const wpComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          WorkPackageScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+            const displayContext = DisplayContext.WP_VIEW;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDecoratorForNarrative(displayContext, domainTermsVisible, designComponent, wpComponent, updateComponent);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+
+        it('highlights a scoped wp narrative in scope pane', () => {
+
+            const designComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const wpComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          WorkPackageScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateComponent = {
+                componentType: ComponentType.FEATURE,
+                designVersionId: 'DESIGN_VERSION1',
+                scopeType: UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const displayContext = DisplayContext.WP_SCOPE;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDecoratorForNarrative(displayContext, domainTermsVisible, designComponent, wpComponent, updateComponent);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+
+    });
+
+
+    describe('Ultrawide will highlight any Domain Dictionary term found in a Scenario', () => {
+
+        it('highlights a design scenario', () => {
+
+            const item = {
+                componentType:      ComponentType.SCENARIO,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = null;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+
+        it('highlights a scoped update scenario in edit pane', () => {
+
+            const item = {
+                componentType:      ComponentType.SCENARIO,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = {
+                componentType:      ComponentType.SCENARIO,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+
+            };
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+
+        it('highlights a scoped update scenario in scope pane', () => {
+
+            const item = {
+                componentType:      ComponentType.SCENARIO,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = {
+                componentType:      ComponentType.SCENARIO,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+
+            };
+            const displayContext = DisplayContext.UPDATE_SCOPE;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+    });
+
+
+    describe('Ultrawide will not highlight Domain Dictionary terms found in an Application name', () => {
+
+        it('no decorator returned in design edit', () => {
+
+            const item = {
+                componentType:      ComponentType.APPLICATION,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = null;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNull(decorator, 'Decorator not null');
+        });
+
+        it('no decorator returned in update edit', () => {
+
+            const item = {
+                componentType:      ComponentType.APPLICATION,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = {
+                componentType:      ComponentType.APPLICATION,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+
+            };
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNull(decorator, 'Decorator not null');
+        });
+    });
+
+    describe('Ultrawide will not highlight Domain Dictionary terms found in a Design Section name', () => {
+
+        it('no decorator returned in design edit', () => {
+
+            const item = {
+                componentType:      ComponentType.DESIGN_SECTION,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = null;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNull(decorator, 'Decorator not null');
+        });
+
+        it('no decorator returned in update edit', () => {
+
+            const item = {
+                componentType:      ComponentType.DESIGN_SECTION,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = {
+                componentType:      ComponentType.DESIGN_SECTION,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+
+            };
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNull(decorator, 'Decorator not null');
+        });
+    });
+
+    describe('Ultrawide will not highlight Domain Dictionary terms found in a Feature name', () => {
+
+        it('no decorator returned in design edit', () => {
+
+            const item = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = null;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNull(decorator, 'Decorator not null');
+        });
+
+        it('no decorator returned in update edit', () => {
+
+            const item = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+
+            };
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNull(decorator, 'Decorator not null');
+        });
+    });
+
+    describe('Ultrawide will not highlight Domain Dictionary terms found in a Feature Aspect name', () => {
+
+        it('no decorator returned in design edit', () => {
+
+            const item = {
+                componentType:      ComponentType.FEATURE_ASPECT,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = null;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNull(decorator, 'Decorator not null');
+        });
+
+        it('no decorator returned in update edit', () => {
+
+            const item = {
+                componentType:      ComponentType.FEATURE_ASPECT,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = {
+                componentType:      ComponentType.FEATURE_ASPECT,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+
+            };
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNull(decorator, 'Decorator not null');
+        });
+    });
+
 });

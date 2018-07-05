@@ -58,7 +58,7 @@ export const updateTermName = new ValidatedMethod({
         // Server validation
         const result = DomainDictionaryValidationApi.validateUpdateTermName(userRole, view, mode, termId, newName);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('domainDictionary.updateTermName.failValidation', result)
         }
 
