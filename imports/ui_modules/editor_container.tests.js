@@ -2000,7 +2000,7 @@ describe('UI Mods: Editor Container', () => {
             });
         });
 
-        describe('There is a Find Scenario option when editing a Design Update', () => {
+        describe('There is a Find Scenario option when editing or viewing a Design Update', () => {
 
             it('has a find scenario tab when view update', () => {
 

@@ -57,10 +57,10 @@ export class FinderResult extends Component {
 
         const resultItem =
             <div>
-                <div className="feature">
+                <div id="find-result-feature" className="feature">
                     {result.featureName}
                 </div>
-                <div className={'scenario ' + scenarioHighlight}>
+                <div id="find-result-scenario" className={'scenario ' + scenarioHighlight}>
                     {result.scenarioName}
                 </div>
             </div>;
