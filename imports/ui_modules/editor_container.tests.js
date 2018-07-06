@@ -4,12 +4,71 @@ import {
     WorkPackageType
 } from "../constants/constants";
 
+import {hashID} from "../common/utils";
+
 import { EditorContainerUiModules } from '../ui_modules/editor_container.js';
 
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
+import {UITab} from "../constants/ui_context_ids";
 
 describe('UI Mods: Editor Container', () => {
+
+    const DEFAULT_DV_CONTEXT = {
+        userId:                         'USER1',
+        designId:                       'DESIGN1',
+        designVersionId:                'DESIGN_VERSION1',
+        designUpdateId:                 'NONE',
+        workPackageId:                  'NONE',
+        designComponentId:              'NONE',
+        designComponentType:            'NONE',
+        featureReferenceId:             'NONE',
+        featureAspectReferenceId:       'NONE',
+        scenarioReferenceId:            'NONE',
+        scenarioStepId:                 'NONE',
+    };
+
+    const DEFAULT_DU_CONTEXT = {
+        userId:                         'USER1',
+        designId:                       'DESIGN1',
+        designVersionId:                'DESIGN_VERSION1',
+        designUpdateId:                 'DESIGN_UPDATE1',
+        workPackageId:                  'NONE',
+        designComponentId:              'NONE',
+        designComponentType:            'NONE',
+        featureReferenceId:             'NONE',
+        featureAspectReferenceId:       'NONE',
+        scenarioReferenceId:            'NONE',
+        scenarioStepId:                 'NONE',
+    };
+
+    const DEFAULT_BASE_WP_CONTEXT = {
+        userId:                         'USER1',
+        designId:                       'DESIGN1',
+        designVersionId:                'DESIGN_VERSION1',
+        designUpdateId:                 'NONE',
+        workPackageId:                  'WORK_PACKAGE1',
+        designComponentId:              'NONE',
+        designComponentType:            'NONE',
+        featureReferenceId:             'NONE',
+        featureAspectReferenceId:       'NONE',
+        scenarioReferenceId:            'NONE',
+        scenarioStepId:                 'NONE',
+    };
+
+    const DEFAULT_UPDATE_WP_CONTEXT = {
+        userId:                         'USER1',
+        designId:                       'DESIGN1',
+        designVersionId:                'DESIGN_VERSION1',
+        designUpdateId:                 'DESIGN_UPDATE1',
+        workPackageId:                  'WORK_PACKAGE1',
+        designComponentId:              'NONE',
+        designComponentType:            'NONE',
+        featureReferenceId:             'NONE',
+        featureAspectReferenceId:       'NONE',
+        scenarioReferenceId:            'NONE',
+        scenarioStepId:                 'NONE',
+    };
 
     function testLayout (view, mode, userRole, viewOptions, userContext){
 
@@ -25,6 +84,22 @@ describe('UI Mods: Editor Container', () => {
         const layout = EditorContainerUiModules.getLayout(view, mode, userRole, viewOptions, colWidths, editors, userContext);
 
         return shallow(layout);
+
+    }
+
+    function testTabsLayout (view, mode, userRole, viewOptions, userContext){
+
+        const baseApplications = [];
+        const workingApplications = [];
+        const updateApplications = [];
+        const wpApplications = [];
+        const designSummaryData = {};
+        const editorClass = '';
+
+        const editors = EditorContainerUiModules.getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, designSummaryData, userContext, userRole, view, mode, viewOptions, editorClass);
+        const tabLayout = EditorContainerUiModules.getTabsView(view, userRole, userContext, 4, 'column1', editors );
+
+        return shallow(tabLayout);
 
     }
 
@@ -67,21 +142,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs: false,
                 };
 
-                const userContext = {
-                    userId: 'USER1',
-                    designId: 'DESIGN1',
-                    designVersionId: 'DESIGN_VERSION1',
-                    designUpdateId: 'NONE',
-                    workPackageId: 'NONE',
-                    designComponentId: 'NONE',
-                    designComponentType: 'NONE',
-                    featureReferenceId: 'NONE',
-                    featureAspectReferenceId: 'NONE',
-                    scenarioReferenceId: 'NONE',
-                    scenarioStepId: 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
                 chai.assert.equal(item.find('#column2').length, 1, 'Details not found');
@@ -115,21 +176,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs: false,
                 };
 
-                const userContext = {
-                    userId: 'USER1',
-                    designId: 'DESIGN1',
-                    designVersionId: 'DESIGN_VERSION1',
-                    designUpdateId: 'NONE',
-                    workPackageId: 'NONE',
-                    designComponentId: 'NONE',
-                    designComponentType: 'NONE',
-                    featureReferenceId: 'NONE',
-                    featureAspectReferenceId: 'NONE',
-                    scenarioReferenceId: 'NONE',
-                    scenarioStepId: 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
                 chai.assert.equal(item.find('#column2').length, 0, 'Details are visible');
@@ -163,21 +210,8 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs: false,
                 };
 
-                const userContext = {
-                    userId: 'USER1',
-                    designId: 'DESIGN1',
-                    designVersionId: 'DESIGN_VERSION1',
-                    designUpdateId: 'NONE',
-                    workPackageId: 'NONE',
-                    designComponentId: 'NONE',
-                    designComponentType: 'NONE',
-                    featureReferenceId: 'NONE',
-                    featureAspectReferenceId: 'NONE',
-                    scenarioReferenceId: 'NONE',
-                    scenarioStepId: 'NONE',
-                };
 
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
                 chai.assert.equal(item.find('#column2').length, 0, 'Unexpected column 2');
@@ -211,21 +245,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs: false,
                 };
 
-                const userContext = {
-                    userId: 'USER1',
-                    designId: 'DESIGN1',
-                    designVersionId: 'DESIGN_VERSION1',
-                    designUpdateId: 'NONE',
-                    workPackageId: 'NONE',
-                    designComponentId: 'NONE',
-                    designComponentType: 'NONE',
-                    featureReferenceId: 'NONE',
-                    featureAspectReferenceId: 'NONE',
-                    scenarioReferenceId: 'NONE',
-                    scenarioStepId: 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
                 chai.assert.equal(item.find('#column2').length, 0, 'Unexpected column 2');
@@ -259,21 +279,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs: false,
                 };
 
-                const userContext = {
-                    userId: 'USER1',
-                    designId: 'DESIGN1',
-                    designVersionId: 'DESIGN_VERSION1',
-                    designUpdateId: 'NONE',
-                    workPackageId: 'NONE',
-                    designComponentId: 'NONE',
-                    designComponentType: 'NONE',
-                    featureReferenceId: 'NONE',
-                    featureAspectReferenceId: 'NONE',
-                    scenarioReferenceId: 'NONE',
-                    scenarioStepId: 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
                 chai.assert.equal(item.find('#column2').length, 1, 'Tabs column not found');
@@ -306,21 +312,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs: false,
                 };
 
-                const userContext = {
-                    userId: 'USER1',
-                    designId: 'DESIGN1',
-                    designVersionId: 'DESIGN_VERSION1',
-                    designUpdateId: 'NONE',
-                    workPackageId: 'NONE',
-                    designComponentId: 'NONE',
-                    designComponentType: 'NONE',
-                    featureReferenceId: 'NONE',
-                    featureAspectReferenceId: 'NONE',
-                    scenarioReferenceId: 'NONE',
-                    scenarioStepId: 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
                 chai.assert.equal(item.find('#column2').length, 0, 'Unexpected column 2');
@@ -356,21 +348,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs: false,
                 };
 
-                const userContext = {
-                    userId: 'USER1',
-                    designId: 'DESIGN1',
-                    designVersionId: 'DESIGN_VERSION1',
-                    designUpdateId: 'NONE',
-                    workPackageId: 'NONE',
-                    designComponentId: 'NONE',
-                    designComponentType: 'NONE',
-                    featureReferenceId: 'NONE',
-                    featureAspectReferenceId: 'NONE',
-                    scenarioReferenceId: 'NONE',
-                    scenarioStepId: 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
                 chai.assert.equal(item.find('#column2').length, 0, 'Unexpected column 2');
@@ -598,21 +576,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -646,21 +610,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope is not visible');
                 chai.assert.equal(item.find('#editCol').length, 1, 'Edit pane is not visible');
@@ -693,21 +643,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -743,21 +679,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -791,21 +713,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope is not visible');
                 chai.assert.equal(item.find('#editCol').length, 1, 'Edit pane is not visible');
@@ -838,21 +746,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -888,21 +782,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -936,21 +816,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope is not visible');
                 chai.assert.equal(item.find('#editCol').length, 1, 'Edit pane is not visible');
@@ -983,21 +849,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1033,21 +885,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1080,21 +918,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope is not visible');
                 chai.assert.equal(item.find('#editCol').length, 1, 'Edit pane is not visible');
@@ -1127,21 +951,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1177,21 +987,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1224,21 +1020,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope is not visible');
                 chai.assert.equal(item.find('#editCol').length, 1, 'Edit pane is not visible');
@@ -1271,21 +1053,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1321,21 +1089,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1368,21 +1122,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope is not visible');
                 chai.assert.equal(item.find('#editCol').length, 1, 'Edit pane is not visible');
@@ -1415,21 +1155,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1465,21 +1191,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1512,21 +1224,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope is not visible');
                 chai.assert.equal(item.find('#editCol').length, 1, 'Edit pane is not visible');
@@ -1559,21 +1257,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1609,21 +1293,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -1656,21 +1326,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope is not visible');
                 chai.assert.equal(item.find('#editCol').length, 1, 'Edit pane is not visible');
@@ -1703,21 +1359,7 @@ describe('UI Mods: Editor Container', () => {
                     workShowAllAsTabs:          false,
                 };
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testLayout(view, mode, userRole, viewOptions, userContext);
+                const item = testLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#scopeCol').length, 0, 'Scope is visible');
                 chai.assert.equal(item.find('#editCol').length, 0, 'Edit pane is visible');
@@ -2207,21 +1849,7 @@ describe('UI Mods: Editor Container', () => {
                 const mode = ViewMode.MODE_EDIT;
                 const view = ViewType.DESIGN_NEW;
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testAddComponent(view, mode, userContext);
+                const item = testAddComponent(view, mode, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#addApplication').length, 1, 'Add application not found');
             });
@@ -2231,21 +1859,7 @@ describe('UI Mods: Editor Container', () => {
                 const mode = ViewMode.MODE_VIEW;
                 const view = ViewType.DESIGN_NEW;
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testAddComponent(view, mode, userContext);
+                const item = testAddComponent(view, mode, DEFAULT_DV_CONTEXT);
 
                 chai.assert.equal(item.find('#addApplication').length, 0, 'Add application found');
             });
@@ -2258,21 +1872,7 @@ describe('UI Mods: Editor Container', () => {
                 const mode = ViewMode.MODE_EDIT;
                 const view = ViewType.DESIGN_UPDATE_EDIT;
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'DESIGN_UPDATE1',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testAddComponent(view, mode, userContext);
+                const item = testAddComponent(view, mode, DEFAULT_DU_CONTEXT);
 
                 chai.assert.equal(item.find('#addApplication').length, 1, 'Add application not found');
             });
@@ -2282,21 +1882,7 @@ describe('UI Mods: Editor Container', () => {
                 const mode = ViewMode.MODE_VIEW;
                 const view = ViewType.DESIGN_UPDATE_EDIT;
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'DESIGN_UPDATE1',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testAddComponent(view, mode, userContext);
+                const item = testAddComponent(view, mode, DEFAULT_DU_CONTEXT);
 
                 chai.assert.equal(item.find('#addApplication').length, 0, 'Add application found');
             });
@@ -2306,27 +1892,147 @@ describe('UI Mods: Editor Container', () => {
                 const mode = ViewMode.MODE_VIEW;
                 const view = ViewType.DESIGN_UPDATE_VIEW;
 
-                const userContext = {
-                    userId:                         'USER1',
-                    designId:                       'DESIGN1',
-                    designVersionId:                'DESIGN_VERSION1',
-                    designUpdateId:                 'DESIGN_UPDATE1',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                };
-
-                const item = testAddComponent(view, mode, userContext);
+                const item = testAddComponent(view, mode, DEFAULT_DU_CONTEXT);
 
                 chai.assert.equal(item.find('#addApplication').length, 0, 'Add application found');
             });
         });
     });
 
+    describe('UC 440', () => {
 
+        describe('There is a Find Scenario option when editing or viewing a Design Version', () => {
 
+            it('has a find scenario tab when viewing new', () => {
+
+                const mode = ViewMode.MODE_VIEW;
+                const view = ViewType.DESIGN_NEW;
+                const userRole = RoleType.DESIGNER;
+
+                const viewOptions = {
+                    testSummaryVisible:         false,
+                    designShowAllAsTabs:        true
+                };
+
+                const html = testTabsLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
+
+                chai.assert.equal(html.find(hashID(UITab.TAB_SCENARIO_SEARCH, '')).length, 1, 'Search tab not found');
+            });
+
+            it('has a find scenario tab when editing new', () => {
+
+                const mode = ViewMode.MODE_EDIT;
+                const view = ViewType.DESIGN_NEW;
+                const userRole = RoleType.DESIGNER;
+
+                const viewOptions = {
+                    testSummaryVisible:         false,
+                    designShowAllAsTabs:        true
+                };
+
+                const html = testTabsLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
+
+                chai.assert.equal(html.find(hashID(UITab.TAB_SCENARIO_SEARCH, '')).length, 1, 'Search tab not found');
+            });
+
+            it('has a find scenario tab when viewing published', () => {
+
+                const mode = ViewMode.MODE_VIEW;
+                const view = ViewType.DESIGN_PUBLISHED;
+                const userRole = RoleType.DESIGNER;
+
+                const viewOptions = {
+                    testSummaryVisible:         false,
+                    designShowAllAsTabs:        true
+                };
+
+                const html = testTabsLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
+
+                chai.assert.equal(html.find(hashID(UITab.TAB_SCENARIO_SEARCH, '')).length, 1, 'Search tab not found');
+            });
+
+            it('has a find scenario tab when editing published', () => {
+
+                const mode = ViewMode.MODE_EDIT;
+                const view = ViewType.DESIGN_PUBLISHED;
+                const userRole = RoleType.DESIGNER;
+
+                const viewOptions = {
+                    testSummaryVisible:         false,
+                    designShowAllAsTabs:        true
+                };
+
+                const html = testTabsLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
+
+                chai.assert.equal(html.find(hashID(UITab.TAB_SCENARIO_SEARCH, '')).length, 1, 'Search tab not found');
+            });
+
+            it('has a find scenario tab when viewing updatable', () => {
+
+                const mode = ViewMode.MODE_VIEW;
+                const view = ViewType.DESIGN_UPDATABLE;
+                const userRole = RoleType.DESIGNER;
+
+                const viewOptions = {
+                    testSummaryVisible:         false,
+                    designShowAllAsTabs:        true
+                };
+
+                const html = testTabsLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
+
+                chai.assert.equal(html.find(hashID(UITab.TAB_SCENARIO_SEARCH, '')).length, 1, 'Search tab not found');
+            });
+
+            it('has a find scenario tab when editing updatable', () => {
+
+                const mode = ViewMode.MODE_EDIT;
+                const view = ViewType.DESIGN_UPDATABLE;
+                const userRole = RoleType.DESIGNER;
+
+                const viewOptions = {
+                    testSummaryVisible:         false,
+                    designShowAllAsTabs:        true
+                };
+
+                const html = testTabsLayout(view, mode, userRole, viewOptions, DEFAULT_DV_CONTEXT);
+
+                chai.assert.equal(html.find(hashID(UITab.TAB_SCENARIO_SEARCH, '')).length, 1, 'Search tab not found');
+            });
+        });
+
+        describe('There is a Find Scenario option when editing a Design Update', () => {
+
+            it('has a find scenario tab when view update', () => {
+
+                const mode = ViewMode.MODE_VIEW;
+                const view = ViewType.DESIGN_UPDATE_VIEW;
+                const userRole = RoleType.DESIGNER;
+
+                const viewOptions = {
+                    testSummaryVisible:         false,
+                    updateShowAllAsTabs:        true
+                };
+
+                const html = testTabsLayout(view, mode, userRole, viewOptions, DEFAULT_DU_CONTEXT);
+
+                chai.assert.equal(html.find(hashID(UITab.TAB_SCENARIO_SEARCH, '')).length, 1, 'Search tab not found');
+            });
+
+            it('has a find scenario tab when editing update', () => {
+
+                const mode = ViewMode.MODE_EDIT;
+                const view = ViewType.DESIGN_UPDATE_EDIT;
+                const userRole = RoleType.DESIGNER;
+
+                const viewOptions = {
+                    testSummaryVisible:         false,
+                    updateShowAllAsTabs:        true
+                };
+
+                const html = testTabsLayout(view, mode, userRole, viewOptions, DEFAULT_DU_CONTEXT);
+
+                chai.assert.equal(html.find(hashID(UITab.TAB_SCENARIO_SEARCH, '')).length, 1, 'Search tab not found');
+            });
+        });
+    });
 });

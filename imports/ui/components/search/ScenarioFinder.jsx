@@ -10,8 +10,9 @@ import PropTypes from 'prop-types';
 import FindResultsContainer         from '../../containers/search/FindResultsContainer.jsx';
 
 // Ultrawide Services
-import {log} from "../../../common/utils";
+import {log, getID} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
+import {UI} from "../../../constants/ui_context_ids";
 
 // Bootstrap
 import {InputGroup, FormControl} from 'react-bootstrap';
@@ -52,17 +53,19 @@ export class ScenarioFinder extends Component {
         // Items -------------------------------------------------------------------------------------------------------
 
         const input =
-            <InputGroup>
+            <InputGroup >
                 <InputGroup.Addon>Find:</InputGroup.Addon>
-                <FormControl type="text"  onChange={(e) => this.onSearchChange(e)} />
+                <FormControl id={getID(UI.INPUT_SCENARIO_SEARCH, '')} type="text"  onChange={(e) => this.onSearchChange(e)} />
             </InputGroup>;
 
         const results =
-            <FindResultsContainer params={{
-                searchString:   this.state.searchString,
-                userContext:    userContext,
-                displayContext: displayContext
-            }}/>;
+            <div id={getID(UI.OUTPUT_SCENARIO_SEARCH, '')}>
+                <FindResultsContainer params={{
+                    searchString:   this.state.searchString,
+                    userContext:    userContext,
+                    displayContext: displayContext
+                }}/>
+            </div>;
 
         // Layout ------------------------------------------------------------------------------------------------------
 

@@ -15,6 +15,17 @@ export const AddActionIds = {
     UI_CONTEXT_ADD_SCENARIO_TO:         'ADD_SCENARIO_TO_'
 };
 
+export const UITab = {
+    TAB_DETAILS:                    'tab-details',
+    TAB_DOMAIN_DICT:                'tab-dict',
+    TAB_ACC_TESTS:                  'tab-acc',
+    TAB_INT_TESTS:                  'tab-int',
+    TAB_UNIT_TESTS:                 'tab-unit',
+    TAB_SCENARIO_SEARCH:            'tab-search',
+    TAB_UPDATE_SUMMARY:             'tab-update-summary',
+    TAB_WORKING_VIEW:               'tab-working-view'
+};
+
 export const UI = {
 
     BUTTON_REMOVE:                      'but-remove-',
@@ -61,4 +72,6 @@ export const UI = {
     MODAL_DV_UPDATES_MERGE:             'modal-dv-upd-merge-',
     MODAL_DV_UPDATES_ROLL:              'modal-dv-upd-roll-',
     MODAL_DV_UPDATES_IGNORE:            'modal-dv-upd-ignore-',
+    INPUT_SCENARIO_SEARCH:              'input-scenario-search',
+    OUTPUT_SCENARIO_SEARCH:             'output-scenario-search',
 };

@@ -76,6 +76,44 @@ describe('UI Mods: Design Component', () => {
         });
     });
 
+    describe('Domain Dictionary terms are highlighted in Scenario and Narrative texts', () => {
+
+        it('gets a decorator for scenarios', () => {
+
+            const item = {
+                componentType:      ComponentType.SCENARIO,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const updateItem = null;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDomainTermDecorator(item, displayContext, domainTermsVisible, updateItem);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        });
+
+        it('gets a decorator for narratives', () => {
+
+            const designComponent = {
+                componentType:      ComponentType.FEATURE,
+                designVersionId:    'DESIGN_VERSION1',
+                scopeType:          UpdateScopeType.SCOPE_IN_SCOPE
+            };
+
+            const wpComponent = null;
+            const updateComponent = null;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const domainTermsVisible = true;
+
+            const decorator = ComponentUiModules.getDecoratorForNarrative(displayContext, domainTermsVisible, designComponent, wpComponent, updateComponent);
+
+            chai.assert.isNotNull(decorator, 'Decorator was null');
+        })
+    });
+
     describe('Ultrawide will highlight any Domain Dictionary term found in a Feature Narrative', () => {
 
         it('highlights a base design narrative', () => {
