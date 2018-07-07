@@ -11,7 +11,8 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import {DesignComponentMessages, UserManagementMessages} from "../../../constants/message_texts";
 import {LogLevel, MessageType} from "../../../constants/constants";
-import {log} from "../../../common/utils";
+import {UI} from "../../../constants/ui_context_ids";
+import {log, getID} from "../../../common/utils";
 
 import { ClientUserManagementServices } from '../../../apiClient/apiClientUserManagement.js';
 
@@ -176,7 +177,7 @@ export class UserDetails extends Component {
             log((msg) => console.log(msg), LogLevel.PERF, 'Render User Details');
 
             const selectedClass = (user.userId === currentUserId ? ' user-selected' : ' user-not-selected');
-            const activeClass = (user.isActive ? ' user-active' : ' user-inactive');
+            const activeClass = (user.isActive ? 'user-active' : 'user-inactive');
             const activateButtonText = (user.isActive ? 'De-Activate' : 'Activate');
 
             const viewInstance = (
@@ -212,8 +213,8 @@ export class UserDetails extends Component {
                         </Row>
                     </Grid>
                     <div className="user-buttons">
-                        <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit(user)}>Edit</Button>
-                        <Button id="butRemove" bsSize="xs"
+                        <Button id={getID(UI.OPTION_EDIT, user.userName)} bsSize="xs" onClick={() => this.onEdit(user)}>Edit</Button>
+                        <Button id={getID(UI.OPTION_TOGGLE_ACTIVE, user.userName)} bsSize="xs"
                                 onClick={() => this.onToggleActive(user, userContext)}>{activateButtonText}</Button>
                     </div>
                 </div>
@@ -221,7 +222,7 @@ export class UserDetails extends Component {
 
             const formInstance = (
                 <Form horizontal>
-                    <FormGroup id="user-username-edit" controlId="formUserName">
+                    <FormGroup id={getID(UI.INPUT_USER_NAME, user.userName)} controlId="formUserName">
                         <Col componentClass={ControlLabel} sm={3}>
                             User Name (Login)
                         </Col>
@@ -231,7 +232,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup id="user-display-name-edit" controlId="formDisplayName">
+                    <FormGroup id={getID(UI.INPUT_DISPLAY_NAME, user.userName)} controlId="formDisplayName">
                         <Col componentClass={ControlLabel} sm={3}>
                             Display Name
                         </Col>
@@ -241,7 +242,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup id="user-designer-edit" controlId="formIsDesigner">
+                    <FormGroup id={getID(UI.INPUT_ROLE_DESIGNER, user.userName)} controlId="formIsDesigner">
                         <Col componentClass={ControlLabel} sm={3}>
                             User is Designer
                         </Col>
@@ -252,7 +253,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup id="user-developer-edit" controlId="formIsDeveloper">
+                    <FormGroup id={getID(UI.INPUT_ROLE_DEVELOPER, user.userName)} controlId="formIsDeveloper">
                         <Col componentClass={ControlLabel} sm={3}>
                             User is Developer
                         </Col>
@@ -263,7 +264,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup id="user-manager-edit" controlId="formIsManager">
+                    <FormGroup id={getID(UI.INPUT_ROLE_MANAGER, user.userName)} controlId="formIsManager">
                         <Col componentClass={ControlLabel} sm={3}>
                             User is Manager
                         </Col>
@@ -274,7 +275,7 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup id="user-guest-edit" controlId="formIsGuestUser">
+                    <FormGroup id={getID(UI.INPUT_ROLE_GUEST, user.userName)} controlId="formIsGuestUser">
                         <Col componentClass={ControlLabel} sm={3}>
                             User is Guest Viewer Only
                         </Col>
@@ -285,13 +286,13 @@ export class UserDetails extends Component {
                         </Col>
                     </FormGroup>
 
-                    <Button id="butSave" bsSize="xs" onClick={() => this.onSave(userContext)}>
+                    <Button id={getID(UI.OPTION_SAVE, user.userName)} bsSize="xs" onClick={() => this.onSave(userContext)}>
                         Save
                     </Button>
-                    <Button id="butCancel" bsSize="xs" onClick={() => this.onCancel()}>
+                    <Button id={getID(UI.OPTION_UNDO, user.userName)} bsSize="xs" onClick={() => this.onCancel()}>
                         Cancel
                     </Button>
-                    <Button id="butReset" bsSize="xs" onClick={() => this.onResetPassword(userContext, user)}>
+                    <Button id={getID(UI.OPTION_RESET, user.userName)} bsSize="xs" onClick={() => this.onResetPassword(userContext, user)}>
                         Reset Password
                     </Button>
 

@@ -16,7 +16,8 @@ import { ClientUserManagementServices }             from '../../../apiClient/api
 import { ClientDocumentServices }                   from '../../../apiClient/apiClientDocument.js';
 
 import {UserSettingValue, UserSetting, LogLevel, RoleType} from '../../../constants/constants.js';
-import {log} from "../../../common/utils";
+import {UI} from "../../../constants/ui_context_ids";
+import {log, getID} from "../../../common/utils";
 
 // Data Services
 import { DesignVersionData }                        from '../../../data/design/design_version_db.js';
@@ -182,7 +183,12 @@ export class ConfigurationSettings extends Component {
 
         if(userContext.designVersionId !== 'NONE') {
             const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
-            return dv.designVersionName;
+            if(dv){
+                return dv.designVersionName;
+            } else {
+                return 'NONE';
+            }
+
         } else {
             return 'No Design Version currently selected';
         }
@@ -275,27 +281,29 @@ export class ConfigurationSettings extends Component {
             </Well>;
 
         const changeUserPassword =
-            <Well className="settings-well">
-                <form onSubmit={(e) => this.onUpdateUserPassword(e)}>
-                    <div className="design-item-header">Change My Password</div>
-                    <div className="design-item-note">You'll need to remember it so be careful!</div>
-                    <FormGroup controlId="configOldPassword">
-                        <ControlLabel>Current Password:</ControlLabel>
-                        <FormControl id="configOldPassword" ref="configOldPassword" type="password" onChange={(e) => this.updateOldPassword(e)}/>
-                    </FormGroup>
-                    <FormGroup controlId="configNewPassword1">
-                        <ControlLabel>New Password:</ControlLabel>
-                        <FormControl id="configNewPassword1" ref="configNewPassword1" type="password" onChange={(e) => this.updateNewPassword1(e)}/>
-                    </FormGroup>
-                    <FormGroup controlId="configNewPassword2">
-                        <ControlLabel>Repeat New Password:</ControlLabel>
-                        <FormControl id="configNewPassword2" ref="configNewPassword2" type="password" onChange={(e) => this.updateNewPassword2(e)}/>
-                    </FormGroup>
-                    <Button id="configChangePassword" type="submit">
-                        Change My Password
-                    </Button>
-                </form>
-            </Well>;
+            <div id={getID(UI.CONFIG_PASSWORD, '')}>
+                <Well className="settings-well">
+                    <form onSubmit={(e) => this.onUpdateUserPassword(e)}>
+                        <div className="design-item-header">Change My Password</div>
+                        <div className="design-item-note">You'll need to remember it so be careful!</div>
+                        <FormGroup controlId="configOldPassword">
+                            <ControlLabel>Current Password:</ControlLabel>
+                            <FormControl id={getID(UI.INPUT_PASSWORD_OLD, '')} ref="configOldPassword" type="password" onChange={(e) => this.updateOldPassword(e)}/>
+                        </FormGroup>
+                        <FormGroup controlId="configNewPassword1">
+                            <ControlLabel>New Password:</ControlLabel>
+                            <FormControl id={getID(UI.INPUT_PASSWORD_NEW1, '')} ref="configNewPassword1" type="password" onChange={(e) => this.updateNewPassword1(e)}/>
+                        </FormGroup>
+                        <FormGroup controlId="configNewPassword2">
+                            <ControlLabel>Repeat New Password:</ControlLabel>
+                            <FormControl id={getID(UI.INPUT_PASSWORD_NEW2, '')} ref="configNewPassword2" type="password" onChange={(e) => this.updateNewPassword2(e)}/>
+                        </FormGroup>
+                        <Button id={getID(UI.BUTTON_CHANGE_PASSWORD, '')} type="submit">
+                            Change My Password
+                        </Button>
+                    </form>
+                </Well>
+            </div>;
 
         let settingsGrid = '';
 
