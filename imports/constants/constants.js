@@ -181,7 +181,8 @@ export const ItemType = {
     DESIGN:         'DESIGN',
     DESIGN_VERSION: 'DESIGN_VERSION',
     DESIGN_UPDATE:  'DESIGN_UPDATE',
-    WORK_PACKAGE:   'WORK_PACKAGE'
+    WORK_PACKAGE:   'WORK_PACKAGE',
+    USER:           'USER'
 };
 
 export const FieldType = {

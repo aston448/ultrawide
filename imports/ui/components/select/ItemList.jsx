@@ -68,7 +68,7 @@ export class ItemList extends Component {
                         {this.bodyData()}
                     </div>
                     <div className="item-container-footer">
-                        <div className="design-item-add">
+                        <div id={footerActionUiContext} className="design-item-add">
                             <DesignComponentAdd
                                 uiContextId={footerActionUiContext}
                                 addText={footerAction}

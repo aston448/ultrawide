@@ -6,10 +6,13 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { ItemList }             from './ItemList.jsx'           // Non Redux
 import { UltrawideItem }        from './UltrawideItem';       // Non Redux
+import { UserDetails }          from "../admin/UserDetails";
 
 import { ItemType} from '../../../constants/constants.js'
 
 import { Designs } from '../../../collections/design/designs.js'
+import {AddActionIds} from "../../../constants/ui_context_ids";
+import {hashID} from "../../../common/utils";
 
 
 
@@ -74,10 +77,27 @@ describe('JSX: ItemList', () => {
         }
     }
 
-    function testItemContainer(itemType, itemList,  headerText, hasFooterAction, footerAction){
+    function renderUserList(users){
+        if(users.length > 0) {
+            return users.map((user) => {
+                return (
+                    <UserDetails
+                        key={user._id}
+                        user={user}
+                    />
+                );
+            });
+        }
+    }
+
+    function addUserFunction(){
+
+        return true;
+    }
+
+    function testItemContainer(itemType, itemList, headerText, hasFooterAction, footerAction, footerActionFunction, footerActionUiContext){
 
         let bodyDataFunction = null;
-        let footerActionFunction = null;
 
         switch(itemType){
             case ItemType.DESIGN:
@@ -92,6 +112,8 @@ describe('JSX: ItemList', () => {
             case ItemType.WORK_PACKAGE:
                 bodyDataFunction = () => renderWorkPackagesList(itemList);
                 break;
+            case ItemType.USER:
+                bodyDataFunction = () => renderUserList(itemList);
         }
 
         return shallow(
@@ -100,6 +122,7 @@ describe('JSX: ItemList', () => {
                 bodyDataFunction={bodyDataFunction}
                 hasFooterAction={hasFooterAction}
                 footerAction={footerAction}
+                footerActionUiContext={footerActionUiContext}
                 footerActionFunction={footerActionFunction}
             />
         );
@@ -232,6 +255,39 @@ describe('JSX: ItemList', () => {
             const item = testItemContainer(ItemType.DESIGN_UPDATE, designUpdates, 'Design Updates', false, '');
 
             chai.assert.equal(item.find('UltrawideItem').length, 3, 'Expecting 3 Design Updates');
+        });
+    });
+
+    // Users -----------------------------------------------------------------------------------------------------------
+
+    describe('The user list has an option to add a new Ultrawide user', () => {
+
+        it('has the option when footer function provided', () => {
+
+            const users = [
+                {
+                    _id: '1',
+                    userName:   'user1'
+                }
+            ];
+
+            const item = testItemContainer(ItemType.USER, users, 'Users', true, 'Add User', addUserFunction, AddActionIds.UI_CONTEXT_ADD_USER);
+
+            chai.assert.equal(item.find(hashID(AddActionIds.UI_CONTEXT_ADD_USER, '')).length, 1, 'Add user not found');
+        });
+
+        it('has no option when footer function not provided', () => {
+
+            const users = [
+                {
+                    _id: '1',
+                    userName:   'user1'
+                }
+            ];
+
+            const item = testItemContainer(ItemType.USER, users, 'Users', false, '', null, AddActionIds.UI_CONTEXT_ADD_USER);
+
+            chai.assert.equal(item.find(hashID(AddActionIds.UI_CONTEXT_ADD_USER, '')).length, 0, 'Add user was found');
         });
     });
 
