@@ -180,11 +180,13 @@ export const StepContext = {
 
 // Types of items that can be selected
 export const ItemType = {
-    DESIGN:         'DESIGN',
-    DESIGN_VERSION: 'DESIGN_VERSION',
-    DESIGN_UPDATE:  'DESIGN_UPDATE',
-    WORK_PACKAGE:   'WORK_PACKAGE',
-    USER:           'USER'
+    DESIGN:             'DESIGN',
+    DESIGN_VERSION:     'DESIGN_VERSION',
+    DESIGN_UPDATE:      'DESIGN_UPDATE',
+    WORK_PACKAGE:       'WORK_PACKAGE',
+    USER:               'USER',
+    TEST_LOCATION:      'TEST_LOCATION',
+    TEST_LOCATION_FILE: 'TEST_LOCATION_FILE',
 };
 
 export const FieldType = {

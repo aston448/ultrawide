@@ -7,12 +7,15 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { ItemList }             from './ItemList.jsx'           // Non Redux
 import { UltrawideItem }        from './UltrawideItem';       // Non Redux
 import { UserDetails }          from "../admin/UserDetails";
+import {TestOutputLocation}     from "../configure/TestOutputLocation";
+import {TestOutputFile}         from "../configure/TestOutputFile";
 
 import { ItemType} from '../../../constants/constants.js'
 
 import { Designs } from '../../../collections/design/designs.js'
 import {AddActionIds} from "../../../constants/ui_context_ids";
 import {hashID} from "../../../common/utils";
+
 
 
 
@@ -90,10 +93,47 @@ describe('JSX: ItemList', () => {
         }
     }
 
+    function renderLocationList(locations){
+        if(locations.length > 0) {
+            return locations.map((location) => {
+                return (
+                    <TestOutputLocation
+                        key={location._id}
+                        location={location}
+                    />
+                );
+            });
+        }
+    }
+
+    function renderLocationFileList(locationFiles){
+        if(locationFiles.length > 0) {
+            return locationFiles.map((file) => {
+                return (
+                    <TestOutputFile
+                        key={file._id}
+                        file={file}
+                    />
+                );
+            });
+        }
+    }
+
     function addUserFunction(){
 
         return true;
     }
+
+    function addLocationFunction(){
+
+        return true;
+    }
+
+    function addLocationFileFunction(){
+
+        return true;
+    }
+
 
     function testItemContainer(itemType, itemList, headerText, hasFooterAction, footerAction, footerActionFunction, footerActionUiContext){
 
@@ -114,6 +154,14 @@ describe('JSX: ItemList', () => {
                 break;
             case ItemType.USER:
                 bodyDataFunction = () => renderUserList(itemList);
+                break;
+            case ItemType.TEST_LOCATION:
+                bodyDataFunction = () => renderLocationList(itemList);
+                break;
+            case ItemType.TEST_LOCATION_FILE:
+                bodyDataFunction = () => renderLocationFileList(itemList);
+                break;
+
         }
 
         return shallow(
@@ -288,6 +336,73 @@ describe('JSX: ItemList', () => {
             const item = testItemContainer(ItemType.USER, users, 'Users', false, '', null, AddActionIds.UI_CONTEXT_ADD_USER);
 
             chai.assert.equal(item.find(hashID(AddActionIds.UI_CONTEXT_ADD_USER, '')).length, 0, 'Add user was found');
+        });
+    });
+
+
+    // Test Output Locations -------------------------------------------------------------------------------------------
+
+    describe('The Test Output Locations list has an option to add a new item', () => {
+
+        it('has the option when footer function provided', () => {
+
+            const locations = [
+                {
+                    _id:            'LOCATION_1',
+                    locationName:   'LOCATION1'
+                }
+            ];
+
+            const item = testItemContainer(ItemType.TEST_LOCATION, locations, 'Locations', true, 'Add Test Location', addLocationFunction, AddActionIds.UI_CONTEXT_ADD_TEST_LOCATION);
+
+            chai.assert.equal(item.find(hashID(AddActionIds.UI_CONTEXT_ADD_TEST_LOCATION)).length, 1, 'Add test location not found');
+        });
+
+        it('has no option when footer function not provided', () => {
+
+            const locations = [
+                {
+                    _id:            'LOCATION_1',
+                    locationName:   'LOCATION1'
+                }
+            ];
+
+            const item = testItemContainer(ItemType.TEST_LOCATION, locations, 'Locations', false, '', null, AddActionIds.UI_CONTEXT_ADD_TEST_LOCATION);
+
+            chai.assert.equal(item.find(hashID(AddActionIds.UI_CONTEXT_ADD_TEST_LOCATION, '')).length, 0, 'Add test location was found');
+        });
+    });
+
+    // Test Output Location Files --------------------------------------------------------------------------------------
+
+    describe('The Test Output File list for a Test Output Location has an option to add a new file', () => {
+
+        it('has the option when footer function provided', () => {
+
+            const files = [
+                {
+                    _id:            'FILE_1',
+                    fileAlias:      'File1'
+                }
+            ];
+
+            const item = testItemContainer(ItemType.TEST_LOCATION_FILE, files, 'Files', true, 'Add Test Location File', addLocationFileFunction, AddActionIds.UI_CONTEXT_ADD_TEST_FILE);
+
+            chai.assert.equal(item.find(hashID(AddActionIds.UI_CONTEXT_ADD_TEST_FILE)).length, 1, 'Add test location file not found');
+        });
+
+        it('has no option when footer function not provided', () => {
+
+            const files = [
+                {
+                    _id:            'FILE_1',
+                    fileAlias:      'File1'
+                }
+            ];
+
+            const item = testItemContainer(ItemType.TEST_LOCATION_FILE, files, 'Files', false, '', null, AddActionIds.UI_CONTEXT_ADD_TEST_FILE);
+
+            chai.assert.equal(item.find(hashID(AddActionIds.UI_CONTEXT_ADD_TEST_FILE, '')).length, 0, 'Add test location file was found');
         });
     });
 

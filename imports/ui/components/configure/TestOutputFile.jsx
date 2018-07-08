@@ -10,10 +10,10 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import { ClientTestOutputLocationServices }         from '../../../apiClient/apiClientTestOutputLocations.js';
 import { TestLocationFileTypes, TestRunners, TestLocationFileStatus, LogLevel}    from '../../../constants/constants.js';
-import { createSelectionList}                   from '../../../common/reactUtils.js';
+import { createSelectionList}                       from '../../../common/reactUtils.js';
 import { TextLookups }                              from '../../../common/lookups.js';
-import { getDateTimeString, log}                from '../../../common/utils.js';
-
+import { getDateTimeString, log, getContextID}      from '../../../common/utils.js';
+import {UI}                                         from "../../../constants/ui_context_ids";
 
 // Bootstrap
 import {Button} from 'react-bootstrap';
@@ -146,8 +146,8 @@ export class TestOutputFile extends Component {
                     </Row>
                 </Grid>
                 <div className="output-location-buttons">
-                    <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
-                    <Button id="butRemove" bsSize="xs" onClick={() => this.onRemove(userRole, locationFile)}>Remove</Button>
+                    <Button id={getContextID(UI.BUTTON_EDIT, locationFile.fileAlias)} bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
+                    <Button id={getContextID(UI.BUTTON_REMOVE, locationFile.fileAlias)} bsSize="xs" onClick={() => this.onRemove(userRole, locationFile)}>Remove</Button>
                 </div>
             </div>
         );
@@ -159,7 +159,7 @@ export class TestOutputFile extends Component {
                         File Alias
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="text" placeholder={locationFile.fileAlias} value={this.state.aliasValue} onChange={(e) => this.onAliasChange(e)} />
+                        <FormControl id={getContextID(UI.INPUT_FILE_ALIAS, locationFile.fileAlias)} type="text" placeholder={locationFile.fileAlias} value={this.state.aliasValue} onChange={(e) => this.onAliasChange(e)} />
                     </Col>
                 </FormGroup>
 
@@ -168,7 +168,7 @@ export class TestOutputFile extends Component {
                         File Name
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="text" placeholder={locationFile.fileName} value={this.state.nameValue} onChange={(e) => this.onNameChange(e)}/>
+                        <FormControl id={getContextID(UI.INPUT_FILE_NAME, locationFile.fileAlias)} type="text" placeholder={locationFile.fileName} value={this.state.nameValue} onChange={(e) => this.onNameChange(e)}/>
                     </Col>
                 </FormGroup>
 
@@ -177,7 +177,7 @@ export class TestOutputFile extends Component {
                         Type
                     </Col>
                     <Col sm={10}>
-                        <FormControl componentClass="select" placeholder={locationFile.fileType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>
+                        <FormControl id={getContextID(UI.INPUT_FILE_TYPE, locationFile.fileAlias)} componentClass="select" placeholder={locationFile.fileType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>
                             {createSelectionList(TestLocationFileTypes)}
                         </FormControl>
                     </Col>
@@ -188,16 +188,16 @@ export class TestOutputFile extends Component {
                         Test Runner
                     </Col>
                     <Col sm={10}>
-                        <FormControl componentClass="select" placeholder={locationFile.testRunner} value={this.state.runnerValue} onChange={(e) => this.onRunnerChange(e)}>
+                        <FormControl id={getContextID(UI.INPUT_FILE_TEST_RUNNER, locationFile.fileAlias)} componentClass="select" placeholder={locationFile.testRunner} value={this.state.runnerValue} onChange={(e) => this.onRunnerChange(e)}>
                             {createSelectionList(TestRunners)}
                         </FormControl>
                     </Col>
                 </FormGroup>
 
-                <Button bsSize="xs" onClick={() => this.onSave(userRole)}>
+                <Button id={getContextID(UI.BUTTON_SAVE, locationFile.fileAlias)} bsSize="xs" onClick={() => this.onSave(userRole)}>
                     Save
                 </Button>
-                <Button bsSize="xs" onClick={() => this.onCancel()}>
+                <Button id={getContextID(UI.BUTTON_CANCEL, locationFile.fileAlias)} bsSize="xs" onClick={() => this.onCancel()}>
                     Cancel
                 </Button>
 

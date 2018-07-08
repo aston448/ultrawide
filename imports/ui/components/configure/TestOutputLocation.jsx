@@ -11,7 +11,8 @@ import PropTypes from 'prop-types';
 import { ClientTestOutputLocationServices }         from '../../../apiClient/apiClientTestOutputLocations.js';
 
 import {UltrawideDirectory, LogLevel} from '../../../constants/constants.js';
-import {log} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
+import {UI} from "../../../constants/ui_context_ids";
 
 // Bootstrap
 import {Checkbox, Button, ButtonGroup, Modal} from 'react-bootstrap';
@@ -139,10 +140,10 @@ export class TestOutputLocation extends Component {
         const defaultText = this.state.isGuestViewerLocationValue ? 'Default' : '';
 
         const modalOkButton =
-            <Button onClick={() => this.onRemove(userRole, location)}>OK</Button>;
+            <Button id={UI.MODAL_OK} onClick={() => this.onRemove(userRole, location)}>OK</Button>;
 
         const modalCancelButton =
-            <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
+            <Button id={UI.MODAL_CANCEL} onClick={() => this.onCloseModal()}>Cancel</Button>;
 
         const confirmDeleteModal =
             <Modal show={this.state.showModal} onHide={() => this.onCloseModal()}>
@@ -185,8 +186,8 @@ export class TestOutputLocation extends Component {
                         <input className="design-item-note" id="files" type="file" onChange={(e) => this.onUpload(e)}/>
                     </div>
                     <ButtonGroup>
-                        <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
-                        <Button id="butRemove" bsSize="xs" onClick={() => this.onShowModal()}>Remove</Button>
+                        <Button id={getContextID(UI.BUTTON_EDIT, location.locationName)} bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
+                        <Button id={getContextID(UI.BUTTON_REMOVE, location.locationName)} bsSize="xs" onClick={() => this.onShowModal()}>Remove</Button>
                     </ButtonGroup>
                 </div>
                 {confirmDeleteModal}
@@ -200,7 +201,7 @@ export class TestOutputLocation extends Component {
                         Location Is Shared
                     </Col>
                     <Col sm={10}>
-                        <Checkbox checked={this.state.isSharedValue}
+                        <Checkbox id={getContextID(UI.OPTION_TOGGLE_LOCATION_SHARED, location.locationName)} checked={this.state.isSharedValue}
                                   onChange={(e) => this.onIsSharedChange(e)}>
                         </Checkbox>
                     </Col>
@@ -222,7 +223,7 @@ export class TestOutputLocation extends Component {
                         Location Name
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="text" placeholder={location.locationName} value={this.state.nameValue} onChange={(e) => this.onNameChange(e)} />
+                        <FormControl id={getContextID(UI.INPUT_LOCATION_NAME, location.locationName)} type="text" placeholder={location.locationName} value={this.state.nameValue} onChange={(e) => this.onNameChange(e)} />
                     </Col>
                 </FormGroup>
 
@@ -234,14 +235,14 @@ export class TestOutputLocation extends Component {
                         {dataStore + UltrawideDirectory.TEST_OUTPUT_DIR}
                     </Col>
                     <Col sm={4}>
-                        <FormControl type="text" placeholder={location.locationPath} value={this.state.pathValue} onChange={(e) => this.onPathChange(e)}/>
+                        <FormControl id={getContextID(UI.INPUT_LOCATION_PATH, location.locationName)} type="text" placeholder={location.locationPath} value={this.state.pathValue} onChange={(e) => this.onPathChange(e)}/>
                     </Col>
                 </FormGroup>
 
-                <Button bsSize="xs" onClick={() => this.onSave(userRole, userContext)}>
+                <Button id={getContextID(UI.BUTTON_SAVE, location.locationName)} bsSize="xs" onClick={() => this.onSave(userRole, userContext)}>
                     Save
                 </Button>
-                <Button bsSize="xs" onClick={() => this.onCancel()}>
+                <Button id={getContextID(UI.BUTTON_CANCEL, location.locationName)} bsSize="xs" onClick={() => this.onCancel()}>
                     Cancel
                 </Button>
 
