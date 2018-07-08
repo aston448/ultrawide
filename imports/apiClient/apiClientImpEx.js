@@ -33,7 +33,7 @@ class ClientImpExServicesClass{
     backupDesign(designId, userRole){
 
         // Client validation
-        let result = ImpExValidationApi.validateBackupDesign(userRole);
+        let result = ImpExValidationApi.validateBackupDesign(userRole, designId);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -101,7 +101,7 @@ class ClientImpExServicesClass{
     archiveDesign(designId, userId){
 
         // Client validation
-        let result = ImpExValidationApi.validateArchiveDesign(userId);
+        let result = ImpExValidationApi.validateArchiveDesign(userId, designId);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen

@@ -21,7 +21,7 @@ export const backupDesign = new ValidatedMethod({
 
     run({designId, userRole}){
 
-        const result = ImpExValidationApi.validateBackupDesign(userRole);
+        const result = ImpExValidationApi.validateBackupDesign(userRole, designId);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('impex.backupDesign.failValidation', result)
@@ -73,7 +73,7 @@ export const archiveDesign = new ValidatedMethod({
 
     run({designId, userId}){
 
-        const result = ImpExValidationApi.validateArchiveDesign(userId);
+        const result = ImpExValidationApi.validateArchiveDesign(userId, designId);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('impex.archiveDesign.failValidation', result)

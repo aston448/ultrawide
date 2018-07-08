@@ -198,16 +198,6 @@ Design.propTypes = {
     uiName: PropTypes.string.isRequired
 };
 
-// Redux function which maps state from the store to specific props this component is interested in.
-// function mapStateToProps(state) {
-//     return {
-//         userContext: state.currentUserItemContext,
-//         userRole: state.currentUserRole
-//     }
-// }
-//
-// // Connect the Redux store to this component ensuring that its required state is mapped to props
-// export default connect(mapStateToProps)(Design);
 
 
 

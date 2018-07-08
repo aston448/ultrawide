@@ -173,10 +173,10 @@ export default class DesignVersion extends Component {
             <Button id={getContextID(UI.BUTTON_CREATE_NEXT, uiName)} bsSize="xs" onClick={ () => this.onShowModal(userRole, designVersion)}>Create Next</Button>;
 
         const modalOkButton =
-            <Button id={getContextID(UI.MODAL_DV_OK, uiName)} onClick={() => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>OK</Button>;
+            <Button id={getContextID(UI.MODAL_OK, uiName)} onClick={() => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>OK</Button>;
 
         const modalCancelButton =
-            <Button id={getContextID(UI.MODAL_DV_CANCEL, uiName)} onClick={() => this.onCloseModal()}>Cancel</Button>;
+            <Button id={getContextID(UI.MODAL_CANCEL, uiName)} onClick={() => this.onCloseModal()}>Cancel</Button>;
 
 
         // Popup shown when user wants to create next Design Version

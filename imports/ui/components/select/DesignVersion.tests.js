@@ -159,7 +159,7 @@ describe('JSX: DesignVersion', () => {
 
                 const item = testDesignVersion(itemData, userContext, userRole, itemData.designVersionName);
 
-                const expectedUiItem = hashID(UI.MODAL_DV_CANCEL, 'DesignVersion1');
+                const expectedUiItem = hashID(UI.MODAL_CANCEL, 'DesignVersion1');
 
                 // Show the modal
                 item.setState({showModal: true});

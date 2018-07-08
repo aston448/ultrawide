@@ -27,7 +27,7 @@ describe('VAL: User Management', () => {
                 const expectation = UserManagementValidationErrors.USER_MANAGEMENT_INVALID_NEW_PASSWORDS;
                 const result = UserManagementValidationServices.validateChangeUserPassword('newPassword', 'wrongPassword');
 
-                chai.assert.equal(result, expectation, 'Expected password match to be valid');
+                chai.assert.equal(result, expectation, 'Expected password match to be invalid');
             });
         });
     });
@@ -61,7 +61,7 @@ describe('VAL: User Management', () => {
                 const expectation = UserManagementValidationErrors.USER_MANAGEMENT_INVALID_NEW_PASSWORDS;
                 const result = UserManagementValidationServices.validateChangeAdminPassword(user, 'newPassword', 'wrongPassword');
 
-                chai.assert.equal(result, expectation, 'Expected password match to be valid');
+                chai.assert.equal(result, expectation, 'Expected password match to be invalid');
             });
         });
 
@@ -78,7 +78,7 @@ describe('VAL: User Management', () => {
                 const expectation = Validation.VALID;
                 const result = UserManagementValidationServices.validateChangeAdminPassword(user, 'newPassword', 'newPassword');
 
-                chai.assert.equal(result, expectation, 'Expected password match to be invalid');
+                chai.assert.equal(result, expectation, 'Expected password match to be valid');
             });
 
             it('invalid if not admin', function () {

@@ -8,8 +8,10 @@ export const Validation = {
 };
 
 export const ImpExValidationErrors = {
-    BACKUP_DESIGN_INVALID_ROLE_RESTORE:     'Only the admin user can restore a Design',
-    BACKUP_DESIGN_INVALID_ROLE_ARCHIVE:     'Only the admin user can archive a Design'
+    RESTORE_DESIGN_INVALID_ROLE:                'Only the admin user can restore a Design',
+    ARCHIVE_DESIGN_INVALID_ROLE:                'Only the admin user can archive a Design',
+    BACKUP_DESIGN_INVALID_STATUS_ARCHIVED:      'Archived Designs cannot be backed up',
+    ARCHIVE_DESIGN_INVALID_STATUS_REMOVABLE:    'Removable Designs cannot be archived'
 };
 
 export const UserManagementValidationErrors = {

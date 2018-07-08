@@ -840,6 +840,90 @@ describe('UI Mods: UW Item', () => {
 
         });
 
+        describe('A live Design in the Designs administration list has an option to archive it', () => {
+
+            it('has archive option for live admin', () => {
+
+                const itemType = ItemType.DESIGN;
+
+                const itemData = {
+                    _id:                'DESIGN_01',
+                    designName:         'Design1',
+                    isRemovable:        false,
+                    designStatus:       DesignStatus.DESIGN_LIVE
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'NONE',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'NONE',
+                };
+
+                const userRole = RoleType.ADMIN;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ARCHIVE, 'Design1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' was not found');
+            });
+
+            it('has no archive option for live designer', () => {
+
+                const itemType = ItemType.DESIGN;
+
+                const itemData = {
+                    _id:                'DESIGN_01',
+                    designName:         'Design1',
+                    isRemovable:        false,
+                    designStatus:       DesignStatus.DESIGN_LIVE
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'NONE',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'NONE',
+                };
+
+                const userRole = RoleType.DESIGNER;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ARCHIVE, 'Design1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');
+            });
+
+            it('has no archive option for archived admin', () => {
+
+                const itemType = ItemType.DESIGN;
+
+                const itemData = {
+                    _id:                'DESIGN_01',
+                    designName:         'Design1',
+                    isRemovable:        false,
+                    designStatus:       DesignStatus.DESIGN_ARCHIVED
+                };
+
+                const userContext = {
+                    userId:             'USER1',
+                    designId:           'DESIGN_01',
+                    designVersionId:    'NONE',
+                    designUpdateId:     'NONE',
+                    workPackageId:      'NONE',
+                };
+
+                const userRole = RoleType.ADMIN;
+
+                const item = testLayout(itemType, itemData, userContext, userRole);
+                const expectedUiItem = hashID(UI.BUTTON_ARCHIVE, 'Design1');
+
+                chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');
+            });
+        });
+
         describe('If a Design is removable, the Design has an option to remove the Design', () => {
 
             it('has a Remove button if the Design is removable', () => {

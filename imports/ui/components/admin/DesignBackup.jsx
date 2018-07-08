@@ -9,8 +9,9 @@ import PropTypes from 'prop-types';
 
 
 // Ultrawide Services
-import {log} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
+import {UI} from "../../../constants/ui_context_ids";
 
 import { ClientImpExServices }          from '../../../apiClient/apiClientImpEx.js';
 
@@ -59,10 +60,10 @@ export class DesignBackup extends Component {
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Backup');
 
         const modalOkButton =
-            <Button onClick={() => this.onRestore(backup, userContext)}>OK</Button>;
+            <Button id={UI.MODAL_OK} onClick={() => this.onRestore(backup, userContext)}>OK</Button>;
 
         const modalCancelButton =
-            <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
+            <Button id={UI.MODAL_CANCEL} onClick={() => this.onCloseModal()}>Cancel</Button>;
 
         const viewInstance = (
             <div>
@@ -80,7 +81,7 @@ export class DesignBackup extends Component {
                     </Row>
                 </Grid>
                 <div className="user-buttons">
-                    <Button id="butRestore" bsSize="xs" onClick={ () => this.onShowModal()}>Restore</Button>
+                    <Button id={getContextID(UI.BUTTON_RESTORE, backup.backupDesignName)} bsSize="xs" onClick={ () => this.onShowModal()}>Restore</Button>
                 </div>
             </div>
         );

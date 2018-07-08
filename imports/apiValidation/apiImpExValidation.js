@@ -4,6 +4,7 @@ import { ImpExValidationServices }          from '../service_modules/validation/
 
 // Data Access
 import { UserRoleData }                     from '../data/users/user_role_db.js';
+import { DesignData}                        from "../data/design/design_db";
 
 //======================================================================================================================
 //
@@ -13,9 +14,11 @@ import { UserRoleData }                     from '../data/users/user_role_db.js'
 
 class ImpExValidationApiClass{
 
-    validateBackupDesign(userRole){
+    validateBackupDesign(userRole, designId){
 
-        return ImpExValidationServices.validateBackupDesign(userRole);
+        const design = DesignData.getDesignById(designId);
+
+        return ImpExValidationServices.validateBackupDesign(userRole, design);
 
     };
 
@@ -27,11 +30,12 @@ class ImpExValidationApiClass{
 
     };
 
-    validateArchiveDesign(userId){
+    validateArchiveDesign(userId, designId){
 
         const user = UserRoleData.getRoleByUserId(userId);
+        const design = DesignData.getDesignById(designId);
 
-        return ImpExValidationServices.validateArchiveDesign(user);
+        return ImpExValidationServices.validateArchiveDesign(user, design);
     }
 
 }

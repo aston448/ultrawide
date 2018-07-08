@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import { RoleType } from '../../constants/constants.js';
+import { DesignStatus } from '../../constants/constants.js';
 import { Validation, ImpExValidationErrors } from '../../constants/validation_errors.js';
 
 //======================================================================================================================
@@ -13,7 +13,12 @@ import { Validation, ImpExValidationErrors } from '../../constants/validation_er
 
 class ImpExValidationServicesClass{
 
-    validateBackupDesign(userRole){
+    validateBackupDesign(userRole, design){
+
+        // Cannot backup archived Design
+        if(design.designStatus === DesignStatus.DESIGN_ARCHIVED){
+            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_STATUS_ARCHIVED;
+        }
 
         return Validation.VALID;
     };
@@ -21,24 +26,30 @@ class ImpExValidationServicesClass{
     validateRestoreDesign(user){
 
         if(!user){
-            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_ROLE_RESTORE;
+            return ImpExValidationErrors.RESTORE_DESIGN_INVALID_ROLE;
         }
 
         if(!(user.isAdmin)){
-            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_ROLE_RESTORE;
+            return ImpExValidationErrors.RESTORE_DESIGN_INVALID_ROLE;
         }
 
         return Validation.VALID;
     };
 
-    validateArchiveDesign(user){
+    validateArchiveDesign(user, design){
 
-        if(!user){
-            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_ROLE_ARCHIVE;
+        // Cannot archive a removable design
+        if(design.isRemovable){
+            return ImpExValidationErrors.ARCHIVE_DESIGN_INVALID_STATUS_REMOVABLE;
         }
 
+        if(!user){
+            return ImpExValidationErrors.ARCHIVE_DESIGN_INVALID_ROLE;
+        }
+
+        // Only admin user can archive
         if(!(user.isAdmin)){
-            return ImpExValidationErrors.BACKUP_DESIGN_INVALID_ROLE_ARCHIVE;
+            return ImpExValidationErrors.ARCHIVE_DESIGN_INVALID_ROLE;
         }
 
         return Validation.VALID;
