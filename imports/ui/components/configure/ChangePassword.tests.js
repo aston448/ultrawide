@@ -3,12 +3,12 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-import { ChangePassword } from './ChangePassword.jsx' // Non Redux wrapped
-import { hashID } from "../../../common/utils";
-import { UI } from '../../../constants/ui_context_ids.js'
+import ChangePassword       from './ChangePassword.jsx'
+
+import { hashID }           from "../../../common/utils";
+import { UI }               from '../../../constants/ui_context_ids.js'
+
 import {DisplayContext, RoleType, UserSettingValue} from "../../../constants/constants";
-
-
 
 
 describe('JSX: ConfigSettings', () => {

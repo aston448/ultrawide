@@ -24,7 +24,7 @@ import {Well, ControlLabel, FormControl, Button, FormGroup}     from 'react-boot
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class ChangePassword extends Component {
+export default class ChangePassword extends Component {
 
     constructor(props) {
         super(props);
@@ -78,15 +78,15 @@ export class ChangePassword extends Component {
                 <form onSubmit={(e) => this.onUpdateUserPassword(e, displayContext)}>
                     <div className="design-item-header">Change My Password</div>
                     <div className="design-item-note">You'll need to remember it so be careful!</div>
-                    <FormGroup controlId="configOldPassword">
+                    <FormGroup>
                         <ControlLabel>Current Password:</ControlLabel>
                         <FormControl id={getContextID(UI.INPUT_PASSWORD_OLD, '')} ref="configOldPassword" type="password" onChange={(e) => this.updateOldPassword(e)}/>
                     </FormGroup>
-                    <FormGroup controlId="configNewPassword1">
+                    <FormGroup>
                         <ControlLabel>New Password:</ControlLabel>
                         <FormControl id={getContextID(UI.INPUT_PASSWORD_NEW1, '')} ref="configNewPassword1" type="password" onChange={(e) => this.updateNewPassword1(e)}/>
                     </FormGroup>
-                    <FormGroup controlId="configNewPassword2">
+                    <FormGroup>
                         <ControlLabel>Repeat New Password:</ControlLabel>
                         <FormControl id={getContextID(UI.INPUT_PASSWORD_NEW2, '')} ref="configNewPassword2" type="password" onChange={(e) => this.updateNewPassword2(e)}/>
                     </FormGroup>

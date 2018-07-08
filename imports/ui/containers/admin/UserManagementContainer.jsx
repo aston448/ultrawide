@@ -14,7 +14,7 @@ import UserDetails                      from '../../components/admin/UserDetails
 import ChangePassword                   from '../../components/configure/ChangePassword.jsx';
 
 // Ultrawide Services
-import {log, detID} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
 import {LogLevel, DisplayContext} from "../../../constants/constants";
 import {UI} from "../../../constants/ui_context_ids";
 
@@ -109,9 +109,9 @@ export class UserManagementScreen extends Component {
                         {users}
                     </Col>
                     <Col id={UI.CONFIG_ADMIN_PASSWORD} md={6} className="col">
-                        {<ChangePassword
+                        <ChangePassword
                             displayContext={DisplayContext.CONFIG_ADMIN_PASSWORD}
-                        />}
+                        />
                     </Col>
                 </Row>
             </Grid>

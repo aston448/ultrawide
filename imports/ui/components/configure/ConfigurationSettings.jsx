@@ -9,13 +9,13 @@ import PropTypes from 'prop-types';
 import TestOutputsContainer                     from '../../containers/configure/TestOutputsContainer.jsx';
 import UserTestOutputsContainer                 from '../../containers/configure/UserTestOutputsContainer.jsx';
 import DefaultAspectsListContainer              from '../../containers/edit/DefaultFeatureAspectsContainer.jsx';
+import ChangePassword                           from '../../components/configure/ChangePassword.jsx';
 
 // Ultrawide Services
 import { ClientUserSettingsServices }               from '../../../apiClient/apiClientUserSettings.js';
-import { ClientUserManagementServices }             from '../../../apiClient/apiClientUserManagement.js';
 import { ClientDocumentServices }                   from '../../../apiClient/apiClientDocument.js';
 
-import {UserSettingValue, UserSetting, LogLevel, RoleType} from '../../../constants/constants.js';
+import {UserSettingValue, UserSetting, LogLevel, RoleType, DisplayContext} from '../../../constants/constants.js';
 import {UI} from "../../../constants/ui_context_ids";
 import {log, getContextID} from "../../../common/utils";
 
@@ -28,8 +28,6 @@ import {FormGroup, Radio, Checkbox, Grid, Row, Col, Tabs, Tab} from 'react-boots
 
 // REDUX services
 import {connect} from 'react-redux';
-import {ChangePassword} from "./ChangePassword";
-import {DisplayContext} from "../../../constants/constants";
 
 
 // =====================================================================================================================
@@ -285,9 +283,9 @@ export class ConfigurationSettings extends Component {
                                     </Grid>
                                 </Col>
                                 <Col id={UI.CONFIG_PASSWORD} md={6} className="close-col">
-                                    {<ChangePassword
+                                    <ChangePassword
                                         displayContext={DisplayContext.CONFIG_USER_PASSWORD}
-                                    />}
+                                    />
                                 </Col>
                             </Row>
                         </Col>
