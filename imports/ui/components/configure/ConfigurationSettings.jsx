@@ -17,7 +17,7 @@ import { ClientDocumentServices }                   from '../../../apiClient/api
 
 import {UserSettingValue, UserSetting, LogLevel, RoleType} from '../../../constants/constants.js';
 import {UI} from "../../../constants/ui_context_ids";
-import {log, getID} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
 
 // Data Services
 import { DesignVersionData }                        from '../../../data/design/design_version_db.js';
@@ -28,6 +28,8 @@ import {FormGroup, Radio, Checkbox, Grid, Row, Col, Tabs, Tab} from 'react-boots
 
 // REDUX services
 import {connect} from 'react-redux';
+import {ChangePassword} from "./ChangePassword";
+import {DisplayContext} from "../../../constants/constants";
 
 
 // =====================================================================================================================
@@ -47,9 +49,6 @@ export class ConfigurationSettings extends Component {
             currentWindowSize: this.props.currentWindowSize,
             currentIntOutputPath: this.props.intTestOutputDir,
             includeNarratives: this.props.includeNarratives === UserSettingValue.SETTING_INCLUDE,
-            oldPassword: '',
-            newPassword1: '',
-            newPassword2: '',
             includeSectionDetails: (this.props.includeSectionDetails === UserSettingValue.SETTING_INCLUDE),
             includeNarrativeDetails: (this.props.includeNarrativeDetails === UserSettingValue.SETTING_INCLUDE),
             includeFeatureDetails: (this.props.includeFeatureDetails === UserSettingValue.SETTING_INCLUDE),
@@ -96,30 +95,6 @@ export class ConfigurationSettings extends Component {
         ClientUserSettingsServices.setIntTestOutputDir(this.state.currentIntOutputPath);
 
         ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_INT_OUTPUT_LOCATION, this.state.currentIntOutputPath);
-    }
-
-    updateOldPassword(e){
-        this.setState({oldPassword: e.target.value});
-    }
-
-    updateNewPassword1(e){
-        this.setState({newPassword1: e.target.value});
-    }
-
-    updateNewPassword2(e){
-        this.setState({newPassword2: e.target.value});
-    }
-
-    updateIntOutputDir(e){
-        this.setState({currentIntOutputPath: e.target.value});
-    }
-
-    onUpdateUserPassword(e){
-
-        // Call this to prevent Submit reloading the page
-        e.preventDefault();
-
-        ClientUserManagementServices.changeUserPassword(this.state.oldPassword, this.state.newPassword1, this.state.newPassword2);
     }
 
     updateDocumentOptions(settingType){
@@ -280,30 +255,6 @@ export class ConfigurationSettings extends Component {
                 </form>
             </Well>;
 
-        const changeUserPassword =
-            <div id={getID(UI.CONFIG_PASSWORD, '')}>
-                <Well className="settings-well">
-                    <form onSubmit={(e) => this.onUpdateUserPassword(e)}>
-                        <div className="design-item-header">Change My Password</div>
-                        <div className="design-item-note">You'll need to remember it so be careful!</div>
-                        <FormGroup controlId="configOldPassword">
-                            <ControlLabel>Current Password:</ControlLabel>
-                            <FormControl id={getID(UI.INPUT_PASSWORD_OLD, '')} ref="configOldPassword" type="password" onChange={(e) => this.updateOldPassword(e)}/>
-                        </FormGroup>
-                        <FormGroup controlId="configNewPassword1">
-                            <ControlLabel>New Password:</ControlLabel>
-                            <FormControl id={getID(UI.INPUT_PASSWORD_NEW1, '')} ref="configNewPassword1" type="password" onChange={(e) => this.updateNewPassword1(e)}/>
-                        </FormGroup>
-                        <FormGroup controlId="configNewPassword2">
-                            <ControlLabel>Repeat New Password:</ControlLabel>
-                            <FormControl id={getID(UI.INPUT_PASSWORD_NEW2, '')} ref="configNewPassword2" type="password" onChange={(e) => this.updateNewPassword2(e)}/>
-                        </FormGroup>
-                        <Button id={getID(UI.BUTTON_CHANGE_PASSWORD, '')} type="submit">
-                            Change My Password
-                        </Button>
-                    </form>
-                </Well>
-            </div>;
 
         let settingsGrid = '';
 
@@ -333,8 +284,10 @@ export class ConfigurationSettings extends Component {
                                         </Row>
                                     </Grid>
                                 </Col>
-                                <Col md={6} className="close-col">
-                                    {changeUserPassword}
+                                <Col id={UI.CONFIG_PASSWORD} md={6} className="close-col">
+                                    {<ChangePassword
+                                        displayContext={DisplayContext.CONFIG_USER_PASSWORD}
+                                    />}
                                 </Col>
                             </Row>
                         </Col>
@@ -373,8 +326,10 @@ export class ConfigurationSettings extends Component {
 
                                     </Grid>
                                 </Col>
-                                <Col md={6} className="close-col">
-                                    {changeUserPassword}
+                                <Col id={UI.CONFIG_PASSWORD} md={6} className="close-col">
+                                    {<ChangePassword
+                                        displayContext={DisplayContext.CONFIG_USER_PASSWORD}
+                                    />}
                                 </Col>
                             </Row>
                             <Row>

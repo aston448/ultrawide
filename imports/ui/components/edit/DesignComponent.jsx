@@ -27,7 +27,7 @@ import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClie
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import { ComponentUiModules }                   from '../../../ui_modules/design_component.js'
 
-import { getID, log }              from '../../../common/utils.js';
+import { getContextID, log }              from '../../../common/utils.js';
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
@@ -787,7 +787,7 @@ export class DesignComponent extends Component{
         
         if(mode === ViewMode.MODE_VIEW || displayContext === DisplayContext.UPDATE_SCOPE || displayContext === DisplayContext.WP_SCOPE){
             return (
-                <div id={getID(uiItem, uiContextName)} className={itemStyle}>
+                <div id={getContextID(uiItem, uiContextName)} className={itemStyle}>
                     {headerHtml}
                     {bodyHtml}
                 </div>
@@ -800,7 +800,7 @@ export class DesignComponent extends Component{
                         displayContext={displayContext}
                         mode={mode}
                     />
-                    <div id={getID(uiItem, uiContextName)} className={itemStyle}>
+                    <div id={getContextID(uiItem, uiContextName)} className={itemStyle}>
                         {headerHtml}
                         {bodyHtml}
                     </div>

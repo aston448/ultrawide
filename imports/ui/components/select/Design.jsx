@@ -12,7 +12,7 @@ import UltrawideItemEditableField from "../common/UltrawideItemEditableField";
 // Ultrawide Services
 import { ItemType, DesignStatus, RoleType, FieldType, LogLevel } from '../../../constants/constants.js';
 import { UI } from '../../../constants/ui_context_ids';
-import {log, getID} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
 
 import { ClientDesignServices }     from '../../../apiClient/apiClientDesign.js';
 import { ClientImpExServices }     from '../../../apiClient/apiClientImpEx.js';
@@ -70,13 +70,13 @@ export default class Design extends Component {
         let buttons = '';
 
         const removeButton =
-            <Button id={getID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
+            <Button id={getContextID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
 
         const backupButton =
-            <Button id={getID(UI.BUTTON_BACKUP, uiName)} bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>;
+            <Button id={getContextID(UI.BUTTON_BACKUP, uiName)} bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>;
 
         const archiveButton =
-            <Button id={getID(UI.BUTTON_ARCHIVE, uiName)} bsSize="xs" onClick={ () => this.onShowModal()} >Archive Design</Button>;
+            <Button id={getContextID(UI.BUTTON_ARCHIVE, uiName)} bsSize="xs" onClick={ () => this.onShowModal()} >Archive Design</Button>;
 
         const modalOkButton =
             <Button onClick={ () => this.onArchiveDesign(userContext, design._id)}>OK</Button>;
@@ -176,7 +176,7 @@ export default class Design extends Component {
             }
 
             return (
-                <div id={getID(UI.ITEM_DESIGN, uiName)}>
+                <div id={getContextID(UI.ITEM_DESIGN, uiName)}>
                     {name}
                     <div className={statusClass}>
                         {buttons}

@@ -21,14 +21,22 @@ export function uiName(name){
     return replaceAll(name, ' ', '_');
 }
 
-export function getID(item, name){
+export function getContextID(item, name){
 
-    return item + uiName(name);
+    if(name) {
+        return item + uiName(name);
+    } else {
+        return item;
+    }
 }
 
 export function hashID(item, name){
 
-    return '#' + item + uiName(name);
+    if(name) {
+        return '#' + item + uiName(name);
+    } else {
+        return '#' + item;
+    }
 }
 
 export function getDateTimeString(dateTime){

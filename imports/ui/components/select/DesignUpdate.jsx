@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import UltrawideItemEditableField   from "../common/UltrawideItemEditableField";
 
 // Ultrawide Services
-import {log, getID} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
 import { UI } from '../../../constants/ui_context_ids';
 import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType, FieldType, LogLevel} from '../../../constants/constants.js';
 import { TextLookups } from '../../../common/lookups.js';
@@ -139,24 +139,24 @@ export default class DesignUpdate extends Component {
                 uiName={uiName}
             />;
 
-        const editButton = <Button id={getID(UI.BUTTON_EDIT, uiName)} bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, designUpdate)}>Edit</Button>;
-        const deleteButton = <Button id={getID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>;
-        const publishButton = <Button id={getID(UI.BUTTON_PUBLISH, uiName)} bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>;
-        const withdrawButton = <Button id={getID(UI.BUTTON_WITHDRAW, uiName)} bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>;
-        const viewButton = <Button id={getID(UI.BUTTON_VIEW, uiName)} bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>;
+        const editButton = <Button id={getContextID(UI.BUTTON_EDIT, uiName)} bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, designUpdate)}>Edit</Button>;
+        const deleteButton = <Button id={getContextID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>;
+        const publishButton = <Button id={getContextID(UI.BUTTON_PUBLISH, uiName)} bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>;
+        const withdrawButton = <Button id={getContextID(UI.BUTTON_WITHDRAW, uiName)} bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>;
+        const viewButton = <Button id={getContextID(UI.BUTTON_VIEW, uiName)} bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>;
 
         const mergeOptions =
             <div className={'merge-options'}>
-                <FormGroup id={getID(UI.ITEM_MERGE_OPTIONS, uiName)}>
-                    <Radio inline id={getID(UI.MERGE_OPTION_INCLUDE, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
+                <FormGroup id={getContextID(UI.ITEM_MERGE_OPTIONS, uiName)}>
+                    <Radio inline id={getContextID(UI.MERGE_OPTION_INCLUDE, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_INCLUDE)}
                     </Radio>
-                    <Radio inline id={getID(UI.MERGE_OPTION_ROLL, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
+                    <Radio inline id={getContextID(UI.MERGE_OPTION_ROLL, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_ROLL)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_ROLL)}
                     </Radio>
-                    <Radio inline id={getID(UI.MERGE_OPTION_IGNORE, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
+                    <Radio inline id={getContextID(UI.MERGE_OPTION_IGNORE, uiName)} checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_IGNORE)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_IGNORE)}
                     </Radio>
@@ -237,7 +237,7 @@ export default class DesignUpdate extends Component {
         }
 
         return (
-            <div id={getID(UI.ITEM_DESIGN_UPDATE, uiName)}>
+            <div id={getContextID(UI.ITEM_DESIGN_UPDATE, uiName)}>
                 {name}
                 {body}
                 <div className={statusClass}>

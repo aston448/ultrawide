@@ -70,6 +70,7 @@ export const UI = {
     COMPONENT_UNSELECTED:               'component-unselected-',
     LINK_ITEM_LINK_LABEL:               'link-label-',
     CONFIG_PASSWORD:                    'config-password',
+    CONFIG_ADMIN_PASSWORD:              'config-admin-password',
     MODAL_NEXT_VERSION:                 'modal-next-dv-',
     MODAL_DV_OK:                        'modal-dv-ok-',
     MODAL_DV_CANCEL:                    'modal-dv-cancel-',

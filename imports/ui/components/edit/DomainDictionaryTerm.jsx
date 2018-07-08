@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 // Ultrawide Services
 import {ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
 import {UI} from "../../../constants/ui_context_ids";
-import {log, getID} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
 
 import { ClientDomainDictionaryServices }   from '../../../apiClient/apiClientDomainDictionary.js';
 import { DomainDictUiServices }             from "../../../ui_modules/domain_dictionary";
@@ -262,7 +262,7 @@ export class DomainDictionaryTerm extends Component {
         );
 
         let nameEditorEditing =
-            <div id={getID(UI.EDITABLE_FIELD_EDITING, dictionaryTerm.domainTermNew)}>
+            <div id={getContextID(UI.EDITABLE_FIELD_EDITING, dictionaryTerm.domainTermNew)}>
                 <InputGroup>
                     <div className="editableItem domain-term">
                         <FormControl
@@ -274,32 +274,32 @@ export class DomainDictionaryTerm extends Component {
                         />
                     </div>
                     <InputGroup.Addon onClick={ () => this.onSaveTermName(userRole, view, mode, dictionaryTerm, this.state.termNameValue)}>
-                        <div id={getID(UI.OPTION_SAVE, uiContextNameTerm)} className="green"><Glyphicon glyph="ok"/></div>
+                        <div id={getContextID(UI.OPTION_SAVE, uiContextNameTerm)} className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoTermEdit()}>
-                        <div id={getID(UI.OPTION_UNDO, uiContextNameTerm)} className="red"><Glyphicon glyph="arrow-left"/></div>
+                        <div id={getContextID(UI.OPTION_UNDO, uiContextNameTerm)} className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
 
         let nameEditorNotEditing =
-            <div id={getID(UI.EDITABLE_FIELD, dictionaryTerm.domainTermNew)} onClick={ () => this.setCurrentTerm()}>
+            <div id={getContextID(UI.EDITABLE_FIELD, dictionaryTerm.domainTermNew)} onClick={ () => this.setCurrentTerm()}>
                 <InputGroup>
                     <div className={"readOnlyItem domain-term"}>
                         <ControlLabel>{this.state.termNameValue}</ControlLabel>
                     </div>
                     <InputGroup.Addon onClick={ () => this.editTermName()}>
-                        <div id={getID(UI.OPTION_EDIT, uiContextNameTerm)} className="blue"><Glyphicon glyph="edit"/></div>
+                        <div id={getContextID(UI.OPTION_EDIT, uiContextNameTerm)} className="blue"><Glyphicon glyph="edit"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.onDeleteTerm(userRole, view, mode, dictionaryTerm)}>
-                        <div id={getID(UI.OPTION_REMOVE, uiContextNameTerm)} className="red"><Glyphicon glyph="remove"/></div>
+                        <div id={getContextID(UI.OPTION_REMOVE, uiContextNameTerm)} className="red"><Glyphicon glyph="remove"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
 
 
         let definitionEditorEditing =
-            <div id={getID(UI.EDITABLE_FIELD_EDITING, 'definition')}>
+            <div id={getContextID(UI.EDITABLE_FIELD_EDITING, 'definition')}>
                 <InputGroup>
                     <div className="editableItem domain-definition">
                         <Editor
@@ -314,17 +314,17 @@ export class DomainDictionaryTerm extends Component {
                     </div>
 
                     <InputGroup.Addon onClick={ () => this.onSaveTermDefinition(userRole, view, mode, dictionaryTerm)}>
-                        <div id={getID(UI.OPTION_SAVE, uiContextNameDef)} className="green"><Glyphicon glyph="ok"/></div>
+                        <div id={getContextID(UI.OPTION_SAVE, uiContextNameDef)} className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoTermDefinitionEdit()}>
-                        <div id={getID(UI.OPTION_UNDO, uiContextNameDef)} className="red"><Glyphicon glyph="arrow-left"/></div>
+                        <div id={getContextID(UI.OPTION_UNDO, uiContextNameDef)} className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
 
         let definitionEditorNotEditing =
 
-                <div id={getID(UI.EDITABLE_FIELD, 'definition')} className={"readOnlyItem  domain-definition"}>
+                <div id={getContextID(UI.EDITABLE_FIELD, 'definition')} className={"readOnlyItem  domain-definition"}>
                     <InputGroup>
 
                         <div  onClick={ () => this.setCurrentTerm()}>
@@ -339,7 +339,7 @@ export class DomainDictionaryTerm extends Component {
                         <InputGroup.Addon onClick={ () => this.editTermDefinition()}>
                             <OverlayTrigger overlay={tooltipEdit}>
                                 <a href="#">
-                                    <div id={getID(UI.OPTION_EDIT, uiContextNameDef)} className="blue"><Glyphicon glyph="edit"/></div>
+                                    <div id={getContextID(UI.OPTION_EDIT, uiContextNameDef)} className="blue"><Glyphicon glyph="edit"/></div>
                                 </a>
                             </OverlayTrigger>
                         </InputGroup.Addon>
@@ -347,7 +347,7 @@ export class DomainDictionaryTerm extends Component {
                 </div>;
 
         let viewOnlyTerm =
-            <div id={getID(UI.READ_ONLY_FIELD, dictionaryTerm.domainTermNew)} onClick={ () => this.setCurrentTerm()}>
+            <div id={getContextID(UI.READ_ONLY_FIELD, dictionaryTerm.domainTermNew)} onClick={ () => this.setCurrentTerm()}>
                 <InputGroup>
                     <div className={"readOnlyItem  domain-term"}>
                         <ControlLabel>{this.state.termNameValue}</ControlLabel>
@@ -356,7 +356,7 @@ export class DomainDictionaryTerm extends Component {
             </div>;
 
         let viewOnlyDefinition =
-            <div id={getID(UI.READ_ONLY_FIELD, 'definition')} className={"readOnlyItem domain-definition"}>
+            <div id={getContextID(UI.READ_ONLY_FIELD, 'definition')} className={"readOnlyItem domain-definition"}>
                 <InputGroup>
                     <div  onClick={ () => this.setCurrentTerm()}>
                         <div>

@@ -11,10 +11,12 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import ItemList                         from '../../components/select/ItemList.jsx';
 import UserDetails                      from '../../components/admin/UserDetails.jsx';
+import ChangePassword                   from '../../components/configure/ChangePassword.jsx';
 
 // Ultrawide Services
-import {log} from "../../../common/utils";
-import {LogLevel} from "../../../constants/constants";
+import {log, detID} from "../../../common/utils";
+import {LogLevel, DisplayContext} from "../../../constants/constants";
+import {UI} from "../../../constants/ui_context_ids";
 
 import { ClientDataServices }               from '../../../apiClient/apiClientDataServices.js';
 import { ClientUserManagementServices }     from '../../../apiClient/apiClientUserManagement.js';
@@ -39,14 +41,11 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class UserManagementScreen extends Component {
+export class UserManagementScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            oldPassword: '',
-            newPassword1: '',
-            newPassword2: ''
         };
 
     };
@@ -75,26 +74,6 @@ class UserManagementScreen extends Component {
         );
     }
 
-    updateOldPassword(e){
-        this.setState({oldPassword: e.target.value});
-    }
-
-    updateNewPassword1(e){
-        this.setState({newPassword1: e.target.value});
-    }
-
-    updateNewPassword2(e){
-        this.setState({newPassword2: e.target.value});
-    }
-
-    onUpdateAdminPassword(e){
-
-        // Call this to prevent Submit reloading the page
-        e.preventDefault();
-
-        ClientUserManagementServices.changeAdminPassword(this.state.oldPassword, this.state.newPassword1, this.state.newPassword2);
-    }
-
     render() {
 
         const {userData} = this.props;
@@ -112,7 +91,6 @@ class UserManagementScreen extends Component {
             bodyDataFunction = () => this.noUsers()
         }
 
-
         const users =
             <ItemList
                 headerText={'Ultrawide Users'}
@@ -123,37 +101,17 @@ class UserManagementScreen extends Component {
                 footerActionFunction={footerActionFunction}
             />;
 
-        const changeAdminPassword =
-            <Well className="admin-password-well">
-                <form onSubmit={(e) => this.onUpdateAdminPassword(e)}>
-                    <div className="design-item-header">Change Admin Password</div>
-                    <div className="design-item-note">You'll need to remember it so be careful!</div>
-                    <FormGroup controlId="oldPassword">
-                        <ControlLabel>Current Password:</ControlLabel>
-                        <FormControl ref="oldPassword" type="password"  onChange={(e) => this.updateOldPassword(e)}/>
-                    </FormGroup>
-                    <FormGroup controlId="newPassword1">
-                        <ControlLabel>New Password:</ControlLabel>
-                        <FormControl ref="newPassword1" type="password"  onChange={(e) => this.updateNewPassword1(e)}/>
-                    </FormGroup>
-                    <FormGroup controlId="newPassword2">
-                        <ControlLabel>Repeat New Password:</ControlLabel>
-                        <FormControl ref="newPassword2" type="password"  onChange={(e) => this.updateNewPassword2(e)}/>
-                    </FormGroup>
-                    <Button type="submit">
-                        Change Admin Password
-                    </Button>
-                </form>
-            </Well>;
-
+        // User Management screen also has a panel to change the Admin password
         return (
             <Grid>
                 <Row>
                     <Col md={6} className="col">
                         {users}
                     </Col>
-                    <Col md={6} className="col">
-                        {changeAdminPassword}
+                    <Col id={UI.CONFIG_ADMIN_PASSWORD} md={6} className="col">
+                        {<ChangePassword
+                            displayContext={DisplayContext.CONFIG_ADMIN_PASSWORD}
+                        />}
                     </Col>
                 </Row>
             </Grid>
@@ -164,17 +122,6 @@ class UserManagementScreen extends Component {
 UserManagementScreen.propTypes = {
     userData:       PropTypes.array.isRequired
 };
-
-// Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-    return {
-
-    }
-}
-
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-UserManagementScreen = connect(mapStateToProps)(UserManagementScreen);
-
 
 
 export default UserManagementContainer = createContainer(({params}) => {

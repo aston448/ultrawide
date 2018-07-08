@@ -21,7 +21,7 @@ import {ClientDesignUpdateServices}     from "../apiClient/apiClientDesignUpdate
 import {ClientDesignVersionServices}    from "../apiClient/apiClientDesignVersion";
 
 import { TextLookups } from '../common/lookups.js';
-import {log, getID, replaceAll} from "../common/utils";
+import {log, getContextID, replaceAll} from "../common/utils";
 
 import React from 'react';
 
@@ -40,16 +40,16 @@ class UltrawideItemUiModulesClass {
 
         switch(uwItemType){
             case ItemType.DESIGN:
-                uiName = getID(UI.ITEM_DESIGN, itemData.designName);
+                uiName = getContextID(UI.ITEM_DESIGN, itemData.designName);
                 break;
             case ItemType.DESIGN_VERSION:
-                uiName = getID(UI.ITEM_DESIGN_VERSION, itemData.designVersionName);
+                uiName = getContextID(UI.ITEM_DESIGN_VERSION, itemData.designVersionName);
                 break;
             case ItemType.DESIGN_UPDATE:
-                uiName = getID(UI.ITEM_DESIGN_UPDATE, itemData.updateName);
+                uiName = getContextID(UI.ITEM_DESIGN_UPDATE, itemData.updateName);
                 break;
             case ItemType.WORK_PACKAGE:
-                uiName = getID(UI.ITEM_WORK_PACKAGE, itemData.workPackageName);
+                uiName = getContextID(UI.ITEM_WORK_PACKAGE, itemData.workPackageName);
                 break;
         }
 
@@ -74,7 +74,7 @@ class UltrawideItemUiModulesClass {
         if(viewData.selected){
 
             return(
-                <div id={getID(UI.UW_ITEM_SELECTED, viewData.uiName)}>
+                <div id={getContextID(UI.UW_ITEM_SELECTED, viewData.uiName)}>
                     {this.selectedLayout(uwItemType, selectFunction, viewData.statusClass, viewData.itemName, itemData, userContext, userRole, viewData.uiName)}
                 </div>
             );
@@ -82,7 +82,7 @@ class UltrawideItemUiModulesClass {
         } else {
 
             return(
-                <div id={getID(UI.UW_ITEM_UNSELECTED, viewData.uiName)}>
+                <div id={getContextID(UI.UW_ITEM_UNSELECTED, viewData.uiName)}>
                     {this.unselectedLayout(uwItemType, selectFunction, viewData.statusClass, viewData.itemName, itemData, viewData.uiName)}
                 </div>
             )
@@ -396,7 +396,7 @@ class UltrawideItemUiModulesClass {
             case ItemType.WORK_PACKAGE:
 
                 return (
-                    <div id={getID(UI.ITEM_SUMMARY, uiName) + '-' + itemType}>
+                    <div id={getContextID(UI.ITEM_SUMMARY, uiName) + '-' + itemType}>
                         {itemName}
                     </div>
                 );
@@ -404,7 +404,7 @@ class UltrawideItemUiModulesClass {
             case ItemType.DESIGN_UPDATE:
 
                 return(
-                    <div id={getID(UI.ITEM_SUMMARY, uiName) + '-' + itemType}>
+                    <div id={getContextID(UI.ITEM_SUMMARY, uiName) + '-' + itemType}>
                         <InputGroup>
                             <InputGroup.Addon>
                                 <div id="updateWpSummary" className={uwItem.updateWpStatus}><Glyphicon

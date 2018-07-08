@@ -11,7 +11,7 @@ import UltrawideItemEditableField   from "../common/UltrawideItemEditableField";
 // Ultrawide Services
 import { ClientWorkPackageServices }    from '../../../apiClient/apiClientWorkPackage.js';
 
-import { getID, log } from "../../../common/utils";
+import { getContextID, log } from "../../../common/utils";
 import { UI } from '../../../constants/ui_context_ids';
 import {ItemType, WorkPackageStatus, RoleType, FieldType, LogLevel} from '../../../constants/constants.js';
 
@@ -161,28 +161,28 @@ export default class WorkPackage extends Component {
             />;
 
         const buttonEdit =
-            <Button id={getID(UI.BUTTON_EDIT, uiName)} bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>;
+            <Button id={getContextID(UI.BUTTON_EDIT, uiName)} bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>;
 
         const buttonView =
-            <Button id={getID(UI.BUTTON_VIEW, uiName)} bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>;
+            <Button id={getContextID(UI.BUTTON_VIEW, uiName)} bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>;
 
         const buttonRemove =
-            <Button id={getID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userRole, userContext, workPackage)}>Remove</Button>;
+            <Button id={getContextID(UI.BUTTON_REMOVE, uiName)} bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userRole, userContext, workPackage)}>Remove</Button>;
 
         const buttonPublish =
-            <Button id={getID(UI.BUTTON_PUBLISH, uiName)} bsSize="xs" onClick={ () => this.onPublishWorkPackage(userRole, userContext, workPackage)}>Publish</Button>;
+            <Button id={getContextID(UI.BUTTON_PUBLISH, uiName)} bsSize="xs" onClick={ () => this.onPublishWorkPackage(userRole, userContext, workPackage)}>Publish</Button>;
 
         const buttonWithdraw =
-            <Button id={getID(UI.BUTTON_WITHDRAW, uiName)} bsSize="xs" onClick={ () => this.onWithdrawWorkPackage(userRole, userContext, workPackage)}>Withdraw</Button>;
+            <Button id={getContextID(UI.BUTTON_WITHDRAW, uiName)} bsSize="xs" onClick={ () => this.onWithdrawWorkPackage(userRole, userContext, workPackage)}>Withdraw</Button>;
 
         const buttonAdopt =
-            <Button id={getID(UI.BUTTON_ADOPT, uiName)} bsSize="xs" onClick={ () => this.onAdoptWorkPackage(userRole, userContext, workPackage)}>Adopt</Button>;
+            <Button id={getContextID(UI.BUTTON_ADOPT, uiName)} bsSize="xs" onClick={ () => this.onAdoptWorkPackage(userRole, userContext, workPackage)}>Adopt</Button>;
 
         const buttonRelease =
-            <Button id={getID(UI.BUTTON_RELEASE, uiName)} bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>;
+            <Button id={getContextID(UI.BUTTON_RELEASE, uiName)} bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>;
 
         const buttonDevelop =
-            <Button id={getID(UI.BUTTON_DEVELOP, uiName)} bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, workPackage)}>Develop</Button>;
+            <Button id={getContextID(UI.BUTTON_DEVELOP, uiName)} bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, workPackage)}>Develop</Button>;
 
 
         // Layout ------------------------------------------------------------------------------------------------------
@@ -270,7 +270,7 @@ export default class WorkPackage extends Component {
         }
 
         return (
-            <div id={getID(UI.ITEM_WORK_PACKAGE, uiName)}>
+            <div id={getContextID(UI.ITEM_WORK_PACKAGE, uiName)}>
                 {name}
                 {body}
                 <div className={statusClass}>

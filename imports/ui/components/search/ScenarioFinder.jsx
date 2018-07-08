@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import FindResultsContainer         from '../../containers/search/FindResultsContainer.jsx';
 
 // Ultrawide Services
-import {log, getID} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
 import {LogLevel} from "../../../constants/constants";
 import {UI} from "../../../constants/ui_context_ids";
 
@@ -55,11 +55,11 @@ export class ScenarioFinder extends Component {
         const input =
             <InputGroup >
                 <InputGroup.Addon>Find:</InputGroup.Addon>
-                <FormControl id={getID(UI.INPUT_SCENARIO_SEARCH, '')} type="text"  onChange={(e) => this.onSearchChange(e)} />
+                <FormControl id={getContextID(UI.INPUT_SCENARIO_SEARCH, '')} type="text" onChange={(e) => this.onSearchChange(e)} />
             </InputGroup>;
 
         const results =
-            <div id={getID(UI.OUTPUT_SCENARIO_SEARCH, '')}>
+            <div id={getContextID(UI.OUTPUT_SCENARIO_SEARCH, '')}>
                 <FindResultsContainer params={{
                     searchString:   this.state.searchString,
                     userContext:    userContext,

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 // Ultrawide Services
 import {LogLevel} from '../../../constants/constants.js';
-import {log, getID} from "../../../common/utils";
+import {log, getContextID} from "../../../common/utils";
 import { UI } from '../../../constants/ui_context_ids';
 
 
@@ -88,15 +88,15 @@ export default class UltrawideItemEditableField extends Component{
         if(fieldType === FieldType.LINK){
 
             readOnlyValue =
-                <a id={getID(UI.LINK_ITEM_LINK_LABEL, uiName)} href={currentFieldValue} target="_blank">Open Link</a>;
+                <a id={getContextID(UI.LINK_ITEM_LINK_LABEL, uiName)} href={currentFieldValue} target="_blank">Open Link</a>;
 
             if(currentFieldValue === 'NONE'){
-                readOnlyValue = <div  id={getID(UI.LINK_ITEM_LINK_LABEL, uiName)} className="greyed-out">Link Not Set</div>
+                readOnlyValue = <div id={getContextID(UI.LINK_ITEM_LINK_LABEL, uiName)} className="greyed-out">Link Not Set</div>
             }
         }
 
         const fieldEditorEditing =
-            <div id={getID(UI.EDITABLE_FIELD_EDITING, uiName) + '-' + fieldType}>
+            <div id={getContextID(UI.EDITABLE_FIELD_EDITING, uiName) + '-' + fieldType}>
                 <InputGroup>
                     <div className="editableItem">
                         <FormControl
@@ -108,10 +108,10 @@ export default class UltrawideItemEditableField extends Component{
                         />
                     </div>
                     <InputGroup.Addon onClick={ () => this.saveFieldValue(userRole, currentItemType, fieldType, currentItemId)}>
-                        <div id={getID(UI.OPTION_SAVE, uiName) + '-' + fieldType} className="green"><Glyphicon glyph="ok"/></div>
+                        <div id={getContextID(UI.OPTION_SAVE, uiName) + '-' + fieldType} className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoFieldChange()}>
-                        <div id={getID(UI.OPTION_UNDO, uiName) + '-' + fieldType} className="red"><Glyphicon glyph="arrow-left"/></div>
+                        <div id={getContextID(UI.OPTION_UNDO, uiName) + '-' + fieldType} className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
@@ -120,10 +120,10 @@ export default class UltrawideItemEditableField extends Component{
             <div>
                 <InputGroup>
                     <div className={"readOnlyItem"}>
-                        <ControlLabel id={getID(UI.EDITABLE_FIELD, uiName) + '-' + fieldType}>{readOnlyValue}</ControlLabel>
+                        <ControlLabel id={getContextID(UI.EDITABLE_FIELD, uiName) + '-' + fieldType}>{readOnlyValue}</ControlLabel>
                     </div>
                     <InputGroup.Addon onClick={ () => this.editFieldName()}>
-                        <div id={getID(UI.OPTION_EDIT, uiName) + '-' + fieldType} className="blue"><Glyphicon glyph="edit"/></div>
+                        <div id={getContextID(UI.OPTION_EDIT, uiName) + '-' + fieldType} className="blue"><Glyphicon glyph="edit"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
@@ -132,7 +132,7 @@ export default class UltrawideItemEditableField extends Component{
             <div>
                 <InputGroup>
                     <div className={"readOnlyItem"}>
-                        <ControlLabel id={getID(UI.READ_ONLY_FIELD, uiName) + '-' + fieldType}>{readOnlyValue}</ControlLabel>
+                        <ControlLabel id={getContextID(UI.READ_ONLY_FIELD, uiName) + '-' + fieldType}>{readOnlyValue}</ControlLabel>
                     </div>
                 </InputGroup>
             </div>;
