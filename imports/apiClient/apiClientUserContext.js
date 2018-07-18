@@ -729,26 +729,32 @@ class ClientUserContextServicesClass {
 
     resetContextsOnDesignRemoval(removedDesignId){
 
-        // This prevents errors after re-login if a Design is removed that other people have accessed
-        const affectedContexts = UserContextData.getAllUserContextsForDesign(removedDesignId);
+        if(Meteor.isServer) {
 
-        affectedContexts.forEach((context) => {
+            // This prevents errors after re-login if a Design is removed that other people have accessed
+            const affectedContexts = UserContextData.getAllUserContextsForDesign(removedDesignId);
 
-            UserContextData.clearUserContext(context.userId);
+            affectedContexts.forEach((context) => {
 
-        });
+                UserContextData.clearUserContext(context.userId);
+
+            });
+        }
     };
 
     resetContextsOnDesignComponentRemoval(removedDesignComponentId){
 
-        // This prevents errors after re-login if a Design Component is removed that other people have accessed
-        const affectedContexts = UserContextData.getAllUserContextsForComponent(removedDesignComponentId);
+        if(Meteor.isServer) {
 
-        affectedContexts.forEach((context) => {
+            // This prevents errors after re-login if a Design Component is removed that other people have accessed
+            const affectedContexts = UserContextData.getAllUserContextsForComponent(removedDesignComponentId);
 
-            UserContextData.clearComponentContext(context.userId);
+            affectedContexts.forEach((context) => {
 
-        });
+                UserContextData.clearComponentContext(context.userId);
+
+            });
+        }
     };
 }
 
