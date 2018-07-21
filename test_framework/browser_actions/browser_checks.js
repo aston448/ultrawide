@@ -8,21 +8,21 @@ class BrowserChecksClass{
 
     componentIsVisible(item, itemName){
 
-        const uiComponentName = hashID(item, uiName(itemName));
+        const uiComponentName = hashID(item, itemName);
 
         browser.waitForExist(uiComponentName, 1000)
     }
 
     componentWithParentIsVisible(item, parentName, itemName){
 
-        const uiComponentName = hashID(item, uiName(parentName + ' ' + itemName));
+        const uiComponentName = hashID(item, parentName + ' ' + itemName);
 
         browser.waitForExist(uiComponentName, 1000)
     }
 
     componentIsNotVisible(item, itemName){
 
-        const uiComponentName = hashID(item, uiName(itemName));
+        const uiComponentName = hashID(item, itemName);
 
         if(browser.isVisible(uiComponentName)){
 
@@ -32,7 +32,7 @@ class BrowserChecksClass{
 
     componentWithParentIsNotVisible(item, parentName, itemName){
 
-        const uiComponentName = hashID(item, uiName(parentName + ' ' + itemName));
+        const uiComponentName = hashID(item, parentName + ' ' + itemName);
 
         if(browser.isVisible(uiComponentName)){
 
@@ -42,16 +42,23 @@ class BrowserChecksClass{
 
     componentExists(item, itemName){
 
-        const uiComponentName = hashID(item, uiName(itemName));
+        const uiComponentName = hashID(item, itemName);
 
         return browser.isExisting(uiComponentName);
     }
 
     componentWithParentExists(item, parentName, itemName){
 
-        const uiComponentName = hashID(item, uiName(parentName + ' ' + itemName));
+        const uiComponentName = hashID(item, parentName + ' ' + itemName);
 
         return browser.isExisting(uiComponentName);
+    }
+
+    componentWithParentIsGone(item, parentName, itemName){
+
+        const uiComponentName = hashID(item, parentName + ' ' + itemName);
+
+        return browser.waitUntil(browser.isExisting(uiComponentName) === false, 1000);
     }
 
 

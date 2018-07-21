@@ -65,7 +65,7 @@ describe('UC 144 - Remove Design Component', function(){
         BrowserActions.optionClickWithParent(UI.OPTION_REMOVE, 'Feature1', 'Actions');
 
         // Verify
-        assert.isFalse(BrowserChecks.componentWithParentExists(UI.DESIGN_COMPONENT, 'Feature1', 'Actions'))
+        assert.isTrue(BrowserChecks.componentWithParentIsGone(UI.DESIGN_COMPONENT, 'Feature1', 'Actions'))
         //expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 2));
     });
 
