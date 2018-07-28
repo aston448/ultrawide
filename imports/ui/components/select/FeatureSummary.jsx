@@ -30,6 +30,7 @@ export class FeatureSummary extends Component {
         super(props);
 
         this.state = {
+            isSelectable: false
         };
     }
 
@@ -41,12 +42,21 @@ export class FeatureSummary extends Component {
             nextProps.featureSummary.summaryStatus !== this.props.featureSummary.summaryStatus ||
             nextProps.featureSummary.expectedCount !== this.props.featureSummary.expectedCount ||
             nextProps.featureSummary.scenarioCount !== this.props.featureSummary.scenarioCount ||
-            nextProps.featureSummary.fulfilledCount !== this.props.featureSummary.fulfilledCount
+            nextProps.featureSummary.fulfilledCount !== this.props.featureSummary.fulfilledCount ||
+            nextState.isSelectable !== this.state.isSelectable
         ){
             shouldUpdate = true;
         }
 
         return shouldUpdate;
+    }
+
+    setSelectable(){
+        this.setState({isSelectable: true});
+    }
+
+    setUnselectable(){
+        this.setState({isSelectable: false});
     }
 
     onGoToFeature(userRole, userContext, featureReferenceId){
@@ -59,6 +69,8 @@ export class FeatureSummary extends Component {
         const {featureSummary, userContext, userRole} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Feature Summary');
+
+        let layout = '';
 
         if(featureSummary.hasTestData){
 
@@ -128,8 +140,8 @@ export class FeatureSummary extends Component {
             }
 
 
-            return(
-                <Grid className="close-grid">
+            layout =
+                <Grid onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()} className="close-grid">
                     <Row className="feature-summary-row">
                         <Col md={8} className="close-col">
                             <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
@@ -162,11 +174,11 @@ export class FeatureSummary extends Component {
                             <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
                         </Col>
                     </Row>
-                </Grid>
-            )
+                </Grid>;
+
         } else {
-            return(
-                <Grid className="close-grid">
+            layout =
+                <Grid onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()} className="close-grid">
                     <Row>
                         <Col md={8} className="close-col">
                             <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
@@ -175,89 +187,21 @@ export class FeatureSummary extends Component {
                             <span className="test-summary-text feature-no-highlight">No test data yet</span>
                         </Col>
                     </Row>
-                </Grid>
-            )
+                </Grid>;
+
         }
 
+        let itemClass = 'feature-summary-non-selectable';
 
-        // let resultClassRequired = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGLIGHT_REQUIRED;
-        // let resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-        // let resultClassFail = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-        // let resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-        // let resultFeatureSummary = '';
+        if(this.state.isSelectable){
+            itemClass = 'feature-summary-selectable';
+        }
 
-        // if(featureSummary.hasTestData) {
-        //     // If no Scenarios at all indicate design deficit
-        //     if (featureSummary.noTestCount === 0 && featureSummary.testFailCount === 0 && featureSummary.testPassCount === 0) {
-        //         resultFeatureSummary = 'feature-summary-no-scenarios';
-        //     } else {
-        //         // If any fails it's a FAIL
-        //         if (featureSummary.testFailCount > 0) {
-        //             resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-        //             resultClassFail = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL;
-        //             resultFeatureSummary = 'feature-summary-bad';
-        //         } else {
-        //             // Highlight passes if any and no fails
-        //             if (featureSummary.testPassCount > 0) {
-        //                 resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
-        //             } else {
-        //                 // No passes or failures so highlight number of tests
-        //                 resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_NO_TEST;
-        //             }
-        //             if (featureSummary.noTestCount > 0) {
-        //                 if (featureSummary.testPassCount > 0) {
-        //                     resultFeatureSummary = 'feature-summary-mmm';
-        //                 } else {
-        //                     resultFeatureSummary = 'feature-summary-meh';
-        //                 }
-        //             } else {
-        //                 // All passes and no pending tests
-        //                 resultFeatureSummary = 'feature-summary-good';
-        //             }
-        //         }
-        //     }
-        //
-        //     return (
-        //
-        //         <Grid className="close-grid">
-        //             <Row className="feature-summary-row">
-        //                 <Col md={8} className="close-col">
-        //                     <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
-        //                 </Col>
-        //                 <Col md={1} className="close-col">
-        //                     <span className={resultClassPass}><Glyphicon glyph="ok-circle"/></span>
-        //                     <span className={resultClassPass}>{featureSummary.testPassCount}</span>
-        //                 </Col>
-        //                 <Col md={1} className="close-col">
-        //                     <span className={resultClassFail}><Glyphicon glyph="remove-circle"/></span>
-        //                     <span className={resultClassFail}>{featureSummary.testFailCount}</span>
-        //                 </Col>
-        //                 <Col md={1} className="close-col">
-        //                     <span className={resultClassNotTested}><Glyphicon glyph="ban-circle"/></span>
-        //                     <span className={resultClassNotTested}>{featureSummary.noTestCount}</span>
-        //                 </Col>
-        //                 <Col md={1} className="close-col">
-        //                     <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
-        //                 </Col>
-        //             </Row>
-        //         </Grid>
-        //     )
-        //
-        // } else {
-        //
-        //     return(
-        //         <Grid className="close-grid">
-        //             <Row className="feature-summary-row">
-        //                 <Col md={7} className="close-col">
-        //                     <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
-        //                 </Col>
-        //                 <Col md={5} className="close-col">
-        //                     <span className="test-summary-text feature-no-highlight">No test data yet</span>
-        //                 </Col>
-        //             </Row>
-        //         </Grid>
-        //     )
-        // }
+        return(
+            <div className={itemClass}>
+                {layout}
+            </div>
+        )
     }
 }
 

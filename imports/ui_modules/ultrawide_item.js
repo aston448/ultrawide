@@ -34,7 +34,7 @@ class UltrawideItemUiModulesClass {
     // MAIN API --------------------------------------------------------------------------------------------------------
 
     // This function is fully module testable with enzyme render().  It has no REDUX sub-components.
-    getComponentLayout(uwItemType, itemData, userContext, userRole){
+    getComponentLayout(uwItemType, itemData, userContext, userRole, isSelectable){
 
         let uiName = '';
 
@@ -56,13 +56,13 @@ class UltrawideItemUiModulesClass {
         // Return a generically named item
         return (
             <div id={uiName}>
-                {this.getSelectedUnselectedLayout(uwItemType, itemData, userContext, userRole)}
+                {this.getSelectedUnselectedLayout(uwItemType, itemData, userContext, userRole, isSelectable)}
             </div>
         );
 
     }
 
-    getSelectedUnselectedLayout(uwItemType, itemData, userContext, userRole){
+    getSelectedUnselectedLayout(uwItemType, itemData, userContext, userRole, isSelectable){
 
         // Get the visualisation data required for this component in its current state
         const viewData = this.getVisualisationData(uwItemType, itemData, userContext, userRole);
@@ -83,7 +83,7 @@ class UltrawideItemUiModulesClass {
 
             return(
                 <div id={getContextID(UI.UW_ITEM_UNSELECTED, viewData.uiName)}>
-                    {this.unselectedLayout(uwItemType, selectFunction, viewData.statusClass, viewData.itemName, itemData, viewData.uiName)}
+                    {this.unselectedLayout(uwItemType, selectFunction, viewData.statusClass, viewData.itemName, itemData, viewData.uiName, isSelectable)}
                 </div>
             )
         }
@@ -99,6 +99,10 @@ class UltrawideItemUiModulesClass {
         let itemNameOld = '';
         let itemRefNew = '';
         let itemRefOld = '';
+
+        if(nextState.isSelectable !== state.isSelectable){
+            return true;
+        }
 
         switch(props.itemType){
             case ItemType.DESIGN:
@@ -361,13 +365,15 @@ class UltrawideItemUiModulesClass {
     }
 
 
-    unselectedLayout(itemType, onClickFunction, statusClass, itemName, uwItem, uiName){
+    unselectedLayout(itemType, onClickFunction, statusClass, itemName, uwItem, uiName, isSelectable){
+
+        let itemClass = 'item-grid';
 
         return(
-            <Grid className="item-grid" onClick={onClickFunction}>
+            <Grid className={itemClass} onClick={onClickFunction}>
                 <Row>
                     <Col className={'design-item-name ' + statusClass} md={11}>
-                        {this.unselectedItemLayout(itemType, itemName, uwItem, uiName)}
+                        {this.unselectedItemLayout(itemType, itemName, uwItem, uiName, isSelectable)}
                     </Col>
                 </Row>
             </Grid>
@@ -387,7 +393,12 @@ class UltrawideItemUiModulesClass {
     }
 
 
-    unselectedItemLayout(itemType, itemName, uwItem, uiName){
+    unselectedItemLayout(itemType, itemName, uwItem, uiName, isSelectable){
+
+        let itemClass = 'item-name';
+        if(isSelectable){
+            itemClass = 'item-name-selectable';
+        }
 
         switch(itemType){
 
@@ -396,7 +407,7 @@ class UltrawideItemUiModulesClass {
             case ItemType.WORK_PACKAGE:
 
                 return (
-                    <div id={getContextID(UI.ITEM_SUMMARY, uiName) + '-' + itemType}>
+                    <div className={itemClass} id={getContextID(UI.ITEM_SUMMARY, uiName) + '-' + itemType}>
                         {itemName}
                     </div>
                 );
@@ -404,7 +415,7 @@ class UltrawideItemUiModulesClass {
             case ItemType.DESIGN_UPDATE:
 
                 return(
-                    <div id={getContextID(UI.ITEM_SUMMARY, uiName) + '-' + itemType}>
+                    <div className={itemClass} id={getContextID(UI.ITEM_SUMMARY, uiName) + '-' + itemType}>
                         <InputGroup>
                             <InputGroup.Addon>
                                 <div id="updateWpSummary" className={uwItem.updateWpStatus}><Glyphicon

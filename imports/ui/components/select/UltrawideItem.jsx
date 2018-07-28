@@ -25,11 +25,23 @@ import {connect} from 'react-redux';
 export class UltrawideItem extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            isSelectable: false
+        };
     }
 
     shouldComponentUpdate(nextProps, nextState){
 
         return UltrawideItemUiModules.updateRequired(nextProps, this.props, nextState, this.state);
+    }
+
+    setSelectable(){
+        this.setState({isSelectable: true});
+    }
+
+    setUnselectable(){
+        this.setState({isSelectable: false});
     }
 
     render() {
@@ -38,8 +50,8 @@ export class UltrawideItem extends Component {
         log((msg) => console.log(msg), LogLevel.PERF, 'Render UltrawideItem {}', itemType);
 
         return(
-            <div>
-                {UltrawideItemUiModules.getComponentLayout(itemType, item, userContext, userRole)}
+            <div onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()}>
+                {UltrawideItemUiModules.getComponentLayout(itemType, item, userContext, userRole, this.state.isSelectable)}
             </div>
         )
     }

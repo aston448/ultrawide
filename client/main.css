@@ -654,6 +654,15 @@ input {
     background-color: transparent;
 }
 
+.item-name{
+    cursor: default;
+}
+
+.item-name-selectable{
+    color: red;
+    cursor: pointer;
+}
+
 .close-grid-progress{
     margin: 0;
     padding: 0;
@@ -725,6 +734,14 @@ input {
     margin: 10px 5px 20px 5px;
     padding: 10px;
     border: 1px solid black;
+}
+
+.project-summary-item-selectable{
+    margin: 10px 5px 20px 5px;
+    padding: 10px;
+    border: 1px solid black;
+    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
+    cursor: pointer;
 }
 
 .project-summary-item-active{
@@ -1861,6 +1878,7 @@ input {
     font-size:  16px;
     font-weight: 500;
     color: black;
+    background-color: transparent;
 }
 
 /*.feature-summary-row{*/
@@ -2538,6 +2556,16 @@ input {
 
 .non-summary-row{
     background-color: transparent;
+}
+
+.feature-summary-selectable{
+    background-color: palegoldenrod;
+    cursor: pointer;
+}
+
+.feature-summary-non-selectable{
+    background-color: transparent;
+    cursor: default;
 }
 
 .feature-no-highlight{

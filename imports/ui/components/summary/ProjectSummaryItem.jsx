@@ -36,7 +36,7 @@ export class ProjectSummaryItem extends Component{
         super(...args);
 
         this.state = {
-
+            isSelectable: false,
         };
 
     }
@@ -47,10 +47,18 @@ export class ProjectSummaryItem extends Component{
         }
     }
 
+    setSelectable(){
+        this.setState({isSelectable: true});
+    }
+
+    setUnselectable(){
+        this.setState({isSelectable: false});
+    }
+
     render(){
         const {displayContext, featureCount, totalFeatureCount, testsCount, currentSummaryItem} = this.props;
 
-        console.log('Context: ' + displayContext + ' features: ' + featureCount);
+        //console.log('Context: ' + displayContext + ' features: ' + featureCount);
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Project Summary Item in context {} with {} features', displayContext, featureCount);
 
@@ -65,8 +73,10 @@ export class ProjectSummaryItem extends Component{
         if(displayContext === currentSummaryItem){
             itemClass = 'project-summary-item-active '
 
-
         } else {
+            if(this.state.isSelectable){
+                itemClass = 'project-summary-item-selectable '
+            }
             goodClass = 'project-summary-good-inactive';
             badClass = 'project-summary-bad-inactive';
             okClass = 'project-summary-ok-inactive';
@@ -250,7 +260,7 @@ export class ProjectSummaryItem extends Component{
         }
 
         return(
-            <div onClick={() => this.clickHandler()} className={itemClass}>{layout}</div>
+            <div onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()} onClick={() => this.clickHandler()} className={itemClass}>{layout}</div>
         );
 
     }
