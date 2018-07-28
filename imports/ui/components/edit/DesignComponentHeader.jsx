@@ -39,6 +39,7 @@ import { DragSource } from 'react-dnd';
 
 // Draft JS - Name is text editable
 import {Editor, EditorState, SelectionState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
+import UltrawideAction from "../common/UltrawideAction";
 const {hasCommandModifier} = KeyBindingUtil;
 
 // =====================================================================================================================
@@ -859,48 +860,6 @@ export class DesignComponentHeader extends Component{
             </Tooltip>
         );
 
-        const tooltipEdit = (
-            <Tooltip id="modal-tooltip">
-                Edit...
-            </Tooltip>
-        );
-
-        let tooltipDelete = '';
-
-        if(isDeleted){
-
-            tooltipDelete = (
-                <Tooltip id="modal-tooltip">
-                    Undo Delete
-                </Tooltip>
-            );
-        } else {
-
-            tooltipDelete = (
-                <Tooltip id="modal-tooltip">
-                    Delete
-                </Tooltip>
-            );
-        }
-
-        const tooltipMove = (
-            <Tooltip id="modal-tooltip">
-                Move
-            </Tooltip>
-        );
-
-        const tooltipSave = (
-            <Tooltip id="modal-tooltip">
-                Save Edit
-            </Tooltip>
-        );
-
-        const tooltipCancel = (
-            <Tooltip id="modal-tooltip">
-                Cancel Edit
-            </Tooltip>
-        );
-
         let hiddenIcon =
             <InputGroup.Addon>
                 <div className="invisible"><Glyphicon glyph="star"/></div>
@@ -980,36 +939,33 @@ export class DesignComponentHeader extends Component{
 
 
         let editAction =
-            <InputGroup.Addon >
-                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipEdit}>
-                    <div id={getContextID(UI.OPTION_EDIT, uiContextName)} onClick={ () => this.editComponentName()}>
-                        <div className="blue"><Glyphicon glyph="edit"/></div>
-                    </div>
-                </OverlayTrigger>
+            <InputGroup.Addon>
+                <UltrawideAction
+                    actionType={UI.OPTION_EDIT}
+                    uiContextName={uiContextName}
+                    actionFunction={() => this.editComponentName()}
+                />
             </InputGroup.Addon>;
 
         // TODO Removal - Show Modal for non-logical deletes if user has this setting enabled.
 
         let deleteAction =
             <InputGroup.Addon>
-                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipDelete}>
-                    <div id={getContextID(UI.OPTION_REMOVE, uiContextName)} onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                        <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
-                    </div>
-                </OverlayTrigger>
+                <UltrawideAction
+                    actionType={UI.OPTION_REMOVE}
+                    uiContextName={uiContextName}
+                    actionFunction={() => this.deleteRestoreComponent(view, mode, currentItem, userContext)}
+                    isDeleted={isDeleted}
+                />
             </InputGroup.Addon>;
-
 
 
         let moveAction =
             <InputGroup.Addon>
-                <div className="lgrey">
-                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMove}>
-                        <div id={getContextID(UI.OPTION_MOVE, uiContextName)}>
-                            <Glyphicon glyph="move"/>
-                        </div>
-                    </OverlayTrigger>
-                </div>
+                <UltrawideAction
+                    actionType={UI.OPTION_MOVE}
+                    uiContextName={uiContextName}
+                />
             </InputGroup.Addon>;
 
 
@@ -1018,33 +974,33 @@ export class DesignComponentHeader extends Component{
             draggableMoveAction =
                 <InputGroup.Addon>
                     {connectDragSource(
-                        <div className="lgrey">
-                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMove}>
-                                <div id={getContextID(UI.OPTION_MOVE, uiContextName)}>
-                                    <Glyphicon glyph="move"/>
-                                </div>
-                            </OverlayTrigger>
-                        </div>)
+                        <div>
+                            <UltrawideAction
+                                actionType={UI.OPTION_MOVE}
+                                uiContextName={uiContextName}
+                            />
+                        </div>
+                    )
                     }
                 </InputGroup.Addon>
         }
 
         let saveAction =
             <InputGroup.Addon>
-                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipSave}>
-                    <div id={getContextID(UI.OPTION_SAVE, uiContextName)} onClick={ () => this.saveComponentName(view, mode)}>
-                        <div className="green"><Glyphicon glyph="ok"/></div>
-                    </div>
-                </OverlayTrigger>
+                <UltrawideAction
+                    actionType={UI.OPTION_SAVE}
+                    uiContextName={uiContextName}
+                    actionFunction={() => this.saveComponentName(view, mode)}
+                />
             </InputGroup.Addon>;
 
         let undoAction =
             <InputGroup.Addon id="actionUndo">
-                <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipCancel}>
-                    <div id={getContextID(UI.OPTION_UNDO, uiContextName)} onClick={ () => this.undoComponentNameChange()}>
-                        <div className="red"><Glyphicon glyph="arrow-left"/></div>
-                    </div>
-                </OverlayTrigger>
+                <UltrawideAction
+                    actionType={UI.OPTION_UNDO}
+                    uiContextName={uiContextName}
+                    actionFunction={() => this.undoComponentNameChange()}
+                />
             </InputGroup.Addon>;
 
         // Major --------------------------
