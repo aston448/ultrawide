@@ -1,16 +1,12 @@
 import {Designs}                    from '../../collections/design/designs.js'
 import {DesignVersions}             from '../../collections/design/design_versions.js'
 import {DesignVersionComponents}    from '../../collections/design/design_version_components.js'
-import {DesignUpdates}              from '../../collections/design_update/design_updates.js'
 import {DesignUpdateComponents}     from '../../collections/design_update/design_update_components.js'
-import {WorkPackages}               from '../../collections/work/work_packages.js';
-import {WorkPackageComponents}      from '../../collections/work/work_package_components.js';
-import {DomainDictionary}           from '../../collections/design/domain_dictionary';
-
 import { ComponentType }            from '../../constants/constants.js';
+
 import { DefaultItemNames }         from '../../constants/default_names.js';
 
-import { DesignVersionData }            from '../design/design_version_db.js';
+import { DesignVersionData }        from '../design/design_version_db.js';
 
 class DesignDataClass {
 

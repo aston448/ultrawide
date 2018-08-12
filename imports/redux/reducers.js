@@ -44,6 +44,8 @@ const initialState = {
     currentUserDevTab:                  EditorTab.TAB_DETAILS,
     currentUserSummaryItem:             DisplayContext.PROJECT_SUMMARY_ALL,
     currentUserTestOutputLocationId:    'NONE',
+    currentUserDesignPermutationId:     'NONE',
+    currentUserPermutationValueId:      'NONE',
     currentUserDevContext:              null,
     currentUserOpenDesignItems:         [],
     currentUserOpenDesignUpdateItems:   [],
@@ -190,6 +192,14 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_CURRENT_USER_TEST_OUTPUT_LOCATION:
             return Object.assign({}, state, {
                 currentUserTestOutputLocationId: action.newUserTestOutputLocationId
+            });
+        case Actions.SET_CURRENT_USER_DESIGN_PERMUTATION:
+            return Object.assign({}, state, {
+                currentUserDesignPermutationId: action.newUserDesignPermutationId
+            });
+        case Actions.SET_CURRENT_USER_PERMUTATION_VALUE:
+            return Object.assign({}, state, {
+                currentUserPermutationValueId: action.newUserPermutationValueId
             });
         case Actions.SET_CURRENT_USER_DEV_CONTEXT:
             return Object.assign({}, state, {

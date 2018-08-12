@@ -139,3 +139,11 @@ export const TestOutputLocationMessages = {
     MSG_LOCATION_FILE_REMOVED:          'Test output location file removed',
     MSG_USER_CONFIGURATION_SAVED:       'Configuration for test output locations updated'
 };
+
+export const DesignPermutationMessages = {
+
+    MSG_PERMUTATION_ADDED:              'Design permutation added',
+    MSG_PERMUTATION_SAVED:              'Design permutation name updated',
+    MSG_PERMUTATION_VALUE_ADDED:        'Design permutation value added',
+    MSG_PERMUTATION_VALUE_SAVED:        'Design permutation value saved'
+};

@@ -51,6 +51,8 @@ import {
     setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
     updateUserMessage
 } from '../redux/actions'
+import {DesignPermutationData} from "../data/design/design_permutation_db";
+import {DesignPermutationValueData} from "../data/design/design_permutation_value_db";
 
 
 // =====================================================================================================================
@@ -235,7 +237,7 @@ class ClientDataServicesClass{
 
         if(Meteor.isClient){
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Get User Data with callback {}", callback);
+             //log((msg) => console.log(msg), LogLevel.DEBUG, "Get User Data with callback {}", callback);
 
             store.dispatch(updateUserMessage({
                 messageType: MessageType.WARNING,
@@ -306,6 +308,9 @@ class ClientDataServicesClass{
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", userContext.designVersionId);
 
+                // Design specifc data
+                const dpHandle = Meteor.subscribe('designPermutations', userContext.designId);
+
                 // Design Version specific data
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
@@ -313,6 +318,7 @@ class ClientDataServicesClass{
                 const fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
                 const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
+                const dpvHandle = Meteor.subscribe('designPermutationValues', userContext.designVersionId);
 
                 // User specific data
                 const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
@@ -327,7 +333,7 @@ class ClientDataServicesClass{
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dusHandle.ready() ||
+                        !dusHandle.ready() || !dpHandle.ready() || !dpvHandle.ready() ||
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() ||
                         !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
@@ -528,7 +534,30 @@ class ClientDataServicesClass{
         return UserTestTypeLocationData.getUserTestTypeLocations(userContext.userId);
     }
 
+    // Get permutations for current Design
+    getDesignPermutationsData(designId){
 
+        return DesignPermutationData.getPermutationsForDesign(designId);
+    }
+
+    // Get permutation values for current permutation
+    getPermutationValuesData(permutationId, designVersionId){
+
+        console.log('Getting perm values for DV %s and Perm %s', designVersionId, permutationId);
+
+        const data = DesignPermutationValueData.getDvPermutationValuesForPermutation(permutationId, designVersionId);
+        const perm = DesignPermutationData.getDesignPermutationById(permutationId);
+
+        let name = '';
+        if(perm){
+            name = perm.permutationName;
+        }
+
+        return{
+            data: data,
+            name: name
+        }
+    }
 
     getApplicationHeaderData(userContext, view){
 

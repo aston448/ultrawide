@@ -8,7 +8,9 @@ export const DefaultItemNames = {
     NEXT_DESIGN_VERSION_NUMBER:     'x.x',
     NEW_DESIGN_UPDATE_NAME:         'New Design Update',
     NEW_DESIGN_UPDATE_REF:          'CRxxx',
-    NEW_WORK_PACKAGE_NAME:          'New Work Package'
+    NEW_WORK_PACKAGE_NAME:          'New Work Package',
+    NEW_PERMUTATION_NAME:           'New Permutation',
+    NEW_PERMUTATION_VALUE:          'New Permutation Value'
 
 };
 

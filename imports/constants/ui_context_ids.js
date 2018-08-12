@@ -2,6 +2,8 @@
 
 export const AddActionIds = {
     UI_CONTEXT_ADD_DESIGN:              'ADD_DESIGN',
+    UI_CONTEXT_ADD_DESIGN_PERMUTATION:  'ADD_DESIGN_PERMUTATION',
+    UI_CONTEXT_ADD_PERMUTATION_VALUE:   'ADD_PERMUTATION_VALUE',
     UI_CONTEXT_ADD_DESIGN_UPDATE:       'ADD_DESIGN_UPDATE',
     UI_CONTEXT_ADD_WORK_PACKAGE:        'ADD_WORK_PACKAGE',
     UI_CONTEXT_ADD_DOMAIN_TERM:         'ADD_DOMAIN_TERM',
@@ -96,5 +98,6 @@ export const UI = {
     INPUT_FILE_ALIAS:                   'input-file-alias-',
     INPUT_FILE_TYPE:                    'input-file-type-',
     INPUT_FILE_TEST_RUNNER:             'input-file-runner-',
+    INPUT_PERMUTATION_NAME:             'input-permutation-name-',
     OUTPUT_SCENARIO_SEARCH:             'output-scenario-search',
 };

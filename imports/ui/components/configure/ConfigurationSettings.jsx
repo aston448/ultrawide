@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 import TestOutputsContainer                     from '../../containers/configure/TestOutputsContainer.jsx';
 import UserTestOutputsContainer                 from '../../containers/configure/UserTestOutputsContainer.jsx';
+import DesignPermutationsContainer              from '../../containers/configure/DesignPermutationsContainer.jsx';
 import DefaultAspectsListContainer              from '../../containers/edit/DefaultFeatureAspectsContainer.jsx';
 import ChangePassword                           from '../../components/configure/ChangePassword.jsx';
 
@@ -419,6 +420,10 @@ export class ConfigurationSettings extends Component {
                 userContext: userContext
             }}/>;
 
+        const designPermutationsManagement =
+            <DesignPermutationsContainer params={{
+                userContext: userContext
+            }}/>;
 
         // Layout ------------------------------------------------------------------------------------------------------
 
@@ -428,7 +433,6 @@ export class ConfigurationSettings extends Component {
                 <Tabs className="top-tabs" defaultActiveKey={1} id="config-view_tabs">
                     <Tab eventKey={1} title="ULTRAWIDE SETTINGS"><div id="configTabMySettings">{settingsGrid}</div></Tab>
                 </Tabs>
-
             )
         } else {
 
@@ -438,12 +442,10 @@ export class ConfigurationSettings extends Component {
                     <Tab eventKey={2} title="MY TEST LOCATIONS"><div id="configTabTestSettings">{userTestLocationsManagement}</div></Tab>
                     <Tab eventKey={3} title="ULTRAWIDE SETTINGS"><div id="configTabMySettings">{settingsGrid}</div></Tab>
                     <Tab eventKey={4} title="DOCUMENT EXPORT"><div id="configTabDocExport">{exportGrid}</div></Tab>
+                    <Tab eventKey={5} title="DESIGN PERMUTATIONS"><div id="configTabDesignPermutations">{designPermutationsManagement}</div></Tab>
                 </Tabs>
-
             )
         }
-
-
     }
 }
 

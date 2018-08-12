@@ -34,6 +34,8 @@ export const SET_CURRENT_USER_WP_TAB = 'SET_CURRENT_USER_WP_TAB';
 export const SET_CURRENT_USER_DEV_TAB = 'SET_CURRENT_USER_DEV_TAB';
 export const SET_CURRENT_USER_SUMMARY_ITEM = 'SET_CURRENT_USER_SUMMARY_ITEM';
 export const SET_CURRENT_USER_TEST_OUTPUT_LOCATION = 'SET_CURRENT_USER_TEST_OUTPUT_LOCATION';
+export const SET_CURRENT_USER_DESIGN_PERMUTATION = 'SET_CURRENT_USER_DESIGN_PERMUTATION';
+export const SET_CURRENT_USER_PERMUTATION_VALUE = 'SET_CURRENT_USER_PERMUTATION_VALUE';
 
 // Indicates the current development context for a developer - i.e. what they are working on
 export const SET_CURRENT_USER_DEV_CONTEXT = 'SET_CURRENT_USER_DEV_CONTEXT';
@@ -356,6 +358,24 @@ export function setCurrentUserTestOutputLocation(locationId){
     return function (dispatch) {
 
         dispatch({type: SET_CURRENT_USER_TEST_OUTPUT_LOCATION, newUserTestOutputLocationId: locationId});
+    };
+}
+
+// The currently selected Desgn Permutation
+export function setCurrentUserDesignPermutation(permutationId){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_DESIGN_PERMUTATION, newUserDesignPermutationId: permutationId});
+    };
+}
+
+// The currently selected Desgn Permutation Value
+export function setCurrentUserPermutationValue(permutationValueId){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_PERMUTATION_VALUE, newUserPermutationValueId: permutationValueId});
     };
 }
 
