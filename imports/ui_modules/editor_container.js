@@ -29,6 +29,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserDesignTab, setCurrentUserUpdateTab, setCurrentUserWpTab, setCurrentUserDevTab} from '../redux/actions'
+import {ScenarioTestExpectations} from "../ui/components/mash/ScenarioTestExpectations";
 
 
 class EditorContainerUiModulesClass{
@@ -396,6 +397,15 @@ class EditorContainerUiModulesClass{
                 }}/>
             </div>
         );
+    }
+
+    getTestExpectations(){
+
+        return(
+            <div id="testExpectationsPane">
+                <ScenarioTestExpectations />
+            </div>
+        )
     }
 
     getAccTestsPane(view, userContext){
@@ -924,6 +934,7 @@ class EditorContainerUiModulesClass{
                         <Col id={colId} md={colWidth} className="close-col">
                             <Tabs className="top-tabs" activeKey={this.getCurrentDesignTab()} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
                                 <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                                <Tab id={UITab.TAB_TEST_EXPECTATIONS} eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title="TEST EXPECTATIONS">{this.getTestExpectations()}</Tab>
                                 <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
                                 <Tab id={UITab.TAB_ACC_TESTS} eventKey={EditorTab.TAB_ACC_TESTS} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
                                 <Tab id={UITab.TAB_INT_TESTS} eventKey={EditorTab.TAB_INT_TESTS} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>

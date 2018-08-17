@@ -2655,6 +2655,18 @@ input {
     border: 1px solid darkgrey;
 }
 
+.test-expectation-active{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    color: black;
+}
+
+.test-expectation{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    color: grey;
+}
+
 .scenario-test-summary{
     margin: 5px 0px 5px 0px;
     padding: 0px;

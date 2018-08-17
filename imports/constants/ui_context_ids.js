@@ -19,6 +19,7 @@ export const AddActionIds = {
 
 export const UITab = {
     TAB_DETAILS:                    'tab-details',
+    TAB_TEST_EXPECTATIONS:          'tab-test-expectations',
     TAB_DOMAIN_DICT:                'tab-dict',
     TAB_ACC_TESTS:                  'tab-acc',
     TAB_INT_TESTS:                  'tab-int',

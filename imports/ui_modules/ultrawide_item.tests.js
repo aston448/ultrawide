@@ -1185,7 +1185,7 @@ describe('UI Mods: UW Item', () => {
                 const userRole = RoleType.DESIGNER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                // If expanded the Name editing field will be visible.
+                // If selected the Name editing field will be visible.
                 const expectedUiItem = hashID(UI.EDITABLE_FIELD, 'Design1') + '-' + FieldType.NAME;
 
                 chai.assert.equal(item.find(expectedUiItem).length, 1, expectedUiItem + ' was not found');
@@ -1213,7 +1213,7 @@ describe('UI Mods: UW Item', () => {
                 const userRole = RoleType.DESIGNER;
 
                 const item = testLayout(itemType, itemData, userContext, userRole);
-                // If expanded the Name editing field will be visible.
+                // If selected the Name editing field will be visible.
                 const expectedUiItem = hashID(UI.EDITABLE_FIELD, 'Design1') + '-' + FieldType.NAME;
 
                 chai.assert.equal(item.find(expectedUiItem).length, 0, expectedUiItem + ' was found');

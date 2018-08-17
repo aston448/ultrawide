@@ -187,6 +187,9 @@ export const ItemType = {
     USER:               'USER',
     TEST_LOCATION:      'TEST_LOCATION',
     TEST_LOCATION_FILE: 'TEST_LOCATION_FILE',
+    TEST_TYPE:          'TEST_TYPE',
+    DESIGN_PERMUTATION: 'DESIGN_PERMUTATION',
+    PERMUTATION_VALUE:  'PERMUTATION_VALUE'
 };
 
 export const FieldType = {
@@ -378,7 +381,8 @@ export const EditorTab = {
     TAB_UNIT_TESTS:                 '5',
     TAB_SCENARIO_SEARCH:            '6',
     TAB_UPDATE_SUMMARY:             '7',
-    TAB_WORKING_VIEW:               '8'
+    TAB_WORKING_VIEW:               '8',
+    TAB_TEST_EXPECTATIONS:          '9'
 };
 
 export const ScenarioStepType = {
