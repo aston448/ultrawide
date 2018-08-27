@@ -1,6 +1,7 @@
 
 import { Mongo } from 'meteor/mongo';
 import {  } from '../../constants/constants.js';
+import {MashTestStatus} from "../../constants/constants";
 
 export const ScenarioTestExpectations = new Mongo.Collection('scenarioTestExpectations');
 
@@ -8,19 +9,18 @@ export const ScenarioTestExpectations = new Mongo.Collection('scenarioTestExpect
 let Schema = new SimpleSchema({
     designVersionId:                {type: String},                                         // Belongs to this Design Version
     scenarioReferenceId:            {type: String},                                         // Belongs to this Scenario
-    permutationId:                  {type: String},                                         // Is this type of permutation
-    permutationValueId:             {type: String},                                         // Is this particular permutation
-    requiresAcceptanceTest:         {type: Boolean, defaultValue: false},                   // Required for Acceptance Tests
-    requiresIntegrationTest:        {type: Boolean, defaultValue: false},                   // Required for Integration Tests
-    requiresUnitTest:               {type: Boolean, defaultValue: false},                   // Required for Unit Tests
+    testType:                       {type: String},                                         // For this category of tests
+    permutationId:                  {type: String, defaultValue: 'NONE'},                   // For this permutation
+    permutationValueId:             {type: String, defaultValue: 'NONE'},                   // For this permutation value
+    expectationStatus:              {type: String, defaultValue: MashTestStatus.MASH_NOT_LINKED},
 });
 
 ScenarioTestExpectations.attachSchema(Schema);
 
 // Publish Design Versions wanted
 if(Meteor.isServer){
-    Meteor.publish('scenarioTestExpectations', function scenarioTestExpectationsPublication(designId, designVersionId){
-        return ScenarioTestExpectations.find({designId: designId, designVersionId: designVersionId});
+    Meteor.publish('scenarioTestExpectations', function scenarioTestExpectationsPublication(designVersionId){
+        return ScenarioTestExpectations.find({designVersionId: designVersionId});
     })
 }
 

@@ -224,6 +224,15 @@ class ClientTestIntegrationServicesClass {
 
     // LOCAL CLIENT ACTIONS ============================================================================================
 
+    getDesignItem(userContext, designItemId){
+
+        if(userContext.designUpdateId === 'NONE'){
+            return DesignComponentData.getDesignComponentById(designItemId);
+        } else {
+            return DesignUpdateComponentData.getUpdateComponentById(designItemId);
+        }
+    }
+
     hasScenarios(featureAspect, userContext){
 
         let scenarioCount = 0;

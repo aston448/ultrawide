@@ -319,6 +319,7 @@ class ClientDataServicesClass{
                 const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
                 const dpvHandle = Meteor.subscribe('designPermutationValues', userContext.designVersionId);
+                const steHandle = Meteor.subscribe('scenarioTestExpectations', userContext.designVersionId);
 
                 // User specific data
                 const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
@@ -337,7 +338,7 @@ class ClientDataServicesClass{
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() ||
                         !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
-                        !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready()
+                        !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready() || !steHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);

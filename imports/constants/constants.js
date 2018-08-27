@@ -150,6 +150,7 @@ export const DisplayContext = {
     VIEW_ACCEPTANCE_MASH:   'VIEW_ACCEPTANCE_MASH', // View of Scenarios in a Feature related to Acceptance tests
     VIEW_UNIT_MASH:         'VIEW_UNIT_MASH',       // View of related Unit Tests in the Design-Dev Mash
     VIEW_UNIT_UNLINKED:     'VIEW_UNIT_UNLINKED',   // View of all unlinked unit tests
+    TEST_EXPECTATIONS:      'TEST_EXPECTATIONS',
     MASH_DATA:              'MASH_DATA',            // Test results window
     MASH_ACC_TESTS:         'MASH_ACC_TESTS',
     MASH_INT_TESTS:         'MASH_INT_TESTS',
@@ -208,6 +209,7 @@ export const ComponentType = {
     FEATURE_ASPECT:     'FEATURE_ASPECT',
     SCENARIO:           'SCENARIO',
     TEST:               'TEST',
+    TEST_EXPECTATION:   'TEST_EXPECTATION',
     SCENARIO_STEP:      'SCENARIO_STEP',
     BACKGROUND_STEP:    'BACKGROUND_STEP',
     DRAGGABLE_ITEM:     'DRAGGABLE'

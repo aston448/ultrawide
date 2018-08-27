@@ -5,7 +5,7 @@ import { Validation, DesignPermutationValidationErrors } from '../../constants/v
 
 //======================================================================================================================
 //
-// Validation Services for Test Output Locations.
+// Validation Services for Design Permutations.
 //
 // All services should make no data-access calls so as to be module testable
 //

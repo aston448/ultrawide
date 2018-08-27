@@ -2655,15 +2655,55 @@ input {
     border: 1px solid darkgrey;
 }
 
+.scenario-test-expectations{
+    border: 1px solid darkgrey;
+    border-radius: 2px;
+    padding: 3px;
+}
+
+.design-permutations-header{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    color: black;
+}
+
 .test-expectation-active{
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
-    color: black;
+    color: red;
 }
 
 .test-expectation{
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
+    color: grey;
+}
+
+.permutation-expectation-active{
+     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+     font-size:  11px;
+     padding: 0 0 0 3px;
+     color: blue;
+ }
+
+.permutation-expectation{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    padding: 0 0 0 3px;
+    color: grey;
+}
+
+.value-expectation-active{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  10px;
+    padding: 0 0 0 6px;
+    color: red;
+}
+
+.value-expectation{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  10px;
+    padding: 0 0 0 6px;
     color: grey;
 }
 

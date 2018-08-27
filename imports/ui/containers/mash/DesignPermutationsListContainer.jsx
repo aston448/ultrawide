@@ -1,0 +1,114 @@
+
+// == IMPORTS ==========================================================================================================
+
+// Meteor / React Services
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { createContainer } from 'meteor/react-meteor-data';
+
+// Ultrawide GUI Components
+import TestExpectationItem from "../../components/mash/TestExpectationItem";
+
+
+// Ultrawide Services
+import {log} from "../../../common/utils";
+import { ItemType, LogLevel} from "../../../constants/constants";
+import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
+
+import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
+import { ClientDesignPermutationServices }     from '../../../apiClient/apiClientDesignPermutation.js'
+
+// Bootstrap
+import {Grid, Row, Col} from 'react-bootstrap';
+
+// REDUX services
+import {connect} from 'react-redux';
+
+
+
+
+
+// =====================================================================================================================
+
+// -- CLASS ------------------------------------------------------------------------------------------------------------
+//
+// Design Permutations List - List of permutations available for test expectations
+//
+// ---------------------------------------------------------------------------------------------------------------------
+
+export class DesignPermutationsList extends Component {
+    constructor(props) {
+        super(props);
+
+    };
+
+    addNewPermutation(role, userContext) {
+        ClientDesignPermutationServices.addDesignPermutation(role, userContext);
+    };
+
+    renderPermutationsList(permutations, testType){
+        return permutations.map((permutation) => {
+            return (
+                <TestExpectationItem
+                    key={permutation._id}
+                    testType={testType}
+                    itemType={ItemType.DESIGN_PERMUTATION}
+                    itemId={permutation._id}
+                    itemParentId={'NONE'}
+                    itemText={permutation.permutationName}
+                    expandable={true}
+                />
+            );
+        });
+    };
+
+
+    render() {
+
+        const {permutationData, testType} = this.props;
+
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Permutations List');
+
+        if(permutationData && permutationData.length > 0) {
+            return (
+                <div className="scenario-test-expectations">
+                    <div className="design-permutations-header">Permutations</div>
+                    {this.renderPermutationsList(permutationData, testType)}
+                </div>
+            );
+        } else {
+            return(
+                <div></div>
+            );
+        }
+
+    };
+}
+
+DesignPermutationsList.propTypes = {
+    permutationData:        PropTypes.array.isRequired,
+    testType:               PropTypes.string.isRequired
+};
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        userRole:       state.currentUserRole,
+        userContext:    state.currentUserItemContext,
+        permutationId:  state.currentUserDesignPermutationId
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default DesignPermutationsListContainer = createContainer(({params}) => {
+
+    const permutationData =  ClientDataServices.getDesignPermutationsData(params.userContext.designId);
+    const testType = params.testType;
+
+    return {
+        permutationData: permutationData,
+        testType:   testType
+    };
+
+
+}, connect(mapStateToProps)(DesignPermutationsList));

@@ -147,3 +147,12 @@ export const DesignPermutationMessages = {
     MSG_PERMUTATION_VALUE_ADDED:        'Design permutation value added',
     MSG_PERMUTATION_VALUE_SAVED:        'Design permutation value saved'
 };
+
+export const TestExpectationMessages = {
+
+    MSG_TYPE_ADDED:                     'Test expectation for test type added',
+    MSG_TYPE_REMOVED:                   'All test expectations for test type removed',
+    MSG_PERM_REMOVED:                   'All test expectations for design permutation removed',
+    MSG_VALUE_ADDED:                    'Test expectation for permutation value added',
+    MSG_VALUE_REMOVED:                  'Test expectation for permutation value removed'
+};

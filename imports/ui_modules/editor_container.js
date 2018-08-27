@@ -11,6 +11,7 @@ import DomainDictionaryContainer    from '../../imports/ui/containers/edit/Domai
 import DesignUpdateSummaryContainer from '../../imports/ui/containers/summary/UpdateSummaryContainer.jsx';
 import MashSelectedItemContainer    from '../../imports/ui/containers/mash/MashSelectedItemContainer.jsx';
 import ScenarioFinder               from '../../imports/ui/components/search/ScenarioFinder.jsx';
+import TestExpectationSelectedItemContainer    from "../ui/containers/mash/TestExpectationSelectedItemContainer.jsx";
 
 // Ultrawide Services
 import {DisplayContext, RoleType, ViewMode, ViewType, WorkPackageType, ComponentType, LogLevel, EditorTab } from "../constants/constants";
@@ -29,7 +30,7 @@ import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserDesignTab, setCurrentUserUpdateTab, setCurrentUserWpTab, setCurrentUserDevTab} from '../redux/actions'
-import {ScenarioTestExpectations} from "../ui/components/mash/ScenarioTestExpectations";
+
 
 
 class EditorContainerUiModulesClass{
@@ -399,11 +400,37 @@ class EditorContainerUiModulesClass{
         );
     }
 
-    getTestExpectations(){
+    getTestExpectations(view, userContext){
+
+        const displayContext = DisplayContext.TEST_EXPECTATIONS;
+
+        let childComponentType = 'NONE';
+
+        if(userContext.designComponentType !== 'NONE'){
+            switch(userContext.designComponentType){
+                case ComponentType.FEATURE:
+                    childComponentType = ComponentType.FEATURE_ASPECT;
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                    childComponentType = ComponentType.SCENARIO;
+                    break;
+                case ComponentType.SCENARIO:
+                    childComponentType = ComponentType.TEST_EXPECTATION;
+                    break;
+            }
+        }
 
         return(
             <div id="testExpectationsPane">
-                <ScenarioTestExpectations />
+                <TestExpectationSelectedItemContainer
+                    params={{
+                        childComponentType: childComponentType,
+                        designItemId: 'NONE',
+                        userContext: userContext,
+                        view: view,
+                        displayContext: displayContext
+                    }}
+                />
             </div>
         )
     }
@@ -933,13 +960,13 @@ class EditorContainerUiModulesClass{
                     return(
                         <Col id={colId} md={colWidth} className="close-col">
                             <Tabs className="top-tabs" activeKey={this.getCurrentDesignTab()} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
-                                <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                                <Tab id={UITab.TAB_TEST_EXPECTATIONS} eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title="TEST EXPECTATIONS">{this.getTestExpectations()}</Tab>
-                                <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
-                                <Tab id={UITab.TAB_ACC_TESTS} eventKey={EditorTab.TAB_ACC_TESTS} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
-                                <Tab id={UITab.TAB_INT_TESTS} eventKey={EditorTab.TAB_INT_TESTS} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>
-                                <Tab id={UITab.TAB_UNIT_TESTS} eventKey={EditorTab.TAB_UNIT_TESTS} title="UNIT TESTS">{this.getUnitTestsPane(view, userContext)}</Tab>
-                                <Tab id={UITab.TAB_SCENARIO_SEARCH} eventKey={EditorTab.TAB_SCENARIO_SEARCH} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title="TEST EXPECTATIONS">{this.getTestExpectations(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_ACC_TESTS} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_INT_TESTS} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_UNIT_TESTS} title="UNIT TESTS">{this.getUnitTestsPane(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_SCENARIO_SEARCH} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
                             </Tabs>
                         </Col>
                     );

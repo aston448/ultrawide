@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import {TestExpectationItem} from "./TestExpectationItem";
+import TestExpectationItem from "./TestExpectationItem";
 
 // Ultrawide Services
 import { ClientTestOutputLocationServices }         from '../../../apiClient/apiClientTestOutputLocations.js';
@@ -57,6 +57,7 @@ export class ScenarioTestExpectations extends Component {
                             testType={TestType.ACCEPTANCE}
                             itemType={ItemType.TEST_TYPE}
                             itemId={'ACC'}
+                            itemParentId={'NONE'}
                             itemText={'Acceptance'}
                             expandable={true}
                         />
@@ -66,6 +67,7 @@ export class ScenarioTestExpectations extends Component {
                             testType={TestType.INTEGRATION}
                             itemType={ItemType.TEST_TYPE}
                             itemId={'INT'}
+                            itemParentId={'NONE'}
                             itemText={'Integration'}
                             expandable={true}
                         />
@@ -75,6 +77,7 @@ export class ScenarioTestExpectations extends Component {
                             testType={TestType.UNIT}
                             itemType={ItemType.TEST_TYPE}
                             itemId={'UNIT'}
+                            itemParentId={'NONE'}
                             itemText={'Unit'}
                             expandable={true}
                         />
@@ -92,7 +95,7 @@ export class ScenarioTestExpectations extends Component {
 }
 
 ScenarioTestExpectations.propTypes = {
-
+    scenario: PropTypes.object.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

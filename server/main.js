@@ -7,6 +7,7 @@ import '../imports/collections/configure/user_settings.js';
 
 import '../imports/collections/design/designs.js';
 import '../imports/collections/design/design_permutations.js';
+import '../imports/collections/design/scenario_test_expectations.js';
 import '../imports/collections/design/design_versions.js';
 import '../imports/collections/design_update/design_updates.js';
 import '../imports/collections/design/design_version_components.js';
@@ -44,6 +45,7 @@ import '../imports/startup/server/startup.js';
 // Server API
 import '../imports/apiServer/apiDesign.js';
 import '../imports/apiServer/apiDesignPermutation.js';
+import '../imports/apiServer/apiScenarioTestExpectation.js';
 import '../imports/apiServer/apiDesignVersion.js';
 import '../imports/apiServer/apiDesignUpdate.js';
 import '../imports/apiServer/apiDesignUpdateSummary.js';
@@ -62,6 +64,7 @@ import '../imports/apiServer/server/apiDocument.js';
 // Meteor Validated Methods
 import '../imports/apiValidatedMethods/design_methods.js';
 import '../imports/apiValidatedMethods/design_permutation_methods.js';
+import '../imports/apiValidatedMethods/scenario_test_expectation_methods.js';
 import '../imports/apiValidatedMethods/design_version_methods.js';
 import '../imports/apiValidatedMethods/design_update_methods.js';
 import '../imports/apiValidatedMethods/design_update_summary_methods.js';
