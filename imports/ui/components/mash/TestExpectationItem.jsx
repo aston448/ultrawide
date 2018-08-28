@@ -17,6 +17,7 @@ import {log, getContextID} from "../../../common/utils";
 import {UI} from "../../../constants/ui_context_ids";
 
 // Bootstrap
+import {InputGroup, Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -106,10 +107,15 @@ export class TestExpectationItem extends Component {
                 if(this.state.expanded){
                     body =
                         <div className='test-expectation-active'>
-                            <div onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', userContext)}>{itemText}</div>
-                            <div onClick={() => this.setUnexpanded()}>
-                                Hide Permutations
-                            </div>
+                            <InputGroup>
+                                <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', userContext)}>
+                                    <div className='in-scope'><Glyphicon glyph="ok"/></div>
+                                </InputGroup.Addon>
+                                <div>{itemText + ' test required'}</div>
+                                <InputGroup.Addon onClick={() => this.setUnexpanded()}>
+                                    <div><Glyphicon glyph="minus"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>
                             <DesignPermutationsListContainer
                                 params={{
                                     userContext: userContext,
@@ -122,12 +128,26 @@ export class TestExpectationItem extends Component {
                     if(this.state.selected){
                         body =
                             <div className='test-expectation-active'>
-                                <div onClick={() => this.setExpanded()}>Show Permutations...</div>
+                                <InputGroup>
+                                    <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', userContext)}>
+                                        <div className='in-scope'><Glyphicon glyph="ok"/></div>
+                                    </InputGroup.Addon>
+                                    <div>{itemText + ' test required'}</div>
+                                    <InputGroup.Addon onClick={() => this.setExpanded()}>
+                                        <div><Glyphicon glyph="plus"/></div>
+                                    </InputGroup.Addon>
+                                </InputGroup>
                             </div>
                     } else {
                         body =
                             <div className='test-expectation'>
-                                <div onClick={() => this.addExpectation(itemType, testType, itemId, 'NONE', userContext)}>{itemText}</div>
+                                <InputGroup>
+                                    <InputGroup.Addon onClick={() => this.addExpectation(itemType, testType, itemId, 'NONE', userContext)}>
+                                        <div className='out-scope'><Glyphicon glyph="ok"/></div>
+                                    </InputGroup.Addon>
+                                    <div>{'No ' + itemText + ' test'}</div>
+                                </InputGroup>
+
                             </div>
                     }
 
@@ -137,7 +157,15 @@ export class TestExpectationItem extends Component {
                 if(this.state.selected){
                     body =
                         <div className='permutation-expectation-active'>
-                            <div onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', userContext)}>{itemText}</div>
+                            <InputGroup>
+                                <InputGroup.Addon>
+                                    <div><Glyphicon glyph="asterisk"/></div>
+                                </InputGroup.Addon>
+                                <div>{itemText}</div>
+                                <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', userContext)}>
+                                    <div><Glyphicon glyph="minus"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>
                             <PermutationValuesListContainer
                                 params={{
                                     permutationId: itemId,
@@ -149,20 +177,39 @@ export class TestExpectationItem extends Component {
                 } else {
                     body =
                         <div className='permutation-expectation'>
-                            <div onClick={() => this.addExpectation(itemType, testType, itemId, 'NONE', userContext)}>{itemText}</div>
+                            <InputGroup>
+                                <InputGroup.Addon>
+                                    <div><Glyphicon glyph="asterisk"/></div>
+                                </InputGroup.Addon>
+                                <div>{itemText}</div>
+                                <InputGroup.Addon onClick={() => this.addExpectation(itemType, testType, itemId, 'NONE', userContext)}>
+                                    <div><Glyphicon glyph="plus"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>
                         </div>
                 }
                 break;
             case ItemType.PERMUTATION_VALUE:
                 if(this.state.selected){
                     body =
+
                         <div className='value-expectation-active'>
-                            <div onClick={() => this.removeExpectation(itemType, testType, itemId, itemParentId, userContext)}>{itemText}</div>
+                            <InputGroup>
+                                <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, itemParentId, userContext)}>
+                                    <div className='in-scope'><Glyphicon glyph="ok"/></div>
+                                </InputGroup.Addon>
+                                <div>{itemText}</div>
+                            </InputGroup>
                         </div>;
                 } else {
                     body =
                         <div className='value-expectation'>
-                            <div onClick={() => this.addExpectation(itemType, testType, itemId, itemParentId, userContext)}>{itemText}</div>
+                            <InputGroup>
+                                <InputGroup.Addon onClick={() => this.addExpectation(itemType, testType, itemId, itemParentId, userContext)}>
+                                    <div className='out-scope'><Glyphicon glyph="ok"/></div>
+                                </InputGroup.Addon>
+                                <div>{itemText}</div>
+                            </InputGroup>
                         </div>
                 }
                 break;

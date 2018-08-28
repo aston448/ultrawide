@@ -2670,39 +2670,43 @@ input {
 .test-expectation-active{
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
+    border: 1px solid darkgrey;
+    border-radius: 2px;
+    padding: 3px;
     color: red;
 }
 
 .test-expectation{
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
+    padding: 3px;
     color: grey;
 }
 
 .permutation-expectation-active{
      font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-     font-size:  11px;
+     font-size:  12px;
      padding: 0 0 0 3px;
      color: blue;
  }
 
 .permutation-expectation{
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  11px;
+    font-size:  12px;
     padding: 0 0 0 3px;
     color: grey;
 }
 
 .value-expectation-active{
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  10px;
+    font-size:  12px;
     padding: 0 0 0 6px;
     color: red;
 }
 
 .value-expectation{
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  10px;
+    font-size:  12px;
     padding: 0 0 0 6px;
     color: grey;
 }
