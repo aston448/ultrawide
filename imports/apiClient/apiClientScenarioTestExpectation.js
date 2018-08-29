@@ -1,9 +1,9 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import { MessageType, ItemType }                      from '../constants/constants.js';
-import { Validation }                       from '../constants/validation_errors.js';
-import { TestExpectationMessages }          from '../constants/message_texts.js'
+import { MessageType, ItemType }                        from '../constants/constants.js';
+import { Validation }                                   from '../constants/validation_errors.js';
+import { TestExpectationMessages }                      from '../constants/message_texts.js'
 
 import { ServerScenarioTestExpectationApi }             from '../apiServer/apiScenarioTestExpectation.js';
 import { ScenarioTestExpectationValidationApi }         from '../apiValidation/apiScenarioTestExpectationValidation.js';
@@ -202,6 +202,26 @@ class ClientScenarioTestExpectationServicesClass {
                 const permExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
                 return permExpectations.length > 0;
         }
+    }
+
+    hasChildExpectations(itemType, designVersionId, itemRef, testType, permId){
+
+        switch(itemType){
+
+            case ItemType.PERMUTATION_VALUE:
+                return false;
+            case ItemType.DESIGN_PERMUTATION:
+                // True if there are any values existing for this scenario ref, test type and permutation
+                const permVals = ScenarioTestExpectationData.getPermutationValuesForScenarioTestTypePerm(designVersionId, itemRef, testType, permId);
+                return (permVals.length > 0);
+            case ItemType.TEST_TYPE:
+                // True if there are any values existing for this scenario ref and test type
+                const testVals = ScenarioTestExpectationData.getPermutationValuesForScenarioTestType(designVersionId, itemRef, testType);
+                return (testVals.length > 0);
+            default:
+                return false;
+        }
+
     }
 }
 

@@ -39,6 +39,27 @@ class ScenarioTestExpectationDataClass{
         }).fetch();
     }
 
+    getPermutationValuesForScenarioTestType(designVersionId, scenarioReferenceId, testType){
+
+        return ScenarioTestExpectations.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            testType:               testType,
+            permutationValueId:     {$ne: 'NONE'}
+        }).fetch();
+    }
+
+    getPermutationValuesForScenarioTestTypePerm(designVersionId, scenarioReferenceId, testType, permId){
+
+        return ScenarioTestExpectations.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            testType:               testType,
+            permutationId:          permId,
+            permutationValueId:     {$ne: 'NONE'}
+        }).fetch();
+    }
+
     getScenarioTestExpectationsForScenarioTestType(designVersionId, scenarioReferenceId, testType){
 
             return ScenarioTestExpectations.find({

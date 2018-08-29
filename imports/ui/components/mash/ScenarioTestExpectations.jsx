@@ -45,7 +45,7 @@ export class ScenarioTestExpectations extends Component {
 
 
     render() {
-        const {userRole, userContext} = this.props;
+        const {scenario, userRole, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Scenario Test Expectations');
 
@@ -58,6 +58,7 @@ export class ScenarioTestExpectations extends Component {
                             itemType={ItemType.TEST_TYPE}
                             itemId={'ACC'}
                             itemParentId={'NONE'}
+                            itemRef={scenario.componentReferenceId}
                             itemText={'Acceptance'}
                             expandable={true}
                         />
@@ -68,6 +69,7 @@ export class ScenarioTestExpectations extends Component {
                             itemType={ItemType.TEST_TYPE}
                             itemId={'INT'}
                             itemParentId={'NONE'}
+                            itemRef={scenario.componentReferenceId}
                             itemText={'Integration'}
                             expandable={true}
                         />
@@ -78,6 +80,7 @@ export class ScenarioTestExpectations extends Component {
                             itemType={ItemType.TEST_TYPE}
                             itemId={'UNIT'}
                             itemParentId={'NONE'}
+                            itemRef={scenario.componentReferenceId}
                             itemText={'Unit'}
                             expandable={true}
                         />

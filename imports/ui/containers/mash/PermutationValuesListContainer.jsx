@@ -44,7 +44,7 @@ export class DesignPermutationValuesList extends Component {
         ClientDesignPermutationServices.addPermutationValue(this.props.userRole, this.props.permutationId, this.props.userContext.designVersionId);
     };
 
-    renderPermutationValuesList(permutationValues, testType){
+    renderPermutationValuesList(permutationValues, testType, scenarioRefId){
         return permutationValues.map((permutationValue) => {
             return (
                 <TestExpectationItem
@@ -53,6 +53,7 @@ export class DesignPermutationValuesList extends Component {
                     itemType={ItemType.PERMUTATION_VALUE}
                     itemId={permutationValue._id}
                     itemParentId={permutationValue.permutationId}
+                    itemRef={scenarioRefId}
                     itemText={permutationValue.permutationValueName}
                     expandable={false}
                 />
@@ -64,14 +65,14 @@ export class DesignPermutationValuesList extends Component {
 
     render() {
 
-        const {permutationValuesData, testType} = this.props;
+        const {permutationValuesData, testType, scenarioRefId} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Permutation Values List');
 
         if(permutationValuesData && permutationValuesData.length > 0) {
             return (
                 <div>
-                    {this.renderPermutationValuesList(permutationValuesData, testType)}
+                    {this.renderPermutationValuesList(permutationValuesData, testType, scenarioRefId)}
                 </div>
             );
         } else {
@@ -84,7 +85,8 @@ export class DesignPermutationValuesList extends Component {
 
 DesignPermutationValuesList.propTypes = {
     permutationValuesData:      PropTypes.array.isRequired,
-    testType:                   PropTypes.string.isRequired
+    testType:                   PropTypes.string.isRequired,
+    scenarioRefId:              PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -104,8 +106,9 @@ export default PermutationValuesListContainer = createContainer(({params}) => {
     );
 
     return {
-        permutationValuesData: permutationValuesData.data,
-        testType:   params.testType
+        permutationValuesData:  permutationValuesData.data,
+        testType:               params.testType,
+        scenarioRefId:          params.scenarioReferenceId
     };
 
 }, connect(mapStateToProps)(DesignPermutationValuesList));

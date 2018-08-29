@@ -46,7 +46,7 @@ export class DesignPermutationsList extends Component {
         ClientDesignPermutationServices.addDesignPermutation(role, userContext);
     };
 
-    renderPermutationsList(permutations, testType){
+    renderPermutationsList(permutations, testType, scenarioRefId){
         return permutations.map((permutation) => {
             return (
                 <TestExpectationItem
@@ -55,6 +55,7 @@ export class DesignPermutationsList extends Component {
                     itemType={ItemType.DESIGN_PERMUTATION}
                     itemId={permutation._id}
                     itemParentId={'NONE'}
+                    itemRef={scenarioRefId}
                     itemText={permutation.permutationName}
                     expandable={true}
                 />
@@ -65,14 +66,14 @@ export class DesignPermutationsList extends Component {
 
     render() {
 
-        const {permutationData, testType} = this.props;
+        const {permutationData, testType, scenarioRefId} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Permutations List');
 
         if(permutationData && permutationData.length > 0) {
             return (
                 <div className="scenario-test-expectations">
-                    {this.renderPermutationsList(permutationData, testType)}
+                    {this.renderPermutationsList(permutationData, testType, scenarioRefId)}
                 </div>
             );
         } else {
@@ -86,7 +87,8 @@ export class DesignPermutationsList extends Component {
 
 DesignPermutationsList.propTypes = {
     permutationData:        PropTypes.array.isRequired,
-    testType:               PropTypes.string.isRequired
+    testType:               PropTypes.string.isRequired,
+    scenarioRefId:          PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -102,11 +104,11 @@ function mapStateToProps(state) {
 export default DesignPermutationsListContainer = createContainer(({params}) => {
 
     const permutationData =  ClientDataServices.getDesignPermutationsData(params.userContext.designId);
-    const testType = params.testType;
 
     return {
-        permutationData: permutationData,
-        testType:   testType
+        permutationData:    permutationData,
+        testType:           params.testType,
+        scenarioRefId:      params.scenarioReferenceId
     };
 
 
