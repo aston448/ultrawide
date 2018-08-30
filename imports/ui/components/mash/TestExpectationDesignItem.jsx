@@ -135,7 +135,7 @@ class TestExpectationDesignItem extends Component {
                     return (
                         <div className={'scenario-test-expectations'}>
 
-                            <div className={"mash-scenario"}>
+                            <div className={"expectation-scenario"}>
                                 {designItem.componentNameNew}
                             </div>
 

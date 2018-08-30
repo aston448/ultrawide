@@ -59,6 +59,7 @@ export const DetailsViewType = {
     VIEW_UPD_SUMM:              'VIEW_UPD_SUMM',
     VIEW_DOM_DICT:              'VIEW_DOM_DICT',
     VIEW_VERSION_PROGRESS:      'VIEW_VERSION_PROGRESS',
+    VIEW_TEST_EXPECTATIONS:     'VIEW_TEST_EXPECTATIONS',
     VIEW_ALL_AS_TABS:           'VIEW_ALL_AS_TABS'
 };
 

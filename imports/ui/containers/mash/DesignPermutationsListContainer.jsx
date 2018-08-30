@@ -72,7 +72,7 @@ export class DesignPermutationsList extends Component {
 
         if(permutationData && permutationData.length > 0) {
             return (
-                <div className="scenario-test-expectations">
+                <div className={'permutation-test-expectations'}>
                     {this.renderPermutationsList(permutationData, testType, scenarioRefId)}
                 </div>
             );

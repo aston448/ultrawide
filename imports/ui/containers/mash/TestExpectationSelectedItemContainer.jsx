@@ -8,7 +8,9 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import TestExpectationDesignItem       from '../../components/mash/TestExpectationDesignItem.jsx';
+import TestExpectationDesignItem        from '../../components/mash/TestExpectationDesignItem.jsx';
+import DetailsViewHeader                from '../../components/common/DetailsViewHeader.jsx';
+import DetailsViewFooter                from '../../components/common/DetailsViewFooter.jsx';
 
 // Ultrawide Services
 import {DetailsViewType, ViewType, DisplayContext, ComponentType, LogLevel}    from '../../../constants/constants.js';
@@ -66,6 +68,9 @@ class TestExpectationSelectedItemList extends Component {
         });
     }
 
+    getEditorClass(){
+        return ClientUserSettingsServices.getWindowSizeClassForDesignEditor();
+    }
 
     render() {
 
@@ -73,10 +78,28 @@ class TestExpectationSelectedItemList extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Mash Selected Item');
 
-        // Don't bother to render if not actually visible
-        // TODO - conditional render
-        if(true) {
+        // Get correct window height
+        const editorClass = this.getEditorClass();
 
+        if(isTopParent) {
+
+            const nameData = ClientUserContextServices.getContextNameData(userContext, displayContext);
+
+            let titleText = '';
+
+            switch(itemType){
+                case ComponentType.SCENARIO:
+                    titleText = 'Test Expectations for Scenario';
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                    titleText = 'Test Expectations for ' + nameData.featureAspect + ' scenarios in ' + nameData.feature;
+                    break;
+                case ComponentType.FEATURE:
+                    titleText = 'Test Expectations for ' + nameData.feature;
+                    break;
+            }
+
+            // Full container
             let panelHeader = '';
             let detailsType = '';
             let menuVisible = false;
@@ -91,9 +114,21 @@ class TestExpectationSelectedItemList extends Component {
 
                 // Render more design or the expectations
                 mainPanel =
-                    <div id={panelId}>
-                        {this.renderDesignItems(designItems, displayContext)}
+                    <div className="design-editor-container">
+                        <DetailsViewHeader
+                            detailsType={DetailsViewType.VIEW_TEST_EXPECTATIONS}
+                            isClosable={true}
+                            titleText={titleText}
+                        />
+                        <div className={editorClass}>
+                            {this.renderDesignItems(designItems, displayContext)}
+                        </div>
+                        <DetailsViewFooter
+                            detailsType={DetailsViewType.VIEW_TEST_EXPECTATIONS}
+                            actionsVisible={false}
+                        />
                     </div>
+
 
             } else {
 
@@ -122,9 +157,10 @@ class TestExpectationSelectedItemList extends Component {
             )
 
         } else {
-            // Dummy render when not actualy visible
+            // Next level down
             return (
                 <div>
+                    {this.renderDesignItems(designItems, displayContext)}
                 </div>
             )
         }

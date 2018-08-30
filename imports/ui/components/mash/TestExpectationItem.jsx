@@ -127,7 +127,10 @@ export class TestExpectationItem extends Component {
                                 <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', itemRef, userContext)}>
                                     <div className='in-scope'><Glyphicon glyph="ok"/></div>
                                 </InputGroup.Addon>
-                                <div>{itemText + ' test required'}</div>
+                                    <div>
+                                        <span>{itemText + ' test'}</span>
+                                        <span>{' REQUIRED'}</span>
+                                    </div>
                                 <InputGroup.Addon onClick={() => this.setUnexpanded()}>
                                     <div><Glyphicon glyph="minus"/></div>
                                 </InputGroup.Addon>
@@ -217,6 +220,9 @@ export class TestExpectationItem extends Component {
                                     <div className='in-scope'><Glyphicon glyph="ok"/></div>
                                 </InputGroup.Addon>
                                 <div>{itemText}</div>
+                                <InputGroup.Addon>
+                                    <div>REQUIRED</div>
+                                </InputGroup.Addon>
                             </InputGroup>
                         </div>;
                 } else {
