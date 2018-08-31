@@ -70,9 +70,14 @@ class ScenarioTestExpectationServicesClass{
     selectTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){
 
         // Data check - should not already exist
-        const expectation = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
+        const expectation = ScenarioTestExpectationData.getScenarioTestExpectationForScenarioTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
 
-        if(expectation.length === 0){
+        if(expectation){
+
+            // Log a warning as should not be happening
+            log((msg) => console.log(msg), LogLevel.WARNING, 'Test expectation already existed - not adding to Scenario Test Expectations', testType);
+
+        } else {
 
             const expectationData = {
                 designVersionId:                designVersionId,
@@ -84,11 +89,7 @@ class ScenarioTestExpectationServicesClass{
             };
 
             ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
-
-        } else {
-            // Log a warning as should not be happening
-            log((msg) => console.log(msg), LogLevel.WARNING, 'Test expectation already existed - not adding to Scenario Test Expectations', testType);
-        }
+         }
     }
 
     // Unselect Permutation Value - clear expectation for value

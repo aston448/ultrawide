@@ -2855,6 +2855,10 @@ input {
     color: red;
 }
 
+.mash-incomplete {
+    color: orange;
+}
+
 .tag-active {
     color: blue;
 }

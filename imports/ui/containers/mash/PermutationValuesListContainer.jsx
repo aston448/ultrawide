@@ -11,7 +11,7 @@ import TestExpectationItem from "../../components/mash/TestExpectationItem";
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import {ItemType, LogLevel} from "../../../constants/constants";
+import {ItemType, LogLevel, MashTestStatus} from "../../../constants/constants";
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
@@ -22,6 +22,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {ScenarioTestExpectationData} from "../../../data/design/scenario_test_expectations_db";
 
 
 
@@ -44,8 +45,28 @@ export class DesignPermutationValuesList extends Component {
         ClientDesignPermutationServices.addPermutationValue(this.props.userRole, this.props.permutationId, this.props.userContext.designVersionId);
     };
 
+    getScenarioValueExpectation(dvId, scenarioRefId, testType, permId, permValueId){
+        return ScenarioTestExpectationData.getScenarioTestExpectationForScenarioTestTypePermutationValue(dvId, scenarioRefId, testType, permId, permValueId);
+    }
+
     renderPermutationValuesList(permutationValues, testType, scenarioRefId){
         return permutationValues.map((permutationValue) => {
+
+            // Get any current status for this value for the current scenario
+            const permValueExpectation = this.getScenarioValueExpectation(
+                this.props.userContext.designVersionId,
+                scenarioRefId,
+                testType,
+                permutationValue.permutationId,
+                permutationValue._id
+            );
+
+            let itemStatus = MashTestStatus.MASH_NOT_LINKED;
+
+            if (permValueExpectation){
+                itemStatus = permValueExpectation.expectationStatus;
+            }
+
             return (
                 <TestExpectationItem
                     key={permutationValue._id}
@@ -55,6 +76,7 @@ export class DesignPermutationValuesList extends Component {
                     itemParentId={permutationValue.permutationId}
                     itemRef={scenarioRefId}
                     itemText={permutationValue.permutationValueName}
+                    itemStatus={itemStatus}
                     expandable={false}
                 />
             );

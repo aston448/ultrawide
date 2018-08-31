@@ -185,6 +185,8 @@ class TextLookupsClass {
                 return 'Pass';
             case MashTestStatus.MASH_FAIL:
                 return 'Fail';
+            case MashTestStatus.MASH_INCOMPLETE:
+                return 'Incomplete';
             default:
                 return 'No Data';
         }

@@ -12,7 +12,7 @@ import TestExpectationItem from "../../components/mash/TestExpectationItem";
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import { ItemType, LogLevel} from "../../../constants/constants";
+import {ItemType, LogLevel, MashTestStatus} from "../../../constants/constants";
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
@@ -57,6 +57,7 @@ export class DesignPermutationsList extends Component {
                     itemParentId={'NONE'}
                     itemRef={scenarioRefId}
                     itemText={permutation.permutationName}
+                    itemStatus={MashTestStatus.MASH_NOT_LINKED}
                     expandable={true}
                 />
             );

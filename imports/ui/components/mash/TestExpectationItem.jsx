@@ -14,6 +14,7 @@ import {ClientScenarioTestExpectationServices} from "../../../apiClient/apiClien
 
 import {ItemType, LogLevel} from '../../../constants/constants.js';
 import {log, getContextID} from "../../../common/utils";
+import { TextLookups } from "../../../common/lookups";
 import {UI} from "../../../constants/ui_context_ids";
 
 // Bootstrap
@@ -112,7 +113,7 @@ export class TestExpectationItem extends Component {
     }
 
     render() {
-        const {testType, itemType, itemId, itemParentId, itemRef, itemText, userContext} = this.props;
+        const {testType, itemType, itemId, itemParentId, itemRef, itemText, itemStatus, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Scenario Test Expectations');
 
@@ -127,9 +128,9 @@ export class TestExpectationItem extends Component {
                                 <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', itemRef, userContext)}>
                                     <div className='in-scope'><Glyphicon glyph="ok"/></div>
                                 </InputGroup.Addon>
-                                    <div>
+                                    <div className={itemStatus}>
                                         <span>{itemText + ' test'}</span>
-                                        <span>{' REQUIRED'}</span>
+                                        <span>{' - ' + TextLookups.mashTestStatus(itemStatus)}</span>
                                     </div>
                                 <InputGroup.Addon onClick={() => this.setUnexpanded()}>
                                     <div><Glyphicon glyph="minus"/></div>
@@ -152,7 +153,10 @@ export class TestExpectationItem extends Component {
                                     <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', itemRef, userContext)}>
                                         <div className='in-scope'><Glyphicon glyph="ok"/></div>
                                     </InputGroup.Addon>
-                                    <div>{itemText + ' test required'}</div>
+                                    <div className={itemStatus}>
+                                        <span>{itemText + ' test'}</span>
+                                        <span>{' - ' + TextLookups.mashTestStatus(itemStatus)}</span>
+                                    </div>
                                     <InputGroup.Addon onClick={() => this.setExpanded()}>
                                         <div><Glyphicon glyph="plus"/></div>
                                     </InputGroup.Addon>
@@ -221,7 +225,7 @@ export class TestExpectationItem extends Component {
                                 </InputGroup.Addon>
                                 <div>{itemText}</div>
                                 <InputGroup.Addon>
-                                    <div>REQUIRED</div>
+                                    <div className={itemStatus}>{TextLookups.mashTestStatus(itemStatus)}</div>
                                 </InputGroup.Addon>
                             </InputGroup>
                         </div>;
@@ -254,6 +258,7 @@ TestExpectationItem.propTypes = {
     itemParentId:   PropTypes.string.isRequired,
     itemRef:        PropTypes.string.isRequired,
     itemText:       PropTypes.string.isRequired,
+    itemStatus:     PropTypes.string.isRequired,
     expandable:     PropTypes.bool.isRequired
 };
 

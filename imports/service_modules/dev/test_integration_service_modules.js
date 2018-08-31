@@ -16,6 +16,8 @@ import { TestOutputLocationFileData }       from '../../data/configure/test_outp
 import { UserDvMashScenarioData }           from '../../data/mash/user_dv_mash_scenario_db.js'
 import { UserMashScenarioTestData }         from '../../data/mash/user_mash_scenario_test_db.js';
 import { UserRoleData }                     from '../../data/users/user_role_db.js';
+import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
+import {DesignPermutationValueData} from "../../data/design/design_permutation_value_db";
 
 //======================================================================================================================
 //
@@ -289,7 +291,25 @@ class TestIntegrationModulesClass {
             let scenarioIntMashStatus = MashStatus.MASH_NOT_LINKED;
             let scenarioAccMashStatus = MashStatus.MASH_NOT_LINKED;
 
+            // Get any permutation value unit tests expected for this scenario
+            const unitTestPermutationExpectations = ScenarioTestExpectationData.getPermutationValuesForScenarioTestType(
+                userContext.designVersionId, scenario.componentReferenceId, TestType.UNIT
+            );
+
             unitTests.forEach((unitTest) => {
+
+                // Update Unit Test expectations
+                unitTestPermutationExpectations.forEach((expectation) => {
+
+                    // Get the permutation value
+                    const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId);
+
+                    // If the individual test references the perm value set the result against it
+                    if(unitTest.testName.includes(permValue.permutationValueName)){
+
+                        ScenarioTestExpectationData.setExpectationPermutationValueTestStatus(expectation._id, unitTest.testResult);
+                    }
+                });
 
                 unitTestCount++;
                 scenarioUnitMashStatus = MashStatus.MASH_LINKED;
@@ -329,7 +349,25 @@ class TestIntegrationModulesClass {
 
             });
 
+            // Get any permutation value int tests expected for this scenario
+            const intTestPermutationExpectations = ScenarioTestExpectationData.getPermutationValuesForScenarioTestType(
+                userContext.designVersionId, scenario.componentReferenceId, TestType.INTEGRATION
+            );
+
             intTests.forEach((intTest) => {
+
+                // Update Int Test expectations
+                intTestPermutationExpectations.forEach((expectation) => {
+
+                    // Get the permutation value
+                    const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId);
+
+                    // If the individual test references the perm value set the result against it
+                    if(intTest.testName.includes(permValue.permutationValueName)){
+
+                        ScenarioTestExpectationData.setExpectationPermutationValueTestStatus(expectation._id, intTest.testResult);
+                    }
+                });
 
                 intTestCount++;
                 scenarioIntMashStatus = MashStatus.MASH_LINKED;
@@ -368,7 +406,25 @@ class TestIntegrationModulesClass {
                 );
             });
 
+            // Get any permutation value acc tests expected for this scenario
+            const accTestPermutationExpectations = ScenarioTestExpectationData.getPermutationValuesForScenarioTestType(
+                userContext.designVersionId, scenario.componentReferenceId, TestType.ACCEPTANCE
+            );
+
             accTests.forEach((accTest) => {
+
+                // Update Acc Test expectations
+                accTestPermutationExpectations.forEach((expectation) => {
+
+                    // Get the permutation value
+                    const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId);
+
+                    // If the individual test references the perm value set the result against it
+                    if(accTest.testName.includes(permValue.permutationValueName)){
+
+                        ScenarioTestExpectationData.setExpectationPermutationValueTestStatus(expectation._id, accTest.testResult);
+                    }
+                });
 
                 accTestCount++;
                 scenarioAccMashStatus = MashStatus.MASH_LINKED;

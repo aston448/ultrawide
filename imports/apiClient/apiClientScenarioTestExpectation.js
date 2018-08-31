@@ -199,8 +199,8 @@ class ClientScenarioTestExpectationServicesClass {
                 const testExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(designVersionId, scenarioReferenceId, testType);
                 return testExpectations.length > 0;
             case ItemType.PERMUTATION_VALUE:
-                const permExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
-                return permExpectations.length > 0;
+                const permExpectation = ScenarioTestExpectationData.getScenarioTestExpectationForScenarioTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
+                return(typeof permExpectation !== 'undefined');
         }
     }
 

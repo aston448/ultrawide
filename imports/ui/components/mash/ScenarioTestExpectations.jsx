@@ -45,7 +45,7 @@ export class ScenarioTestExpectations extends Component {
 
 
     render() {
-        const {scenario, userRole, userContext} = this.props;
+        const {scenario, scenarioUnitMashTestStatus, scenarioIntMashTestStatus, scenarioAccMashTestStatus} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Scenario Test Expectations');
 
@@ -60,6 +60,7 @@ export class ScenarioTestExpectations extends Component {
                             itemParentId={'NONE'}
                             itemRef={scenario.componentReferenceId}
                             itemText={'Acceptance'}
+                            itemStatus={scenarioAccMashTestStatus}
                             expandable={true}
                         />
                     </Col>
@@ -71,6 +72,7 @@ export class ScenarioTestExpectations extends Component {
                             itemParentId={'NONE'}
                             itemRef={scenario.componentReferenceId}
                             itemText={'Integration'}
+                            itemStatus={scenarioIntMashTestStatus}
                             expandable={true}
                         />
                     </Col>
@@ -82,6 +84,7 @@ export class ScenarioTestExpectations extends Component {
                             itemParentId={'NONE'}
                             itemRef={scenario.componentReferenceId}
                             itemText={'Unit'}
+                            itemStatus={scenarioUnitMashTestStatus}
                             expandable={true}
                         />
                     </Col>
@@ -98,7 +101,10 @@ export class ScenarioTestExpectations extends Component {
 }
 
 ScenarioTestExpectations.propTypes = {
-    scenario: PropTypes.object.isRequired
+    scenario:                   PropTypes.object.isRequired,
+    scenarioUnitMashTestStatus: PropTypes.string.isRequired,
+    scenarioIntMashTestStatus:  PropTypes.string.isRequired,
+    scenarioAccMashTestStatus:  PropTypes.string.isRequired,
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

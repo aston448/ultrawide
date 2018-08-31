@@ -69,15 +69,17 @@ class ScenarioTestExpectationDataClass{
             }).fetch();
     }
 
-    getScenarioTestExpectationsForScenarioTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){
+    getScenarioTestExpectationForScenarioTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){
 
-        return ScenarioTestExpectations.find({
+        // There can be only one...
+
+        return ScenarioTestExpectations.findOne({
             designVersionId:        designVersionId,
             scenarioReferenceId:    scenarioReferenceId,
             testType:               testType,
             permutationId:          permutationId,
             permutationValueId:     permutationValueId,
-        }).fetch();
+        });
     }
 
     // UPDATE ==========================================================================================================
@@ -92,6 +94,18 @@ class ScenarioTestExpectationDataClass{
                 $set:{
                     permutationId: 'NONE',
                     permutationValueId: 'NONE'
+                }
+            }
+        );
+    }
+
+    setExpectationPermutationValueTestStatus(expectationId, testResult){
+
+        return ScenarioTestExpectations.update(
+            {_id: expectationId},
+            {
+                $set:{
+                    expectationStatus: testResult
                 }
             }
         );
