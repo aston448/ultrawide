@@ -11,6 +11,8 @@ import { UserDesignUpdateSummary }      from "../../collections/summary/user_des
 import { UserDevDesignSummary }         from "../../collections/summary/user_dev_design_summary";
 import { UserDevTestSummary }           from "../../collections/summary/user_dev_test_summary";
 import { UserWorkProgressSummary }      from "../../collections/summary/user_work_progress_summary";
+import { DesignPermutationValues }      from '../../collections/design/design_permutation_values.js';
+import { ScenarioTestExpectations }     from '../../collections/design/scenario_test_expectations.js';
 
 import { ComponentType, UpdateMergeStatus, WorkPackageStatus, WorkPackageTestStatus, DesignUpdateStatus, DuWorkPackageTestStatus, DesignUpdateMergeAction, WorkPackageType } from '../../constants/constants.js';
 
@@ -538,11 +540,13 @@ class DesignVersionDataClass {
     removeDesignVersionData(designVersionId){
 
         // Remove the restorable data
+        DesignPermutationValues.remove({designVersionId: designVersionId});
         DesignUpdates.remove({designVersionId: designVersionId});
         WorkPackages.remove({designVersionId: designVersionId});
         DesignVersionComponents.remove({designVersionId: designVersionId});
         DesignUpdateComponents.remove({designVersionId: designVersionId});
         WorkPackageComponents.remove({designVersionId: designVersionId});
+        ScenarioTestExpectations.remove({designVersionId: designVersionId});
         DomainDictionary.remove({designVersionId: designVersionId});
 
         // Remove ephemeral data

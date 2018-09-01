@@ -163,29 +163,36 @@ class TestExpectationDesignItem extends Component {
                     // Here the designItem contains the actual Scenario Mash data - should be for one scenario
                     const mashScenario = this.getMashTestStatus(userContext, designItem.componentReferenceId);
 
-                    let unitStatus = mashScenario.unitMashTestStatus;
-                    let intStatus = mashScenario.intMashTestStatus;
-                    let accStatus = mashScenario.accMashTestStatus;
+                    let unitStatus = MashTestStatus.MASH_NOT_LINKED;
+                    let intStatus = MashTestStatus.MASH_NOT_LINKED;
+                    let accStatus = MashTestStatus.MASH_NOT_LINKED;
 
-                    // Check for expectation completeness if not already failing
-                    if(mashScenario.unitMashTestStatus !== MashTestStatus.MASH_FAIL){
+                    if(mashScenario) {
 
-                        if(this.testTypeIsIncomplete(designItem, TestType.UNIT)){
-                            unitStatus = MashTestStatus.MASH_INCOMPLETE;
+                        unitStatus = mashScenario.unitMashTestStatus;
+                        intStatus = mashScenario.intMashTestStatus;
+                        accStatus = mashScenario.accMashTestStatus;
+
+                        // Check for expectation completeness if not already failing
+                        if (mashScenario.unitMashTestStatus !== MashTestStatus.MASH_FAIL) {
+
+                            if (this.testTypeIsIncomplete(designItem, TestType.UNIT)) {
+                                unitStatus = MashTestStatus.MASH_INCOMPLETE;
+                            }
                         }
-                    }
 
-                    if(mashScenario.intMashTestStatus !== MashTestStatus.MASH_FAIL){
+                        if (mashScenario.intMashTestStatus !== MashTestStatus.MASH_FAIL) {
 
-                        if(this.testTypeIsIncomplete(designItem, TestType.INTEGRATION)){
-                            intStatus = MashTestStatus.MASH_INCOMPLETE;
+                            if (this.testTypeIsIncomplete(designItem, TestType.INTEGRATION)) {
+                                intStatus = MashTestStatus.MASH_INCOMPLETE;
+                            }
                         }
-                    }
 
-                    if(mashScenario.accMashTestStatus !== MashTestStatus.MASH_FAIL){
+                        if (mashScenario.accMashTestStatus !== MashTestStatus.MASH_FAIL) {
 
-                        if(this.testTypeIsIncomplete(designItem, TestType.ACCEPTANCE)){
-                            accStatus = MashTestStatus.MASH_INCOMPLETE;
+                            if (this.testTypeIsIncomplete(designItem, TestType.ACCEPTANCE)) {
+                                accStatus = MashTestStatus.MASH_INCOMPLETE;
+                            }
                         }
                     }
 

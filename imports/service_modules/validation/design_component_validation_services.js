@@ -219,14 +219,5 @@ class DesignComponentValidationServicesClass{
 
         return Validation.VALID;
     }
-
-    validateSetScenarioTestExpectations(userRole){
-
-        if(userRole !== RoleType.DESIGNER){
-            return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_ROLE_TEST_EXPECTATIONS;
-        }
-
-        return Validation.VALID;
-    }
 }
 export const DesignComponentValidationServices = new DesignComponentValidationServicesClass();

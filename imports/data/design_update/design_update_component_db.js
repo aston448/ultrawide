@@ -93,12 +93,7 @@ class DesignUpdateComponentDataClass {
             // Editing state (shared and persistent)
             isRemovable:                    true,           // Note all update items are removable when scoped
             isScopable:                     isScopable,
-            scopeType:                      scopeType,
-
-            // Test Expectation
-            requiresAcceptanceTest:         baseComponent.requiresAcceptanceTest,
-            requiresIntegrationTest:        baseComponent.requiresIntegrationTest,
-            requiresUnitTest:               baseComponent.requiresUnitTest
+            scopeType:                      scopeType
         });
     }
 
@@ -148,12 +143,7 @@ class DesignUpdateComponentDataClass {
                 isRemovable:                    component.isRemovable,
                 isScopable:                     component.isScopable,
                 scopeType:                      component.scopeType,
-                lockingUser:                    component.lockingUser,
-
-                // Test Expectation
-                requiresAcceptanceTest:         component.requiresAcceptanceTest,
-                requiresIntegrationTest:        component.requiresIntegrationTest,
-                requiresUnitTest:               component.requiresUnitTest
+                lockingUser:                    component.lockingUser
             }
         );
     }
@@ -681,20 +671,6 @@ class DesignUpdateComponentDataClass {
                     componentFeatureReferenceIdNew: newFeatureRefId,
                     componentLevel: newLevel,
                     isMoved: isMoved
-                }
-            }
-        );
-    }
-
-    setTestExpectations(designUpdateComponentId, accExpectation, intExpectation, unitExpectation){
-
-        return DesignUpdateComponents.update(
-            {_id: designUpdateComponentId},
-            {
-                $set:{
-                    requiresAcceptanceTest:         accExpectation,
-                    requiresIntegrationTest:        intExpectation,
-                    requiresUnitTest:               unitExpectation
                 }
             }
         );

@@ -416,34 +416,3 @@ export const reorderDesignComponent = new ValidatedMethod({
     }
 });
 
-export const setScenarioTestExpectations = new ValidatedMethod({
-
-    name: 'designComponent.setScenarioTestExpectations',
-
-    validate: new SimpleSchema({
-        userId:             {type: String},
-        userRole:           {type: String},
-        designComponentId:  {type: String},
-        accExpectation:     {type: Boolean},
-        intExpectation:     {type: Boolean},
-        unitExpectation:    {type: Boolean}
-    }).validator(),
-
-    run({userId, userRole, designComponentId, accExpectation, intExpectation, unitExpectation}){
-
-        // Server validation
-        const result = DesignComponentValidationApi.validateSetScenarioTestExpectations(userRole);
-
-        if (result !== Validation.VALID) {
-            throw new Meteor.Error('designComponent.setScenarioTestExpectations.failValidation', result)
-        }
-
-        // Server action
-        try {
-            DesignComponentServices.setScenarioTestExpectations(userId, designComponentId, accExpectation, intExpectation, unitExpectation);
-        } catch (e) {
-            console.log(e.stack);
-            throw new Meteor.Error(e.code, e.stack)
-        }
-    }
-});

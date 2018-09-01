@@ -3,7 +3,7 @@
 import fs from 'fs';
 
 // Ultrawide Services
-import { UltrawideDirectory, WorkPackageType, LogLevel } from '../../constants/constants.js';
+import { UltrawideDirectory, WorkPackageType, ComponentType, UpdateMergeStatus, MashTestStatus, TestType, LogLevel } from '../../constants/constants.js';
 import { getIdFromMap, log }            from '../../common/utils.js';
 
 import { DesignServices }                   from '../../servicers/design/design_services.js';
@@ -14,12 +14,12 @@ import { DesignComponentModules }           from '../../service_modules/design/d
 import { AppGlobalData }                    from '../../data/app/app_global_db.js';
 import { UserContextData }                  from '../../data/context/user_context_db.js';
 import { UserRoleData }                     from '../../data/users/user_role_db.js';
-import { UserSettingsData }                  from '../../data/configure/user_setting_db.js';
+import { UserSettingsData }                 from '../../data/configure/user_setting_db.js';
 import { DesignData }                       from '../../data/design/design_db.js';
 import { DesignVersionData }                from '../../data/design/design_version_db.js';
 import { DesignUpdateData }                 from '../../data/design_update/design_update_db.js';
 import { WorkPackageData }                  from '../../data/work/work_package_db.js';
-import { WorkPackageComponentData }        from '../../data/work/work_package_component_db.js';
+import { WorkPackageComponentData }         from '../../data/work/work_package_component_db.js';
 import { DesignComponentData }              from '../../data/design/design_component_db.js';
 import { DesignUpdateComponentData }        from '../../data/design_update/design_update_component_db.js';
 import { DesignBackupData }                 from '../../data/backups/design_backup_db.js';
@@ -27,6 +27,9 @@ import { UserTestTypeLocationData }         from '../../data/configure/user_test
 import { TestOutputLocationData }           from '../../data/configure/test_output_location_db.js';
 import { TestOutputLocationFileData }       from '../../data/configure/test_output_location_file_db.js';
 import { DefaultFeatureAspectData }         from '../../data/design/default_feature_aspect_db.js';
+import { DesignPermutationData }            from "../../data/design/design_permutation_db";
+import { DesignPermutationValueData }       from "../../data/design/design_permutation_value_db";
+import { ScenarioTestExpectationData }      from "../../data/design/scenario_test_expectations_db";
 
 //======================================================================================================================
 //
@@ -369,6 +372,29 @@ class ImpexModulesClass{
         });
     }
 
+    restoreDesignPermutationData(designPermutationData, backupDataVersion, currentDataVersion, designsMapping){
+
+        let designPermutationsMapping = [];
+
+        const newDesignPermutationData = this.migrateDesignPermutationData(designPermutationData, backupDataVersion, currentDataVersion);
+
+        newDesignPermutationData.forEach((designPermutation) => {
+
+            log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Permutation: {}", designPermutation.permutationName);
+
+            const designId = getIdFromMap(designsMapping, designPermutation.designId);
+
+            let designPermutationId = DesignPermutationData.importDesignPermutation(designPermutation, designId);
+
+            if (designPermutationId) {
+                // Store the new Design Perm ID
+                designPermutationsMapping.push({oldId: designPermutation._id, newId: designPermutationId});
+            }
+        });
+
+        return designPermutationsMapping;
+    }
+
     restoreDesignVersionData(designVersionData, backupDataVersion, currentDataVersion, designsMapping){
 
         let designVersionsMapping = [];
@@ -397,6 +423,37 @@ class ImpexModulesClass{
 
         return designVersionsMapping;
     };
+
+    restorePermutationValueData(permutationValueData, backupDataVersion, currentDataVersion, designVersionsMapping, designPermutationsMapping){
+
+        let permutationValuesMapping = [];
+
+        const newPermutationValueData = this.migratePermutationValueData(permutationValueData, backupDataVersion, currentDataVersion);
+
+        newPermutationValueData.forEach((permutationValue) => {
+
+            const designVersionId = getIdFromMap(designVersionsMapping, permutationValue.designVersionId);
+            const permutationId = getIdFromMap(designPermutationsMapping, permutationValue.permutationId);
+
+            if (designVersionId && permutationId) {
+
+                log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Permutation Value: {} to Design Version {} permutation {}", permutationValue.permutationValueName, designVersionId, permutationId);
+
+                let permutationValueId = DesignPermutationValueData.importDesignPermutationValue(
+                    permutationValue,
+                    designVersionId,
+                    permutationId
+                );
+
+                if (permutationValueId) {
+                    // Store the new Permutation Value ID
+                    permutationValuesMapping.push({oldId: permutationValue._id, newId: permutationValueId});
+                }
+            }
+        });
+
+        return permutationValuesMapping;
+    }
 
     restoreDesignUpdateData(designUpdateData, backupDataVersion, currentDataVersion, designVersionsMapping){
 
@@ -552,12 +609,7 @@ class ImpexModulesClass{
                     isDevUpdated:                   component.isDevUpdated,
                     isDevAdded:                     component.isDevAdded,
 
-                    isRemovable:                    component.isRemovable,
-
-                    // Test Expectation
-                    requiresAcceptanceTest:         component.requiresAcceptanceTest ? component.requiresAcceptanceTest : false,
-                    requiresIntegrationTest:        component.requiresIntegrationTest ? component.requiresIntegrationTest : false,
-                    requiresUnitTest:               component.requiresUnitTest ? component.requiresUnitTest : false
+                    isRemovable:                    component.isRemovable
                 }
             );
 
@@ -645,12 +697,7 @@ class ImpexModulesClass{
                         isRemovable:                    component.isRemovable,
                         isScopable:                     component.isScopable,
                         scopeType:                      component.scopeType,
-                        lockingUser:                    component.lockingUser,
-
-                        // Test Expectation
-                        requiresAcceptanceTest:         component.requiresAcceptanceTest ? component.requiresAcceptanceTest : false,
-                        requiresIntegrationTest:        component.requiresIntegrationTest ? component.requiresIntegrationTest : false,
-                        requiresUnitTest:               component.requiresUnitTest ? component.requiresUnitTest : false
+                        lockingUser:                    component.lockingUser
                     }
                 );
 
@@ -721,6 +768,115 @@ class ImpexModulesClass{
         return workPackageComponentsMapping;
     };
 
+    restoreScenarioTestExpectationData(scenarioTestExpectationData, backupDataVersion, currentDataVersion, designVersionsMapping, designPermutationsMapping, permutationValuesMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Scenario Teat Expectations...");
+
+        let expectationCount = 0;
+
+        const newTestExpectationData = this.migrateTestExpectationData(scenarioTestExpectationData, backupDataVersion, currentDataVersion);
+
+        let testExpectationBatch = [];
+
+        scenarioTestExpectationData.forEach((expectation) => {
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Test Expectation {} - {}", expectation.testType, expectation.permutationValueId);
+
+            const designVersionId = getIdFromMap(designVersionsMapping, expectation.designVersionId);
+            const permutationId = getIdFromMap(designPermutationsMapping, expectation.permutationId);
+            const permutationValueId = getIdFromMap(permutationValuesMapping, expectation.permutationValueId);
+
+            testExpectationBatch.push(
+                {
+                    designVersionId:                designVersionId,
+                    scenarioReferenceId:            expectation.scenarioReferenceId,
+                    testType:                       expectation.testType,
+                    permutationId:                  permutationId,
+                    permutationValueId:             permutationValueId,
+                    expectationStatus:              expectation.expectationStatus
+                }
+            );
+
+            expectationCount++;
+        });
+
+        // Bulk insert the lot for efficiency
+        if(testExpectationBatch.length > 0) {
+            ScenarioTestExpectationData.bulkInsert(testExpectationBatch);
+        }
+
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Scenario Test Expectations", expectationCount);
+    }
+
+    initialPopulateTestExpectationData(dvComponents, designVersionsMapping){
+
+        let testExpectationBatch = [];
+        let expectationCount = 0;
+
+        dvComponents.forEach((component) => {
+
+            if(component.componentType === ComponentType.SCENARIO && component.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED){
+
+                const designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
+
+                if(component.requiresAcceptanceTest){
+
+                    testExpectationBatch.push(
+                        {
+                            designVersionId:                designVersionId,
+                            scenarioReferenceId:            component.componentReferenceId,
+                            testType:                       TestType.ACCEPTANCE,
+                            permutationId:                  'NONE',                             // No permutations inherited
+                            permutationValueId:             'NONE',
+                            expectationStatus:              MashTestStatus.MASH_NOT_LINKED      // Will get recalculated
+                        }
+                    );
+
+                    expectationCount++;
+                }
+
+                if(component.requiresIntegrationTest){
+
+                    testExpectationBatch.push(
+                        {
+                            designVersionId:                designVersionId,
+                            scenarioReferenceId:            component.componentReferenceId,
+                            testType:                       TestType.INTEGRATION,
+                            permutationId:                  'NONE',                             // No permutations inherited
+                            permutationValueId:             'NONE',
+                            expectationStatus:              MashTestStatus.MASH_NOT_LINKED      // Will get recalculated
+                        }
+                    );
+
+                    expectationCount++;
+                }
+
+                if(component.requiresUnitTest){
+
+                    testExpectationBatch.push(
+                        {
+                            designVersionId:                designVersionId,
+                            scenarioReferenceId:            component.componentReferenceId,
+                            testType:                       TestType.UNIT,
+                            permutationId:                  'NONE',                             // No permutations inherited
+                            permutationValueId:             'NONE',
+                            expectationStatus:              MashTestStatus.MASH_NOT_LINKED      // Will get recalculated
+                        }
+                    );
+                }
+
+                expectationCount++;
+
+            }
+        });
+
+        // Bulk insert the lot for efficiency
+        if(testExpectationBatch.length > 0) {
+            ScenarioTestExpectationData.bulkInsert(testExpectationBatch);
+        }
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Scenario Test Expectations (Initial Populate)", expectationCount);
+    }
 
     // Migration Functions ---------------------------------------------------------------------------------------------
 
@@ -928,6 +1084,27 @@ class ImpexModulesClass{
         return newDefaultFeatureAspectData;
     }
 
+    migrateDesignPermutationData(designPermutationData, backupVersion, currentVersion){
+
+        // Add to this function for each release
+        let newDesignPermutationData = designPermutationData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 1:
+                        // Start empty if not existing
+                        if(designPermutationData){
+                            newDesignPermutationData = designPermutationData;
+                        } else {
+                            newDesignPermutationData = [];
+                        }
+                }
+        }
+
+        return newDesignPermutationData;
+    }
+
     migrateDesignVersionData(designVersionData, backupVersion, currentVersion){
 
         // Add to this function for each release
@@ -944,6 +1121,27 @@ class ImpexModulesClass{
 
         return newDesignVersionData;
     };
+
+    migratePermutationValueData(permutationValueData, backupVersion, currentVersion){
+
+        // Add to this function for each release
+        let newPermutationValueData = permutationValueData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 1:
+                        // Start empty if not existing
+                        if(permutationValueData){
+                            newPermutationValueData = permutationValueData;
+                        } else {
+                            newPermutationValueData = [];
+                        }
+                }
+        }
+
+        return newPermutationValueData;
+    }
 
     migrateDesignUpdateData(designUpdateData, backupVersion, currentVersion){
 
@@ -1014,6 +1212,7 @@ class ImpexModulesClass{
     };
 
     migrateWorkPackageComponentData(workPackageComponentData, backupVersion, currentVersion){
+
         // Add to this function for each release
         let newWorkPackageComponentData = workPackageComponentData;
 
@@ -1028,6 +1227,23 @@ class ImpexModulesClass{
 
         return newWorkPackageComponentData;
     };
+
+    migrateTestExpectationData(scenarioTestExpectationData, backupVersion, currentVersion){
+
+        // Add to this function for each release
+        let newScenarioTestExpectationData = scenarioTestExpectationData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 2:
+                        // No changes
+                        newScenarioTestExpectationData = scenarioTestExpectationData
+                }
+        }
+
+        return newScenarioTestExpectationData;
+    }
 
     migrateFeatureBackgroundStepData(featureBackgroundStepsData, backupVersion, currentVersion){
         // Add to this function for each release

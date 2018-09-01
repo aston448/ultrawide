@@ -9,23 +9,20 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewType, LogLevel, UpdateMergeStatus}    from '../../../constants/constants.js';
-import {log} from "../../../common/utils";
+import {ViewType, LogLevel, UpdateMergeStatus, MashTestStatus, UpdateScopeType, TestType}    from '../../../constants/constants.js';
+import { TextLookups }                  from '../../../common/lookups.js';
+import {log}                            from "../../../common/utils";
 
 import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 
-import { TextLookups }                  from '../../../common/lookups.js';
+
 
 // Bootstrap
 import {Grid, Row, Col, InputGroup, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
-import {connect} from "react-redux";
-import {MashTestStatus, UpdateScopeType} from "../../../constants/constants";
-
-
-
 // REDUX services
+import {connect} from "react-redux";
 
 // =====================================================================================================================
 
@@ -40,12 +37,25 @@ class TestSummary extends Component {
         super(props);
 
         this.state = {
-            accExpectation: props.scenario.requiresAcceptanceTest,
-            intExpectation: props.scenario.requiresIntegrationTest,
-            unitExpectation: props.scenario.requiresUnitTest
+            accExpectation: this.testExpected(TestType.ACCEPTANCE, this.props.scenarioTestExpectations),
+            intExpectation: this.testExpected(TestType.INTEGRATION, this.props.scenarioTestExpectations),
+            unitExpectation: this.testExpected(TestType.UNIT, this.props.scenarioTestExpectations),
         };
     }
 
+    testExpected(testType, expectationData){
+
+        let expected = false;
+
+        expectationData.forEach((expectation) => {
+
+            if(expectation.testType === testType){
+                expected = true;
+            }
+        });
+
+        return expected;
+    }
 
     shouldComponentUpdate(nextProps, nextState) {
 
@@ -61,105 +71,105 @@ class TestSummary extends Component {
         return shouldUpdate;
     }
 
-    componentDidUpdate(){
+    // componentDidUpdate(){
+    //
+    //     //console.log('TEST SUMMARY UPDATED with scenario ' + this.props.scenario);
+    //     this.updateTestExpectations(this.props.scenario, this.props.userRole, this.props.userContext, this.props.displayContext, this.state.accExpectation, this.state.intExpectation, this.state.unitExpectation);
+    // }
 
-        //console.log('TEST SUMMARY UPDATED with scenario ' + this.props.scenario);
-        this.updateTestExpectations(this.props.scenario, this.props.userRole, this.props.userContext, this.props.displayContext, this.state.accExpectation, this.state.intExpectation, this.state.unitExpectation);
-    }
+    // checkForViewOk(){
+    //
+    //     switch(this.props.view){
+    //         case ViewType.WORK_PACKAGE_BASE_VIEW:
+    //         case ViewType.WORK_PACKAGE_BASE_EDIT:
+    //         case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+    //         case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+    //             return false;
+    //         case ViewType.DESIGN_UPDATE_EDIT:
+    //             // OK only for in scope scenarios in DU
+    //             return (this.props.inScope);
+    //         default:
+    //             return true;
+    //     }
+    // }
 
-    checkForViewOk(){
-
-        switch(this.props.view){
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                return false;
-            case ViewType.DESIGN_UPDATE_EDIT:
-                // OK only for in scope scenarios in DU
-                return (this.props.inScope);
-            default:
-                return true;
-        }
-    }
-
-    toggleAccExpectation(){
-
-        if (this.checkForViewOk()) {
-
-            let newAccState = !this.state.accExpectation;
-
-            this.setState({accExpectation: newAccState});
-
-        }
-
-
-    }
-
-    toggleIntExpectation(){
-
-        if(this.checkForViewOk()) {
-
-            let newIntState = !this.state.intExpectation;
-
-            this.setState({intExpectation: newIntState});
-
-        }
-    }
-
-    toggleUnitExpectation(){
-
-        if(this.checkForViewOk()) {
-
-            let newUnitState = !this.state.unitExpectation;
-
-            this.setState({unitExpectation: newUnitState});
-
-        }
-    }
+    // toggleAccExpectation(){
+    //
+    //     if (this.checkForViewOk()) {
+    //
+    //         let newAccState = !this.state.accExpectation;
+    //
+    //         this.setState({accExpectation: newAccState});
+    //
+    //     }
+    //
+    //
+    // }
+    //
+    // toggleIntExpectation(){
+    //
+    //     if(this.checkForViewOk()) {
+    //
+    //         let newIntState = !this.state.intExpectation;
+    //
+    //         this.setState({intExpectation: newIntState});
+    //
+    //     }
+    // }
+    //
+    // toggleUnitExpectation(){
+    //
+    //     if(this.checkForViewOk()) {
+    //
+    //         let newUnitState = !this.state.unitExpectation;
+    //
+    //         this.setState({unitExpectation: newUnitState});
+    //
+    //     }
+    // }
 
 
-    updateTestExpectations(scenario, userRole, userContext, displayContext, accState, intState, unitState){
-
-        switch(this.props.view){
-
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-
-                if(scenario.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
-                    ClientDesignUpdateComponentServices.setScenarioTestExpectations(
-                        scenario,
-                        userRole,
-                        userContext,
-                        displayContext,
-                        accState,
-                        intState,
-                        unitState
-                    );
-                }
-                break;
-            default:
-
-                //console.log('Set expectations ' + userRole + ' and user context ' + userContext);
-
-                ClientDesignComponentServices.setScenarioTestExpectations(
-                    scenario,
-                    userRole,
-                    userContext,
-                    displayContext,
-                    accState,
-                    intState,
-                    unitState
-                );
-
-                break;
-        }
-
-    }
+    // updateTestExpectations(scenario, userRole, userContext, displayContext, accState, intState, unitState){
+    //
+    //     switch(this.props.view){
+    //
+    //         case ViewType.DESIGN_UPDATE_EDIT:
+    //         case ViewType.DESIGN_UPDATE_VIEW:
+    //
+    //             if(scenario.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+    //                 ClientDesignUpdateComponentServices.setScenarioTestExpectations(
+    //                     scenario,
+    //                     userRole,
+    //                     userContext,
+    //                     displayContext,
+    //                     accState,
+    //                     intState,
+    //                     unitState
+    //                 );
+    //             }
+    //             break;
+    //         default:
+    //
+    //             //console.log('Set expectations ' + userRole + ' and user context ' + userContext);
+    //
+    //             ClientDesignComponentServices.setScenarioTestExpectations(
+    //                 scenario,
+    //                 userRole,
+    //                 userContext,
+    //                 displayContext,
+    //                 accState,
+    //                 intState,
+    //                 unitState
+    //             );
+    //
+    //             break;
+    //     }
+    //
+    // }
 
     render() {
 
-        const {testSummaryData, scenario, displayContext, userContext, userRole} = this.props;
+        const {testSummaryData, scenario, scenarioTestExpectations, displayContext, userContext, userRole} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Summary {} ', scenario.componentNameNew);
 
@@ -170,9 +180,9 @@ class TestSummary extends Component {
 
         const tooltipDelay = 1000;
 
-        const tooltipAcceptanceText = this.state.accExpectation ? 'Requires Acceptance test' : 'Click to require Acceptance test';
-        const tooltipIntegrationText = this.state.intExpectation ? 'Requires Integration test' : 'Click to require Integration test';
-        const tooltipUnitText = this.state.unitExpectation ? 'Requires Unit test' : 'Click to require Unit test';
+        const tooltipAcceptanceText = this.state.accExpectation ? 'Requires Acceptance test' : 'No Acceptance test required';
+        const tooltipIntegrationText = this.state.intExpectation ? 'Requires Integration test' : 'No Integration test required';
+        const tooltipUnitText = this.state.unitExpectation ? 'Requires Unit test' : 'No Unit test required';
 
         const accStatusText = this.state.accExpectation ? TextLookups.mashTestStatus(testSummaryData.accMashTestStatus) : 'Not required';
         const intStatusText = this.state.intExpectation ? TextLookups.mashTestStatus(testSummaryData.intMashTestStatus) : 'Not required';
@@ -257,7 +267,7 @@ class TestSummary extends Component {
                                 <InputGroup.Addon className="scenario-test-requirement">
                                     <OverlayTrigger delayShow={tooltipDelay} placement="top"
                                                     overlay={tooltipAcceptance}>
-                                        <div className={testExpectationAcc} onClick={() => this.toggleAccExpectation(scenario._id, userRole, userContext, displayContext)}>
+                                        <div className={testExpectationAcc}>
                                             Acc
                                         </div>
                                     </OverlayTrigger>
@@ -272,7 +282,7 @@ class TestSummary extends Component {
                                 <InputGroup.Addon className="scenario-test-requirement">
                                     <OverlayTrigger delayShow={tooltipDelay} placement="top"
                                                     overlay={tooltipIntegration}>
-                                        <div className={testExpectationInt} onClick={() => this.toggleIntExpectation(scenario._id, userRole, userContext, displayContext)}>
+                                        <div className={testExpectationInt}>
                                             Int
                                         </div>
                                     </OverlayTrigger>
@@ -286,7 +296,7 @@ class TestSummary extends Component {
                             <InputGroup className="scenario-test-summary">
                                 <InputGroup.Addon className="scenario-test-requirement">
                                     <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipUnit}>
-                                        <div className={testExpectationUnit} onClick={() => this.toggleUnitExpectation(scenario._id, userRole, userContext, displayContext)}>
+                                        <div className={testExpectationUnit}>
                                             Unit
                                         </div>
                                     </OverlayTrigger>
@@ -318,7 +328,7 @@ class TestSummary extends Component {
                 );
 
             } else {
-                // There is no test data for this component yet but still want to be able to set expectations
+                // There is no test data for this component yet but still want to be able to see expectations
                 const testSummaryWithNoData =
                     <Grid className="close-grid">
                         <Row>
@@ -327,8 +337,7 @@ class TestSummary extends Component {
                                     <InputGroup.Addon className="scenario-test-requirement">
                                         <OverlayTrigger delayShow={tooltipDelay} placement="top"
                                                         overlay={tooltipAcceptance}>
-                                            <div className={testExpectationAcc}
-                                                 onClick={() => this.toggleAccExpectation()}>
+                                            <div className={testExpectationAcc}>
                                                 Acc
                                             </div>
                                         </OverlayTrigger>
@@ -343,8 +352,7 @@ class TestSummary extends Component {
                                     <InputGroup.Addon className="scenario-test-requirement">
                                         <OverlayTrigger delayShow={tooltipDelay} placement="top"
                                                         overlay={tooltipIntegration}>
-                                            <div className={testExpectationInt}
-                                                 onClick={() => this.toggleIntExpectation()}>
+                                            <div className={testExpectationInt}>
                                                 Int
                                             </div>
                                         </OverlayTrigger>
@@ -358,8 +366,7 @@ class TestSummary extends Component {
                                 <InputGroup className="scenario-test-summary">
                                     <InputGroup.Addon className="scenario-test-requirement">
                                         <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={tooltipUnit}>
-                                            <div className={testExpectationUnit}
-                                                 onClick={() => this.toggleUnitExpectation()}>
+                                            <div className={testExpectationUnit}>
                                                 Unit
                                             </div>
                                         </OverlayTrigger>
@@ -386,6 +393,7 @@ class TestSummary extends Component {
 TestSummary.propTypes = {
     testSummaryData: PropTypes.object,
     scenario: PropTypes.object,
+    scenarioTestExpectations: PropTypes.array,
     displayContext: PropTypes.string,
     inScope: PropTypes.bool
 };

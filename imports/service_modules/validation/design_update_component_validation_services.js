@@ -453,15 +453,6 @@ class DesignUpdateComponentValidationServicesClass{
 
         return Validation.VALID;
     }
-
-    validateSetScenarioTestExpectations(userRole){
-
-        if(userRole !== RoleType.DESIGNER){
-            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_ROLE_TEST_EXPECTATIONS;
-        }
-
-        return Validation.VALID;
-    }
 }
 
 export const DesignUpdateComponentValidationServices = new DesignUpdateComponentValidationServicesClass();

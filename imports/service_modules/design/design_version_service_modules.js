@@ -1,7 +1,7 @@
 
 // Ultrawide Services
 import { DesignVersionStatus, UpdateMergeStatus, ComponentType, LogLevel } from '../../constants/constants.js';
-import { log } from '../../common/utils.js';
+import { log, getIdFromMap } from '../../common/utils.js';
 
 // Data Access
 import { DesignVersionData }            from '../../data/design/design_version_db.js';
@@ -9,6 +9,9 @@ import { DesignComponentData }          from '../../data/design/design_component
 import { DesignUpdateData }             from '../../data/design_update/design_update_db.js';
 import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
 import { DomainDictionaryData }        from '../../data/design/domain_dictionary_db.js';
+import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
+import {DesignPermutationValueData} from "../../data/design/design_permutation_value_db";
+
 
 //======================================================================================================================
 //
@@ -74,11 +77,6 @@ class DesignVersionModulesClass {
                         updateMergeStatus:              UpdateMergeStatus.COMPONENT_BASE,
                         isDevUpdated:                   false,
                         isDevAdded:                     false,
-
-                        requiresAcceptanceTest:         previousComponent.requiresAcceptanceTest,
-                        requiresIntegrationTest:        previousComponent.requiresIntegrationTest,
-                        requiresUnitTest:               previousComponent.requiresUnitTest,
-
                         isRemovable:                    previousComponent.isRemovable,
                     }
                 );
@@ -838,6 +836,52 @@ class DesignVersionModulesClass {
 
         if(newDomainDictionaryBatch.length > 0) {
             DomainDictionaryData.bulkInsertEntries(newDomainDictionaryBatch);
+        }
+    }
+
+    rollForwardTestExpectationValues(currentDesignVersionId, newDesignVersionId){
+
+        const oldValues = DesignPermutationValueData.getAllValuesForDesignVersion(currentDesignVersionId);
+        const permutationValuesMapping = [];
+
+        oldValues.forEach((oldValue) => {
+
+            // Import the existing value to the new DV but with the old permutation id
+            const newId = DesignPermutationValueData.importDesignPermutationValue(oldValue, newDesignVersionId, oldValue.permutationId);
+
+            if (newId) {
+                // Store the new Design Update ID
+                permutationValuesMapping.push({oldId: oldValue._id, newId: newId});
+            }
+        });
+
+        return permutationValuesMapping;
+    }
+
+    rollForwardTestExpectations(currentDesignVersionId, newDesignVersionId, permutationValuesMapping){
+
+        // We want to copy ALL test expectations to the new DV.
+
+        const oldExpectations = ScenarioTestExpectationData.getAllTestExpectationsForDesignVersion(currentDesignVersionId);
+
+        let newExpectationsBatch = [];
+
+        oldExpectations.forEach((expectation) => {
+
+            newExpectationsBatch.push(
+                {
+                    designVersionId:                newDesignVersionId,
+                    scenarioReferenceId:            expectation.scenarioReferenceId,
+                    testType:                       expectation.testType,
+                    permutationId:                  expectation.permutationId,
+                    permutationValueId:             getIdFromMap(permutationValuesMapping, expectation.permutationValueId),
+                    expectationStatus:              expectation.expectationStatus
+                }
+            );
+        });
+
+        if(newExpectationsBatch.length > 0) {
+            ScenarioTestExpectationData.bulkInsert(newExpectationsBatch);
         }
     }
 

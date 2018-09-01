@@ -48,6 +48,9 @@ class ScenarioTestExpectationServicesClass{
 
             ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
 
+            // And mark the Scenario as requiring the test
+
+
         } else {
             // Log a warning as should not be happening
             log((msg) => console.log(msg), LogLevel.WARNING, 'Test expectation already existed - not adding to Scenario Test Expectations', testType);

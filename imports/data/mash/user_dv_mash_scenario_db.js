@@ -73,23 +73,7 @@ class UserDvMashScenarioDataClass {
 
     // UPDATE ==========================================================================================================
 
-    updateMashScenarioExpectations(userId, designVersionId, scenarioReferenceId, requiresAcc, requiresInt, requiresUnit){
 
-        return UserDesignVersionMashScenarios.update(
-            {
-                userId: userId,
-                designVersionId: designVersionId,
-                designScenarioReferenceId: scenarioReferenceId
-            },
-            {
-                $set:{
-                    requiresAcceptanceTest:         requiresAcc,
-                    requiresIntegrationTest:        requiresInt,
-                    requiresUnitTest:               requiresUnit
-                }
-            }
-        );
-    }
 
     // REMOVE ==========================================================================================================
 

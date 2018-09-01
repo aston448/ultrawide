@@ -24,6 +24,35 @@ import { UserDvMashScenarioData }           from '../../data/mash/user_dv_mash_s
 
 class TestSummaryServicesClass {
 
+    refreshExpectedTestSummaryForFeature(userContext){
+
+        let featureGlobalData = {
+            featureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+            featureScenarioCount: 0,
+            featureExpectedTestCount: 0,
+            featureFulfilledTestCount: 0,
+            featureMissingTestScenarios: 0,
+            featureNoExpectationScenarios: 0,
+            featureAllTestsFulfilled: false,
+            duFeatureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+            duFeaturePassingTests: 0,
+            duFeatureFailingTests: 0,
+            duFeatureScenarioCount: 0,
+            duFeatureExpectedTestCount: 0,
+            duFeatureFulfilledTestCount: 0,
+            duFeatureNoTestScenarios: 0,
+            wpFeatureTestStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+            wpFeaturePassingTests: 0,
+            wpFeatureFailingTests: 0,
+            wpFeatureScenarioCount: 0,
+            wpFeatureExpectedTestCount: 0,
+            wpFeatureFulfilledTestCount: 0,
+            wpFeatureNoTestScenarios: 0,
+            totalFailingScenarioCount: 0,
+            totalPassingScenarioCount: 0,
+        };
+    }
+
     refreshTestSummaryForFeature(userContext){
 
         let designFeature = {};

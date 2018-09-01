@@ -1,7 +1,8 @@
 
 // Ultrawide services
-import { MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
+import { MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, TestType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
+import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
 
 
 class TestSummaryModulesClass{
@@ -80,7 +81,14 @@ class TestSummaryModulesClass{
             }
         }
 
+        // Get test expectations for Scenario
+        const scenarioAccTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(userContext.designVersionId, featureScenario.designScenarioReferenceId, TestType.ACCEPTANCE);
+        const scenarioIntTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(userContext.designVersionId, featureScenario.designScenarioReferenceId, TestType.INTEGRATION);
+        const scenarioUnitTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(userContext.designVersionId, featureScenario.designScenarioReferenceId, TestType.UNIT);
+
         // Get expected test count for feature
+
+
         if(featureScenario.requiresAcceptanceTest){
             log((msg) => console.log(msg), LogLevel.TRACE, "  -- Requires Acceptance: {}", featureScenario.scenarioName);
             newGlobalData.featureExpectedTestCount++;

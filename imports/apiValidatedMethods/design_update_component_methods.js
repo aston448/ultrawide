@@ -488,35 +488,5 @@ export const toggleScope = new ValidatedMethod({
 
 });
 
-export const setUpdateScenarioTestExpectations = new ValidatedMethod({
 
-    name: 'designUpdateComponent.setScenarioTestExpectations',
-
-    validate: new SimpleSchema({
-        userId:             {type: String},
-        userRole:           {type: String},
-        designUpdateComponentId:  {type: String},
-        accExpectation:     {type: Boolean},
-        intExpectation:     {type: Boolean},
-        unitExpectation:    {type: Boolean}
-    }).validator(),
-
-    run({userId, userRole, designUpdateComponentId, accExpectation, intExpectation, unitExpectation}){
-
-        // Server validation
-        const result = DesignUpdateComponentValidationApi.validateSetScenarioTestExpectations(userRole);
-
-        if (result !== Validation.VALID) {
-            throw new Meteor.Error('designUpdateComponent.setScenarioTestExpectations.failValidation', result)
-        }
-
-        // Server action
-        try {
-            DesignUpdateComponentServices.setScenarioTestExpectations(userId, designUpdateComponentId, accExpectation, intExpectation, unitExpectation);
-        } catch (e) {
-            console.log(e.stack);
-            throw new Meteor.Error(e.code, e.stack)
-        }
-    }
-});
 

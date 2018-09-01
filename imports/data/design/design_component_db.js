@@ -77,11 +77,6 @@ class DesignComponentDataClass {
                 isDevAdded:                     false,
 
                 isRemovable:                    updateItem.isRemovable,
-
-                // Test Expectation
-                requiresAcceptanceTest:         updateItem.requiresAcceptanceTest,
-                requiresIntegrationTest:        updateItem.requiresIntegrationTest,
-                requiresUnitTest:               updateItem.requiresUnitTest
             }
         );
     }
@@ -125,12 +120,7 @@ class DesignComponentDataClass {
                     isDevUpdated:                   component.isDevUpdated,
                     isDevAdded:                     component.isDevAdded,
 
-                    isRemovable:                    component.isRemovable,
-
-                    // Test Expectation
-                    requiresAcceptanceTest:         component.requiresAcceptanceTest,
-                    requiresIntegrationTest:        component.requiresIntegrationTest,
-                    requiresUnitTest:               component.requiresUnitTest
+                    isRemovable:                    component.isRemovable
                 }
             );
 
@@ -642,20 +632,6 @@ class DesignComponentDataClass {
                 $set: {
                     componentIndexOld: oldIndex,
                     componentIndexNew: newIndex
-                }
-            }
-        );
-    }
-
-    setTestExpectations(designComponentId, accExpectation, intExpectation, unitExpectation){
-
-        return DesignVersionComponents.update(
-            {_id: designComponentId},
-            {
-                $set:{
-                    requiresAcceptanceTest:         accExpectation,
-                    requiresIntegrationTest:        intExpectation,
-                    requiresUnitTest:               unitExpectation
                 }
             }
         );

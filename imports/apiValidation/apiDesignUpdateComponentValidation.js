@@ -166,10 +166,5 @@ class DesignUpdateComponentValidationApiClass {
         return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designComponent, updateComponent, componentInOtherDesignUpdates, hasNoNewChildren, newScope);
     }
 
-    validateSetScenarioTestExpectations(userRole){
-
-        return DesignUpdateComponentValidationServices.validateSetScenarioTestExpectations(userRole);
-    }
-
 }
 export const DesignUpdateComponentValidationApi = new DesignUpdateComponentValidationApiClass();

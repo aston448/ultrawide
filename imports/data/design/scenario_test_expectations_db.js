@@ -1,8 +1,5 @@
+
 import {ScenarioTestExpectations} from "../../collections/design/scenario_test_expectations";
-import {DefaultItemNames} from "../../constants/default_names";
-import {TestType} from "../../constants/constants";
-
-
 
 class ScenarioTestExpectationDataClass{
 
@@ -21,6 +18,9 @@ class ScenarioTestExpectationDataClass{
         );
     }
 
+    bulkInsert(batchData){
+        ScenarioTestExpectations.batchInsert(batchData);
+    }
 
     // SELECT ==========================================================================================================
 
@@ -80,6 +80,13 @@ class ScenarioTestExpectationDataClass{
             permutationId:          permutationId,
             permutationValueId:     permutationValueId,
         });
+    }
+
+    getAllTestExpectationsForDesignVersion(designVersionId){
+
+        return ScenarioTestExpectations.find({
+            designVersionId:        designVersionId
+        }).fetch();
     }
 
     // UPDATE ==========================================================================================================

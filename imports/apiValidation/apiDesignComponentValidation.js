@@ -75,10 +75,5 @@ class DesignComponentValidationApiClass {
         return DesignComponentValidationServices.validateReorderDesignComponent(view, mode, displayContext, movingComponent, targetComponent)
     }
 
-    validateSetScenarioTestExpectations(userRole){
-
-        return DesignComponentValidationServices.validateSetScenarioTestExpectations(userRole);
-    }
-
 }
 export const DesignComponentValidationApi = new DesignComponentValidationApiClass();

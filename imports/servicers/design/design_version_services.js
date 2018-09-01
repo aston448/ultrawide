@@ -122,6 +122,14 @@ class DesignVersionServicesClass {
                     DesignVersionModules.rollForwardDomainDictionary(currentDesignVersionId, nextDesignVersionId);
                     log(msg => console.log(msg), LogLevel.DEBUG, "  Domain Dictionary Carried Forward");
 
+                    // Carry forward Permutation Values
+                    const permutationValuesMapping = DesignVersionModules.rollForwardTestExpectationValues(currentDesignVersionId, nextDesignVersionId);
+                    log(msg => console.log(msg), LogLevel.DEBUG, "  Permutation Values Carried Forward");
+
+                    // Carry Forward Scenario Test Expectations and map to new DV values
+                    DesignVersionModules.rollForwardTestExpectations(currentDesignVersionId, nextDesignVersionId, permutationValuesMapping);
+                    log(msg => console.log(msg), LogLevel.DEBUG, "  Test Expectations Carried Forward");
+
                 } catch(e) {
 
                     // If anything went wrong roll back to where we were

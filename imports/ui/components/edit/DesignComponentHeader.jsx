@@ -40,6 +40,7 @@ import { DragSource } from 'react-dnd';
 // Draft JS - Name is text editable
 import {Editor, EditorState, SelectionState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
 import UltrawideAction from "../common/UltrawideAction";
+import {ScenarioTestExpectationData} from "../../../data/design/scenario_test_expectations_db";
 const {hasCommandModifier} = KeyBindingUtil;
 
 // =====================================================================================================================
@@ -537,8 +538,6 @@ export class DesignComponentHeader extends Component{
             ClientDesignComponentServices.gotoWorkPackage(workPackageId);
         }
     };
-
-
 
 
     // Render the header of the design component - has tools in it depending on context
@@ -1431,10 +1430,14 @@ export class DesignComponentHeader extends Component{
 
                     // Pass the scenario into summary for test expectations
                     let scenario = currentItem;
+
                     // But if an update, use the update scenario
                     if(updateItem && view === ViewType.DESIGN_UPDATE_EDIT){
                         scenario = updateItem;
                     }
+
+                    // And get the test expectations associated with the scenario
+                    const scenarioTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenario(userContext.designVersionId, scenario.componentReferenceId);
 
                     // onClick={ () => this.setCurrentComponent()}
 
@@ -1450,6 +1453,7 @@ export class DesignComponentHeader extends Component{
                                     <TestSummary
                                         testSummaryData={testSummaryData}
                                         scenario={scenario}
+                                        scenarioTestExpectations={scenarioTestExpectations}
                                         displayContext={displayContext}
                                         inScope={inScope}
                                     />

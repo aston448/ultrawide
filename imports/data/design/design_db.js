@@ -1,4 +1,5 @@
 import {Designs}                    from '../../collections/design/designs.js'
+import {DesignPermutations}         from '../../collections/design/design_permutations.js';
 import {DesignVersions}             from '../../collections/design/design_versions.js'
 import {DesignVersionComponents}    from '../../collections/design/design_version_components.js'
 import {DesignUpdateComponents}     from '../../collections/design_update/design_update_components.js'
@@ -122,6 +123,8 @@ class DesignDataClass {
 
             DesignVersionData.removeDesignVersionData(designVersion._id);
         });
+
+        DesignPermutations.remove({designId: designId});
 
         DesignVersions.remove({designId: designId});
 

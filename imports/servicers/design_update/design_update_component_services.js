@@ -583,22 +583,6 @@ class DesignUpdateComponentServicesClass {
             DesignUpdateData.setSummaryDataStale(thisComponent.designUpdateId, true);
         }
     }
-
-    setScenarioTestExpectations(userId, designUpdateComponentId, accExpectation, intExpectation, unitExpectation){
-
-        DesignUpdateComponentData.setTestExpectations(designUpdateComponentId, accExpectation, intExpectation, unitExpectation);
-
-        // Duplicate the expectations on the base component
-        const updateComponent = DesignUpdateComponentData.getUpdateComponentById(designUpdateComponentId);
-
-        const baseComponent = DesignComponentData.getDesignComponentByRef(updateComponent.designVersionId, updateComponent.componentReferenceId);
-
-        DesignComponentData.setTestExpectations(baseComponent._id, accExpectation, intExpectation, unitExpectation);
-
-        // And update the mash expectations too for this scenario
-        UserDvMashScenarioData.updateMashScenarioExpectations(userId, baseComponent.designVersionId, baseComponent.componentReferenceId, accExpectation, intExpectation, unitExpectation);
-
-    }
 }
 
 export const DesignUpdateComponentServices = new DesignUpdateComponentServicesClass();

@@ -19,6 +19,9 @@ import { UserTestTypeLocationData }         from '../../data/configure/user_test
 import { TestOutputLocationData }           from '../../data/configure/test_output_location_db.js';
 import { TestOutputLocationFileData }       from '../../data/configure/test_output_location_file_db.js';
 import { DefaultFeatureAspectData }         from '../../data/design/default_feature_aspect_db.js';
+import {DesignPermutationData} from "../../data/design/design_permutation_db";
+import {DesignPermutationValueData} from "../../data/design/design_permutation_value_db";
+import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
 
 //======================================================================================================================
 //
@@ -136,6 +139,8 @@ class ImpExServicesClass{
             let designVersionComponents = [];
             let designUpdateComponents = [];
             let workPackageComponents = [];
+            let permutationValues = [];
+            let scenarioTestExpectations = [];
             let domainDictionary = [];
 
             // Data stored across Designs ------------------------------------------------------------------------------
@@ -160,26 +165,36 @@ class ImpExServicesClass{
 
             const defaultFeatureAspects = DefaultFeatureAspectData.getDefaultAspectsForDesign(designId);
 
+            const designPermutations = DesignPermutationData.getPermutationsForDesign(designId);
+
             const designVersionData = DesignData.getDesignVersions(designId);
 
+            // And for each Design Version in the Design
             designVersionData.forEach((designVersion) => {
                 designVersions.push(designVersion);
 
+                // All permutation values for this Version
+                const permutationValuesData = DesignPermutationValueData.getAllValuesForDesignVersion(designVersion._id);
+
+                permutationValuesData.forEach((permutationValue) => {
+                    permutationValues.push(permutationValue);
+                });
+
                 // All updates in this Version
-                let designUpdateData = DesignVersionData.getAllUpdates(designVersion._id);
+                const designUpdateData = DesignVersionData.getAllUpdates(designVersion._id);
 
                 designUpdateData.forEach((designUpdate) => {
                     designUpdates.push(designUpdate);
                 });
 
                 // All Work packages in this version
-                let workPackageData = DesignVersionData.getAllWorkPackages(designVersion._id);
+                const workPackageData = DesignVersionData.getAllWorkPackages(designVersion._id);
 
                 workPackageData.forEach((workPackage) => {
                     workPackages.push(workPackage);
 
                     // All work package components in this Work Package
-                    let workPackageComponentData = WorkPackageData.getAllWorkPackageComponents(workPackage._id);
+                    const workPackageComponentData = WorkPackageData.getAllWorkPackageComponents(workPackage._id);
 
                     workPackageComponentData.forEach((workPackageComponent) => {
                         workPackageComponents.push(workPackageComponent)
@@ -187,21 +202,28 @@ class ImpExServicesClass{
                 });
 
                 // All design components in this version
-                let designVersionComponentData = DesignVersionData.getAllComponents(designVersion._id);
+                const designVersionComponentData = DesignVersionData.getAllComponents(designVersion._id);
 
                 designVersionComponentData.forEach((designVersionComponent) => {
                     designVersionComponents.push(designVersionComponent);
                 });
 
                 // All Design Update components in this version
-                let designUpdateComponentData = DesignVersionData.getAllUpdateComponents(designVersion._id);
+                const designUpdateComponentData = DesignVersionData.getAllUpdateComponents(designVersion._id);
 
                 designUpdateComponentData.forEach((designUpdateComponent) => {
                     designUpdateComponents.push(designUpdateComponent);
                 });
 
+                // All Scenario Test Expectations in this version
+                const scenarioTestExpectationData = ScenarioTestExpectationData.getAllTestExpectationsForDesignVersion(designVersion._id);
+
+                scenarioTestExpectationData.forEach((scenarioTestExpectation) => {
+                    scenarioTestExpectations.push(scenarioTestExpectation);
+                });
+
                 // All Domain Dictionary entries for this version
-                let dictionaryData = DesignVersionData.getDomainDictionaryEntries(designVersion._id);
+                const dictionaryData = DesignVersionData.getDomainDictionaryEntries(designVersion._id);
 
                 dictionaryData.forEach((domainItem) => {
                     domainDictionary.push(domainItem);
@@ -214,6 +236,8 @@ class ImpExServicesClass{
                     userRoles: userRoles,
                     testOutputLocations: testOutputLocations,
                     testOutputLocationFiles: testOutputLocationFiles,
+                    designPermutations: designPermutations,
+                    permutationValues: permutationValues,
                     userTestTypeLocations: userTestTypeLocations,
                     userSettings: userSettings,
                     designs: designData,
@@ -224,7 +248,8 @@ class ImpExServicesClass{
                     domainDictionary: domainDictionary,
                     designVersionComponents: designVersionComponents,
                     designUpdateComponents: designUpdateComponents,
-                    workPackageComponents: workPackageComponents
+                    workPackageComponents: workPackageComponents,
+                    scenarioTestExpectations: scenarioTestExpectations
                 };
 
 
@@ -261,6 +286,8 @@ class ImpExServicesClass{
             let usersMapping = [];
             let locationsMapping = [];
             let designsMapping = [];
+            let designPermutationsMapping = [];
+            let permutationValuesMapping = [];
             let designVersionsMapping = [];
             let designUpdatesMapping = [];
             let workPackagesMapping = [];
@@ -326,6 +353,9 @@ class ImpExServicesClass{
                     // Restore Default Feature Aspects
                     ImpexModules.restoreDefaultFeatureAspects(backupData.defaultFeatureAspects, backupDataVersion, currentDataVersion, designsMapping);
 
+                    // Restore Design Permutations
+                    designPermutationsMapping = ImpexModules.restoreDesignPermutationData(backupData.designPermutations, backupDataVersion, currentDataVersion, designsMapping);
+
                     // Restore Design Versions
                     designVersionsMapping = ImpexModules.restoreDesignVersionData(backupData.designVersions, backupDataVersion, currentDataVersion, designsMapping);
 
@@ -336,6 +366,9 @@ class ImpExServicesClass{
                     const hasDesignUpdates = (backupData.designUpdates.length > 0);
 
                     workPackagesMapping = ImpexModules.restoreWorkPackageData(backupData.workPackages, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, usersMapping, hasDesignUpdates);
+
+                    // Restore Permutation Values
+                    permutationValuesMapping = ImpexModules.restorePermutationValueData(backupData.permutationValues, backupDataVersion, currentDataVersion, designVersionsMapping, designPermutationsMapping);
 
                     // Restore Domain Dictionary
                     ImpexModules.restoreDomainDictionaryData(backupData.domainDictionary, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping);
@@ -352,6 +385,12 @@ class ImpExServicesClass{
 
                     ImpexModules.restoreWorkPackageComponentData(backupData.workPackageComponents, backupDataVersion, currentDataVersion, workPackagesMapping, designVersionComponentsMapping, designUpdateComponentsMapping, hasDesignVersionComponents, hasDesignUpdateComponents);
 
+                    // Restore Scenario Test Expectations
+                    if(backupData.scenarioTestExpectations && backupData.scenarioTestExpectations.length > 0) {
+                        ImpexModules.restoreScenarioTestExpectationData(backupData.scenarioTestExpectations, backupDataVersion, currentDataVersion, designVersionsMapping, designPermutationsMapping, permutationValuesMapping);
+                    } else {
+                        ImpexModules.initialPopulateTestExpectationData(backupData.designVersionComponents, designVersionsMapping)
+                    }
 
                     // Replacement / restore has succeeded so remove the old data if it existed ++++++++++++++++++++++++++++
 

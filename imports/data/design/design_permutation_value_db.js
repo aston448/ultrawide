@@ -17,13 +17,13 @@ class DesignPermutationValueClass{
         );
     }
 
-    importDesignPermutationValue(designPermutationValue){
+    importDesignPermutationValue(designPermutationValue, designVersionId, permutationId){
 
         if(Meteor.isServer) {
             return DesignPermutationValues.insert(
                 {
-                    permutationId: designPermutationValue.permutationId,
-                    designVersionId: designPermutationValue.designVersionId,
+                    permutationId: permutationId,
+                    designVersionId: designVersionId,
                     permutationValueName: designPermutationValue.permutationValueName
                 }
             );
@@ -62,6 +62,13 @@ class DesignPermutationValueClass{
         return DesignPermutationValues.find({
             _id: {$ne: permutationValueId},
             permutationId:  permutationId,
+            designVersionId: designVersionId
+        }).fetch();
+    }
+
+    getAllValuesForDesignVersion(designVersionId){
+
+        return DesignPermutationValues.find({
             designVersionId: designVersionId
         }).fetch();
     }

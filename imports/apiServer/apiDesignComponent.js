@@ -10,8 +10,7 @@ import {
     updateFeatureNarrative,
     removeDesignComponent,
     moveDesignComponent,
-    reorderDesignComponent,
-    setScenarioTestExpectations
+    reorderDesignComponent
 } from '../apiValidatedMethods/design_component_methods.js'
 
 // =====================================================================================================================
@@ -185,23 +184,6 @@ class ServerDesignComponentApiClass {
                 displayContext: displayContext,
                 movingComponentId: designComponentId,
                 targetComponentId: targetComponentId,
-            },
-            (err, result) => {
-                callback(err, result);
-            }
-        );
-    }
-
-    setScenarioTestExpectations(userId, userRole, designComponentId, accExpectation, intExpectation, unitExpectation, callback){
-
-        setScenarioTestExpectations.call(
-            {
-                userId: userId,
-                userRole: userRole,
-                designComponentId: designComponentId,
-                accExpectation: accExpectation,
-                intExpectation: intExpectation,
-                unitExpectation: unitExpectation,
             },
             (err, result) => {
                 callback(err, result);

@@ -40,11 +40,6 @@ let Schema = new SimpleSchema({
     isDevUpdated:                   {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been updated by a developer
     isDevAdded:                     {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been added by a developer
 
-    // Test Expectation
-    requiresAcceptanceTest:         {type: Boolean, defaultValue: false},
-    requiresIntegrationTest:        {type: Boolean, defaultValue: false},
-    requiresUnitTest:               {type: Boolean, defaultValue: false},
-
     // Editing state (shared and persistent)
     isRemovable:                    {type: Boolean, defaultValue: true} ,               // Flag to indicate if current component can be deleted
 
@@ -55,11 +50,6 @@ let Schema = new SimpleSchema({
 
 DesignVersionComponents.attachSchema(Schema);
 
-DesignVersionComponents.allow({
-    update(requiresAcceptanceTest, requiresIntegrationTest, requiresUnitTest){
-        return true;
-    }
-});
 
 // Publish Design Updates wanted
 if(Meteor.isServer){

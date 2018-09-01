@@ -54,10 +54,6 @@ let Schema = new SimpleSchema({
     scopeType:                      {type: String, defaultValue: UpdateScopeType.SCOPE_OUT_SCOPE},  // Indicates if item is in full, parent or peer scope in an update
     lockingUser:                    {type: String, defaultValue: 'NONE'},               // Indicates if a component is locked for edit by a user
 
-    // Test Expectation
-    requiresAcceptanceTest:         {type: Boolean, defaultValue: false},
-    requiresIntegrationTest:        {type: Boolean, defaultValue: false},
-    requiresUnitTest:               {type: Boolean, defaultValue: false}
 });
 
 DesignUpdateComponents.attachSchema(Schema);

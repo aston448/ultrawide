@@ -15,12 +15,12 @@ class DesignPermutationClass{
         );
     }
 
-    importDesignPermutation(designPermutation){
+    importDesignPermutation(designPermutation, designId){
 
         if(Meteor.isServer) {
             return DesignPermutations.insert(
                 {
-                    designId: designPermutation.designId,
+                    designId: designId,
                     permutationName: designPermutation.permutationName
                 }
             );
