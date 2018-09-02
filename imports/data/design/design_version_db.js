@@ -15,6 +15,7 @@ import { DesignPermutationValues }      from '../../collections/design/design_pe
 import { ScenarioTestExpectations }     from '../../collections/design/scenario_test_expectations.js';
 
 import { ComponentType, UpdateMergeStatus, WorkPackageStatus, WorkPackageTestStatus, DesignUpdateStatus, DuWorkPackageTestStatus, DesignUpdateMergeAction, WorkPackageType } from '../../constants/constants.js';
+import {UserDvScenarioTestExpectationStatus} from "../../collections/mash/user_dv_scenario_test_expectation_status";
 
 class DesignVersionDataClass {
 
@@ -555,6 +556,7 @@ class DesignVersionDataClass {
         UserDevDesignSummary.remove({designVersionId: designVersionId});
         UserDevTestSummary.remove({designVersionId: designVersionId});
         UserWorkProgressSummary.remove({designVersionId: designVersionId});
+        UserDvScenarioTestExpectationStatus.remove({designVersionId: designVersionId})
     }
 }
 

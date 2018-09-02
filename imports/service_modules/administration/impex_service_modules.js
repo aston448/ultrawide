@@ -791,8 +791,7 @@ class ImpexModulesClass{
                     scenarioReferenceId:            expectation.scenarioReferenceId,
                     testType:                       expectation.testType,
                     permutationId:                  permutationId,
-                    permutationValueId:             permutationValueId,
-                    expectationStatus:              expectation.expectationStatus
+                    permutationValueId:             permutationValueId
                 }
             );
 
@@ -827,8 +826,7 @@ class ImpexModulesClass{
                             scenarioReferenceId:            component.componentReferenceId,
                             testType:                       TestType.ACCEPTANCE,
                             permutationId:                  'NONE',                             // No permutations inherited
-                            permutationValueId:             'NONE',
-                            expectationStatus:              MashTestStatus.MASH_NOT_LINKED      // Will get recalculated
+                            permutationValueId:             'NONE'
                         }
                     );
 
@@ -843,8 +841,7 @@ class ImpexModulesClass{
                             scenarioReferenceId:            component.componentReferenceId,
                             testType:                       TestType.INTEGRATION,
                             permutationId:                  'NONE',                             // No permutations inherited
-                            permutationValueId:             'NONE',
-                            expectationStatus:              MashTestStatus.MASH_NOT_LINKED      // Will get recalculated
+                            permutationValueId:             'NONE'
                         }
                     );
 
@@ -859,8 +856,7 @@ class ImpexModulesClass{
                             scenarioReferenceId:            component.componentReferenceId,
                             testType:                       TestType.UNIT,
                             permutationId:                  'NONE',                             // No permutations inherited
-                            permutationValueId:             'NONE',
-                            expectationStatus:              MashTestStatus.MASH_NOT_LINKED      // Will get recalculated
+                            permutationValueId:             'NONE'
                         }
                     );
                 }

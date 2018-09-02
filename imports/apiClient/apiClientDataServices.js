@@ -253,13 +253,14 @@ class ClientDataServicesClass{
             const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
             const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
             const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
+            const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
 
             Tracker.autorun((loader) => {
 
                 let loading = (
                     !dusHandle.ready() || !dvmHandle.ready() ||
                     !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
-                    !dsHandle.ready() || !psHandle.ready()
+                    !dsHandle.ready() || !psHandle.ready() || !dveHandle.ready()
                 );
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "loading User Data = {}", loading);
@@ -323,6 +324,7 @@ class ClientDataServicesClass{
 
                 // User specific data
                 const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
+                const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
                 const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
                 const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
                 const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
@@ -334,7 +336,7 @@ class ClientDataServicesClass{
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dusHandle.ready() || !dpHandle.ready() || !dpvHandle.ready() ||
+                        !dusHandle.ready() || !dpHandle.ready() || !dpvHandle.ready() || !dveHandle.ready() ||
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() ||
                         !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||

@@ -11,8 +11,7 @@ let Schema = new SimpleSchema({
     scenarioReferenceId:            {type: String},                                         // Belongs to this Scenario
     testType:                       {type: String},                                         // For this category of tests
     permutationId:                  {type: String, defaultValue: 'NONE'},                   // For this permutation
-    permutationValueId:             {type: String, defaultValue: 'NONE'},                   // For this permutation value
-    expectationStatus:              {type: String, defaultValue: MashTestStatus.MASH_NOT_LINKED},
+    permutationValueId:             {type: String, defaultValue: 'NONE'}                    // For this permutation value
 });
 
 ScenarioTestExpectations.attachSchema(Schema);

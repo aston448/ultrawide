@@ -6,18 +6,19 @@ import { log } from '../../common/utils.js';
 import { UltrawideMochaTestServices }       from '../../service_modules/dev/test_processor_ultrawide_mocha.js';
 
 // Data Access
-import { DesignComponentData }              from '../../data/design/design_component_db.js';
-import { UserAcceptanceTestResultData }     from '../../data/test_results/user_acceptance_test_result_db.js';
-import { UserIntegrationTestResultData }    from '../../data/test_results/user_integration_test_result_db.js';
-import { UserUnitTestResultData }           from '../../data/test_results/user_unit_test_result_db.js';
-import { UserTestTypeLocationData }         from '../../data/configure/user_test_type_location_db.js';
-import { TestOutputLocationData }           from '../../data/configure/test_output_location_db.js';
-import { TestOutputLocationFileData }       from '../../data/configure/test_output_location_file_db.js';
-import { UserDvMashScenarioData }           from '../../data/mash/user_dv_mash_scenario_db.js'
-import { UserMashScenarioTestData }         from '../../data/mash/user_mash_scenario_test_db.js';
-import { UserRoleData }                     from '../../data/users/user_role_db.js';
-import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
-import {DesignPermutationValueData} from "../../data/design/design_permutation_value_db";
+import { DesignComponentData }                  from '../../data/design/design_component_db.js';
+import { UserAcceptanceTestResultData }         from '../../data/test_results/user_acceptance_test_result_db.js';
+import { UserIntegrationTestResultData }        from '../../data/test_results/user_integration_test_result_db.js';
+import { UserUnitTestResultData }               from '../../data/test_results/user_unit_test_result_db.js';
+import { UserTestTypeLocationData }             from '../../data/configure/user_test_type_location_db.js';
+import { TestOutputLocationData }               from '../../data/configure/test_output_location_db.js';
+import { TestOutputLocationFileData }           from '../../data/configure/test_output_location_file_db.js';
+import { UserDvMashScenarioData }               from '../../data/mash/user_dv_mash_scenario_db.js'
+import { UserMashScenarioTestData }             from '../../data/mash/user_mash_scenario_test_db.js';
+import { UserRoleData }                         from '../../data/users/user_role_db.js';
+import {ScenarioTestExpectationData}            from "../../data/design/scenario_test_expectations_db";
+import {DesignPermutationValueData}             from "../../data/design/design_permutation_value_db";
+import {UserDvScenarioTestExpectationStatusData}from '../../data/mash/user_dv_scenario_test_expectation_status_db.js'
 
 //======================================================================================================================
 //
@@ -215,6 +216,7 @@ class TestIntegrationModulesClass {
         // Clear all data for user-designVersion
         UserDvMashScenarioData.removeAllDvScenariosForUser(userContext.userId, userContext.designVersionId);
         UserMashScenarioTestData.removeAllDvTestsForUser(userContext.userId, userContext.designVersionId);
+        UserDvScenarioTestExpectationStatusData.removeAllUserExpectationStatuses(userContext.userId);
 
         log((msg) => console.log(msg), LogLevel.PERF, "    Old data removed...");
 
@@ -225,6 +227,7 @@ class TestIntegrationModulesClass {
 
         let scenarioBatchData = [];
         let scenarioTestBatchData = [];
+        let scenarioExpectationStatusBatch = [];
 
         // Extract out just the user's test results so that when there are many users this does not
         // slow down
@@ -307,7 +310,14 @@ class TestIntegrationModulesClass {
                     // If the individual test references the perm value set the result against it
                     if(unitTest.testName.includes(permValue.permutationValueName)){
 
-                        ScenarioTestExpectationData.setExpectationPermutationValueTestStatus(expectation._id, unitTest.testResult);
+                        scenarioExpectationStatusBatch.push(
+                            {
+                                userId:                     userContext.userId,
+                                designVersionId:            userContext.designVersionId,
+                                scenarioTestExpectationId:  expectation._id,
+                                expectationStatus:          unitTest.testResult
+                            }
+                        );
                     }
                 });
 
@@ -365,7 +375,14 @@ class TestIntegrationModulesClass {
                     // If the individual test references the perm value set the result against it
                     if(intTest.testName.includes(permValue.permutationValueName)){
 
-                        ScenarioTestExpectationData.setExpectationPermutationValueTestStatus(expectation._id, intTest.testResult);
+                        scenarioExpectationStatusBatch.push(
+                            {
+                                userId:                     userContext.userId,
+                                designVersionId:            userContext.designVersionId,
+                                scenarioTestExpectationId:  expectation._id,
+                                expectationStatus:          intTest.testResult
+                            }
+                        );
                     }
                 });
 
@@ -422,7 +439,14 @@ class TestIntegrationModulesClass {
                     // If the individual test references the perm value set the result against it
                     if(accTest.testName.includes(permValue.permutationValueName)){
 
-                        ScenarioTestExpectationData.setExpectationPermutationValueTestStatus(expectation._id, accTest.testResult);
+                        scenarioExpectationStatusBatch.push(
+                            {
+                                userId:                     userContext.userId,
+                                designVersionId:            userContext.designVersionId,
+                                scenarioTestExpectationId:  expectation._id,
+                                expectationStatus:          accTest.testResult
+                            }
+                        );
                     }
                 });
 
@@ -552,9 +576,137 @@ class TestIntegrationModulesClass {
             log((msg) => console.log(msg), LogLevel.PERF, "    Inserting {} mash records...", scenarioTestBatchData.length);
             UserMashScenarioTestData.bulkInsertData(scenarioTestBatchData);
         }
+
+        if(scenarioExpectationStatusBatch.length > 0){
+            log((msg) => console.log(msg), LogLevel.PERF, "    Inserting {} expectation status records...", scenarioExpectationStatusBatch.length);
+            UserDvScenarioTestExpectationStatusData.bulkInsertData(scenarioExpectationStatusBatch);
+        }
+
+
+        // Now calculate the overall expectation status for each scenario given the test results
+        scenarioExpectationStatusBatch = [];
+
+        dvScenarios.forEach((scenario) => {
+
+            const scenarioTestTypeStatuses = this.getScenarioOverallExpectationStatus(userContext, scenario.componentReferenceId);
+            const unitTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenario.componentReferenceId, TestType.UNIT);
+            const intTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenario.componentReferenceId, TestType.INTEGRATION);
+            const accTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenario.componentReferenceId, TestType.ACCEPTANCE);
+
+            if(unitTestExpectation){
+                scenarioExpectationStatusBatch.push({
+                    userId:                     userContext.userId,
+                    designVersionId:            userContext.designVersionId,
+                    scenarioTestExpectationId:  unitTestExpectation._id,
+                    expectationStatus:          scenarioTestTypeStatuses.unitStatus
+                });
+            }
+
+            if(intTestExpectation){
+                scenarioExpectationStatusBatch.push({
+                    userId:                     userContext.userId,
+                    designVersionId:            userContext.designVersionId,
+                    scenarioTestExpectationId:  intTestExpectation._id,
+                    expectationStatus:          scenarioTestTypeStatuses.intStatus
+                });
+            }
+
+            if(accTestExpectation){
+                scenarioExpectationStatusBatch.push({
+                    userId:                     userContext.userId,
+                    designVersionId:            userContext.designVersionId,
+                    scenarioTestExpectationId:  accTestExpectation._id,
+                    expectationStatus:          scenarioTestTypeStatuses.accStatus
+                });
+            }
+        });
+
+        if(scenarioExpectationStatusBatch.length > 0){
+            log((msg) => console.log(msg), LogLevel.PERF, "    Inserting {} expectation status records...", scenarioExpectationStatusBatch.length);
+            UserDvScenarioTestExpectationStatusData.bulkInsertData(scenarioExpectationStatusBatch);
+        }
+
+    }
+
+    getScenarioOverallExpectationStatus(userContext, scenarioRefId){
+
+        // Here the designItem contains the actual Scenario Mash data - should be for one scenario
+        const mashScenario = UserDvMashScenarioData.getScenario(userContext, scenarioRefId);
+
+        let unitStatus = MashTestStatus.MASH_NOT_LINKED;
+        let intStatus = MashTestStatus.MASH_NOT_LINKED;
+        let accStatus = MashTestStatus.MASH_NOT_LINKED;
+
+        if(mashScenario) {
+
+            unitStatus = mashScenario.unitMashTestStatus;
+            intStatus = mashScenario.intMashTestStatus;
+            accStatus = mashScenario.accMashTestStatus;
+
+            // Check for expectation completeness if not already failing
+            if (mashScenario.unitMashTestStatus !== MashTestStatus.MASH_FAIL) {
+
+                if (this.testTypeIsIncomplete(userContext, scenarioRefId, TestType.UNIT)) {
+                    unitStatus = MashTestStatus.MASH_INCOMPLETE;
+                }
+            }
+
+            if (mashScenario.intMashTestStatus !== MashTestStatus.MASH_FAIL) {
+
+                if (this.testTypeIsIncomplete(userContext, scenarioRefId, TestType.INTEGRATION)) {
+                    intStatus = MashTestStatus.MASH_INCOMPLETE;
+                }
+            }
+
+            if (mashScenario.accMashTestStatus !== MashTestStatus.MASH_FAIL) {
+
+                if (this.testTypeIsIncomplete(userContext, scenarioRefId, TestType.ACCEPTANCE)) {
+                    accStatus = MashTestStatus.MASH_INCOMPLETE;
+                }
+            }
+        }
+
+        return(
+            {
+                unitStatus: unitStatus,
+                intStatus:  intStatus,
+                accStatus:  accStatus
+            }
+        )
     }
 
 
+    testTypeIsIncomplete(userContext, scenarioRefId, testType){
+
+        const allExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(
+            userContext.designVersionId,
+            scenarioRefId,
+            testType
+        );
+
+        // But if any values are missing or pending mark as incomplete
+        let retVal = false;
+
+        allExpectations.forEach((expectation) => {
+
+            const userExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, expectation._id);
+
+            if(expectation.permutationValueId !== 'NONE'){
+                if(userExpectationStatus){
+                    // Expected test is missing
+                    if(userExpectationStatus.expectationStatus === MashTestStatus.MASH_NOT_LINKED || userExpectationStatus.expectationStatus === MashTestStatus.MASH_PENDING){
+                        retVal = true;
+                    }
+                } else {
+                    // No status for expected test...
+                    retVal = true;
+                }
+
+            }
+        });
+
+        return retVal;
+    }
 
     getTestIdentity(fullTitle, scenarioName, suiteName, groupName, testName){
 

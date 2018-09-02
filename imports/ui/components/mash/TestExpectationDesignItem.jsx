@@ -10,18 +10,16 @@ import ScenarioTestExpectations                     from '../../components/mash/
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import { ComponentType, TestType, LogLevel } from '../../../constants/constants.js';
+import { ComponentType, TestType, MashTestStatus, LogLevel } from '../../../constants/constants.js';
 
-import { ClientTestIntegrationServices }        from '../../../apiClient/apiClientTestIntegration.js';
-import { UserDvMashScenarioData }               from '../../../data/mash/user_dv_mash_scenario_db.js';
-import {ScenarioTestExpectationData}            from "../../../data/design/scenario_test_expectations_db";
+import { ClientTestIntegrationServices }            from '../../../apiClient/apiClientTestIntegration.js';
+import {ScenarioTestExpectationData}                from "../../../data/design/scenario_test_expectations_db";
+import {UserDvScenarioTestExpectationStatusData}    from "../../../data/mash/user_dv_scenario_test_expectation_status_db";
 
 // Bootstrap
 
 // REDUX services
 import {connect} from 'react-redux';
-import {MashTestStatus} from "../../../constants/constants";
-
 
 
 // =====================================================================================================================
@@ -53,30 +51,49 @@ class TestExpectationDesignItem extends Component {
         return ClientTestIntegrationServices.hasScenarios(designItem, userContext)
     }
 
-    getMashTestStatus(userContext, scenarioRefId){
+    getTestTypeExpectationStatus(userContext, scenarioRefId){
 
-        return UserDvMashScenarioData.getScenario(userContext, scenarioRefId)
-    }
+        // Determine the current user status of the overall test type expectations
+        let unitStatus = MashTestStatus.MASH_NOT_LINKED;
+        let intStatus = MashTestStatus.MASH_NOT_LINKED;
+        let accStatus = MashTestStatus.MASH_NOT_LINKED;
 
-    testTypeIsIncomplete(designItem, testType){
+        const unitExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.UNIT);
+        const intExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.INTEGRATION);
+        const accExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.ACCEPTANCE);
 
-        const allExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(
-            this.props.userContext.designVersionId,
-            designItem.componentReferenceId,
-            testType
-        );
+        if(unitExpectation){
+            const unitStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, unitExpectation._id);
 
-        // But if any values are missing or pending mark as incomplete
-        let retVal = false;
-
-        allExpectations.forEach((expectation) => {
-
-            if(expectation.permutationValueId !== 'NONE' &&  (expectation.expectationStatus === MashTestStatus.MASH_NOT_LINKED || expectation.expectationStatus === MashTestStatus.MASH_PENDING)){
-                retVal = true;
+            if(unitStatusData){
+                unitStatus = unitStatusData.expectationStatus;
             }
-        });
+        }
 
-        return retVal;
+        if(intExpectation){
+            const intStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, intExpectation._id);
+
+            if(intStatusData){
+                intStatus = intStatusData.expectationStatus;
+            }
+        }
+
+        if(accExpectation){
+            const accStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, accExpectation._id);
+
+            if(accStatusData){
+                accStatus = accStatusData.expectationStatus;
+            }
+        }
+
+
+        return(
+            {
+                unitStatus: unitStatus,
+                intStatus:  intStatus,
+                accStatus:  accStatus
+            }
+        )
     }
 
     render(){
@@ -161,40 +178,9 @@ class TestExpectationDesignItem extends Component {
                 case ComponentType.SCENARIO:
 
                     // Here the designItem contains the actual Scenario Mash data - should be for one scenario
-                    const mashScenario = this.getMashTestStatus(userContext, designItem.componentReferenceId);
 
-                    let unitStatus = MashTestStatus.MASH_NOT_LINKED;
-                    let intStatus = MashTestStatus.MASH_NOT_LINKED;
-                    let accStatus = MashTestStatus.MASH_NOT_LINKED;
-
-                    if(mashScenario) {
-
-                        unitStatus = mashScenario.unitMashTestStatus;
-                        intStatus = mashScenario.intMashTestStatus;
-                        accStatus = mashScenario.accMashTestStatus;
-
-                        // Check for expectation completeness if not already failing
-                        if (mashScenario.unitMashTestStatus !== MashTestStatus.MASH_FAIL) {
-
-                            if (this.testTypeIsIncomplete(designItem, TestType.UNIT)) {
-                                unitStatus = MashTestStatus.MASH_INCOMPLETE;
-                            }
-                        }
-
-                        if (mashScenario.intMashTestStatus !== MashTestStatus.MASH_FAIL) {
-
-                            if (this.testTypeIsIncomplete(designItem, TestType.INTEGRATION)) {
-                                intStatus = MashTestStatus.MASH_INCOMPLETE;
-                            }
-                        }
-
-                        if (mashScenario.accMashTestStatus !== MashTestStatus.MASH_FAIL) {
-
-                            if (this.testTypeIsIncomplete(designItem, TestType.ACCEPTANCE)) {
-                                accStatus = MashTestStatus.MASH_INCOMPLETE;
-                            }
-                        }
-                    }
+                    // Get the current user status for the test type expectation
+                    const expectationStatus = this.getTestTypeExpectationStatus(userContext, designItem.componentReferenceId);
 
                     return (
                         <div className={'scenario-test-expectations'}>
@@ -205,9 +191,9 @@ class TestExpectationDesignItem extends Component {
 
                             <ScenarioTestExpectations
                                 scenario={designItem}
-                                scenarioUnitMashTestStatus={unitStatus}
-                                scenarioIntMashTestStatus={intStatus}
-                                scenarioAccMashTestStatus={accStatus}
+                                scenarioUnitMashTestStatus={expectationStatus.unitStatus}
+                                scenarioIntMashTestStatus={expectationStatus.intStatus}
+                                scenarioAccMashTestStatus={expectationStatus.accStatus}
                             />
                         </div>
                     );

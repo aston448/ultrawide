@@ -23,6 +23,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 // REDUX services
 import {connect} from 'react-redux';
 import {ScenarioTestExpectationData} from "../../../data/design/scenario_test_expectations_db";
+import {UserDvScenarioTestExpectationStatusData} from "../../../data/mash/user_dv_scenario_test_expectation_status_db";
 
 
 
@@ -53,6 +54,8 @@ export class DesignPermutationValuesList extends Component {
         return permutationValues.map((permutationValue) => {
 
             // Get any current status for this value for the current scenario
+            let itemStatus = MashTestStatus.MASH_NOT_LINKED;
+
             const permValueExpectation = this.getScenarioValueExpectation(
                 this.props.userContext.designVersionId,
                 scenarioRefId,
@@ -61,10 +64,17 @@ export class DesignPermutationValuesList extends Component {
                 permutationValue._id
             );
 
-            let itemStatus = MashTestStatus.MASH_NOT_LINKED;
-
             if (permValueExpectation){
-                itemStatus = permValueExpectation.expectationStatus;
+
+                const userExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                    this.props.userContext.userId,
+                    this.props.userContext.designVersionId,
+                    permValueExpectation._id
+                );
+
+                if(userExpectationStatus) {
+                    itemStatus = userExpectationStatus.expectationStatus;
+                }
             }
 
             return (
@@ -82,7 +92,6 @@ export class DesignPermutationValuesList extends Component {
             );
         });
     };
-
 
 
     render() {

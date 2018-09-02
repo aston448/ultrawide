@@ -12,8 +12,7 @@ class ScenarioTestExpectationDataClass{
                 scenarioReferenceId:            expectationData.scenarioReferenceId,
                 testType:                       expectationData.testType,
                 permutationId:                  expectationData.permutationId,
-                permutationValueId:             expectationData.permutationValueId,
-                expectationStatus:              expectationData.expectationStatus
+                permutationValueId:             expectationData.permutationValueId
             }
         );
     }
@@ -28,6 +27,19 @@ class ScenarioTestExpectationDataClass{
 
         return ScenarioTestExpectations.findOne({
             _id: expectationId
+        });
+    }
+
+    getScenarioTestTypeExpectation(designVersionId, scenarioReferenceId, testType){
+
+        // There can be only one...
+
+        return ScenarioTestExpectations.findOne({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            testType:               testType,
+            permutationId:          'NONE',
+            permutationValueId:     'NONE'
         });
     }
 
