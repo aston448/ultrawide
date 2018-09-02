@@ -1,22 +1,22 @@
 
-
 // Ultrawide Services
-import { DesignUpdateSummaryServices }      from '../summary/design_update_summary_services.js';
+import { DesignUpdateSummaryServices }              from '../summary/design_update_summary_services.js';
+import { WorkPackageServices }                      from '../../servicers/work/work_package_services.js';
+import { TestIntegrationModules }                   from '../../service_modules/dev/test_integration_service_modules.js';
+import { TestSummaryServices }                      from '../summary/test_summary_services.js';
+import { ChimpMochaTestServices }                   from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
-import { TestRunner, LogLevel}          from '../../constants/constants.js';
-import {log}                            from '../../common/utils.js';
-
-import { WorkPackageServices }              from '../../servicers/work/work_package_services.js';
-import { TestIntegrationModules }           from '../../service_modules/dev/test_integration_service_modules.js';
-import { TestSummaryServices }              from '../summary/test_summary_services.js';
-import { ChimpMochaTestServices }           from '../../service_modules/dev/test_processor_chimp_mocha.js';
+import { TestRunner, LogLevel, TestType}            from '../../constants/constants.js';
+import {log}                                        from '../../common/utils.js';
 
 // Data Access
-import { DesignUpdateData }                 from '../../data/design_update/design_update_db.js';
-import { DesignVersionData }                from '../../data/design/design_version_db.js';
-import { UserAcceptanceTestResultData }     from '../../data/test_results/user_acceptance_test_result_db.js';
-import { UserIntegrationTestResultData }    from '../../data/test_results/user_integration_test_result_db.js';
-import { UserUnitTestResultData }           from '../../data/test_results/user_unit_test_result_db.js';
+import { DesignUpdateData }                         from '../../data/design_update/design_update_db.js';
+import { DesignVersionData }                        from '../../data/design/design_version_db.js';
+import { UserAcceptanceTestResultData }             from '../../data/test_results/user_acceptance_test_result_db.js';
+import { UserIntegrationTestResultData }            from '../../data/test_results/user_integration_test_result_db.js';
+import { UserUnitTestResultData }                   from '../../data/test_results/user_unit_test_result_db.js';
+import {ScenarioTestExpectationData}                from "../../data/design/scenario_test_expectations_db";
+import {UserDvScenarioTestExpectationStatusData}    from "../../data/mash/user_dv_scenario_test_expectation_status_db";
 
 //======================================================================================================================
 //
@@ -80,6 +80,57 @@ class TestIntegrationServicesClass{
         }
     }
 
+    updateScenarioTestTypeExpectations(userContext, scenarioRefId){
+
+        const expectationStatus = TestIntegrationModules.getScenarioOverallExpectationStatus(userContext, scenarioRefId);
+
+        const unitTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.UNIT);
+        const intTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.INTEGRATION);
+        const accTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.ACCEPTANCE);
+
+        if(unitTestExpectation){
+
+            const unitTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                userContext.userId,
+                userContext.designVersionId,
+                unitTestExpectation._id
+            );
+
+            if(unitTestExpectationStatus){
+
+                UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(unitTestExpectationStatus._id, expectationStatus.unitStatus);
+            }
+        }
+
+        if(intTestExpectation){
+
+            const intTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                userContext.userId,
+                userContext.designVersionId,
+                intTestExpectation._id
+            );
+
+            if(intTestExpectationStatus){
+
+                UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(intTestExpectationStatus._id, expectationStatus.intStatus);
+            }
+        }
+
+        if(accTestExpectation){
+
+            const accTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                userContext.userId,
+                userContext.designVersionId,
+                accTestExpectation._id
+            );
+
+            if(accTestExpectationStatus){
+
+                UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(accTestExpectationStatus._id, expectationStatus.accStatus);
+            }
+        }
+
+    }
 
     updateTestSummaryData(userContext){
 

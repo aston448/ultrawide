@@ -22,6 +22,7 @@ import {InputGroup, Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {TestIntegrationServices} from "../../../servicers/dev/test_integration_services";
 
 
 // =====================================================================================================================
@@ -81,6 +82,10 @@ export class TestExpectationItem extends Component {
                 break;
         }
 
+        // Refresh the overall test status of the Scenario
+        // TODO - move this to a SERVER call
+        TestIntegrationServices.updateScenarioTestTypeExpectations(userContext, itemRef);
+
         this.setState({selected: true});
     }
 
@@ -97,6 +102,10 @@ export class TestExpectationItem extends Component {
                 ClientScenarioTestExpectationServices.unselectTestTypePermutationValueExpectation(userContext.designVersionId, itemRef, testType, itemParentId, itemId);
                 break;
         }
+
+        // Refresh the overall test status of the Scenario
+        // TODO - move this to a SERVER call
+        TestIntegrationServices.updateScenarioTestTypeExpectations(userContext, itemRef);
 
         this.setState({selected: false});
         this.setState({expanded: false});

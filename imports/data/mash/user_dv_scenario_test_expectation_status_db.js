@@ -31,13 +31,11 @@ class UserDvScenarioTestExpectationStatusDataClass{
     // UPDATE ==========================================================================================================
 
 
-    setUserExpectationTestStatus(userId, designVersionId, expectationId, testResult){
+    setUserExpectationTestStatus(testStatusId, testResult){
 
         return UserDvScenarioTestExpectationStatus.update(
             {
-                userId:                     userId,
-                designVersionId:            designVersionId,
-                scenarioTestExpectationId:  expectationId
+                _id:    testStatusId
             },
             {
                 $set:{
