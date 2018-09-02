@@ -82,51 +82,53 @@ class TestIntegrationServicesClass{
 
     updateScenarioTestTypeExpectations(userContext, scenarioRefId){
 
-        const expectationStatus = TestIntegrationModules.getScenarioOverallExpectationStatus(userContext, scenarioRefId);
+        if(Meteor.isServer) {
+            const expectationStatus = TestIntegrationModules.getScenarioOverallExpectationStatus(userContext, scenarioRefId);
 
-        const unitTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.UNIT);
-        const intTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.INTEGRATION);
-        const accTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.ACCEPTANCE);
+            const unitTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.UNIT);
+            const intTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.INTEGRATION);
+            const accTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.ACCEPTANCE);
 
-        if(unitTestExpectation){
+            if (unitTestExpectation) {
 
-            const unitTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
-                userContext.userId,
-                userContext.designVersionId,
-                unitTestExpectation._id
-            );
+                const unitTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    unitTestExpectation._id
+                );
 
-            if(unitTestExpectationStatus){
+                if (unitTestExpectationStatus) {
 
-                UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(unitTestExpectationStatus._id, expectationStatus.unitStatus);
+                    UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(unitTestExpectationStatus._id, expectationStatus.unitStatus);
+                }
             }
-        }
 
-        if(intTestExpectation){
+            if (intTestExpectation) {
 
-            const intTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
-                userContext.userId,
-                userContext.designVersionId,
-                intTestExpectation._id
-            );
+                const intTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    intTestExpectation._id
+                );
 
-            if(intTestExpectationStatus){
+                if (intTestExpectationStatus) {
 
-                UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(intTestExpectationStatus._id, expectationStatus.intStatus);
+                    UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(intTestExpectationStatus._id, expectationStatus.intStatus);
+                }
             }
-        }
 
-        if(accTestExpectation){
+            if (accTestExpectation) {
 
-            const accTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
-                userContext.userId,
-                userContext.designVersionId,
-                accTestExpectation._id
-            );
+                const accTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    accTestExpectation._id
+                );
 
-            if(accTestExpectationStatus){
+                if (accTestExpectationStatus) {
 
-                UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(accTestExpectationStatus._id, expectationStatus.accStatus);
+                    UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(accTestExpectationStatus._id, expectationStatus.accStatus);
+                }
             }
         }
 

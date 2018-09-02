@@ -2,6 +2,7 @@ import { Validation } from '../constants/validation_errors.js'
 
 import { ScenarioTestExpectationValidationApi }      from '../apiValidation/apiScenarioTestExpectationValidation.js';
 import { ScenarioTestExpectationServices }           from '../servicers/design/scenario_test_expectation_services.js';
+import {TestIntegrationServices} from "../servicers/dev/test_integration_services";
 
 //======================================================================================================================
 //
@@ -142,6 +143,26 @@ export const unselectTestTypePermutationValue = new ValidatedMethod({
 
         try {
             ScenarioTestExpectationServices.unselectTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
+
+export const updateScenarioExpectationStatus = new ValidatedMethod({
+
+    name: 'scenarioTestExpectations.updateScenarioExpectationStatus',
+
+    validate: new SimpleSchema({
+        userContext:            {type: Object, blackbox: true},
+        scenarioReferenceId:    {type: String},
+    }).validator(),
+
+    run({userContext, scenarioReferenceId}){
+
+        try {
+            TestIntegrationServices.updateScenarioTestTypeExpectations(userContext, scenarioReferenceId);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.code, e.stack)

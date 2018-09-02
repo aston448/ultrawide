@@ -75,16 +75,12 @@ export class TestExpectationItem extends Component {
 
         switch(itemType){
             case ItemType.TEST_TYPE:
-                ClientScenarioTestExpectationServices.selectTestTypeExpectation(userContext.designVersionId, itemRef, testType);
+                ClientScenarioTestExpectationServices.selectTestTypeExpectation(userContext, itemRef, testType);
                 break;
             case ItemType.PERMUTATION_VALUE:
-                ClientScenarioTestExpectationServices.selectTestTypePermutationValueExpectation(userContext.designVersionId, itemRef, testType, itemParentId, itemId);
+                ClientScenarioTestExpectationServices.selectTestTypePermutationValueExpectation(userContext, itemRef, testType, itemParentId, itemId);
                 break;
         }
-
-        // Refresh the overall test status of the Scenario
-        // TODO - move this to a SERVER call
-        TestIntegrationServices.updateScenarioTestTypeExpectations(userContext, itemRef);
 
         this.setState({selected: true});
     }
@@ -93,13 +89,13 @@ export class TestExpectationItem extends Component {
 
         switch(itemType){
             case ItemType.TEST_TYPE:
-                ClientScenarioTestExpectationServices.unselectTestTypeExpectation(userContext.designVersionId, itemRef, testType);
+                ClientScenarioTestExpectationServices.unselectTestTypeExpectation(userContext, itemRef, testType);
                 break;
             case ItemType.DESIGN_PERMUTATION:
-                ClientScenarioTestExpectationServices.unselectTestTypePermutationExpectation(userContext.designVersionId, itemRef, testType, itemId);
+                ClientScenarioTestExpectationServices.unselectTestTypePermutationExpectation(userContext, itemRef, testType, itemId);
                 break;
             case ItemType.PERMUTATION_VALUE:
-                ClientScenarioTestExpectationServices.unselectTestTypePermutationValueExpectation(userContext.designVersionId, itemRef, testType, itemParentId, itemId);
+                ClientScenarioTestExpectationServices.unselectTestTypePermutationValueExpectation(userContext, itemRef, testType, itemParentId, itemId);
                 break;
         }
 

@@ -53,6 +53,9 @@ import {
 } from '../redux/actions'
 import {DesignPermutationData} from "../data/design/design_permutation_db";
 import {DesignPermutationValueData} from "../data/design/design_permutation_value_db";
+import {ScenarioTestExpectationData} from "../data/design/scenario_test_expectations_db";
+import {MashTestStatus, TestType} from "../constants/constants";
+import {UserDvScenarioTestExpectationStatusData} from "../data/mash/user_dv_scenario_test_expectation_status_db";
 
 
 // =====================================================================================================================
@@ -561,6 +564,52 @@ class ClientDataServicesClass{
             name: name
         }
     }
+
+    getTestTypeExpectationStatus(userContext, scenarioRefId){
+
+        // Determine the current user status of the overall test type expectations
+        let unitStatus = MashTestStatus.MASH_NOT_LINKED;
+        let intStatus = MashTestStatus.MASH_NOT_LINKED;
+        let accStatus = MashTestStatus.MASH_NOT_LINKED;
+
+        const unitExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.UNIT);
+        const intExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.INTEGRATION);
+        const accExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.ACCEPTANCE);
+
+        if(unitExpectation){
+            const unitStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, unitExpectation._id);
+
+            if(unitStatusData){
+                unitStatus = unitStatusData.expectationStatus;
+            }
+        }
+
+        if(intExpectation){
+            const intStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, intExpectation._id);
+
+            if(intStatusData){
+                intStatus = intStatusData.expectationStatus;
+            }
+        }
+
+        if(accExpectation){
+            const accStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, accExpectation._id);
+
+            if(accStatusData){
+                accStatus = accStatusData.expectationStatus;
+            }
+        }
+
+
+        return(
+            {
+                unitStatus: unitStatus,
+                intStatus:  intStatus,
+                accStatus:  accStatus
+            }
+        )
+    }
+
 
     getApplicationHeaderData(userContext, view){
 

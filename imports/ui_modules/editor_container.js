@@ -406,8 +406,8 @@ class EditorContainerUiModulesClass{
 
         let childComponentType = 'NONE';
 
-        if(userContext.designComponentType !== 'NONE'){
-            switch(userContext.designComponentType){
+        if (userContext.designComponentType !== 'NONE') {
+            switch (userContext.designComponentType) {
                 case ComponentType.FEATURE:
                     childComponentType = ComponentType.FEATURE_ASPECT;
                     break;
@@ -420,7 +420,7 @@ class EditorContainerUiModulesClass{
             }
         }
 
-        return(
+        return (
             <div id="testExpectationsPane">
                 <TestExpectationSelectedItemContainer
                     params={{
@@ -433,6 +433,7 @@ class EditorContainerUiModulesClass{
                 />
             </div>
         )
+
     }
 
     getAccTestsPane(view, userContext){

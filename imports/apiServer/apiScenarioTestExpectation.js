@@ -4,7 +4,8 @@ import {
     unselectTestType,
     unselectTestTypePermutation,
     selectTestTypePermutationValue,
-    unselectTestTypePermutationValue
+    unselectTestTypePermutationValue,
+    updateScenarioExpectationStatus
 } from '../apiValidatedMethods/scenario_test_expectation_methods.js'
 
 
@@ -89,6 +90,19 @@ class ServerScenarioTestExpectationApiClass {
                 callback(err, result);
             }
         );
+    }
+
+    updateScenarioExpectationStatus(userContext, scenarioReferenceId, callback){
+
+        updateScenarioExpectationStatus.call(
+            {
+                userContext,
+                scenarioReferenceId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        )
     }
 }
 

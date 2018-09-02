@@ -26,7 +26,7 @@ import { TestResultsUiServices }            from '../../../ui_modules/test_resul
 
 // REDUX services
 import {connect} from 'react-redux';
-import {EditorTab} from "../../../constants/constants";
+import {EditorTab, MashTestStatus} from "../../../constants/constants";
 import store from "../../../redux/store";
 
 // =====================================================================================================================
@@ -57,11 +57,19 @@ class TestExpectationSelectedItemList extends Component {
     renderDesignItems(designItems, displayContext){
         return designItems.map((designItem) => {
             if(designItem) {
+
+                let expectationStatus = {};
+
+                if(designItem.componentType === ComponentType.SCENARIO){
+                    expectationStatus = ClientDataServices.getTestTypeExpectationStatus(this.props.userContext, designItem.componentReferenceId);
+                }
+
                 return (
                     <TestExpectationDesignItem
                         key={designItem._id}
                         designItem={designItem}
                         displayContext={displayContext}
+                        expectationStatus={expectationStatus}
                     />
                 );
             }
@@ -110,7 +118,7 @@ class TestExpectationSelectedItemList extends Component {
             let mainPanel = <div></div>;
             let noData = false;
 
-            if (designItems.length > 0) {
+            if (userContext.designComponentId !== 'NONE' && designItems.length > 0) {
 
                 // Render more design or the expectations
                 mainPanel =
@@ -143,8 +151,7 @@ class TestExpectationSelectedItemList extends Component {
                     mainPanel =
                         <div className="design-item-note">
                             Select a Feature or Feature item to see test expectations
-                        </div>
-                    noData = true;
+                        </div>;
 
                 }
             }
@@ -169,10 +176,10 @@ class TestExpectationSelectedItemList extends Component {
 }
 
 TestExpectationSelectedItemList.propTypes = {
-    designItems:    PropTypes.array.isRequired,
-    itemType:       PropTypes.string.isRequired,
-    displayContext: PropTypes.string.isRequired,
-    isTopParent:    PropTypes.bool.isRequired
+    designItems:        PropTypes.array.isRequired,
+    itemType:           PropTypes.string,
+    displayContext:     PropTypes.string.isRequired,
+    isTopParent:        PropTypes.bool.isRequired
 };
 
 
@@ -199,13 +206,11 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
     // The parent design item is either the original user context or the next item down passed in
     let designItemId = params.userContext.designComponentId;
 
-    const featureAspectReferenceId = params.userContext.featureAspectReferenceId;
-    const scenarioReferenceId = params.userContext.scenarioReferenceId;
-    const itemType = params.userContext.designComponentType;
+    const itemType = params.userContext.componentType;
 
     let isTopParent = true;
 
-    if(params.designItemId !== 'NONE'){
+    if (params.designItemId !== 'NONE') {
         designItemId = params.designItemId;
         isTopParent = false;
     }
@@ -214,7 +219,13 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
 
     console.log("Selected item type is " + itemType);
 
-    switch(itemType) {
+    let expectationStatus = {
+        unitStatus: MashTestStatus.MASH_NOT_LINKED,
+        intStatus: MashTestStatus.MASH_NOT_LINKED,
+        accStatus: MashTestStatus.MASH_NOT_LINKED
+    };
+
+    switch (itemType) {
 
         case ComponentType.SCENARIO:
 
@@ -238,7 +249,7 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
                 }
             }
 
-            // Anything else we get the actual design items, not the scenario mash
+            // Anything else we get the actual design items, not the scenario
             designItems = ClientDataServices.getComponentDataForParentComponent(
                 params.childComponentType,
                 params.view,
@@ -248,17 +259,18 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
                 componentRefId,
                 params.displayContext
             );
-
     }
+
 
     console.log("Found " + designItems.length + " items of type " + params.childComponentType + " for item type " + itemType);
 
-    return{
-        designItems:    designItems,
-        itemType:       itemType,
+    return {
+        designItems: designItems,
+        itemType: itemType,
         displayContext: params.displayContext,
-        isTopParent:    isTopParent
+        isTopParent: isTopParent,
     }
+
 
 
 

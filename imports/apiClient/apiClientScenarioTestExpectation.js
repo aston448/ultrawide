@@ -25,7 +25,7 @@ class ClientScenarioTestExpectationServicesClass {
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // User selects a test type ----------------------------------------------------------------------------------------
-    selectTestTypeExpectation(designVersionId, scenarioReferenceId, testType){
+    selectTestTypeExpectation(userContext, scenarioReferenceId, testType){
 
         // Client validation
         let result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation();
@@ -37,7 +37,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.selectTestType(designVersionId, scenarioReferenceId, testType, (err, result) => {
+        ServerScenarioTestExpectationApi.selectTestType(userContext.designVersionId, scenarioReferenceId, testType, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -58,7 +58,7 @@ class ClientScenarioTestExpectationServicesClass {
     };
 
     // User de-selects a test type -------------------------------------------------------------------------------------
-    unselectTestTypeExpectation(designVersionId, scenarioReferenceId, testType){
+    unselectTestTypeExpectation(userContext, scenarioReferenceId, testType){
 
         // Client validation
         let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation();
@@ -70,7 +70,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestType(designVersionId, scenarioReferenceId, testType, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestType(userContext.designVersionId, scenarioReferenceId, testType, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -91,7 +91,7 @@ class ClientScenarioTestExpectationServicesClass {
     };
 
     // User de-selects a test type permutation -------------------------------------------------------------------------
-    unselectTestTypePermutationExpectation(designVersionId, scenarioReferenceId, testType, permutationId){
+    unselectTestTypePermutationExpectation(userContext, scenarioReferenceId, testType, permutationId){
 
         // Client validation
         let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationExpectation();
@@ -103,7 +103,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestTypePermutation(designVersionId, scenarioReferenceId, testType, permutationId, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestTypePermutation(userContext.designVersionId, scenarioReferenceId, testType, permutationId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -125,7 +125,7 @@ class ClientScenarioTestExpectationServicesClass {
 
 
     // User selects a test type permutation value-----------------------------------------------------------------------
-    selectTestTypePermutationValueExpectation(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){
+    selectTestTypePermutationValueExpectation(userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
 
         // Client validation
         let result = ScenarioTestExpectationValidationApi.validateAddTestTypePermutationValueExpectation();
@@ -137,7 +137,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.selectTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
+        ServerScenarioTestExpectationApi.selectTestTypePermutationValue(userContext.designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -150,6 +150,16 @@ class ClientScenarioTestExpectationServicesClass {
                     messageType: MessageType.INFO,
                     messageText: TestExpectationMessages.MSG_VALUE_ADDED
                 }));
+
+                // Update the status of the Scenarios overall expectations
+                ServerScenarioTestExpectationApi.updateScenarioExpectationStatus(userContext, scenarioReferenceId, (err, result) => {
+
+                    if (err) {
+                        // Unexpected error as all expected errors already handled - show alert.
+                        // Can't update screen here because of error
+                        alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    }
+                });
             }
         });
 
@@ -158,7 +168,7 @@ class ClientScenarioTestExpectationServicesClass {
     };
 
     // User de-selects a test type permutation value--------------------------------------------------------------------
-    unselectTestTypePermutationValueExpectation(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){
+    unselectTestTypePermutationValueExpectation(userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
 
         // Client validation
         let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationValueExpectation();
@@ -170,7 +180,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestTypePermutationValue(userContext.designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -183,6 +193,16 @@ class ClientScenarioTestExpectationServicesClass {
                     messageType: MessageType.INFO,
                     messageText: TestExpectationMessages.MSG_VALUE_REMOVED
                 }));
+
+                // Update the status of the Scenarios overall expectations
+                ServerScenarioTestExpectationApi.updateScenarioExpectationStatus(userContext, scenarioReferenceId, (err, result) => {
+
+                    if (err) {
+                        // Unexpected error as all expected errors already handled - show alert.
+                        // Can't update screen here because of error
+                        alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    }
+                });
             }
         });
 

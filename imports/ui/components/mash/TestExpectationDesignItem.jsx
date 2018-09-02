@@ -51,53 +51,8 @@ class TestExpectationDesignItem extends Component {
         return ClientTestIntegrationServices.hasScenarios(designItem, userContext)
     }
 
-    getTestTypeExpectationStatus(userContext, scenarioRefId){
-
-        // Determine the current user status of the overall test type expectations
-        let unitStatus = MashTestStatus.MASH_NOT_LINKED;
-        let intStatus = MashTestStatus.MASH_NOT_LINKED;
-        let accStatus = MashTestStatus.MASH_NOT_LINKED;
-
-        const unitExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.UNIT);
-        const intExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.INTEGRATION);
-        const accExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.ACCEPTANCE);
-
-        if(unitExpectation){
-            const unitStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, unitExpectation._id);
-
-            if(unitStatusData){
-                unitStatus = unitStatusData.expectationStatus;
-            }
-        }
-
-        if(intExpectation){
-            const intStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, intExpectation._id);
-
-            if(intStatusData){
-                intStatus = intStatusData.expectationStatus;
-            }
-        }
-
-        if(accExpectation){
-            const accStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, accExpectation._id);
-
-            if(accStatusData){
-                accStatus = accStatusData.expectationStatus;
-            }
-        }
-
-
-        return(
-            {
-                unitStatus: unitStatus,
-                intStatus:  intStatus,
-                accStatus:  accStatus
-            }
-        )
-    }
-
     render(){
-        const { designItem, displayContext, view, userContext } = this.props;
+        const { designItem, displayContext, expectationStatus, view, userContext } = this.props;
 
         log((msg) => console.log(msg), LogLevel.DEBUG, 'Render Test Expectation Design Item');
 
@@ -178,9 +133,7 @@ class TestExpectationDesignItem extends Component {
                 case ComponentType.SCENARIO:
 
                     // Here the designItem contains the actual Scenario Mash data - should be for one scenario
-
-                    // Get the current user status for the test type expectation
-                    const expectationStatus = this.getTestTypeExpectationStatus(userContext, designItem.componentReferenceId);
+                    // And expectation status is populated with the current test expectation statuses for the scenario
 
                     return (
                         <div className={'scenario-test-expectations'}>
@@ -210,7 +163,8 @@ class TestExpectationDesignItem extends Component {
 
 TestExpectationDesignItem.propTypes = {
     designItem:     PropTypes.object.isRequired,
-    displayContext: PropTypes.string.isRequired
+    displayContext: PropTypes.string.isRequired,
+    expectationStatus:  PropTypes.object
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
