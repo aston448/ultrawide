@@ -4,25 +4,23 @@
 // Meteor / React Services
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import TestExpectationItem from "./TestExpectationItem";
+import TestExpectationItem from "../../components/mash/TestExpectationItem";
 
 // Ultrawide Services
-import { ClientTestOutputLocationServices }         from '../../../apiClient/apiClientTestOutputLocations.js';
+import {ClientDataServices} from "../../../apiClient/apiClientDataServices";
 
-import {UltrawideDirectory, LogLevel} from '../../../constants/constants.js';
+import { ItemType, TestType, LogLevel} from '../../../constants/constants.js';
 import {log, getContextID} from "../../../common/utils";
 import {UI} from "../../../constants/ui_context_ids";
 
 // Bootstrap
-import {Checkbox, Button, ButtonGroup, Modal} from 'react-bootstrap';
-import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {ClientDesignPermutationServices} from "../../../apiClient/apiClientDesignPermutation";
-import {ItemType, TestType} from "../../../constants/constants";
 
 
 // =====================================================================================================================
@@ -116,5 +114,19 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-export default connect(mapStateToProps)(ScenarioTestExpectations);
+ScenarioTestExpectations = connect(mapStateToProps)(ScenarioTestExpectations);
 
+
+
+export default ScenarioTestExpectationsContainer = createContainer(({params}) => {
+
+    const testExpectationStatus = ClientDataServices.getTestTypeExpectationStatus(params.userContext, params.scenario.componentReferenceId);
+
+    return{
+        scenario: params.scenario,
+        scenarioUnitMashTestStatus: testExpectationStatus.unitStatus,
+        scenarioIntMashTestStatus:  testExpectationStatus.intStatus,
+        scenarioAccMashTestStatus:  testExpectationStatus.accStatus,
+    }
+
+},ScenarioTestExpectations);

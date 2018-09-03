@@ -6,15 +6,14 @@ import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
 import TestExpectationSelectedItemContainer         from '../../containers/mash/TestExpectationSelectedItemContainer.jsx';
-import ScenarioTestExpectations                     from '../../components/mash/ScenarioTestExpectations.jsx';
+import ScenarioTestExpectationsContainer            from '../../containers/mash/ScenarioTestExpectationsContainer.jsx';
+
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import { ComponentType, TestType, MashTestStatus, LogLevel } from '../../../constants/constants.js';
+import { ComponentType, LogLevel } from '../../../constants/constants.js';
 
 import { ClientTestIntegrationServices }            from '../../../apiClient/apiClientTestIntegration.js';
-import {ScenarioTestExpectationData}                from "../../../data/design/scenario_test_expectations_db";
-import {UserDvScenarioTestExpectationStatusData}    from "../../../data/mash/user_dv_scenario_test_expectation_status_db";
 
 // Bootstrap
 
@@ -142,12 +141,10 @@ class TestExpectationDesignItem extends Component {
                                 {designItem.componentNameNew}
                             </div>
 
-                            <ScenarioTestExpectations
-                                scenario={designItem}
-                                scenarioUnitMashTestStatus={expectationStatus.unitStatus}
-                                scenarioIntMashTestStatus={expectationStatus.intStatus}
-                                scenarioAccMashTestStatus={expectationStatus.accStatus}
-                            />
+                            <ScenarioTestExpectationsContainer params={{
+                                userContext: userContext,
+                                scenario: designItem
+                            }}/>
                         </div>
                     );
 
@@ -163,8 +160,7 @@ class TestExpectationDesignItem extends Component {
 
 TestExpectationDesignItem.propTypes = {
     designItem:     PropTypes.object.isRequired,
-    displayContext: PropTypes.string.isRequired,
-    expectationStatus:  PropTypes.object
+    displayContext: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

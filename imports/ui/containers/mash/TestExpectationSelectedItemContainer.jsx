@@ -58,18 +58,11 @@ class TestExpectationSelectedItemList extends Component {
         return designItems.map((designItem) => {
             if(designItem) {
 
-                let expectationStatus = {};
-
-                if(designItem.componentType === ComponentType.SCENARIO){
-                    expectationStatus = ClientDataServices.getTestTypeExpectationStatus(this.props.userContext, designItem.componentReferenceId);
-                }
-
                 return (
                     <TestExpectationDesignItem
                         key={designItem._id}
                         designItem={designItem}
                         displayContext={displayContext}
-                        expectationStatus={expectationStatus}
                     />
                 );
             }
@@ -219,12 +212,6 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
 
     console.log("Selected item type is " + itemType);
 
-    let expectationStatus = {
-        unitStatus: MashTestStatus.MASH_NOT_LINKED,
-        intStatus: MashTestStatus.MASH_NOT_LINKED,
-        accStatus: MashTestStatus.MASH_NOT_LINKED
-    };
-
     switch (itemType) {
 
         case ComponentType.SCENARIO:
@@ -270,8 +257,4 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
         displayContext: params.displayContext,
         isTopParent: isTopParent,
     }
-
-
-
-
 }, TestExpectationSelectedItemList);
