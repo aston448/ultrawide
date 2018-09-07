@@ -3,9 +3,242 @@
 import { MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, TestType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
 import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
+import {UserDvScenarioTestExpectationStatusData} from "../../data/mash/user_dv_scenario_test_expectation_status_db";
+import {UserDvTestSummaryData} from "../../data/summary/user_dv_test_summary_db";
+import {WorkPackageComponentData} from "../../data/work/work_package_component_db";
+import {DesignUpdateComponentData} from "../../data/design_update/design_update_component_db";
 
 
 class TestSummaryModulesClass{
+
+    getSummaryDataForScenario(userContext, scenarioReferenceId){
+
+        const testExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenario(
+            userContext.designVersionId,
+            scenarioReferenceId
+        );
+
+        let accTestExpectedCount = 0;
+        let accTestPassCount = 0;
+        let accTestFailCount = 0;
+        let accTestMissingCount = 0;
+        let intTestExpectedCount = 0;
+        let intTestPassCount = 0;
+        let intTestFailCount = 0;
+        let intTestMissingCount = 0;
+        let unitTestExpectedCount = 0;
+        let unitTestPassCount = 0;
+        let unitTestFailCount = 0;
+        let unitTestMissingCount = 0;
+        let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
+
+        testExpectations.forEach((testExpectation) => {
+
+            const expectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                userContext.userId,
+                userContext.designVersionId,
+                testExpectation._id
+            );
+
+            switch(testExpectation.testType){
+                case TestType.ACCEPTANCE:
+                    accTestExpectedCount++;
+                    switch(expectationStatus.expectationStatus){
+                        case MashTestStatus.MASH_PASS:
+                            accTestPassCount++;
+                            break;
+                        case MashTestStatus.MASH_FAIL:
+                            accTestFailCount++;
+                            break;
+                        default:
+                            accTestMissingCount++;
+                            break;
+                    }
+                    break;
+                case TestType.INTEGRATION:
+                    intTestExpectedCount++;
+                    switch(expectationStatus.expectationStatus){
+                        case MashTestStatus.MASH_PASS:
+                            intTestPassCount++;
+                            break;
+                        case MashTestStatus.MASH_FAIL:
+                            intTestFailCount++;
+                            break;
+                        default:
+                            intTestMissingCount++;
+                            break;
+                    }
+                    break;
+                case TestType.UNIT:
+                    unitTestExpectedCount++;
+                    switch(expectationStatus.expectationStatus){
+                        case MashTestStatus.MASH_PASS:
+                            unitTestPassCount++;
+                            break;
+                        case MashTestStatus.MASH_FAIL:
+                            unitTestFailCount++;
+                            break;
+                        default:
+                            unitTestMissingCount++;
+                            break;
+                    }
+                    break;
+            }
+        });
+
+        // Derive overall status
+        const totalExpectedTests = accTestExpectedCount + intTestExpectedCount + unitTestExpectedCount;
+
+        // Fail if any failures at all
+        if(accTestFailCount > 0 || intTestFailCount > 0 || unitTestFailCount > 0){
+            scenarioTestStatus = MashTestStatus.MASH_FAIL;
+        } else {
+            // If all expectations are passes (and there were some tests expected) its a total success
+            if((totalExpectedTests > 0) &&
+                (accTestExpectedCount === accTestPassCount) &&
+                (intTestExpectedCount === intTestPassCount) &&
+                (unitTestExpectedCount === unitTestPassCount)
+            ){
+                scenarioTestStatus = MashTestStatus.MASH_PASS;
+            } else {
+                // No failures and not all passing so if any are passing its a partial success
+                if(accTestPassCount > 0 || intTestPassCount > 0 || unitTestPassCount > 0){
+                    scenarioTestStatus = MashTestStatus.MASH_INCOMPLETE;
+                } else {
+                    // There are no tests completed - is this because there are no expectations
+                    if(totalExpectedTests > 0){
+                        scenarioTestStatus = MashTestStatus.MASH_NO_TESTS;
+                    } else {
+                        scenarioTestStatus = MashTestStatus.MASH_NO_EXPECTATIONS;
+                    }
+                }
+            }
+        }
+
+        // Return a data entry
+        return{
+            userId:                 userContext.userId,
+            designVersionId:        userContext.designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            accTestExpectedCount:   accTestExpectedCount,
+            accTestPassCount:       accTestPassCount,
+            accTestFailCount:       accTestFailCount,
+            accTestMissingCount:    accTestMissingCount,
+            intTestExpectedCount:   intTestExpectedCount,
+            intTestPassCount:       intTestPassCount,
+            intTestFailCount:       intTestFailCount,
+            intTestMissingCount:    intTestMissingCount,
+            unitTestExpectedCount:  unitTestExpectedCount,
+            unitTestPassCount:      unitTestPassCount,
+            unitTestFailCount:      unitTestFailCount,
+            unitTestMissingCount:   unitTestMissingCount,
+            scenarioTestStatus:     scenarioTestStatus,
+        };
+
+    }
+
+    getSummaryDataForFeature(userContext, featureRefId){
+
+        let featureScenarioCount = 0;
+        let featureExpectedTestCount = 0;
+        let featurePassingTestCount = 0;
+        let featureFailingTestCount = 0;
+        let featureMissingTestCount = 0;
+        let featureTestStatus = MashTestStatus.MASH_NOT_LINKED;
+
+        let featureScenarioSummaries = {};
+
+        // The summary totals will depend on the context - only calculate for what the user actually sees.
+        if(userContext.workPackageId !== 'NONE'){
+
+            // Get just scenario summaries in current WP
+            const wpScenarios = WorkPackageComponentData.getActiveFeatureScenarios(userContext.workPackageId, featureRefId);
+
+            wpScenarios.forEach((scenario) => {
+
+                const scenarioSummary = UserDvTestSummaryData.getScenarioSummary(
+                    userContext.userId, userContext.designVersionId, scenario.componentReferenceId
+                );
+
+                featureScenarioSummaries.push(scenarioSummary);
+            })
+        } else {
+
+            if(userContext.designUpdateId !== 'NONE'){
+
+                // Get just scenario summaries in current DU
+                const duScenarios = DesignUpdateComponentData.getNonRemovedFeatureScenarios(
+                    userContext.designVersionId,
+                    userContext.designUpdateId,
+                    featureRefId
+                );
+
+                duScenarios.forEach((scenario) => {
+
+                    const scenarioSummary = UserDvTestSummaryData.getScenarioSummary(
+                        userContext.userId, userContext.designVersionId, scenario.componentReferenceId
+                    );
+
+                    featureScenarioSummaries.push(scenarioSummary);
+                });
+
+            } else {
+
+                // Get all scenarios in feature
+                featureScenarioSummaries = UserDvTestSummaryData.getScenarioSummariesForFeature(
+                    userContext.userId, userContext.designVersionId, featureRefId
+                );
+            }
+        }
+
+        // Now we have all relevant Scenario Summaries for the Feature, calculate a Feature Summary
+
+        featureScenarioSummaries.forEach((sSum) => {
+
+            featureScenarioCount ++;
+            featureExpectedTestCount += (sSum.accTestExpectedCount + sSum.intTestExpectedCount + sSum.unitTestExpectedCount);
+            featurePassingTestCount += (sSum.accTestPassCount + sSum.intTestPassCount + sSum.unitTestPassCount);
+            featureFailingTestCount += (sSum.accTestFailCount + sSum.intTestFailCount + sSum.unitTestFailCount);
+            featureMissingTestCount += (sSum.accTestMissingCount + sSum.intTestMissingCount + sSum.unitTestMissingCount);
+        });
+
+        //  Status
+        if(featureFailingTestCount > 0){
+            featureTestStatus = MashTestStatus.MASH_FAIL;
+        } else {
+            // If all tests are passes (and there were some tests expected) its a total success
+            if( (featureExpectedTestCount > 0) &&
+                (featureExpectedTestCount === featurePassingTestCount)
+            ){
+                featureTestStatus = MashTestStatus.MASH_PASS;
+            } else {
+                // No failures and not all passing so if any are passing its a partial success
+                if(featurePassingTestCount > 0){
+                    featureTestStatus = MashTestStatus.MASH_INCOMPLETE;
+                } else {
+                    // There are no tests completed - is this because there are no expectations
+                    if(featureExpectedTestCount > 0){
+                        featureTestStatus = MashTestStatus.MASH_NO_TESTS;
+                    } else {
+                        featureTestStatus = MashTestStatus.MASH_NO_EXPECTATIONS;
+                    }
+                }
+            }
+        }
+
+        // Return a data entry
+        return{
+            userId:                     userContext.userId,
+            designVersionId:            userContext.designVersionId,
+            featureReferenceId:         featureRefId,
+            featureScenarioCount:       featureScenarioCount,
+            featureExpectedTestCount:   featureExpectedTestCount,
+            featurePassingTestCount:    featurePassingTestCount,
+            featureFailingTestCount:    featureFailingTestCount,
+            featureMissingTestCount:    featureMissingTestCount,
+            featureTestStatus:          featureTestStatus
+        };
+    }
 
     calculateScenarioSummaryData(userContext, featureScenario, contextDuData, contextWpData, globalData){
 

@@ -1,18 +1,21 @@
 
 // Ultrawide services
-import { MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
+import { MashTestStatus, FeatureTestSummaryStatus, TestType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
 
-import { TestSummaryModules }               from '../../service_modules/dev/test_summary_service_modules.js';
+import { TestSummaryModules }                       from '../../service_modules/dev/test_summary_service_modules.js';
 
 // Data Access
-import { DesignVersionData }                from '../../data/design/design_version_db.js';
-import { DesignComponentData }              from '../../data/design/design_component_db.js';
-import { UserDevTestSummaryData }           from '../../data/summary/user_dev_test_summary_db.js';
-import { UserDevDesignSummaryData }         from '../../data/summary/user_dev_design_summary_db.js';
-import { DesignUpdateComponentData }        from '../../data/design_update/design_update_component_db.js';
-import { WorkPackageComponentData }        from '../../data/work/work_package_component_db.js';
-import { UserDvMashScenarioData }           from '../../data/mash/user_dv_mash_scenario_db.js'
+import { DesignVersionData }                        from '../../data/design/design_version_db.js';
+import { DesignComponentData }                      from '../../data/design/design_component_db.js';
+import { UserDvTestSummaryData }                    from '../../data/summary/user_dv_test_summary_db.js';
+import { UserDevDesignSummaryData }                 from '../../data/summary/user_dev_design_summary_db.js';
+import { DesignUpdateComponentData }                from '../../data/design_update/design_update_component_db.js';
+import { WorkPackageComponentData }                 from '../../data/work/work_package_component_db.js';
+import { UserDvMashScenarioData }                   from '../../data/mash/user_dv_mash_scenario_db.js'
+import { UserDvScenarioTestExpectationStatusData }  from "../../data/mash/user_dv_scenario_test_expectation_status_db";
+import { ScenarioTestExpectationData }              from "../../data/design/scenario_test_expectations_db";
+import { UserDvTestSummaryData }                    from "../../data/summary/user_dv_test_summary_db";
 
 //======================================================================================================================
 //
@@ -23,6 +26,92 @@ import { UserDvMashScenarioData }           from '../../data/mash/user_dv_mash_s
 //======================================================================================================================
 
 class TestSummaryServicesClass {
+
+    refreshAllTestSummaryData(userContext){
+
+        // Remove existing data
+        UserDvTestSummaryData.removeAllUserSummaryData(userContext.userId);
+
+        // Refresh all scenario data -----------------------------------------------------------------------------------
+        const dvScenarios = DesignComponentData.getNonRemovedDvScenarios(userContext.designVersionId);
+
+        const scenarioSummaryBatch = [];
+
+        dvScenarios.forEach((scenario) => {
+
+            const scenarioTestSummaryData = TestSummaryModules.getSummaryDataForScenario(userContext, scenario.componentReferenceId);
+
+            scenarioSummaryBatch.push(scenarioTestSummaryData);
+        });
+
+        // Batch insert for speed
+        if(scenarioSummaryBatch.length > 0) {
+            UserDvTestSummaryData.bulkInsertScenarioSummaryData(scenarioSummaryBatch);
+        }
+
+        // Refresh all Feature data ------------------------------------------------------------------------------------
+        const dvFeatures = DesignComponentData.getNonRemovedDvFeatures(userContext.designVersionId);
+
+        const featureSummaryBatch = [];
+
+        dvFeatures.forEach((feature) => {
+
+            const featureTestSummaryData = TestSummaryModules.getSummaryDataForFeature(userContext, feature.componentReferenceId);
+
+            featureSummaryBatch.push(featureTestSummaryData);
+        });
+
+        // Batch insert for speed
+        if(featureSummaryBatch.length > 0) {
+            UserDvTestSummaryData.bulkInsertFeatureSummaryData(featureSummaryBatch);
+        }
+
+        // Refresh DV data ---------------------------------------------------------------------------------------------
+
+    }
+
+    // Update test summary for one Scenario
+    updateScenarioTestSummary(userContext, scenarioReferenceId){
+
+        // Remove existing data
+        UserDvTestSummaryData.removeScenarioTestSummary(userContext, scenarioReferenceId);
+
+        const scenarioTestSummaryData = TestSummaryModules.getSummaryDataForScenario(userContext, scenarioReferenceId);
+
+        // And insert the scenario summary
+        UserDvTestSummaryData.insertScenarioTestSummary(scenarioTestSummaryData);
+
+    }
+
+    // Update one feature test summary assuming all scenarios are updated
+    updateFeatureTestSummary(userContext, featureReferenceId){
+
+        // Remove existing data
+        UserDvTestSummaryData.removeFeatureTestSummary(userContext, featureReferenceId);
+
+        const featureTestSummaryData = TestSummaryModules.getSummaryDataForFeature(userContext, featureReferenceId);
+
+        // And insert the feature summary
+        UserDvTestSummaryData.insertFeatureTestSummary(featureTestSummaryData);
+
+    }
+
+    // Update a feature summary after updating all the scenarios in it
+    updateFeatureTestSummaryData(userContext, featureReferenceId){
+
+
+    }
+
+    // Update Design Version test summary - just from features
+    updateDvTestSummary(userContext){
+
+    }
+
+    // Update all data for test summary for entire Design Version
+    updateDvTestSummaryData(userContext){
+
+
+    }
 
     refreshExpectedTestSummaryForFeature(userContext){
 
@@ -125,7 +214,7 @@ class TestSummaryServicesClass {
 
         // Now update the relevant test summary data for the feature.
         log((msg) => console.log(msg), LogLevel.DEBUG, "Updating feature test summary for feature {} with expected tests {}", designFeature.componentReferenceId, featureGlobalData.featureExpectedTestCount);
-        UserDevTestSummaryData.updateFeatureTestSummary(userContext.userId, designFeature.designVersionId, designFeature.componentReferenceId, featureGlobalData);
+        UserDvTestSummaryData.updateFeatureTestSummary(userContext.userId, designFeature.designVersionId, designFeature.componentReferenceId, featureGlobalData);
         log((msg) => console.log(msg), LogLevel.DEBUG, "Updating complete");
 
     }
@@ -153,7 +242,7 @@ class TestSummaryServicesClass {
 
         // Delete data for current user context.
         // Its MUCH faster to remove everything, recalc and then do a bulk insert than to do updates one by one
-        UserDevTestSummaryData.removeAllUserData(userContext.userId);
+        UserDvTestSummaryData.removeAllUserData(userContext.userId);
         UserDevDesignSummaryData.removeAllUserData(userContext.userId);
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Data removed");
@@ -300,7 +389,7 @@ class TestSummaryServicesClass {
 
         // Bulk insert new feature summary data
         if(batchData.length > 0) {
-            UserDevTestSummaryData.bulkInsertData(batchData);
+            UserDvTestSummaryData.bulkInsertData(batchData);
         }
 
         UserDevDesignSummaryData.insertNewDesignSummary(

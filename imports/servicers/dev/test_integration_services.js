@@ -141,7 +141,7 @@ class TestIntegrationServicesClass{
         if(Meteor.isServer){
 
             // Recreate the summary mash
-            TestSummaryServices.refreshTestSummaryData(userContext);
+            TestSummaryServices.refreshAllTestSummaryData(userContext);
         }
     }
 

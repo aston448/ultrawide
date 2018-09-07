@@ -343,6 +343,19 @@ class DesignUpdateComponentDataClass {
         }).count();
     }
 
+    getNonRemovedFeatureScenarios(designVersionId, designUpdateId, featureRefId){
+
+        return DesignUpdateComponents.find(
+            {
+                designVersionId:                designVersionId,
+                designUpdateId:                 designUpdateId,
+                componentFeatureReferenceIdNew: featureRefId,
+                componentType:                  ComponentType.SCENARIO,
+                isRemoved:                      false
+            }
+        ).fetch();
+    }
+
     getNonScenarioFeatureComponents(designVersionId, designUpdateId, featureRefId){
 
         return DesignUpdateComponents.find(

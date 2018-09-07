@@ -175,6 +175,15 @@ class DesignComponentDataClass {
         ).fetch();
     }
 
+    getNonRemovedDvFeatures(designVersionId){
+
+        return DesignVersionComponents.find({
+            designVersionId:    designVersionId,
+            componentType:      ComponentType.FEATURE,
+            updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+        }).fetch();
+    }
+
     getNonRemovedDvScenarios(designVersionId){
 
         return DesignVersionComponents.find({

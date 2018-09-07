@@ -147,6 +147,18 @@ class WorkPackageComponentDataClass {
         ).fetch();
     }
 
+    getActiveFeatureScenarios(workPackageId, featureReferenceId){
+
+        return WorkPackageComponents.find(
+            {
+                workPackageId:                  workPackageId,
+                componentType:                  ComponentType.SCENARIO,
+                componentFeatureReferenceId:    featureReferenceId,
+                scopeType:                      WorkPackageScopeType.SCOPE_ACTIVE
+            }
+        ).fetch();
+    }
+
     getActiveFeatureAspectScenarios(workPackageId, featureAspectReferenceId){
 
         return WorkPackageComponents.find(

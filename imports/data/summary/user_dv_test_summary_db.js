@@ -1,15 +1,79 @@
-import { UserDevTestSummary }       from '../../collections/summary/user_dev_test_summary.js';
+import { UserDvScenarioTestSummary }        from '../../collections/summary/user_dv_scenario_test_summary.js';
+import { UserDvFeatureTestSummary }         from "../../collections/summary/user_dv_feature_test_summary";
 
-class UserDevTestSummaryDataClass {
+import {MashTestStatus} from "../../constants/constants";
+
+class UserDvTestSummaryDataClass {
 
     // INSERT ==========================================================================================================
 
-    bulkInsertData(batchData){
+    bulkInsertScenarioSummaryData(batchData){
 
-        UserDevTestSummary.batchInsert(batchData);
+        UserDvScenarioTestSummary.batchInsert(batchData);
+    }
+
+    bulkInsertFeatureSummaryData(batchData){
+
+        UserDvFeatureTestSummary.batchInsert(batchData);
+    }
+
+    insertScenarioTestSummary(summaryData){
+
+        return UserDvScenarioTestSummary.insert({
+            userId:                     summaryData.userId,
+            designVersionId:            summaryData.designVersionId,
+            scenarioReferenceId:        summaryData.scenarioReferenceId,
+            accTestExpectedCount:       summaryData.accTestExpectedCount,
+            accTestPassCount:           summaryData.accTestPassCount,
+            accTestFailCount:           summaryData.accTestFailCount,
+            accTestMissingCount:        summaryData.accTestMissingCount,
+            intTestExpectedCount:       summaryData.intTestExpectedCount,
+            intTestPassCount:           summaryData.intTestPassCount,
+            intTestFailCount:           summaryData.intTestFailCount,
+            intTestMissingCount:        summaryData.intTestMissingCount,
+            unitTestExpectedCount:      summaryData.unitTestExpectedCount,
+            unitTestPassCount:          summaryData.unitTestPassCount,
+            unitTestFailCount:          summaryData.unitTestFailCount,
+            unitTestMissingCount:       summaryData.unitTestMissingCount,
+            scenarioTestStatus:         summaryData.scenarioTestStatus
+        });
+    }
+
+    insertFeatureTestSummary(summaryData){
+
+        return UserDvFeatureTestSummary.insert({
+            userId:                     summaryData.userId,
+            designVersionId:            summaryData.designVersionId,
+            featureReferenceId:         summaryData.featureReferenceId,
+            featureScenarioCount:       summaryData.featureScenarioCount,
+            featureExpectedTestCount:   summaryData.featureExpectedTestCount,
+            featurePassingTestCount:    summaryData.featurePassingTestCount,
+            featureFailingTestCount:    summaryData.featureFailingTestCount,
+            featureMissingTestCount:    summaryData.featureMissingTestCount,
+            featureTestStatus:          summaryData.featureTestStatus
+        });
     }
 
     // SELECT ==========================================================================================================
+
+    getScenarioSummary(userId, designVersionId, scenarioRefId){
+
+        return UserDvScenarioTestSummary.findOne({
+            userId: userId,
+            designVersionId: designVersionId,
+            scenarioRefId:  scenarioRefId
+        });
+    }
+
+    getScenarioSummariesForFeature(userId, designVersionId,  featureRefId){
+
+        return UserDvFeatureTestSummary.find({
+            userId: userId,
+            designVersionId: designVersionId,
+            featureReferenceId: featureRefId
+        }).fetch();
+    }
+
 
     getTestSummaryForScenario(userId, designVersionId, scenarioRefId, featureRefId){
 
@@ -122,12 +186,36 @@ class UserDevTestSummaryDataClass {
 
     // REMOVE ==========================================================================================================
 
-    removeAllUserData(userId){
+    removeScenarioTestSummary(userContext, scenarioRefId){
 
-        return UserDevTestSummary.remove({
+        return UserDvScenarioTestSummary.remove({
+            userId:                 userContext.userId,
+            designVersionId:        userContext.designVersionId,
+            scenarioReferenceId:    scenarioRefId
+        });
+    }
+
+    removeFeatureTestSummary(userContext, featureRefId){
+
+        return UserDvFeatureTestSummary.remove({
+            userId:                 userContext.userId,
+            designVersionId:        userContext.designVersionId,
+            featureReferenceId:     featureRefId
+        });
+
+    }
+
+    removeAllUserSummaryData(userId){
+
+        // Scenario summaries
+        return UserDvScenarioTestSummary.remove({
             userId: userId,
         });
+
+        // Feature summaries
+
+        // DV summary
     }
 }
 
-export const UserDevTestSummaryData = new UserDevTestSummaryDataClass();
+export const UserDvTestSummaryData = new UserDvTestSummaryDataClass();

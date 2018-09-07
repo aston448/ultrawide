@@ -37,7 +37,7 @@ import { UserDevDesignSummaryData }         from '../data/summary/user_dev_desig
 import { DomainDictionaryData }             from '../data/design/domain_dictionary_db.js';
 import { UserDvMashScenarioData }           from '../data/mash/user_dv_mash_scenario_db.js';
 import { UserMashScenarioTestData }         from '../data/mash/user_mash_scenario_test_db.js';
-import { UserDevTestSummaryData }           from '../data/summary/user_dev_test_summary_db.js';
+import { UserDvTestSummaryData }           from '../data/summary/user_dv_test_summary_db.js';
 import { UserWorkProgressSummaryData }      from '../data/summary/user_work_progress_summary_db.js';
 import { DefaultFeatureAspectData }         from '../data/design/default_feature_aspect_db.js';
 
@@ -792,27 +792,27 @@ class ClientDataServicesClass{
 
                     case DisplayContext.PROJECT_SUMMARY_NONE:
 
-                        features = UserDevTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
+                        features = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
                         break;
 
                     case DisplayContext.PROJECT_SUMMARY_MISSING:
 
-                        features = UserDevTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId);
+                        features = UserDvTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId);
                         break;
 
                     case DisplayContext.PROJECT_SUMMARY_FAIL:
 
-                        features = UserDevTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId);
+                        features = UserDvTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId);
                         break;
 
                     case DisplayContext.PROJECT_SUMMARY_SOME:
 
-                        features = UserDevTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId);
+                        features = UserDvTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId);
                         break;
 
                     case DisplayContext.PROJECT_SUMMARY_ALL:
 
-                        features = UserDevTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId);
+                        features = UserDvTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId);
                         break;
 
                 }
@@ -898,7 +898,7 @@ class ClientDataServicesClass{
 
                 features.forEach((feature) => {
 
-                    const mashData = UserDevTestSummaryData.getTestSummaryForFeature(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
+                    const mashData = UserDvTestSummaryData.getTestSummaryForFeature(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
 
 
 
@@ -2061,7 +2061,7 @@ class ClientDataServicesClass{
 
         const userContext = store.getState().currentUserItemContext;
 
-        return UserDevTestSummaryData.getTestSummaryForFeature(userContext.userId, feature.designVersionId, feature.componentReferenceId);
+        return UserDvTestSummaryData.getTestSummaryForFeature(userContext.userId, feature.designVersionId, feature.componentReferenceId);
 
     }
 
@@ -2723,11 +2723,11 @@ class ClientDataServicesClass{
 
             totalFeatureCount = DesignVersionData.getNonRemovedFeatureCount(userContext.designId, userContext.designVersionId);
 
-            noRequirementsCount = UserDevTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId).length;
-            missingRequirementsCount = UserDevTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId).length;
-            failingCount = UserDevTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId).length;
-            somePassingCount = UserDevTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId).length;
-            allPassingCount = UserDevTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId).length;
+            noRequirementsCount = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId).length;
+            missingRequirementsCount = UserDvTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId).length;
+            failingCount = UserDvTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId).length;
+            somePassingCount = UserDvTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId).length;
+            allPassingCount = UserDvTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId).length;
 
             testsCount = failingCount + somePassingCount + allPassingCount;
         }
