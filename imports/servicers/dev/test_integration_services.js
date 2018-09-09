@@ -151,7 +151,7 @@ class TestIntegrationServicesClass{
 
         if(Meteor.isServer){
 
-            TestSummaryServices.refreshTestSummaryForFeature(userContext)
+            TestSummaryServices.updateFeatureTestSummary(userContext)
         }
     }
 

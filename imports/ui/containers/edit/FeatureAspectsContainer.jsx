@@ -102,7 +102,7 @@ class FeatureAspectsList extends Component {
 
                 return components.map((featureAspect) => {
 
-                    let testSummaryData = null;
+                    //let testSummaryData = null;
 
                     updateItem = this.getDesignUpdateItem(featureAspect, displayContext, userContext.designUpdateId);
                     wpItem = this.getWpItem(featureAspect, userContext.workPackageId);
@@ -127,7 +127,7 @@ class FeatureAspectsList extends Component {
                             isDragDropHovering={false}
                             displayContext={displayContext}
                             testSummary={testSummary}
-                            testSummaryData={testSummaryData}
+                            //testSummaryData={testSummaryData}
                         />
                     );
                 });

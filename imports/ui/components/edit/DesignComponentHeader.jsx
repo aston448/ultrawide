@@ -7,22 +7,20 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import TestSummary          from '../summary/TestSummary.jsx';
-import FeatureTestSummary   from '../summary/FeatureTestSummary.jsx';
+import UltrawideAction                          from "../common/UltrawideAction";
+import ScenarioTestSummaryContainer             from '../../containers/summary/ScenarioTestSummaryContainer.jsx';
+import FeatureTestSummaryContainer              from '../../containers/summary/FeatureTestSummaryContainer.jsx';
 
 // Ultrawide Services
 import { ClientDesignComponentServices }        from '../../../apiClient/apiClientDesignComponent.js';
 import { ClientDesignUpdateComponentServices }  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import { ClientWorkPackageComponentServices }   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import { ClientDomainDictionaryServices }       from '../../../apiClient/apiClientDomainDictionary.js';
-import { ClientTextEditorServices }             from '../../../apiClient/apiClientTextEditor.js';
 import { ComponentUiModules }                   from '../../../ui_modules/design_component.js'
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel,
-    MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
+import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageScopeType, LogLevel,
+    UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
 
-import { UI }                           from "../../../constants/ui_context_ids";
-import {DefaultComponentNames}          from '../../../constants/default_names.js';
+import { UI }                               from "../../../constants/ui_context_ids";
 import {getComponentClass, getContextID, replaceAll, log}         from '../../../common/utils.js';
 import { TextLookups }                      from '../../../common/lookups.js'
 
@@ -39,8 +37,8 @@ import { DragSource } from 'react-dnd';
 
 // Draft JS - Name is text editable
 import {Editor, EditorState, SelectionState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
-import UltrawideAction from "../common/UltrawideAction";
-import {ScenarioTestExpectationData} from "../../../data/design/scenario_test_expectations_db";
+
+
 const {hasCommandModifier} = KeyBindingUtil;
 
 // =====================================================================================================================
@@ -542,7 +540,7 @@ export class DesignComponentHeader extends Component{
 
     // Render the header of the design component - has tools in it depending on context
     render() {
-        const {currentItem, updateItem, wpItem, uiContextName, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
+        const {currentItem, updateItem, wpItem, uiContextName, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, isOpen} = this.props;
 
         if(updateItem) {
             log((msg) => console.log(msg), LogLevel.PERF, 'Render Update Design Component Header {} {} with in scope {} in context {}', currentItem._id, currentItem.componentNameNew, this.state.inScope, displayContext);
@@ -1344,55 +1342,57 @@ export class DesignComponentHeader extends Component{
 
                     let featureRowClass = 'scenario-test-row-untested';
 
-                    if(testSummaryData) {
-                        switch(view){
-                            case ViewType.DESIGN_PUBLISHED:
-                            case ViewType.DESIGN_UPDATABLE:
-                            case ViewType.DESIGN_UPDATE_EDIT:           // Scope pane
-                            case ViewType.WORK_PACKAGE_BASE_EDIT:       // Scope pane
-                                // Whole DV
-                                // Any failures at all it's a fail
-                                if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
-                                    featureRowClass = 'scenario-test-row-fail'
-                                } else {
-                                    // No failures so any passes its a pass for now
-                                    if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
-                                        featureRowClass = 'scenario-test-row-pass'
-                                    }
-                                }
-                                break;
-                            case ViewType.DESIGN_UPDATE_VIEW:
-                            case ViewType.WORK_PACKAGE_UPDATE_EDIT:     // Scope pane
-                                // DU Only
-                                // Any failures at all it's a fail
-                                if (testSummaryData.duFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
-                                    featureRowClass = 'scenario-test-row-fail'
-                                } else {
-                                    // No failures so any passes its a pass for now
-                                    if (testSummaryData.duFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
-                                        featureRowClass = 'scenario-test-row-pass'
-                                    }
-                                }
-                                break;
-                            case ViewType.WORK_PACKAGE_BASE_VIEW:
-                            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                            case ViewType.DEVELOP_BASE_WP:
-                            case ViewType.DEVELOP_UPDATE_WP:
-                                // WP Only
-                                // Any failures at all it's a fail
-                                if (testSummaryData.wpFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
-                                    featureRowClass = 'scenario-test-row-fail'
-                                } else {
-                                    // No failures so any passes its a pass for now
-                                    if (testSummaryData.wpFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
-                                        featureRowClass = 'scenario-test-row-pass'
-                                    }
-                                }
-                                break;
+                    // Get feature test summary status for this feature
 
-                        }
-
-                    }
+                    // if(testSummaryData) {
+                    //     switch(view){
+                    //         case ViewType.DESIGN_PUBLISHED:
+                    //         case ViewType.DESIGN_UPDATABLE:
+                    //         case ViewType.DESIGN_UPDATE_EDIT:           // Scope pane
+                    //         case ViewType.WORK_PACKAGE_BASE_EDIT:       // Scope pane
+                    //             // Whole DV
+                    //             // Any failures at all it's a fail
+                    //             if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
+                    //                 featureRowClass = 'scenario-test-row-fail'
+                    //             } else {
+                    //                 // No failures so any passes its a pass for now
+                    //                 if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
+                    //                     featureRowClass = 'scenario-test-row-pass'
+                    //                 }
+                    //             }
+                    //             break;
+                    //         case ViewType.DESIGN_UPDATE_VIEW:
+                    //         case ViewType.WORK_PACKAGE_UPDATE_EDIT:     // Scope pane
+                    //             // DU Only
+                    //             // Any failures at all it's a fail
+                    //             if (testSummaryData.duFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
+                    //                 featureRowClass = 'scenario-test-row-fail'
+                    //             } else {
+                    //                 // No failures so any passes its a pass for now
+                    //                 if (testSummaryData.duFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
+                    //                     featureRowClass = 'scenario-test-row-pass'
+                    //                 }
+                    //             }
+                    //             break;
+                    //         case ViewType.WORK_PACKAGE_BASE_VIEW:
+                    //         case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                    //         case ViewType.DEVELOP_BASE_WP:
+                    //         case ViewType.DEVELOP_UPDATE_WP:
+                    //             // WP Only
+                    //             // Any failures at all it's a fail
+                    //             if (testSummaryData.wpFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
+                    //                 featureRowClass = 'scenario-test-row-fail'
+                    //             } else {
+                    //                 // No failures so any passes its a pass for now
+                    //                 if (testSummaryData.wpFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
+                    //                     featureRowClass = 'scenario-test-row-pass'
+                    //                 }
+                    //             }
+                    //             break;
+                    //
+                    //     }
+                    //
+                    // }
 
                     return(
                         <Grid id="featureTestSummary">
@@ -1403,9 +1403,10 @@ export class DesignComponentHeader extends Component{
                                     </div>
                                 </Col>
                                 <Col md={5} className="close-col" onClick={ () => this.setCurrentComponent()}>
-                                    <FeatureTestSummary
-                                        testSummaryData={testSummaryData}
-                                    />
+                                    <FeatureTestSummaryContainer params={{
+                                        userContext: userContext,
+                                        featureRefId: currentItem.componentReferenceId
+                                    }}/>
                                 </Col>
                             </Row>
                         </Grid>
@@ -1416,17 +1417,17 @@ export class DesignComponentHeader extends Component{
 
                     let rowClass = 'scenario-test-row-untested';
 
-                    if(testSummaryData) {
-                        // Any failures at all it's a fail
-                        if (testSummaryData.accMashTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.intMashTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.unitFailCount > 0) {
-                            rowClass = 'scenario-test-row-fail'
-                        } else {
-                            // No failures so any passes its a pass for now
-                            if (testSummaryData.accMashTestStatus === MashTestStatus.MASH_PASS || testSummaryData.intMashTestStatus === MashTestStatus.MASH_PASS || testSummaryData.unitPassCount > 0) {
-                                rowClass = 'scenario-test-row-pass'
-                            }
-                        }
-                    }
+                    // if(testSummaryData) {
+                    //     // Any failures at all it's a fail
+                    //     if (testSummaryData.accMashTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.intMashTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.unitFailCount > 0) {
+                    //         rowClass = 'scenario-test-row-fail'
+                    //     } else {
+                    //         // No failures so any passes its a pass for now
+                    //         if (testSummaryData.accMashTestStatus === MashTestStatus.MASH_PASS || testSummaryData.intMashTestStatus === MashTestStatus.MASH_PASS || testSummaryData.unitPassCount > 0) {
+                    //             rowClass = 'scenario-test-row-pass'
+                    //         }
+                    //     }
+                    // }
 
                     // Pass the scenario into summary for test expectations
                     let scenario = currentItem;
@@ -1437,7 +1438,6 @@ export class DesignComponentHeader extends Component{
                     }
 
                     // And get the test expectations associated with the scenario
-                    const scenarioTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenario(userContext.designVersionId, scenario.componentReferenceId);
 
                     // onClick={ () => this.setCurrentComponent()}
 
@@ -1450,13 +1450,10 @@ export class DesignComponentHeader extends Component{
                                     </div>
                                 </Col>
                                 <Col md={5} className="close-col">
-                                    <TestSummary
-                                        testSummaryData={testSummaryData}
-                                        scenario={scenario}
-                                        scenarioTestExpectations={scenarioTestExpectations}
-                                        displayContext={displayContext}
-                                        inScope={inScope}
-                                    />
+                                    <ScenarioTestSummaryContainer params={{
+                                        userContext: userContext,
+                                        scenarioRefId: scenario.componentReferenceId
+                                    }}/>
                                 </Col>
                             </Row>
                         </Grid>
@@ -1502,7 +1499,7 @@ DesignComponentHeader.propTypes = {
     displayContext: PropTypes.string.isRequired,
     userContext: PropTypes.object.isRequired,
     testSummary: PropTypes.bool.isRequired,
-    testSummaryData: PropTypes.object,
+    //testSummaryData: PropTypes.object,
     isOpen: PropTypes.bool.isRequired,
     testDataFlag: PropTypes.number.isRequired,
     updateScopeItems: PropTypes.object.isRequired,

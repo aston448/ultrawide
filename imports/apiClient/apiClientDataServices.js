@@ -257,13 +257,17 @@ class ClientDataServicesClass{
             const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
             const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
             const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
+            const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
+            const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
+            const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
 
             Tracker.autorun((loader) => {
 
                 let loading = (
                     !dusHandle.ready() || !dvmHandle.ready() ||
                     !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
-                    !dsHandle.ready() || !psHandle.ready() || !dveHandle.ready()
+                    !dsHandle.ready() || !psHandle.ready() || !dveHandle.ready() ||
+                    !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready()
                 );
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "loading User Data = {}", loading);
@@ -335,6 +339,9 @@ class ClientDataServicesClass{
                 const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
                 const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
                 const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
+                const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
+                const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
+                const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
 
                 Tracker.autorun((loader) => {
 
@@ -343,7 +350,8 @@ class ClientDataServicesClass{
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() ||
                         !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
-                        !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready() || !steHandle.ready()
+                        !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready() || !steHandle.ready() ||
+                        !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
@@ -1901,6 +1909,55 @@ class ClientDataServicesClass{
             dictionaryTerms: domainDictionaryItems
         }
     };
+
+    getScenarioTestSummaryData(userContext, scenarioRefId){
+
+        let summaryData = UserDvTestSummaryData.getScenarioSummary(
+            userContext.userId,
+            userContext.designVersionId,
+            scenarioRefId
+        );
+
+        console.log('Summary data for user %s, dv %s, ref %s is %o', userContext.userId, userContext.designVersionId, scenarioRefId, summaryData);
+
+        if(!summaryData){
+            summaryData = {};
+        }
+
+        const scenarioTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenario(
+            userContext.designVersionId,
+            scenarioRefId
+        );
+
+        const scenario = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, scenarioRefId);
+
+        return{
+            summaryData: summaryData,
+            testExpectations: scenarioTestExpectations,
+            scenario: scenario
+        }
+
+    }
+
+    getFeatureTestSummaryData(userContext, featureRefId){
+
+        const featureSummary = UserDvTestSummaryData.getFeatureSummary(
+            userContext.userId,
+            userContext.designVersionId,
+            featureRefId
+        );
+
+        if(featureSummary){
+            return featureSummary;
+        } else {
+            return {};
+        }
+
+    }
+
+    getDesignVersionTestSummaryData(){
+
+    }
 
     getScenarioMashData(userContext, featureAspectReferenceId, scenarioReferenceId = 'NONE'){
 

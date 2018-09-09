@@ -9,6 +9,7 @@ let Schema = new SimpleSchema({
     userId:                     {type: String, index: 1},
     designVersionId:            {type: String, index: 1},
     scenarioReferenceId:        {type: String, index: 1},
+    featureReferenceId:         {type: String, index: 1},
     accTestExpectedCount:       {type: Number, defaultValue: 0},
     accTestPassCount:           {type: Number, defaultValue: 0},
     accTestFailCount:           {type: Number, defaultValue: 0},

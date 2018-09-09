@@ -390,7 +390,7 @@ export class DesignComponent extends Component{
     render() {
 
         const {currentItem, updateItem, wpItem, uiItemId, uiParentId, displayContext, isDragDropHovering, mode, view, userContext,
-            testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag,
+            testSummary, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag,
             workPackageScopeItems, workPackageScopeFlag, domainTermsVisible, includeNarratives} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Component {}', currentItem.componentNameNew);
@@ -428,7 +428,7 @@ export class DesignComponent extends Component{
                     displayContext={displayContext}
                     userContext={userContext}
                     testSummary={testSummary}
-                    testSummaryData={testSummaryData}
+                    //testSummaryData={testSummaryData}
                     isOpen={this.state.open}
                     testDataFlag={testDataFlag}
                     updateScopeItems={updateScopeItems}
@@ -820,7 +820,7 @@ DesignComponent.propTypes = {
     isDragDropHovering: PropTypes.bool.isRequired,
     displayContext: PropTypes.string.isRequired,
     testSummary: PropTypes.bool.isRequired,
-    testSummaryData: PropTypes.object
+    //testSummaryData: PropTypes.object
 };
 
 

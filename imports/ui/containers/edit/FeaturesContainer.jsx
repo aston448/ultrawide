@@ -57,7 +57,7 @@ class FeaturesList extends Component {
             if (
                 nextProps.testDataFlag !== this.props.testDataFlag ||
                 nextProps.testSummary !== this.props.testSummary ||
-                    nextProps.viewOptionsFlag !== this.props.viewOptionsFlag
+                nextProps.viewOptionsFlag !== this.props.viewOptionsFlag
             ) {
                 shouldUpdate = true;
             }
@@ -108,11 +108,11 @@ class FeaturesList extends Component {
 
                 return components.map((feature) => {
 
-                    let testSummaryData = null;
-
-                    if (testSummary) {
-                        testSummaryData = ClientDataServices.getTestSummaryFeatureData(feature);
-                    }
+                    // let testSummaryData = null;
+                    //
+                    // if (testSummary) {
+                    //     testSummaryData = ClientDataServices.getTestSummaryFeatureData(feature);
+                    // }
 
                     updateItem = this.getDesignUpdateItem(feature, displayContext, userContext.designUpdateId);
                     wpItem = this.getWpItem(feature, userContext.workPackageId);
@@ -137,7 +137,7 @@ class FeaturesList extends Component {
                             isDragDropHovering={false}
                             displayContext={displayContext}
                             testSummary={testSummary}
-                            testSummaryData={testSummaryData}
+                            //testSummaryData={testSummaryData}
                         />
                     );
                 });
@@ -145,11 +145,11 @@ class FeaturesList extends Component {
 
                 return components.map((feature) => {
 
-                    let testSummaryData = null;
-
-                    if (testSummary) {
-                        testSummaryData = ClientDataServices.getTestSummaryFeatureData(feature);
-                    }
+                    // let testSummaryData = null;
+                    //
+                    // if (testSummary) {
+                    //     testSummaryData = ClientDataServices.getTestSummaryFeatureData(feature);
+                    // }
 
                     updateItem = this.getDesignUpdateItem(feature, displayContext, userContext.designUpdateId);
                     wpItem = this.getWpItem(feature, userContext.workPackageId);
@@ -164,7 +164,7 @@ class FeaturesList extends Component {
                             view={view}
                             mode={mode}
                             testSummary={testSummary}
-                            testSummaryData={testSummaryData}
+                            //testSummaryData={testSummaryData}
                         />
                     );
                 });

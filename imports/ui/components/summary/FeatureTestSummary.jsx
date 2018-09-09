@@ -44,9 +44,9 @@ export class FeatureTestSummary extends Component {
             if (
                 nextProps.testSummaryData.featureScenarioCount !== this.props.testSummaryData.featureScenarioCount ||
                 nextProps.testSummaryData.featureExpectedTestCount !== this.props.testSummaryData.featureExpectedTestCount ||
-                nextProps.testSummaryData.featureFulfilledTestCount !== this.props.testSummaryData.featureFulfilledTestCount ||
-                nextProps.testSummaryData.featureTestPassCount !== this.props.testSummaryData.featureTestPassCount ||
-                nextProps.testSummaryData.featureTestFailCount !== this.props.testSummaryData.featureTestFailCount
+                nextProps.testSummaryData.featurePassingTestCount !== this.props.testSummaryData.featurePassingTestCount ||
+                nextProps.testSummaryData.featureFailingTestCount !== this.props.testSummaryData.featureFailingTestCount ||
+                nextProps.testSummaryData.featureMissingTestCount !== this.props.testSummaryData.featureMissingTestCount
             ) {
                 shouldUpdate = true;
             }
@@ -60,7 +60,7 @@ export class FeatureTestSummary extends Component {
     refreshSummary(userContext){
 
         // Update the feature test summary as well to match
-        ClientTestIntegrationServices.updateTestSummaryDataForFeature(userContext);
+        //ClientTestIntegrationServices.updateTestSummaryDataForFeature(userContext);
     }
 
 
@@ -74,19 +74,17 @@ export class FeatureTestSummary extends Component {
 
             let resultClassScenarios = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGLIGHT_REQUIRED;
             let resultClassRequired = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-            let resultClassFulfilled = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
             let resultClassPass = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
             let resultClassFail = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-            let resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
+            let resultClassMissing = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
             let resultFeatureSummary = '';
 
             // Get data for view
             let scenarioCount = 0;
             let requiredCount = 0;
-            let fulfilledCount = 0;
             let passCount = 0;
             let failCount = 0;
-            let noTestCount = 0;
+            let missingCount = 0;
 
             switch(view){
                 case ViewType.DESIGN_PUBLISHED:
@@ -96,20 +94,19 @@ export class FeatureTestSummary extends Component {
                     // Whole DV
                     scenarioCount = testSummaryData.featureScenarioCount;
                     requiredCount = testSummaryData.featureExpectedTestCount;
-                    fulfilledCount = testSummaryData.featureFulfilledTestCount;
-                    passCount = testSummaryData.featureTestPassCount;
-                    failCount = testSummaryData.featureTestFailCount;
-                    noTestCount = testSummaryData.featureNoTestCount;
+                    passCount = testSummaryData.featurePassingTestCount;
+                    failCount = testSummaryData.featureFailingTestCount;
+                    missingCount = testSummaryData.featureMissingTestCount;
                     break;
                 case ViewType.DESIGN_UPDATE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:     // Scope pane
                     // DU Only
-                    scenarioCount = testSummaryData.duFeatureScenarioCount;
-                    requiredCount = testSummaryData.duFeatureExpectedTestCount;
-                    fulfilledCount = testSummaryData.duFeatureFulfilledTestCount;
-                    passCount = testSummaryData.duFeatureTestPassCount;
-                    failCount = testSummaryData.duFeatureTestFailCount;
-                    noTestCount = testSummaryData.duFeatureNoTestCount;
+                    // scenarioCount = testSummaryData.duFeatureScenarioCount;
+                    // requiredCount = testSummaryData.duFeatureExpectedTestCount;
+                    // fulfilledCount = testSummaryData.duFeatureFulfilledTestCount;
+                    // passCount = testSummaryData.duFeatureTestPassCount;
+                    // failCount = testSummaryData.duFeatureTestFailCount;
+                    // noTestCount = testSummaryData.duFeatureNoTestCount;
                     //console.log("  Pass count: " + passCount);
                     break;
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
@@ -117,20 +114,32 @@ export class FeatureTestSummary extends Component {
                 case ViewType.DEVELOP_BASE_WP:
                 case ViewType.DEVELOP_UPDATE_WP:
                     // WP Only
-                    scenarioCount = testSummaryData.wpFeatureScenarioCount;
-                    requiredCount = testSummaryData.wpFeatureExpectedTestCount;
-                    fulfilledCount = testSummaryData.wpFeatureFulfilledTestCount;
-                    passCount = testSummaryData.wpFeatureTestPassCount;
-                    failCount = testSummaryData.wpFeatureTestFailCount;
-                    noTestCount = testSummaryData.wpFeatureNoTestCount;
+                    // scenarioCount = testSummaryData.wpFeatureScenarioCount;
+                    // requiredCount = testSummaryData.wpFeatureExpectedTestCount;
+                    // fulfilledCount = testSummaryData.wpFeatureFulfilledTestCount;
+                    // passCount = testSummaryData.wpFeatureTestPassCount;
+                    // failCount = testSummaryData.wpFeatureTestFailCount;
+                    // noTestCount = testSummaryData.wpFeatureNoTestCount;
                     break;
 
             }
 
+            // Any failures at all it's a fail
+            //             if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
+            //                 featureRowClass = 'scenario-test-row-fail'
+            //             } else {
+            //                 // No failures so any passes its a pass for now
+            //                 if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
+            //                     featureRowClass = 'scenario-test-row-pass'
+            //                 }
+            //             }
+
             //console.log("Pass count = " + passCount);
 
+            let featureRowClass = 'scenario-test-row-untested';
+
             // If no Scenarios at all indicate design deficit
-            if(noTestCount === 0 && failCount === 0 && passCount === 0){
+            if(missingCount === 0 && failCount === 0 && passCount === 0){
                 resultFeatureSummary = 'feature-summary-no-scenarios';
             } else {
                 // If any fails it's a FAIL
@@ -138,27 +147,27 @@ export class FeatureTestSummary extends Component {
                     resultClassPass = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
                     resultClassFail = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL;
                     resultFeatureSummary = 'feature-summary-bad';
+                    featureRowClass = 'scenario-test-row-fail'
                 } else {
                     // Highlight passes if any and no fails
                     if (passCount > 0) {
                         resultClassPass = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
-                        if((requiredCount === fulfilledCount) && (requiredCount > 0)){
-                            resultClassFulfilled= 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
-                        }
                     } else {
                         // No passes or failures so highlight number of tests
-                        resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_NO_TEST;
+                        resultClassMissing = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_NO_TEST;
                     }
-                    if (noTestCount > 0) {
+                    if (missingCount > 0) {
                         if (passCount > 0) {
                             resultFeatureSummary = 'feature-summary-mmm';
+                            featureRowClass = 'scenario-test-row-pass'
                         } else {
                             resultFeatureSummary = 'feature-summary-meh';
                         }
                     } else {
                         // All passes and no pending tests
-                        if((requiredCount === fulfilledCount) && (requiredCount > 0)) {
+                        if(requiredCount > 0) {
                             resultFeatureSummary = 'feature-summary-good';
+                            featureRowClass = 'scenario-test-row-pass'
                         } else {
                             resultFeatureSummary = 'feature-summary-mmm';
                         }
@@ -185,58 +194,52 @@ export class FeatureTestSummary extends Component {
                 </Tooltip>
             );
 
-            const tooltipFulfilled = (
-                <Tooltip id="modal-tooltip">
-                    {'Number of required tests passing'}
-                </Tooltip>
-            );
-
             const tooltipPasses = (
                 <Tooltip id="modal-tooltip">
-                    {'Total pass count'}
+                    {'Required tests passing'}
                 </Tooltip>
             );
 
             const tooltipFails = (
                 <Tooltip id="modal-tooltip">
-                    {'Total fail count'}
+                    {'Required tests failing'}
+                </Tooltip>
+            );
+
+            const tooltipMissing = (
+                <Tooltip id="modal-tooltip">
+                    {'Required tests missing'}
                 </Tooltip>
             );
 
             return(
                 <Grid className="close-grid">
-                    <Row>
-                        <Col md={2} className="close-col">
-                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>
-                                <div className={resultClassScenarios}>
-                                    <span><Glyphicon glyph="th"/></span>
-                                    <span className="summary-number">{scenarioCount}</span>
-                                </div>
-                            </OverlayTrigger>
+                    <Row className={featureRowClass}>
+                        {/*<Col md={2} className="close-col">*/}
+                            {/*<OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>*/}
+                                {/*<div className={resultClassScenarios}>*/}
+                                    {/*<span className="summary-item">Scenarios:</span>*/}
+                                    {/*<span className="summary-number">{scenarioCount}</span>*/}
+                                {/*</div>*/}
+                            {/*</OverlayTrigger>*/}
+                        {/*</Col>*/}
+                        <Col md={1} className="close-col">
+                            <div className={resultFeatureSummary} onClick={() => this.refreshSummary(userContext)}>
+                                <Glyphicon glyph="th"/>
+                            </div>
                         </Col>
-                        <Col md={2} className="close-col">
+                        <Col md={5} className="close-col">
                             <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipRequired}>
                                 <div className={resultClassRequired}>
-                                    <span><Glyphicon glyph="question-sign"/></span>
+                                    <span className="summary-item">Expected Tests:</span>
                                     <span className="summary-number">{requiredCount}</span>
                                 </div>
                             </OverlayTrigger>
                         </Col>
                         <Col md={2} className="close-col">
-                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipFulfilled}>
-                                <div className={resultClassFulfilled}>
-                                    <span><Glyphicon glyph="ok-sign"/></span>
-                                    <span className="summary-number">{fulfilledCount}</span>
-                                </div>
-                            </OverlayTrigger>
-                        </Col>
-                        <Col md={1} className="close-col">
-
-                        </Col>
-                        <Col md={2} className="close-col">
                             <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipPasses}>
                                 <div className={resultClassPass}>
-                                    <span><Glyphicon glyph="ok-circle"/></span>
+                                    <span className="summary-item">Passing:</span>
                                     <span className="summary-number">{passCount}</span>
                                 </div>
                             </OverlayTrigger>
@@ -244,13 +247,18 @@ export class FeatureTestSummary extends Component {
                         <Col md={2} className="close-col">
                             <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipFails}>
                                 <div className={resultClassFail}>
-                                    <span><Glyphicon glyph="remove-circle"/></span>
+                                    <span className="summary-item">Failing:</span>
                                     <span className="summary-number">{failCount}</span>
                                 </div>
                             </OverlayTrigger>
                         </Col>
-                        <Col md={1} className="close-col">
-                            <div className={resultFeatureSummary} onClick={() => this.refreshSummary(userContext)}><Glyphicon glyph="refresh"/></div>
+                        <Col md={2} className="close-col">
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMissing}>
+                                <div className={resultClassMissing}>
+                                    <span className="summary-item">Missing:</span>
+                                    <span className="summary-number">{missingCount}</span>
+                                </div>
+                            </OverlayTrigger>
                         </Col>
                     </Row>
                 </Grid>
@@ -266,7 +274,6 @@ export class FeatureTestSummary extends Component {
                 </Grid>
             )
         }
-
     }
 }
 

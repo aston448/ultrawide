@@ -151,6 +151,18 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default ProjectSummaryContainer = createContainer(({params}) => {
 
-    return ClientDataServices.getProjectSummaryData(params.userContext);
+    //return ClientDataServices.getProjectSummaryData(params.userContext);
+
+    //TODO access from new summary data
+    return  {
+        designVersionName: 'Temp',
+        totalFeatureCount: 0,
+        noTestRequirementsCount: 0,
+        missingTestRequirementsCount: 0,
+        failingTestsCount: 0,
+        someTestsCount: 0,
+        allTestsCount: 0,
+        testsCount: 0
+    }
 
 }, connect(mapStateToProps)(ProjectSummary));

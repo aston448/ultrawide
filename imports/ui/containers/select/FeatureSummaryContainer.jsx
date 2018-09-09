@@ -168,6 +168,15 @@ export default FeatureSummaryContainer = createContainer(({params}) => {
     //console.log('Feature Summary Container with context ' + params.displayContext);
 
     // Gets the currently saved user context and a list of known Designs
-    return ClientDataServices.getDesignVersionFeatureSummaries(params.userContext, params.homePageTab, params.displayContext);
+    //return ClientDataServices.getDesignVersionFeatureSummaries(params.userContext, params.homePageTab, params.displayContext);
+
+    //TODO - link this to new feature summary data
+    return {
+        featureSummaries: [],
+        designVersionName: 'NONE',
+        workPackageName: 'NONE',
+        homePageTab: HomePageTab.TAB_DESIGNS,
+        displayContext: DisplayContext.PROGRESS_SUMMARY
+    };
 
 }, connect(mapStateToProps)(FeaturesList));

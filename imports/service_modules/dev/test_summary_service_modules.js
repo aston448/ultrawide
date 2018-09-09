@@ -2,11 +2,13 @@
 // Ultrawide services
 import { MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, TestType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
-import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
-import {UserDvScenarioTestExpectationStatusData} from "../../data/mash/user_dv_scenario_test_expectation_status_db";
-import {UserDvTestSummaryData} from "../../data/summary/user_dv_test_summary_db";
-import {WorkPackageComponentData} from "../../data/work/work_package_component_db";
-import {DesignUpdateComponentData} from "../../data/design_update/design_update_component_db";
+
+import {ScenarioTestExpectationData}                from "../../data/design/scenario_test_expectations_db";
+import {UserDvScenarioTestExpectationStatusData}    from "../../data/mash/user_dv_scenario_test_expectation_status_db";
+import {UserDvTestSummaryData}                      from "../../data/summary/user_dv_test_summary_db";
+import {WorkPackageComponentData}                   from "../../data/work/work_package_component_db";
+import {DesignUpdateComponentData}                  from "../../data/design_update/design_update_component_db";
+import {DesignComponentData}                        from "../../data/design/design_component_db";
 
 
 class TestSummaryModulesClass{
@@ -17,6 +19,8 @@ class TestSummaryModulesClass{
             userContext.designVersionId,
             scenarioReferenceId
         );
+
+        const scenario = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, scenarioReferenceId);
 
         let accTestExpectedCount = 0;
         let accTestPassCount = 0;
@@ -40,49 +44,52 @@ class TestSummaryModulesClass{
                 testExpectation._id
             );
 
-            switch(testExpectation.testType){
-                case TestType.ACCEPTANCE:
-                    accTestExpectedCount++;
-                    switch(expectationStatus.expectationStatus){
-                        case MashTestStatus.MASH_PASS:
-                            accTestPassCount++;
-                            break;
-                        case MashTestStatus.MASH_FAIL:
-                            accTestFailCount++;
-                            break;
-                        default:
-                            accTestMissingCount++;
-                            break;
-                    }
-                    break;
-                case TestType.INTEGRATION:
-                    intTestExpectedCount++;
-                    switch(expectationStatus.expectationStatus){
-                        case MashTestStatus.MASH_PASS:
-                            intTestPassCount++;
-                            break;
-                        case MashTestStatus.MASH_FAIL:
-                            intTestFailCount++;
-                            break;
-                        default:
-                            intTestMissingCount++;
-                            break;
-                    }
-                    break;
-                case TestType.UNIT:
-                    unitTestExpectedCount++;
-                    switch(expectationStatus.expectationStatus){
-                        case MashTestStatus.MASH_PASS:
-                            unitTestPassCount++;
-                            break;
-                        case MashTestStatus.MASH_FAIL:
-                            unitTestFailCount++;
-                            break;
-                        default:
-                            unitTestMissingCount++;
-                            break;
-                    }
-                    break;
+            if(expectationStatus) {
+
+                switch (testExpectation.testType) {
+                    case TestType.ACCEPTANCE:
+                        accTestExpectedCount++;
+                        switch (expectationStatus.expectationStatus) {
+                            case MashTestStatus.MASH_PASS:
+                                accTestPassCount++;
+                                break;
+                            case MashTestStatus.MASH_FAIL:
+                                accTestFailCount++;
+                                break;
+                            default:
+                                accTestMissingCount++;
+                                break;
+                        }
+                        break;
+                    case TestType.INTEGRATION:
+                        intTestExpectedCount++;
+                        switch (expectationStatus.expectationStatus) {
+                            case MashTestStatus.MASH_PASS:
+                                intTestPassCount++;
+                                break;
+                            case MashTestStatus.MASH_FAIL:
+                                intTestFailCount++;
+                                break;
+                            default:
+                                intTestMissingCount++;
+                                break;
+                        }
+                        break;
+                    case TestType.UNIT:
+                        unitTestExpectedCount++;
+                        switch (expectationStatus.expectationStatus) {
+                            case MashTestStatus.MASH_PASS:
+                                unitTestPassCount++;
+                                break;
+                            case MashTestStatus.MASH_FAIL:
+                                unitTestFailCount++;
+                                break;
+                            default:
+                                unitTestMissingCount++;
+                                break;
+                        }
+                        break;
+                }
             }
         });
 
@@ -120,6 +127,7 @@ class TestSummaryModulesClass{
             userId:                 userContext.userId,
             designVersionId:        userContext.designVersionId,
             scenarioReferenceId:    scenarioReferenceId,
+            featureReferenceId:     scenario.componentFeatureReferenceIdNew,
             accTestExpectedCount:   accTestExpectedCount,
             accTestPassCount:       accTestPassCount,
             accTestFailCount:       accTestFailCount,
@@ -237,6 +245,43 @@ class TestSummaryModulesClass{
             featureFailingTestCount:    featureFailingTestCount,
             featureMissingTestCount:    featureMissingTestCount,
             featureTestStatus:          featureTestStatus
+        };
+    }
+
+    getSummaryDataForDesignVersion(userContext){
+
+        let dvFeatureCount = 0;
+        let dvScenarioCount = 0;
+        let dvExpectedTestCount = 0;
+        let dvPassingTestCount = 0;
+        let dvFailingTestCount = 0;
+        let dvMissingTestCount = 0;
+
+        // Get all feature summaries for DV
+        const featureSummaries = UserDvTestSummaryData.getFeatureSummariesForDesignVersion(userContext.userId, userContext.designVersionId);
+
+        featureSummaries.forEach((summary) => {
+
+            dvFeatureCount++;
+
+            dvScenarioCount += summary.featureScenarioCount;
+            dvExpectedTestCount += summary.featureExpectedTestCount;
+            dvPassingTestCount += summary.featurePassingTestCount;
+            dvFailingTestCount += summary.featureFailingTestCount;
+            dvMissingTestCount += summary.featureMissingTestCount;
+
+        });
+
+        // Return a data entry
+        return{
+            userId:                     userContext.userId,
+            designVersionId:            userContext.designVersionId,
+            dvFeatureCount:             dvFeatureCount,
+            dvScenarioCount:            dvScenarioCount,
+            dvExpectedTestCount:        dvExpectedTestCount,
+            dvPassingTestCount:         dvPassingTestCount,
+            dvFailingTestCount:         dvFailingTestCount,
+            dvMissingTestCount:         dvMissingTestCount
         };
     }
 
