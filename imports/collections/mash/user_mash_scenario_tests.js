@@ -15,6 +15,7 @@ let Schema = new SimpleSchema({
     suiteName:                  {type: String},                         // Feature or Module
     groupName:                  {type: String, optional: true},         // Scenario or Group
     testName:                   {type: String},                         // Scenario or Test
+    testFullName:               {type: String},                         // The original full name
     // Status
     testOutcome:                {type: String},                         // Pending / Pass / Fail
     testError:                  {type: String, optional: true},         // Error if Failure

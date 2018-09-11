@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start-dev": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" LOG_LEVEL=DEBUG meteor run",
-    "start-dev-perf": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" meteor --settings settings_perf.json run",
+    "start-dev-perf": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" LOG_LEVEL=PERF meteor --settings settings_perf.json run",
     "start-dev-trace": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data/\" LOG_LEVEL=TRACE meteor run",
     "start-ci": "MONGO_URL=mongodb://localhost:27017 ULTRAWIDE_DATA_STORE=\"/home/circleci/data/\" meteor run --production",
     "start-test": "ULTRAWIDE_DATA_STORE=\"/Users/aston/ultrawide_data_test/\" meteor -p 3030 run",

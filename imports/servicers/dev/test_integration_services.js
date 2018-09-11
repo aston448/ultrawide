@@ -80,59 +80,82 @@ class TestIntegrationServicesClass{
         }
     }
 
-    updateScenarioTestTypeExpectations(userContext, scenarioRefId){
+    updateScenarioTestTypeExpectationStatuses(userContext, scenarioRefId, testType){
 
         if(Meteor.isServer) {
-            const expectationStatus = TestIntegrationModules.getScenarioOverallExpectationStatus(userContext, scenarioRefId);
 
-            const unitTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.UNIT);
-            const intTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.INTEGRATION);
-            const accTestExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.ACCEPTANCE);
+            // Update / add individual test expectation statuses
+            const scenarioTestTypeExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(
+                userContext.designVersionId,
+                scenarioRefId,
+                testType
+            );
 
-            if (unitTestExpectation) {
+            scenarioTestTypeExpectations.forEach((testExpectation) => {
 
-                const unitTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                const userTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
                     userContext.userId,
                     userContext.designVersionId,
-                    unitTestExpectation._id
+                    testExpectation._id
                 );
 
-                if (unitTestExpectationStatus) {
+                // Get test result for the expectation - if any
+                const testResult = TestIntegrationModules.getUserResultForScenarioExpectation(userContext, testExpectation);
 
-                    UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(unitTestExpectationStatus._id, expectationStatus.unitStatus);
+                if (userTestExpectationStatus) {
+
+                    // Update existing status
+                    UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(userTestExpectationStatus._id, testResult);
+
+                } else {
+
+                    // Insert new expectation status
+                    UserDvScenarioTestExpectationStatusData.insertUserScenarioTestExpectationStatus(
+                        userContext.userId,
+                        userContext.designVersionId,
+                        testExpectation._id,
+                        testResult
+                    );
                 }
-            }
+            });
 
-            if (intTestExpectation) {
+            // Update the overall Scenario Test Type Expectation status where there are sub-expectations
+            const scenarioTestTypeStatuses = TestIntegrationModules.getScenarioOverallExpectationStatus(userContext, scenarioRefId);
 
-                const intTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
-                    userContext.userId,
-                    userContext.designVersionId,
-                    intTestExpectation._id
-                );
+            scenarioTestTypeExpectations.forEach((testExpectation) => {
 
-                if (intTestExpectationStatus) {
+                if(testExpectation.permutationValueId === 'NONE'){
 
-                    UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(intTestExpectationStatus._id, expectationStatus.intStatus);
+                    const userTestTypeExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                        userContext.userId,
+                        userContext.designVersionId,
+                        testExpectation._id
+                    );
+
+                    switch(testType){
+                        case TestType.UNIT:
+                            UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
+                                userTestTypeExpectationStatus._id,
+                                scenarioTestTypeStatuses.unitStatus
+                            );
+                            break;
+                        case TestType.INTEGRATION:
+                            UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
+                                userTestTypeExpectationStatus._id,
+                                scenarioTestTypeStatuses.intStatus
+                            );
+                            break;
+                        case TestType.ACCEPTANCE:
+                            UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
+                                userTestTypeExpectationStatus._id,
+                                scenarioTestTypeStatuses.accStatus
+                            );
+                            break;
+                    }
                 }
-            }
-
-            if (accTestExpectation) {
-
-                const accTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
-                    userContext.userId,
-                    userContext.designVersionId,
-                    accTestExpectation._id
-                );
-
-                if (accTestExpectationStatus) {
-
-                    UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(accTestExpectationStatus._id, expectationStatus.accStatus);
-                }
-            }
+            });
         }
-
-    }
+     }
 
     updateTestSummaryData(userContext){
 

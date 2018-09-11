@@ -14,7 +14,7 @@ import { TextLookups }                  from '../../../common/lookups.js';
 import {log}                            from "../../../common/utils";
 
 // Bootstrap
-import {InputGroup, Tooltip, OverlayTrigger, Glyphicon} from 'react-bootstrap';
+import {InputGroup} from 'react-bootstrap';
 
 // REDUX services
 
@@ -38,13 +38,38 @@ export default class TestTypeSummary extends Component {
         return true;
     }
 
+    getItemText(expectedTestCount, passingTestCount, failingTestCount, missingTestCount){
+
+        if(failingTestCount > 0){
+            if(failingTestCount === 1){
+                return failingTestCount + ' test failing';
+            } else {
+                return failingTestCount + ' tests failing';
+            }
+        }
+
+        if(passingTestCount > 0 && passingTestCount === expectedTestCount){
+            return 'All tests passing';
+        }
+
+        if(passingTestCount === 0){
+            if(missingTestCount === 1){
+                return missingTestCount + ' test expected...';
+            } else {
+                return missingTestCount + ' tests expected...';
+            }
+        }
+
+        return passingTestCount + ' of ' +  expectedTestCount + ' passing';
+    }
+
     render() {
 
         const {testType, statusClass, expectationClass, expectedTestCount, passingTestCount, failingTestCount, missingTestCount} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Type Summary {} ', testType);
 
-        let item = <div className="test-summary-text">No data yet</div>;
+        let item = '';
 
         if(expectedTestCount) {
             item =
@@ -54,30 +79,21 @@ export default class TestTypeSummary extends Component {
                             {testType}
                         </div>
                     </InputGroup.Addon>
-                    <span>
-                    <Glyphicon glyph='th'/>
-                </span>
-                    <span>
-                    {expectedTestCount}
-                </span>
-                    <span>
-                    <Glyphicon glyph='ok-circle'/>
-                </span>
-                    <span>
-                    {passingTestCount}
-                </span>
-                    <span>
-                    <Glyphicon glyph='remove-circle'/>
-                </span>
-                    <span>
-                    {failingTestCount}
-                </span>
-                    <span>
-                    <Glyphicon glyph='ban-circle'/>
-                </span>
-                    <span>
-                    {missingTestCount}
-                </span>
+                    <div className={statusClass}>
+                        {this.getItemText(expectedTestCount, passingTestCount, failingTestCount, missingTestCount)}
+                    </div>
+                </InputGroup>;
+        } else {
+            item =
+                <InputGroup className="scenario-test-summary">
+                    <InputGroup.Addon className="scenario-test-requirement">
+                        <div className={'test-not-expected'}>
+                            {testType}
+                        </div>
+                    </InputGroup.Addon>
+                    <div className={'test-summary-no-result'}>
+                        No test required
+                    </div>
                 </InputGroup>;
         }
 

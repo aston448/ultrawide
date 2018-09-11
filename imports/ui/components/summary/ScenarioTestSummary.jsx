@@ -68,9 +68,9 @@ class ScenarioTestSummary extends Component {
         console.log('Test summary data is %o', testSummaryData);
 
         // Display test expectation options controls
-        let testExpectationAcc = this.state.accExpectation ? 'test-expected' : 'test-not-expected';
-        let testExpectationInt = this.state.intExpectation ? 'test-expected' : 'test-not-expected';
-        let testExpectationUnit = this.state.unitExpectation ? 'test-expected' : 'test-not-expected';
+        let accExpectationClass = this.state.accExpectation ? 'test-expected' : 'test-not-expected';
+        let intExpectationClass = this.state.intExpectation ? 'test-expected' : 'test-not-expected';
+        let unitExpectationClass = this.state.unitExpectation ? 'test-expected' : 'test-not-expected';
 
         // const tooltipDelay = 1000;
         //
@@ -105,36 +105,57 @@ class ScenarioTestSummary extends Component {
 
         if(scenarioTestExpectations.length > 0 && testSummaryData) {
 
-            let accResultClass = 'test-summary-result mash-not-implemented';
+            let accResultClass = 'test-summary-result result-expected';
 
             if (testSummaryData.accTestPassCount > 0 || testSummaryData.accTestFailCount > 0) {
 
                 if (testSummaryData.accTestFailCount > 0) {
-                    accResultClass = 'test-summary-result mash-fail';
+                    accResultClass = 'test-summary-result result-fail';
+                    accExpectationClass = 'test-fail';
                 } else {
-                    accResultClass = 'test-summary-result mash-pass';
+                    if(testSummaryData.accTestPassCount === testSummaryData.accTestExpectedCount) {
+                        accResultClass = 'test-summary-result result-pass';
+                        accExpectationClass = 'test-pass';
+                    } else {
+                        accResultClass = 'test-summary-result result-pass';
+                        accExpectationClass = 'test-partial';
+                    }
                 }
             }
 
-            let intResultClass = 'test-summary-result mash-not-implemented';
+            let intResultClass = 'test-summary-result result-expected';
 
             if (testSummaryData.intTestPassCount > 0 || testSummaryData.intTestFailCount > 0) {
 
                 if (testSummaryData.intTestFailCount > 0) {
-                    intResultClass = 'test-summary-result mash-fail';
+                    intResultClass = 'test-summary-result result-fail';
+                    intExpectationClass = 'test-fail';
                 } else {
-                    intResultClass = 'test-summary-result mash-pass';
+                    if(testSummaryData.intTestPassCount === testSummaryData.intTestExpectedCount) {
+                        intResultClass = 'test-summary-result result-pass';
+                        intExpectationClass = 'test-pass';
+                    } else {
+                        intResultClass = 'test-summary-result result-pass';
+                        intExpectationClass = 'test-partial';
+                    }
                 }
             }
 
-            let unitResultClass = 'test-summary-result mash-not-implemented';
+            let unitResultClass = 'test-summary-result result-expected';
 
-            if (testSummaryData.unitPassCount > 0 || testSummaryData.unitFailCount > 0) {
+            if (testSummaryData.unitTestPassCount > 0 || testSummaryData.unitTestFailCount > 0) {
 
-                if (testSummaryData.unitFailCount > 0) {
-                    unitResultClass = 'test-summary-result mash-fail';
+                if (testSummaryData.unitTestFailCount > 0) {
+                    unitResultClass = 'test-summary-result result-fail';
+                    unitExpectationClass = 'test-fail';
                 } else {
-                    unitResultClass = 'test-summary-result mash-pass';
+                    if(testSummaryData.unitTestPassCount === testSummaryData.unitTestExpectedCount) {
+                        unitResultClass = 'test-summary-result result-pass';
+                        unitExpectationClass = 'test-pass';
+                    } else {
+                        unitResultClass = 'test-summary-result result-pass';
+                        unitExpectationClass = 'test-partial';
+                    }
                 }
             }
 
@@ -145,7 +166,7 @@ class ScenarioTestSummary extends Component {
                            <TestTypeSummary
                                testType={'Acc'}
                                statusClass={accResultClass}
-                               expectationClass={testExpectationAcc}
+                               expectationClass={accExpectationClass}
                                expectedTestCount={testSummaryData.accTestExpectedCount}
                                passingTestCount={testSummaryData.accTestPassCount}
                                failingTestCount={testSummaryData.accTestFailCount}
@@ -156,7 +177,7 @@ class ScenarioTestSummary extends Component {
                             <TestTypeSummary
                                 testType={'Int'}
                                 statusClass={intResultClass}
-                                expectationClass={testExpectationInt}
+                                expectationClass={intExpectationClass}
                                 expectedTestCount={testSummaryData.intTestExpectedCount}
                                 passingTestCount={testSummaryData.intTestPassCount}
                                 failingTestCount={testSummaryData.intTestFailCount}
@@ -167,7 +188,7 @@ class ScenarioTestSummary extends Component {
                             <TestTypeSummary
                                 testType={'Unit'}
                                 statusClass={unitResultClass}
-                                expectationClass={testExpectationUnit}
+                                expectationClass={unitExpectationClass}
                                 expectedTestCount={testSummaryData.unitTestExpectedCount}
                                 passingTestCount={testSummaryData.unitTestPassCount}
                                 failingTestCount={testSummaryData.unitTestFailCount}

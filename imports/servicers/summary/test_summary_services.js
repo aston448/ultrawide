@@ -86,6 +86,9 @@ class TestSummaryServicesClass {
         // And insert the scenario summary
         UserDvTestSummaryData.insertScenarioTestSummary(scenarioTestSummaryData);
 
+        // And update the parent Feature
+        this.updateFeatureTestSummary(userContext, scenarioTestSummaryData.featureReferenceId);
+
     }
 
     // Update one feature test summary assuming all scenarios are updated
@@ -98,6 +101,9 @@ class TestSummaryServicesClass {
 
         // And insert the feature summary
         UserDvTestSummaryData.insertFeatureTestSummary(featureTestSummaryData);
+
+        // And update the overall DV data
+        this.updateDvTestSummary(userContext);
 
     }
 

@@ -2768,15 +2768,14 @@ input {
     min-width: 40px;
     color:black;
     background-color: yellow;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    border-bottom: 1px solid black;
+    border-top: 1px solid darkgrey;
+    border-left: 1px solid darkgrey;
+    border-right: 1px solid darkgrey;
+    border-bottom: 1px solid darkgrey;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
-
 }
 
 .test-pass{
@@ -2792,7 +2791,21 @@ input {
     border-bottom-left-radius: 4px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
+}
 
+.test-partial{
+    padding: 2px;
+    min-width: 40px;
+    color: darkgreen;
+    background-color: darkseagreen;
+    border-top: 1px solid darkgreen;
+    border-left: 1px solid darkgreen;
+    border-right: 1px solid darkgreen;
+    border-bottom: 1px solid darkgreen;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
 }
 
 .test-fail{
@@ -2812,6 +2825,17 @@ input {
 
 .test-summary-result{
     margin: 0;
+    color: black;
+    padding: 2px 5px 0 5px;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  10px;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.test-summary-no-result{
+    margin: 0;
+    color: darkgrey;
     padding: 2px 5px 0 5px;
     border-top: 1px solid darkgrey;
     border-left: 0px solid darkgrey;
@@ -2822,6 +2846,31 @@ input {
     font-weight: bold;
     background-color: transparent;
 }
+
+.result-expected{
+    background-color: #FFFFDD;
+    border-top: 1px solid darkgrey;
+    border-left: 0px solid darkgrey;
+    border-right: 1px solid darkgrey;
+    border-bottom: 1px solid darkgrey;
+}
+
+.result-pass{
+    background-color: #CCEECC;
+    border-top: 1px solid darkgreen;
+    border-left: 0px solid darkgreen;
+    border-right: 1px solid darkgreen;
+    border-bottom: 1px solid darkgreen;
+}
+
+.result-fail{
+    background-color: #EECCCC;
+    border-top: 1px solid darkred;
+    border-left: 0px solid darkred;
+    border-right: 1px solid darkred;
+    border-bottom: 1px solid darkred;
+}
+
 
 .mash-linked {
     color: black;

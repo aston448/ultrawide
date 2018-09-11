@@ -34,6 +34,15 @@ class UserMashScenarioTestDataClass {
         }).fetch();
     }
 
+    getAllScenarioTestData(userId, designVersionId, scenarioReferenceId){
+
+        return UserMashScenarioTests.find({
+            userId:                         userId,
+            designVersionId:                designVersionId,
+            designScenarioReferenceId:      scenarioReferenceId
+        }).fetch();
+    }
+
     // REMOVE ==========================================================================================================
 
     removeAllDvTestsForUser(userId, designVersionId){

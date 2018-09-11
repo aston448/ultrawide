@@ -1,5 +1,6 @@
 
 import {ScenarioTestExpectations} from "../../collections/design/scenario_test_expectations";
+import {UserDvScenarioTestExpectationStatusData} from "../mash/user_dv_scenario_test_expectation_status_db";
 
 class ScenarioTestExpectationDataClass{
 
@@ -43,6 +44,16 @@ class ScenarioTestExpectationDataClass{
         });
     }
 
+    getAllTestTypeExpectations(designVersionId, scenarioReferenceId){
+
+        return ScenarioTestExpectations.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            permutationId:          'NONE',
+            permutationValueId:     'NONE'
+        });
+    }
+
     getScenarioTestExpectationsForScenario(designVersionId, scenarioReferenceId){
 
         return ScenarioTestExpectations.find({
@@ -51,7 +62,16 @@ class ScenarioTestExpectationDataClass{
         }).fetch();
     }
 
-    getPermutationValuesForScenarioTestType(designVersionId, scenarioReferenceId, testType){
+    getPermutationTestExpectationsForScenario(designVersionId, scenarioReferenceId){
+
+        return ScenarioTestExpectations.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            permutationValueId:     {$ne: 'NONE'}
+        }).fetch();
+    }
+
+    getPermutationExpectationsForScenarioTestType(designVersionId, scenarioReferenceId, testType){
 
         return ScenarioTestExpectations.find({
             designVersionId:        designVersionId,
@@ -143,6 +163,18 @@ class ScenarioTestExpectationDataClass{
 
     removeScenarioTestExpectationsForTestType(designVersionId, scenarioReferenceId, testType){
 
+        // If we are removing expectations we need to remove any user expectation statuses
+        const expectationsToRemove = ScenarioTestExpectations.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            testType:               testType
+        }).fetch();
+
+        expectationsToRemove.forEach((expectation) => {
+
+            UserDvScenarioTestExpectationStatusData.removeAllUserExpectationStatusesForExpectation(expectation._id);
+        });
+
         return ScenarioTestExpectations.remove({
             designVersionId:        designVersionId,
             scenarioReferenceId:    scenarioReferenceId,
@@ -151,6 +183,19 @@ class ScenarioTestExpectationDataClass{
     }
 
     removeScenarioTestExpectationsForTestTypePermutation(designVersionId, scenarioReferenceId, testType, permutationId){
+
+        // If we are removing expectations we need to remove any user expectation statuses
+        const expectationsToRemove = ScenarioTestExpectations.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            testType:               testType,
+            permutationId:          permutationId
+        }).fetch();
+
+        expectationsToRemove.forEach((expectation) => {
+
+            UserDvScenarioTestExpectationStatusData.removeAllUserExpectationStatusesForExpectation(expectation._id);
+        });
 
         return ScenarioTestExpectations.remove({
             designVersionId:        designVersionId,
@@ -161,6 +206,20 @@ class ScenarioTestExpectationDataClass{
     }
 
     removeScenarioTestExpectationForTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){
+
+        // If we are removing expectations we need to remove any user expectation statuses
+        const expectationsToRemove = ScenarioTestExpectations.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            testType:               testType,
+            permutationId:          permutationId,
+            permutationValueId:     permutationValueId
+        }).fetch();
+
+        expectationsToRemove.forEach((expectation) => {
+
+            UserDvScenarioTestExpectationStatusData.removeAllUserExpectationStatusesForExpectation(expectation._id);
+        });
 
         return ScenarioTestExpectations.remove({
             designVersionId:        designVersionId,

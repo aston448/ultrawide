@@ -4,8 +4,7 @@ import {
     unselectTestType,
     unselectTestTypePermutation,
     selectTestTypePermutationValue,
-    unselectTestTypePermutationValue,
-    updateScenarioExpectationStatus
+    unselectTestTypePermutationValue
 } from '../apiValidatedMethods/scenario_test_expectation_methods.js'
 
 
@@ -17,11 +16,11 @@ import {
 
 class ServerScenarioTestExpectationApiClass {
 
-    selectTestType(designVersionId, scenarioReferenceId, testType, callback){
+    selectTestType(userContext, scenarioReferenceId, testType, callback){
 
         selectTestType.call(
             {
-                designVersionId:        designVersionId,
+                userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType
             },
@@ -31,11 +30,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     };
 
-    unselectTestType(designVersionId, scenarioReferenceId, testType, callback){
+    unselectTestType(userContext, scenarioReferenceId, testType, callback){
 
         unselectTestType.call(
             {
-                designVersionId:        designVersionId,
+                userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType
             },
@@ -45,11 +44,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     };
 
-    unselectTestTypePermutation(designVersionId, scenarioReferenceId, testType, permutationId, callback){
+    unselectTestTypePermutation(userContext, scenarioReferenceId, testType, permutationId, callback){
 
         unselectTestTypePermutation.call(
             {
-                designVersionId:        designVersionId,
+                userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType,
                 permutationId:          permutationId
@@ -60,11 +59,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     }
 
-    selectTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, callback){
+    selectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId, callback){
 
         selectTestTypePermutationValue.call(
             {
-                designVersionId:        designVersionId,
+                userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType,
                 permutationId:          permutationId,
@@ -76,11 +75,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     }
 
-    unselectTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, callback){
+    unselectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId, callback){
 
         unselectTestTypePermutationValue.call(
             {
-                designVersionId:        designVersionId,
+                userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType,
                 permutationId:          permutationId,
@@ -92,18 +91,6 @@ class ServerScenarioTestExpectationApiClass {
         );
     }
 
-    updateScenarioExpectationStatus(userContext, scenarioReferenceId, callback){
-
-        updateScenarioExpectationStatus.call(
-            {
-                userContext,
-                scenarioReferenceId
-            },
-            (err, result) => {
-                callback(err, result);
-            }
-        )
-    }
 }
 
 export const ServerScenarioTestExpectationApi = new ServerScenarioTestExpectationApiClass();

@@ -2,9 +2,14 @@
 
 import { ScenarioTestExpectationData }  from '../../data/design/scenario_test_expectations_db.js';
 
+import { TestIntegrationServices }      from "../../servicers/dev/test_integration_services.js";
+
 import {TestType, LogLevel, MashTestStatus} from "../../constants/constants";
 
 import {log} from '../../common/utils.js';
+import {TestSummaryServices} from "../summary/test_summary_services";
+import {UserDvScenarioTestExpectationStatusData} from "../../data/mash/user_dv_scenario_test_expectation_status_db";
+
 
 //======================================================================================================================
 //
@@ -30,75 +35,106 @@ class ScenarioTestExpectationServicesClass{
     // User Actions ----------------------------------------------------------------------------------------------------
 
     // Select Test Type - set basic test type expectation
-    selectTestType(designVersionId, scenarioReferenceId, testType){
+    selectTestType(userContext, scenarioReferenceId, testType){
 
-        // Data check - should not already exist
-        const expectation = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(designVersionId, scenarioReferenceId, testType);
+        if(Meteor.isServer) {
+            // Data check - should not already exist
+            const expectation = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(userContext.designVersionId, scenarioReferenceId, testType);
 
-        if(expectation.length === 0){
+            if (expectation.length === 0) {
 
-            const expectationData = {
-                designVersionId:                designVersionId,
-                scenarioReferenceId:            scenarioReferenceId,
-                testType:                       testType,
-                permutationId:                  'NONE',
-                permutationValueId:             'NONE',
-                expectationStatus:              MashTestStatus.MASH_NOT_LINKED
-            };
+                const expectationData = {
+                    designVersionId:        userContext.designVersionId,
+                    scenarioReferenceId:    scenarioReferenceId,
+                    testType:               testType,
+                    permutationId:          'NONE',
+                    permutationValueId:     'NONE',
+                    expectationStatus:       MashTestStatus.MASH_NOT_LINKED
+                };
 
-            ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
+                ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
 
-            // And mark the Scenario as requiring the test
+                TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId,testType);
 
+                TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
 
-        } else {
-            // Log a warning as should not be happening
-            log((msg) => console.log(msg), LogLevel.WARNING, 'Test expectation already existed - not adding to Scenario Test Expectations', testType);
+            } else {
+                // Log a warning as should not be happening
+                log((msg) => console.log(msg), LogLevel.WARNING, 'Test expectation already existed - not adding to Scenario Test Expectations', testType);
+            }
         }
     }
 
     // Unselect Test Type - clear all underlying expectations
-    unselectTestType(designVersionId, scenarioReferenceId, testType){
+    unselectTestType(userContext, scenarioReferenceId, testType){
 
-        ScenarioTestExpectationData.removeScenarioTestExpectationsForTestType(designVersionId, scenarioReferenceId, testType);
+        if(Meteor.isServer) {
+            ScenarioTestExpectationData.removeScenarioTestExpectationsForTestType(userContext.designVersionId, scenarioReferenceId, testType);
+
+            TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId, testType);
+
+            TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
+        }
     }
 
     // Unselect Permutation - clear all permutation value expectations
-    unselectTestTypePermutation(designVersionId, scenarioReferenceId, testType, permutationId){
+    unselectTestTypePermutation(userContext, scenarioReferenceId, testType, permutationId){
 
-        ScenarioTestExpectationData.removeScenarioTestExpectationsForTestTypePermutation(designVersionId, scenarioReferenceId, testType, permutationId);
+        if(Meteor.isServer) {
+            ScenarioTestExpectationData.removeScenarioTestExpectationsForTestTypePermutation(userContext.designVersionId, scenarioReferenceId, testType, permutationId);
+
+            TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId, testType);
+
+            TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
+        }
     }
 
     // Select Permutation Value - set expectation for value
-    selectTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){
+    selectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
 
-        // Data check - should not already exist
-        const expectation = ScenarioTestExpectationData.getScenarioTestExpectationForScenarioTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
+        if(Meteor.isServer) {
+            // Data check - should not already exist
+            const expectation = ScenarioTestExpectationData.getScenarioTestExpectationForScenarioTestTypePermutationValue(userContext.designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
 
-        if(expectation){
+            if (expectation) {
 
-            // Log a warning as should not be happening
-            log((msg) => console.log(msg), LogLevel.WARNING, 'Test expectation already existed - not adding to Scenario Test Expectations', testType);
+                // Log a warning as should not be happening
+                log((msg) => console.log(msg), LogLevel.WARNING, 'Test expectation already existed - not adding to Scenario Test Expectations', testType);
 
-        } else {
+            } else {
 
-            const expectationData = {
-                designVersionId:                designVersionId,
-                scenarioReferenceId:            scenarioReferenceId,
-                testType:                       testType,
-                permutationId:                  permutationId,
-                permutationValueId:             permutationValueId,
-                expectationStatus:              MashTestStatus.MASH_NOT_LINKED
-            };
+                const expectationData = {
+                    designVersionId: userContext.designVersionId,
+                    scenarioReferenceId: scenarioReferenceId,
+                    testType: testType,
+                    permutationId: permutationId,
+                    permutationValueId: permutationValueId,
+                    expectationStatus: MashTestStatus.MASH_NOT_LINKED
+                };
 
-            ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
-         }
+                const expectationId = ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
+
+                console.log('Inserted new test expectation for value %s', expectationId);
+
+                TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId, testType);
+
+                TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
+            }
+
+        }
     }
 
     // Unselect Permutation Value - clear expectation for value
-    unselectTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){
+    unselectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
 
-        ScenarioTestExpectationData.removeScenarioTestExpectationForTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
+        if(Meteor.isServer) {
+
+            ScenarioTestExpectationData.removeScenarioTestExpectationForTestTypePermutationValue(userContext.designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
+
+            TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId, testType);
+
+            TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
+        }
     }
 
 }

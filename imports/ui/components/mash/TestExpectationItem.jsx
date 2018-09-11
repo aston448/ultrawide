@@ -99,10 +99,6 @@ export class TestExpectationItem extends Component {
                 break;
         }
 
-        // Refresh the overall test status of the Scenario
-        // TODO - move this to a SERVER call
-        TestIntegrationServices.updateScenarioTestTypeExpectations(userContext, itemRef);
-
         this.setState({selected: false});
         this.setState({expanded: false});
     }

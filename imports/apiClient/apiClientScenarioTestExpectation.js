@@ -37,7 +37,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.selectTestType(userContext.designVersionId, scenarioReferenceId, testType, (err, result) => {
+        ServerScenarioTestExpectationApi.selectTestType(userContext, scenarioReferenceId, testType, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -70,7 +70,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestType(userContext.designVersionId, scenarioReferenceId, testType, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestType(userContext, scenarioReferenceId, testType, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -103,7 +103,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestTypePermutation(userContext.designVersionId, scenarioReferenceId, testType, permutationId, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestTypePermutation(userContext, scenarioReferenceId, testType, permutationId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -137,7 +137,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.selectTestTypePermutationValue(userContext.designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
+        ServerScenarioTestExpectationApi.selectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -151,15 +151,6 @@ class ClientScenarioTestExpectationServicesClass {
                     messageText: TestExpectationMessages.MSG_VALUE_ADDED
                 }));
 
-                // Update the status of the Scenarios overall expectations
-                ServerScenarioTestExpectationApi.updateScenarioExpectationStatus(userContext, scenarioReferenceId, (err, result) => {
-
-                    if (err) {
-                        // Unexpected error as all expected errors already handled - show alert.
-                        // Can't update screen here because of error
-                        alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-                    }
-                });
             }
         });
 
@@ -180,7 +171,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestTypePermutationValue(userContext.designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -193,16 +184,6 @@ class ClientScenarioTestExpectationServicesClass {
                     messageType: MessageType.INFO,
                     messageText: TestExpectationMessages.MSG_VALUE_REMOVED
                 }));
-
-                // Update the status of the Scenarios overall expectations
-                ServerScenarioTestExpectationApi.updateScenarioExpectationStatus(userContext, scenarioReferenceId, (err, result) => {
-
-                    if (err) {
-                        // Unexpected error as all expected errors already handled - show alert.
-                        // Can't update screen here because of error
-                        alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-                    }
-                });
             }
         });
 
@@ -236,7 +217,7 @@ class ClientScenarioTestExpectationServicesClass {
                 return (permVals.length > 0);
             case ItemType.TEST_TYPE:
                 // True if there are any values existing for this scenario ref and test type
-                const testVals = ScenarioTestExpectationData.getPermutationValuesForScenarioTestType(designVersionId, itemRef, testType);
+                const testVals = ScenarioTestExpectationData.getPermutationExpectationsForScenarioTestType(designVersionId, itemRef, testType);
                 return (testVals.length > 0);
             default:
                 return false;

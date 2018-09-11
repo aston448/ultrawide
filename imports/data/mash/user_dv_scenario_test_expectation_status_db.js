@@ -8,7 +8,10 @@ class UserDvScenarioTestExpectationStatusDataClass{
 
         return UserDvScenarioTestExpectationStatus.insert(
             {
-
+                userId:                     userId,
+                designVersionId:            designVersionId,
+                scenarioTestExpectationId:  expectationId,
+                expectationStatus:          testResult
             }
         );
     }
@@ -48,6 +51,13 @@ class UserDvScenarioTestExpectationStatusDataClass{
 
 
     // REMOVE ==========================================================================================================
+
+    removeAllUserExpectationStatusesForExpectation(expectationId){
+
+        return UserDvScenarioTestExpectationStatus.remove(
+            {scenarioTestExpectationId: expectationId}
+        );
+    }
 
     removeAllUserExpectationStatuses(userId){
 
