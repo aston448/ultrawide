@@ -181,7 +181,7 @@ export class TestExpectationItem extends Component {
             case ItemType.DESIGN_PERMUTATION:
                 if(this.state.expanded){
                     body =
-                        <div className='permutation-expectation-active'>
+                        <div className={itemStatus}>
                             <InputGroup>
                                 <InputGroup.Addon>
                                     <div><Glyphicon glyph="asterisk"/></div>
@@ -194,7 +194,7 @@ export class TestExpectationItem extends Component {
                             <PermutationValuesListContainer
                                 params={{
                                     permutationId: itemId,
-                                    designVersionId: userContext.designVersionId,
+                                    userContext: userContext,
                                     testType: testType,
                                     scenarioReferenceId: itemRef
                                 }}
@@ -202,7 +202,7 @@ export class TestExpectationItem extends Component {
                         </div>;
                 } else {
                     body =
-                        <div className='permutation-expectation'>
+                        <div className={itemStatus}>
                             <InputGroup>
                                 <InputGroup.Addon>
                                     <div><Glyphicon glyph="asterisk"/></div>
@@ -226,7 +226,7 @@ export class TestExpectationItem extends Component {
                                 </InputGroup.Addon>
                                 <div>{itemText}</div>
                                 <InputGroup.Addon>
-                                    <div className={itemStatus}>{TextLookups.mashTestStatus(itemStatus)}</div>
+                                    <div className={'value-expectation-result ' + itemStatus}>{TextLookups.mashTestStatus(itemStatus)}</div>
                                 </InputGroup.Addon>
                             </InputGroup>
                         </div>;

@@ -50,43 +50,19 @@ export class DesignPermutationValuesList extends Component {
         return ScenarioTestExpectationData.getScenarioTestExpectationForScenarioTestTypePermutationValue(dvId, scenarioRefId, testType, permId, permValueId);
     }
 
-    renderPermutationValuesList(permutationValues, testType, scenarioRefId){
-        return permutationValues.map((permutationValue) => {
-
-            // Get any current status for this value for the current scenario
-            let itemStatus = MashTestStatus.MASH_NOT_LINKED;
-
-            const permValueExpectation = this.getScenarioValueExpectation(
-                this.props.userContext.designVersionId,
-                scenarioRefId,
-                testType,
-                permutationValue.permutationId,
-                permutationValue._id
-            );
-
-            if (permValueExpectation){
-
-                const userExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
-                    this.props.userContext.userId,
-                    this.props.userContext.designVersionId,
-                    permValueExpectation._id
-                );
-
-                if(userExpectationStatus) {
-                    itemStatus = userExpectationStatus.expectationStatus;
-                }
-            }
+    renderPermutationValuesList(permutationValuesData, testType, scenarioRefId){
+        return permutationValuesData.map((permutationValueData) => {
 
             return (
                 <TestExpectationItem
-                    key={permutationValue._id}
+                    key={permutationValueData.permutationValue._id}
                     testType={testType}
                     itemType={ItemType.PERMUTATION_VALUE}
-                    itemId={permutationValue._id}
-                    itemParentId={permutationValue.permutationId}
+                    itemId={permutationValueData.permutationValue._id}
+                    itemParentId={permutationValueData.permutationValue.permutationId}
                     itemRef={scenarioRefId}
-                    itemText={permutationValue.permutationValueName}
-                    itemStatus={itemStatus}
+                    itemText={permutationValueData.permutationValue.permutationValueName}
+                    itemStatus={permutationValueData.valueStatus}
                     expandable={false}
                 />
             );
@@ -131,13 +107,15 @@ function mapStateToProps(state) {
 // Connect the Redux store to this component ensuring that its required state is mapped to props
 export default PermutationValuesListContainer = createContainer(({params}) => {
 
-    const permutationValuesData =  ClientDataServices.getPermutationValuesData(
-        params.permutationId,
-        params.designVersionId
+    const permutationValuesData =  ClientDataServices.getPermutationValuesDataWithTestStatus(
+        params.userContext,
+        params.scenarioReferenceId,
+        params.testType,
+        params.permutationId
     );
 
     return {
-        permutationValuesData:  permutationValuesData.data,
+        permutationValuesData:  permutationValuesData,
         testType:               params.testType,
         scenarioRefId:          params.scenarioReferenceId
     };

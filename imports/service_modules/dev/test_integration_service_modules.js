@@ -294,32 +294,7 @@ class TestIntegrationModulesClass {
             let scenarioIntMashStatus = MashStatus.MASH_NOT_LINKED;
             let scenarioAccMashStatus = MashStatus.MASH_NOT_LINKED;
 
-            // Get any permutation value unit tests expected for this scenario
-            // const unitTestPermutationExpectations = ScenarioTestExpectationData.getPermutationExpectationsForScenarioTestType(
-            //     userContext.designVersionId, scenario.componentReferenceId, TestType.UNIT
-            // );
-
             unitTests.forEach((unitTest) => {
-
-                // Update Unit Test expectations
-                // unitTestPermutationExpectations.forEach((expectation) => {
-                //
-                //     // Get the permutation value
-                //     const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId);
-                //
-                //     // If the individual test references the perm value set the result against it
-                //     if(unitTest.testName.includes(permValue.permutationValueName)){
-                //
-                //         scenarioExpectationStatusBatch.push(
-                //             {
-                //                 userId:                     userContext.userId,
-                //                 designVersionId:            userContext.designVersionId,
-                //                 scenarioTestExpectationId:  expectation._id,
-                //                 expectationStatus:          unitTest.testResult
-                //             }
-                //         );
-                //     }
-                // });
 
                 unitTestCount++;
                 scenarioUnitMashStatus = MashStatus.MASH_LINKED;
@@ -360,32 +335,7 @@ class TestIntegrationModulesClass {
 
             });
 
-            // Get any permutation value int tests expected for this scenario
-            // const intTestPermutationExpectations = ScenarioTestExpectationData.getPermutationExpectationsForScenarioTestType(
-            //     userContext.designVersionId, scenario.componentReferenceId, TestType.INTEGRATION
-            // );
-
             intTests.forEach((intTest) => {
-
-                // // Update Int Test expectations
-                // intTestPermutationExpectations.forEach((expectation) => {
-                //
-                //     // Get the permutation value
-                //     const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId);
-                //
-                //     // If the individual test references the perm value set the result against it
-                //     if(intTest.testName.includes(permValue.permutationValueName)){
-                //
-                //         scenarioExpectationStatusBatch.push(
-                //             {
-                //                 userId:                     userContext.userId,
-                //                 designVersionId:            userContext.designVersionId,
-                //                 scenarioTestExpectationId:  expectation._id,
-                //                 expectationStatus:          intTest.testResult
-                //             }
-                //         );
-                //     }
-                // });
 
                 intTestCount++;
                 scenarioIntMashStatus = MashStatus.MASH_LINKED;
@@ -425,32 +375,7 @@ class TestIntegrationModulesClass {
                 );
             });
 
-            // Get any permutation value acc tests expected for this scenario
-            // const accTestPermutationExpectations = ScenarioTestExpectationData.getPermutationExpectationsForScenarioTestType(
-            //     userContext.designVersionId, scenario.componentReferenceId, TestType.ACCEPTANCE
-            // );
-
             accTests.forEach((accTest) => {
-
-                // // Update Acc Test expectations
-                // accTestPermutationExpectations.forEach((expectation) => {
-                //
-                //     // Get the permutation value
-                //     const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId);
-                //
-                //     // If the individual test references the perm value set the result against it
-                //     if(accTest.testName.includes(permValue.permutationValueName)){
-                //
-                //         scenarioExpectationStatusBatch.push(
-                //             {
-                //                 userId:                     userContext.userId,
-                //                 designVersionId:            userContext.designVersionId,
-                //                 scenarioTestExpectationId:  expectation._id,
-                //                 expectationStatus:          accTest.testResult
-                //             }
-                //         );
-                //     }
-                // });
 
                 accTestCount++;
                 scenarioAccMashStatus = MashStatus.MASH_LINKED;
@@ -580,7 +505,6 @@ class TestIntegrationModulesClass {
             UserMashScenarioTestData.bulkInsertData(scenarioTestBatchData);
         }
 
-
         // Now calculate the overall expectation status for each scenario given the test results
         this.calculateUserTestExpectationStatusForExpectations(userContext, dvScenarios)
 
@@ -643,7 +567,7 @@ class TestIntegrationModulesClass {
 
                             if (test.testName.includes(permValue.permutationValueName)) {
 
-                                if (test.testResult === MashTestStatus.MASH_PASS) {
+                                if (test.testOutcome === MashTestStatus.MASH_PASS) {
 
                                     switch(expectation.testType) {
                                         case TestType.UNIT:
@@ -658,7 +582,7 @@ class TestIntegrationModulesClass {
                                     }
                                 }
 
-                                if (test.testResult === MashTestStatus.MASH_FAIL) {
+                                if (test.testOutcome === MashTestStatus.MASH_FAIL) {
 
                                     switch(expectation.testType) {
                                         case TestType.UNIT:
@@ -677,7 +601,7 @@ class TestIntegrationModulesClass {
                                     userId:                     userContext.userId,
                                     designVersionId:            userContext.designVersionId,
                                     scenarioTestExpectationId:  expectation._id,
-                                    expectationStatus:          test.testResult
+                                    expectationStatus:          test.testOutcome
                                 });
                             }
                         }
@@ -692,36 +616,44 @@ class TestIntegrationModulesClass {
             // Now we have accounted for all the permutation expectations we can log the status of the actual test type
             scenarioTestTypeExpectations.forEach((expectation) => {
 
-                switch(expectation.testType){
-                    case TestType.UNIT:
-                        if(unitPermCount === 0){
+                if(unitPermCount === 0){
 
-                            // No permutations so use actual result
-                            scenarioTestData.forEach((test) => {
+                    // No permutations so use actual result (if any - otherwise untested)
 
-                                // Must only match up tests and expectations for the same test type!
-                                if (test.testType === TestType.UNIT) {
-                                    if(test.testFullName.includes(scenario.componentNameNew)){
+                    let testOutcome = MashTestStatus.MASH_NOT_LINKED;
 
-                                        scenarioExpectationStatusBatch.push({
-                                            userId:                     userContext.userId,
-                                            designVersionId:            userContext.designVersionId,
-                                            scenarioTestExpectationId:  expectation._id,
-                                            expectationStatus:          test.testResult
-                                        });
-                                    }
-                                }
-                            });
+                    scenarioTestData.forEach((test) => {
 
-                        } else {
+                        // Must only match up tests and expectations for the same test type!
+                        if (test.testType === expectation.testType) {
+                            if(test.testFullName.includes(scenario.componentNameNew)){
+
+                                testOutcome = test.testOutcome;
+                            }
+                        }
+                    });
+
+                    scenarioExpectationStatusBatch.push({
+                        userId:                     userContext.userId,
+                        designVersionId:            userContext.designVersionId,
+                        scenarioTestExpectationId:  expectation._id,
+                        expectationStatus:          testOutcome
+                    });
+
+
+                } else {
+
+                    // Permutation tests existed so outcome is based on all their results
+                    switch (expectation.testType) {
+                        case TestType.UNIT:
 
                             let unitTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
                             // Status depends on passes or fails
-                            if(unitPermFailCount > 0){
+                            if (unitPermFailCount > 0) {
                                 unitTestStatus = MashTestStatus.MASH_FAIL
                             } else {
-                                if(unitPermPassCount === unitPermCount){
+                                if (unitPermPassCount === unitPermCount) {
                                     unitTestStatus = MashTestStatus.MASH_PASS;
                                 } else {
                                     unitTestStatus = MashTestStatus.MASH_INCOMPLETE;
@@ -729,44 +661,23 @@ class TestIntegrationModulesClass {
                             }
 
                             scenarioExpectationStatusBatch.push({
-                                userId:                     userContext.userId,
-                                designVersionId:            userContext.designVersionId,
-                                scenarioTestExpectationId:  expectation._id,
-                                expectationStatus:          unitTestStatus
-                            });
-                        }
-                        break;
-
-                    case TestType.INTEGRATION:
-
-                        if(intPermCount === 0){
-
-                            // No permutations so use actual result
-                            scenarioTestData.forEach((test) => {
-
-                                // Must only match up tests and expectations for the same test type!
-                                if (test.testType === TestType.INTEGRATION) {
-                                    if(test.testFullName.includes(scenario.componentNameNew)){
-
-                                        scenarioExpectationStatusBatch.push({
-                                            userId:                     userContext.userId,
-                                            designVersionId:            userContext.designVersionId,
-                                            scenarioTestExpectationId:  expectation._id,
-                                            expectationStatus:          test.testResult
-                                        });
-                                    }
-                                }
+                                userId: userContext.userId,
+                                designVersionId: userContext.designVersionId,
+                                scenarioTestExpectationId: expectation._id,
+                                expectationStatus: unitTestStatus
                             });
 
-                        } else {
+                            break;
+
+                        case TestType.INTEGRATION:
 
                             let intTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
                             // Status depends on passes or fails
-                            if(intPermFailCount > 0){
+                            if (intPermFailCount > 0) {
                                 intTestStatus = MashTestStatus.MASH_FAIL
                             } else {
-                                if(intPermPassCount === intPermCount){
+                                if (intPermPassCount === intPermCount) {
                                     intTestStatus = MashTestStatus.MASH_PASS;
                                 } else {
                                     intTestStatus = MashTestStatus.MASH_INCOMPLETE;
@@ -774,44 +685,23 @@ class TestIntegrationModulesClass {
                             }
 
                             scenarioExpectationStatusBatch.push({
-                                userId:                     userContext.userId,
-                                designVersionId:            userContext.designVersionId,
-                                scenarioTestExpectationId:  expectation._id,
-                                expectationStatus:          intTestStatus
-                            });
-                        }
-                        break;
-
-                    case TestType.ACCEPTANCE:
-
-                        if(accPermCount === 0){
-
-                            // No permutations so use actual result
-                            scenarioTestData.forEach((test) => {
-
-                                // Must only match up tests and expectations for the same test type!
-                                if (test.testType === TestType.ACCEPTANCE) {
-                                    if(test.testFullName.includes(scenario.componentNameNew)){
-
-                                        scenarioExpectationStatusBatch.push({
-                                            userId:                     userContext.userId,
-                                            designVersionId:            userContext.designVersionId,
-                                            scenarioTestExpectationId:  expectation._id,
-                                            expectationStatus:          test.testResult
-                                        });
-                                    }
-                                }
+                                userId: userContext.userId,
+                                designVersionId: userContext.designVersionId,
+                                scenarioTestExpectationId: expectation._id,
+                                expectationStatus: intTestStatus
                             });
 
-                        } else {
+                            break;
+
+                        case TestType.ACCEPTANCE:
 
                             let accTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
                             // Status depends on passes or fails
-                            if(accPermFailCount > 0){
+                            if (accPermFailCount > 0) {
                                 accTestStatus = MashTestStatus.MASH_FAIL
                             } else {
-                                if(accPermPassCount === accPermCount){
+                                if (accPermPassCount === accPermCount) {
                                     accTestStatus = MashTestStatus.MASH_PASS;
                                 } else {
                                     accTestStatus = MashTestStatus.MASH_INCOMPLETE;
@@ -819,13 +709,14 @@ class TestIntegrationModulesClass {
                             }
 
                             scenarioExpectationStatusBatch.push({
-                                userId:                     userContext.userId,
-                                designVersionId:            userContext.designVersionId,
-                                scenarioTestExpectationId:  expectation._id,
-                                expectationStatus:          accTestStatus
+                                userId: userContext.userId,
+                                designVersionId: userContext.designVersionId,
+                                scenarioTestExpectationId: expectation._id,
+                                expectationStatus: accTestStatus
                             });
-                        }
-                        break;
+
+                            break;
+                    }
                 }
             });
         });

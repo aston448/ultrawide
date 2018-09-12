@@ -15,10 +15,81 @@ class TestSummaryModulesClass{
 
     getSummaryDataForScenario(userContext, scenarioReferenceId){
 
-        const testExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenario(
+        // If there are perm value test expectations the the expectations are only these, otherwise use test type level expectation
+
+        const permValueUnitTestExpectations = ScenarioTestExpectationData.getPermutationExpectationsForScenarioTestType(
             userContext.designVersionId,
-            scenarioReferenceId
+            scenarioReferenceId,
+            TestType.UNIT
         );
+
+        const permValueIntTestExpectations = ScenarioTestExpectationData.getPermutationExpectationsForScenarioTestType(
+            userContext.designVersionId,
+            scenarioReferenceId,
+            TestType.INTEGRATION
+        );
+
+        const permValueAccTestExpectations = ScenarioTestExpectationData.getPermutationExpectationsForScenarioTestType(
+            userContext.designVersionId,
+            scenarioReferenceId,
+            TestType.ACCEPTANCE
+        );
+
+        let actualExpectations = [];
+
+        //console.log('Unit Expectations for %s are %d', scenarioReferenceId, permValueUnitTestExpectations.length);
+
+
+        if(permValueUnitTestExpectations.length > 0){
+
+            actualExpectations = actualExpectations.concat(permValueUnitTestExpectations);
+        } else {
+
+            // The expectations are any test type level expectation
+            const unitExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(
+                userContext.designVersionId,
+                scenarioReferenceId,
+                TestType.UNIT
+            );
+
+            if(unitExpectation) {
+                actualExpectations.push(unitExpectation)
+            }
+        }
+
+        if(permValueIntTestExpectations.length > 0){
+
+            actualExpectations = actualExpectations.concat(permValueIntTestExpectations);
+        } else {
+
+            // The expectations are any test type level expectation
+            const intExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(
+                userContext.designVersionId,
+                scenarioReferenceId,
+                TestType.INTEGRATION
+            );
+
+            if(intExpectation) {
+                actualExpectations.push(intExpectation)
+            }
+        }
+
+        if(permValueAccTestExpectations.length > 0){
+
+            actualExpectations = actualExpectations.concat(permValueAccTestExpectations);
+        } else {
+
+            // The expectations are any test type level expectation
+            const accExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(
+                userContext.designVersionId,
+                scenarioReferenceId,
+                TestType.ACCEPTANCE
+            );
+
+            if(accExpectation) {
+                actualExpectations.push(accExpectation)
+            }
+        }
 
         const scenario = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, scenarioReferenceId);
 
@@ -36,7 +107,9 @@ class TestSummaryModulesClass{
         let unitTestMissingCount = 0;
         let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
-        testExpectations.forEach((testExpectation) => {
+        //console.log('Actual Expectations for %s are %d', scenarioReferenceId, actualExpectations.length);
+
+        actualExpectations.forEach((testExpectation) => {
 
             const expectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
                 userContext.userId,

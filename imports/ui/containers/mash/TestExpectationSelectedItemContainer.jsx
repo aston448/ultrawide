@@ -199,7 +199,7 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
     // The parent design item is either the original user context or the next item down passed in
     let designItemId = params.userContext.designComponentId;
 
-    const itemType = params.userContext.componentType;
+    const itemType = params.userContext.designComponentType;
 
     let isTopParent = true;
 

@@ -46,18 +46,18 @@ export class DesignPermutationsList extends Component {
         ClientDesignPermutationServices.addDesignPermutation(role, userContext);
     };
 
-    renderPermutationsList(permutations, testType, scenarioRefId){
-        return permutations.map((permutation) => {
+    renderPermutationsList(permutationData, testType, scenarioRefId){
+        return permutationData.map((permutationDatum) => {
             return (
                 <TestExpectationItem
-                    key={permutation._id}
+                    key={permutationDatum.permutation._id}
                     testType={testType}
                     itemType={ItemType.DESIGN_PERMUTATION}
-                    itemId={permutation._id}
+                    itemId={permutationDatum.permutation._id}
                     itemParentId={'NONE'}
                     itemRef={scenarioRefId}
-                    itemText={permutation.permutationName}
-                    itemStatus={MashTestStatus.MASH_NOT_LINKED}
+                    itemText={permutationDatum.permutation.permutationName}
+                    itemStatus={permutationDatum.permutationStatus}
                     expandable={true}
                 />
             );
@@ -104,7 +104,11 @@ function mapStateToProps(state) {
 // Connect the Redux store to this component ensuring that its required state is mapped to props
 export default DesignPermutationsListContainer = createContainer(({params}) => {
 
-    const permutationData =  ClientDataServices.getDesignPermutationsData(params.userContext.designId);
+    const permutationData =  ClientDataServices.getDesignPermutationsWithExpectationStatus(
+        params.userContext,
+        params.scenarioReferenceId,
+        params.testType
+    );
 
     return {
         permutationData:    permutationData,

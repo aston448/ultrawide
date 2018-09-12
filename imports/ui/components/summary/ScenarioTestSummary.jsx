@@ -72,37 +72,6 @@ class ScenarioTestSummary extends Component {
         let intExpectationClass = this.state.intExpectation ? 'test-expected' : 'test-not-expected';
         let unitExpectationClass = this.state.unitExpectation ? 'test-expected' : 'test-not-expected';
 
-        // const tooltipDelay = 1000;
-        //
-        // const tooltipAcceptanceText = this.state.accExpectation ? 'Requires Acceptance test' : 'No Acceptance test required';
-        // const tooltipIntegrationText = this.state.intExpectation ? 'Requires Integration test' : 'No Integration test required';
-        // const tooltipUnitText = this.state.unitExpectation ? 'Requires Unit test' : 'No Unit test required';
-
-        // const accStatusText = this.state.accExpectation ? TextLookups.mashTestStatus(testSummaryData.accMashTestStatus) : 'Not required';
-        // const intStatusText = this.state.intExpectation ? TextLookups.mashTestStatus(testSummaryData.intMashTestStatus) : 'Not required';
-        //
-        // // Unit test shows number of tests if there are any
-        // let unitText = 'No tests';
-        //
-        // const tooltipAcceptance = (
-        //     <Tooltip id="modal-tooltip">
-        //         {tooltipAcceptanceText}
-        //     </Tooltip>
-        // );
-        //
-        // const tooltipIntegration = (
-        //     <Tooltip id="modal-tooltip">
-        //         {tooltipIntegrationText}
-        //     </Tooltip>
-        // );
-        //
-        // const tooltipUnit = (
-        //     <Tooltip id="modal-tooltip">
-        //         {tooltipUnitText}
-        //     </Tooltip>
-        // );
-        //
-
         if(scenarioTestExpectations.length > 0 && testSummaryData) {
 
             let accResultClass = 'test-summary-result result-expected';
@@ -223,7 +192,7 @@ class ScenarioTestSummary extends Component {
                     <Grid className="close-grid">
                         <Row>
                             <Col md={12} className="close-col">
-                                <div>No test data yet...</div>
+                                <div className="test-summary-removed-item">No test requirements yet</div>
                             </Col>
                         </Row>
                     </Grid>;

@@ -554,12 +554,48 @@ class ClientDataServicesClass{
         return DesignPermutationData.getPermutationsForDesign(designId);
     }
 
+    getDesignPermutationsWithExpectationStatus(userContext, scenarioRefId, testType){
+
+        const availablePermutations = DesignPermutationData.getPermutationsForDesign(userContext.designId);
+
+        let returnData = [];
+
+        let permutationStatus = MashTestStatus.MASH_NO_EXPECTATIONS;
+
+        availablePermutations.forEach((permutation) => {
+
+            const permutationValueExpectations = ScenarioTestExpectationData.getPermutationValuesForScenarioTestTypePerm(
+                userContext.designVersionId,
+                scenarioRefId,
+                testType,
+                permutation._id
+            );
+
+            if(permutationValueExpectations.length > 0){
+                permutationStatus = MashTestStatus.MASH_HAS_EXPECTATIONS;
+            }
+
+            returnData.push(
+                {
+                    permutation: permutation,
+                    permutationStatus: permutationStatus
+                }
+            )
+        });
+
+        return returnData;
+    }
+
     // Get permutation values for current permutation
     getPermutationValuesData(permutationId, designVersionId){
 
-        console.log('Getting perm values for DV %s and Perm %s', designVersionId, permutationId);
+        //console.log('Getting perm values for DV %s and Perm %s', designVersionId, permutationId);
 
-        const data = DesignPermutationValueData.getDvPermutationValuesForPermutation(permutationId, designVersionId);
+        const permutations = DesignPermutationValueData.getDvPermutationValuesForPermutation(
+            permutationId,
+            designVersionId
+        );
+
         const perm = DesignPermutationData.getDesignPermutationById(permutationId);
 
         let name = '';
@@ -568,9 +604,66 @@ class ClientDataServicesClass{
         }
 
         return{
-            data: data,
+            data: permutations,
             name: name
         }
+    }
+
+    // Get permutation values for current permutation with current test expectation status
+    getPermutationValuesDataWithTestStatus(userContext, scenarioRefId, testType, permutationId){
+
+        const permutationValues = DesignPermutationValueData.getDvPermutationValuesForPermutation(
+            permutationId,
+            userContext.designVersionId
+        );
+
+        let data = [];
+        let dataItem = {};
+
+        // Get current test status for each permutation
+        permutationValues.forEach((permutationValue) =>{
+
+            const permutationValueExpectation = ScenarioTestExpectationData.getScenarioTestExpectationForScenarioTestTypePermutationValue(
+                userContext.designVersionId,
+                scenarioRefId,
+                testType,
+                permutationId,
+                permutationValue._id
+            );
+
+            if(permutationValueExpectation){
+
+                // Test is expected for this value so see what its status is
+                const testExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                    userContext.userId,
+                    userContext.designVersionId,
+                    permutationValueExpectation._id
+                );
+
+                if(testExpectationStatus){
+                    dataItem = {
+                        permutationValue:   permutationValue,
+                        valueStatus:        testExpectationStatus.expectationStatus
+                    }
+                } else {
+                    dataItem = {
+                        permutationValue:   permutationValue,
+                        valueStatus:        MashTestStatus.MASH_NOT_LINKED
+                    }
+                }
+            } else {
+
+                // No test expected so no status
+                dataItem = {
+                    permutationValue:   permutationValue,
+                    valueStatus:        MashTestStatus.MASH_NOT_LINKED
+                }
+            }
+
+            data.push(dataItem);
+        });
+
+        return data;
     }
 
     getTestTypeExpectationStatus(userContext, scenarioRefId){

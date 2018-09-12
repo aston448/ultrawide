@@ -2731,6 +2731,12 @@ input {
     color: grey;
 }
 
+.value-expectation-result{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    padding: 0;
+}
+
 .scenario-test-summary{
     margin: 5px 0px 5px 0px;
     padding: 0px;
@@ -2871,6 +2877,13 @@ input {
     border-bottom: 1px solid darkred;
 }
 
+.mash-no-expectations{
+    color: darkgrey;
+}
+
+.mash-has-expectations{
+    color: blue;
+}
 
 .mash-linked {
     color: black;

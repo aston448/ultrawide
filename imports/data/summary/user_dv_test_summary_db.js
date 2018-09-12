@@ -249,13 +249,19 @@ class UserDvTestSummaryDataClass {
     removeAllUserSummaryData(userId){
 
         // Scenario summaries
-        return UserDvScenarioTestSummary.remove({
+        UserDvScenarioTestSummary.remove({
             userId: userId,
         });
 
         // Feature summaries
+        UserDvFeatureTestSummary.remove({
+            userId: userId,
+        });
 
         // DV summary
+        return UserDvTestSummary.remove({
+            userId: userId
+        });
     }
 }
 

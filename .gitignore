@@ -16,4 +16,3 @@ tests/mocha-mod-output.json
 
 !/node_modules/ultrawide-mocha-reporter/
 /test_results/
-/imports/service_modules/dev/test_integration_service_modules.js

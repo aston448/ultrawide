@@ -473,7 +473,8 @@ export const MashTestStatus = {
     MASH_PARTIAL:           'mash-partial',
     MASH_NO_TESTS:          'mash-no-tests',
     MASH_INCOMPLETE:        'mash-incomplete',
-    MASH_NO_EXPECTATIONS:   'mash-no-expectations'
+    MASH_NO_EXPECTATIONS:   'mash-no-expectations',
+    MASH_HAS_EXPECTATIONS:  'mash-has-expectations'
 };
 
 export const TestDataStatus = {
