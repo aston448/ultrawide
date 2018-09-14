@@ -107,7 +107,7 @@ class TestSummaryModulesClass{
         let unitTestMissingCount = 0;
         let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
-        //console.log('Actual Expectations for %s are %d', scenarioReferenceId, actualExpectations.length);
+        console.log('Actual Expectations for %s are %d', scenarioReferenceId, actualExpectations.length);
 
         actualExpectations.forEach((testExpectation) => {
 
@@ -161,6 +161,24 @@ class TestSummaryModulesClass{
                                 unitTestMissingCount++;
                                 break;
                         }
+                        break;
+                }
+
+            } else {
+
+                // No status so unfulfilled expectations
+                switch (testExpectation.testType) {
+                    case TestType.ACCEPTANCE:
+                        accTestExpectedCount++;
+                        accTestMissingCount++;
+                        break;
+                    case TestType.INTEGRATION:
+                        intTestExpectedCount++;
+                        intTestMissingCount++;
+                        break;
+                    case TestType.UNIT:
+                        unitTestExpectedCount++;
+                        unitTestMissingCount++;
                         break;
                 }
             }
