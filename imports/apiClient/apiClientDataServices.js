@@ -903,6 +903,11 @@ class ClientDataServicesClass{
                         features = UserDvTestSummaryData.getFeaturesWithScenariosWithMissingTests(userContext.userId, userContext.designVersionId);
                         break;
 
+                    case DisplayContext.DV_BACKLOG_TEST_FAIL:
+
+                        features = UserDvTestSummaryData.getFeaturesWithScenariosWithFailingTests(userContext.userId, userContext.designVersionId);
+                        break;
+
                     // case DisplayContext.PROJECT_SUMMARY_NONE:
                     //
                     //     features = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
@@ -939,11 +944,12 @@ class ClientDataServicesClass{
                         featureName: feature.componentNameNew,
                         featureRef: feature.componentReferenceId,
                         hasTestData: true,
-                        summaryStatus: featureTestSummary.featureTestStatus,
-                        scenarioCount: featureTestSummary.featureScenarioCount,
-                        expectedCount: featureTestSummary.featureExpectedTestCount,
-                        fulfilledCount: featureTestSummary.featurePassingTestCount,
-                        failedCount: featureTestSummary.featureFailingTestCount
+                        featureTestStatus: featureTestSummary.featureTestStatus,
+                        featureScenarioCount: featureTestSummary.featureScenarioCount,
+                        featureExpectedTestCount: featureTestSummary.featureExpectedTestCount,
+                        featurePassingTestCount: featureTestSummary.featurePassingTestCount,
+                        featureFailingTestCount: featureTestSummary.featureFailingTestCount,
+                        featureMissingTestCount: featureTestSummary.featureMissingTestCount
                     };
 
                     featureSummaries.push(featureSummary);
@@ -1020,11 +1026,12 @@ class ClientDataServicesClass{
                             featureName: feature.componentNameNew,
                             featureRef: feature.componentReferenceId,
                             hasTestData: true,
-                            summaryStatus: featureSummaryData.featureTestStatus,
-                            scenarioCount: featureSummaryData.featureScenarioCount,
-                            expectedCount: featureSummaryData.featureExpectedTestCount,
-                            fulfilledCount: featureSummaryData.featurePassingTestCount,
-                            failedCount: featureSummaryData.featureFailingTestCount
+                            featureTestStatus: featureSummaryData.featureTestStatus,
+                            featureScenarioCount: featureSummaryData.featureScenarioCount,
+                            featureExpectedTestCount: featureSummaryData.featureExpectedTestCount,
+                            featurePassingTestCount: featureSummaryData.featurePassingTestCount,
+                            featureFailingTestCount: featureSummaryData.featureFailingTestCount,
+                            featureMissingTestCount: featureSummaryData.featureMissingTestCount
                         };
 
                     } else {
@@ -1034,11 +1041,12 @@ class ClientDataServicesClass{
                             featureName: feature.componentNameNew,
                             featureRef: feature.componentReferenceId,
                             hasTestData: false,
-                            summaryStatus: 'NONE',
-                            scenarioCount: 0,
-                            expectedCount: 0,
-                            fulfilledCount: 0,
-                            failedCount: 0
+                            featureTestStatus: 'NONE',
+                            featureScenarioCount: 0,
+                            featureExpectedTestCount: 0,
+                            featurePassingTestCount: 0,
+                            featureFailingTestCount: 0,
+                            featureMissingTestCount: 0
                         };
 
                     }
@@ -2023,7 +2031,7 @@ class ClientDataServicesClass{
             scenarioRefId
         );
 
-        console.log('Summary data for user %s, dv %s, ref %s is %o', userContext.userId, userContext.designVersionId, scenarioRefId, summaryData);
+        //console.log('Summary data for user %s, dv %s, ref %s is %o', userContext.userId, userContext.designVersionId, scenarioRefId, summaryData);
 
         if(!summaryData){
             summaryData = {};
@@ -2866,6 +2874,7 @@ class ClientDataServicesClass{
         let dvPassingTestCount = 0;
         let dvNoTestExpectationsScenarioCount = 0;
         let dvMissingTestScenarioCount = 0;
+        let dvFailingTestScenarioCount = 0;
 
         const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
@@ -2887,6 +2896,7 @@ class ClientDataServicesClass{
 
             dvNoTestExpectationsScenarioCount = UserDvTestSummaryData.getScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId).length;
             dvMissingTestScenarioCount = UserDvTestSummaryData.getScenariosWithMissingTests(userContext.userId, userContext.designVersionId).length;
+            dvFailingTestScenarioCount = UserDvTestSummaryData.getScenariosWithFailingTests(userContext.userId, userContext.designVersionId).length;
         }
 
         return{
@@ -2896,7 +2906,8 @@ class ClientDataServicesClass{
             dvExpectedTestCount:        dvExpectedTestCount,
             dvPassingTestCount:         dvPassingTestCount,
             dvNoTestExpectationsCount:  dvNoTestExpectationsScenarioCount,
-            dvMissingTestCount:         dvMissingTestScenarioCount
+            dvMissingTestCount:         dvMissingTestScenarioCount,
+            dvFailingTestCount:         dvFailingTestScenarioCount
         }
     }
 

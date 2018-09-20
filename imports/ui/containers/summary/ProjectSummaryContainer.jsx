@@ -60,7 +60,7 @@ export class ProjectSummary extends Component {
 
     render() {
 
-        const {designVersionName, dvTotalFeatureCount, dvTotalScenarioCount, dvExpectedTestCount, dvPassingTestCount, dvNoTestExpectationsCount, dvMissingTestCount, dvFailingTestsCount, userContext} = this.props;
+        const {designVersionName, dvTotalFeatureCount, dvTotalScenarioCount, dvExpectedTestCount, dvPassingTestCount, dvNoTestExpectationsCount, dvMissingTestCount, dvFailingTestCount, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Project Summary');
 
@@ -109,6 +109,14 @@ export class ProjectSummary extends Component {
                             testCount={0}
                             selectionFunction={() => this.onSummaryItemSelect(DisplayContext.DV_BACKLOG_TEST_MISSING)}
                         />
+                        <ProjectBacklogItem
+                            displayContext={DisplayContext.DV_BACKLOG_TEST_FAIL}
+                            totalFeatureCount={dvTotalFeatureCount}
+                            featureCount={0}
+                            scenarioCount={dvFailingTestCount}
+                            testCount={0}
+                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.DV_BACKLOG_TEST_FAIL)}
+                        />
                     </Col>
                     <Col md={8} >
                         <FeatureSummaryContainer params={{
@@ -136,7 +144,7 @@ ProjectSummary.propTypes = {
     dvPassingTestCount: PropTypes.number.isRequired,
     dvNoTestExpectationsCount: PropTypes.number.isRequired,
     dvMissingTestCount: PropTypes.number.isRequired,
-    dvFailingTestsCount: PropTypes.number.isRequired
+    dvFailingTestCount: PropTypes.number.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -151,8 +159,6 @@ export default ProjectSummaryContainer = createContainer(({params}) => {
 
     const dvSummary = ClientDataServices.getDvSummaryData(params.userContext);
 
-    console.log('No exp count = ' + dvSummary.dvNoTestExpectationsCount);
-
     //TODO access from new summary data
     return  {
         designVersionName: dvSummary.designVersionName,
@@ -162,8 +168,7 @@ export default ProjectSummaryContainer = createContainer(({params}) => {
         dvPassingTestCount: dvSummary.dvPassingTestCount,
         dvNoTestExpectationsCount: dvSummary.dvNoTestExpectationsCount,
         dvMissingTestCount: dvSummary.dvMissingTestCount,
-        failingTestsCount: 0,
-        dvFailingTestsCount: 0
+        dvFailingTestCount: dvSummary.dvFailingTestCount,
     }
 
 }, connect(mapStateToProps)(ProjectSummary));

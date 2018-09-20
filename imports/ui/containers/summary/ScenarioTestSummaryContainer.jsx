@@ -89,7 +89,7 @@ export default ScenarioTestSummaryContainer = createContainer(({params}) => {
         params.scenarioRefId
     );
 
-    console.log('Scenario data is %o', scenarioData);
+    //console.log('Scenario data is %o', scenarioData);
 
     return{
         summaryData:        scenarioData.summaryData,

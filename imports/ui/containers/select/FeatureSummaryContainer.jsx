@@ -39,12 +39,13 @@ export class FeaturesList extends Component {
     }
 
 
-    renderFeatureList(featureSummaries){
+    renderFeatureList(featureSummaries, displayContext){
         return featureSummaries.map((featureSummary) => {
             return (
                 <FeatureSummary
                     key={featureSummary._id}
                     featureSummary={featureSummary}
+                    displayContext={displayContext}
                 />
             );
         });
@@ -79,7 +80,7 @@ export class FeaturesList extends Component {
         }
 
         if(featureSummaries && featureSummaries.length > 0) {
-            bodyDataFunction = () => this.renderFeatureList(featureSummaries);
+            bodyDataFunction = () => this.renderFeatureList(featureSummaries, displayContext);
         } else {
             if(userContext.designVersionId === 'NONE'){
                 bodyDataFunction = () => this.noDesignVersion();
@@ -98,6 +99,11 @@ export class FeaturesList extends Component {
             case DisplayContext.DV_BACKLOG_TEST_MISSING:
 
                 headerText = 'Features with scenarios with missing tests...';
+                break;
+
+            case DisplayContext.DV_BACKLOG_TEST_FAIL:
+
+                headerText = 'Features with scenarios with failing tests...';
                 break;
 
             default:

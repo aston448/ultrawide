@@ -140,13 +140,16 @@ export class ProjectBacklogItem extends Component{
 
             case DisplayContext.DV_BACKLOG_TEST_FAIL:
 
-                if(featureCount === 0){
+                if(scenarioCount === 0){
                     backlogDetails = 'No backlog';
+                    itemClass = itemClass + goodClass;
                 } else {
-                    if(featureCount === 1){
-                        backlogDetails = 'One Feature has Scenarios with failing tests.';
+                    if(scenarioCount === 1){
+                        backlogDetails = 'One Scenario has failing tests.';
+                        itemClass = itemClass + badClass;
                     } else {
-                        backlogDetails = featureCount + ' Features have Scenarios with failing tests.';
+                        backlogDetails = scenarioCount + ' Scenarios have failing tests.';
+                        itemClass = itemClass + badClass;
                     }
                 }
                 break;

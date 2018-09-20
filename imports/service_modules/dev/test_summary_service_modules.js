@@ -107,6 +107,7 @@ class TestSummaryModulesClass{
         let unitTestMissingCount = 0;
         let totalTestExpectedCount = 0;
         let totalTestMissingCount = 0;
+        let totalTestFailCount = 0;
         let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
         console.log('Actual Expectations for %s are %d', scenarioReferenceId, actualExpectations.length);
@@ -132,6 +133,7 @@ class TestSummaryModulesClass{
                                 break;
                             case MashTestStatus.MASH_FAIL:
                                 accTestFailCount++;
+                                totalTestFailCount++;
                                 break;
                             default:
                                 accTestMissingCount++;
@@ -147,6 +149,7 @@ class TestSummaryModulesClass{
                                 break;
                             case MashTestStatus.MASH_FAIL:
                                 intTestFailCount++;
+                                totalTestFailCount++;
                                 break;
                             default:
                                 intTestMissingCount++;
@@ -162,6 +165,7 @@ class TestSummaryModulesClass{
                                 break;
                             case MashTestStatus.MASH_FAIL:
                                 unitTestFailCount++;
+                                totalTestFailCount++;
                                 break;
                             default:
                                 unitTestMissingCount++;
@@ -195,7 +199,7 @@ class TestSummaryModulesClass{
         });
 
         // Fail if any failures at all
-        if(accTestFailCount > 0 || intTestFailCount > 0 || unitTestFailCount > 0){
+        if(totalTestFailCount > 0){
             scenarioTestStatus = MashTestStatus.MASH_FAIL;
         } else {
             // If all expectations are passes (and there were some tests expected) its a total success
@@ -240,6 +244,7 @@ class TestSummaryModulesClass{
             unitTestMissingCount:   unitTestMissingCount,
             totalTestExpectedCount: totalTestExpectedCount,
             totalTestMissingCount:  totalTestMissingCount,
+            totalTestFailCount:     totalTestFailCount,
             scenarioTestStatus:     scenarioTestStatus,
         };
 
@@ -311,7 +316,7 @@ class TestSummaryModulesClass{
             featureScenarioCount ++;
             featureExpectedTestCount += sSum.totalTestExpectedCount;
             featurePassingTestCount += (sSum.accTestPassCount + sSum.intTestPassCount + sSum.unitTestPassCount);
-            featureFailingTestCount += (sSum.accTestFailCount + sSum.intTestFailCount + sSum.unitTestFailCount);
+            featureFailingTestCount += sSum.totalTestFailCount;
             featureMissingTestCount += sSum.totalTestMissingCount;
             if(sSum.totalTestExpectedCount === 0){
                 featureMissingExpectationCount++;

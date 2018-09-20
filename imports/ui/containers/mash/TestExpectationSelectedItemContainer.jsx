@@ -210,7 +210,7 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
 
     let designItems = [];
 
-    console.log("Selected item type is " + itemType);
+    //console.log("Selected item type is " + itemType);
 
     switch (itemType) {
 
@@ -249,7 +249,7 @@ export default TestExpectationSelectedItemContainer = createContainer(({params})
     }
 
 
-    console.log("Found " + designItems.length + " items of type " + params.childComponentType + " for item type " + itemType);
+    //console.log("Found " + designItems.length + " items of type " + params.childComponentType + " for item type " + itemType);
 
     return {
         designItems: designItems,

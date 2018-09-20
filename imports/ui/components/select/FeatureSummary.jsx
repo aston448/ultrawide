@@ -15,6 +15,7 @@ import {Grid, Row, Col, Glyphicon, Tooltip, OverlayTrigger} from 'react-bootstra
 
 // REDUX services
 import {connect} from 'react-redux';
+import {DisplayContext, MashTestStatus} from "../../../constants/constants";
 
 
 // =====================================================================================================================
@@ -39,10 +40,12 @@ export class FeatureSummary extends Component {
         let shouldUpdate = false;
 
         if(
-            nextProps.featureSummary.summaryStatus !== this.props.featureSummary.summaryStatus ||
-            nextProps.featureSummary.expectedCount !== this.props.featureSummary.expectedCount ||
-            nextProps.featureSummary.scenarioCount !== this.props.featureSummary.scenarioCount ||
-            nextProps.featureSummary.fulfilledCount !== this.props.featureSummary.fulfilledCount ||
+            nextProps.displayContext !== this.props.displayContext ||
+            nextProps.featureSummary.featureTestStatus !== this.props.featureSummary.featureTestStatus ||
+            nextProps.featureSummary.featureExpectedTestCount !== this.props.featureSummary.featureExpectedTestCount ||
+            nextProps.featureSummary.featureScenarioCount !== this.props.featureSummary.featureScenarioCount ||
+            nextProps.featureSummary.featurePassingTestCount !== this.props.featureSummary.featurePassingTestCount ||
+            nextProps.featureSummary.featureFailingTestCount !== this.props.featureSummary.featureFailingTestCount ||
             nextState.isSelectable !== this.state.isSelectable
         ){
             shouldUpdate = true;
@@ -66,7 +69,7 @@ export class FeatureSummary extends Component {
     };
 
     render() {
-        const {featureSummary, userContext, userRole} = this.props;
+        const {featureSummary, displayContext, userContext, userRole} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Feature Summary');
 
@@ -81,18 +84,18 @@ export class FeatureSummary extends Component {
 
             let testPassFailCount = 0;
 
-            if(featureSummary.summaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS){
+            if(featureSummary.featureTestStatus === MashTestStatus.MASH_FAIL){
                 resultFeatureSummary = 'feature-summary-bad';
                 resultClassFulfilled = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL;
-                testPassFailCount = featureSummary.failedCount;
+                testPassFailCount = featureSummary.featureFailingTestCount;
             } else {
-                if((featureSummary.expectedCount === featureSummary.fulfilledCount) && (featureSummary.expectedCount > 0)){
+                if((featureSummary.featureExpectedTestCount === featureSummary.featurePassingTestCount) && (featureSummary.featureExpectedTestCount > 0)){
                     resultFeatureSummary = 'feature-summary-good';
                     resultClassRequired = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
                     resultClassFulfilled = 'feature-test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
                 } else {
-                    if(featureSummary.expectedCount > 0){
-                        if(featureSummary.fulfilledCount > 0) {
+                    if(featureSummary.featureExpectedTestCount > 0){
+                        if(featureSummary.featurePassingTestCount > 0) {
                             resultFeatureSummary = 'feature-summary-mmm';
                         } else {
                             resultFeatureSummary = 'feature-summary-meh';
@@ -101,7 +104,7 @@ export class FeatureSummary extends Component {
                         resultFeatureSummary = 'feature-summary-meh';
                     }
                 }
-                testPassFailCount = featureSummary.fulfilledCount;
+                testPassFailCount = featureSummary.featurePassingTestCount;
             }
 
 
@@ -116,6 +119,12 @@ export class FeatureSummary extends Component {
             const tooltipRequired = (
                 <Tooltip id="modal-tooltip">
                     {'Number of tests required'}
+                </Tooltip>
+            );
+
+            const tooltipMissing = (
+                <Tooltip id="modal-tooltip">
+                    {'Number of tests missing'}
                 </Tooltip>
             );
 
@@ -134,47 +143,144 @@ export class FeatureSummary extends Component {
             let passFailTooltip = tooltipFulfilled;
             let passFailIcon = 'ok-sign';
 
-            if(featureSummary.summaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS){
+            if(featureSummary.featureTestStatus === MashTestStatus.MASH_FAIL){
                 passFailTooltip = tooltipFailed;
                 passFailIcon = 'remove-circle'
             }
 
+            switch(displayContext){
+                case DisplayContext.DV_BACKLOG_DESIGN:
 
-            layout =
-                <Grid onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()} className="close-grid">
-                    <Row className="feature-summary-row">
-                        <Col md={8} className="close-col">
-                            <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
-                        </Col>
-                        <Col md={1} className="close-col">
-                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>
-                                <div className={resultClassScenarios}>
-                                    <span><Glyphicon glyph="th"/></span>
-                                    <span className="summary-number">{featureSummary.scenarioCount}</span>
-                                </div>
-                            </OverlayTrigger>
-                        </Col>
-                        <Col md={1} className="close-col">
-                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipRequired}>
-                                <div className={resultClassRequired}>
-                                    <span><Glyphicon glyph="question-sign"/></span>
-                                    <span className="summary-number">{featureSummary.expectedCount}</span>
-                                </div>
-                            </OverlayTrigger>
-                        </Col>
-                        <Col md={1} className="close-col">
-                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={passFailTooltip}>
-                                <div className={resultClassFulfilled}>
-                                    <span><Glyphicon glyph={passFailIcon}/></span>
-                                    <span className="summary-number">{testPassFailCount}</span>
-                                </div>
-                            </OverlayTrigger>
-                        </Col>
-                        <Col md={1} className="close-col">
-                            <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
-                        </Col>
-                    </Row>
-                </Grid>;
+                    layout =
+                        <Grid onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()} className="close-grid">
+                            <Row className="feature-summary-row">
+                                <Col md={8} className="close-col">
+                                    <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
+                                </Col>
+                                <Col md={4} className="close-col">
+                                    <div>
+                                        This Feature has no Scenarios defined as yet...
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Grid>;
+
+                    break;
+
+                case DisplayContext.DV_BACKLOG_NO_EXP:
+
+                    layout =
+                        <Grid onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()} className="close-grid">
+                            <Row className="feature-summary-row">
+                                <Col md={8} className="close-col">
+                                    <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>
+                                        <div className={resultClassScenarios}>
+                                            <span><Glyphicon glyph="th"/></span>
+                                            <span className="summary-number">{featureSummary.featureScenarioCount}</span>
+                                        </div>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipRequired}>
+                                        <div className={resultClassRequired}>
+                                            <span><Glyphicon glyph="question-sign"/></span>
+                                            <span className="summary-number">{featureSummary.featureExpectedTestCount}</span>
+                                        </div>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
+                                </Col>
+                            </Row>
+                        </Grid>;
+
+                     break;
+
+                case DisplayContext.DV_BACKLOG_TEST_MISSING:
+
+                    layout =
+                        <Grid onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()} className="close-grid">
+                            <Row className="feature-summary-row">
+                                <Col md={8} className="close-col">
+                                    <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>
+                                        <div className={resultClassScenarios}>
+                                            <span><Glyphicon glyph="th"/></span>
+                                            <span className="summary-number">{featureSummary.featureScenarioCount}</span>
+                                        </div>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipRequired}>
+                                        <div className={resultClassRequired}>
+                                            <span><Glyphicon glyph="question-sign"/></span>
+                                            <span className="summary-number">{featureSummary.featureExpectedTestCount}</span>
+                                        </div>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMissing}>
+                                        <div className={resultClassRequired}>
+                                            <span><Glyphicon glyph="ban-circle"/></span>
+                                            <span className="summary-number">{featureSummary.featureMissingTestCount}</span>
+                                        </div>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
+                                </Col>
+                            </Row>
+                        </Grid>;
+
+                    break;
+
+                default:
+
+                    // For normal Feature summary or failing tests summary
+
+                    layout =
+                        <Grid onMouseEnter={ () => this.setSelectable()} onMouseLeave={ () => this.setUnselectable()} className="close-grid">
+                            <Row className="feature-summary-row">
+                                <Col md={8} className="close-col">
+                                    <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>
+                                        <div className={resultClassScenarios}>
+                                            <span><Glyphicon glyph="th"/></span>
+                                            <span className="summary-number">{featureSummary.featureScenarioCount}</span>
+                                        </div>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipRequired}>
+                                        <div className={resultClassRequired}>
+                                            <span><Glyphicon glyph="question-sign"/></span>
+                                            <span className="summary-number">{featureSummary.featureExpectedTestCount}</span>
+                                        </div>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={passFailTooltip}>
+                                        <div className={resultClassFulfilled}>
+                                            <span><Glyphicon glyph={passFailIcon}/></span>
+                                            <span className="summary-number">{testPassFailCount}</span>
+                                        </div>
+                                    </OverlayTrigger>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
+                                </Col>
+                            </Row>
+                        </Grid>;
+            }
 
         } else {
             layout =
@@ -184,7 +290,7 @@ export class FeatureSummary extends Component {
                             <div className="feature-small" onClick={() => this.onGoToFeature(userRole, userContext, featureSummary.featureRef)}>{featureSummary.featureName}</div>
                         </Col>
                         <Col md={4} className="close-col">
-                            <span className="test-summary-text feature-no-highlight">No test data yet</span>
+                            <span className="test-summary-text feature-no-highlight">No summary data yet</span>
                         </Col>
                     </Row>
                 </Grid>;
@@ -206,7 +312,8 @@ export class FeatureSummary extends Component {
 }
 
 FeatureSummary.propTypes = {
-    featureSummary: PropTypes.object.isRequired
+    featureSummary: PropTypes.object.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

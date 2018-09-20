@@ -65,7 +65,7 @@ class ScenarioTestSummary extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Summary {} ', scenario.componentNameNew);
 
-        console.log('Test summary data is %o', testSummaryData);
+        //console.log('Test summary data is %o', testSummaryData);
 
         // Display test expectation options controls
         let accExpectationClass = this.state.accExpectation ? 'test-expected' : 'test-not-expected';

@@ -95,15 +95,9 @@ class ScenariosList extends Component {
 
             return components.map((scenario) => {
 
-                console.log('Rendering Scenario %s', scenario.componentNameNew);
-                //let testSummaryData = null;
-
                 const uiItemId = replaceAll(scenario.componentNameNew, ' ', '_');
                 const uiParentId = replaceAll(this.getParentName(scenario), ' ', '_');
 
-                // if(testSummary) {
-                //     testSummaryData = ClientDataServices.getTestSummaryData(scenario);
-                // }
 
                 let updateItem = this.getDesignUpdateItem(scenario, displayContext, userContext.designUpdateId);
                 let wpItem = this.getWpItem(scenario, userContext.workPackageId);
@@ -127,7 +121,6 @@ class ScenariosList extends Component {
                         isDragDropHovering={false}
                         displayContext={displayContext}
                         testSummary={testSummary}
-                        //testSummaryData={testSummaryData}
                     />
                 );
             });
