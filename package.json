@@ -37,6 +37,7 @@
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",
     "classnames": "^2.2.5",
+    "core-js": "^2.5.7",
     "draft-js": "^0.8.1",
     "meteor-node-stubs": "^0.2.11",
     "officegen": "^0.4.5",
