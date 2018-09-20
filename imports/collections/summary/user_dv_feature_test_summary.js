@@ -6,15 +6,16 @@ import {MashTestStatus} from "../../constants/constants";
 export const UserDvFeatureTestSummary = new Mongo.Collection('userDvFeatureTestSummary');
 
 let Schema = new SimpleSchema({
-    userId:                     {type: String, index: 1},
-    designVersionId:            {type: String, index: 1},
-    featureReferenceId:         {type: String, index: 1},
-    featureScenarioCount:       {type: Number, defaultValue: 0},
-    featureExpectedTestCount:   {type: Number, defaultValue: 0},
-    featurePassingTestCount:    {type: Number, defaultValue: 0},
-    featureFailingTestCount:    {type: Number, defaultValue: 0},
-    featureMissingTestCount:    {type: Number, defaultValue: 0},
-    featureTestStatus:          {type: String, defaultValue: MashTestStatus.MASH_NOT_LINKED}
+    userId:                         {type: String, index: 1},
+    designVersionId:                {type: String, index: 1},
+    featureReferenceId:             {type: String, index: 1},
+    featureScenarioCount:           {type: Number, defaultValue: 0},
+    featureExpectedTestCount:       {type: Number, defaultValue: 0},
+    featurePassingTestCount:        {type: Number, defaultValue: 0},
+    featureFailingTestCount:        {type: Number, defaultValue: 0},
+    featureMissingTestCount:        {type: Number, defaultValue: 0},
+    featureMissingExpectationCount: {type: Number, defaultValue: 0},
+    featureTestStatus:              {type: String, defaultValue: MashTestStatus.MASH_NOT_LINKED}
 });
 
 UserDvFeatureTestSummary.attachSchema(Schema);

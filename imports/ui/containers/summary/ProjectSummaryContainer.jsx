@@ -8,7 +8,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ProjectSummaryItem           from '../../components/summary/ProjectSummaryItem.jsx';
+import ProjectBacklogItem           from '../../components/summary/BacklogItem.jsx';
 import FeatureSummaryContainer      from '../../containers/select/FeatureSummaryContainer.jsx';
 
 // Ultrawide Services
@@ -24,7 +24,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import store from '../../../redux/store'
 import {
-    setCurrentUserSummaryItem
+    setCurrentUserBacklogItem
 } from '../../../redux/actions'
 
 
@@ -54,69 +54,67 @@ export class ProjectSummary extends Component {
 
         this.setState({displayContext: displayContext});
 
-        store.dispatch(setCurrentUserSummaryItem(displayContext));
+        store.dispatch(setCurrentUserBacklogItem(displayContext));
     }
 
 
     render() {
 
-        const {designVersionName, totalFeatureCount, noTestRequirementsCount, missingTestRequirementsCount, failingTestsCount, someTestsCount, allTestsCount, testsCount, userContext} = this.props;
+        const {designVersionName, dvTotalFeatureCount, dvTotalScenarioCount, dvExpectedTestCount, dvPassingTestCount, dvNoTestExpectationsCount, dvMissingTestCount, dvFailingTestsCount, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Project Summary');
 
         const layout =
             <Grid>
                 <Row>
-                    <Col md={9}>
+                    <Col md={4}>
                         <div className="project-summary-header">{designVersionName}</div>
                     </Col>
-                    <Col md={3}>
-                        <div className="project-summary-features">{totalFeatureCount + ' FEATURES'}</div>
+                    <Col md={2}>
+                        <div className="project-summary-features">{dvTotalFeatureCount + ' FEATURES'}</div>
+                    </Col>
+                    <Col md={2}>
+                        <div className="project-summary-features">{dvTotalScenarioCount + ' SCENARIOS'}</div>
+                    </Col>
+                    <Col md={2}>
+                        <div className="project-summary-tests">{dvExpectedTestCount + ' TESTS EXPECTED'}</div>
+                    </Col>
+                    <Col md={2}>
+                        <div className="project-summary-tests">{dvPassingTestCount + ' TESTS PASSING'}</div>
                     </Col>
                 </Row>
                 <Row>
                     <Col md={4}>
-                        <ProjectSummaryItem
-                            displayContext={DisplayContext.PROJECT_SUMMARY_NONE}
-                            totalFeatureCount={totalFeatureCount}
-                            featureCount={noTestRequirementsCount}
-                            testsCount={testsCount}
-                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_NONE)}
+                        <ProjectBacklogItem
+                            displayContext={DisplayContext.DV_BACKLOG_DESIGN}
+                            totalFeatureCount={dvTotalFeatureCount}
+                            featureCount={0}
+                            scenarioCount={0}
+                            testCount={0}
+                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.DV_BACKLOG_DESIGN)}
                         />
-                        <ProjectSummaryItem
-                            displayContext={DisplayContext.PROJECT_SUMMARY_MISSING}
-                            totalFeatureCount={totalFeatureCount}
-                            featureCount={missingTestRequirementsCount}
-                            testsCount={testsCount}
-                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_MISSING)}
+                        <ProjectBacklogItem
+                            displayContext={DisplayContext.DV_BACKLOG_NO_EXP}
+                            totalFeatureCount={dvTotalFeatureCount}
+                            featureCount={0}
+                            scenarioCount={dvNoTestExpectationsCount}
+                            testCount={0}
+                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.DV_BACKLOG_NO_EXP)}
                         />
-                        <ProjectSummaryItem
-                            displayContext={DisplayContext.PROJECT_SUMMARY_FAIL}
-                            totalFeatureCount={totalFeatureCount}
-                            featureCount={failingTestsCount}
-                            testsCount={testsCount}
-                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_FAIL)}
-                        />
-                        <ProjectSummaryItem
-                            displayContext={DisplayContext.PROJECT_SUMMARY_SOME}
-                            totalFeatureCount={totalFeatureCount}
-                            featureCount={someTestsCount}
-                            testsCount={testsCount}
-                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_SOME)}
-                        />
-                        <ProjectSummaryItem
-                            displayContext={DisplayContext.PROJECT_SUMMARY_ALL}
-                            totalFeatureCount={totalFeatureCount}
-                            featureCount={allTestsCount}
-                            testsCount={testsCount}
-                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.PROJECT_SUMMARY_ALL)}
+                        <ProjectBacklogItem
+                            displayContext={DisplayContext.DV_BACKLOG_TEST_MISSING}
+                            totalFeatureCount={dvTotalFeatureCount}
+                            featureCount={0}
+                            scenarioCount={dvMissingTestCount}
+                            testCount={0}
+                            selectionFunction={() => this.onSummaryItemSelect(DisplayContext.DV_BACKLOG_TEST_MISSING)}
                         />
                     </Col>
                     <Col md={8} >
                         <FeatureSummaryContainer params={{
                             userContext: userContext,
                             homePageTab: HomePageTab.TAB_SUMMARY,
-                            displayContext: store.getState().currentUserSummaryItem
+                            displayContext: store.getState().currentUserBacklogItem
                         }}/>
                     </Col>
                 </Row>
@@ -132,13 +130,13 @@ export class ProjectSummary extends Component {
 
 ProjectSummary.propTypes = {
     designVersionName: PropTypes.string.isRequired,
-    totalFeatureCount: PropTypes.number.isRequired,
-    noTestRequirementsCount: PropTypes.number.isRequired,
-    missingTestRequirementsCount: PropTypes.number.isRequired,
-    failingTestsCount: PropTypes.number.isRequired,
-    someTestsCount: PropTypes.number.isRequired,
-    allTestsCount: PropTypes.number.isRequired,
-    testsCount: PropTypes.number.isRequired
+    dvTotalFeatureCount: PropTypes.number.isRequired,
+    dvTotalScenarioCount: PropTypes.number.isRequired,
+    dvExpectedTestCount: PropTypes.number.isRequired,
+    dvPassingTestCount: PropTypes.number.isRequired,
+    dvNoTestExpectationsCount: PropTypes.number.isRequired,
+    dvMissingTestCount: PropTypes.number.isRequired,
+    dvFailingTestsCount: PropTypes.number.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -151,18 +149,21 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default ProjectSummaryContainer = createContainer(({params}) => {
 
-    //return ClientDataServices.getProjectSummaryData(params.userContext);
+    const dvSummary = ClientDataServices.getDvSummaryData(params.userContext);
+
+    console.log('No exp count = ' + dvSummary.dvNoTestExpectationsCount);
 
     //TODO access from new summary data
     return  {
-        designVersionName: 'Temp',
-        totalFeatureCount: 0,
-        noTestRequirementsCount: 0,
-        missingTestRequirementsCount: 0,
+        designVersionName: dvSummary.designVersionName,
+        dvTotalFeatureCount: dvSummary.dvFeatureCount,
+        dvTotalScenarioCount: dvSummary.dvScenarioCount,
+        dvExpectedTestCount: dvSummary.dvExpectedTestCount,
+        dvPassingTestCount: dvSummary.dvPassingTestCount,
+        dvNoTestExpectationsCount: dvSummary.dvNoTestExpectationsCount,
+        dvMissingTestCount: dvSummary.dvMissingTestCount,
         failingTestsCount: 0,
-        someTestsCount: 0,
-        allTestsCount: 0,
-        testsCount: 0
+        dvFailingTestsCount: 0
     }
 
 }, connect(mapStateToProps)(ProjectSummary));

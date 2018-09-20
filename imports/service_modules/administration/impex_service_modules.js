@@ -568,52 +568,59 @@ class ImpexModulesClass{
         let designComponentBatch = [];
 
         newDesignComponentData.forEach((component) => {
-            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Component {} - {}", component.componentType, component.componentNameNew);
 
-            let designId = getIdFromMap(designsMapping, component.designId);
-            let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
-            let workPackageId = getIdFromMap(workPackagesMapping, component.workPackageId);
+            // Remove invalid data
+            if(component.componentType === ComponentType.SCENARIO && component.componentParentReferenceIdNew === 'NONE'){
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Removing Invalid Design Component {} - {}", component.componentType, component.componentNameNew);
+            } else {
 
-            designComponentBatch.push(
-                {
-                    // Identity
-                    componentReferenceId:           component.componentReferenceId,
-                    designId:                       designId,                               // Will be a new id for the restored data
-                    designVersionId:                designVersionId,                        // Ditto
-                    componentType:                  component.componentType,
-                    componentLevel:                 component.componentLevel,
+                log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Component {} - {}", component.componentType, component.componentNameNew);
 
-                    componentParentReferenceIdOld:  component.componentParentReferenceIdOld,
-                    componentParentReferenceIdNew:  component.componentParentReferenceIdNew,
-                    componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
-                    componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
-                    componentIndexOld:              component.componentIndexNew,
-                    componentIndexNew:              component.componentIndexNew,
+                let designId = getIdFromMap(designsMapping, component.designId);
+                let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
+                let workPackageId = getIdFromMap(workPackagesMapping, component.workPackageId);
 
-                    // Data
-                    componentNameOld:               component.componentNameOld,
-                    componentNameNew:               component.componentNameNew,
-                    componentNameRawOld:            component.componentNameRawOld,
-                    componentNameRawNew:            component.componentNameRawNew,
-                    componentNarrativeOld:          component.componentNarrativeOld,
-                    componentNarrativeNew:          component.componentNarrativeNew,
-                    componentNarrativeRawOld:       component.componentNarrativeRawOld,
-                    componentNarrativeRawNew:       component.componentNarrativeRawNew,
-                    componentTextRawOld:            component.componentTextRawOld,
-                    componentTextRawNew:            component.componentTextRawNew,
+                designComponentBatch.push(
+                    {
+                        // Identity
+                        componentReferenceId: component.componentReferenceId,
+                        designId: designId,                               // Will be a new id for the restored data
+                        designVersionId: designVersionId,                        // Ditto
+                        componentType: component.componentType,
+                        componentLevel: component.componentLevel,
 
-                    // State (shared and persistent only)
-                    isNew:                          component.isNew,
-                    workPackageId:                  workPackageId,
-                    updateMergeStatus:              component.updateMergeStatus,
-                    isDevUpdated:                   component.isDevUpdated,
-                    isDevAdded:                     component.isDevAdded,
+                        componentParentReferenceIdOld: component.componentParentReferenceIdOld,
+                        componentParentReferenceIdNew: component.componentParentReferenceIdNew,
+                        componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
+                        componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
+                        componentIndexOld: component.componentIndexNew,
+                        componentIndexNew: component.componentIndexNew,
 
-                    isRemovable:                    component.isRemovable
-                }
-            );
+                        // Data
+                        componentNameOld: component.componentNameOld,
+                        componentNameNew: component.componentNameNew,
+                        componentNameRawOld: component.componentNameRawOld,
+                        componentNameRawNew: component.componentNameRawNew,
+                        componentNarrativeOld: component.componentNarrativeOld,
+                        componentNarrativeNew: component.componentNarrativeNew,
+                        componentNarrativeRawOld: component.componentNarrativeRawOld,
+                        componentNarrativeRawNew: component.componentNarrativeRawNew,
+                        componentTextRawOld: component.componentTextRawOld,
+                        componentTextRawNew: component.componentTextRawNew,
 
-            componentCount++;
+                        // State (shared and persistent only)
+                        isNew: component.isNew,
+                        workPackageId: workPackageId,
+                        updateMergeStatus: component.updateMergeStatus,
+                        isDevUpdated: component.isDevUpdated,
+                        isDevAdded: component.isDevAdded,
+
+                        isRemovable: component.isRemovable
+                    }
+                );
+
+                componentCount++;
+            }
         });
 
         // Bulk insert the lot for efficiency

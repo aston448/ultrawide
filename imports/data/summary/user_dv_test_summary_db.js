@@ -37,6 +37,8 @@ class UserDvTestSummaryDataClass {
             unitTestPassCount:          summaryData.unitTestPassCount,
             unitTestFailCount:          summaryData.unitTestFailCount,
             unitTestMissingCount:       summaryData.unitTestMissingCount,
+            totalTestExpectedCount:     summaryData.totalTestExpectedCount,
+            totalTestMissingCount:      summaryData.totalTestMissingCount,
             scenarioTestStatus:         summaryData.scenarioTestStatus
         });
     }
@@ -44,15 +46,16 @@ class UserDvTestSummaryDataClass {
     insertFeatureTestSummary(summaryData){
 
         return UserDvFeatureTestSummary.insert({
-            userId:                     summaryData.userId,
-            designVersionId:            summaryData.designVersionId,
-            featureReferenceId:         summaryData.featureReferenceId,
-            featureScenarioCount:       summaryData.featureScenarioCount,
-            featureExpectedTestCount:   summaryData.featureExpectedTestCount,
-            featurePassingTestCount:    summaryData.featurePassingTestCount,
-            featureFailingTestCount:    summaryData.featureFailingTestCount,
-            featureMissingTestCount:    summaryData.featureMissingTestCount,
-            featureTestStatus:          summaryData.featureTestStatus
+            userId:                         summaryData.userId,
+            designVersionId:                summaryData.designVersionId,
+            featureReferenceId:             summaryData.featureReferenceId,
+            featureScenarioCount:           summaryData.featureScenarioCount,
+            featureExpectedTestCount:       summaryData.featureExpectedTestCount,
+            featurePassingTestCount:        summaryData.featurePassingTestCount,
+            featureFailingTestCount:        summaryData.featureFailingTestCount,
+            featureMissingTestCount:        summaryData.featureMissingTestCount,
+            featureMissingExpectationCount: summaryData.featureMissingExpectationCount,
+            featureTestStatus:              summaryData.featureTestStatus
         });
     }
 
@@ -105,6 +108,58 @@ class UserDvTestSummaryDataClass {
             userId:                 userId,
             designVersionId:        designVersionId
         }).fetch();
+    }
+
+    getDesignVersionTestSummary(userId, designVersionId){
+
+        return UserDvTestSummary.findOne({
+            userId:             userId,
+            designVersionId:    designVersionId
+        });
+    }
+
+    getScenariosWithNoTestExpectations(userId, designVersionId){
+
+        return UserDvScenarioTestSummary.find(
+            {
+                userId:             userId,
+                designVersionId:    designVersionId,
+                totalTestExpectedCount: 0
+            }, {fields: {_id: 1, scenarioReferenceId: 1, featureReferenceId: 1}}
+        ).fetch();
+    }
+
+    getFeaturesWithScenariosWithNoTestExpectations(userId, designVersionId){
+
+        return UserDvFeatureTestSummary.find(
+            {
+                userId:                         userId,
+                designVersionId:                designVersionId,
+                featureMissingExpectationCount: {$gt: 0}
+            }
+        ).fetch();
+    }
+
+    getScenariosWithMissingTests(userId, designVersionId){
+
+        return UserDvScenarioTestSummary.find(
+            {
+                userId:             userId,
+                designVersionId:    designVersionId,
+                totalTestMissingCount: {$gt: 0}
+            }, {fields: {_id: 1, scenarioReferenceId: 1, featureReferenceId: 1}}
+        ).fetch();
+    }
+
+    getFeaturesWithScenariosWithMissingTests(userId, designVersionId){
+
+        return UserDvFeatureTestSummary.find(
+            {
+                userId:                         userId,
+                designVersionId:                designVersionId,
+                featureMissingTestCount:        {$gt: 0}
+            }
+        ).fetch();
     }
 
 

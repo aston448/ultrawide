@@ -90,29 +90,14 @@ export class FeaturesList extends Component {
 
         switch(displayContext){
 
-            case DisplayContext.PROJECT_SUMMARY_NONE:
+            case DisplayContext.DV_BACKLOG_NO_EXP:
 
-                headerText = 'Features with no test requirements...';
+                headerText = 'Features with scenarios without test expectations...';
                 break;
 
-            case DisplayContext.PROJECT_SUMMARY_MISSING:
+            case DisplayContext.DV_BACKLOG_TEST_MISSING:
 
-                headerText = 'Features with scenarios without test requirements...';
-                break;
-
-            case DisplayContext.PROJECT_SUMMARY_FAIL:
-
-                headerText = 'Features with failing tests...';
-                break;
-
-            case DisplayContext.PROJECT_SUMMARY_SOME:
-
-                headerText = 'Features with some tests passing...';
-                break;
-
-            case DisplayContext.PROJECT_SUMMARY_ALL:
-
-                headerText = 'Features with all required tests passing...';
+                headerText = 'Features with scenarios with missing tests...';
                 break;
 
             default:
@@ -168,15 +153,15 @@ export default FeatureSummaryContainer = createContainer(({params}) => {
     //console.log('Feature Summary Container with context ' + params.displayContext);
 
     // Gets the currently saved user context and a list of known Designs
-    //return ClientDataServices.getDesignVersionFeatureSummaries(params.userContext, params.homePageTab, params.displayContext);
+    const featureSummaries = ClientDataServices.getDesignVersionFeatureSummaries(params.userContext, params.homePageTab, params.displayContext);
 
     //TODO - link this to new feature summary data
     return {
-        featureSummaries: [],
-        designVersionName: 'NONE',
-        workPackageName: 'NONE',
-        homePageTab: HomePageTab.TAB_DESIGNS,
-        displayContext: DisplayContext.PROGRESS_SUMMARY
+        featureSummaries: featureSummaries.summaryData,
+        designVersionName: featureSummaries.designVersionName,
+        workPackageName: featureSummaries.workPackageName,
+        homePageTab: featureSummaries.homePageTab,
+        displayContext: featureSummaries.displayContext
     };
 
 }, connect(mapStateToProps)(FeaturesList));

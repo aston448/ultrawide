@@ -103,6 +103,19 @@ class TextLookupsClass {
         }
     }
 
+    displayContext(displayContext){
+        switch(displayContext){
+            case DisplayContext.DV_BACKLOG_DESIGN:
+                return 'Design Features Scenario Backlog';
+            case DisplayContext.DV_BACKLOG_NO_EXP:
+                return 'Scenario Test Expectations Backlog';
+            case DisplayContext.DV_BACKLOG_TEST_MISSING:
+                return 'Scenario Missing Tests Backlog';
+            case DisplayContext.DV_BACKLOG_TEST_FAIL:
+                return 'Scenario Failing Tests Backlog'
+        }
+    }
+
     ultrawideAction(action){
 
         switch(action){

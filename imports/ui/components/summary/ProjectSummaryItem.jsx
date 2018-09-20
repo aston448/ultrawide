@@ -279,7 +279,7 @@ ProjectSummaryItem.propTypes = {
 function mapStateToProps(state) {
     return {
         userRole: state.currentUserRole,
-        currentSummaryItem: state.currentUserSummaryItem
+        currentSummaryItem: state.currentUserBacklogItem
     }
 }
 

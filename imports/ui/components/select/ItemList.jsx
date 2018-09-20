@@ -109,7 +109,7 @@ ItemList.propTypes = {
 function mapStateToProps(state) {
     return {
         userContext: state.currentUserItemContext,
-        summaryItem: state.currentUserSummaryItem,
+        summaryItem: state.currentUserBacklogItem,
         testLocation: state.currentUserTestOutputLocationId,
         view: state.currentAppView
     }

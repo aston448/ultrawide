@@ -22,6 +22,8 @@ let Schema = new SimpleSchema({
     unitTestPassCount:          {type: Number, defaultValue: 0},
     unitTestFailCount:          {type: Number, defaultValue: 0},
     unitTestMissingCount:       {type: Number, defaultValue: 0},
+    totalTestExpectedCount:     {type: Number, defaultValue: 0},
+    totalTestMissingCount:      {type: Number, defaultValue: 0},
     scenarioTestStatus:         {type: String, defaultValue: MashTestStatus.MASH_NOT_LINKED}
 });
 

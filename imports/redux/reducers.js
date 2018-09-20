@@ -42,7 +42,7 @@ const initialState = {
     currentUserUpdateTab:               EditorTab.TAB_DETAILS,
     currentUserWpTab:                   EditorTab.TAB_DETAILS,
     currentUserDevTab:                  EditorTab.TAB_DETAILS,
-    currentUserSummaryItem:             DisplayContext.PROJECT_SUMMARY_ALL,
+    currentUserBacklogItem:             DisplayContext.DV_BACKLOG_DESIGN,
     currentUserTestOutputLocationId:    'NONE',
     currentUserDesignPermutationId:     'NONE',
     currentUserPermutationValueId:      'NONE',
@@ -185,9 +185,9 @@ export function myApplication(state = initialState, action) {
             return Object.assign({}, state, {
                 currentUserDevTab: action.newTab
             });
-        case Actions.SET_CURRENT_USER_SUMMARY_ITEM:
+        case Actions.SET_CURRENT_USER_BACKLOG_ITEM:
             return Object.assign({}, state, {
-                currentUserSummaryItem: action.newItem
+                currentUserBacklogItem: action.newItem
             });
         case Actions.SET_CURRENT_USER_TEST_OUTPUT_LOCATION:
             return Object.assign({}, state, {

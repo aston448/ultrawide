@@ -692,12 +692,12 @@ input {
 
 .project-summary-header{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  24px;
+    font-size:  26px;
     font-weight: normal;
     letter-spacing: 4px;
     margin: 5px;
     padding: 5px 10px 5px 10px;
-    color: black;
+    color: darkred;
     height: 50px;
     background-color: white;
     border: 1px solid lightgrey;
@@ -709,10 +709,25 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  18px;
     font-weight: normal;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     margin: 5px;
     padding: 12px 10px 10px 10px;
     color: black;
+    height: 50px;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
+}
+
+.project-summary-tests{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    margin: 5px;
+    padding: 12px 10px 10px 10px;
+    color: blue;
     height: 50px;
     background-color: white;
     border: 1px solid lightgrey;
@@ -727,7 +742,20 @@ input {
 
 .summary-hand{
     font-size:  20px;
-    padding: 5px 10px 0 0;
+    padding: 5px 5px 0 0;
+    text-align: right;
+}
+
+.backlog-title{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    padding: 5px 5px 0 0;
+    font-size:  20px;
+}
+
+.backlog-details{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    padding: 5px 5px 0 0;
+    font-size:  16px;
 }
 
 .project-summary-item{

@@ -32,7 +32,7 @@ export const SET_CURRENT_USER_DESIGN_TAB = 'SET_CURRENT_USER_DESIGN_TAB';
 export const SET_CURRENT_USER_UPDATE_TAB = 'SET_CURRENT_USER_UPDATE_TAB';
 export const SET_CURRENT_USER_WP_TAB = 'SET_CURRENT_USER_WP_TAB';
 export const SET_CURRENT_USER_DEV_TAB = 'SET_CURRENT_USER_DEV_TAB';
-export const SET_CURRENT_USER_SUMMARY_ITEM = 'SET_CURRENT_USER_SUMMARY_ITEM';
+export const SET_CURRENT_USER_BACKLOG_ITEM = 'SET_CURRENT_USER_BACKLOG_ITEM';
 export const SET_CURRENT_USER_TEST_OUTPUT_LOCATION = 'SET_CURRENT_USER_TEST_OUTPUT_LOCATION';
 export const SET_CURRENT_USER_DESIGN_PERMUTATION = 'SET_CURRENT_USER_DESIGN_PERMUTATION';
 export const SET_CURRENT_USER_PERMUTATION_VALUE = 'SET_CURRENT_USER_PERMUTATION_VALUE';
@@ -333,11 +333,11 @@ export function setCurrentUserDevTab(tab){
     };
 }
 
-export function setCurrentUserSummaryItem(item){
+export function setCurrentUserBacklogItem(item){
 
     return function (dispatch) {
 
-        dispatch({type: SET_CURRENT_USER_SUMMARY_ITEM, newItem: item});
+        dispatch({type: SET_CURRENT_USER_BACKLOG_ITEM, newItem: item});
 
     };
 }

@@ -56,6 +56,7 @@ import {DesignPermutationValueData} from "../data/design/design_permutation_valu
 import {ScenarioTestExpectationData} from "../data/design/scenario_test_expectations_db";
 import {MashTestStatus, TestType} from "../constants/constants";
 import {UserDvScenarioTestExpectationStatusData} from "../data/mash/user_dv_scenario_test_expectation_status_db";
+import {UserDvTestSummary} from "../collections/summary/user_dv_test_summary";
 
 
 // =====================================================================================================================
@@ -872,6 +873,7 @@ class ClientDataServicesClass{
 
         let featureSummaries = [];
         let features = [];
+        let scenarios = [];
         let featureSummary = {};
 
         if(homePageTab === HomePageTab.TAB_SUMMARY){
@@ -880,7 +882,7 @@ class ClientDataServicesClass{
             if (userContext.designVersionId === 'NONE') {
 
                 return {
-                    featureSummaries: featureSummaries,
+                    summaryData: featureSummaries,
                     designVersionName: 'NONE',
                     workPackageName: 'NONE',
                     homePageTab: HomePageTab.TAB_SUMMARY,
@@ -891,30 +893,40 @@ class ClientDataServicesClass{
 
                 switch(displayContext){
 
-                    case DisplayContext.PROJECT_SUMMARY_NONE:
+                    case DisplayContext.DV_BACKLOG_NO_EXP:
 
-                        features = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
+                        features = UserDvTestSummaryData.getFeaturesWithScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId);
                         break;
 
-                    case DisplayContext.PROJECT_SUMMARY_MISSING:
+                    case DisplayContext.DV_BACKLOG_TEST_MISSING:
 
-                        features = UserDvTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId);
+                        features = UserDvTestSummaryData.getFeaturesWithScenariosWithMissingTests(userContext.userId, userContext.designVersionId);
                         break;
 
-                    case DisplayContext.PROJECT_SUMMARY_FAIL:
-
-                        features = UserDvTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId);
-                        break;
-
-                    case DisplayContext.PROJECT_SUMMARY_SOME:
-
-                        features = UserDvTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId);
-                        break;
-
-                    case DisplayContext.PROJECT_SUMMARY_ALL:
-
-                        features = UserDvTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId);
-                        break;
+                    // case DisplayContext.PROJECT_SUMMARY_NONE:
+                    //
+                    //     features = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
+                    //     break;
+                    //
+                    // case DisplayContext.PROJECT_SUMMARY_MISSING:
+                    //
+                    //     features = UserDvTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId);
+                    //     break;
+                    //
+                    // case DisplayContext.PROJECT_SUMMARY_FAIL:
+                    //
+                    //     features = UserDvTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId);
+                    //     break;
+                    //
+                    // case DisplayContext.PROJECT_SUMMARY_SOME:
+                    //
+                    //     features = UserDvTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId);
+                    //     break;
+                    //
+                    // case DisplayContext.PROJECT_SUMMARY_ALL:
+                    //
+                    //     features = UserDvTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId);
+                    //     break;
 
                 }
 
@@ -927,11 +939,11 @@ class ClientDataServicesClass{
                         featureName: feature.componentNameNew,
                         featureRef: feature.componentReferenceId,
                         hasTestData: true,
-                        summaryStatus: featureTestSummary.featureSummaryStatus,
+                        summaryStatus: featureTestSummary.featureTestStatus,
                         scenarioCount: featureTestSummary.featureScenarioCount,
                         expectedCount: featureTestSummary.featureExpectedTestCount,
-                        fulfilledCount: featureTestSummary.featureFulfilledTestCount,
-                        failedCount: featureTestSummary.featureTestFailCount
+                        fulfilledCount: featureTestSummary.featurePassingTestCount,
+                        failedCount: featureTestSummary.featureFailingTestCount
                     };
 
                     featureSummaries.push(featureSummary);
@@ -941,7 +953,7 @@ class ClientDataServicesClass{
                 const dv1 = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
                 return {
-                    featureSummaries: featureSummaries,
+                    summaryData: featureSummaries,
                     designVersionName: dv1.designVersionName,
                     workPackageName: 'NONE',
                     homePageTab: homePageTab,
@@ -955,7 +967,7 @@ class ClientDataServicesClass{
             if (userContext.designVersionId === 'NONE') {
 
                 return {
-                    featureSummaries: featureSummaries,
+                    summaryData: featureSummaries,
                     designVersionName: 'NONE',
                     workPackageName: 'NONE',
                     homePageTab: HomePageTab.TAB_DESIGNS,
@@ -999,21 +1011,20 @@ class ClientDataServicesClass{
 
                 features.forEach((feature) => {
 
-                    const mashData = UserDvTestSummaryData.getTestSummaryForFeature(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
+                    const featureSummaryData = UserDvTestSummaryData.getFeatureSummary(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
 
-
-
-                    if (mashData) {
+                    if (featureSummaryData) {
 
                         featureSummary = {
                             _id: feature._id,
                             featureName: feature.componentNameNew,
                             featureRef: feature.componentReferenceId,
                             hasTestData: true,
-                            summaryStatus: mashData.featureSummaryStatus,
-                            scenarioCount: mashData.featureScenarioCount,
-                            expectedCount: mashData.featureExpectedTestCount,
-                            fulfilledCount: mashData.featureFulfilledTestCount
+                            summaryStatus: featureSummaryData.featureTestStatus,
+                            scenarioCount: featureSummaryData.featureScenarioCount,
+                            expectedCount: featureSummaryData.featureExpectedTestCount,
+                            fulfilledCount: featureSummaryData.featurePassingTestCount,
+                            failedCount: featureSummaryData.featureFailingTestCount
                         };
 
                     } else {
@@ -1026,7 +1037,8 @@ class ClientDataServicesClass{
                             summaryStatus: 'NONE',
                             scenarioCount: 0,
                             expectedCount: 0,
-                            fulfilledCount: 0
+                            fulfilledCount: 0,
+                            failedCount: 0
                         };
 
                     }
@@ -1037,7 +1049,7 @@ class ClientDataServicesClass{
                 if (dv2) {
 
                     return {
-                        featureSummaries: featureSummaries,
+                        summaryData: featureSummaries,
                         designVersionName: dv2.designVersionName,
                         workPackageName: wpName,
                         homePageTab: homePageTab,
@@ -1046,7 +1058,7 @@ class ClientDataServicesClass{
                 } else {
 
                     return {
-                        featureSummaries: featureSummaries,
+                        summaryData: featureSummaries,
                         designVersionName: 'NONE',
                         workPackageName: 'NONE',
                         homePageTab: HomePageTab.TAB_DESIGNS,
@@ -2842,6 +2854,50 @@ class ClientDataServicesClass{
     getDefaultFeatureAspects(designId){
 
         return DefaultFeatureAspectData.getDefaultAspectsForDesign(designId);
+    }
+
+    getDvSummaryData(userContext){
+
+        // DV Name
+        let designVersionName = 'No Design Version Selected';
+        let dvFeatureCount = 0;
+        let dvScenarioCount = 0;
+        let dvExpectedTestCount = 0;
+        let dvPassingTestCount = 0;
+        let dvNoTestExpectationsScenarioCount = 0;
+        let dvMissingTestScenarioCount = 0;
+
+        const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+
+        if(designVersion) {
+
+            designVersionName = designVersion.designVersionName;
+
+            const dvSummary = UserDvTestSummaryData.getDesignVersionTestSummary(
+                userContext.userId,
+                userContext.designVersionId
+            );
+
+            if(dvSummary){
+                dvFeatureCount = dvSummary.dvFeatureCount;
+                dvScenarioCount = dvSummary.dvScenarioCount;
+                dvExpectedTestCount = dvSummary.dvExpectedTestCount;
+                dvPassingTestCount = dvSummary.dvPassingTestCount
+            }
+
+            dvNoTestExpectationsScenarioCount = UserDvTestSummaryData.getScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId).length;
+            dvMissingTestScenarioCount = UserDvTestSummaryData.getScenariosWithMissingTests(userContext.userId, userContext.designVersionId).length;
+        }
+
+        return{
+            designVersionName:          designVersionName,
+            dvFeatureCount:             dvFeatureCount,
+            dvScenarioCount:            dvScenarioCount,
+            dvExpectedTestCount:        dvExpectedTestCount,
+            dvPassingTestCount:         dvPassingTestCount,
+            dvNoTestExpectationsCount:  dvNoTestExpectationsScenarioCount,
+            dvMissingTestCount:         dvMissingTestScenarioCount
+        }
     }
 
     getProjectSummaryData(userContext){
