@@ -10,6 +10,7 @@ export const Validation = {
 export const ImpExValidationErrors = {
     RESTORE_DESIGN_INVALID_ROLE:                'Only the admin user can restore a Design',
     ARCHIVE_DESIGN_INVALID_ROLE:                'Only the admin user can archive a Design',
+    REBASE_DESIGN_INVALID_ROLE:                 'Only the admin user can rebase a Design Version',
     BACKUP_DESIGN_INVALID_STATUS_ARCHIVED:      'Archived Designs cannot be backed up',
     ARCHIVE_DESIGN_INVALID_STATUS_REMOVABLE:    'Removable Designs cannot be archived'
 };

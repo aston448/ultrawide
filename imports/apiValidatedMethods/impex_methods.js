@@ -87,3 +87,30 @@ export const archiveDesign = new ValidatedMethod({
         }
     }
 });
+
+export const rebaseDesignVersion = new ValidatedMethod({
+
+    name: 'impex.rebaseDesignVersion',
+
+    validate: new SimpleSchema({
+        designId:           {type: String},
+        designVersionId:    {type: String},
+        userId:             {type: String}
+    }).validator(),
+
+    run({designId, designVersionId, userId}){
+
+        const result = ImpExValidationApi.validateRebaseDesignVersion(userId);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('impex.rebaseDesignVersion.failValidation', result)
+        }
+
+        try {
+            ImpExServices.exportDesignVersionAsNewBaseDesign(designId, designVersionId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});

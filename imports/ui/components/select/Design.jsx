@@ -51,6 +51,10 @@ export default class Design extends Component {
         ClientImpExServices.archiveDesign(designId, userContext.userId)
     }
 
+    onRebaseDesign(userContext, designId){
+        ClientImpExServices.rebaseDesignVersion(designId, userContext.userId)
+    }
+
     onShowModal(){
         this.setState({showModal: true});
     }
@@ -77,6 +81,9 @@ export default class Design extends Component {
 
         const archiveButton =
             <Button id={getContextID(UI.BUTTON_ARCHIVE, uiName)} bsSize="xs" onClick={ () => this.onShowModal()} >Archive Design</Button>;
+
+        const rebaseButton =
+            <Button id={getContextID(UI.BUTTON_ARCHIVE, uiName)} bsSize="xs" onClick={ () => this.onRebaseDesign(userContext, design._id)} >Rebase Design</Button>;
 
         const modalOkButton =
             <Button onClick={ () => this.onArchiveDesign(userContext, design._id)}>OK</Button>;
@@ -157,6 +164,7 @@ export default class Design extends Component {
                                     <ButtonGroup className="button-group-left">
                                         {backupButton}
                                         {archiveButton}
+                                        {rebaseButton}
                                         {confirmArchiveModal}
                                     </ButtonGroup>
                             }

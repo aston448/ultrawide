@@ -54,6 +54,21 @@ class ImpExValidationServicesClass{
 
         return Validation.VALID;
     }
+
+    validateRebaseDesignVersion(user){
+
+
+        if(!user){
+            return ImpExValidationErrors.REBASE_DESIGN_INVALID_ROLE;
+        }
+
+        // Only admin user can rebase
+        if(!(user.isAdmin)){
+            return ImpExValidationErrors.REBASE_DESIGN_INVALID_ROLE;
+        }
+
+        return Validation.VALID;
+    }
 }
 
 export const ImpExValidationServices = new ImpExValidationServicesClass();

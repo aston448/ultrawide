@@ -11,6 +11,7 @@ import { ImpexMessages } from '../constants/message_texts.js'
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentView, updateUserMessage} from '../redux/actions'
+import {DesignData} from "../data/design/design_db";
 
 
 // =====================================================================================================================
@@ -123,6 +124,56 @@ class ClientImpExServicesClass{
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
                     messageText: ImpexMessages.MSG_DESIGN_ARCHIVE
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    };
+
+    rebaseDesignVersion(designId, userId){
+
+        // TEMP - Design Version is always the latest design version
+        const dvs = DesignData.getDesignVersions(designId);
+        let latestDvId = 'NONE';
+        let maxIndex = -1;
+
+        console.log('Found %i DVs', dvs.length);
+
+        dvs.forEach((dv) => {
+            if(dv.designVersionIndex > maxIndex){
+                console.log('Updating index %i', dv.designVersionIndex);
+                maxIndex = dv.designVersionIndex;
+                latestDvId = dv._id
+            }
+        });
+
+        // Client validation
+        let result = ImpExValidationApi.validateRebaseDesignVersion(userId);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        console.log('Rebasing DV %s', latestDvId);
+
+        // Real action call - server actions
+        ServerImpExApi.rebaseDesignVersion(designId, latestDvId, userId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Rebase Design client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: ImpexMessages.MSG_DESIGN_REBASE
                 }));
             }
         });

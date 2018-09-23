@@ -38,5 +38,12 @@ class ImpExValidationApiClass{
         return ImpExValidationServices.validateArchiveDesign(user, design);
     }
 
+    validateRebaseDesignVersion(userId){
+
+        const user = UserRoleData.getRoleByUserId(userId);
+
+        return ImpExValidationServices.validateRebaseDesignVersion(user);
+    }
+
 }
 export const ImpExValidationApi = new ImpExValidationApiClass();

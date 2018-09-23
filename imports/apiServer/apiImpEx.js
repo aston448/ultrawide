@@ -4,7 +4,8 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import {
     backupDesign,
     restoreDesign,
-    archiveDesign
+    archiveDesign,
+    rebaseDesignVersion
 } from '../apiValidatedMethods/impex_methods.js'
 
 
@@ -42,6 +43,20 @@ class ServerImpExApiClass {
             {
                 designId:   designId,
                 userId:     userId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    rebaseDesignVersion(designId, designVersionId, userId, callback){
+
+        rebaseDesignVersion.call(
+            {
+                designId:           designId,
+                designVersionId:    designVersionId,
+                userId:             userId
             },
             (err, result) => {
                 callback(err, result);

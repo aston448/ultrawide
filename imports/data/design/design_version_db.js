@@ -65,6 +65,14 @@ class DesignVersionDataClass {
         return DesignVersionComponents.find({designVersionId: designVersionId}).fetch();
     }
 
+    getAllNonDeletedComponents(designVersionId){
+
+        return DesignVersionComponents.find({
+            designVersionId: designVersionId,
+            updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+        }).fetch();
+    }
+
     getOtherComponentsOfType(designComponentRef, designVersionId, componentType){
 
         return DesignVersionComponents.find({

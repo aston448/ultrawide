@@ -22,6 +22,7 @@ import { DefaultFeatureAspectData }         from '../../data/design/default_feat
 import {DesignPermutationData} from "../../data/design/design_permutation_db";
 import {DesignPermutationValueData} from "../../data/design/design_permutation_value_db";
 import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
+import {DesignVersionStatus, UpdateMergeStatus} from "../../constants/constants";
 
 //======================================================================================================================
 //
@@ -437,6 +438,192 @@ class ImpExServicesClass{
         log((msg) => console.log(msg), LogLevel.INFO, "Archiving complete.");
     }
 
+    // User has chosen to take a design version and make it into a new base design
+    exportDesignVersionAsNewBaseDesign(designId, designVersionId){
+
+        if(Meteor.isServer){
+
+            let backupLocation = ImpexModules.getBackupLocation();
+
+            let design = DesignData.getDesignById(designId);
+            const designVersion = DesignVersionData.getDesignVersionById(designVersionId);
+
+            // Will be only 1 but want as an array
+            let designData = [];
+
+            // Rename the Design
+            design.designName = design.designName + ' - ' + designVersion.designVersionName;
+
+            designData.push(design);
+
+            const dateTime = new Date();
+
+            const dateString = dateTime.getFullYear() + '-' +
+                padDigits((dateTime.getMonth() + 1), 2) + '-' +
+                padDigits(dateTime.getDate(), 2) + ' ' +
+                padDigits(dateTime.getHours(), 2)  + ':' +
+                padDigits(dateTime.getMinutes(), 2) + ':' +
+                padDigits(dateTime.getSeconds(), 2);
+
+            const fileDate = dateTime.getFullYear() + '_' +
+                padDigits((dateTime.getMonth()+1), 2) + '_' +
+                padDigits(dateTime.getDate(), 2) + '_' +
+                padDigits(dateTime.getHours(), 2) + '_' +
+                padDigits(dateTime.getMinutes(), 2) + '_' +
+                padDigits(dateTime.getSeconds(), 2);
+
+            const backupName = design.designName + ': ' + dateString;
+            const designName = design.designName;
+
+            const ultrawideDataVersion =  ImpexModules.getCurrentDataVersion();
+
+            let metadata = {
+                backupName: backupName,
+                designName: designName,
+                backupDate: dateTime,
+                backupDataVersion: ultrawideDataVersion
+            };
+
+            let designVersions = [];
+            let designUpdates = [];
+            let workPackages = [];
+            let designVersionComponents = [];
+            let designUpdateComponents = [];
+            let workPackageComponents = [];
+            let permutationValues = [];
+            let scenarioTestExpectations = [];
+            let domainDictionary = [];
+
+            // Data stored across Designs ------------------------------------------------------------------------------
+
+            // Store all User Data
+            const userRoles = UserRoleData.getAllUserRoles();
+
+            // Store all test output locations
+            const testOutputLocations = TestOutputLocationData.getAllLocations();
+
+            // Store all test output location files
+            const testOutputLocationFiles = TestOutputLocationFileData.getAllLocationFiles();
+
+            // Store all user test locations
+            const userTestTypeLocations = UserTestTypeLocationData.getAllUserTestTypeLocations();
+
+            // Store all user settings
+            const userSettings = UserSettingsData.getAllUserSettings();
+
+
+            // Data stored for this Design -----------------------------------------------------------------------------
+
+            const defaultFeatureAspects = DefaultFeatureAspectData.getDefaultAspectsForDesign(designId);
+
+            const designPermutations = DesignPermutationData.getPermutationsForDesign(designId);
+
+            const designVersionData = DesignData.getDesignVersions(designId);
+
+            // Revert the DV to a new base design version
+            designVersion.designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
+            designVersion.baseDesignVersionId = 'NONE';
+            designVersion.designVersionIndex = 0;
+
+            designVersions.push(designVersion);
+
+            // All permutation values for this Version
+            const permutationValuesData = DesignPermutationValueData.getAllValuesForDesignVersion(designVersionId);
+
+            permutationValuesData.forEach((permutationValue) => {
+                permutationValues.push(permutationValue);
+            });
+
+            // All updates and WPs will be discarded.
+
+            // All non-deleted design components in this version need to be rebased.
+            const designVersionComponentData = DesignVersionData.getAllNonDeletedComponents(designVersionId);
+
+            designVersionComponentData.forEach((designVersionComponent) => {
+
+                // Reset update merge status
+                designVersionComponent.updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
+
+                // Set all components as unchanged to their new values
+                designVersionComponent.componentParentReferenceIdOld = designVersionComponent.componentParentReferenceIdNew;
+                designVersionComponent.componentFeatureReferenceIdOld = designVersionComponent.componentFeatureReferenceIdNew;
+                designVersionComponent.componentIndexOld = designVersionComponent.componentIndexNew;
+                designVersionComponent.componentNameOld = designVersionComponent.componentNameNew;
+                designVersionComponent.componentNameRawOld = designVersionComponent.componentNameRawNew;
+                designVersionComponent.componentNarrativeOld = designVersionComponent.componentNarrativeNew;
+                designVersionComponent.componentNarrativeRawOld = designVersionComponent.componentNarrativeRawNew;
+                designVersionComponent.componentTextRawOld = designVersionComponent.componentTextRawNew;
+
+                // Clear any change flags
+                designVersionComponent.isNew = false;
+                designVersionComponent.workPackageId = 'NONE';
+                designVersionComponent.isDevUpdated = false;
+                designVersionComponent.isDevAdded = false;
+
+                designVersionComponents.push(designVersionComponent);
+            });
+
+            // All Scenario Test Expectations in this version
+            const scenarioTestExpectationData = ScenarioTestExpectationData.getAllTestExpectationsForDesignVersion(designVersionId);
+
+            scenarioTestExpectationData.forEach((scenarioTestExpectation) => {
+                scenarioTestExpectations.push(scenarioTestExpectation);
+            });
+
+            // All Domain Dictionary entries for this version
+            const dictionaryData = DesignVersionData.getDomainDictionaryEntries(designVersionId);
+
+            dictionaryData.forEach((domainItem) => {
+                domainDictionary.push(domainItem);
+            });
+
+
+            const designBackup =
+                {
+                    metadata: metadata,
+                    userRoles: userRoles,
+                    testOutputLocations: testOutputLocations,
+                    testOutputLocationFiles: testOutputLocationFiles,
+                    designPermutations: designPermutations,
+                    permutationValues: permutationValues,
+                    userTestTypeLocations: userTestTypeLocations,
+                    userSettings: userSettings,
+                    designs: designData,
+                    defaultFeatureAspects: defaultFeatureAspects,
+                    designVersions: designVersions,
+                    designUpdates: designUpdates,
+                    workPackages: workPackages,
+                    domainDictionary: domainDictionary,
+                    designVersionComponents: designVersionComponents,
+                    designUpdateComponents: designUpdateComponents,
+                    workPackageComponents: workPackageComponents,
+                    scenarioTestExpectations: scenarioTestExpectations
+                };
+
+
+            const jsonData = JSON.stringify(designBackup);
+            //const jsonData = JSON.stringify(designBackup, null, 2); // Use if want readable backup file - but much bigger
+
+            const fileName = 'ULTRAWIDE_' + replaceAll(design.designName.trim(), ' ', '_') + '_' + fileDate + '.UBK';
+
+            try {
+
+                fs.writeFileSync(backupLocation + fileName, jsonData);
+
+                log((msg) => console.log(msg), LogLevel.INFO, "Design rebased and backed up as: {}", backupLocation + fileName);
+
+                // If that has not errored, add the backup to the list
+                DesignBackupData.insertNewBackup(metadata, fileName);
+
+
+            } catch (e){
+                log((msg) => console.log(msg), LogLevel.ERROR, "Can't save Design rebase backup: {}", e);
+                throw e;
+            }
+
+        }
+
+    }
 
     // Internal
 
