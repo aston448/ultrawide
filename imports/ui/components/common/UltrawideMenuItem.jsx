@@ -122,6 +122,14 @@ export class UltrawideMenuItem extends Component {
                 menuGlyph = 'king';
                 menuItemToolTip = 'Change to ' + itemName;
                 break;
+            case '111':
+                menuGlyph = 'tag';
+                menuItemToolTip = 'Zoom Level 1';
+                break;
+            case '222':
+                menuGlyph = 'tags';
+                menuItemToolTip = 'Zoom Level 2';
+                break;
             case 'FFF':
                 menuGlyph = 'th';
                 menuItemToolTip = 'Zoom to Features';

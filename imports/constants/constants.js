@@ -295,6 +295,12 @@ export const WorkPackageReviewType = {
     REVIEW_NOT_OK:          'REVIEW_NOT_OK'
 };
 
+export const IterationStatus = {
+    IT_NEW:                 'NEW',
+    IT_IN_PROGRESS:         'IN_PROGRESS',
+    IT_COMPLETE:            'COMPLETE'
+};
+
 export const WorkPackageStatus = {
     WP_NEW:                 'NEW',
     WP_AVAILABLE:           'AVAILABLE',

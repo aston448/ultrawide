@@ -66,6 +66,10 @@ export class DesignEditorHeader extends Component {
         ClientAppHeaderServices.setViewLevelSections(userContext, displayContext);
     }
 
+    onZoomToLevel(userContext, displayContext, level){
+        ClientAppHeaderServices.setViewLevel(userContext, displayContext, level)
+    }
+
     onToggleDomainTerms(userContext, displayContext){
         ClientAppHeaderServices.toggleDomainTerms(userContext, displayContext);
     }
@@ -105,6 +109,16 @@ export class DesignEditorHeader extends Component {
         const zoomSectionsOption =
             <div id="optionZoomSections" className="editor-menu-item-holder">
                 <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="SSS" actionFunction={ () => this.onZoomToSections(userContext, displayContext)}/>
+            </div>;
+
+        const zoomLevel1Option =
+            <div id="optionZoomLevel1" className="editor-menu-item-holder">
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="111" actionFunction={ () => this.onZoomToLevel(userContext, displayContext, 1)}/>
+            </div>;
+
+        const zoomLevel2Option =
+            <div id="optionZoomLevel1" className="editor-menu-item-holder">
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="222" actionFunction={ () => this.onZoomToLevel(userContext, displayContext, 2)}/>
             </div>;
 
         const domainTermsOption =
@@ -219,8 +233,10 @@ export class DesignEditorHeader extends Component {
 
                 options =
                     <div className="details-menu-bar">
-                        {zoomFeaturesOption}
+                        {zoomLevel1Option}
+                        {zoomLevel2Option}
                         {zoomSectionsOption}
+                        {zoomFeaturesOption}
                         {viewModeViewOption}
                         {viewModeEditOption}
                         {domainTermsOption}
@@ -233,8 +249,10 @@ export class DesignEditorHeader extends Component {
 
                     options =
                         <div className="details-menu-bar">
-                            {zoomFeaturesOption}
+                            {zoomLevel1Option}
+                            {zoomLevel2Option}
                             {zoomSectionsOption}
+                            {zoomFeaturesOption}
                             {viewModeViewOption}
                             {viewModeEditOption}
                             {domainTermsOption}
@@ -244,8 +262,10 @@ export class DesignEditorHeader extends Component {
 
                     options =
                         <div className="details-menu-bar">
-                            {zoomFeaturesOption}
+                            {zoomLevel1Option}
+                            {zoomLevel2Option}
                             {zoomSectionsOption}
+                            {zoomFeaturesOption}
                             {domainTermsOption}
                         </div>;
                 }
@@ -257,8 +277,10 @@ export class DesignEditorHeader extends Component {
                     case DisplayContext.UPDATE_EDIT:
                         options =
                             <div className="details-menu-bar">
-                                {zoomFeaturesOption}
+                                {zoomLevel1Option}
+                                {zoomLevel2Option}
                                 {zoomSectionsOption}
+                                {zoomFeaturesOption}
                                 {viewModeViewOption}
                                 {viewModeEditOption}
                                 {domainTermsOption}
@@ -274,8 +296,10 @@ export class DesignEditorHeader extends Component {
                     case DisplayContext.WORKING_VIEW:
                         options =
                             <div className="details-menu-bar">
-                                {zoomFeaturesOption}
+                                {zoomLevel1Option}
+                                {zoomLevel2Option}
                                 {zoomSectionsOption}
+                                {zoomFeaturesOption}
                                 {domainTermsOption}
                             </div>;
                         closable = true;
@@ -285,8 +309,10 @@ export class DesignEditorHeader extends Component {
                         if(mode === ViewMode.MODE_VIEW){
                             options =
                                 <div className="details-menu-bar">
-                                    {zoomFeaturesOption}
+                                    {zoomLevel1Option}
+                                    {zoomLevel2Option}
                                     {zoomSectionsOption}
+                                    {zoomFeaturesOption}
                                     {viewModeViewOption}
                                     {viewModeEditOption}
                                     {domainTermsOption}
@@ -294,8 +320,10 @@ export class DesignEditorHeader extends Component {
                         } else {
                             options =
                                 <div className="details-menu-bar">
-                                    {zoomFeaturesOption}
+                                    {zoomLevel1Option}
+                                    {zoomLevel2Option}
                                     {zoomSectionsOption}
+                                    {zoomFeaturesOption}
                                     {domainTermsOption}
                                 </div>;
                         }
@@ -308,8 +336,10 @@ export class DesignEditorHeader extends Component {
                     case DisplayContext.UPDATE_VIEW:
                         options =
                             <div className="details-menu-bar">
-                                {zoomFeaturesOption}
+                                {zoomLevel1Option}
+                                {zoomLevel2Option}
                                 {zoomSectionsOption}
+                                {zoomFeaturesOption}
                                 {domainTermsOption}
                             </div>;
                         break;
@@ -323,8 +353,10 @@ export class DesignEditorHeader extends Component {
                     case DisplayContext.WORKING_VIEW:
                         options =
                             <div className="details-menu-bar">
-                                {zoomFeaturesOption}
+                                {zoomLevel1Option}
+                                {zoomLevel2Option}
                                 {zoomSectionsOption}
+                                {zoomFeaturesOption}
                                 {domainTermsOption}
                             </div>;
                         closable = true;
@@ -337,8 +369,10 @@ export class DesignEditorHeader extends Component {
 
                 options =
                     <div className="details-menu-bar">
-                        {zoomFeaturesOption}
+                        {zoomLevel1Option}
+                        {zoomLevel2Option}
                         {zoomSectionsOption}
+                        {zoomFeaturesOption}
                         {domainTermsOption}
                     </div>;
                 break;
@@ -348,8 +382,10 @@ export class DesignEditorHeader extends Component {
 
                 options =
                     <div className="details-menu-bar">
-                        {zoomFeaturesOption}
+                        {zoomLevel1Option}
+                        {zoomLevel2Option}
                         {zoomSectionsOption}
+                        {zoomFeaturesOption}
                         {viewModeViewOption}
                         {viewModeEditOption}
                         {domainTermsOption}
@@ -364,8 +400,10 @@ export class DesignEditorHeader extends Component {
                 //if(displayContext === DisplayContext.WP_VIEW){
                     options =
                         <div className="details-menu-bar">
-                            {zoomFeaturesOption}
+                            {zoomLevel1Option}
+                            {zoomLevel2Option}
                             {zoomSectionsOption}
+                            {zoomFeaturesOption}
                             {domainTermsOption}
                         </div>;
                 //}

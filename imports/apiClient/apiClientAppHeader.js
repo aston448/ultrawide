@@ -268,6 +268,90 @@ class ClientAppHeaderServicesClass{
         }
     }
 
+    setViewLevel(userContext, displayContext, level){
+        // Open everything to the specified level
+        let componentArray = [];
+
+        if(userContext.workPackageId !== 'NONE'){
+
+            // WP situation - is it a Base Design or Design Update WP?
+            if(userContext.designUpdateId === 'NONE'){
+
+                if(displayContext === DisplayContext.WP_SCOPE){
+                    componentArray = this.getDesignVersionLevelSections(userContext, level);
+
+                    store.dispatch(setCurrentUserOpenDesignItems(
+                        componentArray,
+                        null,
+                        null
+                    ));
+
+                } else {
+                    // componentArray = this.getWorkPackageSections(userContext);
+                    //
+                    // store.dispatch(setCurrentUserOpenWorkPackageItems(
+                    //     componentArray,
+                    //     null,
+                    //     null
+                    // ));
+                }
+
+            } else {
+                if(displayContext === DisplayContext.WP_SCOPE) {
+                    // componentArray = this.getDesignUpdateSections(userContext);
+                    //
+                    // store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                    //     componentArray,
+                    //     null,
+                    //     null
+                    // ));
+
+                } else {
+                    // componentArray = this.getWorkPackageSections(userContext);
+                    //
+                    // store.dispatch(setCurrentUserOpenWorkPackageItems(
+                    //     componentArray,
+                    //     null,
+                    //     null
+                    // ));
+                }
+            }
+
+            store.dispatch((updateOpenItemsFlag('NONE')));
+
+        } else {
+
+            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE || displayContext === DisplayContext.WORKING_VIEW){
+
+                componentArray = this.getDesignVersionLevelSections(userContext, level);
+
+                console.log('Got %i sections', componentArray.length);
+
+                store.dispatch(setCurrentUserOpenDesignItems(
+                    componentArray,
+                    null,
+                    null
+                ));
+
+                store.dispatch((updateOpenItemsFlag('NONE')));
+
+            } else {
+
+                // componentArray = this.getDesignUpdateSections(userContext);
+                //
+                // store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                //     componentArray,
+                //     null,
+                //     null
+                // ));
+                //
+                // store.dispatch((updateOpenItemsFlag('NONE')));
+
+            }
+        }
+
+    }
+
     toggleDomainTerms(userContext, displayContext){
 
         const currentSetting = store.getState().domainTermsVisible;
@@ -329,6 +413,20 @@ class ClientAppHeaderServicesClass{
         });
 
         return componentArray;
+    }
+
+    getDesignVersionLevelSections(userContext, level){
+
+        const componentArray = [];
+
+        const designVersionOpenComponents = DesignVersionData.getComponentsAboveLevelIds(userContext.designVersionId, level);
+
+        designVersionOpenComponents.forEach((component) => {
+            componentArray.push(component._id);
+        });
+
+        return componentArray;
+
     }
 
     getDesignUpdateSections(userContext){

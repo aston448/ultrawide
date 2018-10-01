@@ -110,7 +110,7 @@ class TestSummaryModulesClass{
         let totalTestFailCount = 0;
         let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
-        console.log('Actual Expectations for %s are %d', scenarioReferenceId, actualExpectations.length);
+        //console.log('Actual Expectations for %s are %d', scenarioReferenceId, actualExpectations.length);
 
         actualExpectations.forEach((testExpectation) => {
 

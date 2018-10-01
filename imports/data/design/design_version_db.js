@@ -197,6 +197,18 @@ class DesignVersionDataClass {
         ).fetch();
     }
 
+    getComponentsAboveLevelIds(designVersionId, level){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                componentType:      {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+                componentLevel:     {$lt: level}
+            },
+            {fields: {_id: 1}}
+        ).fetch();
+    }
+
 
     // DV Updates ------------------------------------------------------------------------------------------------------
 
