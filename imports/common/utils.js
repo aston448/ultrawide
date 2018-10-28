@@ -305,25 +305,26 @@ export function locationMoveDropAllowed(itemType, targetType, viewType, inScope)
         case ComponentType.DESIGN_SECTION:
             // Design Sections can only be moved to other design sections or applications
             return (targetType === ComponentType.DESIGN_SECTION || targetType === ComponentType.APPLICATION);
-            break;
+
         case ComponentType.FEATURE:
             // Features can only be moved to other design sections
             return (targetType === ComponentType.DESIGN_SECTION);
-            break;
+
         case ComponentType.FEATURE_ASPECT:
             // Feature Aspects cannot be moved
             return false;
-            break;
+
         case ComponentType.SCENARIO:
             // Scenarios can only be moved to Feature Aspects
             switch(viewType){
                 case ViewType.DESIGN_NEW:
+                case ViewType.DESIGN_PUBLISHED:
                     return (targetType === ComponentType.FEATURE_ASPECT);
-                    break;
+
                 case ViewType.DESIGN_UPDATE_EDIT:
                     // Target must be an in scope Feature Aspect
                     return (inScope && targetType === ComponentType.FEATURE_ASPECT);
-                    break;
+
             }
             break;
         default:
