@@ -50,6 +50,18 @@ export const DesignVersionMessages = {
     MSG_DESIGN_VERSION_UPDATED:         'Working Design Version updated with latest Merge Updates'
 };
 
+export const WorkItemMessages = {
+
+    MSG_INCREMENT_ADDED:                'New Increment added',
+    MSG_ITERATION_ADDED:                'New Iteration added',
+    MSG_INCREMENT_REMOVED:              'Increment removed',
+    MSG_ITERATION_REMOVED:              'Iteration removed',
+    MSG_WORK_ITEM_UPDATED:              'Work item details updated',
+    MSG_WORK_ITEM_REORDERED:            'Work Item moved in list',
+    MSG_WORK_ITEM_MOVED:            'Work Item moved to new list'
+
+};
+
 export const DesignUpdateMessages = {
 
     MSG_DESIGN_UPDATE_ADDED:            'New Design Update added',

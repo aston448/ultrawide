@@ -9,10 +9,10 @@ import {
 
 import { UI }           from "../constants/ui_context_ids";
 
-import Design           from '../ui/components/select/Design.jsx';
-import DesignVersion    from '../ui/components/select/DesignVersion.jsx';
-import DesignUpdate     from '../ui/components/select/DesignUpdate.jsx';
-import WorkPackage      from "../ui/components/select/WorkPackage.jsx";
+import Design           from '../ui/components/item/Design.jsx';
+import DesignVersion    from '../ui/components/item/DesignVersion.jsx';
+import DesignUpdate     from '../ui/components/item/DesignUpdate.jsx';
+import WorkPackage      from "../ui/components/item/WorkPackage.jsx";
 
 import {ItemStatusUiModules}            from "./item_status";
 import {ClientWorkPackageServices}      from "../apiClient/apiClientWorkPackage";

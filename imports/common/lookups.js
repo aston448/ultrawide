@@ -59,11 +59,11 @@ class TextLookupsClass {
 
         switch(status){
             case WorkPackageStatus.WP_NEW:
-                return 'NEW';
+                return 'Unavailable';
             case WorkPackageStatus.WP_ADOPTED:
-                return 'ADOPTED';
+                return 'Adopted by ';
             case WorkPackageStatus.WP_AVAILABLE:
-                return 'AVAILABLE';
+                return 'Available';
         }
     }
 

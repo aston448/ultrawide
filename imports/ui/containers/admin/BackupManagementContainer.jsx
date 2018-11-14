@@ -9,13 +9,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemList             from '../../components/select/ItemList.jsx';
+import ItemList             from '../../components/item/ItemList.jsx';
 import DesignBackup         from '../../components/admin/DesignBackup.jsx';
-import DesignsContainer     from '../../containers/select/DesignsContainer.jsx';
+import DesignsContainer     from '../item/DesignsContainer.jsx';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import {LogLevel} from "../../../constants/constants";
+import {ItemListType, LogLevel} from "../../../constants/constants";
 
 import { ClientDataServices }              from '../../../apiClient/apiClientDataServices.js';
 
@@ -86,6 +86,7 @@ class BackupManagementScreen extends Component {
                 hasFooterAction={hasFooterAction}
                 footerAction={''}
                 footerActionFunction={footerActionFunction}
+                listType={ItemListType.ULTRAWIDE_ITEM}
             />;
 
         const designs =

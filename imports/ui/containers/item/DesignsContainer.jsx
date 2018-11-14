@@ -8,16 +8,16 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import UltrawideItem        from '../../components/select/UltrawideItem.jsx';
-import ItemList             from '../../components/select/ItemList.jsx';
+import UltrawideItem        from '../../components/item/UltrawideItem.jsx';
+import ItemList             from '../../components/item/ItemList.jsx';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import {ItemType, RoleType, LogLevel}           from '../../../constants/constants.js';
+import {ItemType, ItemListType, RoleType, LogLevel}           from '../../../constants/constants.js';
 import {AddActionIds}       from "../../../constants/ui_context_ids.js";
 
 import { ClientDataServices }   from '../../../apiClient/apiClientDataServices.js';
-import { ClientDesignServices } from  '../../../apiClient/apiClientDesign.js';
+import { ClientDesignServices } from '../../../apiClient/apiClientDesign.js';
 
 
 // REDUX services
@@ -92,6 +92,7 @@ export class DesignsList extends Component {
                     footerAction={'Add Design'}
                     footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_DESIGN}
                     footerActionFunction={footerActionFunction}
+                    listType={ItemListType.ULTRAWIDE_ITEM}
                 />
             </div>
         )

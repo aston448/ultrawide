@@ -68,6 +68,19 @@ export const DesignVersionValidationErrors = {
     DESIGN_VERSION_INVALID_UPDATE_WORKING:      'There must be at least one Design Update set for inclusion to update the working Design Version'
 };
 
+export const WorkItemValidationErrors = {
+    INCREMENT_INVALID_ROLE_ADD:                 'Only a Manager can add Increments',
+    INCREMENT_INVALID_ROLE_REMOVE:              'Only a Manager can remove Increments',
+    INCREMENT_INVALID_REMOVE_CHILD:             'This increment cannot be removed because it contains iterations',
+    ITERATION_INVALID_ROLE_ADD:                 'Only a Manager can add Iterations',
+    WORK_ITEM_INVALID_ROLE_REMOVE:              'Only a Manager can remove Work Items',
+    WORK_ITEM_INVALID_REMOVE_CHILD:             'This Work Item cannot be removed because it contains other Work Items',
+    WORK_ITEM_INVALID_ROLE_UPDATE:              'Only a Manager can update Work Items',
+    WORK_ITEM_DUPLICATE_NAME:                   'A Work Item of this type already exists with this name',
+    WORK_ITEM_INVALID_ROLE_REORDER:             'Only a Manager can reorder Work Items',
+    WORK_ITEM_INVALID_ROLE_MOVE:                'Only a Manager can move Work Items',
+};
+
 export const DesignUpdateValidationErrors = {
     DESIGN_UPDATE_NOT_EXIST:                    'Design Update does not exist',
     DESIGN_UPDATE_INVALID_ROLE_ADD:             'Only a Designer can add Design Updates',

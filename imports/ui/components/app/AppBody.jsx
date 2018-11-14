@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
 import UltrawideAdmin                       from  '../../components/admin/UltrawideAdmin.jsx';
-import MainSelectionPage                    from  '../../components/select/MainSelectionPage.jsx';
+import MainSelectionPage                    from '../item/MainSelectionPage.jsx';
 import EditorContainer                      from  '../../containers/edit/EditorContainer.jsx';
 import WaitMessage                          from  './Wait.jsx';
 

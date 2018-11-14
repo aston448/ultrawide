@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { UltrawideItemUiModules }              from '../../../ui_modules/ultrawide_item.js';
 
 import { LogLevel } from '../../../constants/constants.js';
-import {log} from "../../../../imports/common/utils";
+import {log} from "../../../common/utils";
 
 // REDUX services
 import {connect} from 'react-redux';

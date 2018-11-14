@@ -10,7 +10,9 @@ export const DefaultItemNames = {
     NEW_DESIGN_UPDATE_REF:          'CRxxx',
     NEW_WORK_PACKAGE_NAME:          'New Work Package',
     NEW_PERMUTATION_NAME:           'New Permutation',
-    NEW_PERMUTATION_VALUE:          'New Permutation Value'
+    NEW_PERMUTATION_VALUE:          'New Permutation Value',
+    NEW_INCREMENT_NAME:             'New Increment',
+    NEW_ITERATION_NAME:             'New Iteration'
 
 };
 

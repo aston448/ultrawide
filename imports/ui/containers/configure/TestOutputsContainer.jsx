@@ -9,11 +9,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import TestOutputLocation                   from '../../components/configure/TestOutputLocation.jsx';
 import TestOutputFilesContainer             from '../../containers/configure/TestOutputFilesContainer.jsx';
-import ItemList                             from '../../components/select/ItemList.jsx';
+import ItemList                             from '../../components/item/ItemList.jsx';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import {LogLevel} from "../../../constants/constants";
+import {ItemListType, LogLevel} from "../../../constants/constants";
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
@@ -89,6 +89,7 @@ export class TestOutputsScreen extends Component {
                             footerAction={'Add Location'}
                             footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_TEST_LOCATION}
                             footerActionFunction={() => this.addNewLocation(userRole, userContext)}
+                            listType={ItemListType.ULTRAWIDE_ITEM}
                         />
                     </Col>
                     <Col md={6} className="col">

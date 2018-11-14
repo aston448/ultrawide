@@ -430,7 +430,7 @@ class ClientWorkPackageServicesClass {
             ClientDesignUpdateSummary.getDesignUpdateSummary(false);
 
             // Update the test summary data to reflect the WP.  No need to recalc data
-            ClientTestIntegrationServices.updateTestSummaryData(newContext);
+            //ClientTestIntegrationServices.updateTestSummaryData(newContext);
 
             return newContext;
         }

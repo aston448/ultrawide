@@ -7,7 +7,8 @@ import { Meteor } from 'meteor/meteor';
 // Ultrawide Services
 import { RoleType, ComponentType, ViewType, ViewOptionType, DisplayContext, DesignVersionStatus, DesignUpdateStatus,
         WorkPackageType, WorkPackageStatus, LogLevel, HomePageTab, UpdateMergeStatus, UserSetting, UserSettingValue,
-        WorkPackageTab, DesignUpdateTab, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, WorkSummaryType
+        WorkPackageTab, DesignUpdateTab, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, WorkSummaryType,
+        MashTestStatus, TestType, WorkItemType
 } from '../constants/constants.js';
 
 import { log } from '../common/utils.js';
@@ -27,6 +28,7 @@ import { DesignData }                       from '../data/design/design_db.js';
 import { DesignVersionData }                from '../data/design/design_version_db.js';
 import { DesignUpdateData }                 from '../data/design_update/design_update_db.js';
 import { WorkPackageData }                  from '../data/work/work_package_db.js';
+import { WorkItemData }                     from "../data/work/work_item_db";
 import { WorkPackageComponentData }         from '../data/work/work_package_component_db.js';
 import { DesignComponentData }              from '../data/design/design_component_db.js';
 import { DesignUpdateComponentData }        from '../data/design_update/design_update_component_db.js';
@@ -37,10 +39,13 @@ import { UserDevDesignSummaryData }         from '../data/summary/user_dev_desig
 import { DomainDictionaryData }             from '../data/design/domain_dictionary_db.js';
 import { UserDvMashScenarioData }           from '../data/mash/user_dv_mash_scenario_db.js';
 import { UserMashScenarioTestData }         from '../data/mash/user_mash_scenario_test_db.js';
-import { UserDvTestSummaryData }           from '../data/summary/user_dv_test_summary_db.js';
+import { UserDvTestSummaryData }            from '../data/summary/user_dv_test_summary_db.js';
 import { UserWorkProgressSummaryData }      from '../data/summary/user_work_progress_summary_db.js';
 import { DefaultFeatureAspectData }         from '../data/design/default_feature_aspect_db.js';
-
+import {DesignPermutationData}              from "../data/design/design_permutation_db";
+import {DesignPermutationValueData}         from "../data/design/design_permutation_value_db";
+import {ScenarioTestExpectationData}        from "../data/design/scenario_test_expectations_db";
+import {UserDvScenarioTestExpectationStatusData} from "../data/mash/user_dv_scenario_test_expectation_status_db";
 
 // REDUX services
 import store from '../redux/store'
@@ -51,12 +56,8 @@ import {
     setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
     updateUserMessage
 } from '../redux/actions'
-import {DesignPermutationData} from "../data/design/design_permutation_db";
-import {DesignPermutationValueData} from "../data/design/design_permutation_value_db";
-import {ScenarioTestExpectationData} from "../data/design/scenario_test_expectations_db";
-import {MashTestStatus, TestType} from "../constants/constants";
-import {UserDvScenarioTestExpectationStatusData} from "../data/mash/user_dv_scenario_test_expectation_status_db";
-import {UserDvTestSummary} from "../collections/summary/user_dv_test_summary";
+
+
 
 
 // =====================================================================================================================
@@ -229,6 +230,7 @@ class ClientDataServicesClass{
             const duHandle = Meteor.subscribe('designUpdates');
             const wpHandle = Meteor.subscribe('workPackages');
 
+
             const loading = (
                 !agHandle.ready() || !urHandle.ready() || !dbHandle.ready() || !usHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
             );
@@ -321,6 +323,7 @@ class ClientDataServicesClass{
                 const dpHandle = Meteor.subscribe('designPermutations', userContext.designId);
 
                 // Design Version specific data
+                const wiHandle = Meteor.subscribe('workItems', userContext.designVersionId);
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 const wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
@@ -348,7 +351,7 @@ class ClientDataServicesClass{
 
                     let loading = (
                         !dusHandle.ready() || !dpHandle.ready() || !dpvHandle.ready() || !dveHandle.ready() ||
-                        !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
+                        !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !wiHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() ||
                         !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
                         !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready() || !steHandle.ready() ||
@@ -712,6 +715,32 @@ class ClientDataServicesClass{
         )
     }
 
+    getWorkItemList(userContext, workItemType, itemParentRefId){
+
+        if(userContext.designVersionId === 'NONE'){
+            return [];
+        }
+
+        switch(workItemType){
+            case WorkItemType.INCREMENT:
+                // Get all Increments for DV
+                return WorkItemData.getDesignVersionIncrementsByIndex(userContext.designVersionId);
+            case WorkItemType.ITERATION:
+                // Get List of Iterations in DV Increment
+                return WorkItemData.getDesignVersionIncrementIterationsByIndex(userContext.designVersionId, itemParentRefId);
+            case WorkItemType.BASE_WORK_PACKAGE:
+                // Get Base WPs in an Iteration
+                return WorkItemData.getDesignVersionIterationWpsByIndex(userContext.designVersionId, itemParentRefId);
+            case WorkItemType.DESIGN_UPDATE:
+                // Get DUs in an Iteration
+                return WorkItemData.getDesignVersionIterationDusByIndex(userContext.designVersionId, itemParentRefId);
+            case WorkItemType.UPDATE_WORK_PACKAGE:
+                // Get WPs in a DU
+                return WorkItemData.getDesignVersionDuWpsByIndex(userContext.designVersionId, itemParentRefId);
+            default:
+                break;
+        }
+    }
 
     getApplicationHeaderData(userContext, view){
 
@@ -1076,6 +1105,12 @@ class ClientDataServicesClass{
 
             }
         }
+    }
+
+    // Get a list of Work Packages not yet assigned to Work Items
+    getUnassignedWorkPackages(userContext){
+
+        return WorkPackageData.getUnassignedBaseWorkPackages(userContext.designVersionId);
     }
 
     // Get a list of Work Packages for a Design Version

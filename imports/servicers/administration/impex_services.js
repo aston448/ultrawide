@@ -23,6 +23,7 @@ import {DesignPermutationData} from "../../data/design/design_permutation_db";
 import {DesignPermutationValueData} from "../../data/design/design_permutation_value_db";
 import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
 import {DesignVersionStatus, UpdateMergeStatus} from "../../constants/constants";
+import {IterationData} from "../../data/work/work_item_db";
 
 //======================================================================================================================
 //
@@ -135,6 +136,7 @@ class ImpExServicesClass{
             };
 
             let designVersions = [];
+            let iterations = [];
             let designUpdates = [];
             let workPackages = [];
             let designVersionComponents = [];
@@ -179,6 +181,13 @@ class ImpExServicesClass{
 
                 permutationValuesData.forEach((permutationValue) => {
                     permutationValues.push(permutationValue);
+                });
+
+                // All iterations in this version
+                const iterationData = IterationData.getWorkItemList(designVersion._id);
+
+                iterationData.forEach((iteration) => {
+                    iterations.push(iteration);
                 });
 
                 // All updates in this Version
@@ -244,6 +253,7 @@ class ImpExServicesClass{
                     designs: designData,
                     defaultFeatureAspects: defaultFeatureAspects,
                     designVersions: designVersions,
+                    iterations: iterations,
                     designUpdates: designUpdates,
                     workPackages: workPackages,
                     domainDictionary: domainDictionary,
@@ -289,6 +299,7 @@ class ImpExServicesClass{
             let designsMapping = [];
             let designPermutationsMapping = [];
             let permutationValuesMapping = [];
+            let iterationsMapping = [];
             let designVersionsMapping = [];
             let designUpdatesMapping = [];
             let workPackagesMapping = [];
@@ -352,39 +363,65 @@ class ImpExServicesClass{
                     designsMapping = ImpexModules.restoreDesignData(backupData.designs, backupDataVersion, currentDataVersion);
 
                     // Restore Default Feature Aspects
-                    ImpexModules.restoreDefaultFeatureAspects(backupData.defaultFeatureAspects, backupDataVersion, currentDataVersion, designsMapping);
+                    if(backupData.defaultFeatureAspects) {
+                        ImpexModules.restoreDefaultFeatureAspects(backupData.defaultFeatureAspects, backupDataVersion, currentDataVersion, designsMapping);
+                    }
 
                     // Restore Design Permutations
-                    designPermutationsMapping = ImpexModules.restoreDesignPermutationData(backupData.designPermutations, backupDataVersion, currentDataVersion, designsMapping);
+                    if(backupData.designPermutations) {
+                        designPermutationsMapping = ImpexModules.restoreDesignPermutationData(backupData.designPermutations, backupDataVersion, currentDataVersion, designsMapping);
+                    }
 
                     // Restore Design Versions
                     designVersionsMapping = ImpexModules.restoreDesignVersionData(backupData.designVersions, backupDataVersion, currentDataVersion, designsMapping);
 
+                    // Restore Design Version Iterations
+                    if(backupData.iterations){
+                        iterationsMapping = ImpexModules.restoreIterationData(backupData.iterations, backupDataVersion, currentDataVersion, designVersionsMapping);
+                    }
+
+                    let hasDesignUpdates = false;
+
                     // Restore Design Updates
-                    designUpdatesMapping = ImpexModules.restoreDesignUpdateData(backupData.designUpdates, backupDataVersion, currentDataVersion, designVersionsMapping);
+                    if(backupData.designUpdates) {
+                        hasDesignUpdates = (backupData.designUpdates.length > 0);
+                        designUpdatesMapping = ImpexModules.restoreDesignUpdateData(backupData.designUpdates, backupDataVersion, currentDataVersion, designVersionsMapping);
+                    }
 
                     // Restore Work Packages
-                    const hasDesignUpdates = (backupData.designUpdates.length > 0);
-
-                    workPackagesMapping = ImpexModules.restoreWorkPackageData(backupData.workPackages, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, usersMapping, hasDesignUpdates);
+                    if(backupData.workPackages) {
+                        workPackagesMapping = ImpexModules.restoreWorkPackageData(backupData.workPackages, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, usersMapping, hasDesignUpdates);
+                    }
 
                     // Restore Permutation Values
-                    permutationValuesMapping = ImpexModules.restorePermutationValueData(backupData.permutationValues, backupDataVersion, currentDataVersion, designVersionsMapping, designPermutationsMapping);
+                    if(backupData.permutationValues) {
+                        permutationValuesMapping = ImpexModules.restorePermutationValueData(backupData.permutationValues, backupDataVersion, currentDataVersion, designVersionsMapping, designPermutationsMapping);
+                    }
 
                     // Restore Domain Dictionary
-                    ImpexModules.restoreDomainDictionaryData(backupData.domainDictionary, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping);
+                    if(backupData.domainDictionary) {
+                        ImpexModules.restoreDomainDictionaryData(backupData.domainDictionary, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping);
+                    }
+
+                    let hasDesignVersionComponents = false;
+                    let hasDesignUpdateComponents = false;
 
                     // Restore Design Version Components
-                    designVersionComponentsMapping = ImpexModules.restoreDesignVersionComponentData(backupData.designVersionComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, workPackagesMapping);
+                    if(backupData.designVersionComponents) {
+                        hasDesignVersionComponents = (backupData.designVersionComponents.length > 0);
+                        designVersionComponentsMapping = ImpexModules.restoreDesignVersionComponentData(backupData.designVersionComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, workPackagesMapping);
+                    }
 
                     // Restore Design Update Components
-                    designUpdateComponentsMapping = ImpexModules.restoreDesignUpdateComponentData(backupData.designUpdateComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
+                    if(backupData.designUpdateComponents) {
+                        hasDesignUpdateComponents = (backupData.designUpdateComponents.length > 0);
+                        designUpdateComponentsMapping = ImpexModules.restoreDesignUpdateComponentData(backupData.designUpdateComponents, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
+                    }
 
                     // Restore Work Package Components
-                    const hasDesignVersionComponents = (backupData.designVersionComponents.length > 0);
-                    const hasDesignUpdateComponents = (backupData.designUpdateComponents.length > 0);
-
-                    ImpexModules.restoreWorkPackageComponentData(backupData.workPackageComponents, backupDataVersion, currentDataVersion, workPackagesMapping, designVersionComponentsMapping, designUpdateComponentsMapping, hasDesignVersionComponents, hasDesignUpdateComponents);
+                    if(backupData.workPackageComponents) {
+                        ImpexModules.restoreWorkPackageComponentData(backupData.workPackageComponents, backupDataVersion, currentDataVersion, workPackagesMapping, designVersionComponentsMapping, designUpdateComponentsMapping, hasDesignVersionComponents, hasDesignUpdateComponents);
+                    }
 
                     // Restore Scenario Test Expectations
                     if(backupData.scenarioTestExpectations && backupData.scenarioTestExpectations.length > 0) {

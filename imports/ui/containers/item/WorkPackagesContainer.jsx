@@ -8,12 +8,12 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemList                         from '../../components/select/ItemList.jsx';
-import DesignUpdateSummaryContainer     from '../../containers/summary/UpdateSummaryContainer.jsx';
-import FeatureSummaryContainer          from '../../containers/select/FeatureSummaryContainer.jsx';
+import ItemList                         from '../../components/item/ItemList.jsx';
+import DesignUpdateSummaryContainer     from '../summary/UpdateSummaryContainer.jsx';
+import FeatureSummaryContainer          from './FeatureSummaryContainer.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, DisplayContext, WorkPackageType, RoleType, HomePageTab, LogLevel} from '../../../constants/constants.js';
+import {DesignVersionStatus, DisplayContext, WorkPackageType, ItemListType, RoleType, HomePageTab, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js';
 
 import { ClientDataServices }               from '../../../apiClient/apiClientDataServices.js';
@@ -173,6 +173,7 @@ export class WorkPackagesList extends Component {
                                     footerAction={footerAction}
                                     footerActionUiContext={footerActionUiContextId}
                                     footerActionFunction={footerActionFunction}
+                                    listType={ItemListType.ULTRAWIDE_ITEM}
                                 />
                             </Tab>
                             <Tab eventKey={WorkPackageTab.TAB_ADOPTED} title={tabText2}>
@@ -183,6 +184,7 @@ export class WorkPackagesList extends Component {
                                     footerAction={''}
                                     footerActionUiContext={''}
                                     footerActionFunction={null}
+                                    listType={ItemListType.ULTRAWIDE_ITEM}
                                 />
                             </Tab>
                             <Tab eventKey={WorkPackageTab.TAB_COMPLETE} title={tabText3}>
@@ -193,6 +195,7 @@ export class WorkPackagesList extends Component {
                                     footerAction={''}
                                     footerActionUiContext={''}
                                     footerActionFunction={null}
+                                    listType={ItemListType.ULTRAWIDE_ITEM}
                                 />
                             </Tab>
                         </Tabs>

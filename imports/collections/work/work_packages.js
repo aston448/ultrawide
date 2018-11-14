@@ -10,6 +10,7 @@ export const WorkPackages = new Mongo.Collection('workPackages');
 let Schema = new SimpleSchema({
     designVersionId:            {type: String},                                                         // The Design Version this WP relates to
     designUpdateId:             {type: String, defaultValue: 'NONE'},                                   // The Design Update this WP relates to (if any)
+    parentWorkItemRefId:        {type: String, defaultValue: 'NONE'},                                   // If included in an iteration...
     workPackageType:            {type: String},                                                         // Either Base Version Implementation or Design Update Implementation
     workPackageName:            {type: String},                                                         // Identifier of this work package
     workPackageRawText:         {type: Object, blackbox: true, optional: true},                         // Text descriptive of this package
@@ -17,6 +18,7 @@ let Schema = new SimpleSchema({
     workPackageTestStatus:      {type: String, defaultValue: WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE},
     adoptingUserId:             {type: String, defaultValue: 'NONE'},
     workPackageLink:            {type: String, defaultValue: 'NONE'},
+    workPackageIndex:           {type: Number, decimal: true, defaultValue: 200000}
 });
 
 WorkPackages.attachSchema(Schema);

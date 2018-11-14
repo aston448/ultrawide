@@ -4,6 +4,7 @@ import {WorkPackageComponents}          from '../../collections/work/work_packag
 
 import { WorkPackageStatus, WorkPackageTestStatus, WorkPackageType, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, UpdateMergeStatus, LogLevel }      from '../../constants/constants.js';
 import { DefaultItemNames } from "../../constants/default_names";
+import {WorkItems} from "../../collections/work/work_items";
 
 class WorkPackageDataClass {
 
@@ -47,6 +48,16 @@ class WorkPackageDataClass {
     getWorkPackageById(workPackageId){
 
         return WorkPackages.findOne({_id: workPackageId});
+    }
+
+    getUnassignedBaseWorkPackages(designVersionId){
+
+        return WorkPackages.find({
+            designVersionId:        designVersionId,
+            designUpdateId:         'NONE',
+            workPackageType:        WorkPackageType.WP_BASE,
+            parentWorkItemRefId:    'NONE'
+        }).fetch();
     }
 
     getActiveWorkPackagesForDesignUpdate(designVersionId, designUpdateId){
@@ -123,6 +134,29 @@ class WorkPackageDataClass {
         );
     }
 
+    getOtherPeerWorkPackages(workPackage){
+
+        return WorkPackages.find(
+            {
+                _id:                    {$ne: workPackage._id},
+                designVersionId:        workPackage.designVersionId,
+                wiParentReferenceId:    workPackage.parentWorkItemRefId,
+            },
+            {sort: {wiIndex: -1}}
+        ).fetch();
+    }
+
+    getPeerWorkPackages(workPackage){
+
+        return WorkPackages.find(
+            {
+                designVersionId:        workPackage.designVersionId,
+                wiParentReferenceId:    workPackage.parentWorkItemRefId,
+            },
+            {sort: {wiIndex: 1}}
+        ).fetch();
+    }
+
     // UPDATE ==========================================================================================================
 
     setWorkPackageName(workPackageId, newName){
@@ -180,6 +214,30 @@ class WorkPackageDataClass {
             {
                 $set: {
                     adoptingUserId: userId
+                }
+            }
+        );
+    }
+
+    setWorkItemParent(workPackageId, parentRefId){
+
+        return WorkPackages.update(
+            {_id: workPackageId},
+            {
+                $set: {
+                    parentWorkItemRefId: parentRefId
+                }
+            }
+        );
+    }
+
+    setWorkPackageIndex(workPackageId, newIndex){
+
+        return WorkPackages.update(
+            {_id: workPackageId},
+            {
+                $set: {
+                    workPackageIndex: newIndex
                 }
             }
         );

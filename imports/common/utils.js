@@ -1,10 +1,12 @@
 // Note no code referencing DB in here - will break tests that use utils
 
-import {ComponentType, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType} from '../constants/constants.js';
+import {ComponentType, UpdateMergeStatus, UpdateScopeType, WorkPackageType, WorkPackageScopeType} from '../constants/constants.js';
 
 import {ViewType,DisplayContext, LogLevel} from '../constants/constants.js';
 
 import { TextLookups }   from '../common/lookups.js';
+
+import { WorkItemData }     from '../data/work/work_item_db.js';
 
 export function padDigits(number, digits) {
     return new Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
@@ -216,88 +218,58 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
     }
 }
 
-// export function validateDesignComponentName(component,  newName){
-//
-//     // A design component with the same name as another component is not allowed.  This is because it describes a specific bit of functionality
-//     // and the same description implies ambiguity.  Also the name will act as a key to tests.
-//
-//     // However the rule does not apply to Design Sections and Feature Aspects which may well want to have the same titles
-//     if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
-//         return true;
-//     }
-//
-//     // Problem if any components of the same name in this design version (apart from the current one)
-//     let existingComponents = DesignVersionComponents.find({_id:{$ne: component._id}, designVersionId: component.designVersionId, componentName: newName});
-//
-//     let message = '';
-//
-//     if (existingComponents.count() > 0){
-//         console.log("Error: " + newName + " already exists");
-//
-//         message = {messageType: MessageType.WARNING, messageText: 'Design component names must be unique in this design version'};
-//
-//         // Post message to global state so it wil appear in header
-//         store.dispatch(updateUserMessage(message));
-//         return false;
-//     }
-//
-//     message = {messageType: MessageType.SUCCESS, messageText: 'Name saved successfully'};
-//
-//     // Post message to global state so it wil appear in header
-//     store.dispatch(updateUserMessage(message));
-//     return true;
-// }
+export function workItemMoveDropAllowed(movingWorkItem, targetWorkItem){
 
-// export function validateDesignUpdateComponentName(component, newName){
-//
-//     // A design component with the same name as another component is not allowed.  This is because it describes a specific bit of functionality
-//     // and the same description implies ambiguity.  Also the name will act as a key to tests.
-//
-//     // However the rule does not apply to Design Sections and Feature Aspects which may well want to have the same titles
-//     if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
-//         return true;
-//     }
-//
-//     let message = '';
-//
-//     // Problem if same name is used in the update...
-//     let existingComponents = DesignUpdateComponents.find({
-//         _id:{$ne: component._id},
-//         designVersionId: component.designVersionId,
-//         designUpdateId: component.designUpdateId,
-//         componentNewName: newName                   // Need to check the new name for each component - for unchanged items will be same as old name
-//     });
-//
-//     if (existingComponents.count() > 0){
-//         //console.log("Error: " + newName + " already exists");
-//
-//         message = {messageType: MessageType.WARNING, messageText: 'Design component names must be unique in this design update'};
-//         store.dispatch(updateUserMessage(message));
-//         return false;
-//     }
-//
-//     // Problem if the same name is used for a *different* component in parallel updates
-//     // If its the same item in two updates it will have the same reference id...
-//     let referenceId = DesignUpdateComponents.findOne({_id:component._id}).componentReferenceId;
-//     let existingParallelComponents = DesignUpdateComponents.find({
-//         _id:{$ne: component._id},
-//         componentReferenceId:{$ne: referenceId},
-//         designVersionId: component.designVersionId,
-//         componentNewName: newName});
-//
-//     if (existingParallelComponents.count() > 0){
-//         //console.log("Error: " + newName + " already exists in a parallel design update for a different item");
-//
-//         message = {messageType: MessageType.WARNING, messageText: 'This component name already exists for a different component in another update to this design version'};
-//         store.dispatch(updateUserMessage(message));
-//         return false;
-//     }
-//
-//     message = {messageType: MessageType.SUCCESS, messageText: 'Name saved successfully'};
-//     store.dispatch(updateUserMessage(message));
-//     return true;
-//
-// }
+    // Allowed only to move to another parent of the same kind at the same level
+
+    // Get parent of moving item
+    const parentWorkItem = WorkItemData.getWorkItemParent(movingWorkItem);
+
+    if(parentWorkItem){
+        return(
+            (movingWorkItem.wiParentReferenceId !== targetWorkItem.wiParentReferenceId) &&
+            (parentWorkItem.wiType === targetWorkItem.wiType) &&
+            (parentWorkItem.wiLevel === targetWorkItem.wiLevel)
+        );
+    } else {
+        return false
+    }
+
+}
+
+export function reorderWorkItemDropAllowed(movingWorkItem, targetWorkItem){
+
+    // See if moving item is a WP...?
+    if(movingWorkItem.wiParentReferenceId){
+        // No...
+
+        // Allowed only within the same list
+        return(
+            (movingWorkItem.wiParentReferenceId === targetWorkItem.wiParentReferenceId)
+        );
+
+    } else {
+
+        if(targetWorkItem.parentWorkItemRefId === 'NONE'){
+
+            // Moving back to unassigned - can't drop in order
+            return false;
+
+        } else {
+
+            // Can reorder WPs in the same iteration
+            return(
+                (movingWorkItem.parentWorkItemRefId === targetWorkItem.parentWorkItemRefId)
+            );
+        }
+    }
+
+}
+
+export function workPackageUnassignedDropAllowed(movingItem){
+
+    return (movingItem.workPackageType === WorkPackageType.WP_BASE);
+}
 
 export function locationMoveDropAllowed(itemType, targetType, viewType, inScope){
     // Is drop allowed for this item when moving a component to a new location?

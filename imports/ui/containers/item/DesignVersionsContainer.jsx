@@ -6,11 +6,11 @@ import PropTypes            from 'prop-types';
 import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import UltrawideItem        from '../../components/select/UltrawideItem.jsx';
-import ItemList                     from '../../components/select/ItemList.jsx';
+import UltrawideItem        from '../../components/item/UltrawideItem.jsx';
+import ItemList                     from '../../components/item/ItemList.jsx';
 
 // Ultrawide Services
-import {ItemType, LogLevel} from "../../../constants/constants";
+import {ItemType, ItemListType, LogLevel} from "../../../constants/constants";
 import {log} from "../../../common/utils";
 
 import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
@@ -94,6 +94,7 @@ export class DesignVersionsList extends Component {
                 footerActionUiContext={''}
                 footerActionFunction={footerActionFunction}
                 footerText = ''
+                listType={ItemListType.ULTRAWIDE_ITEM}
             />
         )
     }

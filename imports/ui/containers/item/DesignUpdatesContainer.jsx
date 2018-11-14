@@ -8,12 +8,12 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import UltrawideItem        from '../../components/select/UltrawideItem.jsx';
-import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
-import ItemList                     from '../../components/select/ItemList.jsx';
+import UltrawideItem        from '../../components/item/UltrawideItem.jsx';
+import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx';
+import ItemList                     from '../../components/item/ItemList.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, ItemType, LogLevel, DesignUpdateTab} from '../../../constants/constants.js';
+import {DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType, DisplayContext, ItemType, ItemListType, LogLevel, DesignUpdateTab} from '../../../constants/constants.js';
 import {AddActionIds} from "../../../constants/ui_context_ids";
 import { log } from '../../../common/utils.js';
 
@@ -243,6 +243,7 @@ export class DesignUpdatesList extends Component {
                                             footerAction={''}
                                             footerActionUiContext={''}
                                             footerActionFunction={null}
+                                            listType={ItemListType.ULTRAWIDE_ITEM}
                                         />
                                         <ItemList
                                             headerText={headerText2}
@@ -251,6 +252,7 @@ export class DesignUpdatesList extends Component {
                                             footerAction={''}
                                             footerActionUiContext={''}
                                             footerActionFunction={null}
+                                            listType={ItemListType.ULTRAWIDE_ITEM}
                                         />
                                         <ItemList
                                             headerText={headerText3}
@@ -259,6 +261,7 @@ export class DesignUpdatesList extends Component {
                                             footerAction={''}
                                             footerActionUiContext={''}
                                             footerActionFunction={null}
+                                            listType={ItemListType.ULTRAWIDE_ITEM}
                                         />
                                     </Col>
                                     <Col md={4}>
@@ -269,6 +272,7 @@ export class DesignUpdatesList extends Component {
                                             footerAction={footerAction}
                                             footerActionUiContext={footerUiContextId}
                                             footerActionFunction={footerActionFunction}
+                                            listType={ItemListType.ULTRAWIDE_ITEM}
                                         />
                                     </Col>
                                     <Col md={4}>
@@ -298,6 +302,7 @@ export class DesignUpdatesList extends Component {
                                                     footerAction={footerAction}
                                                     footerActionUiContext={footerUiContextId}
                                                     footerActionFunction={footerActionFunction}
+                                                    listType={ItemListType.ULTRAWIDE_ITEM}
                                                 />
                                             </Tab>
                                             <Tab eventKey={DesignUpdateTab.TAB_ASSIGNED} title={tabText2}>
@@ -308,6 +313,7 @@ export class DesignUpdatesList extends Component {
                                                     footerAction={''}
                                                     footerActionUiContext={''}
                                                     footerActionFunction={null}
+                                                    listType={ItemListType.ULTRAWIDE_ITEM}
                                                 />
                                             </Tab>
                                             <Tab eventKey={DesignUpdateTab.TAB_COMPLETE} title={tabText3}>
@@ -318,6 +324,7 @@ export class DesignUpdatesList extends Component {
                                                     footerAction={''}
                                                     footerActionUiContext={''}
                                                     footerActionFunction={null}
+                                                    listType={ItemListType.ULTRAWIDE_ITEM}
                                                 />
                                             </Tab>
                                         </Tabs>

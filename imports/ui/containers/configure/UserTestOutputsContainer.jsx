@@ -10,11 +10,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import UserTestLocationConfiguration        from '../../components/configure/UserTestLocationConfiguration.jsx';
-import ItemList                             from '../../components/select/ItemList.jsx';
+import ItemList                             from '../../components/item/ItemList.jsx';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import {LogLevel} from "../../../constants/constants";
+import {ItemListType, LogLevel} from "../../../constants/constants";
 
 import { ClientDataServices }  from '../../../apiClient/apiClientDataServices.js';
 
@@ -74,6 +74,7 @@ export class UserTestOutputConfiguration extends Component {
                             hasFooterAction={false}
                             footerAction={'NONE'}
                             footerActionFunction={null}
+                            listType={ItemListType.ULTRAWIDE_ITEM}
                         />
                     </Col>
                 </Row>

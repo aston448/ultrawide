@@ -10,10 +10,10 @@ import { UserDetails }          from "../admin/UserDetails";
 import {TestOutputLocation}     from "../configure/TestOutputLocation";
 import {TestOutputFile}         from "../configure/TestOutputFile";
 
-import { ItemType} from '../../../constants/constants.js'
+import { ItemType, ItemListType} from '../../../constants/constants.js'
 
 import { Designs } from '../../../collections/design/designs.js'
-import {AddActionIds} from "../../../constants/ui_context_ids";
+import {AddActionIds } from "../../../constants/ui_context_ids";
 import {hashID} from "../../../common/utils";
 
 
@@ -172,6 +172,7 @@ describe('JSX: ItemList', () => {
                 footerAction={footerAction}
                 footerActionUiContext={footerActionUiContext}
                 footerActionFunction={footerActionFunction}
+                listType={ItemListType.ULTRAWIDE_ITEM}
             />
         );
     }

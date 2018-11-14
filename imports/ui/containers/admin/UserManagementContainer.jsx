@@ -9,13 +9,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ItemList                         from '../../components/select/ItemList.jsx';
+import ItemList                         from '../../components/item/ItemList.jsx';
 import UserDetails                      from '../../components/admin/UserDetails.jsx';
 import ChangePassword                   from '../../components/configure/ChangePassword.jsx';
 
 // Ultrawide Services
 import {log, getContextID} from "../../../common/utils";
-import {LogLevel, DisplayContext} from "../../../constants/constants";
+import {ItemListType, LogLevel, DisplayContext} from "../../../constants/constants";
 import {UI} from "../../../constants/ui_context_ids";
 
 import { ClientDataServices }               from '../../../apiClient/apiClientDataServices.js';
@@ -99,6 +99,7 @@ export class UserManagementScreen extends Component {
                 footerAction={'Add User'}
                 footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_USER}
                 footerActionFunction={footerActionFunction}
+                listType={ItemListType.ULTRAWIDE_ITEM}
             />;
 
         // User Management screen also has a panel to change the Admin password

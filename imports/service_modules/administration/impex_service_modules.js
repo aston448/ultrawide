@@ -17,6 +17,7 @@ import { UserRoleData }                     from '../../data/users/user_role_db.
 import { UserSettingsData }                 from '../../data/configure/user_setting_db.js';
 import { DesignData }                       from '../../data/design/design_db.js';
 import { DesignVersionData }                from '../../data/design/design_version_db.js';
+import { IterationData}                     from "../../data/work/work_item_db";
 import { DesignUpdateData }                 from '../../data/design_update/design_update_db.js';
 import { WorkPackageData }                  from '../../data/work/work_package_db.js';
 import { WorkPackageComponentData }         from '../../data/work/work_package_component_db.js';
@@ -555,6 +556,38 @@ class ImpexModulesClass{
 
         log((msg) => console.log(msg), LogLevel.INFO, "Added {} Dictionary Terms", componentCount);
     };
+
+    restoreIterationData(iterationData, backupDataVersion, currentDataVersion, designVersionsMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Iterations...");
+
+        let iterationsMapping = [];
+
+        const newIterationData = this.migrateIterationData(iterationData, backupDataVersion, currentDataVersion);
+
+        let componentCount = 0;
+
+        newIterationData.forEach((iteration) => {
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Iteration {}", iteration.iterationName);
+
+            let designVersionId = getIdFromMap(designVersionsMapping, iteration.designVersionId);
+
+            if (designVersionId) {
+                let iterationId = IterationData.importIteration(designVersionId, iteration);
+
+                if (iterationId) {
+                    // Store the new Iteration ID
+                    iterationsMapping.push({oldId: iteration._id, newId: iterationId});
+                }
+            }
+
+            componentCount++;
+        });
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Iterations", componentCount);
+
+        return iterationsMapping;
+    }
 
     restoreDesignVersionComponentData(designComponentData, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, workPackagesMapping){
 
@@ -1123,6 +1156,23 @@ class ImpexModulesClass{
         }
 
         return newDesignVersionData;
+    };
+
+    migrateIterationData(iterationData, backupVersion, currentVersion){
+
+        // Add to this function for each release
+        let newIterationData = iterationData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 1:
+                        // No changes
+                        newIterationData = iterationData
+                }
+        }
+
+        return newIterationData;
     };
 
     migratePermutationValueData(permutationValueData, backupVersion, currentVersion){

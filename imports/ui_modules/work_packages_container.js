@@ -3,7 +3,7 @@ import {AddActionIds} from "../constants/ui_context_ids";
 import { ClientWorkPackageServices } from "../apiClient/apiClientWorkPackage";
 import {log} from "../common/utils";
 import React, { Component } from 'react';
-import UltrawideItem        from '../ui/components/select/UltrawideItem.jsx';
+import UltrawideItem        from '../ui/components/item/UltrawideItem.jsx';
 
 class WorkPackageContainerUiModulesClass{
 

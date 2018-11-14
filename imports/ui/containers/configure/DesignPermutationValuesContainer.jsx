@@ -8,11 +8,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignPermutationValue               from '../../components/configure/DesignPermutationValue.jsx';
-import ItemList                             from '../../components/select/ItemList.jsx';
+import ItemList                             from '../../components/item/ItemList.jsx';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import {LogLevel} from "../../../constants/constants";
+import {ItemListType, LogLevel} from "../../../constants/constants";
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
@@ -89,6 +89,7 @@ export class DesignPermutationValuesScreen extends Component {
                 footerAction={'Add New Value'}
                 footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_PERMUTATION_VALUE}
                 footerActionFunction={() => this.addNewPermutationValue()}
+                listType={ItemListType.ULTRAWIDE_ITEM}
             />
         );
     };

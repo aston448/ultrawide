@@ -21,6 +21,7 @@ import '../imports/collections/context/user_current_view_options.js';
 
 import '../imports/collections/work/work_packages.js';
 import '../imports/collections/work/work_package_components.js';
+import '../imports/collections/work/work_items.js';
 
 import '../imports/collections/dev/user_dev_features.js';
 import '../imports/collections/dev/user_dev_feature_background_steps.js';
@@ -58,6 +59,7 @@ import '../imports/apiServer/apiImpEx.js';
 import '../imports/apiServer/apiTestIntegration.js';
 import '../imports/apiServer/apiTestOutputLocations.js';
 import '../imports/apiServer/apiUserManagement.js';
+import '../imports/apiServer/apiWorkItem.js';
 
 import '../imports/apiServer/server/apiDocument.js';
 
@@ -73,6 +75,7 @@ import '../imports/apiValidatedMethods/design_update_component_methods.js';
 import '../imports/apiValidatedMethods/work_package_methods.js';
 import '../imports/apiValidatedMethods/work_package_component_methods.js';
 import '../imports/apiValidatedMethods/domain_dictionary_methods.js';
+import '../imports/apiValidatedMethods/work_item_methods.js';
 
 
 // Integration test Framework

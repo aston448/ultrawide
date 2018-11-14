@@ -843,10 +843,10 @@ input {
     border-top-right-radius: 4px;
 }
 
-.item-container-footer{
+.item-container-footer {
     border-top: 1px solid ghostwhite;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  14px;
+    font-size: 14px;
     color: black;
     background-color: ghostwhite;
     margin: 0;
@@ -1101,6 +1101,162 @@ input {
 
 .du-all-scenarios-passing{
     color: forestgreen;
+}
+
+/* WORK ITEMS ------------------------------------------------------------------------------------------------------- */
+
+.badge-increment{
+    color: lightgrey;
+    background-color: darkslategray;
+}
+
+.badge-iteration{
+    color: white;
+    background-color: darkseagreen;
+}
+
+.badge-work-package-new{
+    color: white;
+    background-color: cadetblue;
+}
+
+.badge-work-package-available{
+    color: lightgreen;
+    background-color: darkgreen;
+}
+
+.badge-work-package-adopted{
+    color: lightpink;
+    background-color: darkred;
+}
+
+.work-item-name{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    margin: 0 10px 0 0;
+    padding: 0;
+}
+
+.work-item-link{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    margin: 0 20px 0 10px;
+    padding: 0;
+    color: blue;
+}
+
+.item-container-in{
+    margin: 10px 0 0 0px;
+    padding: 0 1px 1px 1px;
+    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
+    border-radius: 4px;
+}
+
+.item-container-header-in{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    color: lightgrey;
+    background-color: darkslategray;
+    margin: 0;
+    padding: 3px 10px 3px 20px;
+    border: 1px solid ghostwhite;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.item-container-footer-in{
+    border-top: 1px solid ghostwhite;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  142px;
+    color: black;
+    background-color: ghostwhite;
+    margin: 0;
+    padding: 3px 10px 3px 20px;
+    min-height: 25px
+}
+
+.item-container-it{
+    margin: 10px 0 0 10px;
+    padding: 0 1px 1px 1px;
+    border-radius: 2px;
+}
+
+.item-container-header-it{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: white;
+    background-color: darkseagreen;
+    margin: 0;
+    padding: 3px 10px 3px 20px;
+    border: 1px solid ghostwhite;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.item-container-footer-it{
+    border-top: 1px solid ghostwhite;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  142px;
+    color: black;
+    background-color: ghostwhite;
+    margin: 0;
+    padding: 3px 10px 3px 20px;
+    min-height: 25px
+}
+
+.item-container-wp{
+    margin: 10px 1px 10px 20px;
+    padding: 0 1px 1px 1px;
+    border-radius: 2px;
+}
+
+.item-container-header-wp{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.item-container-footer-wp{
+    margin: 0;
+    padding: 0;
+    height: 0
+}
+
+.work-item-wp{
+    margin: 0 0 1px 0;
+    padding: 4px 1px 1px 1px;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+}
+
+.work-item-wp-selected{
+    margin: 0 0 1px 0;
+    padding: 4px 1px 1px 1px;
+    background-color: palegoldenrod;
+    border: 1px solid darkgray;
+    border-radius: 4px;
+}
+
+.wp-new{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    padding: 10px 0 0 0;
+    color: lightgrey;
+}
+
+.wp-available {
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size: 11px;
+    padding: 10px 0 0 0;
+    color: darkgreen;
+}
+
+.wp-adopted{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    padding: 10px 0 0 0;
+    color: darkred;
 }
 
 /* -- Design Version Modal ------------------------------------------------------------------------------------------ */

@@ -199,6 +199,29 @@ export const ItemType = {
     PERMUTATION_VALUE:  'PERMUTATION_VALUE'
 };
 
+export const ItemListType = {
+    ULTRAWIDE_ITEM:     'UW_ITEM',
+    WORK_ITEM_IN:       'WI_IN',
+    WORK_ITEM_IT:       'WI_IT',
+    WORK_ITEM_DU:       'WI_DU',
+    WORK_ITEM_WP:       'WI_WP'
+};
+
+export const WorkItemType = {
+    INCREMENT:          'IN',
+    ITERATION:          'IT',
+    DESIGN_UPDATE:      'DU',
+    BASE_WORK_PACKAGE:  'WP',
+    UPDATE_WORK_PACKAGE:'UP',
+    UNASSIGNED_WP:      'UU'
+};
+
+export const WorkItemStatus = {
+    WI_NEW:                 'NEW',
+    WI_IN_PROGRESS:         'IN_PROGRESS',
+    WI_COMPLETE:            'COMPLETE'
+};
+
 export const FieldType = {
     NAME:           'NAME',
     VERSION:        'VERSION',

@@ -12,7 +12,7 @@ import DesignComponentAdd from '../common/DesignComponentAdd.jsx';
 // Ultrawide Services
 import { ClientUserSettingsServices }  from '../../../apiClient/apiClientUserSettings.js';
 import {log} from "../../../common/utils";
-import {LogLevel, ViewType} from "../../../constants/constants";
+import {ItemListType, LogLevel, ViewType} from "../../../constants/constants";
 
 // Bootstrap
 
@@ -53,21 +53,49 @@ export class ItemList extends Component {
 
     render() {
 
-        const {headerText, hasFooterAction, footerAction, footerActionUiContext, footerText} = this.props;
+        const {headerText, hasFooterAction, footerAction, footerActionUiContext, footerText, listType} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Item List');
 
         const bodyClass = this.getWindowSizeClass();
 
+        let containerType = 'item-container';
+        let containerHeaderType = 'item-container-header';
+        let containerFooterType = 'item-container-footer';
+
+        switch(listType){
+
+            case ItemListType.ULTRAWIDE_ITEM:
+                containerType = 'item-container';
+                containerHeaderType = 'item-container-header';
+                containerFooterType = 'item-container-footer';
+                break;
+            case ItemListType.WORK_ITEM_IN:
+                containerType = 'item-container-in';
+                containerHeaderType = 'item-container-header-in';
+                containerFooterType = 'item-container-footer-in';
+                break;
+            case ItemListType.WORK_ITEM_IT:
+                containerType = 'item-container-it';
+                containerHeaderType = 'item-container-header-it';
+                containerFooterType = 'item-container-footer-it';
+                break;
+            case ItemListType.WORK_ITEM_WP:
+                containerType = 'item-container-wp';
+                containerHeaderType = 'item-container-header-wp';
+                containerFooterType = 'item-container-footer-wp';
+                break;
+        }
+
         if(hasFooterAction) {
             return (
 
-                <div className="item-container">
-                    <div className="item-container-header">{headerText}</div>
+                <div className={containerType}>
+                    <div className={containerHeaderType}>{headerText}</div>
                     <div className={bodyClass}>
                         {this.bodyData()}
                     </div>
-                    <div className="item-container-footer">
+                    <div className={containerFooterType}>
                         <div id={footerActionUiContext} className="design-item-add">
                             <DesignComponentAdd
                                 uiContextId={footerActionUiContext}
@@ -81,12 +109,12 @@ export class ItemList extends Component {
         } else {
             return (
 
-                <div className="item-container">
-                    <div className="item-container-header">{headerText}</div>
+                <div className={containerType}>
+                    <div className={containerHeaderType}>{headerText}</div>
                     <div className={bodyClass}>
                         {this.bodyData()}
                     </div>
-                    <div className="item-container-footer">
+                    <div className={containerFooterType}>
                         {footerText}
                     </div>
                 </div>
@@ -102,7 +130,8 @@ ItemList.propTypes = {
     footerAction: PropTypes.string,
     footerActionFunction: PropTypes.func,
     footerActionUiContext: PropTypes.string,
-    footerText: PropTypes.string
+    footerText: PropTypes.string,
+    listType: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

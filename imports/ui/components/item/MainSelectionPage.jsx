@@ -6,12 +6,12 @@ import PropTypes            from 'prop-types';
 import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import DesignsContainer                     from '../../containers/select/DesignsContainer.jsx';
-import DesignVersionsContainer              from '../../containers/select/DesignVersionsContainer.jsx';
-import DesignUpdatesContainer               from '../../containers/select/DesignUpdatesContainer.jsx';
-import WorkPackagesContainer                from '../../containers/select/WorkPackagesContainer.jsx';
+import DesignsContainer                     from '../../containers/item/DesignsContainer.jsx';
+import DesignVersionsContainer              from '../../containers/item/DesignVersionsContainer.jsx';
+import DesignUpdatesContainer               from '../../containers/item/DesignUpdatesContainer.jsx';
+import WorkTabPage                          from '../work/WorkTabPage.jsx';
 import WorkProgressSummaryContainer         from '../../containers/summary/WorkProgressSummaryContainer.jsx';
-import FeatureSummaryContainer              from '../../containers/select/FeatureSummaryContainer.jsx';
+import FeatureSummaryContainer              from '../../containers/item/FeatureSummaryContainer.jsx';
 import ProjectSummaryContainer              from '../../containers/summary/ProjectSummaryContainer.jsx';
 
 
@@ -103,12 +103,7 @@ export class MainSelectionPage extends Component {
             }
 
             workTabLayout =
-                <WorkPackagesContainer params={{
-                    wpType: wpType,
-                    designVersionId: userContext.designVersionId,
-                    userRole: userRole,
-                    userContext: userContext
-                }}/>
+                <WorkTabPage/>
         }
 
 

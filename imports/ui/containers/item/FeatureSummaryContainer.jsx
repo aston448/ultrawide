@@ -8,13 +8,13 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import FeatureSummary           from '../../components/select/FeatureSummary.jsx';
-import ItemList                 from '../../components/select/ItemList.jsx';
+import FeatureSummary           from '../../components/item/FeatureSummary.jsx';
+import ItemList                 from '../../components/item/ItemList.jsx';
 
 // Ultrawide Services
 import { ClientDataServices }       from '../../../apiClient/apiClientDataServices.js';
 
-import {DisplayContext, HomePageTab, LogLevel} from "../../../constants/constants";
+import {DisplayContext, HomePageTab, ItemListType, LogLevel} from "../../../constants/constants";
 import {log} from "../../../common/utils";
 
 // Bootstrap
@@ -129,6 +129,7 @@ export class FeaturesList extends Component {
                 footerAction={''}
                 footerActionUiContext={''}
                 footerActionFunction={footerActionFunction}
+                listType={ItemListType.ULTRAWIDE_ITEM}
             />
         )
 
