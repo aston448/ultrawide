@@ -183,6 +183,16 @@ class WorkItemDataClass{
         );
     }
 
+    getDesignVersionIncrements(designVersionId){
+
+        return WorkItems.find(
+            {
+                designVersionId:    designVersionId,
+                wiType:             WorkItemType.INCREMENT
+            }
+        ).fetch();
+    }
+
     getDesignVersionIncrementsByIndex(designVersionId){
 
         return WorkItems.find(
@@ -191,6 +201,17 @@ class WorkItemDataClass{
                 wiType:             WorkItemType.INCREMENT
             },
             {sort: {wiIndex: 1}}
+        ).fetch();
+    }
+
+    getDesignVersionIncrementIterations(designVersionId, incrementRefId){
+
+        return WorkItems.find(
+            {
+                designVersionId:        designVersionId,
+                wiParentReferenceId:    incrementRefId,
+                wiType:                 WorkItemType.ITERATION
+            }
         ).fetch();
     }
 

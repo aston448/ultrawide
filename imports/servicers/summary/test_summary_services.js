@@ -3,7 +3,7 @@
 import { MashTestStatus, FeatureTestSummaryStatus, TestType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
 
-import { TestSummaryModules }                       from '../../service_modules/dev/test_summary_service_modules.js';
+import { TestSummaryModules }                       from '../../service_modules/summary/test_summary_service_modules.js';
 
 // Data Access
 import { DesignVersionData }                        from '../../data/design/design_version_db.js';

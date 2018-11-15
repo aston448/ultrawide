@@ -321,6 +321,17 @@ class DesignComponentDataClass {
         ).fetch();
     }
 
+    getDvScenariosNotInWorkPackages(designVersionId){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:                designVersionId,
+                workPackageId:                  'NONE',
+                componentType:                  ComponentType.SCENARIO
+            }
+        ).fetch();
+    }
+
     getAllParents(designVersionComponent, parentsList){
 
         //console.log('Looking for parents with list %o ', parentsList);

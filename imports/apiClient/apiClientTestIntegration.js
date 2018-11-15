@@ -134,18 +134,48 @@ class ClientTestIntegrationServicesClass {
     }
 
     // User has requested update of WP / DU progress data
-    refreshProgressData(userContext){
+    refreshWorkProgressData(userContext){
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH WORK DATA...");
+
+        const currentView = store.getState().currentAppView;
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Current view is {}", currentView);
+
+        store.dispatch(setCurrentView(ViewType.WAIT));
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.INFO,
-            messageText: 'Updating Design Updates and Work Packages...'
+            messageText: 'Refreshing Work Progress and Backlogs...'
         }));
 
-        // After tests are updated work progress should be too
-        ClientDesignVersionServices.updateWorkProgress(userContext);
+        ServerTestIntegrationApi.refreshWorkProgressData(userContext, (err, result) => {
 
-        // Get latest status on DUs
-        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+            if(err){
+
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Mash is populated to carry on with test data if needed
+
+                store.dispatch(updateTestDataFlag());
+
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: 'Work Progress updated'
+                }));
+
+                // // After tests are updated work progress should be too
+                // ClientDesignVersionServices.updateWorkProgress(userContext);
+                //
+                // // Get latest status on DUs
+                // ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH WORK DATA.  View to {}", currentView);
+
+                store.dispatch(setCurrentView(currentView));
+            }
+        });
 
         return {success: true, message: ''};
     }

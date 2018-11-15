@@ -1,6 +1,7 @@
 
 import {
     refreshTestData,
+    refreshWorkProgressData,
     updateTestSummaryData,
     updateTestSummaryDataForFeature,
     exportIntegrationTests
@@ -20,6 +21,18 @@ class ServerTestIntegrationApiClass {
             {
                 userContext: userContext,
                 fullRefresh: fullRefresh
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    refreshWorkProgressData(userContext, callback){
+
+        refreshWorkProgressData.call(
+            {
+                userContext: userContext
             },
             (err, result) => {
                 callback(err, result);

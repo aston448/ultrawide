@@ -31,6 +31,7 @@ class WorkPackageDataClass {
                 {
                     designVersionId:        designVersionId,
                     designUpdateId:         designUpdateId,
+                    parentWorkItemRefId:    workPackage.parentWorkItemRefId,
                     workPackageType:        workPackage.workPackageType,
                     workPackageName:        workPackage.workPackageName,
                     workPackageRawText:     workPackage.workPackageRawText,
@@ -48,6 +49,16 @@ class WorkPackageDataClass {
     getWorkPackageById(workPackageId){
 
         return WorkPackages.findOne({_id: workPackageId});
+    }
+
+    getDesignVersionWorkPackagesInIteration(designVersionId, parentIterationRefId){
+
+        return WorkPackages.find(
+            {
+                designVersionId:        designVersionId,
+                parentWorkItemRefId:    parentIterationRefId,
+            }
+        ).fetch();
     }
 
     getUnassignedBaseWorkPackages(designVersionId){
@@ -85,6 +96,29 @@ class WorkPackageDataClass {
             designVersionId:    designVersionId,
             designUpdateId:     designUpdateId
         }).fetch();
+    }
+
+    getOtherPeerWorkPackages(workPackage){
+
+        return WorkPackages.find(
+            {
+                _id:                    {$ne: workPackage._id},
+                designVersionId:        workPackage.designVersionId,
+                wiParentReferenceId:    workPackage.parentWorkItemRefId,
+            },
+            {sort: {wiIndex: -1}}
+        ).fetch();
+    }
+
+    getPeerWorkPackages(workPackage){
+
+        return WorkPackages.find(
+            {
+                designVersionId:        workPackage.designVersionId,
+                wiParentReferenceId:    workPackage.parentWorkItemRefId,
+            },
+            {sort: {wiIndex: 1}}
+        ).fetch();
     }
 
     getActiveScenarios(workPackageId){
@@ -134,28 +168,7 @@ class WorkPackageDataClass {
         );
     }
 
-    getOtherPeerWorkPackages(workPackage){
 
-        return WorkPackages.find(
-            {
-                _id:                    {$ne: workPackage._id},
-                designVersionId:        workPackage.designVersionId,
-                wiParentReferenceId:    workPackage.parentWorkItemRefId,
-            },
-            {sort: {wiIndex: -1}}
-        ).fetch();
-    }
-
-    getPeerWorkPackages(workPackage){
-
-        return WorkPackages.find(
-            {
-                designVersionId:        workPackage.designVersionId,
-                wiParentReferenceId:    workPackage.parentWorkItemRefId,
-            },
-            {sort: {wiIndex: 1}}
-        ).fetch();
-    }
 
     // UPDATE ==========================================================================================================
 

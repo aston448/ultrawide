@@ -107,6 +107,7 @@ class TestSummaryModulesClass{
         let unitTestMissingCount = 0;
         let totalTestExpectedCount = 0;
         let totalTestMissingCount = 0;
+        let totalTestPassCount = 0;
         let totalTestFailCount = 0;
         let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
@@ -130,6 +131,7 @@ class TestSummaryModulesClass{
                         switch (expectationStatus.expectationStatus) {
                             case MashTestStatus.MASH_PASS:
                                 accTestPassCount++;
+                                totalTestPassCount++;
                                 break;
                             case MashTestStatus.MASH_FAIL:
                                 accTestFailCount++;
@@ -146,6 +148,7 @@ class TestSummaryModulesClass{
                         switch (expectationStatus.expectationStatus) {
                             case MashTestStatus.MASH_PASS:
                                 intTestPassCount++;
+                                totalTestPassCount++;
                                 break;
                             case MashTestStatus.MASH_FAIL:
                                 intTestFailCount++;
@@ -162,6 +165,7 @@ class TestSummaryModulesClass{
                         switch (expectationStatus.expectationStatus) {
                             case MashTestStatus.MASH_PASS:
                                 unitTestPassCount++;
+                                totalTestPassCount++;
                                 break;
                             case MashTestStatus.MASH_FAIL:
                                 unitTestFailCount++;
@@ -245,6 +249,7 @@ class TestSummaryModulesClass{
             totalTestExpectedCount: totalTestExpectedCount,
             totalTestMissingCount:  totalTestMissingCount,
             totalTestFailCount:     totalTestFailCount,
+            totalTestPassCount:     totalTestPassCount,
             scenarioTestStatus:     scenarioTestStatus,
         };
 

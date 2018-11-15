@@ -179,6 +179,22 @@ export const DisplayContext = {
     CONFIG_ADMIN_PASSWORD:  'CONFIG_ADMIN_PASSWORD'
 };
 
+export const SummaryType = {
+    SUMMARY_DV:             'SUMMARY_DV',
+    SUMMARY_IN:             'SUMMARY_IN',
+    SUMMARY_IT:             'SUMMARY_IT',
+    SUMMARY_DU:             'SUMMARY_DU',
+    SUMMARY_WP:             'SUMMARY_WP'
+};
+
+export const BacklogType = {
+    BACKLOG_DESIGN:         'BACKLOG_DESIGN',
+    BACKLOG_WP_ASSIGN:      'BACKLOG_WP_ASSIGN',
+    BACKLOG_TEST_EXP:       'BACKLOG_TEST_EXP',
+    BACKLOG_TEST_MISSING:   'BACKLOG_TEST_MISSING',
+    BACKLOG_TEST_FAIL:      'BACKLOG_TEST_FAIL',
+};
+
 export const StepContext = {
     STEP_FEATURE:           'STEP_FEATURE',             // A feature background step
     STEP_FEATURE_SCENARIO:  'STEP_FEATURE_SCENARIO',    // The background steps reproduced for a scenario
