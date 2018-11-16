@@ -735,6 +735,77 @@ input {
     box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
 }
 
+.summary-section-header{
+    margin: 20px 0 0 0;
+    padding: 10px 0 10px 20px;
+    border: 1px solid darkslategrey;
+    border-radius: 4px;
+    background-color: darkslategrey;
+    color: ghostwhite;
+    font-weight: normal;
+    font-size:  14px;
+}
+
+.summary-section-dv{
+    margin: 10px 0 0 0;
+    padding: 10px 0 10px 0;
+    border: 1px solid darkgray;
+    border-radius: 4px;
+    background-color: #FFFFDD;
+}
+
+.summary-section-work{
+    margin: 10px 0 0 0;
+    padding: 10px 0 10px 0;
+    border: 1px solid darkgray;
+    border-radius: 4px;
+    background-color: #EEFFEE;
+}
+
+.summary-section-unassigned{
+    margin: 20px 0 0 0;
+    padding: 10px 0 10px 0;
+    border: 1px solid darkgray;
+    border-radius: 4px;
+    background-color: #FFEEEE;
+}
+
+.summary-item-name-dv{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size: 11px;
+    padding: 0 0 0 0;
+}
+
+.summary-item-name-in{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size: 11px;
+    padding: 0 0 0 0;
+}
+
+.summary-item-name-it{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size: 11px;
+    padding: 0 0 0 10px;
+}
+
+.summary-item-name-wp{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size: 11px;
+    padding: 0 0 0 20px;
+}
+
+.summary-row-selected{
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+}
+
+.summary-item-hand{
+    font-size:  14px;
+    padding: 0px 5px 0 0;
+    margin: 0;
+    text-align: right;
+}
+
 .project-summary-item-icon{
     font-size:  28px;
     padding: 3px 10px 0 0;
@@ -742,7 +813,7 @@ input {
 
 .summary-hand{
     font-size:  20px;
-    padding: 5px 5px 0 0;
+    padding: 0px 5px 0 0;
     text-align: right;
 }
 
@@ -1222,6 +1293,25 @@ input {
     height: 0
 }
 
+.item-container-su{
+    margin: 10px 0px 10px 0px;
+    padding: 0 1px 1px 1px;
+    border-radius: 2px;
+}
+
+.item-container-header-su{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.item-container-footer-su{
+    margin: 0;
+    padding: 0;
+    height: 0
+}
+
+
 .work-item-wp{
     margin: 0 0 1px 0;
     padding: 4px 1px 1px 1px;
@@ -1258,6 +1348,8 @@ input {
     padding: 10px 0 0 0;
     color: darkred;
 }
+
+
 
 /* -- Design Version Modal ------------------------------------------------------------------------------------------ */
 

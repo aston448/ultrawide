@@ -81,7 +81,8 @@ export class WorkTabPage extends Component {
                         <WorkItemListContainer params={{
                             workItemsParentRef: 'NONE',
                             workItemType: WorkItemType.INCREMENT,
-                            userContext: userContext
+                            userContext: userContext,
+                            displayContext: DisplayContext.WORK_ITEM_EDIT
                         }}/>
                     </Col>
                     <Col className="close-col"  md={4}>

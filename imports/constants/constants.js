@@ -170,6 +170,8 @@ export const DisplayContext = {
     PROJECT_SUMMARY_FAIL:   'PROJECT_SUMMARY_FAIL',
     PROJECT_SUMMARY_SOME:   'PROJECT_SUMMARY_SOME',
     PROJECT_SUMMARY_ALL:    'PROJECT_SUMMARY_ALL',
+    WORK_ITEM_EDIT:         'WORK_ITEM_EDIT',       // Work Item List when editing / viewing in WORK tab
+    WORK_ITEM_SUMMARY:      'WORK_ITEM_SUMMARY',    // Work Item List when on Project Summary page
     DV_BACKLOG_NONE:        'DV_BACKLOG_NONE',
     DV_BACKLOG_DESIGN:      'DV_BACKLOG_DESIGN',
     DV_BACKLOG_NO_EXP:      'DV_BACKLOG_NO_EXP',
@@ -220,10 +222,12 @@ export const ItemListType = {
     WORK_ITEM_IN:       'WI_IN',
     WORK_ITEM_IT:       'WI_IT',
     WORK_ITEM_DU:       'WI_DU',
-    WORK_ITEM_WP:       'WI_WP'
+    WORK_ITEM_WP:       'WI_WP',
+    WORK_ITEM_SUMM:     'WI_SUMM'
 };
 
 export const WorkItemType = {
+    DESIGN_VERSION:     'DV',
     INCREMENT:          'IN',
     ITERATION:          'IT',
     DESIGN_UPDATE:      'DU',

@@ -8,8 +8,10 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import ProjectBacklogItem           from '../../components/summary/BacklogItem.jsx';
-import FeatureSummaryContainer      from '../item/FeatureSummaryContainer.jsx';
+import ProjectBacklogItem               from '../../components/summary/BacklogItem.jsx';
+import FeatureSummaryContainer          from '../item/FeatureSummaryContainer.jsx';
+import WorkItemListContainer            from '../../containers/work/WorkItemContainer.jsx';
+import ProjectWorkSummaryItemContainer  from '../../containers/summary/ProjectWorkSummaryItemContainer.jsx'
 
 // Ultrawide Services
 import {DisplayContext, HomePageTab, LogLevel} from '../../../constants/constants.js';
@@ -18,7 +20,7 @@ import {log} from "../../../common/utils";
 import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Well} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -26,6 +28,7 @@ import store from '../../../redux/store'
 import {
     setCurrentUserBacklogItem
 } from '../../../redux/actions'
+import {WorkItemType} from "../../../constants/constants";
 
 
 // =====================================================================================================================
@@ -67,10 +70,10 @@ export class ProjectSummary extends Component {
         const layout =
             <Grid>
                 <Row>
-                    <Col md={4}>
+                    <Col md={3}>
                         <div className="project-summary-header">{designVersionName}</div>
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                         <div className="project-summary-features">{dvTotalFeatureCount + ' FEATURES'}</div>
                     </Col>
                     <Col md={2}>
@@ -84,7 +87,52 @@ export class ProjectSummary extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={4}>
+                    <Col md={6}>
+                        <Row>
+                            <Col md={12}>
+                                <div className="summary-section-header">
+                                    All Work Assigned for this Design Version
+                                </div>
+                                <div className="summary-section-dv">
+                                    <ProjectWorkSummaryItemContainer params={{
+                                        userContext: userContext,
+                                        workItem: {},
+                                        workItemType: WorkItemType.DESIGN_VERSION,
+                                    }}/>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={12}>
+                                <div className="summary-section-header">
+                                    Breakdown by Work Packages
+                                </div>
+                                <div className="summary-section-work">
+                                    <WorkItemListContainer params={{
+                                        workItemsParentRef: 'NONE',
+                                        workItemType: WorkItemType.INCREMENT,
+                                        userContext: userContext,
+                                        displayContext: DisplayContext.WORK_ITEM_SUMMARY
+                                    }}/>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={12}>
+                                <div className="summary-section-header">
+                                    Work Not Yet Assigned
+                                </div>
+                                <div className="summary-section-unassigned">
+                                    <ProjectWorkSummaryItemContainer params={{
+                                        userContext: userContext,
+                                        workItem: {},
+                                        workItemType: WorkItemType.UNASSIGNED_WP
+                                    }}/>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col md={3}>
                         <ProjectBacklogItem
                             displayContext={DisplayContext.DV_BACKLOG_DESIGN}
                             totalFeatureCount={dvTotalFeatureCount}
@@ -118,7 +166,7 @@ export class ProjectSummary extends Component {
                             selectionFunction={() => this.onSummaryItemSelect(DisplayContext.DV_BACKLOG_TEST_FAIL)}
                         />
                     </Col>
-                    <Col md={8} >
+                    <Col md={3} >
                         <FeatureSummaryContainer params={{
                             userContext: userContext,
                             homePageTab: HomePageTab.TAB_SUMMARY,

@@ -85,6 +85,11 @@ export class ItemList extends Component {
                 containerHeaderType = 'item-container-header-wp';
                 containerFooterType = 'item-container-footer-wp';
                 break;
+            case ItemListType.WORK_ITEM_SUMM:
+                containerType = 'item-container-su';
+                containerHeaderType = 'item-container-header-su';
+                containerFooterType = 'item-container-footer-su';
+                break;
         }
 
         if(hasFooterAction) {

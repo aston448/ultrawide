@@ -32,6 +32,7 @@ export class UnassignedWpList extends Component {
                     key={wp._id}
                     workItem={wp}
                     workItemType={WorkItemType.BASE_WORK_PACKAGE}
+                    displayContext={this.props.displayContext}
                 />
             );
         });
@@ -99,7 +100,8 @@ export class UnassignedWpList extends Component {
 }
 
 UnassignedWpList.propTypes = {
-    workPackages: PropTypes.array.isRequired
+    workPackages: PropTypes.array.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -117,7 +119,8 @@ export default UnassignedWpListContainer = createContainer(({params}) => {
     );
 
     return{
-        workPackages: workPackages
+        workPackages: workPackages,
+        displayContext: params.displayContext
     }
 
 }, connect(mapStateToProps)(UnassignedWpList));

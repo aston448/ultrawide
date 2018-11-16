@@ -46,6 +46,7 @@ import {DesignPermutationData}              from "../data/design/design_permutat
 import {DesignPermutationValueData}         from "../data/design/design_permutation_value_db";
 import {ScenarioTestExpectationData}        from "../data/design/scenario_test_expectations_db";
 import {UserDvScenarioTestExpectationStatusData} from "../data/mash/user_dv_scenario_test_expectation_status_db";
+import {UserDvWorkSummaryData}              from "../data/summary/user_dv_work_summary_db";
 
 // REDUX services
 import store from '../redux/store'
@@ -56,6 +57,7 @@ import {
     setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
     updateUserMessage
 } from '../redux/actions'
+
 
 
 
@@ -263,6 +265,8 @@ class ClientDataServicesClass{
             const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
             const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
             const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
+            const dwsHandle = Meteor.subscribe('userDvWorkSummary', userContext.userId, userContext.designVersionId);
+            const dblHandle = Meteor.subscribe('userDvBacklog', userContext.userId, userContext.designVersionId);
 
             Tracker.autorun((loader) => {
 
@@ -270,7 +274,8 @@ class ClientDataServicesClass{
                     !dusHandle.ready() || !dvmHandle.ready() ||
                     !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
                     !dsHandle.ready() || !psHandle.ready() || !dveHandle.ready() ||
-                    !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready()
+                    !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready() ||
+                    !dwsHandle.ready() || !dblHandle.ready()
                 );
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "loading User Data = {}", loading);
@@ -346,6 +351,8 @@ class ClientDataServicesClass{
                 const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
                 const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
                 const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
+                const dwsHandle = Meteor.subscribe('userDvWorkSummary', userContext.userId, userContext.designVersionId);
+                const dblHandle = Meteor.subscribe('userDvBacklog', userContext.userId, userContext.designVersionId);
 
                 Tracker.autorun((loader) => {
 
@@ -355,7 +362,8 @@ class ClientDataServicesClass{
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() ||
                         !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
                         !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready() || !steHandle.ready() ||
-                        !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready()
+                        !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready() ||
+                        !dwsHandle.ready() || !dblHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
@@ -2946,57 +2954,136 @@ class ClientDataServicesClass{
         }
     }
 
-    getProjectSummaryData(userContext){
+    getWorkItemSummaryData(userContext, workItem, workItemType){
 
-        // Want to return:
-        // Design Version Name
-        // Total features in DV
-        // Number of features with scenarios with no test requirements
-        // Number of features with scenarios required tests missing
-        // Number of features with failing tests
-        // Number of features with some passing tests
-        // Number of features with all required tests passing
+        //console.log('Work item type is %s and work item is %o', workItemType, workItem);
 
-        // DV Name
-        let designVersionName = 'No Design Version Selected';
-        const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+        if(userContext.designVersionId === 'NONE'){
 
-        let totalFeatureCount = 0;
-        let noRequirementsCount = 0;
-        let missingRequirementsCount = 0;
-        let failingCount = 0;
-        let somePassingCount = 0;
-        let allPassingCount = 0;
-        let testsCount = 0;
-
-        if(designVersion){
-
-            designVersionName = designVersion.designVersionName;
-
-            totalFeatureCount = DesignVersionData.getNonRemovedFeatureCount(userContext.designId, userContext.designVersionId);
-
-            noRequirementsCount = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId).length;
-            missingRequirementsCount = UserDvTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId).length;
-            failingCount = UserDvTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId).length;
-            somePassingCount = UserDvTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId).length;
-            allPassingCount = UserDvTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId).length;
-
-            testsCount = failingCount + somePassingCount + allPassingCount;
+            return {
+                itemName: '',
+                scenarioCount: 0,
+                expectedTests: 0,
+                passingTests: 0,
+                failingTests: 0,
+                missingTests: 0,
+                noExpectations: 0
+            };
         }
 
-        return(
-            {
-                designVersionName: designVersionName,
-                totalFeatureCount: totalFeatureCount,
-                noTestRequirementsCount: noRequirementsCount,
-                missingTestRequirementsCount: missingRequirementsCount,
-                failingTestsCount: failingCount,
-                someTestsCount: somePassingCount,
-                allTestsCount: allPassingCount,
-                testsCount: testsCount
+        let summaryData = {};
+        let itemName = '';
+
+        switch(workItemType) {
+            case WorkItemType.DESIGN_VERSION:
+                summaryData = UserDvWorkSummaryData.getDesignVersionSummary(userContext.designVersionId);
+                if(summaryData) {
+                    itemName = summaryData.dvName;
+                }
+                break;
+            case WorkItemType.UNASSIGNED_WP:
+                summaryData = UserDvWorkSummaryData.getDesignVersionUnassignedSummary(userContext.designVersionId);
+                if(summaryData) {
+                    itemName = summaryData.dvName;
+                }
+                break;
+            case WorkItemType.INCREMENT:
+                summaryData = UserDvWorkSummaryData.getIncrementSummary(userContext.designVersionId, workItem._id);
+                if(summaryData) {
+                    itemName = summaryData.inName;
+                }
+                break;
+            case WorkItemType.ITERATION:
+                summaryData = UserDvWorkSummaryData.getIterationSummary(userContext.designVersionId, workItem._id);
+                if(summaryData) {
+                    itemName = summaryData.itName;
+                }
+                break;
+            case WorkItemType.BASE_WORK_PACKAGE:
+            case WorkItemType.UPDATE_WORK_PACKAGE:
+                summaryData = UserDvWorkSummaryData.getWorkPackageSummary(userContext.designVersionId, workItem._id);
+                if(summaryData) {
+                    itemName = summaryData.wpName;
+                }
+                break;
+        }
+
+        //console.log('Summary data is %o', summaryData);
+
+        if(summaryData) {
+            return {
+                itemName: itemName,
+                scenarioCount: summaryData.scenarioCount,
+                expectedTests: summaryData.expectedTestCount,
+                passingTests: summaryData.passingTestCount,
+                failingTests: summaryData.failingTestCount,
+                missingTests: summaryData.missingTestCount,
+                noExpectations: summaryData.noExpectationsCount
             }
-        )
+        } else {
+            return {
+                itemName: '',
+                scenarioCount: 0,
+                expectedTests: 0,
+                passingTests: 0,
+                failingTests: 0,
+                missingTests: 0,
+                noExpectations: 0
+            };
+        }
     }
+
+    // getProjectSummaryData(userContext){
+    //
+    //     // Want to return:
+    //     // Design Version Name
+    //     // Total features in DV
+    //     // Number of features with scenarios with no test requirements
+    //     // Number of features with scenarios required tests missing
+    //     // Number of features with failing tests
+    //     // Number of features with some passing tests
+    //     // Number of features with all required tests passing
+    //
+    //     // DV Name
+    //     let designVersionName = 'No Design Version Selected';
+    //     const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+    //
+    //     let totalFeatureCount = 0;
+    //     let noRequirementsCount = 0;
+    //     let missingRequirementsCount = 0;
+    //     let failingCount = 0;
+    //     let somePassingCount = 0;
+    //     let allPassingCount = 0;
+    //     let testsCount = 0;
+    //
+    //     if(designVersion){
+    //
+    //         designVersionName = designVersion.designVersionName;
+    //
+    //         totalFeatureCount = DesignVersionData.getNonRemovedFeatureCount(userContext.designId, userContext.designVersionId);
+    //
+    //         noRequirementsCount = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId).length;
+    //         missingRequirementsCount = UserDvTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId).length;
+    //         failingCount = UserDvTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId).length;
+    //         somePassingCount = UserDvTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId).length;
+    //         allPassingCount = UserDvTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId).length;
+    //
+    //         testsCount = failingCount + somePassingCount + allPassingCount;
+    //     }
+    //
+    //     return(
+    //         {
+    //             designVersionName: designVersionName,
+    //             totalFeatureCount: totalFeatureCount,
+    //             noTestRequirementsCount: noRequirementsCount,
+    //             missingTestRequirementsCount: missingRequirementsCount,
+    //             failingTestsCount: failingCount,
+    //             someTestsCount: somePassingCount,
+    //             allTestsCount: allPassingCount,
+    //             testsCount: testsCount
+    //         }
+    //     )
+    // }
 
 }
 

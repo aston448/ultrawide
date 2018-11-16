@@ -51,7 +51,7 @@ export class WorkItemTarget extends Component{
 
     render(){
 
-        const {workItem, workItemType, connectDropTarget, isOverCurrent, canDrop} = this.props;
+        const {workItem, workItemType, displayContext, connectDropTarget, isOverCurrent, canDrop} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Iteration Target {}', workItem.wiName);
 
@@ -73,6 +73,7 @@ export class WorkItemTarget extends Component{
                     <WorkItem
                         workItem={workItem}
                         workItemType={workItemType}
+                        displayContext={displayContext}
                     />
                 </div>
             )
@@ -82,6 +83,7 @@ export class WorkItemTarget extends Component{
                     <WorkItem
                         workItem={workItem}
                         workItemType={workItemType}
+                        displayContext={displayContext}
                     />
                 </div>
             )
@@ -91,7 +93,8 @@ export class WorkItemTarget extends Component{
 
 WorkItemTarget.propTypes = {
     workItem: PropTypes.object.isRequired,
-    workItemType: PropTypes.string.isRequired
+    workItemType: PropTypes.string.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 // React DnD ===========================================================================================================

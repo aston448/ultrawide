@@ -61,7 +61,8 @@ export class UnassignedWpListTarget extends Component{
                 connectDropTarget(
                     <div>
                         <UnassignedWpListContainer params={{
-                            userContext: userContext
+                            userContext: userContext,
+                            displayContext: DisplayContext.WORK_ITEM_EDIT
                         }}/>
                     </div>
                 )
@@ -70,7 +71,8 @@ export class UnassignedWpListTarget extends Component{
             return (
                 <div>
                     <UnassignedWpListContainer params={{
-                        userContext: userContext
+                        userContext: userContext,
+                        displayContext: DisplayContext.WORK_ITEM_EDIT
                     }}/>
                 </div>
             );

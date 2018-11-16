@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import WorkItemListContainer    from '../../containers/work/WorkItemContainer';
-import WorkItemMoveTarget       from './WorkItemMoveTarget.jsx';
-import WorkItemDetail           from './WorkItemDetail.jsx';
+import WorkItemListContainer            from '../../containers/work/WorkItemContainer';
+import WorkItemMoveTarget               from './WorkItemMoveTarget.jsx';
+import WorkItemDetail                   from './WorkItemDetail.jsx';
+import ProjectWorkSummaryItemContainer  from '../../containers/summary/ProjectWorkSummaryItemContainer.jsx';
 
 // Ultrawide Services
 import {WorkItemType, ViewMode, ViewType, DisplayContext, UserSettingValue, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
@@ -60,7 +61,7 @@ export class WorkItem extends Component{
     // Render generic design component
     render() {
 
-        const {workItem, workItemType, userContext, userRole} = this.props;
+        const {workItem, workItemType, displayContext, userContext, userRole} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render WorkItem');
 
@@ -80,6 +81,22 @@ export class WorkItem extends Component{
         switch(workItemType){
             case WorkItemType.INCREMENT:
 
+                if(displayContext === DisplayContext.WORK_ITEM_SUMMARY){
+                    layout =
+                        <div>
+                            <ProjectWorkSummaryItemContainer params={{
+                                userContext: userContext,
+                                workItem: workItem,
+                                workItemType: workItemType,
+                            }}/>
+                            <WorkItemListContainer params={{
+                                userContext: userContext,
+                                workItemType: WorkItemType.ITERATION,
+                                workItemsParentRef: workItem.wiReferenceId,
+                                displayContext: displayContext
+                            }}/>
+                        </div>;
+                } else {
                     layout =
                         <div>
                             <WorkItemDetail
@@ -91,42 +108,75 @@ export class WorkItem extends Component{
                             <WorkItemListContainer params={{
                                 userContext: userContext,
                                 workItemType: WorkItemType.ITERATION,
-                                workItemsParentRef: workItem.wiReferenceId
+                                workItemsParentRef: workItem.wiReferenceId,
+                                displayContext: displayContext
                             }}/>
                         </div>;
+                }
+
                 break;
 
             case WorkItemType.ITERATION:
 
-                layout =
-                    <div>
-                        <WorkItemDetail
-                            workItem={workItem}
-                            workItemType={workItemType}
-                            userRole={userRole}
-                            userContext={userContext}
-                        />
-                        <WorkItemListContainer params={{
-                            userContext: userContext,
-                            workItemType: WorkItemType.BASE_WORK_PACKAGE,
-                            workItemsParentRef: workItem.wiReferenceId
-                        }}/>
-                    </div>;
+                if(displayContext === DisplayContext.WORK_ITEM_SUMMARY){
+                    layout =
+                        <div>
+                            <ProjectWorkSummaryItemContainer params={{
+                                userContext: userContext,
+                                workItem: workItem,
+                                workItemType: workItemType,
+                            }}/>
+                            <WorkItemListContainer params={{
+                                userContext: userContext,
+                                workItemType: WorkItemType.BASE_WORK_PACKAGE,
+                                workItemsParentRef: workItem.wiReferenceId,
+                                displayContext: displayContext
+                            }}/>
+                        </div>;
+                } else {
+                    layout =
+                        <div>
+                            <WorkItemDetail
+                                workItem={workItem}
+                                workItemType={workItemType}
+                                userRole={userRole}
+                                userContext={userContext}
+                            />
+                            <WorkItemListContainer params={{
+                                userContext: userContext,
+                                workItemType: WorkItemType.BASE_WORK_PACKAGE,
+                                workItemsParentRef: workItem.wiReferenceId,
+                                displayContext: displayContext
+                            }}/>
+                        </div>;
+                }
                 break;
             case WorkItemType.DESIGN_UPDATE:
 
                 break;
             case WorkItemType.BASE_WORK_PACKAGE:
-                layout =
-                    <div>
-                        <WorkItemDetail
-                            workItem={workItem}
-                            workItemType={workItemType}
-                            userRole={userRole}
-                            userContext={userContext}
-                        />
 
-                    </div>;
+                if(displayContext === DisplayContext.WORK_ITEM_SUMMARY){
+                    layout =
+                        <div>
+                            <ProjectWorkSummaryItemContainer params={{
+                                userContext: userContext,
+                                workItem: workItem,
+                                workItemType: workItemType,
+                            }}/>
+                        </div>;
+                } else {
+                    layout =
+                        <div>
+                            <WorkItemDetail
+                                workItem={workItem}
+                                workItemType={workItemType}
+                                userRole={userRole}
+                                userContext={userContext}
+                            />
+
+                        </div>;
+                }
                 break;
 
         }
@@ -160,7 +210,8 @@ export class WorkItem extends Component{
 
 WorkItem.propTypes = {
     workItem: PropTypes.object.isRequired,
-    workItemType: PropTypes.string.isRequired
+    workItemType: PropTypes.string.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 

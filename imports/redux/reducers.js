@@ -50,6 +50,7 @@ const initialState = {
     currentUserOpenDesignItems:         [],
     currentUserOpenDesignUpdateItems:   [],
     currentUserOpenWorkPackageItems:    [],
+    currentUserSummaryItem:             'NONE',
     currentUpdateScopeItems:            {
         flag:   0,
         currentParents: [],
@@ -188,6 +189,10 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_CURRENT_USER_BACKLOG_ITEM:
             return Object.assign({}, state, {
                 currentUserBacklogItem: action.newItem
+            });
+        case Actions.SET_CURRENT_USER_SUMMARY_ITEM:
+            return Object.assign({}, state, {
+                currentUserSummaryItem: action.newItem
             });
         case Actions.SET_CURRENT_USER_TEST_OUTPUT_LOCATION:
             return Object.assign({}, state, {

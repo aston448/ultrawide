@@ -32,6 +32,8 @@ import '../imports/collections/summary/user_design_update_summary.js';
 import '../imports/collections/summary/user_dev_test_summary.js';
 import '../imports/collections/summary/user_dev_design_summary.js';
 import '../imports/collections/summary/user_work_progress_summary.js';
+import '../imports/collections/summary/user_dv_work_summary.js';
+import '../imports/collections/summary/user_dv_backlog.js';
 
 import '../imports/collections/dev/user_work_package_feature_step_data.js';
 
