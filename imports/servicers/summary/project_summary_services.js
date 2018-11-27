@@ -191,7 +191,12 @@ class ProjectSummaryServicesClass {
                                 backlogItem.summaryType = SummaryType.SUMMARY_IN;
                                 UserDvBacklogData.addUpdateBacklogEntry(backlogItem);
 
-                                // Design Version
+                                // Design Version Assigned
+                                backlogItem.inId = 'NONE';
+                                backlogItem.summaryType = SummaryType.SUMMARY_DV_ASSIGNED;
+                                UserDvBacklogData.addUpdateBacklogEntry(backlogItem);
+
+                                // Design Version Total
                                 backlogItem.inId = 'NONE';
                                 backlogItem.summaryType = SummaryType.SUMMARY_DV;
                                 UserDvBacklogData.addUpdateBacklogEntry(backlogItem);
