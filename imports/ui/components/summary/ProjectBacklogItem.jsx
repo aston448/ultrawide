@@ -66,8 +66,6 @@ export class ProjectBacklogItem extends Component{
         const backlogTitle = TextLookups.displayContext(displayContext);
         let backlogDetails = '';
 
-        let icon = '';
-        let iconClass = 'project-summary-item-icon ';
         let itemClass = 'project-summary-item ';
         let goodClass = 'project-summary-good';
         let badClass = 'project-summary-bad';
@@ -84,8 +82,6 @@ export class ProjectBacklogItem extends Component{
             badClass = 'project-summary-bad-inactive';
             okClass = 'project-summary-ok-inactive';
         }
-        let statusClass = '';
-
 
 
         switch(displayContext){
@@ -101,6 +97,22 @@ export class ProjectBacklogItem extends Component{
                         itemClass = itemClass + badClass;
                     } else {
                         backlogDetails = featureCount + ' Features have no Scenarios defined for them yet.';
+                        itemClass = itemClass + badClass;
+                    }
+                }
+                break;
+
+            case DisplayContext.DV_BACKLOG_WORK:
+
+                if(featureCount === 0){
+                    backlogDetails = 'No backlog';
+                    itemClass = itemClass + goodClass;
+                } else {
+                    if(featureCount === 1){
+                        backlogDetails = 'One Feature has Scenarios not assigned to a Work Package.';
+                        itemClass = itemClass + badClass;
+                    } else {
+                        backlogDetails = featureCount + ' Features have Scenarios not assigned to a Work Package.';
                         itemClass = itemClass + badClass;
                     }
                 }
@@ -157,51 +169,19 @@ export class ProjectBacklogItem extends Component{
 
         }
 
-        const layoutInactive =
+        const layout =
             <Grid>
                 <Row className = "backlog-title">
-                    <Col md={10}>
+                    <Col md={12} className="close-col">
                         {backlogTitle}
-                    </Col>
-                    <Col md={2}>
-
                     </Col>
                 </Row>
                 <Row className = "backlog-details">
-                    <Col md={10}>
+                    <Col md={12} className="close-col">
                         {backlogDetails}
-                    </Col>
-                    <Col md={2}>
                     </Col>
                 </Row>
             </Grid>;
-
-
-        const layoutActive =
-            <Grid>
-                <Row className = "backlog-title">
-                    <Col md={11}>
-                        {backlogTitle}
-                    </Col>
-                    <Col md={1}>
-                        <div className="summary-hand"><Glyphicon glyph="hand-right"/></div>
-                    </Col>
-                </Row>
-                <Row className = "backlog-details">
-                    <Col md={11}>
-                        {backlogDetails}
-                    </Col>
-                    <Col md={1}>
-                    </Col>
-                </Row>
-            </Grid>;
-
-
-        let layout = layoutInactive;
-
-        if(displayContext === currentBacklogItem){
-            layout = layoutActive;
-        }
 
         return(
             <div

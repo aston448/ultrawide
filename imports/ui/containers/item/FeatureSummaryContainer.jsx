@@ -89,7 +89,14 @@ export class FeaturesList extends Component {
             }
         }
 
+        let itemListType = ItemListType.BACKLOG_ITEM;
+
         switch(displayContext){
+
+            case DisplayContext.DV_BACKLOG_WORK:
+
+                headerText = 'Features with scenarios not assigned to Work Packages...';
+                break;
 
             case DisplayContext.DV_BACKLOG_NO_EXP:
 
@@ -107,6 +114,8 @@ export class FeaturesList extends Component {
                 break;
 
             default:
+
+                itemListType = ItemListType.ULTRAWIDE_ITEM;
 
                 if(featureSummaries && featureSummaries.length > 0) {
                     headerText = 'Features in ' + locationText;
@@ -129,7 +138,7 @@ export class FeaturesList extends Component {
                 footerAction={''}
                 footerActionUiContext={''}
                 footerActionFunction={footerActionFunction}
-                listType={ItemListType.ULTRAWIDE_ITEM}
+                listType={itemListType}
             />
         )
 
@@ -168,7 +177,7 @@ export default FeatureSummaryContainer = createContainer(({params}) => {
         designVersionName: featureSummaries.designVersionName,
         workPackageName: featureSummaries.workPackageName,
         homePageTab: featureSummaries.homePageTab,
-        displayContext: featureSummaries.displayContext
+        displayContext: params.displayContext
     };
 
 }, connect(mapStateToProps)(FeaturesList));

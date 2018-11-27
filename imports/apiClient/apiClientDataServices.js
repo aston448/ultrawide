@@ -47,6 +47,7 @@ import {DesignPermutationValueData}         from "../data/design/design_permutat
 import {ScenarioTestExpectationData}        from "../data/design/scenario_test_expectations_db";
 import {UserDvScenarioTestExpectationStatusData} from "../data/mash/user_dv_scenario_test_expectation_status_db";
 import {UserDvWorkSummaryData}              from "../data/summary/user_dv_work_summary_db";
+import {UserDvBacklogData}                  from '../data/summary/user_dv_backlog_db'
 
 // REDUX services
 import store from '../redux/store'
@@ -57,6 +58,8 @@ import {
     setDocSectionTextOption, setIncludeNarratives, setIntTestOutputDir,
     updateUserMessage
 } from '../redux/actions'
+import {BacklogType, SummaryType} from "../constants/constants";
+import {UserDvWorkSummary} from "../collections/summary/user_dv_work_summary";
 
 
 
@@ -913,6 +916,8 @@ class ClientDataServicesClass{
         let scenarios = [];
         let featureSummary = {};
 
+        console.log('Getting backlog features for tab ' + homePageTab);
+
         if(homePageTab === HomePageTab.TAB_SUMMARY){
 
             // Main Summary Page.  List depends on display context.
@@ -928,65 +933,74 @@ class ClientDataServicesClass{
 
             } else {
 
+                const workItemContextId = store.getState().currentUserSummaryItem;
+                const workSummary = UserDvWorkSummaryData.getWorkItemSummaryDataById(workItemContextId);
+
+                // Default context is DV if none set yet
+                let workContext = {
+                    userId: userContext.userId,
+                    dvId: userContext.designVersionId,
+                    inId: 'NONE',
+                    itId: 'NONE',
+                    duId: 'NONE',
+                    wpId: 'NONE',
+                    summaryType: SummaryType.SUMMARY_DV
+                };
+
+                if(workSummary) {
+                    workContext = {
+                        userId: userContext.userId,
+                        dvId: userContext.designVersionId,
+                        inId: workSummary.inId,
+                        itId: workSummary.itId,
+                        duId: workSummary.duId,
+                        wpId: workSummary.wpId,
+                        summaryType: workSummary.summaryType
+                    };
+                }
+
                 switch(displayContext){
+
+                    case DisplayContext.DV_BACKLOG_WORK:
+
+                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_WP_ASSIGN);
+                        break;
 
                     case DisplayContext.DV_BACKLOG_NO_EXP:
 
-                        features = UserDvTestSummaryData.getFeaturesWithScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId);
+                        //features = UserDvTestSummaryData.getFeaturesWithScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId);
+                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_EXP);
                         break;
 
                     case DisplayContext.DV_BACKLOG_TEST_MISSING:
 
-                        features = UserDvTestSummaryData.getFeaturesWithScenariosWithMissingTests(userContext.userId, userContext.designVersionId);
+                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_MISSING);
+                        //features = UserDvTestSummaryData.getFeaturesWithScenariosWithMissingTests(userContext.userId, userContext.designVersionId);
                         break;
 
                     case DisplayContext.DV_BACKLOG_TEST_FAIL:
 
-                        features = UserDvTestSummaryData.getFeaturesWithScenariosWithFailingTests(userContext.userId, userContext.designVersionId);
+                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_FAIL);
+                        //features = UserDvTestSummaryData.getFeaturesWithScenariosWithFailingTests(userContext.userId, userContext.designVersionId);
                         break;
-
-                    // case DisplayContext.PROJECT_SUMMARY_NONE:
-                    //
-                    //     features = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId);
-                    //     break;
-                    //
-                    // case DisplayContext.PROJECT_SUMMARY_MISSING:
-                    //
-                    //     features = UserDvTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId);
-                    //     break;
-                    //
-                    // case DisplayContext.PROJECT_SUMMARY_FAIL:
-                    //
-                    //     features = UserDvTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId);
-                    //     break;
-                    //
-                    // case DisplayContext.PROJECT_SUMMARY_SOME:
-                    //
-                    //     features = UserDvTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId);
-                    //     break;
-                    //
-                    // case DisplayContext.PROJECT_SUMMARY_ALL:
-                    //
-                    //     features = UserDvTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId);
-                    //     break;
 
                 }
 
-                features.forEach((featureTestSummary) => {
+                features.forEach((backlogFeature) => {
 
-                    let feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, featureTestSummary.featureReferenceId);
+                    let feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, backlogFeature.featureRefId);
 
                     featureSummary = {
                         _id: feature._id,
                         featureName: feature.componentNameNew,
                         featureRef: feature.componentReferenceId,
                         hasTestData: true,
-                        featureTestStatus: featureTestSummary.featureTestStatus,
-                        featureScenarioCount: featureTestSummary.featureScenarioCount,
-                        featureExpectedTestCount: featureTestSummary.featureExpectedTestCount,
-                        featurePassingTestCount: featureTestSummary.featurePassingTestCount,
-                        featureFailingTestCount: featureTestSummary.featureFailingTestCount,
-                        featureMissingTestCount: featureTestSummary.featureMissingTestCount
+                        featureTestStatus: backlogFeature.featureTestStatus,
+                        featureScenarioCount: backlogFeature.featureScenarioCount,
+                        featureExpectedTestCount: backlogFeature.featureExpectedTestCount,
+                        featurePassingTestCount: backlogFeature.featurePassingTestCount,
+                        featureFailingTestCount: backlogFeature.featureFailingTestCount,
+                        featureMissingTestCount: backlogFeature.featureMissingTestCount
                     };
 
                     featureSummaries.push(featureSummary);
@@ -2911,6 +2925,7 @@ class ClientDataServicesClass{
 
         // DV Name
         let designVersionName = 'No Design Version Selected';
+        let dvSummaryId = 'NONE';
         let dvFeatureCount = 0;
         let dvScenarioCount = 0;
         let dvExpectedTestCount = 0;
@@ -2918,6 +2933,8 @@ class ClientDataServicesClass{
         let dvNoTestExpectationsScenarioCount = 0;
         let dvMissingTestScenarioCount = 0;
         let dvFailingTestScenarioCount = 0;
+        let dvScenarioCompleteCount = 0;
+        let dvScenarioIncompleteCount = 0;
 
         const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
 
@@ -2925,24 +2942,24 @@ class ClientDataServicesClass{
 
             designVersionName = designVersion.designVersionName;
 
-            const dvSummary = UserDvTestSummaryData.getDesignVersionTestSummary(
-                userContext.userId,
-                userContext.designVersionId
-            );
+            const dvSummary = UserDvWorkSummaryData.getDesignVersionSummary(userContext.designVersionId);
 
             if(dvSummary){
-                dvFeatureCount = dvSummary.dvFeatureCount;
-                dvScenarioCount = dvSummary.dvScenarioCount;
-                dvExpectedTestCount = dvSummary.dvExpectedTestCount;
-                dvPassingTestCount = dvSummary.dvPassingTestCount
+                dvSummaryId = dvSummary._id;
+                dvFeatureCount = dvSummary.featureCount;
+                dvScenarioCount = dvSummary.scenarioCount;
+                dvExpectedTestCount = dvSummary.expectedTestCount;
+                dvPassingTestCount = dvSummary.passingTestCount;
+                dvFailingTestScenarioCount = dvSummary.failingTestCount;
+                dvMissingTestScenarioCount = dvSummary.missingTestCount;
+                dvNoTestExpectationsScenarioCount = dvSummary.noExpectationsCount;
+                dvScenarioCompleteCount = dvSummary.scenarioCompleteCount;
+                dvScenarioIncompleteCount = dvSummary.scenarioIncompleteCount;
             }
-
-            dvNoTestExpectationsScenarioCount = UserDvTestSummaryData.getScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId).length;
-            dvMissingTestScenarioCount = UserDvTestSummaryData.getScenariosWithMissingTests(userContext.userId, userContext.designVersionId).length;
-            dvFailingTestScenarioCount = UserDvTestSummaryData.getScenariosWithFailingTests(userContext.userId, userContext.designVersionId).length;
         }
 
         return{
+            dvSummaryId:                dvSummaryId,
             designVersionName:          designVersionName,
             dvFeatureCount:             dvFeatureCount,
             dvScenarioCount:            dvScenarioCount,
@@ -2950,7 +2967,9 @@ class ClientDataServicesClass{
             dvPassingTestCount:         dvPassingTestCount,
             dvNoTestExpectationsCount:  dvNoTestExpectationsScenarioCount,
             dvMissingTestCount:         dvMissingTestScenarioCount,
-            dvFailingTestCount:         dvFailingTestScenarioCount
+            dvFailingTestCount:         dvFailingTestScenarioCount,
+            dvScenarioCompleteCount:    dvScenarioCompleteCount,
+            dvScenarioIncompleteCount:  dvScenarioIncompleteCount
         }
     }
 
@@ -2961,31 +2980,36 @@ class ClientDataServicesClass{
         if(userContext.designVersionId === 'NONE'){
 
             return {
+                summaryId: 'NONE',
                 itemName: '',
+                featureCount: 0,
                 scenarioCount: 0,
                 expectedTests: 0,
                 passingTests: 0,
                 failingTests: 0,
                 missingTests: 0,
-                noExpectations: 0
+                noExpectations: 0,
+                isUnassigned: false
             };
         }
 
         let summaryData = {};
         let itemName = '';
+        let isUnassigned = false;
 
         switch(workItemType) {
-            case WorkItemType.DESIGN_VERSION:
-                summaryData = UserDvWorkSummaryData.getDesignVersionSummary(userContext.designVersionId);
+            case WorkItemType.DV_ASSIGNED:
+                summaryData = UserDvWorkSummaryData.getDesignVersionAssignedSummary(userContext.designVersionId);
                 if(summaryData) {
                     itemName = summaryData.dvName;
                 }
                 break;
-            case WorkItemType.UNASSIGNED_WP:
+            case WorkItemType.DV_UNASSIGNED:
                 summaryData = UserDvWorkSummaryData.getDesignVersionUnassignedSummary(userContext.designVersionId);
                 if(summaryData) {
                     itemName = summaryData.dvName;
                 }
+                isUnassigned = true;
                 break;
             case WorkItemType.INCREMENT:
                 summaryData = UserDvWorkSummaryData.getIncrementSummary(userContext.designVersionId, workItem._id);
@@ -3012,25 +3036,68 @@ class ClientDataServicesClass{
 
         if(summaryData) {
             return {
+                summaryId:  summaryData._id,
                 itemName: itemName,
+                featureCount: summaryData.featureCount,
                 scenarioCount: summaryData.scenarioCount,
                 expectedTests: summaryData.expectedTestCount,
                 passingTests: summaryData.passingTestCount,
                 failingTests: summaryData.failingTestCount,
                 missingTests: summaryData.missingTestCount,
-                noExpectations: summaryData.noExpectationsCount
+                noExpectations: summaryData.noExpectationsCount,
+                isUnassigned: isUnassigned
             }
         } else {
             return {
+                summaryId: 'NONE',
                 itemName: '',
+                featureCount: 0,
                 scenarioCount: 0,
                 expectedTests: 0,
                 passingTests: 0,
                 failingTests: 0,
                 missingTests: 0,
-                noExpectations: 0
+                noExpectations: 0,
+                isUnassigned: false
             };
         }
+    }
+
+    getBacklogSummaryData(userContext, workItem, backlogType){
+
+        let workContext = {};
+
+        if(workItem){
+            workContext = {
+                userId:                 userContext.userId,
+                dvId:                   workItem.dvId,
+                inId:                   workItem.inId,
+                itId:                   workItem.itId,
+                duId:                   workItem.duId,
+                wpId:                   workItem.wpId,
+                summaryType:            workItem.summaryType
+            };
+
+            return UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, backlogType);
+
+        } else {
+
+            // No work item selected so context is whole DV
+            workContext = {
+                userId:                 userContext.userId,
+                dvId:                   userContext.designVersionId,
+                inId:                   'NONE',
+                itId:                   'NONE',
+                duId:                   'NONE',
+                wpId:                   'NONE',
+                summaryType:            SummaryType.SUMMARY_DV
+            };
+
+            return UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, backlogType);
+        }
+
+
+
     }
 
     // getProjectSummaryData(userContext){

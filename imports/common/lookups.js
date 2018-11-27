@@ -105,14 +105,16 @@ class TextLookupsClass {
 
     displayContext(displayContext){
         switch(displayContext){
+            case DisplayContext.DV_BACKLOG_WORK:
+                return 'Work Assignment Backlog';
             case DisplayContext.DV_BACKLOG_DESIGN:
                 return 'Design Features Scenario Backlog';
             case DisplayContext.DV_BACKLOG_NO_EXP:
-                return 'Scenario Test Expectations Backlog';
+                return 'Test Expectations Backlog';
             case DisplayContext.DV_BACKLOG_TEST_MISSING:
-                return 'Scenario Missing Tests Backlog';
+                return 'Missing Tests Backlog';
             case DisplayContext.DV_BACKLOG_TEST_FAIL:
-                return 'Scenario Failing Tests Backlog'
+                return 'Failing Tests Backlog'
         }
     }
 

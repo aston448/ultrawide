@@ -16,13 +16,15 @@ let Schema = new SimpleSchema({
     duName:                 {type: String, optional: true},
     wpId:                   {type: String, index: 1},
     wpName:                 {type: String, optional: true},
+    featureCount:           {type: Number, defaultValue: 0},
     scenarioCount:          {type: Number, defaultValue: 0},
     noExpectationsCount:    {type: Number, defaultValue: 0},
     expectedTestCount:      {type: Number, defaultValue: 0},
     passingTestCount:       {type: Number, defaultValue: 0},
     failingTestCount:       {type: Number, defaultValue: 0},
     missingTestCount:       {type: Number, defaultValue: 0},
-    noWorkPackage:          {type: Boolean}
+    scenarioIncompleteCount:{type: Number, defaultValue: 0},
+    scenarioCompleteCount:  {type: Number, defaultValue: 0}
 });
 
 UserDvWorkSummary.attachSchema(Schema);

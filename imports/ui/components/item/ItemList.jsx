@@ -39,8 +39,14 @@ export class ItemList extends Component {
         return true;
     }
 
-    getWindowSizeClass(){
-        return ClientUserSettingsServices.getWindowSizeClassForDesignItemList();
+    getWindowSizeClass(listType){
+        let sizeClass = ClientUserSettingsServices.getWindowSizeClassForDesignItemList();
+
+        if(listType === ItemListType.BACKLOG_ITEM){
+            sizeClass = sizeClass + '-backlog'
+        }
+
+        return sizeClass;
     }
 
     footerAction(){
@@ -57,7 +63,8 @@ export class ItemList extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Item List');
 
-        const bodyClass = this.getWindowSizeClass();
+        let bodyClass = this.getWindowSizeClass(listType);
+
 
         let containerType = 'item-container';
         let containerHeaderType = 'item-container-header';
@@ -66,6 +73,7 @@ export class ItemList extends Component {
         switch(listType){
 
             case ItemListType.ULTRAWIDE_ITEM:
+            case ItemListType.BACKLOG_ITEM:
                 containerType = 'item-container';
                 containerHeaderType = 'item-container-header';
                 containerFooterType = 'item-container-footer';

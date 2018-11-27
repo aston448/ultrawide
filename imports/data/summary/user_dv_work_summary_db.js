@@ -12,13 +12,30 @@ class UserDvWorkSummaryDataClass {
 
     // SELECT ==========================================================================================================
 
+    getWorkItemSummaryDataById(summaryId){
+
+        return UserDvWorkSummary.findOne(
+            {
+                _id: summaryId
+            }
+        );
+    }
+
     getDesignVersionSummary(designVersionId){
 
         return UserDvWorkSummary.findOne(
             {
                 summaryType:    SummaryType.SUMMARY_DV,
-                dvId:           designVersionId,
-                noWorkPackage:  false
+                dvId:           designVersionId
+            }
+        );
+    }
+    getDesignVersionAssignedSummary(designVersionId){
+
+        return UserDvWorkSummary.findOne(
+            {
+                summaryType:    SummaryType.SUMMARY_DV_ASSIGNED,
+                dvId:           designVersionId
             }
         );
     }
@@ -27,9 +44,8 @@ class UserDvWorkSummaryDataClass {
 
         return UserDvWorkSummary.findOne(
             {
-                summaryType:    SummaryType.SUMMARY_DV,
-                dvId:           designVersionId,
-                noWorkPackage:  true
+                summaryType:    SummaryType.SUMMARY_DV_UNASSIGNED,
+                dvId:           designVersionId
             }
         );
     }
@@ -40,8 +56,7 @@ class UserDvWorkSummaryDataClass {
             {
                 summaryType:    SummaryType.SUMMARY_IN,
                 dvId:           designVersionId,
-                inId:           incrementId,
-                noWorkPackage:  false
+                inId:           incrementId
             }
         );
     }
@@ -52,8 +67,7 @@ class UserDvWorkSummaryDataClass {
             {
                 summaryType:    SummaryType.SUMMARY_IT,
                 dvId:           designVersionId,
-                itId:           iterationId,
-                noWorkPackage:  false
+                itId:           iterationId
             }
         );
     }
@@ -64,8 +78,7 @@ class UserDvWorkSummaryDataClass {
             {
                 summaryType:    SummaryType.SUMMARY_WP,
                 dvId:           designVersionId,
-                wpId:           workPackageId,
-                noWorkPackage:  false
+                wpId:           workPackageId
             }
         );
     }

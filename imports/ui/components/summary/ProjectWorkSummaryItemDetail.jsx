@@ -61,9 +61,9 @@ export class ProjectSummaryWorkItemDetail extends Component{
     }
 
 
-    selectItem(workItemId){
+    selectItem(summaryId){
 
-        store.dispatch(setCurrentUserSummaryItem(workItemId));
+        store.dispatch(setCurrentUserSummaryItem(summaryId));
     }
 
     render() {
@@ -76,13 +76,22 @@ export class ProjectSummaryWorkItemDetail extends Component{
         let badgeClass = '';
         let nameClass = '';
         let summaryRowClass = '';
-        let selected = (workItem._id === currentUserSummaryItem);
+
+        // Selected if the same item id and (for dv) if assignment matches
+        let selected = summaryData.summaryId === currentUserSummaryItem;
 
         //const uiContextName = replaceAll(itemName, ' ', '_');
 
         switch(workItemType){
             case WorkItemType.DESIGN_VERSION:
-            case WorkItemType.UNASSIGNED_WP:
+
+                badgeId = 'DV';
+                badgeClass = 'badge-design-version';
+                nameClass = 'summary-item-name-dv';
+                break;
+
+            case WorkItemType.DV_ASSIGNED:
+            case WorkItemType.DV_UNASSIGNED:
 
                 badgeId = 'DV';
                 badgeClass = 'badge-design-version';
@@ -183,7 +192,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
         let summary =
             <Grid className="close-grid">
-                <Row className={summaryRowClass}>
+                <Row className="summary-detail-row">
                     <Col md={2} className="close-col">
                         <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>
                             <div className={resultClassScenarios}>
@@ -235,6 +244,8 @@ export class ProjectSummaryWorkItemDetail extends Component{
                 </Row>
             </Grid>;
 
+
+
         let selection = <div></div>;
 
         if(selected){
@@ -246,7 +257,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
         const layout =
             <Grid className='close-grid'>
-                <Row>
+                <Row className={summaryRowClass}>
                     <Col md={5} className='close-col'>
                         <div className={nameClass}>
                             <InputGroup>
@@ -266,7 +277,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
 
         return(
-            <div onClick={() => this.selectItem(workItem._id)}>
+            <div onClick={() => this.selectItem(summaryData.summaryId)}>
                 {layout}
             </div>
         );

@@ -174,6 +174,7 @@ export const DisplayContext = {
     WORK_ITEM_SUMMARY:      'WORK_ITEM_SUMMARY',    // Work Item List when on Project Summary page
     DV_BACKLOG_NONE:        'DV_BACKLOG_NONE',
     DV_BACKLOG_DESIGN:      'DV_BACKLOG_DESIGN',
+    DV_BACKLOG_WORK:        'DV_BACKLOG_WORK',
     DV_BACKLOG_NO_EXP:      'DV_BACKLOG_NO_EXP',
     DV_BACKLOG_TEST_MISSING:'DV_BACKLOG_TEST_MISSING',
     DV_BACKLOG_TEST_FAIL:   'DV_BACKLOG_TEST_FAIL',
@@ -183,6 +184,8 @@ export const DisplayContext = {
 
 export const SummaryType = {
     SUMMARY_DV:             'SUMMARY_DV',
+    SUMMARY_DV_ASSIGNED:    'SUMMARY_DV_ASSIGNED',
+    SUMMARY_DV_UNASSIGNED:  'SUMMARY_DV_UNASSIGNED',
     SUMMARY_IN:             'SUMMARY_IN',
     SUMMARY_IT:             'SUMMARY_IT',
     SUMMARY_DU:             'SUMMARY_DU',
@@ -206,7 +209,7 @@ export const StepContext = {
 // Types of items that can be selected
 export const ItemType = {
     DESIGN:             'DESIGN',
-    DESIGN_VERSION:     'DESIGN_VERSION',
+    DESIGN_VERSION:     'DV_ASSIGNED',
     DESIGN_UPDATE:      'DESIGN_UPDATE',
     WORK_PACKAGE:       'WORK_PACKAGE',
     USER:               'USER',
@@ -219,6 +222,7 @@ export const ItemType = {
 
 export const ItemListType = {
     ULTRAWIDE_ITEM:     'UW_ITEM',
+    BACKLOG_ITEM:       'BL_ITEM',
     WORK_ITEM_IN:       'WI_IN',
     WORK_ITEM_IT:       'WI_IT',
     WORK_ITEM_DU:       'WI_DU',
@@ -228,12 +232,13 @@ export const ItemListType = {
 
 export const WorkItemType = {
     DESIGN_VERSION:     'DV',
+    DV_ASSIGNED:        'DA',
     INCREMENT:          'IN',
     ITERATION:          'IT',
     DESIGN_UPDATE:      'DU',
     BASE_WORK_PACKAGE:  'WP',
     UPDATE_WORK_PACKAGE:'UP',
-    UNASSIGNED_WP:      'UU'
+    DV_UNASSIGNED:      'UU'
 };
 
 export const WorkItemStatus = {
