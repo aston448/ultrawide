@@ -6,8 +6,6 @@ import {ViewType,DisplayContext, LogLevel} from '../constants/constants.js';
 
 import { TextLookups }   from '../common/lookups.js';
 
-import { WorkItemData }     from '../data/work/work_item_db.js';
-
 export function padDigits(number, digits) {
     return new Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
 }
@@ -218,12 +216,9 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
     }
 }
 
-export function workItemMoveDropAllowed(movingWorkItem, targetWorkItem){
+export function workItemMoveDropAllowed(movingWorkItem, targetWorkItem, parentWorkItem){
 
     // Allowed only to move to another parent of the same kind at the same level
-
-    // Get parent of moving item
-    const parentWorkItem = WorkItemData.getWorkItemParent(movingWorkItem);
 
     if(parentWorkItem){
         return(

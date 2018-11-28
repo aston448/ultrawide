@@ -823,6 +823,14 @@ input {
     background-color: lightsalmon;
 }
 
+.summary-row-increment{
+    background-color: #CCEECC;
+}
+
+.summary-row-iteration{
+    background-color: #CCEEEE;
+}
+
 .summary-item-hand{
     font-size:  14px;
     padding: 4px 5px 0 0;
@@ -2913,12 +2921,20 @@ input {
     color: red;
 }
 
+.feature-highlight-no-expectations{
+    color: darkred;
+}
+
 .feature-highlight-pass{
     color: green;
 }
 
 .feature-highlight-no-test{
      color: darkblue;
+}
+
+.feature-highlight-expectations{
+    color: darkblue;
 }
 
 .feature-highlight-required{

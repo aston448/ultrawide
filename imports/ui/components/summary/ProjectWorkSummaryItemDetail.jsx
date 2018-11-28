@@ -71,7 +71,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Project Work Summary Item Detail {}', summaryData.itemName);
 
-        let itemName = summaryData.itemName;
+        let itemName = '';
         let badgeId = workItemType;
         let badgeClass = '';
         let nameClass = '';
@@ -85,6 +85,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
         switch(workItemType){
             case WorkItemType.DESIGN_VERSION:
 
+                itemName = summaryData.itemName;
                 badgeId = 'DV';
                 badgeClass = 'badge-design-version';
                 nameClass = 'summary-item-name-dv';
@@ -93,6 +94,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
             case WorkItemType.DV_ASSIGNED:
             case WorkItemType.DV_UNASSIGNED:
 
+                itemName = summaryData.itemName;
                 badgeId = 'DV';
                 badgeClass = 'badge-design-version';
                 nameClass = 'summary-item-name-dv';
@@ -100,18 +102,24 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
             case WorkItemType.INCREMENT:
 
+                itemName = workItem.wiName;
                 badgeClass = 'badge-increment';
                 nameClass = 'summary-item-name-in';
+                summaryRowClass = 'summary-row-increment';
                 break;
 
             case WorkItemType.ITERATION:
+
+                itemName = workItem.wiName;
                 badgeClass = 'badge-iteration';
                 nameClass = 'summary-item-name-it';
+                summaryRowClass = 'summary-row-iteration';
                 break;
 
             case WorkItemType.BASE_WORK_PACKAGE:
             case WorkItemType.UPDATE_WORK_PACKAGE:
 
+                itemName = workItem.workPackageName;
                 badgeId = 'WP';
                 switch(workItem.workPackageStatus){
                     case WorkPackageStatus.WP_NEW:
@@ -128,7 +136,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
         }
 
         let resultClassScenarios = '';
-        let resultClassExpected = '';
+        let resultClassExpected = 'feature-highlight-expectations';
         let resultClassPassing = '';
         let resultClassFailing = '';
         let resultClassMissing = '';
@@ -136,6 +144,28 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
         if(selected){
             summaryRowClass = 'summary-row-selected';
+        }
+
+        if(summaryData.failingTests > 0){
+            resultClassFailing = 'feature-highlight-fail';
+        } else {
+            resultClassFailing = 'feature-no-highlight';
+        }
+
+        if(summaryData.passingTests > 0){
+            resultClassPassing = 'feature-highlight-pass';
+        } else {
+            resultClassPassing = 'feature-no-highlight';
+        }
+
+        if(summaryData.noExpectations > 0){
+            resultClassNoExpectation = 'feature-highlight-no-expectations';
+        } else {
+            resultClassNoExpectation = 'feature-no-highlight';
+        }
+
+        if(summaryData.missingTests === 0){
+            resultClassMissing = 'feature-no-highlight';
         }
 
         // Name Data ---------------------------------------------------------------------------------------------------

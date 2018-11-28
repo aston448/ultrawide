@@ -20,6 +20,7 @@ import {workItemMoveDropAllowed, log, replaceAll} from '../../../common/utils.js
 
 // React DnD
 import { DropTarget } from 'react-dnd';
+import {WorkItemData} from "../../../data/work/work_item_db";
 
 
 // =====================================================================================================================
@@ -115,7 +116,11 @@ const componentTarget = {
         if(props.workItem.wiType === WorkItemType.ITERATION && item.workPackageType === WorkPackageType.WP_BASE){
             return true;
         } else {
-            return (workItemMoveDropAllowed(item, props.workItem));
+
+            // Get parent of moving item
+            const parentWorkItem = WorkItemData.getWorkItemParent(movingWorkItem);
+
+            return (workItemMoveDropAllowed(item, props.workItem, parentWorkItem));
         }
 
 

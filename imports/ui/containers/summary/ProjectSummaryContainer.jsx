@@ -162,7 +162,7 @@ export class ProjectSummary extends Component {
                                 <div className="summary-section-dv">
                                     <ProjectWorkSummaryItemContainer params={{
                                         userContext: userContext,
-                                        workItem: {},
+                                        workItem: {workItem},
                                         workItemType: WorkItemType.DV_ASSIGNED,
                                     }}/>
                                 </div>
