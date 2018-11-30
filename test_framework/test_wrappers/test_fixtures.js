@@ -92,12 +92,12 @@ class TestFixturesClass {
 
         // Add two WPS
         server.call('testWorkPackages.addNewWorkPackage', workPackageType, userRole, userName, expectation);
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.selectWorkItem', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
         server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles', expectation);
         server.call('testWorkPackages.publishSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
 
         server.call('testWorkPackages.addNewWorkPackage', workPackageType, userRole, userName, expectation);
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.selectWorkItem', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
         server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage2', RoleType.MANAGER, 'miles', expectation);
         server.call('testWorkPackages.publishSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
 

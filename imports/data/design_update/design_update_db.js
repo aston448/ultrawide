@@ -225,6 +225,19 @@ class DesignUpdateDataClass{
         ).fetch();
     }
 
+    getUnassignedWorkPackages(designUpdateId){
+
+        return WorkPackages.find(
+            {
+                designUpdateId: designUpdateId,
+                parentWorkItemRefId: 'NONE'
+            },
+            {
+                $sort: {workPackageName: 1}
+            }
+        ).fetch();
+    }
+
     getPublishedWorkPackages(designUpdateId){
 
         return WorkPackages.find(

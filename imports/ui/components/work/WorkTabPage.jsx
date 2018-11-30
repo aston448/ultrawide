@@ -9,6 +9,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 import WorkItemListContainer                from '../../containers/work/WorkItemContainer.jsx';
 import UnassignedWpListTarget               from '../../components/work/UnassignedWpListTarget.jsx';
 import FeatureSummaryContainer              from '../../containers/item/FeatureSummaryContainer.jsx';
+import DesignUpdateSummaryContainer         from '../../containers/summary/UpdateSummaryContainer.jsx';
 
 // Ultrawide Services
 import {DisplayContext, WorkItemType, HomePageTab, LogLevel, RoleType}        from '../../../constants/constants.js';
@@ -24,6 +25,7 @@ import {Tabs, Tab, Grid, Row, Col, Nav, NavItem} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import store from '../../../redux/store'
 import {} from "../../../constants/constants";
+import {WorkPackageType} from "../../../constants/constants";
 
 
 // =====================================================================================================================
@@ -50,52 +52,112 @@ export class WorkTabPage extends Component {
 
     render(){
 
-        const {userContext} = this.props;
+        const {wpType, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Work Tab Page');
 
         // Items -------------------------------------------------------------------------------------------------------
 
-        let wpSummary = '';
+        let layout = '';
 
+        if(wpType === WorkPackageType.WP_BASE){
 
-        if(userContext.workPackageId !== 'NONE') {
-            wpSummary =
-                <div>
-                    <FeatureSummaryContainer params={{
-                        userContext: userContext,
-                        homePageTab: HomePageTab.TAB_WORK
-                    }}/>
-                </div>
-        } else {
-            wpSummary =
-                <div className="design-item-note">
-                    Select a Work Package to see Features
-                </div>
-        }
+            // Work Page Layout for Base Designs
+            let wpSummary = '';
 
-        const layout =
-            <Grid className="close-grid">
-                <Row>
-                    <Col className="close-col" md={4}>
-                        <WorkItemListContainer params={{
-                            workItemsParentRef: 'NONE',
-                            workItemType: WorkItemType.INCREMENT,
+            if(userContext.workPackageId !== 'NONE') {
+                wpSummary =
+                    <div>
+                        <FeatureSummaryContainer params={{
                             userContext: userContext,
-                            displayContext: DisplayContext.WORK_ITEM_EDIT
+                            homePageTab: HomePageTab.TAB_WORK
                         }}/>
-                    </Col>
-                    <Col className="close-col"  md={4}>
-                        <UnassignedWpListTarget
-                            userContext={userContext}
-                        />
-                    </Col>
-                    <Col className="close-col"  md={4}>
-                        {wpSummary}
-                    </Col>
-                </Row>
-            </Grid>;
+                    </div>
+            } else {
+                wpSummary =
+                    <div className="design-item-note">
+                        Select a Work Package to see Features
+                    </div>
+            }
 
+            layout =
+                <Grid className="close-grid">
+                    <Row>
+                        <Col className="close-col" md={4}>
+                            <WorkItemListContainer params={{
+                                workItemsParentRef: 'NONE',
+                                workItemType: WorkItemType.INCREMENT,
+                                userContext: userContext,
+                                displayContext: DisplayContext.WORK_ITEM_EDIT_BASE
+                            }}/>
+                        </Col>
+                        <Col className="close-col"  md={4}>
+                            <UnassignedWpListTarget
+                                userContext={userContext}
+                                displayContext={DisplayContext.WORK_ITEM_EDIT_BASE}
+                            />
+                        </Col>
+                        <Col className="close-col"  md={4}>
+                            {wpSummary}
+                        </Col>
+                    </Row>
+                </Grid>;
+
+        } else {
+
+            // Work Page Layout for Updatable Designs
+
+            let duSummary = '';
+
+            if(userContext.designUpdateId === 'NONE'){
+                duSummary =
+                    <div className="design-item-note">
+                        Select a Design Update
+                    </div>
+            } else {
+
+                duSummary =
+                    <div>
+                        <DesignUpdateSummaryContainer
+                            params={{
+                                userContext: userContext
+                            }}
+                        />
+                    </div>
+            }
+
+            layout =
+                <Grid className="close-grid">
+                    <Row>
+                        <Col className="close-col" md={4}>
+                            <WorkItemListContainer params={{
+                                workItemsParentRef: 'NONE',
+                                workItemType: WorkItemType.INCREMENT,
+                                userContext: userContext,
+                                displayContext: DisplayContext.WORK_ITEM_EDIT_UPD
+                            }}/>
+                        </Col>
+                        <Col className="close-col"  md={4}>
+                            <UnassignedWpListTarget
+                                userContext={userContext}
+                                displayContext={DisplayContext.WORK_ITEM_DU_LIST}
+                            />
+                        </Col>
+                        {/*<Col className="close-col"  md={4}>*/}
+                            {/*<WorkItemListContainer params={{*/}
+                                {/*workItemsParentRef: 'NONE',*/}
+                                {/*workItemType: WorkItemType.DESIGN_UPDATE,*/}
+                                {/*userContext: userContext,*/}
+                                {/*displayContext: DisplayContext.WORK_ITEM_DU_LIST*/}
+                            {/*}}/>*/}
+                        {/*</Col>*/}
+                        <Col className="close-col"  md={4}>
+                            {duSummary}
+                        </Col>
+                    </Row>
+                </Grid>;
+
+        }
 
         return(
             <div id="home-page">
@@ -108,7 +170,7 @@ export class WorkTabPage extends Component {
 }
 
 WorkTabPage.propTypes = {
-
+    wpType: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

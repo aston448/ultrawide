@@ -32,7 +32,7 @@ export class WorkItemList extends Component {
             if(
                 (item.wiType !== WorkItemType.BASE_WORK_PACKAGE) &&
                 (item.wiType !== WorkItemType.UPDATE_WORK_PACKAGE) &&
-                (this.props.displayContext === DisplayContext.WORK_ITEM_EDIT)
+                (this.props.displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || this.props.displayContext === DisplayContext.WORK_ITEM_EDIT_UPD)
             ){
                 return (
                     <WorkItemTarget
@@ -56,6 +56,23 @@ export class WorkItemList extends Component {
         });
     }
 
+    renderDuList(dus){
+
+        return dus.map((du) => {
+
+            return (
+                <WorkItem
+                    key={du._id}
+                    workItem={du}
+                    workItemType={WorkItemType.DESIGN_UPDATE}
+                    displayContext={this.props.displayContext}
+                />
+            );
+
+
+        });
+    }
+
     noItem(){
         return (
             <div className="design-item-note">No Items</div>
@@ -65,6 +82,12 @@ export class WorkItemList extends Component {
     noWp(){
         return (
             <div className="design-item-note">No Work Packages</div>
+        );
+    }
+
+    noDu(){
+        return (
+            <div className="design-item-note">No Design Updates for this Design Version</div>
         );
     }
 
@@ -93,66 +116,86 @@ export class WorkItemList extends Component {
         let itemListType = '';
         let layout = <div></div>;
 
-        switch(workItemType){
-            case WorkItemType.INCREMENT:
+        if(displayContext === DisplayContext.WORK_ITEM_DU_LIST){
 
-                if(userRole === RoleType.MANAGER && displayContext === DisplayContext.WORK_ITEM_EDIT){
-                    hasFooterAction = true;
-                    footerAction = 'Add Increment';
-                    footerActionFunction = () => this.addNewIncrement(userContext, userRole);
-                    uiContext = AddActionIds.UI_CONTEXT_ADD_ITERATION;
-
-                }
-
-                if(displayContext === DisplayContext.WORK_ITEM_EDIT){
-                    headerText = 'Design Version Work Plan';
-                    itemListType = ItemListType.WORK_ITEM_IN;
-                } else {
-                    itemListType = ItemListType.WORK_ITEM_SUMM;
-                }
-
-                break;
-
-            case WorkItemType.ITERATION:
-
-                if(userRole === RoleType.MANAGER && displayContext === DisplayContext.WORK_ITEM_EDIT){
-                    hasFooterAction = true;
-                    footerAction = 'Add Iteration';
-                    footerActionFunction = () => this.addNewIteration(userContext, parentItemRef, userRole);
-                    uiContext = AddActionIds.UI_CONTEXT_ADD_ITERATION
-                }
-
-                if(displayContext === DisplayContext.WORK_ITEM_EDIT){
-                    headerText = 'Iterations';
-                    itemListType = ItemListType.WORK_ITEM_IT;
-                } else {
-                    itemListType = ItemListType.WORK_ITEM_SUMM;
-                }
-
-                break;
-
-            case WorkItemType.BASE_WORK_PACKAGE:
-            case WorkItemType.UPDATE_WORK_PACKAGE:
-
-                // These are actual WPs
-                if(displayContext === DisplayContext.WORK_ITEM_EDIT){
-                    itemListType = ItemListType.WORK_ITEM_WP;
-                } else {
-                    itemListType = ItemListType.WORK_ITEM_SUMM;
-                }
-                break;
-        }
-
-
-        if(workItems && workItems.length > 0) {
-            bodyDataFunction = () => this.renderItemList(workItems, workItemType)
-        } else {
-            if(workItemType === WorkItemType.BASE_WORK_PACKAGE || workItemType === WorkItemType.UPDATE_WORK_PACKAGE){
-                bodyDataFunction = () => this.noWp()
+            // A list of DUs for the Design Version that WPs can be added to
+            if(workItems && workItems.length > 0) {
+                bodyDataFunction = () => this.renderDuList(workItems);
+                headerText = 'Unassigned Work Packages for Design Updates'
             } else {
-                bodyDataFunction = () => this.noItem()
+                bodyDataFunction = () => this.noDu()
+            }
+
+        } else {
+
+            switch(workItemType){
+                case WorkItemType.INCREMENT:
+
+                    if(userRole === RoleType.MANAGER && (displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || displayContext === DisplayContext.WORK_ITEM_EDIT_UPD)){
+                        hasFooterAction = true;
+                        footerAction = 'Add Increment';
+                        footerActionFunction = () => this.addNewIncrement(userContext, userRole);
+                        uiContext = AddActionIds.UI_CONTEXT_ADD_ITERATION;
+
+                    }
+
+                    if(displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || displayContext === DisplayContext.WORK_ITEM_EDIT_UPD){
+                        headerText = 'Design Version Work Plan';
+                        itemListType = ItemListType.WORK_ITEM_IN;
+                    } else {
+                        itemListType = ItemListType.WORK_ITEM_SUMM;
+                    }
+
+                    break;
+
+                case WorkItemType.ITERATION:
+
+                    if(userRole === RoleType.MANAGER && (displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || displayContext === DisplayContext.WORK_ITEM_EDIT_UPD)){
+                        hasFooterAction = true;
+                        footerAction = 'Add Iteration';
+                        footerActionFunction = () => this.addNewIteration(userContext, parentItemRef, userRole);
+                        uiContext = AddActionIds.UI_CONTEXT_ADD_ITERATION
+                    }
+
+                    if(displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || displayContext === DisplayContext.WORK_ITEM_EDIT_UPD){
+                        headerText = 'Iterations';
+                        itemListType = ItemListType.WORK_ITEM_IT;
+                    } else {
+                        itemListType = ItemListType.WORK_ITEM_SUMM;
+                    }
+
+                    break;
+
+                case WorkItemType.DESIGN_UPDATE:
+
+                    itemListType = ItemListType.WORK_ITEM_WP;
+                    break;
+
+                case WorkItemType.BASE_WORK_PACKAGE:
+                case WorkItemType.UPDATE_WORK_PACKAGE:
+
+                    // These are actual WPs
+                    if(displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || displayContext === DisplayContext.WORK_ITEM_EDIT_UPD){
+                        itemListType = ItemListType.WORK_ITEM_WP;
+                    } else {
+                        itemListType = ItemListType.WORK_ITEM_SUMM;
+                    }
+                    break;
+            }
+
+
+            if(workItems && workItems.length > 0) {
+                bodyDataFunction = () => this.renderItemList(workItems, workItemType)
+            } else {
+                if(workItemType === WorkItemType.BASE_WORK_PACKAGE || workItemType === WorkItemType.UPDATE_WORK_PACKAGE){
+                    bodyDataFunction = () => this.noWp()
+                } else {
+                    bodyDataFunction = () => this.noItem()
+                }
             }
         }
+
+
 
         return(
             <div>
@@ -190,7 +233,8 @@ export default WorkItemListContainer = createContainer(({params}) => {
     const workItems = ClientDataServices.getWorkItemList(
         params.userContext,
         params.workItemType,
-        params.workItemsParentRef
+        params.workItemsParentRef,
+        params.displayContext
     );
 
     return{

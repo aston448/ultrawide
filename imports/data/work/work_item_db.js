@@ -239,6 +239,18 @@ class WorkItemDataClass{
         ).fetch();
     }
 
+    getDesignVersionIterationDu(designVersionId, iterationRefId, designUpdateId){
+
+        return WorkItems.findOne(
+            {
+                designVersionId:        designVersionId,
+                wiParentReferenceId:    iterationRefId,
+                wiType:                 WorkItemType.DESIGN_UPDATE,
+                wiDuId:                 designUpdateId
+            }
+        );
+    }
+
     getDesignVersionIterationDusByIndex(designVersionId, iterationRefId){
 
         return WorkItems.find(
@@ -253,13 +265,13 @@ class WorkItemDataClass{
 
     getDesignVersionDuWpsByIndex(designVersionId, duRefId){
 
-        return WorkItems.find(
+        return WorkPackages.find(
             {
                 designVersionId:        designVersionId,
-                wiParentReferenceId:    duRefId,
-                wiType:                 WorkItemType.UPDATE_WORK_PACKAGE
+                parentWorkItemRefId:    duRefId,
+                workPackageType:        WorkPackageType.WP_UPDATE
             },
-            {sort: {wiIndex: 1}}
+            {sort: {workPackageIndex: 1}}
         ).fetch();
     }
 
@@ -302,13 +314,25 @@ class WorkItemDataClass{
         return WorkItems.findOne(
             {
                 designVersionId:    workItem.designVersionId,
-                wiReferenceId:      workItem.wiParentReferenceId
+                wiReferenceId:      workItem.parentWorkItemRefId
+            }
+        );
+    }
+
+    getWorkPackageParentDu(wp){
+
+        return WorkItems.findOne(
+            {
+                designVersionId:    wp.designVersionId,
+                wiReferenceId:      wp.wiParentReferenceId,
+                wiType:             WorkItemType.DESIGN_UPDATE
             }
         );
     }
 
     getWorkItemChildCount(workItem){
 
+        // For Increments we want the Iterations
         if(workItem.wiType === WorkItemType.INCREMENT){
             return WorkItems.find(
                 {
@@ -319,11 +343,24 @@ class WorkItemDataClass{
             ).fetch().length
         }
 
+        // For Iterations we want Base WPs
         if(workItem.wiType === WorkItemType.ITERATION){
             return WorkPackages.find(
                 {
                     designVersionId:        workItem.designVersionId,
-                    parentWorkItemRefId:    workItem.wiReferenceId
+                    parentWorkItemRefId:    workItem.wiReferenceId,
+                    wiType:                 WorkItemType.BASE_WORK_PACKAGE
+                }
+            ).fetch().length
+        }
+
+        // For Updates we want Update WPs
+        if(workItem.wiType === WorkItemType.DESIGN_UPDATE){
+            return WorkPackages.find(
+                {
+                    designVersionId:        workItem.designVersionId,
+                    parentWorkItemRefId:    workItem.wiReferenceId,
+                    wiType:                 WorkItemType.UPDATE_WORK_PACKAGE
                 }
             ).fetch().length
         }

@@ -11,7 +11,7 @@ class WorkPackageActionsClass{
 
     managerAddsBaseDesignWorkPackageCalled(wpName, expectation){
         server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles', expectation);
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.selectWorkItem', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
         server.call('testWorkPackages.updateWorkPackageName', wpName, RoleType.MANAGER, 'miles', expectation);
     }
 
@@ -21,26 +21,26 @@ class WorkPackageActionsClass{
 
     managerAddsUpdateWorkPackageCalled(wpName, expectation){
         server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_UPDATE, RoleType.MANAGER, 'miles', expectation);
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.selectWorkItem', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
         server.call('testWorkPackages.updateWorkPackageName', wpName, RoleType.MANAGER, 'miles', expectation);
     }
 
     // Select
     managerSelectsWorkPackage(wpName){
-        server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.selectWorkItem', wpName, RoleType.MANAGER, 'miles');
     }
 
     developerSelectsWorkPackage(wpName){
-        server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.DEVELOPER, 'hugh');
+        server.call('testWorkPackages.selectWorkItem', wpName, RoleType.DEVELOPER, 'hugh');
     }
 
     anotherDeveloperSelectsWorkPackage(wpName){
-        server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.DEVELOPER, 'davey');
+        server.call('testWorkPackages.selectWorkItem', wpName, RoleType.DEVELOPER, 'davey');
     }
 
 
     designerSelectsWorkPackage(wpName){
-        server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.DESIGNER, 'gloria');
+        server.call('testWorkPackages.selectWorkItem', wpName, RoleType.DESIGNER, 'gloria');
     }
 
     // Update Name

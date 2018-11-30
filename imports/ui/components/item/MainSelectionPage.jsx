@@ -88,6 +88,7 @@ export class MainSelectionPage extends Component {
 
 
         let workTabLayout = <div className="design-item-note">No Design Version Selected</div>;
+
         let wpType = WorkPackageType.WP_BASE;
 
         if(userContext.designVersionId !== 'NONE'){
@@ -103,7 +104,9 @@ export class MainSelectionPage extends Component {
             }
 
             workTabLayout =
-                <WorkTabPage/>
+                <WorkTabPage
+                    wpType={wpType}
+                />
         }
 
 

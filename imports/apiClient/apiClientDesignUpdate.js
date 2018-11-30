@@ -20,6 +20,7 @@ import { DesignComponentData }              from '../data/design/design_componen
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setUpdateScopeItems} from '../redux/actions';
+import {DisplayContext} from "../constants/constants";
 
 // =====================================================================================================================
 // Client API for Design Update Items
@@ -326,7 +327,7 @@ class ClientDesignUpdateServicesClass {
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // Sets the currently selected design update as part of the global state -------------------------------------------
-    setDesignUpdate(userContext, newDesignUpdateId){
+    setDesignUpdate(userContext, newDesignUpdateId, displayContext='NONE'){
 
         let newContext = userContext;
 
@@ -357,7 +358,7 @@ class ClientDesignUpdateServicesClass {
         // Load or refresh DU Summary data - if necessary
         ClientDesignUpdateSummary.getDesignUpdateSummary(false);
 
-        if(newDesignUpdateId !== userContext.designUpdateId) {
+        if((newDesignUpdateId !== userContext.designUpdateId) && (displayContext !== DisplayContext.WORK_ITEM_DU_LIST)) {
 
             // Update test summary if changing DU
             ClientTestIntegrationServices.updateTestSummaryData(newContext);

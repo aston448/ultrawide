@@ -14,7 +14,7 @@ Meteor.methods({
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
         // This is not a validated action
-        ClientWorkPackageServices.selectWorkPackage(userRole, userContext, workPackage);
+        ClientWorkPackageServices.selectWorkItem(userRole, userContext, workPackage);
     },
 
     'testWorkPackages.addNewWorkPackage'(workPackageType, userRole, userName, expectation){

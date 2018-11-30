@@ -370,7 +370,7 @@ class ClientWorkPackageServicesClass {
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // User clicks on a WP to select it
-    selectWorkPackage(userRole, userContext, workPackage, testIntegrationDataContext){
+    selectWorkPackage(userRole, userContext, workPackage){
 
         let newContext = userContext;
 

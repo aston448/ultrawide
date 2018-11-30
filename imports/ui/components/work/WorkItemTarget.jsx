@@ -58,11 +58,28 @@ export class WorkItemTarget extends Component{
 
         let uiItemId = '';
 
-        if(workItemType === WorkItemType.BASE_WORK_PACKAGE){
-            uiItemId = replaceAll(workItem.workPackageName, ' ', '_');
-        } else {
-            uiItemId = replaceAll(workItem.wiName, ' ', '_');
+        switch(workItemType){
+            case WorkItemType.BASE_WORK_PACKAGE:
+            case WorkItemType.UPDATE_WORK_PACKAGE:
+
+                uiItemId = replaceAll(workItem.workPackageName, ' ', '_');
+                break;
+
+            case WorkItemType.DESIGN_UPDATE:
+
+                if(displayContext === DisplayContext.WORK_ITEM_DU_LIST){
+                    uiItemId = replaceAll(workItem.updateName, ' ', '_');
+                } else {
+                    uiItemId = replaceAll(workItem.wiName, ' ', '_');
+                }
+
+                break;
+
+            default:
+
+                uiItemId = replaceAll(workItem.wiName, ' ', '_');
         }
+
         let uiContextName = uiItemId;
 
         //console.log("Rendering design component target: " + this.props.currentItem.componentType + " - " + currentItem.componentNameNew + " canDrop: " + canDrop + " display context " + displayContext + "mode " + mode);
@@ -113,12 +130,14 @@ const componentTarget = {
         // Validate if a drop would be allowed...
 
         // If the target is an iteration allow WPs to drop on it
-        if(props.workItem.wiType === WorkItemType.ITERATION && item.workPackageType === WorkPackageType.WP_BASE){
+        if(props.workItem.wiType === WorkItemType.ITERATION &&
+            (item.workPackageType === WorkPackageType.WP_BASE || item.workPackageType === WorkPackageType.WP_UPDATE)
+        ){
             return true;
         } else {
 
             // Get parent of moving item
-            const parentWorkItem = WorkItemData.getWorkItemParent(movingWorkItem);
+            const parentWorkItem = WorkItemData.getWorkItemParent(item);
 
             return (workItemMoveDropAllowed(item, props.workItem, parentWorkItem));
         }

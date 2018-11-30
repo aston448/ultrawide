@@ -34,6 +34,7 @@ import { DragSource } from 'react-dnd';
 
 // Draft JS - Name is text editable
 import {Editor, EditorState, SelectionState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
+import {ClientDesignUpdateServices} from "../../../apiClient/apiClientDesignUpdate";
 
 
 
@@ -119,62 +120,98 @@ class WorkItemDetail extends Component{
         this.setState({editing: false});
     }
 
-    selectWorkPackage(){
+    selectWorkItem(){
 
-        if(this.props.workItemType === WorkItemType.BASE_WORK_PACKAGE || this.props.workItemType === WorkItemType.UPDATE_WORK_PACKAGE){
+        switch(this.props.workItemType){
 
-            ClientWorkPackageServices.selectWorkPackage(
-                this.props.userRole,
-                this.props.userContext,
-                this.props.workItem
-            );
+            case WorkItemType.BASE_WORK_PACKAGE:
+            case WorkItemType.UPDATE_WORK_PACKAGE:
+
+                ClientWorkPackageServices.selectWorkPackage(
+                    this.props.userRole,
+                    this.props.userContext,
+                    this.props.workItem
+                );
+
+                break;
+
+            case WorkItemType.DESIGN_UPDATE:
+
+                ClientDesignUpdateServices.setDesignUpdate(
+                    this.props.userContext,
+                    this.props.workItem._id
+                );
+
+                break;
         }
     }
 
+
+
     // Render the header of the design component - has tools in it depending on context
     render() {
-        const {workItem, workItemType, userRole, userContext, connectDragSource, connectDragPreview, isDragging} = this.props;
+        const {workItem, workItemType, userRole, userContext, displayContext, connectDragSource, connectDragPreview, isDragging} = this.props;
 
         let itemName = '';
         let badgeId = '';
         let badgeClass = '';
         let workItemClass = '';
+        let selectedItem = false;
+        let selectedItemClass = '';
 
-        if(workItemType === WorkItemType.BASE_WORK_PACKAGE || workItemType === WorkItemType.UPDATE_WORK_PACKAGE){
-            itemName = workItem.workPackageName;
-            badgeId = 'WP';
-            if(workItem._id === userContext.workPackageId){
-                workItemClass = 'work-item-wp-selected';
-            } else {
-                workItemClass = 'work-item-wp';
-            }
+        switch(workItemType){
 
+            case WorkItemType.INCREMENT:
 
-            // Colour code the WP badge according to status
-            switch(workItem.workPackageStatus){
-                case WorkPackageStatus.WP_NEW:
-                    badgeClass = 'badge-work-package-new';
-                    break;
-                case WorkPackageStatus.WP_AVAILABLE:
-                    badgeClass = 'badge-work-package-available';
-                    break;
-                case WorkPackageStatus.WP_ADOPTED:
-                    badgeClass = 'badge-work-package-adopted';
-                    break;
-            }
+                itemName = workItem.wiName;
+                badgeId = workItem.wiType;
+                badgeClass = 'badge-increment';
 
-        } else {
-            itemName = workItem.wiName;
-            badgeId = workItem.wiType;
+                break;
 
-            switch(workItem.wiType){
-                case WorkItemType.INCREMENT:
-                    badgeClass = 'badge-increment';
-                    break;
-                case WorkItemType.ITERATION:
-                    badgeClass = 'badge-iteration';
-                    break;
-            }
+            case WorkItemType.ITERATION:
+
+                itemName = workItem.wiName;
+                badgeId = workItem.wiType;
+                badgeClass = 'badge-iteration';
+                break;
+
+            case WorkItemType.DESIGN_UPDATE:
+
+                if(displayContext === DisplayContext.WORK_ITEM_DU_LIST){
+                    itemName = workItem.updateName;
+                } else {
+                    itemName = workItem.wiName;
+                }
+                badgeId = 'DU';
+                badgeClass = 'badge-du';
+                break;
+
+            case WorkItemType.BASE_WORK_PACKAGE:
+            case WorkItemType.UPDATE_WORK_PACKAGE:
+
+                itemName = workItem.workPackageName;
+                badgeId = 'WP';
+                if(workItem._id === userContext.workPackageId){
+                    workItemClass = 'work-item-wp-selected';
+                } else {
+                    workItemClass = 'work-item-wp';
+                }
+
+                // Colour code the WP badge according to status
+                switch(workItem.workPackageStatus){
+                    case WorkPackageStatus.WP_NEW:
+                        badgeClass = 'badge-work-package-new';
+                        break;
+                    case WorkPackageStatus.WP_AVAILABLE:
+                        badgeClass = 'badge-work-package-available';
+                        break;
+                    case WorkPackageStatus.WP_ADOPTED:
+                        badgeClass = 'badge-work-package-adopted';
+                        break;
+                }
+
+                break;
         }
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render WorkItem Detail {}', itemName);
@@ -262,7 +299,7 @@ class WorkItemDetail extends Component{
             <div className="work-item-name">{itemName}</div>;
 
         // Get buttons for Work Packages based on their status
-        if(workItemType === WorkItemType.BASE_WORK_PACKAGE) {
+        if(workItemType === WorkItemType.BASE_WORK_PACKAGE || workItemType === WorkItemType.UPDATE_WORK_PACKAGE) {
 
             buttons = WorkItemDetailUIModules.getWorkPackageButtonsLayout(userRole, userContext, workItem, uiContextName);
         }
@@ -360,6 +397,13 @@ class WorkItemDetail extends Component{
                         break;
                     case WorkItemType.DESIGN_UPDATE:
 
+                        if(displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || displayContext === DisplayContext.WORK_ITEM_EDIT_UPD){
+                            layout = wpNotEditingDraggable;
+                        } else {
+                            layout = itemNotEditable;
+                            selectedItem = (workItem._id === userContext.designUpdateId);
+                        }
+
                         break;
                 }
 
@@ -372,9 +416,13 @@ class WorkItemDetail extends Component{
                 layout = itemNotEditable;
         }
 
+        if(selectedItem){
+            selectedItemClass = 'summary-row-selected';
+        }
+
 
         return(
-            <div onClick={() => this.selectWorkPackage()}>
+            <div className={selectedItemClass} onClick={() => this.selectWorkItem()}>
                 {layout}
             </div>
         );
@@ -387,7 +435,8 @@ WorkItemDetail.propTypes = {
     workItem: PropTypes.object.isRequired,
     workItemType: PropTypes.string.isRequired,
     userRole: PropTypes.string.isRequired,
-    userContext:  PropTypes.object.isRequired
+    userContext:  PropTypes.object.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 // React DnD ===========================================================================================================
@@ -406,9 +455,11 @@ const componentSource = {
     endDrag(props, monitor, component){
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "END DRAG!");
+        //console.log('End Drag');
 
         if (!monitor.didDrop) {
             log((msg) => console.log(msg), LogLevel.DEBUG, "NO DROP");
+            //console.log('No Drop');
             return;
         }
 
@@ -436,7 +487,7 @@ const componentSource = {
                     break;
 
                 case 'MOVE_WP_UNASSIGNED':
-
+                    //console.log('Move Unassigned');
                     ClientWorkItemServices.moveWorkItem(item.workItem, null, props.userRole);
                     break;
 
@@ -444,6 +495,7 @@ const componentSource = {
                     log((msg) => console.log(msg), LogLevel.DEBUG, "NO DRAG TYPE");
             }
         } else {
+            console.log('No result');
             log((msg) => console.log(msg), LogLevel.DEBUG, "NO DROP RESULT");
         }
     }

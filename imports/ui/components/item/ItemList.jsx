@@ -93,6 +93,11 @@ export class ItemList extends Component {
                 containerHeaderType = 'item-container-header-wp';
                 containerFooterType = 'item-container-footer-wp';
                 break;
+            case ItemListType.WORK_ITEM_DU_WP:
+                containerType = 'item-container-wp';
+                containerHeaderType = 'item-container-header-wp';
+                containerFooterType = 'item-container-footer';
+                break;
             case ItemListType.WORK_ITEM_SUMM:
                 containerType = 'item-container-su';
                 containerHeaderType = 'item-container-header-su';

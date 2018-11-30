@@ -1243,6 +1243,11 @@ input {
     background-color: darkred;
 }
 
+.badge-du{
+    color: yellow;
+    background-color: darkgoldenrod;
+}
+
 .work-item-name{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;

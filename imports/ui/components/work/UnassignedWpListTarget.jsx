@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
 import UnassignedWpListContainer            from '../../containers/work/UnassignedWpListContainer.jsx';
+import WorkItemListContainer                from '../../containers/work/WorkItemContainer';
 
 // Ultrawide Services
 import {ComponentType, WorkItemType, WorkPackageType, ViewMode, DisplayContext, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
@@ -51,38 +52,80 @@ export class UnassignedWpListTarget extends Component{
 
     render(){
 
-        const {userContext, connectDropTarget, isOverCurrent, canDrop} = this.props;
+        const {userContext, displayContext, connectDropTarget, isOverCurrent, canDrop} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Unassigned WP List Target');
 
+        switch(displayContext){
 
-        if(!(Meteor.isTest) && canDrop){
-            return (
-                connectDropTarget(
-                    <div>
-                        <UnassignedWpListContainer params={{
-                            userContext: userContext,
-                            displayContext: DisplayContext.WORK_ITEM_EDIT
-                        }}/>
-                    </div>
-                )
-            );
-        } else {
-            return (
-                <div>
-                    <UnassignedWpListContainer params={{
-                        userContext: userContext,
-                        displayContext: DisplayContext.WORK_ITEM_EDIT
-                    }}/>
-                </div>
-            );
+            case DisplayContext.WORK_ITEM_DU_LIST:
+
+                // Start with a list of DUs
+
+                if(!(Meteor.isTest) && canDrop){
+                    return (
+                        connectDropTarget(
+                            <div>
+                                <WorkItemListContainer params={{
+                                    workItemsParentRef: 'NONE',
+                                    workItemType: WorkItemType.DESIGN_UPDATE,
+                                    userContext: userContext,
+                                    displayContext: displayContext
+                                }}/>
+                            </div>
+                        )
+                    );
+                } else {
+                    return (
+                        <div>
+                            <WorkItemListContainer params={{
+                                workItemsParentRef: 'NONE',
+                                workItemType: WorkItemType.DESIGN_UPDATE,
+                                userContext: userContext,
+                                displayContext: displayContext
+                            }}/>
+                        </div>
+                    );
+                }
+
+                break;
+
+            default:
+
+                // Otherwise its just WPs
+
+                if(!(Meteor.isTest) && canDrop){
+                    return (
+                        connectDropTarget(
+                            <div>
+                                <UnassignedWpListContainer params={{
+                                    userContext: userContext,
+                                    displayContext: displayContext,
+                                    parentId: 'NONE'
+                                }}/>
+                            </div>
+                        )
+                    );
+                } else {
+                    return (
+                        <div>
+                            <UnassignedWpListContainer params={{
+                                userContext: userContext,
+                                displayContext: displayContext,
+                                parentId: 'NONE'
+                            }}/>
+                        </div>
+                    );
+                }
+
         }
+
     }
 }
 
 UnassignedWpListTarget.propTypes = {
     userContext: PropTypes.object.isRequired,
-
+    displayContext: PropTypes.string.isRequired
 };
 
 // React DnD ===========================================================================================================

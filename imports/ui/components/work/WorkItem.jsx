@@ -11,6 +11,7 @@ import WorkItemListContainer            from '../../containers/work/WorkItemCont
 import WorkItemMoveTarget               from './WorkItemMoveTarget.jsx';
 import WorkItemDetail                   from './WorkItemDetail.jsx';
 import ProjectWorkSummaryItemContainer  from '../../containers/summary/ProjectWorkSummaryItemContainer.jsx';
+import UnassignedWpListContainer        from '../../containers/work/UnassignedWpListContainer.jsx';
 
 // Ultrawide Services
 import {WorkItemType, ViewMode, ViewType, DisplayContext, UserSettingValue, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
@@ -67,10 +68,23 @@ export class WorkItem extends Component{
 
         let uiItemId = '';
 
-        if(workItemType === WorkItemType.BASE_WORK_PACKAGE){
-            uiItemId = replaceAll(workItem.workPackageName, ' ', '_');
-        } else {
-            uiItemId = replaceAll(workItem.wiName, ' ', '_');
+        switch(workItemType){
+
+            case WorkItemType.BASE_WORK_PACKAGE:
+            case WorkItemType.UPDATE_WORK_PACKAGE:
+                uiItemId = replaceAll(workItem.workPackageName, ' ', '_');
+                break;
+            case WorkItemType.DESIGN_UPDATE:
+
+                 if(displayContext === DisplayContext.WORK_ITEM_DU_LIST){
+                    uiItemId = replaceAll(workItem.updateName, ' ', '_');
+                } else {
+                    uiItemId = replaceAll(workItem.wiName, ' ', '_');
+                }
+                break;
+            default:
+                uiItemId = replaceAll(workItem.wiName, ' ', '_');
+                break;
         }
 
         let uiContextName = uiItemId;
@@ -104,6 +118,7 @@ export class WorkItem extends Component{
                                 workItemType={workItemType}
                                 userRole={userRole}
                                 userContext={userContext}
+                                displayContext={displayContext}
                             />
                             <WorkItemListContainer params={{
                                 userContext: userContext,
@@ -118,43 +133,165 @@ export class WorkItem extends Component{
 
             case WorkItemType.ITERATION:
 
-                if(displayContext === DisplayContext.WORK_ITEM_SUMMARY){
-                    layout =
-                        <div>
-                            <ProjectWorkSummaryItemContainer params={{
-                                userContext: userContext,
-                                workItem: workItem,
-                                workItemType: workItemType,
-                            }}/>
-                            <WorkItemListContainer params={{
-                                userContext: userContext,
-                                workItemType: WorkItemType.BASE_WORK_PACKAGE,
-                                workItemsParentRef: workItem.wiReferenceId,
-                                displayContext: displayContext
-                            }}/>
-                        </div>;
-                } else {
-                    layout =
-                        <div>
-                            <WorkItemDetail
-                                workItem={workItem}
-                                workItemType={workItemType}
-                                userRole={userRole}
-                                userContext={userContext}
-                            />
-                            <WorkItemListContainer params={{
-                                userContext: userContext,
-                                workItemType: WorkItemType.BASE_WORK_PACKAGE,
-                                workItemsParentRef: workItem.wiReferenceId,
-                                displayContext: displayContext
-                            }}/>
-                        </div>;
+                switch(displayContext){
+
+                    // TODO - need to have a Base and Update Summary context
+                    case DisplayContext.WORK_ITEM_SUMMARY:
+
+                        layout =
+                            <div>
+                                <ProjectWorkSummaryItemContainer params={{
+                                    userContext: userContext,
+                                    workItem: workItem,
+                                    workItemType: workItemType,
+                                }}/>
+                                <WorkItemListContainer params={{
+                                    userContext: userContext,
+                                    workItemType: WorkItemType.BASE_WORK_PACKAGE,
+                                    workItemsParentRef: workItem.wiReferenceId,
+                                    displayContext: displayContext
+                                }}/>
+                            </div>;
+
+                            break;
+
+                    case DisplayContext.WORK_ITEM_EDIT_BASE:
+
+                        layout =
+                            <div>
+                                <WorkItemDetail
+                                    workItem={workItem}
+                                    workItemType={workItemType}
+                                    userRole={userRole}
+                                    userContext={userContext}
+                                    displayContext={displayContext}
+                                />
+                                <WorkItemListContainer params={{
+                                    userContext: userContext,
+                                    workItemType: WorkItemType.BASE_WORK_PACKAGE,
+                                    workItemsParentRef: workItem.wiReferenceId,
+                                    displayContext: displayContext
+                                }}/>
+                            </div>;
+
+                            break;
+
+                    case DisplayContext.WORK_ITEM_EDIT_UPD:
+
+                        // List of Updates in an iteration of Updatable design version
+
+                        layout =
+                            <div>
+                                <WorkItemDetail
+                                    workItem={workItem}
+                                    workItemType={workItemType}
+                                    userRole={userRole}
+                                    userContext={userContext}
+                                    displayContext={displayContext}
+                                />
+                                <WorkItemListContainer params={{
+                                    userContext: userContext,
+                                    workItemType: WorkItemType.DESIGN_UPDATE,
+                                    workItemsParentRef: workItem.wiReferenceId,
+                                    displayContext: displayContext
+                                }}/>
+                            </div>;
+
+                        break;
                 }
+
                 break;
+
             case WorkItemType.DESIGN_UPDATE:
 
+                switch(displayContext){
+
+                    case DisplayContext.WORK_ITEM_SUMMARY:
+
+                        layout =
+                            <div>
+                                <ProjectWorkSummaryItemContainer params={{
+                                    userContext: userContext,
+                                    workItem: workItem,
+                                    workItemType: workItemType,
+                                }}/>
+                                <WorkItemListContainer params={{
+                                    userContext: userContext,
+                                    workItemType: WorkItemType.UPDATE_WORK_PACKAGE,
+                                    workItemsParentRef: workItem._id,
+                                    displayContext: displayContext
+                                }}/>
+                            </div>;
+                        break;
+
+                    case DisplayContext.WORK_ITEM_DU_LIST:
+
+                        // DU has list of unassigned WPs with option to add WP if in the DU List
+                        layout =
+                            <div>
+                                <WorkItemDetail
+                                    workItem={workItem}
+                                    workItemType={workItemType}
+                                    userRole={userRole}
+                                    userContext={userContext}
+                                    displayContext={displayContext}
+                                />
+                                <UnassignedWpListContainer params={{
+                                    userContext: userContext,
+                                    displayContext: displayContext,
+                                    parentId: workItem._id
+                                }}/>
+                            </div>;
+
+                        break;
+
+                    case DisplayContext.WORK_ITEM_EDIT_BASE:
+
+                        layout =
+                            <div>
+                                <WorkItemDetail
+                                    workItem={workItem}
+                                    workItemType={workItemType}
+                                    userRole={userRole}
+                                    userContext={userContext}
+                                    displayContext={displayContext}
+                                />
+                                <WorkItemListContainer params={{
+                                    userContext: userContext,
+                                    workItemType: WorkItemType.BASE_WORK_PACKAGE,
+                                    workItemsParentRef: workItem._id,
+                                    displayContext: displayContext
+                                }}/>
+                            </div>;
+
+                        break;
+
+                    case DisplayContext.WORK_ITEM_EDIT_UPD:
+
+                        layout =
+                            <div>
+                                <WorkItemDetail
+                                    workItem={workItem}
+                                    workItemType={workItemType}
+                                    userRole={userRole}
+                                    userContext={userContext}
+                                    displayContext={displayContext}
+                                />
+                                <WorkItemListContainer params={{
+                                    userContext: userContext,
+                                    workItemType: WorkItemType.UPDATE_WORK_PACKAGE,
+                                    workItemsParentRef: workItem.wiReferenceId,
+                                    displayContext: displayContext
+                                }}/>
+                            </div>;
+
+                        break;
+                }
+
                 break;
+
             case WorkItemType.BASE_WORK_PACKAGE:
+            case WorkItemType.UPDATE_WORK_PACKAGE:
 
                 if(displayContext === DisplayContext.WORK_ITEM_SUMMARY){
                     layout =
@@ -173,6 +310,7 @@ export class WorkItem extends Component{
                                 workItemType={workItemType}
                                 userRole={userRole}
                                 userContext={userContext}
+                                displayContext={displayContext}
                             />
 
                         </div>;

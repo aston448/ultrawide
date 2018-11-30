@@ -263,7 +263,10 @@ export function reorderWorkItemDropAllowed(movingWorkItem, targetWorkItem){
 
 export function workPackageUnassignedDropAllowed(movingItem){
 
-    return (movingItem.workPackageType === WorkPackageType.WP_BASE);
+    return (
+        (movingItem.workPackageType === WorkPackageType.WP_BASE) ||
+        (movingItem.workPackageType === WorkPackageType.WP_UPDATE)
+    );
 }
 
 export function locationMoveDropAllowed(itemType, targetType, viewType, inScope){

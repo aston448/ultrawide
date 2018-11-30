@@ -726,30 +726,47 @@ class ClientDataServicesClass{
         )
     }
 
-    getWorkItemList(userContext, workItemType, itemParentRefId){
+    getWorkItemList(userContext, workItemType, itemParentRefId, displayContext){
 
         if(userContext.designVersionId === 'NONE'){
             return [];
         }
 
-        switch(workItemType){
-            case WorkItemType.INCREMENT:
-                // Get all Increments for DV
-                return WorkItemData.getDesignVersionIncrementsByIndex(userContext.designVersionId);
-            case WorkItemType.ITERATION:
-                // Get List of Iterations in DV Increment
-                return WorkItemData.getDesignVersionIncrementIterationsByIndex(userContext.designVersionId, itemParentRefId);
-            case WorkItemType.BASE_WORK_PACKAGE:
-                // Get Base WPs in an Iteration
-                return WorkItemData.getDesignVersionIterationWpsByIndex(userContext.designVersionId, itemParentRefId);
-            case WorkItemType.DESIGN_UPDATE:
-                // Get DUs in an Iteration
-                return WorkItemData.getDesignVersionIterationDusByIndex(userContext.designVersionId, itemParentRefId);
-            case WorkItemType.UPDATE_WORK_PACKAGE:
-                // Get WPs in a DU
-                return WorkItemData.getDesignVersionDuWpsByIndex(userContext.designVersionId, itemParentRefId);
-            default:
-                break;
+        if(displayContext === DisplayContext.WORK_ITEM_DU_LIST){
+
+            switch(workItemType){
+                case WorkItemType.DESIGN_UPDATE:
+                    // Populating a list of DUs for the current DV to allow WP assignment
+                    return DesignVersionData.getAllUpdates(userContext.designVersionId);
+                case WorkItemType.UPDATE_WORK_PACKAGE:
+                    // Get WPs for DU not in an increment
+                    //return DesignUpdateData.getUnassignedWorkPackages(itemParentRefId);
+            }
+
+
+        } else {
+
+            // The actual work hierarchy
+
+            switch (workItemType) {
+                case WorkItemType.INCREMENT:
+                    // Get all Increments for DV
+                    return WorkItemData.getDesignVersionIncrementsByIndex(userContext.designVersionId);
+                case WorkItemType.ITERATION:
+                    // Get List of Iterations in DV Increment
+                    return WorkItemData.getDesignVersionIncrementIterationsByIndex(userContext.designVersionId, itemParentRefId);
+                case WorkItemType.BASE_WORK_PACKAGE:
+                    // Get Base WPs in an Iteration
+                    return WorkItemData.getDesignVersionIterationWpsByIndex(userContext.designVersionId, itemParentRefId);
+                case WorkItemType.DESIGN_UPDATE:
+                    // Get DUs in an Iteration
+                    return WorkItemData.getDesignVersionIterationDusByIndex(userContext.designVersionId, itemParentRefId);
+                case WorkItemType.UPDATE_WORK_PACKAGE:
+                    // Get WPs in a DU
+                    return WorkItemData.getDesignVersionDuWpsByIndex(userContext.designVersionId, itemParentRefId);
+                default:
+                    break;
+            }
         }
     }
 
@@ -1130,9 +1147,17 @@ class ClientDataServicesClass{
     }
 
     // Get a list of Work Packages not yet assigned to Work Items
-    getUnassignedWorkPackages(userContext){
+    getUnassignedWorkPackages(userContext, displayContext, designUpdateId){
 
-        return WorkPackageData.getUnassignedBaseWorkPackages(userContext.designVersionId);
+        switch(displayContext){
+
+            case DisplayContext.WORK_ITEM_DU_LIST:
+                return DesignUpdateData.getUnassignedWorkPackages(designUpdateId);
+
+            case DisplayContext.WORK_ITEM_EDIT_BASE:
+                return WorkPackageData.getUnassignedBaseWorkPackages(userContext.designVersionId);
+        }
+
     }
 
     // Get a list of Work Packages for a Design Version

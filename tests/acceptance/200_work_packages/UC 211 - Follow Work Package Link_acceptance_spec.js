@@ -48,7 +48,7 @@ describe('UC 211 - Follow Work Package Link', function() {
 
         // Execute -----------------------------------------------------------------------------------------------------
         BrowserActions.selectAvailableWpsTab();
-        BrowserActions.selectWorkPackage('WorkPackage1');
+        BrowserActions.selectWorkItem('WorkPackage1');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Created a new Design

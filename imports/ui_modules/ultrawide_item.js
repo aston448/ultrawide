@@ -182,7 +182,7 @@ class UltrawideItemUiModulesClass {
 
     onSelectWorkPackage(userRole, userContext, wp){
 
-        ClientWorkPackageServices.selectWorkPackage(
+        ClientWorkPackageServices.selectWorkItem(
             userRole,
             userContext,
             wp
