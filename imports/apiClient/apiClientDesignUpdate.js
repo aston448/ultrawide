@@ -356,7 +356,7 @@ class ClientDesignUpdateServicesClass {
         newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
 
         // Load or refresh DU Summary data - if necessary
-        ClientDesignUpdateSummary.getDesignUpdateSummary(false);
+        // ClientDesignUpdateSummary.getDesignUpdateSummary(false);
 
         if((newDesignUpdateId !== userContext.designUpdateId) && (displayContext !== DisplayContext.WORK_ITEM_DU_LIST)) {
 

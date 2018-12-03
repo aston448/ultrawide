@@ -18,7 +18,8 @@ let Schema = new SimpleSchema({
     headerComponentId:          {type: String, defaultValue: 'NONE'},
     itemIndex:                  {type: Number, decimal: true, defaultValue: 1000000},
     itemHeaderName:             {type: String, defaultValue: 'NONE'},
-    scenarioTestStatus:         {type: String, defaultValue: 'NONE'}
+    scenarioTestStatus:         {type: String, defaultValue: 'NONE'},
+    scenarioWorkPackageId:      {type: String, defaultValue: 'NONE'}
 });
 
 UserDesignUpdateSummary.attachSchema(Schema);

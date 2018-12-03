@@ -82,12 +82,18 @@ export class WorkItemTarget extends Component{
 
         let uiContextName = uiItemId;
 
+        let targetClass = 'work-item-target';
+
+        if(canDrop && isOverCurrent){
+            targetClass = 'work-item-target-droppable';
+        }
+
         //console.log("Rendering design component target: " + this.props.currentItem.componentType + " - " + currentItem.componentNameNew + " canDrop: " + canDrop + " display context " + displayContext + "mode " + mode);
 
         if(!(Meteor.isTest) && canDrop){
 
             return connectDropTarget(
-                <div id={'Target_' + uiContextName}>
+                <div id={'Target_' + uiContextName} className={targetClass}>
                     <WorkItem
                         workItem={workItem}
                         workItemType={workItemType}
@@ -120,29 +126,43 @@ WorkItemTarget.propTypes = {
 const componentTarget = {
 
     canDrop(props, monitor){
-        const item = monitor.getItem().workItem;
+        const movingItem = monitor.getItem().workItem;
+        const targetItem = props.workItem;
+        const targetType = props.workItemType;
+        let movingType = '';
+
+        if(movingItem.workPackageType){
+            movingType = movingItem.workPackageType;
+        } else {
+            movingType = movingItem.wiType
+        }
 
         // Prevent container items grabbing the drop...
         if(monitor.didDrop()){
             return false;
         }
 
+        let parentWorkItem = null;
+
+
         // Validate if a drop would be allowed...
+        switch(movingType){
 
-        // If the target is an iteration allow WPs to drop on it
-        if(props.workItem.wiType === WorkItemType.ITERATION &&
-            (item.workPackageType === WorkPackageType.WP_BASE || item.workPackageType === WorkPackageType.WP_UPDATE)
-        ){
-            return true;
-        } else {
+            case WorkPackageType.WP_BASE:
+            case WorkPackageType.WP_UPDATE:
+            case WorkItemType.DESIGN_UPDATE:
 
-            // Get parent of moving item
-            const parentWorkItem = WorkItemData.getWorkItemParent(item);
+                // Can only drop WPs and DUs on iterations
+                return (targetType === WorkItemType.ITERATION);
 
-            return (workItemMoveDropAllowed(item, props.workItem, parentWorkItem));
+            default:
+
+                // Get parent of moving item
+                parentWorkItem = WorkItemData.getWorkItemParent(movingItem);
+                //console.log('Attempting drop for Mv: %o, Tg: %o, Pa: %o', movingItem, targetItem, parentWorkItem);
+                return (workItemMoveDropAllowed(movingItem, targetItem, parentWorkItem));
+
         }
-
-
     },
 
     drop(props, monitor) {

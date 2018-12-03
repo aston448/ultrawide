@@ -137,9 +137,19 @@ class WorkItemDetail extends Component{
 
             case WorkItemType.DESIGN_UPDATE:
 
+                let duId = 'NONE';
+
+                if(this.props.displayContext === DisplayContext.WORK_ITEM_DU_LIST){
+                    // An actual DU
+                    duId = this.props.workItem._id;
+                } else {
+                    // Work Item DU
+                    duId = this.props.workItem.wiDuId;
+                }
+
                 ClientDesignUpdateServices.setDesignUpdate(
                     this.props.userContext,
-                    this.props.workItem._id
+                    duId
                 );
 
                 break;
@@ -215,6 +225,7 @@ class WorkItemDetail extends Component{
         }
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render WorkItem Detail {}', itemName);
+        console.log('Render WI %o', workItem);
 
         const uiContextName = replaceAll(itemName, ' ', '_');
 
@@ -298,6 +309,19 @@ class WorkItemDetail extends Component{
         let itemText =
             <div className="work-item-name">{itemName}</div>;
 
+
+        let updateWpStatus =
+            <InputGroup.Addon>
+                <div id="updateWpSummary" className={workItem.updateWpStatus}><Glyphicon glyph='tasks'/>
+                </div>
+            </InputGroup.Addon>;
+
+        let updateTestStatus =
+            <InputGroup.Addon>
+                <div id="updateTestSummary" className={workItem.updateTestStatus}><Glyphicon
+                glyph='th-large'/></div>
+            </InputGroup.Addon>;
+
         // Get buttons for Work Packages based on their status
         if(workItemType === WorkItemType.BASE_WORK_PACKAGE || workItemType === WorkItemType.UPDATE_WORK_PACKAGE) {
 
@@ -310,6 +334,18 @@ class WorkItemDetail extends Component{
                     {badge}
                     {itemLink}
                     {itemText}
+                </InputGroup>
+                {buttons}
+            </div>;
+
+        let duNotEditable =
+            <div className={workItemClass}>
+                <InputGroup>
+                    {badge}
+                    {itemLink}
+                    {itemText}
+                    {updateWpStatus}
+                    {updateTestStatus}
                 </InputGroup>
                 {buttons}
             </div>;
@@ -394,13 +430,15 @@ class WorkItemDetail extends Component{
                         } else {
                             layout = wpNotEditingDraggable;
                         }
+                        selectedItem = (workItem._id === userContext.workPackageId);
                         break;
                     case WorkItemType.DESIGN_UPDATE:
 
                         if(displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || displayContext === DisplayContext.WORK_ITEM_EDIT_UPD){
                             layout = wpNotEditingDraggable;
+                            selectedItem = (workItem.wiDuId === userContext.designUpdateId);
                         } else {
-                            layout = itemNotEditable;
+                            layout = duNotEditable;
                             selectedItem = (workItem._id === userContext.designUpdateId);
                         }
 
@@ -446,6 +484,40 @@ const componentSource = {
 
     // Start of drag gets the item being dragged
     beginDrag(props) {
+
+        switch(props.workItemType){
+
+            case WorkItemType.BASE_WORK_PACKAGE:
+            case WorkItemType.UPDATE_WORK_PACKAGE:
+
+                ClientWorkPackageServices.selectWorkPackage(
+                    props.userRole,
+                    props.userContext,
+                    props.workItem
+                );
+
+                break;
+
+            case WorkItemType.DESIGN_UPDATE:
+
+                let duId = 'NONE';
+
+                if(props.displayContext === DisplayContext.WORK_ITEM_DU_LIST){
+                    // An actual DU
+                    duId = props.workItem._id;
+                } else {
+                    // Work Item DU
+                    duId = props.workItem.wiDuId;
+                }
+
+                ClientDesignUpdateServices.setDesignUpdate(
+                    props.userContext,
+                    duId
+                );
+
+                break;
+        }
+
         return {
             workItem: props.workItem,
         }
@@ -467,6 +539,7 @@ const componentSource = {
         const dropResult = monitor.getDropResult();
 
         if (dropResult) {
+
             switch(dropResult.dragType){
                 case 'MOVE_LOCATION':
 

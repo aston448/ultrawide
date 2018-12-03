@@ -314,7 +314,7 @@ class WorkItemDataClass{
         return WorkItems.findOne(
             {
                 designVersionId:    workItem.designVersionId,
-                wiReferenceId:      workItem.parentWorkItemRefId
+                wiReferenceId:      workItem.wiParentReferenceId
             }
         );
     }
@@ -324,7 +324,7 @@ class WorkItemDataClass{
         return WorkItems.findOne(
             {
                 designVersionId:    wp.designVersionId,
-                wiReferenceId:      wp.wiParentReferenceId,
+                wiReferenceId:      wp.parentWorkItemRefId,
                 wiType:             WorkItemType.DESIGN_UPDATE
             }
         );
@@ -360,7 +360,7 @@ class WorkItemDataClass{
                 {
                     designVersionId:        workItem.designVersionId,
                     parentWorkItemRefId:    workItem.wiReferenceId,
-                    wiType:                 WorkItemType.UPDATE_WORK_PACKAGE
+                    workPackageType:        WorkPackageType.WP_UPDATE
                 }
             ).fetch().length
         }

@@ -263,9 +263,11 @@ class DesignUpdateSummaryServicesClass {
                             }
 
                             let scenarioTestStatus = 'NONE';
+                            let scenarioWorkPackageId = 'NONE';
 
                             if (item.componentType === ComponentType.SCENARIO) {
                                 scenarioTestStatus = testStatus;
+                                scenarioWorkPackageId = item.workPackageId;
                             }
 
                             log((message) => console.log(message), LogLevel.DEBUG, 'Adding {} item {} with test status {}', summaryType, item.componentNameNew, scenarioTestStatus);
@@ -286,7 +288,8 @@ class DesignUpdateSummaryServicesClass {
                                 itemFeatureName:            featureName,
                                 itemHeaderId:               headerId,
                                 itemIndex:                  item.componentIndexNew,
-                                scenarioTestStatus:         scenarioTestStatus
+                                scenarioTestStatus:         scenarioTestStatus,
+                                scenarioWorkPackageId:      scenarioWorkPackageId
                             });
                         }
                     }

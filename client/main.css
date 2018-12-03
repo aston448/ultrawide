@@ -1189,30 +1189,37 @@ input {
 }
 
 .du-no-wp-scenarios{
+    margin: 5px 0 0 0;
     color: lightgrey;
 }
 
 .du-some-wp-scenarios{
+    margin: 5px 0 0 0;
     color: darkgrey;
 }
 
 .du-all-wp-scenarios{
+    margin: 5px 0 0 0;
     color: black;
 }
 
 .du-scenarios-failing{
+    padding: 2px 0 0 0;
     color: red;
 }
 
 .du-no-scenarios-passing{
+    padding: 2px 0 0 0;
     color: lightgrey;
 }
 
 .du-some-scenarios-passing{
+    padding: 2px 0 0 0;
     color: darkseagreen;
 }
 
 .du-all-scenarios-passing{
+    padding: 2px 0 0 0;
     color: forestgreen;
 }
 
@@ -1246,6 +1253,15 @@ input {
 .badge-du{
     color: yellow;
     background-color: darkgoldenrod;
+}
+
+.work-item-target{
+    border: 1px solid transparent;
+}
+
+.work-item-target-droppable{
+    border: 1px solid darkgrey;
+    background-color: #FFFFDD;
 }
 
 .work-item-name{
@@ -1941,7 +1957,15 @@ input {
 }
 
 .summary-item-type{
-    margin: 0 5px 0 5px;
+    margin: 4px 5px 0 5px;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    font-weight: bold;
+    color: black;
+}
+
+.summary-item-type-missing{
+    margin: 4px 5px 0 5px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
     font-weight: bold;
@@ -1958,7 +1982,7 @@ input {
 }
 
 .summary-icon{
-    margin: 0 0 3px 5px;
+    margin: 4px 0 3px 5px;
     font-size:  11px;
     font-weight: normal
 }

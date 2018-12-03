@@ -132,7 +132,7 @@ class DesignUpdateServicesClass {
 
             designUpdates.forEach((du) => {
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "  DU: {}", du.updateName);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "  DU: {}", du.updateName);
 
                 let duScenarios = DesignUpdateData.getNonPeerScopeScenarios(du._id);
 
@@ -145,7 +145,7 @@ class DesignUpdateServicesClass {
 
                 duScenarios.forEach((duScenario) => {
 
-                    log((msg) => console.log(msg), LogLevel.TRACE, "    DU Scenario: {}", duScenario.componentNameNew);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "    DU Scenario: {} with WP {}", duScenario.componentNameNew, duScenario.workPackageId);
 
 
                     let scenarioTestResult = UserDvMashScenarioData.getScenario(userContext, duScenario.componentReferenceId);
@@ -175,7 +175,7 @@ class DesignUpdateServicesClass {
                     }
                 });
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "    All in WP: {}  Some in WP {}", allInWp, someInWp);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "    All in WP: {}  Some in WP {}", allInWp, someInWp);
                 log((msg) => console.log(msg), LogLevel.TRACE, "    No Fails: {}  No Passes {}  All Passes {}", noFails, noPasses, allPassing);
 
                 let duWpStatus = DesignUpdateWpStatus.DU_NO_WP_SCENARIOS;

@@ -112,15 +112,22 @@ export class WorkTabPage extends Component {
             if(userContext.designUpdateId === 'NONE'){
                 duSummary =
                     <div className="design-item-note">
-                        Select a Design Update
+                        Select a Design Update or Work Package
                     </div>
             } else {
+
+                let displayContext = DisplayContext.UPDATE_SUMMARY;
+
+                if(userContext.workPackageId !== 'NONE'){
+                    displayContext = DisplayContext.WP_SUMMARY;
+                }
 
                 duSummary =
                     <div>
                         <DesignUpdateSummaryContainer
                             params={{
-                                userContext: userContext
+                                userContext: userContext,
+                                displayContext:displayContext
                             }}
                         />
                     </div>
@@ -143,14 +150,6 @@ export class WorkTabPage extends Component {
                                 displayContext={DisplayContext.WORK_ITEM_DU_LIST}
                             />
                         </Col>
-                        {/*<Col className="close-col"  md={4}>*/}
-                            {/*<WorkItemListContainer params={{*/}
-                                {/*workItemsParentRef: 'NONE',*/}
-                                {/*workItemType: WorkItemType.DESIGN_UPDATE,*/}
-                                {/*userContext: userContext,*/}
-                                {/*displayContext: DisplayContext.WORK_ITEM_DU_LIST*/}
-                            {/*}}/>*/}
-                        {/*</Col>*/}
                         <Col className="close-col"  md={4}>
                             {duSummary}
                         </Col>

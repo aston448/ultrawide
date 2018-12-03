@@ -185,6 +185,13 @@ class WorkItemServicesClass {
 
                         // Needs to go inside a DU for an Iteration (creating that DU if needed)
 
+                        // Get old parent for check after move
+                        const oldParentDuItem = WorkItemData.getWorkPackageParentDu(movingWorkItem);
+
+                        console.log('Moving item = %o', movingWorkItem);
+                        console.log('Target item = %o', targetParentItem);
+                        console.log('Old Parent DU = %o', oldParentDuItem);
+
                         // See if DU item exists for Iteration
                         const iterationDu = WorkItemData.getDesignVersionIterationDu(movingWorkItem.designVersionId, targetParentItem.wiReferenceId, movingWorkItem.designUpdateId);
 
@@ -204,6 +211,11 @@ class WorkItemServicesClass {
 
                             // Set WP as belonging to the DU Work Item
                             WorkPackageData.setWorkItemParent(movingWorkItem._id, duWorkItem.wiReferenceId);
+                        }
+
+                        // Check old parent DU to see if still needed (if there was one!)
+                        if(oldParentDuItem) {
+                            this.checkUpdateWorkItemValidity(oldParentDuItem);
                         }
 
                         break;

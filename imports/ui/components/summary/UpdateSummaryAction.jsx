@@ -58,9 +58,14 @@ class UpdateSummaryAction extends Component {
 
         let item = '';
         let testStatus = 'summary-icon invisible';
+        let scenarioHeaderClass = 'summary-item-type';
 
         if(actionItem.itemType === ComponentType.SCENARIO){
             testStatus = 'summary-icon ' + actionItem.scenarioTestStatus;
+
+            if(actionItem.scenarioWorkPackageId === 'NONE'){
+                scenarioHeaderClass = 'summary-item-type-missing';
+            }
         }
 
         switch(actionItem.summaryType){
@@ -141,7 +146,7 @@ class UpdateSummaryAction extends Component {
                                     <div className={testStatus}><Glyphicon glyph="th-large"/></div>
                                 </InputGroup.Addon>
                                 <InputGroup.Addon>
-                                    <div className="summary-item-type">{itemHeader}</div>
+                                    <div className={scenarioHeaderClass}>{itemHeader}</div>
                                 </InputGroup.Addon>
                                 <div className="summary-item">{actionItem.itemName}</div>
                             </InputGroup>
