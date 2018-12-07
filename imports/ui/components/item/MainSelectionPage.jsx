@@ -16,7 +16,7 @@ import ProjectSummaryContainer              from '../../containers/summary/Proje
 
 
 // Ultrawide Services
-import {DesignVersionStatus, WorkPackageType, HomePageTab, LogLevel, RoleType}        from '../../../constants/constants.js';
+import {DesignVersionStatus, WorkPackageType, HomePageTab, LogLevel, RoleType, DisplayContext}        from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
 import { ClientDesignVersionServices }  from '../../../apiClient/apiClientDesignVersion.js';
@@ -75,7 +75,8 @@ export class MainSelectionPage extends Component {
                     <Col className="close-col"  md={6}>
                         <FeatureSummaryContainer params={{
                             userContext: userContext,
-                            homePageTab: userHomeTab
+                            homePageTab: userHomeTab,
+                            displayContext: DisplayContext.DV_FEATURES
                         }}/>
                     </Col>
                 </Row>

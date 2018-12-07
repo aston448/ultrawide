@@ -8,6 +8,7 @@ export const DefaultItemNames = {
     NEXT_DESIGN_VERSION_NUMBER:     'x.x',
     NEW_DESIGN_UPDATE_NAME:         'New Design Update',
     NEW_DESIGN_UPDATE_REF:          'CRxxx',
+    NEW_DESIGN_ANOMALY_NAME:        'New Design Anomaly',
     NEW_WORK_PACKAGE_NAME:          'New Work Package',
     NEW_PERMUTATION_NAME:           'New Permutation',
     NEW_PERMUTATION_VALUE:          'New Permutation Value',
@@ -47,4 +48,17 @@ export const DefaultLocationText = {
 export const DefaultUserDetails = {
     NEW_USER_NAME:                  'newUser',
     NEW_USER_DISPLAY_NAME:          'New User'
+};
+
+export const DefaultRawContent = {
+    "entityMap" : {  },
+    "blocks" : [
+        { "key" : "5efv7", "text" : "Choose Edit to enter details in Rich Text here...",
+            "type" : "unstyled",
+            "depth" : 0,
+            "inlineStyleRanges" : [ ],
+            "entityRanges" : [ ],
+            "data" : {  }
+        }
+    ]
 };

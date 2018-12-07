@@ -68,6 +68,14 @@ export const DesignVersionValidationErrors = {
     DESIGN_VERSION_INVALID_UPDATE_WORKING:      'There must be at least one Design Update set for inclusion to update the working Design Version'
 };
 
+export const DesignAnomalyValidationErrors = {
+    DESIGN_ANOMALY_INVALID_ROLE_ADD:            'A guest viewer cannot add Design Anomalies',
+    DESIGN_ANOMALY_INVALID_ROLE_UPDATE:         'A guest viewer cannot update Design Anomalies',
+    DESIGN_ANOMALY_INVALID_ROLE_REMOVE:         'A guest viewer cannot remove Design Anomalies',
+    DESIGN_ANOMALY_INVALID_STATUS_REMOVE:       'Only new, unedited Design Anomalies can be removed.  Use Close.',
+    DESIGN_ANOMALY_INVALID_STATUS_UPDATE:       'This update is invalid for the current Anomaly Status'
+};
+
 export const WorkItemValidationErrors = {
     INCREMENT_INVALID_ROLE_ADD:                 'Only a Manager can add Increments',
     INCREMENT_INVALID_ROLE_REMOVE:              'Only a Manager can remove Increments',

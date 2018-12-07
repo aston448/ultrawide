@@ -1223,6 +1223,47 @@ input {
     color: forestgreen;
 }
 
+/* DESIGN ANOMALIES ------------------------------------------------------------------------------------------------- */
+
+.design-anomaly{
+    margin: 2px;
+    padding: 3px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.design-anomaly-selected{
+    margin: 2px;
+    padding: 3px;
+    border: 1px solid black;
+    background-color: #FFEEEE;
+    border-radius: 4px;
+}
+
+.badge-da-new{
+    min-width: 75px;
+    color: yellow;
+    background-color: darkgoldenrod;
+}
+
+.badge-da-open{
+    min-width: 75px;
+    color: lightsalmon;
+    background-color: indianred;
+}
+
+.badge-da-ongoing{
+    min-width: 75px;
+    color: black;
+    background-color: indianred;
+}
+
+.badge-da-closed{
+    min-width: 75px;
+    color: darkgrey;
+    background-color: lightgrey;
+}
+
 /* WORK ITEMS ------------------------------------------------------------------------------------------------------- */
 
 .badge-increment{

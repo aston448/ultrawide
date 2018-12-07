@@ -23,7 +23,8 @@ import {DesignPermutationData} from "../../data/design/design_permutation_db";
 import {DesignPermutationValueData} from "../../data/design/design_permutation_value_db";
 import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
 import {DesignVersionStatus, UpdateMergeStatus} from "../../constants/constants";
-import {IterationData} from "../../data/work/work_item_db";
+import {WorkItemData} from "../../data/work/work_item_db";
+import {DesignAnomalyData} from "../../data/design/design_anomaly_db";
 
 //======================================================================================================================
 //
@@ -136,7 +137,8 @@ class ImpExServicesClass{
             };
 
             let designVersions = [];
-            let iterations = [];
+            let workItems = [];
+            let designAnomalies = [];
             let designUpdates = [];
             let workPackages = [];
             let designVersionComponents = [];
@@ -183,11 +185,18 @@ class ImpExServicesClass{
                     permutationValues.push(permutationValue);
                 });
 
-                // All iterations in this version
-                const iterationData = IterationData.getWorkItemList(designVersion._id);
+                // All workItems in this version
+                const workItemData = WorkItemData.getDesignVersionWorkItems(designVersion._id);
 
-                iterationData.forEach((iteration) => {
-                    iterations.push(iteration);
+                workItemData.forEach((workItem) => {
+                    workItems.push(workItem);
+                });
+
+                // All Design Anomalies in this Version
+                const designAnomalyData = DesignAnomalyData.getDesignVersionDesignAnomalies(designVersion._id);
+
+                designAnomalyData.forEach((designAnomaly) => {
+                    designAnomalies.push(designAnomaly);
                 });
 
                 // All updates in this Version
@@ -253,7 +262,8 @@ class ImpExServicesClass{
                     designs: designData,
                     defaultFeatureAspects: defaultFeatureAspects,
                     designVersions: designVersions,
-                    iterations: iterations,
+                    workItems: workItems,
+                    designAnomalies: designAnomalies,
                     designUpdates: designUpdates,
                     workPackages: workPackages,
                     domainDictionary: domainDictionary,
@@ -299,7 +309,7 @@ class ImpExServicesClass{
             let designsMapping = [];
             let designPermutationsMapping = [];
             let permutationValuesMapping = [];
-            let iterationsMapping = [];
+            let workItemsMapping = [];
             let designVersionsMapping = [];
             let designUpdatesMapping = [];
             let workPackagesMapping = [];
@@ -375,9 +385,9 @@ class ImpExServicesClass{
                     // Restore Design Versions
                     designVersionsMapping = ImpexModules.restoreDesignVersionData(backupData.designVersions, backupDataVersion, currentDataVersion, designsMapping);
 
-                    // Restore Design Version Iterations
-                    if(backupData.iterations){
-                        iterationsMapping = ImpexModules.restoreIterationData(backupData.iterations, backupDataVersion, currentDataVersion, designVersionsMapping);
+                    // Restore Design Version Design Anomalies
+                    if(backupData.designAnomalies){
+                        ImpexModules.restoreDesignAnomalyData(backupData.designAnomalies, backupDataVersion, currentDataVersion, designVersionsMapping);
                     }
 
                     let hasDesignUpdates = false;
@@ -391,6 +401,11 @@ class ImpExServicesClass{
                     // Restore Work Packages
                     if(backupData.workPackages) {
                         workPackagesMapping = ImpexModules.restoreWorkPackageData(backupData.workPackages, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, usersMapping, hasDesignUpdates);
+                    }
+
+                    // Restore Design Version Work Items
+                    if(backupData.workItems){
+                        workItemsMapping = ImpexModules.restoreWorkItemData(backupData.workItems, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
                     }
 
                     // Restore Permutation Values
@@ -522,6 +537,7 @@ class ImpExServicesClass{
             };
 
             let designVersions = [];
+            let designAnomalies = [];
             let designUpdates = [];
             let workPackages = [];
             let designVersionComponents = [];
@@ -571,7 +587,7 @@ class ImpExServicesClass{
                 permutationValues.push(permutationValue);
             });
 
-            // All updates and WPs will be discarded.
+            // All Work Items, Updates and WPs will be discarded.
 
             // All non-deleted design components in this version need to be rebased.
             const designVersionComponentData = DesignVersionData.getAllNonDeletedComponents(designVersionId);
@@ -600,6 +616,9 @@ class ImpExServicesClass{
                 designVersionComponents.push(designVersionComponent);
             });
 
+            // Preserve any non-closed Design Anomalies
+            const openDesignAnomalies = DesignAnomalyData.getOpenDvDesignAnomalies(designVersionId);
+
             // All Scenario Test Expectations in this version
             const scenarioTestExpectationData = ScenarioTestExpectationData.getAllTestExpectationsForDesignVersion(designVersionId);
 
@@ -627,6 +646,7 @@ class ImpExServicesClass{
                     userSettings: userSettings,
                     designs: designData,
                     defaultFeatureAspects: defaultFeatureAspects,
+                    designAnomalies: openDesignAnomalies,
                     designVersions: designVersions,
                     designUpdates: designUpdates,
                     workPackages: workPackages,

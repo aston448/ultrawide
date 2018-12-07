@@ -73,6 +73,7 @@ export class ItemList extends Component {
         switch(listType){
 
             case ItemListType.ULTRAWIDE_ITEM:
+            case ItemListType.DESIGN_ANOMALY:
             case ItemListType.BACKLOG_ITEM:
                 containerType = 'item-container';
                 containerHeaderType = 'item-container-header';

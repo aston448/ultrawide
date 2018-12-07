@@ -70,7 +70,8 @@ export class WorkTabPage extends Component {
                     <div>
                         <FeatureSummaryContainer params={{
                             userContext: userContext,
-                            homePageTab: HomePageTab.TAB_WORK
+                            homePageTab: HomePageTab.TAB_WORK,
+                            displayContext: DisplayContext.WORK_ITEM_EDIT_BASE
                         }}/>
                     </div>
             } else {

@@ -147,7 +147,8 @@ export class WorkPackagesList extends Component {
                     <div className="design-item-note">
                         <FeatureSummaryContainer params={{
                             userContext: userContext,
-                            homePageTab: HomePageTab.TAB_WORK
+                            homePageTab: HomePageTab.TAB_WORK,
+                            displayContext: DisplayContext.WP_SUMMARY
                         }}/>
                     </div>
             } else {

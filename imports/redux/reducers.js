@@ -43,6 +43,7 @@ const initialState = {
     currentUserWpTab:                   EditorTab.TAB_DETAILS,
     currentUserDevTab:                  EditorTab.TAB_DETAILS,
     currentUserBacklogItem:             DisplayContext.DV_BACKLOG_DESIGN,
+    currentUserDesignAnomaly:           'NONE',
     currentUserTestOutputLocationId:    'NONE',
     currentUserDesignPermutationId:     'NONE',
     currentUserPermutationValueId:      'NONE',
@@ -189,6 +190,10 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_CURRENT_USER_BACKLOG_ITEM:
             return Object.assign({}, state, {
                 currentUserBacklogItem: action.newItem
+            });
+        case Actions.SET_CURRENT_USER_DESIGN_ANOMALY:
+            return Object.assign({}, state, {
+                currentUserDesignAnomaly: action.newItem
             });
         case Actions.SET_CURRENT_USER_SUMMARY_ITEM:
             return Object.assign({}, state, {

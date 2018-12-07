@@ -131,6 +131,7 @@ export const ViewOptionType = {
 // Context specifies how and what information is displayed in common components
 export const DisplayContext = {
     NONE:                   'NONE',
+    DV_FEATURES:            'DV_FEATURES',
     BASE_EDIT:              'BASE_EDIT',            // Editable new design
     BASE_VIEW:              'BASE_VIEW',            // Base design version window for design update
     WORKING_VIEW:           'WORKING_VIEW',         // Updatable Design Version progress view
@@ -165,6 +166,12 @@ export const DisplayContext = {
     EDITOR_FOOTER:          'EDITOR_FOOTER',
     EDITOR_HEADER:          'EDITOR_HEADER',
     DETAILS_HEADER:         'DETAILS_HEADER',
+    DETAILS_TEXT_EDITABLE:  'DETAILS_TEXT_EDITABLE',
+    DETAILS_TEXT_READ_ONLY: 'DETAILS_TEXT_READ_ONLY',
+    DETAILS_NAME_EDITABLE:  'DETAILS_NAME_EDITABLE',
+    DETAILS_NAME_READ_ONLY: 'DETAILS_NAME_READ_ONLY',
+    ANOMALY_TEXT_EDITABLE:  'ANOMALY_TEXT_EDITABLE',
+    ANOMALY_TEXT_READ_ONLY: 'ANOMALY_TEXT_READ_ONLY',
     PROJECT_SUMMARY_NONE:   'PROJECT_SUMMARY_NONE',
     PROJECT_SUMMARY_MISSING:'PROJECT_SUMMARY_MISSING',
     PROJECT_SUMMARY_FAIL:   'PROJECT_SUMMARY_FAIL',
@@ -224,6 +231,7 @@ export const ItemType = {
 
 export const ItemListType = {
     ULTRAWIDE_ITEM:     'UW_ITEM',
+    DESIGN_ANOMALY:     'DA_ITEM',
     BACKLOG_ITEM:       'BL_ITEM',
     WORK_ITEM_IN:       'WI_IN',
     WORK_ITEM_IT:       'WI_IT',
@@ -292,6 +300,13 @@ export const DesignVersionStatus = {
     VERSION_DRAFT_COMPLETE:         'COMPLETE',         // Draft Design Version now Completed
     VERSION_UPDATABLE:              'UPDATABLE',        // Available to users. Changes only via design updates.
     VERSION_UPDATABLE_COMPLETE:     'UPDATES_COMPLETE'  // Updatable Design Version now complete
+};
+
+export const DesignAnomalyStatus = {
+    ANOMALY_NEW:                    'NEW',              // Just created - no details saved yet
+    ANOMALY_OPEN:                   'OPEN',             // Details provided
+    ANOMALY_ONGOING:                'ONGOING',          // Represents a permanent issue that is documented for test concessions, user advice etc.
+    ANOMALY_CLOSED:                 'CLOSED'            // No longer needed
 };
 
 export const UpdateMergeStatus = {
@@ -447,7 +462,8 @@ export const EditorTab = {
     TAB_SCENARIO_SEARCH:            '6',
     TAB_UPDATE_SUMMARY:             '7',
     TAB_WORKING_VIEW:               '8',
-    TAB_TEST_EXPECTATIONS:          '9'
+    TAB_TEST_EXPECTATIONS:          '9',
+    TAB_ANOMALIES:                  '10'
 };
 
 export const ScenarioStepType = {

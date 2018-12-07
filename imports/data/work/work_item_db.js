@@ -183,6 +183,15 @@ class WorkItemDataClass{
         );
     }
 
+    getDesignVersionWorkItems(designVersionId){
+
+        return WorkItems.find(
+            {
+                designVersionId:    designVersionId
+            }
+        ).fetch();
+    }
+
     getDesignVersionIncrements(designVersionId){
 
         return WorkItems.find(

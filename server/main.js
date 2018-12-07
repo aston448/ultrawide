@@ -47,6 +47,7 @@ import '../imports/startup/server/startup.js';
 
 // Server API
 import '../imports/apiServer/apiDesign.js';
+import '../imports/apiServer/apiDesignAnomaly.js';
 import '../imports/apiServer/apiDesignPermutation.js';
 import '../imports/apiServer/apiScenarioTestExpectation.js';
 import '../imports/apiServer/apiDesignVersion.js';

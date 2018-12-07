@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import TextEditor           from '../../components/edit/TextEditor.jsx';
+import DetailsTextEditor    from './DetailsTextEditor.jsx';
 import Narrative            from '../../components/edit/Narrative.jsx';
 
 // Ultrawide Services
@@ -71,7 +71,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon>
                     <div></div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />
@@ -85,7 +85,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon>
                     <div></div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />
@@ -100,7 +100,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon className="details-item-new">
                     <div>NEW:</div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />
@@ -115,7 +115,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon className="details-item-new">
                     <div>NEW:</div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />
@@ -130,7 +130,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon className="details-item-old">
                     <div>OLD:</div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />
@@ -144,7 +144,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon className="details-item-old">
                     <div>OLD:</div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />
@@ -159,7 +159,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon>
                     <div></div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />
@@ -173,7 +173,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon className="details-item-new">
                     <div>NEW:</div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />
@@ -187,7 +187,7 @@ export class DetailsItem extends Component {
                 <InputGroup.Addon className="details-item-old">
                     <div>OLD:</div>
                 </InputGroup.Addon>
-                <TextEditor
+                <DetailsTextEditor
                     designComponent={item}
                     detailsType={itemType}
                 />

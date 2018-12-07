@@ -32,7 +32,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class FeaturesList extends Component {
+export class FeatureSummaryList extends Component {
     constructor(props) {
         super(props);
 
@@ -145,7 +145,7 @@ export class FeaturesList extends Component {
     }
 }
 
-FeaturesList.propTypes = {
+FeatureSummaryList.propTypes = {
     featureSummaries:       PropTypes.array.isRequired,
     designVersionName:      PropTypes.string.isRequired,
     workPackageName:        PropTypes.string.isRequired,
@@ -180,4 +180,4 @@ export default FeatureSummaryContainer = createContainer(({params}) => {
         displayContext: params.displayContext
     };
 
-}, connect(mapStateToProps)(FeaturesList));
+}, connect(mapStateToProps)(FeatureSummaryList));

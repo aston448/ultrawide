@@ -12,6 +12,7 @@ import DesignUpdateSummaryContainer from '../../imports/ui/containers/summary/Up
 import MashSelectedItemContainer    from '../../imports/ui/containers/mash/MashSelectedItemContainer.jsx';
 import ScenarioFinder               from '../../imports/ui/components/search/ScenarioFinder.jsx';
 import TestExpectationSelectedItemContainer    from "../ui/containers/mash/TestExpectationSelectedItemContainer.jsx";
+import DesignAnomalyContainer       from '../../imports/ui/containers/item/DesignAnomalyContainer.jsx';
 
 // Ultrawide Services
 import {DisplayContext, RoleType, ViewMode, ViewType, WorkPackageType, ComponentType, LogLevel, EditorTab } from "../constants/constants";
@@ -25,7 +26,7 @@ import { ClientDesignUpdateComponentServices }  from "../apiClient/apiClientDesi
 
 
 // Bootstrap
-import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
+import {Grid, Row, Col, Tabs, Tab, Glyphicon, Badge} from 'react-bootstrap';
 
 // REDUX services
 import store from '../redux/store'
@@ -398,6 +399,19 @@ class EditorContainerUiModulesClass{
                 }}/>
             </div>
         );
+    }
+
+    getDesignVersionAnomalies(userContext){
+
+        return(
+            <div id="anomaliesPane">
+                <DesignAnomalyContainer
+                    params={{
+                        userContext: userContext
+                    }}
+                />
+            </div>
+        )
     }
 
     getTestExpectations(view, userContext){
@@ -939,6 +953,18 @@ class EditorContainerUiModulesClass{
 
     getTabsView(view, userRole, userContext, colWidth, colId, editors){
 
+        const detailsTabTitle =
+
+            <div>
+                <Badge>
+                <Glyphicon glyph='tasks'/>
+                </Badge>
+                Details
+            </div>;
+
+
+
+
         switch(view){
             case ViewType.DESIGN_NEW:
             case ViewType.DESIGN_PUBLISHED:
@@ -950,6 +976,7 @@ class EditorContainerUiModulesClass{
                         <Col id={colId} md={colWidth} className="close-col">
                             <Tabs className="top-tabs" activeKey={this.getCurrentDesignTab()} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
                                 <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                                <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title="ANOMALIES">{this.getDesignVersionAnomalies(userContext)}</Tab>
                                 <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
                                 <Tab id={UITab.TAB_SCENARIO_SEARCH} eventKey={EditorTab.TAB_SCENARIO_SEARCH} title="FIND SCENARIO">{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
                             </Tabs>
@@ -961,8 +988,9 @@ class EditorContainerUiModulesClass{
                     return(
                         <Col id={colId} md={colWidth} className="close-col">
                             <Tabs className="top-tabs" activeKey={this.getCurrentDesignTab()} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
-                                <Tab eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title="TEST EXPECTATIONS">{this.getTestExpectations(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_ANOMALIES} title="ANOMALIES">{this.getDesignVersionAnomalies(userContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_ACC_TESTS} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_INT_TESTS} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>
@@ -980,6 +1008,7 @@ class EditorContainerUiModulesClass{
                     <Col id={colId} md={colWidth} className="close-col">
                         <Tabs className="top-tabs" activeKey={this.getCurrentUpdateTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentUpdateTab(tab)}>
                             <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                            <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title="ANOMALIES">{this.getDesignVersionAnomalies(userContext)}</Tab>
                             <Tab id={UITab.TAB_WORKING_VIEW} eventKey={EditorTab.TAB_WORKING_VIEW} title="WORKING VIEW">{editors.viewEditor}</Tab>
                             <Tab id={UITab.TAB_UPDATE_SUMMARY} eventKey={EditorTab.TAB_UPDATE_SUMMARY} title="SUMMARY">{this.getUpdateSummary(userContext)}</Tab>
                             <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
@@ -997,6 +1026,7 @@ class EditorContainerUiModulesClass{
                     <Col id={colId} md={colWidth} className="close-col">
                         <Tabs className="top-tabs" activeKey={this.getCurrentWpTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentWpTab(tab)}>
                             <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                            <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title="ANOMALIES">{this.getDesignVersionAnomalies(userContext)}</Tab>
                             <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title="DICTIONARY">{this.getDomainDictionary(userContext)}</Tab>
                         </Tabs>
                     </Col>
@@ -1009,6 +1039,7 @@ class EditorContainerUiModulesClass{
                     <Col id={colId} md={colWidth} className="close-col">
                         <Tabs className="top-tabs" activeKey={this.getCurrentDevTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentDevTab(tab)}>
                             <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title="DETAILS">{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                            <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title="ANOMALIES">{this.getDesignVersionAnomalies(userContext)}</Tab>
                             <Tab id={UITab.TAB_ACC_TESTS} eventKey={EditorTab.TAB_ACC_TESTS} title="ACCEPTANCE TESTS">{this.getAccTestsPane(view, userContext)}</Tab>
                             <Tab id={UITab.TAB_INT_TESTS} eventKey={EditorTab.TAB_INT_TESTS} title="INTEGRATION TESTS">{this.getIntTestsPane(view, userContext)}</Tab>
                             <Tab id={UITab.TAB_UNIT_TESTS} eventKey={EditorTab.TAB_UNIT_TESTS} title="UNIT TESTS">{this.getUnitTestsPane(view, userContext)}</Tab>

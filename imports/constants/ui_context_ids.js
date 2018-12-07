@@ -5,6 +5,7 @@ export const AddActionIds = {
     UI_CONTEXT_ADD_DESIGN_PERMUTATION:  'ADD_DESIGN_PERMUTATION',
     UI_CONTEXT_ADD_PERMUTATION_VALUE:   'ADD_PERMUTATION_VALUE',
     UI_CONTEXT_ADD_DESIGN_UPDATE:       'ADD_DESIGN_UPDATE',
+    UI_CONTEXT_ADD_DESIGN_ANOMALY:      'ADD_DESIGN_ANOMALY',
     UI_CONTEXT_ADD_INCREMENT:           'ADD_INCREMENT',
     UI_CONTEXT_ADD_ITERATION:           'ADD_ITERATION',
     UI_CONTEXT_ADD_WORK_PACKAGE:        'ADD_WORK_PACKAGE',
@@ -21,6 +22,7 @@ export const AddActionIds = {
 
 export const UITab = {
     TAB_DETAILS:                    'tab-details',
+    TAB_ANOMALIES:                  'tab-anomalies',
     TAB_TEST_EXPECTATIONS:          'tab-test-expectations',
     TAB_DOMAIN_DICT:                'tab-dict',
     TAB_ACC_TESTS:                  'tab-acc',
@@ -48,6 +50,8 @@ export const UI = {
     BUTTON_CHANGE_PASSWORD:             'but-change-password',
     BUTTON_SAVE:                        'but-save-',
     BUTTON_CANCEL:                      'but-cancel-',
+    BUTTON_CLOSE_REOPEN:                'but-close-reopen-',
+    BUTTON_ONGOING:                     'but-ongoing-',
     EDITABLE_FIELD:                     'edit-field-view-',
     EDITABLE_FIELD_EDITING:             'edit-field-edit-',
     READ_ONLY_FIELD:                    'read-only-field-',

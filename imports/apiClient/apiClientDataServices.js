@@ -26,6 +26,7 @@ import { AppGlobalData }                    from '../data/app/app_global_db.js';
 import { UserRoleData }                     from '../data/users/user_role_db.js';
 import { DesignData }                       from '../data/design/design_db.js';
 import { DesignVersionData }                from '../data/design/design_version_db.js';
+import { DesignAnomalyData }                from "../data/design/design_anomaly_db";
 import { DesignUpdateData }                 from '../data/design_update/design_update_db.js';
 import { WorkPackageData }                  from '../data/work/work_package_db.js';
 import { WorkItemData }                     from "../data/work/work_item_db";
@@ -59,10 +60,6 @@ import {
     updateUserMessage
 } from '../redux/actions'
 import {BacklogType, SummaryType} from "../constants/constants";
-import {UserDvWorkSummary} from "../collections/summary/user_dv_work_summary";
-
-
-
 
 
 // =====================================================================================================================
@@ -332,6 +329,7 @@ class ClientDataServicesClass{
 
                 // Design Version specific data
                 const wiHandle = Meteor.subscribe('workItems', userContext.designVersionId);
+                const daHandle = Meteor.subscribe('designAnomalies', userContext.designVersionId);
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 const wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
@@ -362,7 +360,7 @@ class ClientDataServicesClass{
                     let loading = (
                         !dusHandle.ready() || !dpHandle.ready() || !dpvHandle.ready() || !dveHandle.ready() ||
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !wiHandle.ready() ||
-                        !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() ||
+                        !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !daHandle.ready() ||
                         !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
                         !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready() || !steHandle.ready() ||
                         !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready() ||
@@ -925,6 +923,22 @@ class ClientDataServicesClass{
             };
         }
     };
+
+    getDesignAnomalies(userContext){
+
+        if(userContext.designVersionId === 'NONE'){
+            return [];
+        }
+
+        if(userContext.scenarioReferenceId === 'NONE'){
+
+            return DesignAnomalyData.getFeatureDesignAnomalies(userContext.designVersionId, userContext.featureReferenceId);
+
+        } else {
+
+            return DesignAnomalyData.getScenarioDesignAnomalies(userContext.designVersionId, userContext.scenarioReferenceId);
+        }
+    }
 
     getDesignVersionFeatureSummaries(userContext, homePageTab, displayContext = DisplayContext.NONE){
 

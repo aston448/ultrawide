@@ -17,7 +17,8 @@ import { UserRoleData }                     from '../../data/users/user_role_db.
 import { UserSettingsData }                 from '../../data/configure/user_setting_db.js';
 import { DesignData }                       from '../../data/design/design_db.js';
 import { DesignVersionData }                from '../../data/design/design_version_db.js';
-import { IterationData}                     from "../../data/work/work_item_db";
+import { WorkItemData}                      from "../../data/work/work_item_db";
+import { DesignAnomalyData }                from '../../data/design/design_anomaly_db.js';
 import { DesignUpdateData }                 from '../../data/design_update/design_update_db.js';
 import { WorkPackageData }                  from '../../data/work/work_package_db.js';
 import { WorkPackageComponentData }         from '../../data/work/work_package_component_db.js';
@@ -557,36 +558,62 @@ class ImpexModulesClass{
         log((msg) => console.log(msg), LogLevel.INFO, "Added {} Dictionary Terms", componentCount);
     };
 
-    restoreIterationData(iterationData, backupDataVersion, currentDataVersion, designVersionsMapping){
+    restoreWorkItemData(workItemData, backupDataVersion, currentDataVersion, designVersionsMapping, designUpdatesMapping, workPackageMapping){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Iterations...");
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring WorkItems...");
 
-        let iterationsMapping = [];
+        let workItemsMapping = [];
 
-        const newIterationData = this.migrateIterationData(iterationData, backupDataVersion, currentDataVersion);
+        const newWorkItemData = this.migrateWorkItemData(workItemData, backupDataVersion, currentDataVersion);
 
         let componentCount = 0;
 
-        newIterationData.forEach((iteration) => {
-            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Iteration {}", iteration.iterationName);
+        newWorkItemData.forEach((workItem) => {
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding WorkItem {}", workItem.wiName);
 
-            let designVersionId = getIdFromMap(designVersionsMapping, iteration.designVersionId);
+            let designVersionId = getIdFromMap(designVersionsMapping, workItem.designVersionId);
+            let designUpdateId = getIdFromMap(designUpdatesMapping, workItem.wiDuId);
+            let workPackageId = getIdFromMap(workPackageMapping, workItem.wiWpId);
 
             if (designVersionId) {
-                let iterationId = IterationData.importIteration(designVersionId, iteration);
+                let workItemId = WorkItemData.importWorkItem(designVersionId, designUpdateId, workPackageId, workItem);
 
-                if (iterationId) {
-                    // Store the new Iteration ID
-                    iterationsMapping.push({oldId: iteration._id, newId: iterationId});
+                if (workItemId) {
+                    // Store the new WorkItem ID
+                    workItemsMapping.push({oldId: workItem._id, newId: workItemId});
                 }
             }
 
             componentCount++;
         });
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Iterations", componentCount);
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} WorkItems", componentCount);
 
-        return iterationsMapping;
+        return workItemsMapping;
+    }
+
+    restoreDesignAnomalyData(designAnomalyData, backupDataVersion, currentDataVersion, designVersionsMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Anomalies...");
+
+        const newDesignAnomalyData = this.migrateDesignAnomalyData(designAnomalyData, backupDataVersion, currentDataVersion);
+
+        let componentCount = 0;
+
+        newDesignAnomalyData.forEach((designAnomaly) => {
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Anomaly {}", designAnomaly.designAnomalyName);
+
+            let designVersionId = getIdFromMap(designVersionsMapping, designAnomaly.designVersionId);
+
+            if (designVersionId) {
+                let designAnomalyId = DesignAnomalyData.importDesignAnomaly(designVersionId, designAnomaly);
+            }
+
+            componentCount++;
+        });
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Design Anomalies", componentCount);
+
     }
 
     restoreDesignVersionComponentData(designComponentData, backupDataVersion, currentDataVersion, designsMapping, designVersionsMapping, workPackagesMapping){
@@ -1158,21 +1185,38 @@ class ImpexModulesClass{
         return newDesignVersionData;
     };
 
-    migrateIterationData(iterationData, backupVersion, currentVersion){
+    migrateWorkItemData(workItemData, backupVersion, currentVersion){
 
         // Add to this function for each release
-        let newIterationData = iterationData;
+        let newWorkItemData = workItemData;
 
         switch(backupVersion){
             case 1:
                 switch(currentVersion){
                     case 1:
                         // No changes
-                        newIterationData = iterationData
+                        newWorkItemData = workItemData
                 }
         }
 
-        return newIterationData;
+        return newWorkItemData;
+    };
+
+    migrateDesignAnomalyData(designAnomalyData, backupVersion, currentVersion){
+
+        // Add to this function for each release
+        let newDesignAnomalyData = designAnomalyData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 1:
+                        // No changes
+                        newDesignAnomalyData = designAnomalyData
+                }
+        }
+
+        return newDesignAnomalyData;
     };
 
     migratePermutationValueData(permutationValueData, backupVersion, currentVersion){

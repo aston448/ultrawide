@@ -50,6 +50,13 @@ export const DesignVersionMessages = {
     MSG_DESIGN_VERSION_UPDATED:         'Working Design Version updated with latest Merge Updates'
 };
 
+export const DesignAnomalyMessages = {
+    MSG_DESIGN_ANOMALY_ADDED:           'New Design Anomaly added',
+    MSG_DESIGN_ANOMALY_UPDATED:         'Design Anomaly details updated',
+    MSG_DESIGN_ANOMALY_STATUS_UPDATED:  'Design Anomaly status updated',
+    MSG_DESIGN_ANOMALY_REMOVED:         'Design Anomaly removed'
+};
+
 export const WorkItemMessages = {
 
     MSG_INCREMENT_ADDED:                'New Increment added',
