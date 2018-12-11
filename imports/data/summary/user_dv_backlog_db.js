@@ -35,7 +35,8 @@ class UserDvBacklogDataClass {
                 {
                     $set:{
                         scenarioCount:  currentEntry.scenarioCount + 1,
-                        scenarioTestCount: currentEntry.scenarioTestCount + backlogEntry.scenarioTestCount
+                        scenarioTestCount: currentEntry.scenarioTestCount + backlogEntry.scenarioTestCount,
+                        scenarioAnomalyCount: currentEntry.scenarioAnomalyCount + backlogEntry.scenarioAnomalyCount
                     }
                 }
             );
@@ -54,6 +55,7 @@ class UserDvBacklogDataClass {
                 featureRefId:           backlogEntry.featureRefId,
                 scenarioCount:          1,
                 scenarioTestCount:      backlogEntry.scenarioTestCount,
+                scenarioAnomalyCount:   backlogEntry.scenarioAnomalyCount,
                 summaryType:            backlogEntry.summaryType
             });
         }
@@ -92,7 +94,7 @@ class UserDvBacklogDataClass {
 
     // UPDATE ==========================================================================================================
 
-    addFeatureTestData(backlogId, featureResults){
+    addFeatureTestAndAnomalyData(backlogId, featureResults, anomalyCount){
 
         return UserDvBacklog.update(
             {
@@ -106,11 +108,13 @@ class UserDvBacklogDataClass {
                     featureFailingTestCount:        featureResults.featureFailingTestCount,
                     featureMissingTestCount:        featureResults.featureMissingTestCount,
                     featureMissingExpectationCount: featureResults.featureMissingExpectationCount,
-                    featureTestStatus:              featureResults.featureTestStatus
+                    featureTestStatus:              featureResults.featureTestStatus,
+                    featureAnomalyCount:            anomalyCount
                 }
             }
-        )
+        );
     }
+
 
     // REMOVE ==========================================================================================================
 

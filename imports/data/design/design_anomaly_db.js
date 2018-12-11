@@ -75,10 +75,26 @@ class DesignAnomalyDataClass {
         }).fetch();
     }
 
+    getActiveScenarioDesignAnomalies(designVersionId, scenarioReferenceId){
+        return DesignAnomalies.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            $or:                    [{designAnomalyStatus: DesignAnomalyStatus.ANOMALY_OPEN}, {designAnomalyStatus: DesignAnomalyStatus.ANOMALY_ONGOING}]
+        }).fetch();
+    }
+
     getAllFeatureDesignAnomalies(designVersionId, featureReferenceId){
         return DesignAnomalies.find({
             designVersionId:        designVersionId,
             featureReferenceId:     featureReferenceId
+        }).fetch();
+    }
+
+    getAllActiveFeatureDesignAnomalies(designVersionId, featureReferenceId){
+        return DesignAnomalies.find({
+            designVersionId:        designVersionId,
+            featureReferenceId:     featureReferenceId,
+            $or:                    [{designAnomalyStatus: DesignAnomalyStatus.ANOMALY_OPEN}, {designAnomalyStatus: DesignAnomalyStatus.ANOMALY_ONGOING}]
         }).fetch();
     }
 

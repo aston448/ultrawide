@@ -193,6 +193,16 @@ class DesignComponentDataClass {
         }).fetch();
     }
 
+    getNonRemovedFeatureScenarios(designVersionId, featureReferenceId){
+
+        return DesignVersionComponents.find({
+            designVersionId:                designVersionId,
+            componentType:                  ComponentType.SCENARIO,
+            componentFeatureReferenceIdNew: featureReferenceId,
+            updateMergeStatus:              {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+        }).fetch();
+    }
+
     getPeerComponents(designVersionId, componentReferenceId, componentType, componentParentReferenceId){
 
         return DesignVersionComponents.find(

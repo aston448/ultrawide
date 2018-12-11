@@ -183,6 +183,7 @@ export const DisplayContext = {
     WORK_ITEM_DU_LIST:      'WORK_ITEM_DU_LIST',    // List of available Design Updates for DV
     DV_BACKLOG_NONE:        'DV_BACKLOG_NONE',
     DV_BACKLOG_DESIGN:      'DV_BACKLOG_DESIGN',
+    DV_BACKLOG_ANOMALY:     'DV_BACKLOG_ANOMALY',
     DV_BACKLOG_WORK:        'DV_BACKLOG_WORK',
     DV_BACKLOG_NO_EXP:      'DV_BACKLOG_NO_EXP',
     DV_BACKLOG_TEST_MISSING:'DV_BACKLOG_TEST_MISSING',
@@ -203,6 +204,7 @@ export const SummaryType = {
 
 export const BacklogType = {
     BACKLOG_DESIGN:         'BACKLOG_DESIGN',
+    BACKLOG_ANOMALY:        'BACKLOG_ANOMALY',
     BACKLOG_WP_ASSIGN:      'BACKLOG_WP_ASSIGN',
     BACKLOG_TEST_EXP:       'BACKLOG_TEST_EXP',
     BACKLOG_TEST_MISSING:   'BACKLOG_TEST_MISSING',

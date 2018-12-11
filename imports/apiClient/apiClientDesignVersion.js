@@ -223,7 +223,7 @@ class ClientDesignVersionServicesClass {
     // Work Progress screen needs a refresh
     updateWorkProgress(userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "UPDATE WORK PROGRESS...");
+        log((msg) => console.log(msg), LogLevel.PERF, "UPDATE WORK PROGRESS...");
 
         ServerDesignVersionApi.updateWorkProgress(userContext, (err, result) => {
 

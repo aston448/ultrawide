@@ -992,6 +992,16 @@ class ClientDataServicesClass{
 
                 switch(displayContext){
 
+                    case DisplayContext.DV_BACKLOG_DESIGN:
+
+                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_DESIGN);
+                        break;
+
+                    case DisplayContext.DV_BACKLOG_ANOMALY:
+
+                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_ANOMALY);
+                        break;
+
                     case DisplayContext.DV_BACKLOG_WORK:
 
                         features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_WP_ASSIGN);
@@ -3134,10 +3144,8 @@ class ClientDataServicesClass{
 
             return UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, backlogType);
         }
-
-
-
     }
+
 
     // getProjectSummaryData(userContext){
     //

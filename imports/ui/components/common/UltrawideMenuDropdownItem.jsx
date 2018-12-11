@@ -14,12 +14,14 @@ import {log} from "../../../common/utils";
 
 import { ClientAppHeaderServices }          from '../../../apiClient/apiClientAppHeader.js';
 import { ClientTestIntegrationServices }    from '../../../apiClient/apiClientTestIntegration.js';
+import {ClientWorkItemServices}             from "../../../apiClient/apiClientWorkItem";
 
 // Bootstrap
 import {InputGroup, Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+
 
 // =====================================================================================================================
 
@@ -85,14 +87,13 @@ export class UltrawideMenuDropdownItem extends Component {
                 ClientAppHeaderServices.toggleViewOption(viewOptionType, userViewOptions, userContext.userId);
                 break;
             case MenuAction.MENU_ACTION_REFRESH_PROGRESS:
-                ClientTestIntegrationServices.refreshWorkProgressData(userContext);
+                ClientWorkItemServices.refreshWorkProgressData(userContext, true);
                 break;
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
+                // Also refreshes progress
                 ClientTestIntegrationServices.refreshTestData(userContext, false);
                 break;
-            // case MenuAction.MENU_ACTION_REFRESH_DATA:
-            //     ClientTestIntegrationServices.refreshTestData(userContext, true);
-            //     break;
+
         }
 
     }

@@ -28,7 +28,7 @@ import store from '../../../redux/store'
 import {
     setCurrentUserBacklogItem
 } from '../../../redux/actions'
-import {WorkItemType} from "../../../constants/constants";
+import {SummaryType, WorkItemType} from "../../../constants/constants";
 import {WorkItemData} from "../../../data/work/work_item_db";
 import {UserDvWorkSummaryData} from "../../../data/summary/user_dv_work_summary_db";
 
@@ -78,8 +78,34 @@ export class ProjectBacklog extends Component {
         let missingTestCount = 0;
         let failingTestCount = 0;
 
+        // Default to whole DV if nothing selected
+        let summaryType = SummaryType.SUMMARY_DV;
+
+        if(selectedItemSummary){
+            summaryType = selectedItemSummary.summaryType;
+        }
 
         switch(displayContext){
+
+            case DisplayContext.DV_BACKLOG_DESIGN:
+
+                break;
+
+            case DisplayContext.DV_BACKLOG_ANOMALY:
+
+                backlogSummary.forEach((backlogItem) => {
+
+                    if (summaryType === SummaryType.SUMMARY_DV) {
+                        //  For the whole DV we count all Anomalies (Feature and Scenario)
+                        scenarioCount += backlogItem.featureAnomalyCount;
+                    } else {
+                        // For subsets we only count anomalies related to Scenarios
+                        scenarioCount += backlogItem.scenarioAnomalyCount;
+                    }
+                });
+
+                break;
+
             case DisplayContext.DV_BACKLOG_WORK:
                 break;
 
@@ -120,6 +146,7 @@ export class ProjectBacklog extends Component {
             <div>
                 <ProjectBacklogItem
                     displayContext={displayContext}
+                    summaryType={summaryType}
                     totalFeatureCount={totalFeatureCount}
                     featureCount={backlogSummary.length}
                     scenarioCount={scenarioCount}
@@ -149,9 +176,17 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default ProjectBacklogContainer = createContainer(({params}) => {
 
-    console.log('Getting work item summary for id ' + params.currentSummaryId);
+    //console.log('Getting work item summary for id ' + params.currentSummaryId);
 
-    const selectedItemSummary = UserDvWorkSummaryData.getWorkItemSummaryDataById(params.currentSummaryId);
+    let selectedItemSummary ={};
+
+    // If no selection, default to the whole DV
+    if(params.currentSummaryId === 'NONE'){
+        selectedItemSummary = UserDvWorkSummaryData.getDesignVersionSummary(params.userContext.designVersionId)
+    } else {
+        selectedItemSummary = UserDvWorkSummaryData.getWorkItemSummaryDataById(params.currentSummaryId);
+    }
+
 
     const backlogSummary = ClientDataServices.getBacklogSummaryData(
         params.userContext,

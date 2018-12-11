@@ -9,7 +9,7 @@ import { log } from '../common/utils.js';
 
 import { ServerTestIntegrationApi }         from '../apiServer/apiTestIntegration.js';
 import { TestIntegrationValidationApi }     from '../apiValidation/apiTestIntegrationValidation.js';
-import { ClientDesignVersionServices }      from '../apiClient/apiClientDesignVersion.js';
+import { ClientWorkItemServices }           from '../apiClient/apiClientWorkItem.js';
 import { ClientDesignUpdateServices }       from '../apiClient/apiClientDesignUpdate.js';
 
 // Data Access
@@ -165,12 +165,6 @@ class ClientTestIntegrationServicesClass {
                     messageText: 'Work Progress updated'
                 }));
 
-                // // After tests are updated work progress should be too
-                // ClientDesignVersionServices.updateWorkProgress(userContext);
-                //
-                // // Get latest status on DUs
-                // ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
-
                 log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH WORK DATA.  View to {}", currentView);
 
                 store.dispatch(setCurrentView(currentView));
@@ -183,11 +177,11 @@ class ClientTestIntegrationServicesClass {
     // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(userContext, fullRefresh){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST DATA...");
+        log((msg) => console.log(msg), LogLevel.PERF, "REFRESH TEST DATA...");
 
         const currentView = store.getState().currentAppView;
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Current view is {}", currentView);
+        log((msg) => console.log(msg), LogLevel.PERF, "Current view is {}", currentView);
 
         store.dispatch(setCurrentView(ViewType.WAIT));
 
@@ -213,13 +207,11 @@ class ClientTestIntegrationServicesClass {
                 }));
 
                 // After tests are updated work progress should be too
-                ClientDesignVersionServices.updateWorkProgress(userContext);
 
-                // Get latest status on DUs
-                ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+                log((msg) => console.log(msg), LogLevel.PERF, "REFRESH PROGRESS DATA...");
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST DATA.  View to {}", currentView);
-                store.dispatch(setCurrentView(currentView));
+                ClientWorkItemServices.refreshWorkProgressData(userContext, false, currentView);
+
             }
         });
 

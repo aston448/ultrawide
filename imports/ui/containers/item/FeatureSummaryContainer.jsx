@@ -93,6 +93,16 @@ export class FeatureSummaryList extends Component {
 
         switch(displayContext){
 
+            case DisplayContext.DV_BACKLOG_DESIGN:
+
+                headerText = 'Features with no Scenarios defined yet...';
+                break;
+
+            case DisplayContext.DV_BACKLOG_ANOMALY:
+
+                headerText = 'Features with open Design Anomalies...';
+                break;
+
             case DisplayContext.DV_BACKLOG_WORK:
 
                 headerText = 'Features with scenarios not assigned to Work Packages...';

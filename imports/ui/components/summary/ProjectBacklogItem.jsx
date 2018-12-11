@@ -19,6 +19,7 @@ import {Glyphicon}                  from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
+import {SummaryType} from "../../../constants/constants";
 
 // React DnD
 
@@ -57,13 +58,26 @@ export class ProjectBacklogItem extends Component{
     }
 
     render(){
-        const {displayContext, totalFeatureCount, featureCount, scenarioCount, testCount, currentBacklogItem} = this.props;
+        const {displayContext, summaryType, totalFeatureCount, featureCount, scenarioCount, testCount, currentBacklogItem} = this.props;
 
         //console.log('Context: ' + displayContext + ' features: ' + featureCount);
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Backlog Item in context {} with {} features', displayContext, featureCount);
 
-        const backlogTitle = TextLookups.displayContext(displayContext);
+        let backlogTitle = TextLookups.displayContext(displayContext);
+
+        // Clarify that Feature anomalies are only visible for the whole DV selection
+        if(displayContext === DisplayContext.DV_BACKLOG_ANOMALY){
+
+            if(summaryType === SummaryType.SUMMARY_DV){
+
+                backlogTitle = backlogTitle + ' (All Anomalies)'
+            } else {
+
+                backlogTitle = backlogTitle + ' (Scenario Anomalies)'
+            }
+        }
+
         let backlogDetails = '';
 
         let itemClass = 'project-summary-item ';
@@ -88,15 +102,39 @@ export class ProjectBacklogItem extends Component{
 
             case DisplayContext.DV_BACKLOG_DESIGN:
 
-                if(featureCount === 0){
+                if(summaryType === SummaryType.SUMMARY_DV) {
+
+                    if (featureCount === 0) {
+                        backlogDetails = 'No backlog';
+                        itemClass = itemClass + goodClass;
+                    } else {
+                        if (featureCount === 1) {
+                            backlogDetails = 'One Feature has no Scenarios defined for it yet.';
+                            itemClass = itemClass + badClass;
+                        } else {
+                            backlogDetails = featureCount + ' Features have no Scenarios defined for them yet.';
+                            itemClass = itemClass + badClass;
+                        }
+                    }
+                } else {
+
+                    backlogDetails = 'This backlog is only displayed for the whole Design Version';
+                    itemClass = itemClass + okClass;
+                }
+                break;
+
+            case DisplayContext.DV_BACKLOG_ANOMALY:
+
+                // Here the scenario count contains total anomalies
+                if(scenarioCount === 0){
                     backlogDetails = 'No backlog';
                     itemClass = itemClass + goodClass;
                 } else {
-                    if(featureCount === 1){
-                        backlogDetails = 'One Feature has no Scenarios defined for it yet.';
+                    if(scenarioCount === 1){
+                        backlogDetails = 'There is one Design Anomaly in the current selection.';
                         itemClass = itemClass + badClass;
                     } else {
-                        backlogDetails = featureCount + ' Features have no Scenarios defined for them yet.';
+                        backlogDetails = 'There are ' + scenarioCount + ' Design Anomalies in the current selection.';
                         itemClass = itemClass + badClass;
                     }
                 }
@@ -200,6 +238,7 @@ export class ProjectBacklogItem extends Component{
 
 ProjectBacklogItem.propTypes = {
     displayContext: PropTypes.string.isRequired,
+    summaryType: PropTypes.string.isRequired,
     totalFeatureCount: PropTypes.number.isRequired,
     featureCount: PropTypes.number.isRequired,
     scenarioCount: PropTypes.number.isRequired,

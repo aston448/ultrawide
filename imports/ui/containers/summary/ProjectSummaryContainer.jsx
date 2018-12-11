@@ -68,7 +68,7 @@ export class ProjectSummary extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Project Summary');
 
-        console.log('DV Summary = %o', dvSummary);
+        //console.log('DV Summary = %o', dvSummary);
 
         const summaryItem = this.getSummaryItem(summaryId);
 
@@ -199,6 +199,28 @@ export class ProjectSummary extends Component {
                         </Row>
                     </Col>
                     <Col md={6} className="close-col">
+                        <Row>
+                            <Col md={6} className="close-col">
+                                <ProjectBacklogContainer
+                                    params={{
+                                        userContext: userContext,
+                                        currentSummaryId: summaryId,
+                                        backlogType: BacklogType.BACKLOG_DESIGN,
+                                        displayContext: DisplayContext.DV_BACKLOG_DESIGN
+                                    }}
+                                />
+                            </Col>
+                            <Col md={6} className="close-col">
+                                <ProjectBacklogContainer
+                                    params={{
+                                        userContext: userContext,
+                                        currentSummaryId: summaryId,
+                                        backlogType: BacklogType.BACKLOG_ANOMALY,
+                                        displayContext: DisplayContext.DV_BACKLOG_ANOMALY
+                                    }}
+                                />
+                            </Col>
+                        </Row>
                         <Row>
                             <Col md={6} className="close-col">
                                 <ProjectBacklogContainer

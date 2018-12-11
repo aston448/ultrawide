@@ -105,6 +105,8 @@ class TextLookupsClass {
 
     displayContext(displayContext){
         switch(displayContext){
+            case DisplayContext.DV_BACKLOG_ANOMALY:
+                return 'Design Anomaly Backlog';
             case DisplayContext.DV_BACKLOG_WORK:
                 return 'Work Assignment Backlog';
             case DisplayContext.DV_BACKLOG_DESIGN:

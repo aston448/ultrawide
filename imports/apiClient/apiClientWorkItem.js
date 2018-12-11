@@ -10,7 +10,11 @@ import { WorkItemMessages }        from '../constants/message_texts.js'
 
 // REDUX services
 import store from '../redux/store'
-import {updateUserMessage} from '../redux/actions'
+import {setCurrentView, updateTestDataFlag, updateUserMessage} from '../redux/actions'
+import {LogLevel, ViewType} from "../constants/constants";
+import {ServerTestIntegrationApi} from "../apiServer/apiTestIntegration";
+import {log} from "../common/utils";
+import {ClientDesignUpdateServices} from "./apiClientDesignUpdate";
 
 
 // =====================================================================================================================
@@ -266,6 +270,61 @@ class ClientWorkItemServicesClass{
         // Indicate that business validation passed
         return {success: true, message: ''};
     };
+
+    // User has requested update of WP / DU progress data
+    refreshWorkProgressData(userContext, isProgressRefresh, previousView){
+
+        log((msg) => console.log(msg), LogLevel.PERF, "REFRESH WORK DATA...");
+
+        const currentView = store.getState().currentAppView;
+
+        if(isProgressRefresh){
+
+            log((msg) => console.log(msg), LogLevel.PERF, "Current view is {}", currentView);
+
+            store.dispatch(setCurrentView(ViewType.WAIT));
+        }
+
+        store.dispatch(updateUserMessage({
+            messageType: MessageType.INFO,
+            messageText: 'Refreshing Work Progress and Backlogs...'
+        }));
+
+        ServerTestIntegrationApi.refreshWorkProgressData(userContext, (err, result) => {
+
+            if(err){
+
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Mash is populated to carry on with test data if needed
+
+                store.dispatch(updateTestDataFlag());
+
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: 'Work Progress updated'
+                }));
+
+                if(isProgressRefresh){
+
+                    log((msg) => console.log(msg), LogLevel.PERF, "REFRESH WORK DATA.  View to {}", currentView);
+
+                    store.dispatch(setCurrentView(currentView));
+                } else {
+
+                    log((msg) => console.log(msg), LogLevel.PERF, "REFRESH WORK DATA.  View to {}", previousView);
+
+                    store.dispatch(setCurrentView(previousView));
+                }
+
+                // Get latest status on DUs
+                ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+            }
+        });
+
+        return {success: true, message: ''};
+    }
 }
 
 export const ClientWorkItemServices = new ClientWorkItemServicesClass();

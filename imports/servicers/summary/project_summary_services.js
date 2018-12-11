@@ -14,6 +14,7 @@ import {TestSummaryModules}         from '../../service_modules/summary/test_sum
 import {DesignVersionStatus, BacklogType, SummaryType, LogLevel}    from '../../constants/constants.js';
 import {log}                                                        from '../../common/utils.js'
 import {UserDvFeatureTestSummary} from "../../collections/summary/user_dv_feature_test_summary";
+import {DesignAnomalyData} from "../../data/design/design_anomaly_db";
 
 class ProjectSummaryServicesClass {
 
@@ -268,7 +269,8 @@ class ProjectSummaryServicesClass {
             log((msg) => console.log(msg), LogLevel.PERF, "Project Summary: Process Orphans END");
 
             // Get the entire total for DV = assigned + unassigned
-            const dvFeatures = DesignVersionData.getNonRemovedFeatureCount(userContext.designId, userContext.designVersionId);
+            const dvFeatures = DesignVersionData.getNonRemovedFeatures(userContext.designId, userContext.designVersionId);
+            //const dvFeatures = DesignVersionData.getNonRemovedFeatureCount(userContext.designId, userContext.designVersionId);
 
             let dvTotalRow = {
                 userId:                 userContext.userId,
@@ -283,7 +285,7 @@ class ProjectSummaryServicesClass {
                 duName:                 '',
                 wpId:                   'NONE',
                 wpName:                 '',
-                featureCount:           dvFeatures,
+                featureCount:           dvFeatures.length,
                 scenarioCount:          dvAssignedRow.scenarioCount + dvUnassignedRow.scenarioCount,
                 noExpectationsCount:    dvAssignedRow.noExpectationsCount + dvUnassignedRow.noExpectationsCount,
                 expectedTestCount:      dvAssignedRow.expectedTestCount + dvUnassignedRow.expectedTestCount,
@@ -306,14 +308,55 @@ class ProjectSummaryServicesClass {
             // Merge in the unassigned backlog data
             this.updateBacklogData(unassignedBacklogData);
 
-            // Add the feature test data to backlog data
+            // Add anomaly backlog data for Features and Scenarios and 'no Scenario Feature' backlog data
+            let anomalyBacklogList = [];
+            let noScenarioBacklogList = [];
+
+            const workContext = {
+                userId:                 userContext.userId,
+                dvId:                   userContext.designVersionId,
+                inId:                   'NONE',
+                itId:                   'NONE',
+                duId:                   'NONE',
+                wpId:                   'NONE',
+                summaryType:            SummaryType.SUMMARY_DV
+            };
+
+            dvFeatures.forEach((feature) => {
+
+                const designAnomalies = DesignAnomalyData.getAllActiveFeatureDesignAnomalies(userContext.designVersionId, feature.componentReferenceId);
+                const scenarioCount = DesignComponentData.getNonRemovedFeatureScenarios(userContext.designVersionId, feature.componentReferenceId).length;
+
+                if(designAnomalies.length > 0){
+
+                    const backlogEntryAnomaly = this.getBacklogEntry(workContext, BacklogType.BACKLOG_ANOMALY, feature.componentReferenceId, 0, 0);
+
+                    anomalyBacklogList.push(backlogEntryAnomaly);
+                }
+
+                if(scenarioCount === 0){
+
+                    const backlogEntryDesign = this.getBacklogEntry(workContext, BacklogType.BACKLOG_DESIGN, feature.componentReferenceId, 0, 0);
+
+                    noScenarioBacklogList.push(backlogEntryDesign);
+                }
+            });
+
+            this.updateBacklogData(anomalyBacklogList);
+            this.updateBacklogData(noScenarioBacklogList);
+
+            // Add the feature test and anomaly data to backlog data
             const backlogData = UserDvBacklogData.getAllUserBacklogData(userContext);
 
             backlogData.forEach((backlogFeature) => {
 
+                // Get feature summary of test results
                 const featureTestData = UserDvTestSummaryData.getFeatureSummary(userContext.userId, userContext.designVersionId, backlogFeature.featureRefId);
 
-                UserDvBacklogData.addFeatureTestData(backlogFeature._id, featureTestData);
+                // Get count of anomalies against the Feature or its Scenarios
+                const featureAnomalyCount = DesignAnomalyData.getAllActiveFeatureDesignAnomalies(userContext.designVersionId, backlogFeature.featureRefId).length;
+
+                UserDvBacklogData.addFeatureTestAndAnomalyData(backlogFeature._id, featureTestData, featureAnomalyCount);
             });
 
         }
@@ -375,6 +418,8 @@ class ProjectSummaryServicesClass {
     processScenario(rowData, userContext, scenarioRefId){
 
         const scenarioData = TestSummaryModules.getSummaryDataForScenario(userContext, scenarioRefId);
+        // Count the number of open or ongoing anomalies for this scenario
+        const scenarioAnomalyCount = DesignAnomalyData.getActiveScenarioDesignAnomalies(userContext.designVersionId, scenarioRefId).length;
 
         let noExpectationsCount = 0;
         let completeCount = 0;
@@ -414,7 +459,7 @@ class ProjectSummaryServicesClass {
             summaryType:            rowData.summaryType
         };
 
-        const backlogData = this.getBacklogData(workContext, scenarioData);
+        const backlogData = this.getBacklogData(workContext, scenarioData, scenarioAnomalyCount);
 
         return {
             rowData: rowData,
@@ -422,14 +467,18 @@ class ProjectSummaryServicesClass {
         };
     }
 
-    getBacklogData(workContext, scenarioData){
+    getBacklogData(workContext, scenarioData, scenarioAnomalyCount){
 
         let backlogData = [];
 
         if(workContext.summaryType === SummaryType.SUMMARY_DV_UNASSIGNED) {
 
             // A scenario with no WP so goes into the work assignment backlog.
-            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_WP_ASSIGN, scenarioData.featureReferenceId, 0));
+            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_WP_ASSIGN, scenarioData.featureReferenceId, 0, 0));
+
+            if(scenarioAnomalyCount > 0) {
+                backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
+            }
 
             // Add the same stuff to the overall DV so unassigned appears in there too
             const dvWorkContext = {
@@ -442,41 +491,52 @@ class ProjectSummaryServicesClass {
                 summaryType:            SummaryType.SUMMARY_DV
             };
 
-            backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_WP_ASSIGN, scenarioData.featureReferenceId, 0));
+            backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_WP_ASSIGN, scenarioData.featureReferenceId, 0, 0));
 
             if(scenarioData.totalTestExpectedCount === 0){
-                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_TEST_EXP, scenarioData.featureReferenceId, 0));
+                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_TEST_EXP, scenarioData.featureReferenceId, 0, 0));
             }
 
             if(scenarioData.totalTestMissingCount > 0){
-                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_TEST_MISSING, scenarioData.featureReferenceId, scenarioData.totalTestMissingCount));
+                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_TEST_MISSING, scenarioData.featureReferenceId, scenarioData.totalTestMissingCount, 0));
             }
 
             if(scenarioData.totalTestFailCount > 0){
-                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_TEST_FAIL, scenarioData.featureReferenceId, scenarioData.totalTestFailCount));
+                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_TEST_FAIL, scenarioData.featureReferenceId, scenarioData.totalTestFailCount, 0));
+            }
+
+            if(scenarioAnomalyCount > 0) {
+                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
             }
 
         }
 
+
+
         // Scenarios with no test expectations
         if(scenarioData.totalTestExpectedCount === 0){
-            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_TEST_EXP, scenarioData.featureReferenceId, 0));
+            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_TEST_EXP, scenarioData.featureReferenceId, 0, 0));
         }
 
         // Scenarios with missing tests
         if(scenarioData.totalTestMissingCount > 0){
-            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_TEST_MISSING, scenarioData.featureReferenceId, scenarioData.totalTestMissingCount));
+            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_TEST_MISSING, scenarioData.featureReferenceId, scenarioData.totalTestMissingCount, 0));
         }
 
         // Scenarios with failing tests
         if(scenarioData.totalTestFailCount > 0){
-            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_TEST_FAIL, scenarioData.featureReferenceId, scenarioData.totalTestFailCount));
+            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_TEST_FAIL, scenarioData.featureReferenceId, scenarioData.totalTestFailCount, 0));
+        }
+
+        // Scenarios with design anomalies
+        if(scenarioAnomalyCount > 0){
+            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
         }
 
         return backlogData;
     }
 
-    getBacklogEntry(workContext, backlogType, featureRefId, scenarioTestCount){
+    getBacklogEntry(workContext, backlogType, featureRefId, scenarioTestCount, scenarioAnomalyCount){
 
         return {
             userId:                 workContext.userId,
@@ -489,6 +549,7 @@ class ProjectSummaryServicesClass {
             featureRefId:           featureRefId,
             scenarioCount:          1,
             scenarioTestCount:      scenarioTestCount,
+            scenarioAnomalyCount:   scenarioAnomalyCount,
             summaryType:            workContext.summaryType
         }
     }
@@ -500,56 +561,7 @@ class ProjectSummaryServicesClass {
             UserDvBacklogData.addUpdateBacklogEntry(backlogEntry);
         });
     }
-    addBacklogData(workContext, scenarioData){
 
-        if(workContext.summaryType === SummaryType.SUMMARY_DV_UNASSIGNED) {
-
-            // A scenario with no WP so goes into the work assignment backlog.
-            UserDvBacklogData.addUpdateBacklogEntry(workContext, scenarioData.featureReferenceId, 0, BacklogType.BACKLOG_WP_ASSIGN);
-
-            // Add the same stuff to the overall DV so unassigned appears in there too
-            const dvWorkContext = {
-                userId:                 workContext.userId,
-                dvId:                   workContext.dvId,
-                inId:                   'NONE',
-                itId:                   'NONE',
-                duId:                   'NONE',
-                wpId:                   'NONE',
-                summaryType:            SummaryType.SUMMARY_DV
-            };
-
-            UserDvBacklogData.addUpdateBacklogEntry(dvWorkContext, scenarioData.featureReferenceId, 0, BacklogType.BACKLOG_WP_ASSIGN);
-
-            if(scenarioData.totalTestExpectedCount === 0){
-                UserDvBacklogData.addUpdateBacklogEntry(dvWorkContext, scenarioData.featureReferenceId, 0, BacklogType.BACKLOG_TEST_EXP);
-            }
-
-            if(scenarioData.totalTestMissingCount > 0){
-                UserDvBacklogData.addUpdateBacklogEntry(dvWorkContext, scenarioData.featureReferenceId, scenarioData.totalTestMissingCount, BacklogType.BACKLOG_TEST_MISSING);
-            }
-
-            if(scenarioData.totalTestFailCount > 0){
-                UserDvBacklogData.addUpdateBacklogEntry(dvWorkContext, scenarioData.featureReferenceId, scenarioData.totalTestFailCount, BacklogType.BACKLOG_TEST_FAIL);
-            }
-
-        }
-
-        // Scenarios with no test expectations
-        if(scenarioData.totalTestExpectedCount === 0){
-            UserDvBacklogData.addUpdateBacklogEntry(workContext, scenarioData.featureReferenceId, 0, BacklogType.BACKLOG_TEST_EXP);
-        }
-
-        // Scenarios with missing tests
-        if(scenarioData.totalTestMissingCount > 0){
-            UserDvBacklogData.addUpdateBacklogEntry(workContext, scenarioData.featureReferenceId, scenarioData.totalTestMissingCount, BacklogType.BACKLOG_TEST_MISSING);
-        }
-
-        // Scenarios with failing tests
-        if(scenarioData.totalTestFailCount > 0){
-            UserDvBacklogData.addUpdateBacklogEntry(workContext, scenarioData.featureReferenceId, scenarioData.totalTestFailCount, BacklogType.BACKLOG_TEST_FAIL);
-        }
-
-    }
 }
 
 export const ProjectSummaryServices = new ProjectSummaryServicesClass();

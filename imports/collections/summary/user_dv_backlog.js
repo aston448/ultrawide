@@ -15,6 +15,7 @@ let Schema = new SimpleSchema({
     featureRefId:                   {type: String, index: 1},
     scenarioCount:                  {type: Number, defaultValue: 0},
     scenarioTestCount:              {type: Number, defaultValue: 0},
+    scenarioAnomalyCount:           {type: Number, defaultValue: 0},
     summaryType:                    {type: String},
     featureScenarioCount:           {type: Number, defaultValue: 0},
     featureExpectedTestCount:       {type: Number, defaultValue: 0},
@@ -22,7 +23,8 @@ let Schema = new SimpleSchema({
     featureFailingTestCount:        {type: Number, defaultValue: 0},
     featureMissingTestCount:        {type: Number, defaultValue: 0},
     featureMissingExpectationCount: {type: Number, defaultValue: 0},
-    featureTestStatus:              {type: String, defaultValue: MashTestStatus.MASH_NOT_LINKED}
+    featureTestStatus:              {type: String, defaultValue: MashTestStatus.MASH_NOT_LINKED},
+    featureAnomalyCount:            {type: Number, defaultValue: 0}
 });
 
 UserDvBacklog.attachSchema(Schema);
