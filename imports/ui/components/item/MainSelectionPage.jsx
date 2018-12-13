@@ -110,15 +110,6 @@ export class MainSelectionPage extends Component {
                 />
         }
 
-
-        const progressTabLayout =
-            <div className="design-item-note">
-                Page Under Construction - opening in the summer
-            </div>;
-            {/*<WorkProgressSummaryContainer params={{*/}
-                {/*userContext: userContext*/}
-            {/*}}/>;*/}
-
         const projectSummaryTabLayout =
             <ProjectSummaryContainer params={{
                 userContext: userContext
@@ -158,9 +149,6 @@ export class MainSelectionPage extends Component {
                                         <NavItem eventKey={HomePageTab.TAB_WORK}>
                                             WORK
                                         </NavItem>
-                                        <NavItem eventKey={HomePageTab.TAB_PROGRESS}>
-                                            PROGRESS
-                                        </NavItem>
                                     </Nav>
                                 </Col>
                                 <Col className="main-panel" md={11}>
@@ -173,9 +161,6 @@ export class MainSelectionPage extends Component {
                                         </Tab.Pane>
                                         <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_WORK}>
                                             {workTabLayout}
-                                        </Tab.Pane>
-                                        <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_PROGRESS}>
-                                            {progressTabLayout}
                                         </Tab.Pane>
                                     </Tab.Content>
                                 </Col>
@@ -203,9 +188,6 @@ export class MainSelectionPage extends Component {
                                         <NavItem eventKey={HomePageTab.TAB_WORK}>
                                             WORK
                                         </NavItem>
-                                        <NavItem eventKey={HomePageTab.TAB_PROGRESS}>
-                                            PROGRESS
-                                        </NavItem>
                                     </Nav>
                                 </Col>
                                 <Col className="main-panel" md={11}>
@@ -221,9 +203,6 @@ export class MainSelectionPage extends Component {
                                         </Tab.Pane>
                                         <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_WORK}>
                                             {workTabLayout}
-                                        </Tab.Pane>
-                                        <Tab.Pane unmountOnExit={true} eventKey={HomePageTab.TAB_PROGRESS}>
-                                            {progressTabLayout}
                                         </Tab.Pane>
                                     </Tab.Content>
                                 </Col>

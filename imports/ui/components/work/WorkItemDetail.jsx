@@ -225,7 +225,6 @@ class WorkItemDetail extends Component{
         }
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render WorkItem Detail {}', itemName);
-        console.log('Render WI %o', workItem);
 
         const uiContextName = replaceAll(itemName, ' ', '_');
 

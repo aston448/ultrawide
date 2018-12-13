@@ -626,8 +626,53 @@ input {
 
 .top-tabs{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  15px;
+    font-size:  14px;
     font-weight: normal;
+    margin: 0px;
+    padding: 0px;
+}
+
+.tab-title{
+    margin: 0px;
+    padding: 0px;
+    color: darkgrey;
+}
+
+.tab-badge{
+    margin: 0 3px 0 0;
+    min-width: 80px;
+}
+
+.tab-text{
+    padding: 2px 0 0 0;
+}
+
+.tab-details{
+    background-color: darkblue;
+}
+
+.tab-test{
+    background-color: green;
+}
+
+.tab-problems{
+    background-color: indianred;
+}
+
+.tab-domain{
+    background-color: blue;
+}
+
+.tab-search{
+    background-color: darkslateblue;
+}
+
+.tab-progress{
+    background-color: darkred;
+}
+
+.tab-summary{
+    background-color: darkred;
 }
 
 .main-panel{
