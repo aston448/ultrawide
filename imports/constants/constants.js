@@ -41,6 +41,7 @@ export const ViewType = {
     WORK_PACKAGE_UPDATE_EDIT:   'WORK_PACKAGE_UPDATE_EDIT', // Edit a Work Package content for a Design Update
     WORK_PACKAGE_BASE_VIEW:     'WORK_PACKAGE_BASE_VIEW',   // View a Work Package content for a Design Version
     WORK_PACKAGE_UPDATE_VIEW:   'WORK_PACKAGE_UPDATE_VIEW', // View a Work Package content for a Design Update
+    WORK_PACKAGE_SCOPE_WAIT:    'WORK_PACKAGE_SCOPE_WAIT',  // WP is being edited and a big scope update is going on...
     DEVELOP_BASE_WP:            'DEVELOP_BASE_WP',          // Work with adopted base work package as a developer
     DEVELOP_UPDATE_WP:          'DEVELOP_UPDATE_WP',        // Work with adopted update work package as a developer
     WAIT:                       'WAIT'                      // While Data loading

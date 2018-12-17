@@ -1,9 +1,10 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Services
-import { WorkPackageType, ComponentType, MessageType } from '../constants/constants.js';
+import { WorkPackageType, ComponentType, MessageType, LogLevel } from '../constants/constants.js';
 import { Validation }                       from '../constants/validation_errors.js';
 import { WorkPackageComponentMessages }     from '../constants/message_texts.js';
+import { log } from "../common/utils";
 
 import { WorkPackageComponentValidationApi }    from '../apiValidation/apiWorkPackageComponentValidation.js';
 import { ServerWorkPackageComponentApi }        from '../apiServer/apiWorkPackageComponent.js';
@@ -18,8 +19,9 @@ import { DesignUpdateComponentData }            from '../data/design_update/desi
 import store from '../redux/store'
 import {
     setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, setWorkPackageScopeItems,
-    setWorkPackageScopeFlag, setUpdateScopeItems
+    setWorkPackageScopeFlag, setUpdateScopeItems, setCurrentView
 } from '../redux/actions';
+import {ViewType} from "../constants/constants";
 
 
 // =====================================================================================================================
@@ -45,6 +47,18 @@ class ClientWorkPackageComponentServicesClass {
             return {success: false, message: result};
         }
 
+        const currentView = store.getState().currentAppView;
+
+        log((msg) => console.log(msg), LogLevel.PERF, "Current view is {}", currentView);
+
+        // Disable the scope pane while big updates are taking place...
+        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_SCOPE_WAIT));
+
+        store.dispatch(updateUserMessage({
+            messageType: MessageType.INFO,
+            messageText: 'Scoping WP Components...'
+        }));
+
         // Real action call - server actions
         ServerWorkPackageComponentApi.toggleInScope(view, displayContext, userContext, designComponent._id, newScope, (err, result) => {
 
@@ -55,6 +69,8 @@ class ClientWorkPackageComponentServicesClass {
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
+
+                log((msg) => console.log(msg), LogLevel.PERF, 'Render scope management start...');
 
                 // Calculate data used for managing scope rendering efficiently
                 const wpItems = WorkPackageData.getAllWorkPackageComponents(userContext.workPackageId);
@@ -106,6 +122,8 @@ class ClientWorkPackageComponentServicesClass {
 
                 //store.dispatch(setWorkPackageScopeFlag(newFlag));
 
+                log((msg) => console.log(msg), LogLevel.PERF, 'Render scope management end');
+
                 // Show action success on screen
                 if(newScope) {
                     store.dispatch(updateUserMessage({
@@ -118,6 +136,9 @@ class ClientWorkPackageComponentServicesClass {
                         messageText: WorkPackageComponentMessages.MSG_WP_COMPONENT_OUT_SCOPE
                     }));
                 }
+
+                // Back to normal
+                store.dispatch(setCurrentView(currentView));
             }
         });
 

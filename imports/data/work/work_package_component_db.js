@@ -25,6 +25,10 @@ class WorkPackageComponentDataClass {
         );
     }
 
+    bulkInsertWpComponents(componentList){
+        WorkPackageComponents.batchInsert(componentList);
+    }
+
     importComponent(designVersionId, designUpdateId, workPackageId, wpComponent){
 
         if(Meteor.isServer) {
@@ -63,6 +67,13 @@ class WorkPackageComponentDataClass {
 
         return WorkPackageComponents.find({
             workPackageId:          workPackageId
+        }).fetch();
+    }
+
+    getCurrentDesignVersionComponents(designVersionId){
+
+        return WorkPackageComponents.find({
+            designVersionId:        designVersionId
         }).fetch();
     }
 
@@ -228,6 +239,16 @@ class WorkPackageComponentDataClass {
     removeComponent(wpComponentId){
 
         return WorkPackageComponents.remove({_id: wpComponentId});
+    }
+
+    bulkRemoveComponents(designVersionId, componentIdList){
+
+        return WorkPackageComponents.remove(
+            {
+                designVersionId: designVersionId,
+                componentReferenceId: {$in: componentIdList}
+            }
+        );
     }
 }
 

@@ -411,7 +411,7 @@ class DesignUpdateComponentModulesClass{
 
     removeChildrenFromScope(parentComponent, designUpdateId){
 
-        let dvChildren = DesignComponentData.getChildComponents(parentComponent.designVersionId, parentComponent.componentReferenceId);
+        let dvChildren = DesignComponentData.getChildComponentsByIndex(parentComponent.designVersionId, parentComponent.componentReferenceId);
 
         dvChildren.forEach((child) => {
 
@@ -710,7 +710,7 @@ class DesignUpdateComponentModulesClass{
     logicallyDeleteChildren(designUpdateComponent){
 
         // Get the children in the Design Version
-        const childComponents = DesignComponentData.getChildComponents(designUpdateComponent.designVersionId, designUpdateComponent.componentReferenceId);
+        const childComponents = DesignComponentData.getChildComponentsByIndex(designUpdateComponent.designVersionId, designUpdateComponent.componentReferenceId);
 
         let done = false;
 

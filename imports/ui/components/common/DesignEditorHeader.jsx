@@ -197,6 +197,7 @@ export class DesignEditorHeader extends Component {
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
 
                 switch(displayContext){
                     case DisplayContext.WP_SCOPE:
@@ -396,6 +397,7 @@ export class DesignEditorHeader extends Component {
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
 
                 //if(displayContext === DisplayContext.WP_VIEW){
                     options =

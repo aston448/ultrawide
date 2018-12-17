@@ -12,7 +12,7 @@ let Schema = new SimpleSchema({
     // Identity
     designVersionId:            {type: String},                                         // The Design Version for which this is a WP
     designUpdateId:             {type: String, defaultValue: 'NONE'},                   // The Design Update for which this is a WP (if any)
-    workPackageId:              {type: String},                                         // The WP containing this component
+    workPackageId:              {type: String, index: 1},                               // The WP containing this component
     workPackageType:            {type: String},                                         // Either Base Version Implementation or Design Update Implementation
     componentReferenceId:       {type: String, index: 1},                               // The unique reference to the component
     componentParentReferenceId: {type: String, index: 1},                               // The unique reference to the component parent

@@ -150,7 +150,7 @@ class DocumentExportServicesClass{
 
     getChildDesignSections(docx, designVersionId, parentReferenceId, options){
 
-        const childComponents = DesignComponentData.getChildComponents(designVersionId, parentReferenceId);
+        const childComponents = DesignComponentData.getChildComponentsByIndex(designVersionId, parentReferenceId);
 
         let featureCount = 0;
         let paragraph = null;

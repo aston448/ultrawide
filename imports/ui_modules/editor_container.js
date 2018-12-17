@@ -298,39 +298,76 @@ class EditorContainerUiModulesClass{
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
 
                 const testSummaryAvailableForView = (view === ViewType.WORK_PACKAGE_BASE_VIEW || view === ViewType.WORK_PACKAGE_UPDATE_VIEW);
 
                 displayContext = DisplayContext.WP_VIEW;
 
-                scopeEditor =
-                    <div className="design-editor-container">
-                        <DesignEditorHeader
-                            displayContext={DisplayContext.WP_SCOPE}
-                        />
-                        <div className={editorClass}>
-                            {this.renderApplications(baseApplications, DisplayContext.WP_SCOPE, userContext, view, mode, viewOptions.testSummaryVisible)}
-                        </div>
-                        <DesignEditorFooter
-                            displayContext={DisplayContext.WP_SCOPE}
-                            hasDesignSummary={false}
-                        />
-                    </div>;
+                if(view === ViewType.WORK_PACKAGE_SCOPE_WAIT){
 
-                // Actual View of the WP
-                mainEditor =
-                    <div className="design-editor-container">
-                        <DesignEditorHeader
-                            displayContext={displayContext}
-                        />
-                        <div className={editorClass}>
-                            {this.renderApplications(wpApplications, displayContext, userContext, view, mode, (viewOptions.testSummaryVisible && testSummaryAvailableForView))}
-                        </div>
-                        <DesignEditorFooter
-                            displayContext={displayContext}
-                            hasDesignSummary={false}
-                        />
-                    </div>;
+                    scopeEditor =
+                        <div className="design-editor-container">
+                            <DesignEditorHeader
+                                displayContext={DisplayContext.WP_SCOPE}
+                            />
+                            <div className="design-editor-wait">
+                                Updating scope - please wait
+                            </div>
+                            <DesignEditorFooter
+                                displayContext={DisplayContext.WP_SCOPE}
+                                hasDesignSummary={false}
+                            />
+                        </div>;
+
+                    // Actual View of the WP
+                    mainEditor =
+                        <div className="design-editor-container">
+                            <DesignEditorHeader
+                                displayContext={displayContext}
+                            />
+                            <div className="design-editor-wait">
+                                Updating scope - please wait
+                            </div>
+                            <DesignEditorFooter
+                                displayContext={displayContext}
+                                hasDesignSummary={false}
+                            />
+                        </div>;
+
+                } else {
+
+                    scopeEditor =
+                        <div className="design-editor-container">
+                            <DesignEditorHeader
+                                displayContext={DisplayContext.WP_SCOPE}
+                            />
+                            <div className={editorClass}>
+                                {this.renderApplications(baseApplications, DisplayContext.WP_SCOPE, userContext, view, mode, viewOptions.testSummaryVisible)}
+                            </div>
+                            <DesignEditorFooter
+                                displayContext={DisplayContext.WP_SCOPE}
+                                hasDesignSummary={false}
+                            />
+                        </div>;
+
+                    // Actual View of the WP
+                    mainEditor =
+                        <div className="design-editor-container">
+                            <DesignEditorHeader
+                                displayContext={displayContext}
+                            />
+                            <div className={editorClass}>
+                                {this.renderApplications(wpApplications, displayContext, userContext, view, mode, (viewOptions.testSummaryVisible && testSummaryAvailableForView))}
+                            </div>
+                            <DesignEditorFooter
+                                displayContext={displayContext}
+                                hasDesignSummary={false}
+                            />
+                        </div>;
+
+                }
+
 
                 break;
 
@@ -1021,6 +1058,7 @@ class EditorContainerUiModulesClass{
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
 
                 return(
                     <Col id={colId} md={colWidth} className="close-col">
@@ -1707,6 +1745,7 @@ class EditorContainerUiModulesClass{
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
 
 
                 // Layout is SCOPE | WP | opt TEXT | opt DICT
@@ -2291,6 +2330,7 @@ class EditorContainerUiModulesClass{
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
 
                 // Layout is SCOPE | WP | opt TEXT | opt DICT
 

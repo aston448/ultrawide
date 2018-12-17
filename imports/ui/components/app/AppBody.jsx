@@ -99,7 +99,8 @@ class AppBody extends Component {
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-             case ViewType.DEVELOP_BASE_WP:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
+            case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 // Editing Views
                 bodyHtml =

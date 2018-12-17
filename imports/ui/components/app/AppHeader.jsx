@@ -223,6 +223,7 @@ export class AppHeader extends Component {
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 appHeaderMenuContent =

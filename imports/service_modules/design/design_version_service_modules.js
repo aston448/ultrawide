@@ -543,7 +543,7 @@ class DesignVersionModulesClass {
     hasUpdateModifiedChildren(designVersionComponent, originalChildComponent){
 
         // Get children
-        const children = DesignComponentData.getChildComponents(
+        const children = DesignComponentData.getChildComponentsByIndex(
             designVersionComponent.designVersionId,
             designVersionComponent.componentReferenceId
         );
@@ -600,7 +600,7 @@ class DesignVersionModulesClass {
 
     removeUpdateItemChildren(designVersionItem){
 
-        const children = DesignComponentData.getChildComponents(designVersionItem.designVersionId, designVersionItem.componentReferenceId);
+        const children = DesignComponentData.getChildComponentsByIndex(designVersionItem.designVersionId, designVersionItem.componentReferenceId);
 
         children.forEach((child) => {
 
@@ -629,7 +629,7 @@ class DesignVersionModulesClass {
 
     restoreUpdateItemChildren(designVersionItem){
 
-        const children = DesignComponentData.getChildComponents(designVersionItem.designVersionId, designVersionItem.componentReferenceId);
+        const children = DesignComponentData.getChildComponentsByIndex(designVersionItem.designVersionId, designVersionItem.componentReferenceId);
 
         children.forEach((child) => {
 

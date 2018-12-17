@@ -2130,6 +2130,14 @@ input {
     border-left: 1px solid ghostwhite;
 }
 
+.design-editor-wait{
+    padding: 0 20px 0 20px;
+    margin: 100px 0 100px 0;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  15px;
+    color: indianred;
+}
+
 .header-description{
     float: left;
     color: darkslategrey;

@@ -175,6 +175,16 @@ class DesignComponentDataClass {
         ).fetch();
     }
 
+    getFeatureComponents(designVersionId, featureReferenceId){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:                designVersionId,
+                componentFeatureReferenceIdNew: featureReferenceId
+            }
+        ).fetch();
+    }
+
     getNonRemovedDvFeatures(designVersionId){
 
         return DesignVersionComponents.find({
@@ -230,7 +240,7 @@ class DesignComponentDataClass {
         ).fetch();
     }
 
-    getChildComponents(designVersionId, componentReferenceId) {
+    getChildComponentsByIndex(designVersionId, componentReferenceId) {
 
         return DesignVersionComponents.find(
             {
@@ -239,6 +249,16 @@ class DesignComponentDataClass {
             },
             {sort: {componentIndexNew: 1}}
 
+        ).fetch();
+    }
+
+    getChildComponents(designVersionId, componentReferenceId) {
+
+        return DesignVersionComponents.find(
+            {
+                componentParentReferenceIdNew: componentReferenceId,
+                designVersionId: designVersionId
+            }
         ).fetch();
     }
 
