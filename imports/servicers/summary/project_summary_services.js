@@ -15,6 +15,7 @@ import {DesignVersionStatus, BacklogType, SummaryType, LogLevel}    from '../../
 import {log}                                                        from '../../common/utils.js'
 import {UserDvFeatureTestSummary} from "../../collections/summary/user_dv_feature_test_summary";
 import {DesignAnomalyData} from "../../data/design/design_anomaly_db";
+import {WorkPackageComponentData} from "../../data/work/work_package_component_db";
 
 class ProjectSummaryServicesClass {
 
@@ -138,10 +139,15 @@ class ProjectSummaryServicesClass {
                         // WPs in Iterations
                         workPackages = WorkPackageData.getDesignVersionWorkPackagesInIteration(userContext.designVersionId, iteration.wiReferenceId);
 
+                        // Get some local WP Component Scenario Data
+                        let dvWorkPackageActiveScenarioComponentsDb = new Mongo.Collection(null);
+                        const dvWorkPackageActiveScenarioComponents = WorkPackageComponentData.getCurrentDesignVersionActiveScenarios(userContext.designVersionId);
+                        dvWorkPackageActiveScenarioComponentsDb.batchInsert(dvWorkPackageActiveScenarioComponents);
+
                         workPackages.forEach((wp) => {
 
                             // Get all scenarios in the WP
-                            const wpData = this.processWorkPackage(userContext, increment._id, iteration._id, 'NONE', wp);
+                            const wpData = this.processWorkPackage(userContext, increment._id, iteration._id, 'NONE', wp, dvWorkPackageActiveScenarioComponentsDb);
 
                             //console.log('WP DATA: %o', wpData);
 
@@ -363,7 +369,7 @@ class ProjectSummaryServicesClass {
 
     }
 
-    processWorkPackage(userContext, incrementId, iterationId, designUpdateId, workPackage){
+    processWorkPackage(userContext, incrementId, iterationId, designUpdateId, workPackage, dvWorkPackageActiveScenarioComponentsDb){
 
         let wpRow = {
             userId:                 userContext.userId,
@@ -389,10 +395,13 @@ class ProjectSummaryServicesClass {
             scenarioCompleteCount:  0
         };
 
-        log((msg) => console.log(msg), LogLevel.PERF, "Project Summary: Process Scenarios for WP {} END", workPackage.workPackageName);
+        log((msg) => console.log(msg), LogLevel.PERF, "Project Summary: Process Scenarios for WP {} START", workPackage.workPackageName);
 
         // This gives us the scenario ref id
-        const itWpScenarioComponents = WorkPackageData.getActiveScenarios(workPackage._id);
+        //const itWpScenarioComponents = WorkPackageData.getActiveScenarios(workPackage._id);
+        const itWpScenarioComponents = dvWorkPackageActiveScenarioComponentsDb.find({
+            workPackageId: workPackage._id
+        }).fetch();
 
         // Finally, for each Scenario get the summary data
         let wpBacklogData = [];
@@ -417,7 +426,10 @@ class ProjectSummaryServicesClass {
 
     processScenario(rowData, userContext, scenarioRefId){
 
-        const scenarioData = TestSummaryModules.getSummaryDataForScenario(userContext, scenarioRefId);
+        // Get previously calculated test summary data
+        // TODO - make this a pre loaded user sub section of the data to prevent slow down when lots of user data
+        const scenarioData = UserDvTestSummaryData.getScenarioSummary(userContext.userId, userContext.designVersionId, scenarioRefId);
+
         // Count the number of open or ongoing anomalies for this scenario
         const scenarioAnomalyCount = DesignAnomalyData.getActiveScenarioDesignAnomalies(userContext.designVersionId, scenarioRefId).length;
 

@@ -168,7 +168,7 @@ class ComponentUiModulesClass{
 
                 if(nextProps.currentItem.isRemoved !== props.currentItem.isRemoved) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of LOGICAL DELETE", props.currentItem.componentNameNew);
-                    console.log('HEADER SHOULD UPDATE');
+                    //console.log('HEADER SHOULD UPDATE');
                     return true;
                 }
 
@@ -326,7 +326,7 @@ class ComponentUiModulesClass{
 
                 if(nextProps.currentItem.isRemoved !== props.currentItem.isRemoved) {
                     log((msg) => console.log(msg), LogLevel.PERF, " *** Updating {} because of HEADER LOGICAL DELETE", props.currentItem.componentNameNew);
-                    console.log('HEADER SHOULD UPDATE');
+                    //console.log('HEADER SHOULD UPDATE');
                     return true;
                 }
 

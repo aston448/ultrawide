@@ -359,6 +359,19 @@ class WorkItemDetail extends Component{
                         {editAction}
                         {draggableMoveAction}
                     </InputGroup>
+                </div>
+            );
+
+        let wpNotEditingDraggableSelected =
+            connectDragPreview(
+                <div className={workItemClass}>
+                    <InputGroup>
+                        {badge}
+                        {itemLink}
+                        {itemText}
+                        {editAction}
+                        {draggableMoveAction}
+                    </InputGroup>
                     {buttons}
                 </div>
             );
@@ -424,12 +437,19 @@ class WorkItemDetail extends Component{
                         break;
                     case WorkItemType.BASE_WORK_PACKAGE:
                     case WorkItemType.UPDATE_WORK_PACKAGE:
+
+                        selectedItem = (workItem._id === userContext.workPackageId);
+
                         if(this.state.editing){
                             layout = itemEditing;
                         } else {
-                            layout = wpNotEditingDraggable;
+                            if(selectedItem){
+                                layout = wpNotEditingDraggableSelected;
+                            } else {
+                                layout = wpNotEditingDraggable;
+                            }
                         }
-                        selectedItem = (workItem._id === userContext.workPackageId);
+
                         break;
                     case WorkItemType.DESIGN_UPDATE:
 
@@ -567,7 +587,7 @@ const componentSource = {
                     log((msg) => console.log(msg), LogLevel.DEBUG, "NO DRAG TYPE");
             }
         } else {
-            console.log('No result');
+            //console.log('No result');
             log((msg) => console.log(msg), LogLevel.DEBUG, "NO DROP RESULT");
         }
     }

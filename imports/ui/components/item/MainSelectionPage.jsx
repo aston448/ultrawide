@@ -49,7 +49,7 @@ export class MainSelectionPage extends Component {
     }
 
     onSelectTab(eventKey){
-        console.log('Selecting tab ' + eventKey);
+        //console.log('Selecting tab ' + eventKey);
         ClientAppHeaderServices.setHomeTab(eventKey);
     }
 

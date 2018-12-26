@@ -371,7 +371,7 @@ export class DesignComponent extends Component{
     // Add a new scenario to this component (Feature or Feature Aspect)
     addScenario(view, mode, parentItem, userContext){
 
-        console.log('Add Scenario for view ' + view + ' with WP ' + userContext.workPackageId + ' for parent ' + parentItem);
+        //console.log('Add Scenario for view ' + view + ' with WP ' + userContext.workPackageId + ' for parent ' + parentItem);
 
         switch(view){
             case ViewType.DESIGN_NEW:

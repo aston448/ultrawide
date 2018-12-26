@@ -275,7 +275,7 @@ export class DesignComponentHeader extends Component{
                         newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew ||
                         newProps.currentItem.scopeType !== this.props.currentItem.scopeType
                     ){
-                        console.log('Updating editor with %o', newProps.currentItem);
+                        //console.log('Updating editor with %o', newProps.currentItem);
                         if(this.props.displayContext === DisplayContext.UPDATE_SCOPE){
                             this.updateComponentEditorText(newProps, newProps.currentItem.componentNameRawOld);
                         } else {
