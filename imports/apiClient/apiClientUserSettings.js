@@ -93,6 +93,17 @@ class ClientUserSettingsServicesClass {
         }
     }
 
+    getWindowSizeClassForWorkItems(){
+
+        const windowSize = store.getState().currentWindowSize;
+
+        switch(windowSize){
+            case UserSettingValue.SCREEN_SIZE_SMALL:
+                return 'scroll-col-work-small';
+            case UserSettingValue.SCREEN_SIZE_LARGE:
+                return 'scroll-col-work-large';
+        }
+    }
 
     // Set specific settings related data ------------------------------------------------------------------------------
 

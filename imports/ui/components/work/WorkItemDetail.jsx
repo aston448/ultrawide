@@ -166,6 +166,7 @@ class WorkItemDetail extends Component{
         let badgeId = '';
         let badgeClass = '';
         let workItemClass = '';
+        let workItemNameClass = 'work-item-name';
         let selectedItem = false;
         let selectedItemClass = '';
 
@@ -176,7 +177,7 @@ class WorkItemDetail extends Component{
                 itemName = workItem.wiName;
                 badgeId = workItem.wiType;
                 badgeClass = 'badge-increment';
-
+                workItemNameClass = 'work-item-name-in';
                 break;
 
             case WorkItemType.ITERATION:
@@ -184,6 +185,7 @@ class WorkItemDetail extends Component{
                 itemName = workItem.wiName;
                 badgeId = workItem.wiType;
                 badgeClass = 'badge-iteration';
+                workItemNameClass = 'work-item-name-it';
                 break;
 
             case WorkItemType.DESIGN_UPDATE:
@@ -306,7 +308,7 @@ class WorkItemDetail extends Component{
             </InputGroup.Addon>;
 
         let itemText =
-            <div className="work-item-name">{itemName}</div>;
+            <div className={workItemNameClass}>{itemName}</div>;
 
 
         let updateWpStatus =
@@ -327,7 +329,7 @@ class WorkItemDetail extends Component{
             buttons = WorkItemDetailUIModules.getWorkPackageButtonsLayout(userRole, userContext, workItem, uiContextName);
         }
 
-        let itemNotEditable =
+        let itemNotEditableSelected =
             <div className={workItemClass}>
                 <InputGroup>
                     {badge}
@@ -335,6 +337,15 @@ class WorkItemDetail extends Component{
                     {itemText}
                 </InputGroup>
                 {buttons}
+            </div>;
+
+        let itemNotEditable =
+            <div className={workItemClass}>
+                <InputGroup>
+                    {badge}
+                    {itemLink}
+                    {itemText}
+                </InputGroup>
             </div>;
 
         let duNotEditable =
@@ -468,9 +479,28 @@ class WorkItemDetail extends Component{
 
             default:
 
-                // Everyone else can just look and use appropriate WP buttons
+                // Everyone else can just look and use appropriate WP buttons (if selected)
+                switch(workItemType){
 
-                layout = itemNotEditable;
+                    case WorkItemType.BASE_WORK_PACKAGE:
+                    case WorkItemType.UPDATE_WORK_PACKAGE:
+
+                        selectedItem = (workItem._id === userContext.workPackageId);
+
+                        if(selectedItem){
+                            layout = itemNotEditableSelected;
+                        } else {
+                            layout = itemNotEditable;
+                        }
+                        break;
+
+                    default:
+
+                        layout = itemNotEditable;
+                        break;
+                }
+
+
         }
 
         if(selectedItem){

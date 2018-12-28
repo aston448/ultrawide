@@ -158,7 +158,7 @@ export class WorkItemList extends Component {
                     }
 
                     if(displayContext === DisplayContext.WORK_ITEM_EDIT_BASE || displayContext === DisplayContext.WORK_ITEM_EDIT_UPD){
-                        headerText = 'Iterations';
+                        headerText = '';
                         itemListType = ItemListType.WORK_ITEM_IT;
                     } else {
                         itemListType = ItemListType.WORK_ITEM_SUMM;

@@ -180,7 +180,8 @@ class DesignComponentDataClass {
         return DesignVersionComponents.find(
             {
                 designVersionId:                designVersionId,
-                componentFeatureReferenceIdNew: featureReferenceId
+                componentFeatureReferenceIdNew: featureReferenceId,
+                componentType:                  {$ne: ComponentType.FEATURE}
             }
         ).fetch();
     }

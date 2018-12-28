@@ -1086,6 +1086,8 @@ class ClientDataServicesClass{
                     // Getting features in a WP only
                     wpFeatures = WorkPackageData.getWorkPackageComponentsOfType(userContext.workPackageId, ComponentType.FEATURE);
 
+                    console.log('Got %i WP features', wpFeatures.length);
+
                     wpFeatures.forEach((wpFeature) => {
 
                         let dvFeature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, wpFeature.componentReferenceId);

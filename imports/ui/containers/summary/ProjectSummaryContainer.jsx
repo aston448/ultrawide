@@ -30,6 +30,8 @@ import store from '../../../redux/store'
 import {
     setCurrentUserBacklogItem, setCurrentUserSummaryItem
 } from '../../../redux/actions'
+import {ItemListType} from "../../../constants/constants";
+import {ClientUserSettingsServices} from "../../../apiClient/apiClientUserSettings";
 
 
 
@@ -61,6 +63,10 @@ export class ProjectSummary extends Component {
         return UserDvWorkSummaryData.getWorkItemSummaryDataById(summaryId);
     }
 
+    getWindowSizeClass(){
+
+        return ClientUserSettingsServices.getWindowSizeClassForWorkItems();
+    }
 
     render() {
 
@@ -71,6 +77,8 @@ export class ProjectSummary extends Component {
         //console.log('DV Summary = %o', dvSummary);
 
         const summaryItem = this.getSummaryItem(summaryId);
+
+        const workScrollClass = this.getWindowSizeClass();
 
         let backlogContext = '';
 
@@ -131,7 +139,7 @@ export class ProjectSummary extends Component {
         const layout =
             <Grid>
                 <Row>
-                    <Col md={6}>
+                    <Col md={6} className="close-col">
                         <div className="summary-dv-header"  onClick={() => this.onSummaryItemSelect(dvSummary.summaryId)}>
                             {dvSummary.designVersionName + ' - ' + dvSummary.dvFeatureCount + ' Features'}
                         </div>
@@ -143,7 +151,7 @@ export class ProjectSummary extends Component {
                             />
                         </div>
                     </Col>
-                    <Col md={6}>
+                    <Col md={6} className="close-col">
                         <div className="summary-dv-header"  onClick={() => this.onSummaryItemSelect(dvSummary.summaryId)}>
                             {'Design Version Backlogs for ' + backlogContext}
                         </div>
@@ -153,9 +161,9 @@ export class ProjectSummary extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col md={6} className="close-col">
+                    <Col md={6} className={workScrollClass}>
                         <Row>
-                            <Col md={12}>
+                            <Col md={12} className="close-col">
                                 <div className="summary-section-header">
                                     Work Assigned for this Design Version
                                 </div>
@@ -169,7 +177,7 @@ export class ProjectSummary extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Col md={12}>
+                            <Col md={12} className="close-col">
                                 <div className="summary-section-header">
                                     Breakdown by Work Packages
                                 </div>
@@ -184,7 +192,7 @@ export class ProjectSummary extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Col md={12}>
+                            <Col md={12} className="close-col">
                                 <div className="summary-section-header">
                                     Work Not Yet Assigned
                                 </div>

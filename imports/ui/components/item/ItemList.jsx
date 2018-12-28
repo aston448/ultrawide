@@ -88,21 +88,25 @@ export class ItemList extends Component {
                 containerType = 'item-container-it';
                 containerHeaderType = 'item-container-header-it';
                 containerFooterType = 'item-container-footer-it';
+                bodyClass = '';
                 break;
             case ItemListType.WORK_ITEM_WP:
                 containerType = 'item-container-wp';
                 containerHeaderType = 'item-container-header-wp';
                 containerFooterType = 'item-container-footer-wp';
+                bodyClass = '';
                 break;
             case ItemListType.WORK_ITEM_DU_WP:
                 containerType = 'item-container-wp';
                 containerHeaderType = 'item-container-header-wp';
                 containerFooterType = 'item-container-footer';
+                bodyClass = '';
                 break;
             case ItemListType.WORK_ITEM_SUMM:
                 containerType = 'item-container-su';
                 containerHeaderType = 'item-container-header-su';
                 containerFooterType = 'item-container-footer-su';
+                bodyClass = '';
                 break;
         }
 

@@ -40,7 +40,12 @@ export class FeatureSummaryList extends Component {
 
 
     renderFeatureList(featureSummaries, displayContext){
+
+        console.log('Summaries list contains %i features', featureSummaries.length);
+
         return featureSummaries.map((featureSummary) => {
+
+            console.log('Mapping feature: %s - %s', featureSummary._id, featureSummary.featureName);
             return (
                 <FeatureSummary
                     key={featureSummary._id}

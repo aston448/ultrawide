@@ -1007,6 +1007,20 @@ input {
     overflow-y: auto;
 }
 
+.scroll-col-work-large{
+    max-height: 1100px;
+    overflow-y: auto;
+    margin: 5px 0 0 0;
+    padding: 5px;
+}
+
+.scroll-col-work-small{
+    max-height: 800px;
+    overflow-y: auto;
+    margin: 5px 0 0 0;
+    padding: 5px;
+}
+
 .scroll-col-large{
     max-height: 1100px;
     overflow-y: auto;
@@ -1318,7 +1332,7 @@ input {
 
 .badge-iteration{
     color: white;
-    background-color: darkseagreen;
+    background-color: indianred;
 }
 
 .badge-work-package-new{
@@ -1353,6 +1367,24 @@ input {
 .work-item-name{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
+    margin: 0 10px 0 0;
+    padding: 0;
+}
+
+.work-item-name-in{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+    color: darkslategrey;
+    margin: 0 10px 0 0;
+    padding: 0;
+}
+
+.work-item-name-it{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+    color: indianred;
     margin: 0 10px 0 0;
     padding: 0;
 }
@@ -1402,16 +1434,22 @@ input {
 }
 
 .item-container-header-it{
-    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  14px;
-    color: white;
-    background-color: darkseagreen;
     margin: 0;
-    padding: 3px 10px 3px 20px;
-    border: 1px solid ghostwhite;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
+    padding: 0;
+    border: 0;
 }
+
+/*.item-container-header-it{*/
+    /*font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;*/
+    /*font-size:  14px;*/
+    /*color: white;*/
+    /*background-color: darkseagreen;*/
+    /*margin: 0;*/
+    /*padding: 3px 10px 3px 20px;*/
+    /*border: 1px solid ghostwhite;*/
+    /*border-top-left-radius: 2px;*/
+    /*border-top-right-radius: 2px;*/
+/*} */
 
 .item-container-footer-it{
     border-top: 1px solid ghostwhite;
