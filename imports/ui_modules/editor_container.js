@@ -1078,6 +1078,7 @@ class EditorContainerUiModulesClass{
                         <Tabs className="top-tabs" activeKey={this.getCurrentDevTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentDevTab(tab)}>
                             <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
                             <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
+                            <Tab id={UITab.TAB_TEST_EXPECTATIONS} eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title={testExpectationsTabTitle}>{this.getTestExpectations(view, userContext)}</Tab>
                             <Tab id={UITab.TAB_ACC_TESTS} eventKey={EditorTab.TAB_ACC_TESTS} title={accTestTabTitle}>{this.getAccTestsPane(view, userContext)}</Tab>
                             <Tab id={UITab.TAB_INT_TESTS} eventKey={EditorTab.TAB_INT_TESTS} title={intTestTabTitle}>{this.getIntTestsPane(view, userContext)}</Tab>
                             <Tab id={UITab.TAB_UNIT_TESTS} eventKey={EditorTab.TAB_UNIT_TESTS} title={unitTestTabTitle}>{this.getUnitTestsPane(view, userContext)}</Tab>

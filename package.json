@@ -29,6 +29,7 @@
     "local_int_du": "chimp .config/chimp_du.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/500_design_updates",
     "local_int_dom": "chimp .config/chimp_dom.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/700_domain",
     "local_int_adm": "chimp .config/chimp_adm.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/800_admin",
+    "local_int_temp": "chimp .config/chimp_adm.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/aaa_temp",
     "local_int_client": "chimp .config/chimp_client.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_client"
   },
   "dependencies": {

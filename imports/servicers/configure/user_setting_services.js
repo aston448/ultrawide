@@ -21,7 +21,7 @@ class UserSettingsServicesClass {
 
         if (Meteor.isServer) {
 
-            //console.log('Saving setting ' + settingName + ' as ' + newValue);
+            console.log('Saving setting ' + settingName + ' as ' + newValue);
 
             const setting = UserSettingsData.getUserSettingByName(userId, settingName);
 

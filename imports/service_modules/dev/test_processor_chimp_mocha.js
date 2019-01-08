@@ -1,12 +1,15 @@
 import fs from 'fs';
 
 // Ultrawide Services
-import {ComponentType, LogLevel}   from '../../constants/constants.js';
+import {ComponentType, TestType, LogLevel}   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js';
 
 // Data Access
 import { DesignComponentData }                      from '../../data/design/design_component_db.js';
 import { DesignUpdateComponentData }                from '../../data/design_update/design_update_component_db.js';
+import {ScenarioTestExpectationData}                from "../../data/design/scenario_test_expectations_db";
+import {DesignPermutationData}                      from "../../data/design/design_permutation_db";
+import {DesignPermutationValueData}                 from '../../data/design/design_permutation_value_db.js';
 
 
 // Plugin class to read test results from a screen scraped chimp mocha JSON reported file
@@ -18,9 +21,10 @@ class ChimpMochaTestServicesClass {
 
             // Get the selected Feature - already validated that current item is a Feature
             let feature = null;
+            const baseDesignTest = (userContext.designUpdateId === 'NONE');
 
             // Are we working from an Initial Design or a Design Update?
-            if(userContext.designUpdateId === 'NONE') {
+            if(baseDesignTest) {
                 feature = DesignComponentData.getDesignComponentById(userContext.designComponentId);
             } else {
                 feature = DesignUpdateComponentData.getUpdateComponentById(userContext.designComponentId);
@@ -67,7 +71,7 @@ class ChimpMochaTestServicesClass {
             // Now loop through the Scenarios creating pending tests
             let featureAspects = [];
 
-            if(userContext.designUpdateId === 'NONE') {
+            if(baseDesignTest) {
                 featureAspects = DesignComponentData.getFeatureAspects(userContext.designVersionId, feature.componentReferenceId);
             } else {
                 featureAspects = DesignUpdateComponentData.getNonRemovedAspectsForFeature(userContext.designUpdateId, feature.componentReferenceId);
@@ -76,20 +80,73 @@ class ChimpMochaTestServicesClass {
             featureAspects.forEach((aspect) =>{
                 let scenarios = [];
 
-                if(userContext.designUpdateId === 'NONE') {
+                if(baseDesignTest) {
                     scenarios = DesignComponentData.getChildComponentsOfType(userContext.designVersionId, ComponentType.SCENARIO, aspect.componentReferenceId)
                 } else {
                     scenarios = DesignUpdateComponentData.getNonRemovedChildComponentsOfType(userContext.designUpdateId, ComponentType.SCENARIO, aspect.componentReferenceId);
                 }
 
-                // Add Feature aspect comment and scenarios if there are any
-                if(scenarios.length > 0) {
+                // Add Feature aspect and scenarios if there are any test expectations
+                let expectationTotal = 0;
 
-                    fileText += "\n    describe('" + aspect.componentNameNew + "', function(){\n";
+                scenarios.forEach((scenario) => {
+                    const integrationTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(userContext.designVersionId, scenario.componentReferenceId, TestType.INTEGRATION);
+                    expectationTotal += integrationTestExpectations.length;
+                });
+
+                if(scenarios.length > 0 && expectationTotal > 0) {
+
+                    fileText += "\n    describe('" + aspect.componentNameNew + "', function(){\n\n";
 
                     scenarios.forEach((scenario) => {
 
-                        fileText += "        it('" + scenario.componentNameNew + "');\n\n";
+                        // See if there are any test expectations for Integration tests
+
+                        const integrationTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(userContext.designVersionId, scenario.componentReferenceId, TestType.INTEGRATION);
+
+                        if(integrationTestExpectations.length === 1){
+
+                            // Just one integration test, no permutations
+
+                            fileText += "        it('" + scenario.componentNameNew + "', function(){\n            // Add test code here\n        });\n\n";
+
+                        } else {
+
+                            if(integrationTestExpectations.length > 1){
+
+                                fileText += "\n        describe('" + scenario.componentNameNew + "', function(){\n";
+
+                                // We have permutations - get a list of unique ones
+                                let perms = [];
+                                integrationTestExpectations.forEach((expectation) =>{
+
+                                    if(expectation.permutationId !== 'NONE') {
+
+                                        if (!perms.includes(expectation.permutationId)) {
+                                            perms.push(expectation.permutationId);
+                                        }
+                                    }
+                                });
+
+                                // For each permutation value add a test
+                                perms.forEach((permId) =>{
+
+                                    const permName = DesignPermutationData.getDesignPermutationById(permId).permutationName;
+                                    const expectationValues = ScenarioTestExpectationData.getPermutationValuesForScenarioTestTypePerm(userContext.designVersionId, scenario.componentReferenceId, TestType.INTEGRATION, permId);
+
+                                    expectationValues.forEach((expectationValue) => {
+
+                                        const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectationValue.permutationValueId);
+
+                                        fileText += "\n            it('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                // Add test code here\n            });\n\n";
+                                    });
+
+                                });
+
+                                // End scenario describe
+                                fileText += "        });\n"
+                            }
+                        }
 
                     });
 

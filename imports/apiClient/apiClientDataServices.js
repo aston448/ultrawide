@@ -1765,6 +1765,7 @@ class ClientDataServicesClass{
 
                         case DisplayContext.WP_VIEW:
                         case DisplayContext.DEV_DESIGN:
+                        case DisplayContext.TEST_EXPECTATIONS:
                         case DisplayContext.MASH_UNIT_TESTS:
                         case DisplayContext.MASH_INT_TESTS:
                         case DisplayContext.MASH_ACC_TESTS:
@@ -1813,6 +1814,7 @@ class ClientDataServicesClass{
 
                         case DisplayContext.WP_VIEW:
                         case DisplayContext.DEV_DESIGN:
+                        case DisplayContext.TEST_EXPECTATIONS:
                         case DisplayContext.MASH_UNIT_TESTS:
                         case DisplayContext.MASH_INT_TESTS:
                         case DisplayContext.MASH_ACC_TESTS:

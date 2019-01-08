@@ -86,6 +86,12 @@ export class ConfigurationSettings extends Component {
         ClientUserSettingsServices.saveUserSetting(UserSetting.SETTING_INCLUDE_NARRATIVES, newValue);
     }
 
+
+    onIntOutputPathChange(e){
+
+        this.setState({currentIntOutputPath: e.target.value})
+    }
+
     onUpdateIntOutputPath(e){
 
         // Call this to prevent Submit reloading the page
@@ -246,7 +252,7 @@ export class ConfigurationSettings extends Component {
                     <div className="design-item-note">Set to a directory where you can safely generate integration test template files</div>
                     <FormGroup controlId="intOutputDir">
                         <ControlLabel>Directory:</ControlLabel>
-                        <FormControl ref="intOutputDir" type="input" value={pathValue} onChange={(e) => this.updateIntOutputDir(e)}/>
+                        <FormControl ref="intOutputDir" type="input" value={pathValue} onChange={(e) => this.onIntOutputPathChange(e)}/>
                     </FormGroup>
                     <Button type="submit">
                         Save
