@@ -146,7 +146,8 @@ export const TextEditorMessages = {
 
 export const TestIntegrationMessages = {
 
-    MSG_INT_TEST_EXPORTED:              'Integration tests exported for Feature'
+    MSG_INT_TEST_EXPORTED:              'Integration tests exported for Feature',
+    MSG_UNIT_TEST_EXPORTED:             'Unit tests exported for Feature'
 };
 
 export const TestOutputLocationMessages = {

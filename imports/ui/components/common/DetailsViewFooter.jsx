@@ -46,6 +46,10 @@ export class DetailsViewFooter extends Component {
         ClientTestIntegrationServices.exportIntegrationTestFile(this.props.userContext, this.props.userRole);
     }
 
+    onExportUnitTests(){
+        ClientTestIntegrationServices.exportUnitTestFile(this.props.userContext, this.props.userRole);
+    }
+
     addDomainTerm(userRole, view, mode, designId, designVersionId){
         ClientDomainDictionaryServices.addNewDictionaryTerm(userRole, view, mode, designId, designVersionId);
     }
@@ -69,10 +73,16 @@ export class DetailsViewFooter extends Component {
                 actionFunction={ () => this.onExportIntTests()}
             />;
 
+        const exportUnitOption =
+            <UltrawideMenuItem
+                menuType={MenuType.MENU_EDITOR}
+                itemName="Export"
+                actionFunction={ () => this.onExportUnitTests()}
+            />;
+
         // Which menu options should be visible
         switch(detailsType){
             case DetailsViewType.VIEW_INT_TESTS:
-            case DetailsViewType.VIEW_UNIT_TESTS:
                 if(actionsVisible){
                     menuOptions =
                         <div>
@@ -82,6 +92,18 @@ export class DetailsViewFooter extends Component {
                     footerClass = 'details-editor-footer';
                 }
                 break;
+
+            case DetailsViewType.VIEW_UNIT_TESTS:
+                if(actionsVisible){
+                    menuOptions =
+                        <div>
+                            {exportUnitOption}
+                        </div>;
+                } else {
+                    footerClass = 'details-editor-footer';
+                }
+                break;
+
             case DetailsViewType.VIEW_DOM_DICT:
 
                 // Add Dict item available if in editing view

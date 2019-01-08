@@ -627,7 +627,7 @@ input {
 .top-tabs{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
-    font-weight: normal;
+    font-weight: 100;
     margin: 0px;
     padding: 0px;
 }
@@ -640,8 +640,11 @@ input {
 
 .tab-badge{
     margin: 0 3px 0 0;
-    min-width: 80px;
+    font-size:  13px;
+    font-weight: 100;
+    min-width: 90px;
 }
+
 
 .tab-text{
     padding: 2px 0 0 0;
@@ -673,6 +676,10 @@ input {
 
 .tab-summary{
     background-color: darkred;
+}
+
+.faded{
+    opacity: 0.4;
 }
 
 .main-panel{

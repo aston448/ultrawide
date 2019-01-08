@@ -4,7 +4,8 @@ import {
     refreshWorkProgressData,
     updateTestSummaryData,
     updateTestSummaryDataForFeature,
-    exportIntegrationTests
+    exportIntegrationTests,
+    exportUnitTests
 
 } from '../apiValidatedMethods/test_integration_methods.js'
 
@@ -68,6 +69,21 @@ class ServerTestIntegrationApiClass {
     exportIntegrationTests(userContext, outputDir, userRole, testRunner, callback){
 
         exportIntegrationTests.call(
+            {
+                userContext:    userContext,
+                outputDir:      outputDir,
+                userRole:       userRole,
+                testRunner:     testRunner
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    exportUnitTests(userContext, outputDir, userRole, testRunner, callback){
+
+        exportUnitTests.call(
             {
                 userContext:    userContext,
                 outputDir:      outputDir,

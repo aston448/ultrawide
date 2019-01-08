@@ -989,18 +989,90 @@ class EditorContainerUiModulesClass{
         );
     }
 
+    getTabTitle(view, tabKey){
+
+        let isActiveTab = false;
+
+        switch(view){
+
+            case ViewType.DESIGN_NEW:
+            case ViewType.DESIGN_PUBLISHED:
+            case ViewType.DESIGN_UPDATABLE:
+
+                isActiveTab = (this.getCurrentDesignTab() === tabKey);
+                break;
+
+            case ViewType.DESIGN_UPDATE_VIEW:
+            case ViewType.DESIGN_UPDATE_EDIT:
+
+                isActiveTab = (this.getCurrentUpdateTab() === tabKey);
+                break;
+
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_SCOPE_WAIT:
+
+                isActiveTab = (this.getCurrentWpTab() === tabKey);
+                break;
+
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+
+                isActiveTab = (this.getCurrentDevTab() === tabKey);
+                break;
+        }
+
+        let tabBadgeFormat = ' faded';
+        if(isActiveTab){
+            tabBadgeFormat = '';
+        }
+
+        switch(tabKey){
+
+            case EditorTab.TAB_DETAILS:
+                return <TabTitle tabText={'Details'} glyphIconName={'list-alt'} badgeClass={'tab-badge tab-details' + tabBadgeFormat}/>;
+            case EditorTab.TAB_TEST_EXPECTATIONS:
+                return <TabTitle tabText={'Expectations'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
+            case EditorTab.TAB_ACC_TESTS:
+                return <TabTitle tabText={'Acceptance'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
+            case EditorTab.TAB_INT_TESTS:
+                return <TabTitle tabText={'Integration'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
+            case EditorTab.TAB_UNIT_TESTS:
+                return <TabTitle tabText={'Unit'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
+            case EditorTab.TAB_ANOMALIES:
+                return <TabTitle tabText={'Anomalies'} glyphIconName={'warning-sign'} badgeClass={'tab-badge tab-problems' + tabBadgeFormat}/>;
+            case EditorTab.TAB_DOMAIN_DICT:
+                return <TabTitle tabText={'Domain'} glyphIconName={'book'} badgeClass={'tab-badge tab-domain' + tabBadgeFormat}/>;
+            case EditorTab.TAB_SCENARIO_SEARCH:
+                return <TabTitle tabText={'Search'} glyphIconName={'search'} badgeClass={'tab-badge tab-search' + tabBadgeFormat}/>;
+            case EditorTab.TAB_WORKING_VIEW:
+                return <TabTitle tabText={'Progress'} glyphIconName={'search'} badgeClass={'tab-badge tab-progress' + tabBadgeFormat}/>;
+            case EditorTab.TAB_UPDATE_SUMMARY:
+                return <TabTitle tabText={'Summary'} glyphIconName={'search'} badgeClass={'tab-badge tab-summary' + tabBadgeFormat}/>;
+        }
+
+    }
+
     getTabsView(view, userRole, userContext, colWidth, colId, editors){
 
-        const detailsTabTitle = <TabTitle tabText={'Details'} glyphIconName={'list-alt'} badgeClass={'tab-badge tab-details'}/>;
-        const testExpectationsTabTitle = <TabTitle tabText={'Expectations'} glyphIconName={'check'} badgeClass={'tab-badge tab-test'}/>;
-        const accTestTabTitle = <TabTitle tabText={'Acceptance'} glyphIconName={'check'} badgeClass={'tab-badge tab-test'}/>;
-        const intTestTabTitle = <TabTitle tabText={'Integration'} glyphIconName={'check'} badgeClass={'tab-badge tab-test'}/>;
-        const unitTestTabTitle = <TabTitle tabText={'Unit'} glyphIconName={'check'} badgeClass={'tab-badge tab-test'}/>;
-        const anomaliesTabTitle = <TabTitle tabText={'Anomalies'} glyphIconName={'warning-sign'} badgeClass={'tab-badge tab-problems'}/>;
-        const dictionaryTabTitle = <TabTitle tabText={'Domain'} glyphIconName={'book'} badgeClass={'tab-badge tab-domain'}/>;
-        const findTabTitle = <TabTitle tabText={'Search'} glyphIconName={'search'} badgeClass={'tab-badge tab-search'}/>;
-        const workingViewTabTitle = <TabTitle tabText={'Progress'} glyphIconName={'search'} badgeClass={'tab-badge tab-progress'}/>;
-        const summaryTabTitle = <TabTitle tabText={'Summary'} glyphIconName={'search'} badgeClass={'tab-badge tab-summary'}/>;
+
+        const activeDesignTabKey = this.getCurrentDesignTab();
+        const activeUpdateTabKey = this.getCurrentUpdateTab();
+        const activeWpTabKey = this.getCurrentWpTab();
+        const activeDevTabKey = this.getCurrentDevTab();
+
+        const detailsTabTitle = this.getTabTitle(view, EditorTab.TAB_DETAILS);
+        const testExpectationsTabTitle = this.getTabTitle(view, EditorTab.TAB_TEST_EXPECTATIONS);
+        const accTestTabTitle = this.getTabTitle(view, EditorTab.TAB_ACC_TESTS);
+        const intTestTabTitle = this.getTabTitle(view, EditorTab.TAB_INT_TESTS);
+        const unitTestTabTitle = this.getTabTitle(view, EditorTab.TAB_UNIT_TESTS);
+        const anomaliesTabTitle = this.getTabTitle(view, EditorTab.TAB_ANOMALIES);
+        const dictionaryTabTitle = this.getTabTitle(view, EditorTab.TAB_DOMAIN_DICT);
+        const findTabTitle = this.getTabTitle(view, EditorTab.TAB_SCENARIO_SEARCH);
+        const workingViewTabTitle = this.getTabTitle(view, EditorTab.TAB_WORKING_VIEW);
+        const summaryTabTitle = this.getTabTitle(view, EditorTab.TAB_UPDATE_SUMMARY);
 
         switch(view){
             case ViewType.DESIGN_NEW:
@@ -1011,11 +1083,11 @@ class EditorContainerUiModulesClass{
 
                     return(
                         <Col id={colId} md={colWidth} className="close-col">
-                            <Tabs className="top-tabs" activeKey={this.getCurrentDesignTab()} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
-                                <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                                <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
-                                <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
-                                <Tab id={UITab.TAB_SCENARIO_SEARCH} eventKey={EditorTab.TAB_SCENARIO_SEARCH} title={findTabTitle}>{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
+                            <Tabs className="top-tabs" activeKey={activeDesignTabKey} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
+                                <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_SCENARIO_SEARCH} title={findTabTitle}>{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
                             </Tabs>
                         </Col>
                     );
@@ -1024,7 +1096,7 @@ class EditorContainerUiModulesClass{
 
                     return(
                         <Col id={colId} md={colWidth} className="close-col">
-                            <Tabs className="top-tabs" activeKey={this.getCurrentDesignTab()} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
+                            <Tabs className="top-tabs" activeKey={activeDesignTabKey} id="all-tabs" onSelect={(tab) => this.setCurrentDesignTab(tab)}>
                                 <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title={testExpectationsTabTitle}>{this.getTestExpectations(view, userContext)}</Tab>
@@ -1043,13 +1115,12 @@ class EditorContainerUiModulesClass{
 
                 return(
                     <Col id={colId} md={colWidth} className="close-col">
-                        <Tabs className="top-tabs" activeKey={this.getCurrentUpdateTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentUpdateTab(tab)}>
-                            <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                            <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
-                            <Tab id={UITab.TAB_WORKING_VIEW} eventKey={EditorTab.TAB_WORKING_VIEW} title={workingViewTabTitle}>{editors.viewEditor}</Tab>
-                            <Tab id={UITab.TAB_UPDATE_SUMMARY} eventKey={EditorTab.TAB_UPDATE_SUMMARY} title={summaryTabTitle}>{this.getUpdateSummary(userContext)}</Tab>
-                            <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
-                            <Tab id={UITab.TAB_SCENARIO_SEARCH} eventKey={EditorTab.TAB_SCENARIO_SEARCH} title={findTabTitle}>{this.getScenarioFinder(DisplayContext.UPDATE_SCOPE)}</Tab>
+                        <Tabs className="top-tabs" activeKey={activeUpdateTabKey} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentUpdateTab(tab)}>
+                            <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_WORKING_VIEW} title={workingViewTabTitle}>{editors.viewEditor}</Tab>
+                            <Tab eventKey={EditorTab.TAB_UPDATE_SUMMARY} title={summaryTabTitle}>{this.getUpdateSummary(userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_SCENARIO_SEARCH} title={findTabTitle}>{this.getScenarioFinder(DisplayContext.UPDATE_SCOPE)}</Tab>
                         </Tabs>
                     </Col>
                 );
@@ -1062,10 +1133,10 @@ class EditorContainerUiModulesClass{
 
                 return(
                     <Col id={colId} md={colWidth} className="close-col">
-                        <Tabs className="top-tabs" activeKey={this.getCurrentWpTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentWpTab(tab)}>
-                            <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                            <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
-                            <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
+                        <Tabs className="top-tabs" activeKey={activeWpTabKey} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentWpTab(tab)}>
+                            <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
                         </Tabs>
                     </Col>
                 );
@@ -1075,14 +1146,14 @@ class EditorContainerUiModulesClass{
 
                 return(
                     <Col id={colId} md={colWidth} className="close-col">
-                        <Tabs className="top-tabs" activeKey={this.getCurrentDevTab()} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentDevTab(tab)}>
-                            <Tab id={UITab.TAB_DETAILS} eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                            <Tab id={UITab.TAB_ANOMALIES} eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
-                            <Tab id={UITab.TAB_TEST_EXPECTATIONS} eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title={testExpectationsTabTitle}>{this.getTestExpectations(view, userContext)}</Tab>
-                            <Tab id={UITab.TAB_ACC_TESTS} eventKey={EditorTab.TAB_ACC_TESTS} title={accTestTabTitle}>{this.getAccTestsPane(view, userContext)}</Tab>
-                            <Tab id={UITab.TAB_INT_TESTS} eventKey={EditorTab.TAB_INT_TESTS} title={intTestTabTitle}>{this.getIntTestsPane(view, userContext)}</Tab>
-                            <Tab id={UITab.TAB_UNIT_TESTS} eventKey={EditorTab.TAB_UNIT_TESTS} title={unitTestTabTitle}>{this.getUnitTestsPane(view, userContext)}</Tab>
-                            <Tab id={UITab.TAB_DOMAIN_DICT} eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
+                        <Tabs className="top-tabs" activeKey={activeDevTabKey} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentDevTab(tab)}>
+                            <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title={testExpectationsTabTitle}>{this.getTestExpectations(view, userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_ACC_TESTS} title={accTestTabTitle}>{this.getAccTestsPane(view, userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_INT_TESTS} title={intTestTabTitle}>{this.getIntTestsPane(view, userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_UNIT_TESTS} title={unitTestTabTitle}>{this.getUnitTestsPane(view, userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
                         </Tabs>
                     </Col>
                 );

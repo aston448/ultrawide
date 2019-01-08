@@ -30,5 +30,22 @@ class TestIntegrationValidationApiClass{
 
         return TestIntegrationValidationServices.validateExportIntegrationTests(userRole, designComponent);
     };
+
+    validateExportUnitTests(userRole, userContext){
+
+        let designComponent = null;
+
+        if(userContext.designUpdateId === 'NONE'){
+
+            designComponent = DesignComponentData.getDesignComponentById(userContext.designComponentId);
+
+        } else {
+
+            designComponent = DesignUpdateComponentData.getUpdateComponentById(userContext.designComponentId);
+
+        }
+
+        return TestIntegrationValidationServices.validateExportUnitTests(userRole, designComponent);
+    };
 }
 export const TestIntegrationValidationApi = new TestIntegrationValidationApiClass();

@@ -143,6 +143,7 @@ class MashSelectedItemList extends Component {
                                 break;
                             case DisplayContext.MASH_UNIT_TESTS:
                                 panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                                menuVisible = true;
                                 break;
                         }
 

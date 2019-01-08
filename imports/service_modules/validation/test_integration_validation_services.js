@@ -16,7 +16,7 @@ class TestIntegrationValidationServicesClass{
     validateExportIntegrationTests(userRole, designComponent){
 
         // User must be Developer
-        if(userRole != RoleType.DEVELOPER){
+        if(userRole !== RoleType.DEVELOPER){
             return TestIntegrationValidationErrors.EXPORT_INT_INVALID_ROLE;
         }
 
@@ -26,8 +26,28 @@ class TestIntegrationValidationServicesClass{
         }
 
         // Component must be a Feature
-        if(designComponent.componentType != ComponentType.FEATURE){
+        if(designComponent.componentType !== ComponentType.FEATURE){
             return TestIntegrationValidationErrors.EXPORT_INT_NOT_FEATURE;
+        }
+
+        return Validation.VALID;
+    };
+
+    validateExportUnitTests(userRole, designComponent){
+
+        // User must be Developer
+        if(userRole !== RoleType.DEVELOPER){
+            return TestIntegrationValidationErrors.EXPORT_UNIT_INVALID_ROLE;
+        }
+
+        // Component must exist
+        if(!designComponent){
+            return TestIntegrationValidationErrors.EXPORT_UNIT_NO_COMPONENT;
+        }
+
+        // Component must be a Feature
+        if(designComponent.componentType !== ComponentType.FEATURE){
+            return TestIntegrationValidationErrors.EXPORT_UNIT_NOT_FEATURE;
         }
 
         return Validation.VALID;

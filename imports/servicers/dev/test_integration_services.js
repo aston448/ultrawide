@@ -5,6 +5,7 @@ import { WorkPackageServices }                      from '../../servicers/work/w
 import { TestIntegrationModules }                   from '../../service_modules/dev/test_integration_service_modules.js';
 import { TestSummaryServices }                      from '../summary/test_summary_services.js';
 import { ChimpMochaTestServices }                   from '../../service_modules/dev/test_processor_chimp_mocha.js';
+import { UltrawideMochaTestServices }               from '../../service_modules/dev/test_processor_ultrawide_mocha.js';
 
 import { TestRunner, LogLevel, TestType}            from '../../constants/constants.js';
 import {log}                                        from '../../common/utils.js';
@@ -198,6 +199,15 @@ class TestIntegrationServicesClass{
         }
     };
 
+    exportUnitTestFile(userContext, outputDir, testRunner){
+
+        // Add in other test generation here...
+        switch(testRunner){
+            case TestRunner.METEOR_MOCHA:
+                UltrawideMochaTestServices.generateFeatureUnitTestTemplate(userContext, outputDir);
+                break;
+        }
+    };
 
     //  // A Design Only step is moved into the Linked Steps area...
     // updateMovedDesignStep(mashDataItemId)  {

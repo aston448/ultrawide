@@ -234,7 +234,10 @@ export const TextEditorValidationErrors = {
 export const TestIntegrationValidationErrors = {
     EXPORT_INT_INVALID_ROLE:                            'Only a Developer may export integration tests',
     EXPORT_INT_NO_COMPONENT:                            'A component must be selected to export an integration test',
-    EXPORT_INT_NOT_FEATURE:                             'Only Features canbe exported as integration tests'
+    EXPORT_INT_NOT_FEATURE:                             'Only Features can be exported as integration tests',
+    EXPORT_UNIT_INVALID_ROLE:                           'Only a Developer may export unit tests',
+    EXPORT_UNIT_NO_COMPONENT:                           'A component must be selected to export an unit test',
+    EXPORT_UNIT_NOT_FEATURE:                            'Only Features can be exported as unit tests'
 };
 
 export const TestOutputLocationValidationErrors = {

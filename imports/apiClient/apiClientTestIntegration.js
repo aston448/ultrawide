@@ -71,6 +71,46 @@ class ClientTestIntegrationServicesClass {
         return {success: true, message: ''};
     };
 
+    // Developer chooses to export a unit test file from a WP Feature
+    exportUnitTestFile(userContext, userRole){
+
+        const outputDir = store.getState().intTestOutputDir;
+
+        // Client validation
+        let result = TestIntegrationValidationApi.validateExportUnitTests(userRole, userContext);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // TODO - Get Test Runner from user settings
+        // Real action call - server actions
+        ServerTestIntegrationApi.exportUnitTests(userContext, outputDir, userRole, TestRunner.METEOR_MOCHA, (err, result) => {
+
+            if (err) {
+                if(err.error === "FILE_EXISTS"){
+                    alert(err.reason);
+                } else {
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                }
+
+            } else {
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: TestIntegrationMessages.MSG_UNIT_TEST_EXPORTED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    };
 
     // NON-VALIDATED METHODS THAT CALL SERVER API ======================================================================
 

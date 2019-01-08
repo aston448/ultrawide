@@ -120,3 +120,31 @@ export const exportIntegrationTests = new ValidatedMethod({
         }
     }
 });
+
+export const exportUnitTests = new ValidatedMethod({
+
+    name: 'testIntegration.exportIntegexportUnitTestsrationTests',
+
+    validate: new SimpleSchema({
+        userContext:    {type: Object, blackbox: true},
+        outputDir:      {type: String},
+        userRole:       {type: String},
+        testRunner:     {type: String}
+    }).validator(),
+
+    run({userContext, outputDir, userRole, testRunner}){
+
+        const result = TestIntegrationValidationApi.validateExportUnitTests(userRole, userContext);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('textEditor.exportUnitTests.failValidation', result)
+        }
+
+        try {
+            TestIntegrationServices.exportUnitTestFile(userContext, outputDir, testRunner);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
