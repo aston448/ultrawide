@@ -7,10 +7,10 @@ import { DomainDictionaryVerifications } from '../../../test_framework/test_wrap
 
 import {DefaultComponentNames} from '../../../imports/constants/default_names.js';
 
-describe('UC 703 - Edit Domain Dictionary Term Definition', function(){
+describe('UC 124 - Remove Domain Dictionary Term', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 703 - Edit Domain Dictionary Term Definition');
+        TestFixtures.logTestSuite('UC 124 - Remove Domain Dictionary Term');
     });
 
     after(function(){
@@ -30,20 +30,21 @@ describe('UC 703 - Edit Domain Dictionary Term Definition', function(){
     });
 
 
-    // Actions
-    it('A Designer may edit the definition of a Domain Dictionary term', function(){
+    describe('Actions', function(){
 
-        // Setup
-        DomainDictionaryActions.designerAddsNewTerm();
-        DomainDictionaryActions.designerEditsTermNameFrom_To_(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME, 'Term1');
+        it('A Designer may remove a Domain Dictionary term', function(){
 
-        // Execute
-        DomainDictionaryActions.designerEditsTerm_DefinitionTo_('Term1', 'Term1 Definition');
+            // Setup
+            DomainDictionaryActions.designerAddsNewTerm();
+            DomainDictionaryActions.designerEditsTermNameFrom_To_(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME, 'Term1');
+            DomainDictionaryVerifications.termExistsForDesignerCalled('Term1');
 
-        // Verify
-        DomainDictionaryVerifications.termExistsForDesignerCalled('Term1');
-        DomainDictionaryVerifications.termDefinitionForTerm_ForDesignerIs('Term1', 'Term1 Definition');
+            // Execute
+            DomainDictionaryActions.designerRemovesTerm('Term1');
+
+            // Verify
+            DomainDictionaryVerifications.termDoesNotExistForDesignerCalled('Term1');
+        });
+
     });
-
-
 });

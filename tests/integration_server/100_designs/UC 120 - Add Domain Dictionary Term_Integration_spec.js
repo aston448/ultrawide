@@ -7,10 +7,10 @@ import { DomainDictionaryVerifications } from '../../../test_framework/test_wrap
 
 import {DefaultComponentNames} from '../../../imports/constants/default_names.js';
 
-describe('UC 704 - Remove Domain Dictionary Term', function(){
+describe('UC 120 - Add Domain Dictionary Term', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 704 - Remove Domain Dictionary Term');
+        TestFixtures.logTestSuite('UC 120 - Add Domain Dictionary Term');
     });
 
     after(function(){
@@ -30,20 +30,16 @@ describe('UC 704 - Remove Domain Dictionary Term', function(){
     });
 
 
-    // Actions
-    it('A Designer may remove a Domain Dictionary term', function(){
+    describe('Actions', function(){
 
-        // Setup
-        DomainDictionaryActions.designerAddsNewTerm();
-        DomainDictionaryActions.designerEditsTermNameFrom_To_(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME, 'Term1');
-        DomainDictionaryVerifications.termExistsForDesignerCalled('Term1');
+        it('A Designer can add a new term to the Domain Dictionary', function(){
 
-        // Execute
-        DomainDictionaryActions.designerRemovesTerm('Term1');
+            // Execute
+            DomainDictionaryActions.designerAddsNewTerm();
 
-        // Verify
-        DomainDictionaryVerifications.termDoesNotExistForDesignerCalled('Term1');
+            // Verify
+            DomainDictionaryVerifications.termExistsForDesignerCalled(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME);
+        });
+
     });
-
-
 });

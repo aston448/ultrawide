@@ -276,7 +276,7 @@ class UltrawideMochaTestServicesClass{
 
                                         const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectationValue.permutationValueId);
 
-                                        fileText += "\n            it('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                /// Replace this with test code\n            expect.fail(null, null, 'Test not implemented yet');\n            });\n\n";
+                                        fileText += "\n            it('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                // Replace this with test code\n                expect.fail(null, null, 'Test not implemented yet');\n            });\n\n";
                                     });
 
                                 });
