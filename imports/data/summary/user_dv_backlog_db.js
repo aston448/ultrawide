@@ -53,6 +53,7 @@ class UserDvBacklogDataClass {
                 wpId:                   backlogEntry.wpId,
                 backlogType:            backlogEntry.backlogType,
                 featureRefId:           backlogEntry.featureRefId,
+                featureName:            backlogEntry.featureName,
                 scenarioCount:          1,
                 scenarioTestCount:      backlogEntry.scenarioTestCount,
                 scenarioAnomalyCount:   backlogEntry.scenarioAnomalyCount,
@@ -77,7 +78,8 @@ class UserDvBacklogDataClass {
                 wpId:                   workContext.wpId,
                 backlogType:            backlogType,
                 summaryType:            workContext.summaryType
-            }
+            },
+            {$sort: {featureName: 1}}
         ).fetch();
     }
 

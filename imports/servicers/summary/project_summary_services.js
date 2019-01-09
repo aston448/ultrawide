@@ -437,29 +437,32 @@ class ProjectSummaryServicesClass {
         let completeCount = 0;
         let incompleteCount = 0;
 
-        if(scenarioData.totalTestExpectedCount === 0){
-            noExpectationsCount = 1;
-        }
+        if(scenarioData) {
 
-        // Complete if tests expected and all expected are passing
-        if((scenarioData.totalTestExpectedCount === scenarioData.totalTestPassCount) && scenarioData.totalTestExpectedCount > 0){
-            completeCount = 1;
-        } else {
-            // Incomplete if tests expected but not all passing
-            if(scenarioData.totalTestExpectedCount > 0) {
-                incompleteCount = 1;
+            if (scenarioData.totalTestExpectedCount === 0) {
+                noExpectationsCount = 1;
             }
+
+            // Complete if tests expected and all expected are passing
+            if ((scenarioData.totalTestExpectedCount === scenarioData.totalTestPassCount) && scenarioData.totalTestExpectedCount > 0) {
+                completeCount = 1;
+            } else {
+                // Incomplete if tests expected but not all passing
+                if (scenarioData.totalTestExpectedCount > 0) {
+                    incompleteCount = 1;
+                }
+            }
+
+            rowData.scenarioCount++;
+            rowData.noExpectationsCount += noExpectationsCount;
+            rowData.expectedTestCount += scenarioData.totalTestExpectedCount;
+            rowData.passingTestCount += scenarioData.totalTestPassCount;
+            rowData.failingTestCount += scenarioData.totalTestFailCount;
+            rowData.missingTestCount += scenarioData.totalTestMissingCount;
+            rowData.scenarioCompleteCount += completeCount;
+            rowData.scenarioIncompleteCount += incompleteCount;
+
         }
-
-        rowData.scenarioCount++;
-        rowData.noExpectationsCount += noExpectationsCount;
-        rowData.expectedTestCount += scenarioData.totalTestExpectedCount;
-        rowData.passingTestCount += scenarioData.totalTestPassCount;
-        rowData.failingTestCount += scenarioData.totalTestFailCount;
-        rowData.missingTestCount += scenarioData.totalTestMissingCount;
-        rowData.scenarioCompleteCount += completeCount;
-        rowData.scenarioIncompleteCount += incompleteCount;
-
 
         const workContext = {
             userId:                 userContext.userId,
@@ -482,6 +485,10 @@ class ProjectSummaryServicesClass {
     getBacklogData(workContext, scenarioData, scenarioAnomalyCount){
 
         let backlogData = [];
+
+        if(!scenarioData){
+            return backlogData;
+        }
 
         if(workContext.summaryType === SummaryType.SUMMARY_DV_UNASSIGNED) {
 
@@ -550,6 +557,8 @@ class ProjectSummaryServicesClass {
 
     getBacklogEntry(workContext, backlogType, featureRefId, scenarioTestCount, scenarioAnomalyCount){
 
+        const featureName = DesignComponentData.getDesignComponentByRef(workContext.dvId, featureRefId).componentNameNew;
+
         return {
             userId:                 workContext.userId,
             dvId:                   workContext.dvId,
@@ -559,6 +568,7 @@ class ProjectSummaryServicesClass {
             wpId:                   workContext.wpId,
             backlogType:            backlogType,
             featureRefId:           featureRefId,
+            featureName:            featureName,
             scenarioCount:          1,
             scenarioTestCount:      scenarioTestCount,
             scenarioAnomalyCount:   scenarioAnomalyCount,

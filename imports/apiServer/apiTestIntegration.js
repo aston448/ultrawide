@@ -66,14 +66,15 @@ class ServerTestIntegrationApiClass {
         );
     };
 
-    exportIntegrationTests(userContext, outputDir, userRole, testRunner, callback){
+    exportIntegrationTests(userContext, outputDir, userRole, testRunner, testType, callback){
 
         exportIntegrationTests.call(
             {
                 userContext:    userContext,
                 outputDir:      outputDir,
                 userRole:       userRole,
-                testRunner:     testRunner
+                testRunner:     testRunner,
+                testType:       testType
             },
             (err, result) => {
                 callback(err, result);

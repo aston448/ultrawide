@@ -13,6 +13,7 @@ let Schema = new SimpleSchema({
     wpId:                           {type: String, index: 1},
     backlogType:                    {type: String, index: 1},
     featureRefId:                   {type: String, index: 1},
+    featureName:                    {type: String},
     scenarioCount:                  {type: Number, defaultValue: 0},
     scenarioTestCount:              {type: Number, defaultValue: 0},
     scenarioAnomalyCount:           {type: Number, defaultValue: 0},

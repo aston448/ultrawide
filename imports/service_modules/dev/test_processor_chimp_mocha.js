@@ -108,7 +108,7 @@ class ChimpMochaTestServicesClass {
 
                             // Just one integration test, no permutations
 
-                            fileText += "        it('" + scenario.componentNameNew + "', function(){\n            // Add test code here\n        });\n\n";
+                            fileText += "        it('" + scenario.componentNameNew + "', function(){\n            // Replace this with test code\n            expect.fail(null, null, 'Test not implemented yet');\n        });\n\n";
 
                         } else {
 
@@ -138,7 +138,7 @@ class ChimpMochaTestServicesClass {
 
                                         const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectationValue.permutationValueId);
 
-                                        fileText += "\n            it('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                // Add test code here\n            });\n\n";
+                                        fileText += "\n            it('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                /// Replace this with test code\n            expect.fail(null, null, 'Test not implemented yet');\n            });\n\n";
                                     });
 
                                 });

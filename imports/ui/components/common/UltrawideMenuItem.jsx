@@ -151,8 +151,8 @@ export class UltrawideMenuItem extends Component {
                 menuItemToolTip = 'Edit Mode';
                 break;
             case 'Export':
-                menuGlyph = 'upload';
-                menuItemToolTip = 'Export';
+                menuGlyph = 'download-alt';
+                menuItemToolTip = 'Export test template file';
         }
 
         const tooltipIcon = (

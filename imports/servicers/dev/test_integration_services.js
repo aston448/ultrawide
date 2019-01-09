@@ -188,13 +188,13 @@ class TestIntegrationServicesClass{
         })
     }
 
-    // User generates a test file from a Design or Design Update Feature
-    exportIntegrationTestFile(userContext, outputDir, testRunner){
+    // User generates an integration or acceptance test file from a Design or Design Update Feature
+    exportIntegrationTestFile(userContext, outputDir, testRunner, testType){
 
         // Add in other test generation here...
         switch(testRunner){
             case TestRunner.CHIMP_MOCHA:
-                ChimpMochaTestServices.writeIntegrationTestFile(userContext, outputDir);
+                UltrawideMochaTestServices.generateTestTemplateFile(userContext, outputDir, testType);
                 break;
         }
     };

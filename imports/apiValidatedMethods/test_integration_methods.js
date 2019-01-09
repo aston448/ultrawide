@@ -101,10 +101,11 @@ export const exportIntegrationTests = new ValidatedMethod({
         userContext:    {type: Object, blackbox: true},
         outputDir:      {type: String},
         userRole:       {type: String},
-        testRunner:     {type: String}
+        testRunner:     {type: String},
+        testType:       {type: String}
     }).validator(),
 
-    run({userContext, outputDir, userRole, testRunner}){
+    run({userContext, outputDir, userRole, testRunner, testType}){
 
         const result = TestIntegrationValidationApi.validateExportIntegrationTests(userRole, userContext);
 
@@ -113,7 +114,7 @@ export const exportIntegrationTests = new ValidatedMethod({
         }
 
         try {
-            TestIntegrationServices.exportIntegrationTestFile(userContext, outputDir, testRunner);
+            TestIntegrationServices.exportIntegrationTestFile(userContext, outputDir, testRunner, testType);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.code, e.stack)
@@ -123,7 +124,7 @@ export const exportIntegrationTests = new ValidatedMethod({
 
 export const exportUnitTests = new ValidatedMethod({
 
-    name: 'testIntegration.exportIntegexportUnitTestsrationTests',
+    name: 'testIntegration.exportUnitTests',
 
     validate: new SimpleSchema({
         userContext:    {type: Object, blackbox: true},

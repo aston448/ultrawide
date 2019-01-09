@@ -11,7 +11,7 @@ import DesignComponentAdd               from '../../components/common/DesignComp
 import UltrawideMenuItem                from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
-import {ViewType, ViewMode, DetailsViewType, MenuType, LogLevel}  from '../../../constants/constants.js';
+import {ViewType, ViewMode, DetailsViewType, MenuType, TestType, LogLevel}  from '../../../constants/constants.js';
 import {AddActionIds}                                   from "../../../constants/ui_context_ids.js";
 import {log, getContextID} from "../../../common/utils";
 
@@ -42,8 +42,8 @@ export class DetailsViewFooter extends Component {
         return false
     }
 
-    onExportIntTests(){
-        ClientTestIntegrationServices.exportIntegrationTestFile(this.props.userContext, this.props.userRole);
+    onExportIntTests(testType){
+        ClientTestIntegrationServices.exportIntegrationTestFile(this.props.userContext, this.props.userRole, testType);
     }
 
     onExportUnitTests(){
@@ -66,27 +66,34 @@ export class DetailsViewFooter extends Component {
 
         let menuOptions = '';
 
-        const exportIntOption =
-            <UltrawideMenuItem
-                menuType={MenuType.MENU_EDITOR}
-                itemName="Export"
-                actionFunction={ () => this.onExportIntTests()}
-            />;
-
-        const exportUnitOption =
-            <UltrawideMenuItem
-                menuType={MenuType.MENU_EDITOR}
-                itemName="Export"
-                actionFunction={ () => this.onExportUnitTests()}
-            />;
-
         // Which menu options should be visible
         switch(detailsType){
-            case DetailsViewType.VIEW_INT_TESTS:
+
+            case DetailsViewType.VIEW_ACC_TESTS:
                 if(actionsVisible){
                     menuOptions =
                         <div>
-                            {exportIntOption}
+                            <UltrawideMenuItem
+                                menuType={MenuType.MENU_EDITOR}
+                                itemName="Export"
+                                actionFunction={ () => this.onExportIntTests(TestType.ACCEPTANCE)}
+                            />
+                        </div>;
+                } else {
+                    footerClass = 'details-editor-footer';
+                }
+                break;
+
+            case DetailsViewType.VIEW_INT_TESTS:
+
+                if(actionsVisible){
+                    menuOptions =
+                        <div>
+                            <UltrawideMenuItem
+                                menuType={MenuType.MENU_EDITOR}
+                                itemName="Export"
+                                actionFunction={ () => this.onExportIntTests(TestType.INTEGRATION)}
+                            />
                         </div>;
                 } else {
                     footerClass = 'details-editor-footer';
@@ -97,7 +104,11 @@ export class DetailsViewFooter extends Component {
                 if(actionsVisible){
                     menuOptions =
                         <div>
-                            {exportUnitOption}
+                            <UltrawideMenuItem
+                                menuType={MenuType.MENU_EDITOR}
+                                itemName="Export"
+                                actionFunction={ () => this.onExportUnitTests()}
+                            />
                         </div>;
                 } else {
                     footerClass = 'details-editor-footer';

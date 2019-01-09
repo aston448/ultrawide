@@ -133,16 +133,17 @@ class MashSelectedItemList extends Component {
                         switch (displayContext) {
                             case DisplayContext.MASH_ACC_TESTS:
                                 panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                                // Allow feature export to int test file
+                                // Allow feature export to test file
                                 menuVisible = true;
                                 break;
                             case DisplayContext.MASH_INT_TESTS:
                                 panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                                // Allow feature export to int test file
+                                // Allow feature export to test file
                                 menuVisible = true;
                                 break;
                             case DisplayContext.MASH_UNIT_TESTS:
                                 panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                                // Allow feature export to test file
                                 menuVisible = true;
                                 break;
                         }
