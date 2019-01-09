@@ -4,8 +4,8 @@ import { DesignActions }                from '../../../test_framework/test_wrapp
 import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
 import { DesignVersionVerifications }   from '../../../test_framework/test_wrappers/design_version_verifications.js';
 
-import { DesignVersionStatus } from '../../../imports/constants/constants.js'
-import {DefaultItemNames} from '../../../imports/constants/default_names.js';
+import { DesignVersionStatus }          from '../../../imports/constants/constants.js'
+import {DefaultItemNames}               from '../../../imports/constants/default_names.js';
 
 describe('UC 105 - Withdraw Design Version', function(){
 
@@ -23,7 +23,6 @@ describe('UC 105 - Withdraw Design Version', function(){
 
         // Add  Design - Design1: will create default Design Version
         DesignActions.designerAddsNewDesignCalled('Design1');
-
     });
 
     afterEach(function(){
@@ -31,20 +30,21 @@ describe('UC 105 - Withdraw Design Version', function(){
     });
 
 
-    // Actions
-    it('A Designer can revert a Design Version from Draft published to New', function() {
+    describe('Actions', function(){
 
-        // Setup
-        DesignActions.designerSelectsDesign('Design1');
-        DesignVersionActions.designerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
-        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
+        it('A Designer can revert a Design Version from Published to New', function(){
 
-        // Execute
-        DesignVersionActions.designerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+            // Setup
+            DesignActions.designerSelectsDesign('Design1');
+            DesignVersionActions.designerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+            expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
 
-        // Validate - NEW again
-        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
+            // Execute
+            DesignVersionActions.designerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+
+            // Validate - NEW again
+            expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
+        });
 
     });
-
 });

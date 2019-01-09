@@ -73,6 +73,10 @@ class DesignVersionVerificationsClass {
         server.call('verifyDesignVersions.currentDesignVersionNameIs', name, 'miles');
     }
 
+    currentDesignVersionNameForGuestIs(name){
+        server.call('verifyDesignVersions.currentDesignVersionNameIs', name, 'wilma');
+    }
+
     currentDesignVersionNumberForDesignerIs(number){
         server.call('verifyDesignVersions.currentDesignVersionNumberIs', number, 'gloria');
     }
@@ -83,6 +87,10 @@ class DesignVersionVerificationsClass {
 
     currentDesignVersionNumberForManagerIs(number){
         server.call('verifyDesignVersions.currentDesignVersionNumberIs', number, 'miles');
+    }
+
+    currentDesignVersionNumberForGuestIs(number){
+        server.call('verifyDesignVersions.currentDesignVersionNumberIs', number, 'wilma');
     }
 
 }

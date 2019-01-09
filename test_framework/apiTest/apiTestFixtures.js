@@ -109,6 +109,7 @@ Meteor.methods({
             let developerUserId = '';
             let anotherDeveloperUserId = '';
             let managerUserId = '';
+            let guestUserId = '';
 
             // Only need to recreate meteor accounts after reset
 
@@ -248,6 +249,29 @@ Meteor.methods({
                 isManager: true
             });
 
+            // Guest -------------------------------------------------------------------------------------------------
+            const guestUser = Accounts.findUserByUsername('wilma');
+            if(!guestUser) {
+
+                guestUserId = Accounts.createUser(
+                    {
+                        username: 'wilma',
+                        password: 'wilma123'
+                    }
+                );
+            } else {
+                guestUserId = guestUser._id;
+
+                // Reset to default password
+                Accounts.setPassword(guestUserId, 'wilma123')
+            }
+
+            UserRoles.insert({
+                userId: guestUserId,
+                userName: 'wilma',
+                displayName: 'Wilma Cargo',
+                isGuestViewer: true
+            });
 
             // Start new users with default context
             UserContext.insert({
@@ -266,6 +290,9 @@ Meteor.methods({
                 userId: managerUserId
             });
 
+            UserContext.insert({
+                userId: guestUserId
+            });
 
             // And default view options
             UserCurrentViewOptions.insert({
@@ -285,6 +312,11 @@ Meteor.methods({
             // And default view options
             UserCurrentViewOptions.insert({
                 userId: managerUserId
+            });
+
+            // And default view options
+            UserCurrentViewOptions.insert({
+                userId: guestUserId
             });
 
         }

@@ -60,6 +60,6 @@
     "enzyme-redux": "^0.1.7",
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^15.6.2",
-    "ultrawide-mocha-reporter": "^1.0.7"
+    "ultrawide-mocha-reporter": "^1.0.8"
   }
 }

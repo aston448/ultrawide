@@ -22,6 +22,10 @@ class DesignVersionActionsClass{
         server.call('testDesignVersions.selectDesignVersion', versionName, 'miles');
     }
 
+    guestSelectsDesignVersion(versionName){
+        server.call('testDesignVersions.selectDesignVersion', versionName, 'wilma');
+    }
+
     // Set Name
     designerUpdatesDesignVersionNameFrom_To_(oldName, newName, expectation){
         server.call('testDesignVersions.selectDesignVersion', oldName, 'gloria', expectation);
@@ -40,6 +44,10 @@ class DesignVersionActionsClass{
         server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    guestUpdatesDesignVersionNameTo(newName, expectation){
+        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.GUEST_VIEWER, 'wilma', expectation);
+    }
+
     // Set Number
     designerUpdatesDesignVersionNumberTo(newNumber, expectation){
         server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.DESIGNER, 'gloria', expectation);
@@ -51,6 +59,10 @@ class DesignVersionActionsClass{
 
     managerUpdatesDesignVersionNumberTo(newNumber, expectation){
         server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.MANAGER, 'miles', expectation);
+    }
+
+    guestUpdatesDesignVersionNumberTo(newNumber, expectation){
+        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.GUEST_VIEWER, 'wilma', expectation);
     }
 
     // Publish

@@ -26,6 +26,10 @@ class DesignActionsClass {
         server.call('testDesigns.selectDesign', designName, 'miles', expectation);
     }
 
+    guestSelectsDesign(designName, expectation){
+        server.call('testDesigns.selectDesign', designName, 'wilma', expectation);
+    }
+
     designerRemovesDesign(designName, expectation){
         server.call('testDesigns.removeDesign', designName, RoleType.DESIGNER, 'gloria', expectation);
     }

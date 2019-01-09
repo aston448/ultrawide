@@ -132,6 +132,8 @@ class TestDataHelpersClass {
                 return RoleType.DEVELOPER;
             case 'miles':
                 return RoleType.MANAGER;
+            case 'wilma':
+                return RoleType.GUEST_VIEWER;
         }
     }
 
