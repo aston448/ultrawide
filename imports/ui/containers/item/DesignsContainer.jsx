@@ -68,13 +68,13 @@ export class DesignsList extends Component {
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Designs');
 
         let hasFooterAction = false;
-        let footerActionFunction = null;
+        let footerActionFunctionFn = null;
         let bodyDataFunction = null;
 
         // Designs only addable by a Designer
         if(userRole === RoleType.DESIGNER){
             hasFooterAction = true;
-            footerActionFunction = () => this.addNewDesign(userRole)
+            footerActionFunctionFn = () => this.addNewDesign(userRole)
         }
 
         if(designs && designs.length > 0) {
@@ -91,7 +91,7 @@ export class DesignsList extends Component {
                     hasFooterAction={hasFooterAction}
                     footerAction={'Add Design'}
                     footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_DESIGN}
-                    footerActionFunction={footerActionFunction}
+                    footerActionFunction={footerActionFunctionFn}
                     listType={ItemListType.ULTRAWIDE_ITEM}
                 />
             </div>

@@ -78,13 +78,20 @@ export default class UltrawideAction  extends Component{
 
             case UI.OPTION_REMOVE:
 
-                if(isDeleted){
-                    tooltipText = 'Undo Delete';
-                    actionGlyph = 'arrow-left';
-                } else {
-                    tooltipText = 'Delete';
-                    actionGlyph = 'remove';
+                tooltipText = 'Delete';
+                actionGlyph = 'remove';
+
+                actionClass = 'red';
+                if(this.state.isSelectable){
+                    actionClass = 'red-selectable';
                 }
+
+                break;
+
+            case UI.OPTION_RESTORE:
+
+                tooltipText = 'Undo Delete';
+                actionGlyph = 'arrow-left';
 
                 actionClass = 'red';
                 if(this.state.isSelectable){
@@ -157,8 +164,7 @@ export default class UltrawideAction  extends Component{
 UltrawideAction.propTypes = {
     actionType: PropTypes.string.isRequired,
     uiContextName: PropTypes.string.isRequired,
-    actionFunction: PropTypes.func,
-    isDeleted: PropTypes.bool
+    actionFunction: PropTypes.func
 };
 
 

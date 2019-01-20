@@ -936,7 +936,7 @@ export class DesignComponentHeader extends Component{
 
 
         let editAction =
-            <InputGroup.Addon>
+            <InputGroup.Addon id={getContextID(UI.OPTION_EDIT, uiContextName)}>
                 <UltrawideAction
                     actionType={UI.OPTION_EDIT}
                     uiContextName={uiContextName}
@@ -944,21 +944,33 @@ export class DesignComponentHeader extends Component{
                 />
             </InputGroup.Addon>;
 
-        // TODO Removal - Show Modal for non-logical deletes if user has this setting enabled.
 
-        let deleteAction =
-            <InputGroup.Addon>
-                <UltrawideAction
-                    actionType={UI.OPTION_REMOVE}
-                    uiContextName={uiContextName}
-                    actionFunction={() => this.deleteRestoreComponent(view, mode, currentItem, userContext)}
-                    isDeleted={isDeleted}
-                />
-            </InputGroup.Addon>;
+        let deleteRestoreAction = '';
 
+        if(isDeleted){
+            deleteRestoreAction =
+                <InputGroup.Addon id={getContextID(UI.OPTION_RESTORE, uiContextName)}>
+                    <UltrawideAction
+                        actionType={UI.OPTION_RESTORE}
+                        uiContextName={uiContextName}
+                        actionFunction={() => this.deleteRestoreComponent(view, mode, currentItem, userContext)}
+                        isDeleted={isDeleted}
+                    />
+                </InputGroup.Addon>;
+        } else {
+            deleteRestoreAction =
+                <InputGroup.Addon id={getContextID(UI.OPTION_REMOVE, uiContextName)}>
+                    <UltrawideAction
+                        actionType={UI.OPTION_REMOVE}
+                        uiContextName={uiContextName}
+                        actionFunction={() => this.deleteRestoreComponent(view, mode, currentItem, userContext)}
+                        isDeleted={isDeleted}
+                    />
+                </InputGroup.Addon>;
+        }
 
         let moveAction =
-            <InputGroup.Addon>
+            <InputGroup.Addon id={getContextID(UI.OPTION_MOVE, uiContextName)}>
                 <UltrawideAction
                     actionType={UI.OPTION_MOVE}
                     uiContextName={uiContextName}
@@ -983,7 +995,7 @@ export class DesignComponentHeader extends Component{
         }
 
         let saveAction =
-            <InputGroup.Addon>
+            <InputGroup.Addon id={getContextID(UI.OPTION_SAVE, uiContextName)}>
                 <UltrawideAction
                     actionType={UI.OPTION_SAVE}
                     uiContextName={uiContextName}
@@ -992,7 +1004,7 @@ export class DesignComponentHeader extends Component{
             </InputGroup.Addon>;
 
         let undoAction =
-            <InputGroup.Addon id="actionUndo">
+            <InputGroup.Addon id={getContextID(UI.OPTION_UNDO, uiContextName)}>
                 <UltrawideAction
                     actionType={UI.OPTION_UNDO}
                     uiContextName={uiContextName}
@@ -1096,7 +1108,7 @@ export class DesignComponentHeader extends Component{
                         {indent}
                         {readOnlyEditor}
                         {editAction}
-                        {deleteAction}
+                        {deleteRestoreAction}
                         {moveAction}
                     </InputGroup>
                 </div>
@@ -1109,7 +1121,7 @@ export class DesignComponentHeader extends Component{
                             {indent}
                             {readOnlyEditor}
                             {editAction}
-                            {deleteAction}
+                            {deleteRestoreAction}
                             {draggableMoveAction}
                         </InputGroup>
                     </div>
@@ -1125,7 +1137,7 @@ export class DesignComponentHeader extends Component{
                         {indent}
                         {readOnlyEditor}
                         {editAction}
-                        {deleteAction}
+                        {deleteRestoreAction}
                         {moveAction}
                         {hiddenIcon}
                         {updateStatus}
@@ -1141,7 +1153,7 @@ export class DesignComponentHeader extends Component{
                             {indent}
                             {readOnlyEditor}
                             {editAction}
-                            {deleteAction}
+                            {deleteRestoreAction}
                             {draggableMoveAction}
                             {hiddenIcon}
                             {updateStatus}
@@ -1158,7 +1170,7 @@ export class DesignComponentHeader extends Component{
                     {indent}
                     {readOnlyEditor}
                     {editAction}
-                    {deleteAction}
+                    {deleteRestoreAction}
                     {hiddenIcon}
                 </InputGroup>
             </div>;
@@ -1170,7 +1182,7 @@ export class DesignComponentHeader extends Component{
                     {indent}
                     {readOnlyEditor}
                     {editAction}
-                    {deleteAction}
+                    {deleteRestoreAction}
                     {hiddenIcon}
                     {hiddenIcon}
                     {updateStatus}

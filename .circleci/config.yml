@@ -30,8 +30,8 @@ jobs:
 #          command: meteor npm install --save bcrypt
 
       - run:
-          name: install-chimp
-          command: sudo npm install -g chimp
+          name: install-chimpy
+          command: sudo npm install -g chimpy
 
       - run:
           name: install-selenium

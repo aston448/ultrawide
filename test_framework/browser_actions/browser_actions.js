@@ -66,6 +66,7 @@ class BrowserActionsClass{
         browser.setValue('#loginUserName', userName);
         browser.setValue('#loginPassword', password);
 
+
         browser.click('#loginSubmit');
 
     }

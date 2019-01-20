@@ -69,6 +69,7 @@ export const UI = {
     OPTION_SAVE:                        'opt-save-',
     OPTION_UNDO:                        'opt-undo-',
     OPTION_REMOVE:                      'opt-remove-',
+    OPTION_RESTORE:                     'opt-restore-',
     OPTION_MOVE:                        'opt-move-',
     OPTION_RESET:                       'opt-reset-',
     OPTION_TOGGLE_ACTIVE:               'opt-toggle-active-',
