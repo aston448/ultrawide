@@ -1,17 +1,16 @@
-
 import { Mongo } from 'meteor/mongo';
 
-export const UserMashScenarioTests = new Mongo.Collection('userMashScenarioTests');
+export const UserTestExpectationResults = new Mongo.Collection('userTestExpectationResults');
 
 let Schema = new SimpleSchema({
     // Identity
-    userId:                     {type: String, index: 1},                         // Meteor user id
-    designVersionId:            {type: String, index: 1},                         // Current design version
-    designScenarioReferenceId:  {type: String, defaultValue: 'NONE', index: 1},   // Reference to matching scenario in design (if any)
-    designAspectReferenceId:    {type: String, defaultValue: 'NONE'},   // Reference to parent Feature Aspect in design (if any)
-    designFeatureReferenceId:   {type: String, defaultValue: 'NONE'},   // Reference to parent Feature in design (if any)
-    testType:                   {type: String},                         // Type of test this result relates to
+    userId:                     {type: String, index: 1},               // Meteor user id
+    designVersionId:            {type: String, index: 1},               // Current design version
+    designScenarioReferenceId:  {type: String, index: 1},               // Reference to matching scenario in design
+    scenarioTestExpectationId:  {type: String, index: 1},               // Test Expectation - for test type amd permutation
+    testType:                   {type: String},
     // Data
+    permValue:                  {type: String},
     suiteName:                  {type: String},                         // Feature or Module
     groupName:                  {type: String, optional: true},         // Scenario or Group
     testName:                   {type: String},                         // Scenario or Test
@@ -24,12 +23,12 @@ let Schema = new SimpleSchema({
     testDuration:               {type: Number, optional: true},         // Duration if test run successfully
 });
 
-UserMashScenarioTests.attachSchema(Schema);
+UserTestExpectationResults.attachSchema(Schema);
 
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userMashScenarioTests', function userMashScenarioTestsPublication(userId){
-        return UserMashScenarioTests.find({userId: userId});
-    })
+    Meteor.publish('userTestExpectationResults', function userTestExpectationResultsPublication(userId, designVersionId){
+        return UserTestExpectationResults.find({userId: userId, designVersionId: designVersionId});
+    });
 }

@@ -246,12 +246,7 @@ class ClientTestIntegrationServicesClass {
                     messageText: 'Test data and results loaded'
                 }));
 
-                // After tests are updated work progress should be too
-
-                log((msg) => console.log(msg), LogLevel.PERF, "REFRESH PROGRESS DATA...");
-
-                ClientWorkItemServices.refreshWorkProgressData(userContext, false, currentView);
-
+                store.dispatch(setCurrentView(currentView));
             }
         });
 

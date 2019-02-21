@@ -76,13 +76,13 @@ class ScenarioTestSummary extends Component {
 
             let accResultClass = 'test-summary-result result-expected';
 
-            if (testSummaryData.accTestPassCount > 0 || testSummaryData.accTestFailCount > 0) {
+            if (testSummaryData.totalAccPassing > 0 || testSummaryData.totalAccFailing > 0) {
 
-                if (testSummaryData.accTestFailCount > 0) {
+                if (testSummaryData.totalAccFailing > 0) {
                     accResultClass = 'test-summary-result result-fail';
                     accExpectationClass = 'test-fail';
                 } else {
-                    if(testSummaryData.accTestPassCount === testSummaryData.accTestExpectedCount) {
+                    if(testSummaryData.totalAccPassing === testSummaryData.totalAccExpectations) {
                         accResultClass = 'test-summary-result result-pass';
                         accExpectationClass = 'test-pass';
                     } else {
@@ -94,13 +94,13 @@ class ScenarioTestSummary extends Component {
 
             let intResultClass = 'test-summary-result result-expected';
 
-            if (testSummaryData.intTestPassCount > 0 || testSummaryData.intTestFailCount > 0) {
+            if (testSummaryData.totalIntPassing > 0 || testSummaryData.totalIntFailing > 0) {
 
-                if (testSummaryData.intTestFailCount > 0) {
+                if (testSummaryData.totalIntFailing > 0) {
                     intResultClass = 'test-summary-result result-fail';
                     intExpectationClass = 'test-fail';
                 } else {
-                    if(testSummaryData.intTestPassCount === testSummaryData.intTestExpectedCount) {
+                    if(testSummaryData.totalIntPassing === testSummaryData.totalIntExpectations) {
                         intResultClass = 'test-summary-result result-pass';
                         intExpectationClass = 'test-pass';
                     } else {
@@ -112,13 +112,13 @@ class ScenarioTestSummary extends Component {
 
             let unitResultClass = 'test-summary-result result-expected';
 
-            if (testSummaryData.unitTestPassCount > 0 || testSummaryData.unitTestFailCount > 0) {
+            if (testSummaryData.totalUnitPassing > 0 || testSummaryData.totalUnitFailing > 0) {
 
-                if (testSummaryData.unitTestFailCount > 0) {
+                if (testSummaryData.totalUnitFailing > 0) {
                     unitResultClass = 'test-summary-result result-fail';
                     unitExpectationClass = 'test-fail';
                 } else {
-                    if(testSummaryData.unitTestPassCount === testSummaryData.unitTestExpectedCount) {
+                    if(testSummaryData.totalUnitPassing === testSummaryData.totalUnitExpectations) {
                         unitResultClass = 'test-summary-result result-pass';
                         unitExpectationClass = 'test-pass';
                     } else {
@@ -136,10 +136,10 @@ class ScenarioTestSummary extends Component {
                                testType={'Acc'}
                                statusClass={accResultClass}
                                expectationClass={accExpectationClass}
-                               expectedTestCount={testSummaryData.accTestExpectedCount}
-                               passingTestCount={testSummaryData.accTestPassCount}
-                               failingTestCount={testSummaryData.accTestFailCount}
-                               missingTestCount={testSummaryData.accTestMissingCount}
+                               expectedTestCount={testSummaryData.totalAccExpectations}
+                               passingTestCount={testSummaryData.totalAccPassing}
+                               failingTestCount={testSummaryData.totalAccFailing}
+                               missingTestCount={testSummaryData.totalAccMissing}
                            />
                         </Col>
                         <Col md={4} className="close-col">
@@ -147,10 +147,10 @@ class ScenarioTestSummary extends Component {
                                 testType={'Int'}
                                 statusClass={intResultClass}
                                 expectationClass={intExpectationClass}
-                                expectedTestCount={testSummaryData.intTestExpectedCount}
-                                passingTestCount={testSummaryData.intTestPassCount}
-                                failingTestCount={testSummaryData.intTestFailCount}
-                                missingTestCount={testSummaryData.intTestMissingCount}
+                                expectedTestCount={testSummaryData.totalIntExpectations}
+                                passingTestCount={testSummaryData.totalIntPassing}
+                                failingTestCount={testSummaryData.totalIntFailing}
+                                missingTestCount={testSummaryData.totalIntMissing}
                             />
                         </Col>
                         <Col md={4} className="close-col">
@@ -158,10 +158,10 @@ class ScenarioTestSummary extends Component {
                                 testType={'Unit'}
                                 statusClass={unitResultClass}
                                 expectationClass={unitExpectationClass}
-                                expectedTestCount={testSummaryData.unitTestExpectedCount}
-                                passingTestCount={testSummaryData.unitTestPassCount}
-                                failingTestCount={testSummaryData.unitTestFailCount}
-                                missingTestCount={testSummaryData.unitTestMissingCount}
+                                expectedTestCount={testSummaryData.totalUnitExpectations}
+                                passingTestCount={testSummaryData.totalUnitPassing}
+                                failingTestCount={testSummaryData.totalUnitFailing}
+                                missingTestCount={testSummaryData.totalUnitMissing}
                             />
                         </Col>
                     </Row>

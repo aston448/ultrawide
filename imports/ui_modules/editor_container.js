@@ -488,6 +488,42 @@ class EditorContainerUiModulesClass{
 
     }
 
+    getTestResults(view, userContext){
+
+        const displayContext = DisplayContext.TEST_RESULTS;
+
+        let childComponentType = 'NONE';
+
+        if (userContext.designComponentType !== 'NONE') {
+            switch (userContext.designComponentType) {
+                case ComponentType.FEATURE:
+                    childComponentType = ComponentType.FEATURE_ASPECT;
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                    childComponentType = ComponentType.SCENARIO;
+                    break;
+                case ComponentType.SCENARIO:
+                    childComponentType = ComponentType.TEST_EXPECTATION;
+                    break;
+            }
+        }
+
+        return (
+            <div id="testExpectationsPane">
+                <TestExpectationSelectedItemContainer
+                    params={{
+                        childComponentType: childComponentType,
+                        designItemId: 'NONE',
+                        userContext: userContext,
+                        view: view,
+                        displayContext: displayContext
+                    }}
+                />
+            </div>
+        )
+
+    }
+
     getAccTestsPane(view, userContext){
 
         let accTests = '';
@@ -1035,12 +1071,8 @@ class EditorContainerUiModulesClass{
                 return <TabTitle tabText={'Details'} glyphIconName={'list-alt'} badgeClass={'tab-badge tab-details' + tabBadgeFormat}/>;
             case EditorTab.TAB_TEST_EXPECTATIONS:
                 return <TabTitle tabText={'Expectations'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
-            case EditorTab.TAB_ACC_TESTS:
-                return <TabTitle tabText={'Acceptance'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
-            case EditorTab.TAB_INT_TESTS:
-                return <TabTitle tabText={'Integration'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
-            case EditorTab.TAB_UNIT_TESTS:
-                return <TabTitle tabText={'Unit'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
+            case EditorTab.TAB_TEST_RESULTS:
+                return <TabTitle tabText={'Results'} glyphIconName={'check'} badgeClass={'tab-badge tab-test' + tabBadgeFormat}/>;
             case EditorTab.TAB_ANOMALIES:
                 return <TabTitle tabText={'Anomalies'} glyphIconName={'warning-sign'} badgeClass={'tab-badge tab-problems' + tabBadgeFormat}/>;
             case EditorTab.TAB_DOMAIN_DICT:
@@ -1065,9 +1097,7 @@ class EditorContainerUiModulesClass{
 
         const detailsTabTitle = this.getTabTitle(view, EditorTab.TAB_DETAILS);
         const testExpectationsTabTitle = this.getTabTitle(view, EditorTab.TAB_TEST_EXPECTATIONS);
-        const accTestTabTitle = this.getTabTitle(view, EditorTab.TAB_ACC_TESTS);
-        const intTestTabTitle = this.getTabTitle(view, EditorTab.TAB_INT_TESTS);
-        const unitTestTabTitle = this.getTabTitle(view, EditorTab.TAB_UNIT_TESTS);
+        const testResultsTabTitle = this.getTabTitle(view, EditorTab.TAB_TEST_RESULTS);
         const anomaliesTabTitle = this.getTabTitle(view, EditorTab.TAB_ANOMALIES);
         const dictionaryTabTitle = this.getTabTitle(view, EditorTab.TAB_DOMAIN_DICT);
         const findTabTitle = this.getTabTitle(view, EditorTab.TAB_SCENARIO_SEARCH);
@@ -1100,9 +1130,7 @@ class EditorContainerUiModulesClass{
                                 <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title={testExpectationsTabTitle}>{this.getTestExpectations(view, userContext)}</Tab>
-                                <Tab eventKey={EditorTab.TAB_ACC_TESTS} title={accTestTabTitle}>{this.getAccTestsPane(view, userContext)}</Tab>
-                                <Tab eventKey={EditorTab.TAB_INT_TESTS} title={intTestTabTitle}>{this.getIntTestsPane(view, userContext)}</Tab>
-                                <Tab eventKey={EditorTab.TAB_UNIT_TESTS} title={unitTestTabTitle}>{this.getUnitTestsPane(view, userContext)}</Tab>
+                                <Tab eventKey={EditorTab.TAB_TEST_RESULTS} title={testResultsTabTitle}>{this.getTestResults(view, userContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>{this.getDomainDictionary(userContext)}</Tab>
                                 <Tab eventKey={EditorTab.TAB_SCENARIO_SEARCH} title={findTabTitle}>{this.getScenarioFinder(DisplayContext.BASE_VIEW)}</Tab>
                             </Tabs>
@@ -1150,9 +1178,7 @@ class EditorContainerUiModulesClass{
                             <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
                             <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
                             <Tab eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title={testExpectationsTabTitle}>{this.getTestExpectations(view, userContext)}</Tab>
-                            <Tab eventKey={EditorTab.TAB_ACC_TESTS} title={accTestTabTitle}>{this.getAccTestsPane(view, userContext)}</Tab>
-                            <Tab eventKey={EditorTab.TAB_INT_TESTS} title={intTestTabTitle}>{this.getIntTestsPane(view, userContext)}</Tab>
-                            <Tab eventKey={EditorTab.TAB_UNIT_TESTS} title={unitTestTabTitle}>{this.getUnitTestsPane(view, userContext)}</Tab>
+                            <Tab eventKey={EditorTab.TAB_TEST_RESULTS} title={testResultsTabTitle}>{this.getTestResults(view, userContext)}</Tab>
                             <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
                         </Tabs>
                     </Col>
@@ -2092,6 +2118,8 @@ class EditorContainerUiModulesClass{
     }
 
     getLayout(view, mode, userRole, viewOptions, colWidths, editors, userContext){
+
+        // TODO - Change to one test results view option
 
         let layout = '';
         let col1 = '';

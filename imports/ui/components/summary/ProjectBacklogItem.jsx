@@ -7,19 +7,19 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
+import BacklogFeatureContainer      from '../../containers/item/BacklogFeatureContainer';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
 import {TextLookups} from '../../../common/lookups.js';
-import { DisplayContext, LogLevel } from '../../../constants/constants.js';
+import { DisplayContext, BacklogType, WorkItemType, LogLevel } from '../../../constants/constants.js';
 
 // Bootstrap
-import {InputGroup, Grid, Row, Col}                 from 'react-bootstrap';
-import {Glyphicon}                  from 'react-bootstrap';
+import {Badge, Grid, Row, Col}                 from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {SummaryType} from "../../../constants/constants";
+
 
 // React DnD
 
@@ -58,25 +58,14 @@ export class ProjectBacklogItem extends Component{
     }
 
     render(){
-        const {displayContext, summaryType, totalFeatureCount, featureCount, scenarioCount, testCount, currentBacklogItem} = this.props;
+        const {backlogType, workItemType, backlogFeatures, scenarioCount, backlogItemTotal, currentBacklogItem} = this.props;
 
         //console.log('Context: ' + displayContext + ' features: ' + featureCount);
+        const featureCount = backlogFeatures.size;
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Render Backlog Item in context {} with {} features', displayContext, featureCount);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Backlog Item in context {} with {} features', backlogType, featureCount);
 
-        let backlogTitle = TextLookups.displayContext(displayContext);
-
-        // Clarify that Feature anomalies are only visible for the whole DV selection
-        if(displayContext === DisplayContext.DV_BACKLOG_ANOMALY){
-
-            if(summaryType === SummaryType.SUMMARY_DV){
-
-                backlogTitle = backlogTitle + ' (All Anomalies)'
-            } else {
-
-                backlogTitle = backlogTitle + ' (Scenario Anomalies)'
-            }
-        }
+        let backlogTitle = TextLookups.backlogType(backlogType);
 
         let backlogDetails = '';
 
@@ -85,7 +74,7 @@ export class ProjectBacklogItem extends Component{
         let badClass = 'project-summary-bad';
         let okClass = 'project-summary-ok';
 
-        if(displayContext === currentBacklogItem){
+        if(backlogType === currentBacklogItem){
             itemClass = 'project-summary-item-active '
 
         } else {
@@ -98,11 +87,11 @@ export class ProjectBacklogItem extends Component{
         }
 
 
-        switch(displayContext){
+        switch(backlogType){
 
-            case DisplayContext.DV_BACKLOG_DESIGN:
+            case BacklogType.BACKLOG_DESIGN:
 
-                if(summaryType === SummaryType.SUMMARY_DV) {
+                if(workItemType === WorkItemType.DESIGN_VERSION) {
 
                     if (featureCount === 0) {
                         backlogDetails = 'No backlog';
@@ -123,24 +112,45 @@ export class ProjectBacklogItem extends Component{
                 }
                 break;
 
-            case DisplayContext.DV_BACKLOG_ANOMALY:
+            case BacklogType.BACKLOG_SCENARIO_ANOMALY:
 
-                // Here the scenario count contains total anomalies
-                if(scenarioCount === 0){
+                if(featureCount === 0){
                     backlogDetails = 'No backlog';
                     itemClass = itemClass + goodClass;
                 } else {
-                    if(scenarioCount === 1){
-                        backlogDetails = 'There is one Design Anomaly in the current selection.';
+                    if(featureCount === 1){
+                        backlogDetails = 'One Feature has Scenario Design Anomalies.';
                         itemClass = itemClass + badClass;
                     } else {
-                        backlogDetails = 'There are ' + scenarioCount + ' Design Anomalies in the current selection.';
+                        backlogDetails = 'There are ' + featureCount + ' Features with Scenario Design Anomalies.';
                         itemClass = itemClass + badClass;
                     }
                 }
                 break;
 
-            case DisplayContext.DV_BACKLOG_WORK:
+            case BacklogType.BACKLOG_FEATURE_ANOMALY:
+
+                if(workItemType === WorkItemType.DESIGN_VERSION) {
+                    if(featureCount === 0){
+                        backlogDetails = 'No backlog';
+                        itemClass = itemClass + goodClass;
+                    } else {
+                        if(featureCount === 1){
+                            backlogDetails = 'One Feature has Design Anomalies in the Design Version.';
+                            itemClass = itemClass + badClass;
+                        } else {
+                            backlogDetails = featureCount + ' Features have Feature Design Anomalies.';
+                            itemClass = itemClass + badClass;
+                        }
+                    }
+                } else {
+
+                    backlogDetails = 'This backlog is only displayed for the whole Design Version';
+                    itemClass = itemClass + okClass;
+                }
+                break;
+
+            case BacklogType.BACKLOG_WP_ASSIGN:
 
                 if(featureCount === 0){
                     backlogDetails = 'No backlog';
@@ -156,49 +166,49 @@ export class ProjectBacklogItem extends Component{
                 }
                 break;
 
-            case DisplayContext.DV_BACKLOG_NO_EXP:
+            case BacklogType.BACKLOG_TEST_EXP:
 
-                if(scenarioCount === 0){
+                if(featureCount === 0){
                     backlogDetails = 'No backlog';
                     itemClass = itemClass + goodClass;
                 } else {
-                    if(scenarioCount === 1){
-                        backlogDetails = 'One Scenario has no Test Expectations.';
+                    if(featureCount === 1){
+                        backlogDetails = 'One Feature has Scenarios with no Test Expectations.';
                         itemClass = itemClass + badClass;
                     } else {
-                        backlogDetails = scenarioCount + ' Scenarios have no Test Expectations.';
+                        backlogDetails = featureCount + ' Features have Scenarios with no Test Expectations.';
                         itemClass = itemClass + badClass;
                     }
                 }
                 break;
 
-            case DisplayContext.DV_BACKLOG_TEST_MISSING:
+            case BacklogType.BACKLOG_TEST_MISSING:
 
-                if(scenarioCount === 0){
+                if(featureCount === 0){
                     backlogDetails = 'No backlog';
                     itemClass = itemClass + goodClass;
                 } else {
-                    if(scenarioCount === 1){
-                        backlogDetails = 'One Scenario has missing tests.';
+                    if(featureCount === 1){
+                        backlogDetails = 'One Feature has Scenarios with missing tests.';
                         itemClass = itemClass + badClass;
                     } else {
-                        backlogDetails = scenarioCount + ' Scenarios have missing tests.';
+                        backlogDetails = featureCount + ' Features have Scenarios with missing tests.';
                         itemClass = itemClass + badClass;
                     }
                 }
                 break;
 
-            case DisplayContext.DV_BACKLOG_TEST_FAIL:
+            case BacklogType.BACKLOG_TEST_FAIL:
 
-                if(scenarioCount === 0){
+                if(featureCount === 0){
                     backlogDetails = 'No backlog';
                     itemClass = itemClass + goodClass;
                 } else {
-                    if(scenarioCount === 1){
-                        backlogDetails = 'One Scenario has failing tests.';
+                    if(featureCount === 1){
+                        backlogDetails = 'One Feature has Scenarios with failing tests.';
                         itemClass = itemClass + badClass;
                     } else {
-                        backlogDetails = scenarioCount + ' Scenarios have failing tests.';
+                        backlogDetails = featureCount + ' Features have Scenarios with failing tests.';
                         itemClass = itemClass + badClass;
                     }
                 }
@@ -207,19 +217,49 @@ export class ProjectBacklogItem extends Component{
 
         }
 
-        const layout =
+        const backlogTotal =
+            <div>
+                <Badge>{backlogItemTotal}</Badge>
+            </div>;
+
+        const backlogHeader =
+            <Row className = "backlog-title">
+                <Col md={1} className="close-col">
+                    {backlogTotal}
+                </Col>
+                <Col md={6} className="close-col">
+                    {backlogTitle}
+                </Col>
+                <Col md={5} className="close-col backlog-details">
+                    {backlogDetails}
+                </Col>
+            </Row>;
+
+        const backlogBody =
+            <Row>
+                <BacklogFeatureContainer params={
+                    {
+                        backlogFeatures: backlogFeatures
+                    }
+                }/>
+            </Row>;
+
+        const layoutNotSelected =
             <Grid>
-                <Row className = "backlog-title">
-                    <Col md={12} className="close-col">
-                        {backlogTitle}
-                    </Col>
-                </Row>
-                <Row className = "backlog-details">
-                    <Col md={12} className="close-col">
-                        {backlogDetails}
-                    </Col>
-                </Row>
+                {backlogHeader}
             </Grid>;
+
+        const layoutSelected =
+            <Grid>
+                {backlogHeader}
+                {backlogBody}
+            </Grid>;
+
+        let layout = layoutNotSelected;
+
+        if(backlogType === currentBacklogItem){
+            layout = layoutSelected;
+        }
 
         return(
             <div
@@ -237,12 +277,10 @@ export class ProjectBacklogItem extends Component{
 
 
 ProjectBacklogItem.propTypes = {
-    displayContext: PropTypes.string.isRequired,
-    summaryType: PropTypes.string.isRequired,
-    totalFeatureCount: PropTypes.number.isRequired,
-    featureCount: PropTypes.number.isRequired,
-    scenarioCount: PropTypes.number.isRequired,
-    testCount: PropTypes.number.isRequired,
+    backlogType: PropTypes.string.isRequired,
+    workItemType: PropTypes.string.isRequired,
+    backlogFeatures: PropTypes.object.isRequired,
+    backlogItemTotal: PropTypes.number.isRequired,
     selectionFunction: PropTypes.func.isRequired
 };
 

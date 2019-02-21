@@ -54,7 +54,7 @@ function mapStateToProps(state) {
 
 export default ProjectWorkSummaryItemContainer = createContainer(({params}) => {
 
-    const summaryData = ClientDataServices.getWorkItemSummaryData(
+    const summaryData = ClientDataServices.getWorkItemSummary(
         params.userContext,
         params.workItem,
         params.workItemType

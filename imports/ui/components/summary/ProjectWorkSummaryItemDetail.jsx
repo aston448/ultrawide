@@ -69,7 +69,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
     render() {
         const {workItemType, summaryData, workItem, currentUserSummaryItem} = this.props;
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Render Project Work Summary Item Detail {}', summaryData.itemName);
+        log((msg) => console.log(msg), LogLevel.PERF, 'Render Project Work Summary Item Detail {}', summaryData.workItemName);
 
         let itemName = '';
         let badgeId = workItemType;
@@ -78,14 +78,14 @@ export class ProjectSummaryWorkItemDetail extends Component{
         let summaryRowClass = '';
 
         // Selected if the same item id and (for dv) if assignment matches
-        let selected = summaryData.summaryId === currentUserSummaryItem;
+        let selected = summaryData._id === currentUserSummaryItem;
 
         //const uiContextName = replaceAll(itemName, ' ', '_');
 
         switch(workItemType){
             case WorkItemType.DESIGN_VERSION:
 
-                itemName = summaryData.itemName;
+                itemName = summaryData.workItemName;
                 badgeId = 'DV';
                 badgeClass = 'badge-design-version';
                 nameClass = 'summary-item-name-dv';
@@ -94,7 +94,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
             case WorkItemType.DV_ASSIGNED:
             case WorkItemType.DV_UNASSIGNED:
 
-                itemName = summaryData.itemName;
+                itemName = summaryData.workItemName;
                 badgeId = 'DV';
                 badgeClass = 'badge-design-version';
                 nameClass = 'summary-item-name-dv';
@@ -102,7 +102,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
             case WorkItemType.INCREMENT:
 
-                itemName = workItem.wiName;
+                itemName = summaryData.workItemName;
                 badgeClass = 'badge-increment';
                 nameClass = 'summary-item-name-in';
                 summaryRowClass = 'summary-row-increment';
@@ -110,7 +110,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
             case WorkItemType.ITERATION:
 
-                itemName = workItem.wiName;
+                itemName = summaryData.workItemName;
                 badgeClass = 'badge-iteration';
                 nameClass = 'summary-item-name-it';
                 summaryRowClass = 'summary-row-iteration';
@@ -119,7 +119,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
             case WorkItemType.BASE_WORK_PACKAGE:
             case WorkItemType.UPDATE_WORK_PACKAGE:
 
-                itemName = workItem.workPackageName;
+                itemName = summaryData.workItemName;
                 badgeId = 'WP';
                 switch(workItem.workPackageStatus){
                     case WorkPackageStatus.WP_NEW:
@@ -146,25 +146,25 @@ export class ProjectSummaryWorkItemDetail extends Component{
             summaryRowClass = 'summary-row-selected';
         }
 
-        if(summaryData.failingTests > 0){
+        if(summaryData.totalFailing > 0){
             resultClassFailing = 'feature-highlight-fail';
         } else {
             resultClassFailing = 'feature-no-highlight';
         }
 
-        if(summaryData.passingTests > 0){
+        if(summaryData.totalPassing > 0){
             resultClassPassing = 'feature-highlight-pass';
         } else {
             resultClassPassing = 'feature-no-highlight';
         }
 
-        if(summaryData.noExpectations > 0){
+        if(summaryData.totalNoExpectations > 0){
             resultClassNoExpectation = 'feature-highlight-no-expectations';
         } else {
             resultClassNoExpectation = 'feature-no-highlight';
         }
 
-        if(summaryData.missingTests === 0){
+        if(summaryData.totalMissing === 0){
             resultClassMissing = 'feature-no-highlight';
         }
 
@@ -227,7 +227,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
                         <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>
                             <div className={resultClassScenarios}>
                                 <span><Glyphicon glyph="th"/></span>
-                                <span className="summary-number">{summaryData.scenarioCount}</span>
+                                <span className="summary-number">{summaryData.totalScenarios}</span>
                             </div>
                         </OverlayTrigger>
                     </Col>
@@ -235,7 +235,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
                         <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipExpected}>
                             <div className={resultClassExpected}>
                                 <span><Glyphicon glyph="question-sign"/></span>
-                                <span className="summary-number">{summaryData.expectedTests}</span>
+                                <span className="summary-number">{summaryData.totalExpectations}</span>
                             </div>
                         </OverlayTrigger>
                     </Col>
@@ -243,7 +243,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
                         <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipPassing}>
                             <div className={resultClassPassing}>
                                 <span><Glyphicon glyph="ok-circle"/></span>
-                                <span className="summary-number">{summaryData.passingTests}</span>
+                                <span className="summary-number">{summaryData.totalPassing}</span>
                             </div>
                         </OverlayTrigger>
                     </Col>
@@ -251,7 +251,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
                         <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipFailing}>
                             <div className={resultClassFailing}>
                                 <span><Glyphicon glyph="remove-circle"/></span>
-                                <span className="summary-number">{summaryData.failingTests}</span>
+                                <span className="summary-number">{summaryData.totalFailing}</span>
                             </div>
                         </OverlayTrigger>
                     </Col>
@@ -259,7 +259,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
                         <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipMissing}>
                             <div className={resultClassMissing}>
                                 <span><Glyphicon glyph="ban-circle"/></span>
-                                <span className="summary-number">{summaryData.missingTests}</span>
+                                <span className="summary-number">{summaryData.totalMissing}</span>
                             </div>
                         </OverlayTrigger>
                     </Col>
@@ -267,7 +267,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
                         <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipNoExpectation}>
                             <div className={resultClassNoExpectation}>
                                 <span><Glyphicon glyph="exclamation-sign"/></span>
-                                <span className="summary-number">{summaryData.noExpectations}</span>
+                                <span className="summary-number">{summaryData.totalNoExpectations}</span>
                             </div>
                         </OverlayTrigger>
                     </Col>
@@ -307,7 +307,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
 
         return(
-            <div onClick={() => this.selectItem(summaryData.summaryId)}>
+            <div onClick={() => this.selectItem(summaryData._id)}>
                 {layout}
             </div>
         );

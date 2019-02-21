@@ -154,6 +154,7 @@ export const DisplayContext = {
     VIEW_UNIT_MASH:         'VIEW_UNIT_MASH',       // View of related Unit Tests in the Design-Dev Mash
     VIEW_UNIT_UNLINKED:     'VIEW_UNIT_UNLINKED',   // View of all unlinked unit tests
     TEST_EXPECTATIONS:      'TEST_EXPECTATIONS',
+    TEST_RESULTS:           'TEST_RESULTS',
     MASH_DATA:              'MASH_DATA',            // Test results window
     MASH_ACC_TESTS:         'MASH_ACC_TESTS',
     MASH_INT_TESTS:         'MASH_INT_TESTS',
@@ -205,7 +206,8 @@ export const SummaryType = {
 
 export const BacklogType = {
     BACKLOG_DESIGN:         'BACKLOG_DESIGN',
-    BACKLOG_ANOMALY:        'BACKLOG_ANOMALY',
+    BACKLOG_SCENARIO_ANOMALY: 'BACKLOG_SCENARIO_ANOMALY',
+    BACKLOG_FEATURE_ANOMALY: 'BACKLOG_FEATURE_ANOMALY',
     BACKLOG_WP_ASSIGN:      'BACKLOG_WP_ASSIGN',
     BACKLOG_TEST_EXP:       'BACKLOG_TEST_EXP',
     BACKLOG_TEST_MISSING:   'BACKLOG_TEST_MISSING',
@@ -383,7 +385,9 @@ export const DuWorkPackageTestStatus = {
 
 export const WorkPackageTestStatus = {
     WP_TESTS_COMPLETE:      'WP_TESTS_COMPLETE',
-    WP_TESTS_NOT_COMPLETE:  'WP_TESTS_NOT_COMPLETE'
+    WP_TESTS_NOT_COMPLETE:  'WP_TESTS_NOT_COMPLETE',
+    WP_TESTS_FAILING:       'WP_TESTS_FAILING',
+    WP_TESTS_NONE:          'WP_TESTS_NONE'
 };
 
 export const WorkPackageType = {
@@ -458,15 +462,13 @@ export const DesignUpdateTab = {
 export const EditorTab = {
     TAB_NOT_SET:                    '0',
     TAB_DETAILS:                    '1',
-    TAB_DOMAIN_DICT:                '2',
-    TAB_ACC_TESTS:                  '3',
-    TAB_INT_TESTS:                  '4',
-    TAB_UNIT_TESTS:                 '5',
-    TAB_SCENARIO_SEARCH:            '6',
-    TAB_UPDATE_SUMMARY:             '7',
-    TAB_WORKING_VIEW:               '8',
-    TAB_TEST_EXPECTATIONS:          '9',
-    TAB_ANOMALIES:                  '10'
+    TAB_TEST_EXPECTATIONS:          '2',
+    TAB_TEST_RESULTS:               '3',
+    TAB_DOMAIN_DICT:                '4',
+    TAB_SCENARIO_SEARCH:            '5',
+    TAB_UPDATE_SUMMARY:             '6',
+    TAB_WORKING_VIEW:               '7',
+    TAB_ANOMALIES:                  '8'
 };
 
 export const ScenarioStepType = {

@@ -4,11 +4,11 @@ import { Mongo } from 'meteor/mongo';
 export const UserWorkProgressSummary = new Mongo.Collection('userWorkProgressSummary');
 
 let Schema = new SimpleSchema({
-    userId:                     {type: String},
-    designVersionId:            {type: String},
-    designUpdateId:             {type: String, defaultValue: 'NONE'},
-    workPackageId:              {type: String, defaultValue: 'NONE'},
-    workSummaryType:            {type: String},
+    userId:                     {type: String, index: 1},
+    designVersionId:            {type: String, index: 1},
+    designUpdateId:             {type: String, defaultValue: 'NONE', index: 1},
+    workPackageId:              {type: String, defaultValue: 'NONE', index: 1},
+    workSummaryType:            {type: String, index: 1},
     name:                       {type: String},
     totalScenarios:             {type: Number, defaultValue: 0},
     scenariosInWp:              {type: Number, defaultValue: 0},

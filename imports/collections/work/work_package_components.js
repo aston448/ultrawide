@@ -17,7 +17,7 @@ let Schema = new SimpleSchema({
     componentReferenceId:       {type: String, index: 1},                               // The unique reference to the component
     componentParentReferenceId: {type: String, index: 1},                               // The unique reference to the component parent
     componentFeatureReferenceId:{type: String, defaultValue: 'NONE', index: 1},         // If a component is part of a feature this is set
-    componentType:              {type: String},                                         // Application, Design Section, Feature etc.
+    componentType:              {type: String, index: 1},                               // Application, Design Section, Feature etc.
     componentIndex:             {type: Number, decimal: true, defaultValue: 100000},    // Used for ordering
 
     // Status

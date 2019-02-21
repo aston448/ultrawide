@@ -8,7 +8,7 @@ let Schema = new SimpleSchema({
     componentReferenceId:           {type: String, index: 1},                           // A unique ID that persists across design versions
     designId:                       {type: String},                                     // Denormalisation for easy access of design id
     designVersionId:                {type: String},                                     // The design version this is a change to
-    componentType:                  {type: String},                                     // App, Section, Feature, Feature Aspect, Scenario
+    componentType:                  {type: String, index: 1},                           // App, Section, Feature, Feature Aspect, Scenario
     componentLevel:                 {type: Number, defaultValue: 0},                    // Level of nested section items
 
     // Location
@@ -35,7 +35,7 @@ let Schema = new SimpleSchema({
 
     // Component State
     isNew:                          {type: Boolean, defaultValue: true},                // Flag to indicate a new item which should be editable by default
-    workPackageId:                  {type: String, defaultValue: 'NONE'},               // For Scenarios, the Work Package containing the Scenario
+    workPackageId:                  {type: String, defaultValue: 'NONE', index: 1},     // For Scenarios, the Work Package containing the Scenario
     updateMergeStatus:              {type: String, defaultValue: UpdateMergeStatus.COMPONENT_BASE}, // Indicates how the component was changed from the previous version
     isDevUpdated:                   {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been updated by a developer
     isDevAdded:                     {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been added by a developer

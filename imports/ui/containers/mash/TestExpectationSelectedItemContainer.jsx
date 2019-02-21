@@ -88,28 +88,28 @@ class TestExpectationSelectedItemList extends Component {
 
             let titleText = '';
 
-            switch(itemType){
-                case ComponentType.SCENARIO:
-                    titleText = 'Test Expectations for Scenario';
+            switch(displayContext){
+                case DisplayContext.TEST_EXPECTATIONS:
+                    titleText = 'Test Expectations for ';
                     break;
-                case ComponentType.FEATURE_ASPECT:
-                    titleText = 'Test Expectations for ' + nameData.featureAspect + ' scenarios in ' + nameData.feature;
-                    break;
-                case ComponentType.FEATURE:
-                    titleText = 'Test Expectations for ' + nameData.feature;
+                case DisplayContext.TEST_RESULTS:
+                    titleText = 'Test Results for ';
                     break;
             }
 
-            // Full container
-            let panelHeader = '';
-            let detailsType = '';
-            let menuVisible = false;
-
-            let itemHeader = '';
-            let panelId = '';
+            switch(itemType){
+                case ComponentType.SCENARIO:
+                    titleText += ' Scenario';
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                    titleText += nameData.featureAspect + ' scenarios in ' + nameData.feature;
+                    break;
+                case ComponentType.FEATURE:
+                    titleText += nameData.feature;
+                    break;
+            }
 
             let mainPanel = <div></div>;
-            let noData = false;
 
             if (userContext.designComponentId !== 'NONE' && designItems.length > 0) {
 

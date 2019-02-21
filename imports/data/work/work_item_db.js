@@ -236,6 +236,16 @@ class WorkItemDataClass{
         ).fetch();
     }
 
+    getDesignVersionIterationWps(designVersionId, iterationRefId){
+
+        return WorkPackages.find(
+            {
+                designVersionId:        designVersionId,
+                parentWorkItemRefId:    iterationRefId
+            }
+        ).fetch();
+    }
+
     getDesignVersionIterationWpsByIndex(designVersionId, iterationRefId){
 
         return WorkPackages.find(

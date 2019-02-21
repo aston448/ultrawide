@@ -8,8 +8,7 @@ import { createContainer }  from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import SingleTestScenarioMashItem           from '../../components/mash/SingleTestScenarioMashItem.jsx';
-import MultiTestScenarioMashItem            from '../../components/mash/MultiTestScenarioMashItem.jsx';
+import TestExpectationResult           from '../../components/mash/TestExpectationResult.jsx';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
@@ -22,6 +21,7 @@ import { TestResultsUiServices }                from "../../../ui_modules/test_r
 
 // REDUX services
 import {connect} from 'react-redux';
+import {UserTestData} from "../../../data/test_data/user_test_data_db";
 
 
 
@@ -41,110 +41,51 @@ class ScenarioTestResultsList extends Component {
 
     shouldComponentUpdate(nextProps, nextState){
 
-        return TestResultsUiServices.shouldContainerUpdate(this.props, nextProps, 'UPDATE');
+        return true //TestResultsUiServices.shouldContainerUpdate(this.props, nextProps, 'UPDATE');
     };
 
 
-    renderAcceptanceScenarios(mashData){
+    renderTestExpectationResults(results, scenarioName){
 
-        return mashData.map((mashItem) => {
-            if(mashItem) {
+        return results.map((result) => {
 
-                // For acceptance tests show as a list if more than one test is defined for a scenario
-                if(mashItem.accTestCount > 1){
-                    return (
-                        <MultiTestScenarioMashItem
-                            key={mashItem._id}
-                            mashItem={mashItem}
-                            displayContext={DisplayContext.MASH_ACC_TESTS}
-                        />
-                    );
-                } else {
-                    return (
-                        <SingleTestScenarioMashItem
-                            key={mashItem._id}
-                            mashItem={mashItem}
-                            displayContext={DisplayContext.MASH_ACC_TESTS}
-                        />
-                    );
-                }
-            }
-        });
+            return (
+                <TestExpectationResult
+                    key={result._id}
+                    testResult={result}
+                    scenarioName={scenarioName}
+                />
+            );
+       });
+
     };
 
-    renderIntegrationScenarios(mashData){
-
-        return mashData.map((mashItem) => {
-            if(mashItem) {
-
-                // For integration tests show as a list if more than one test is defined for a scenario
-                if(mashItem.intTestCount > 1){
-                    return (
-                        <MultiTestScenarioMashItem
-                            key={mashItem._id}
-                            mashItem={mashItem}
-                            displayContext={DisplayContext.MASH_INT_TESTS}
-                        />
-                    );
-                } else {
-                    return (
-                        <SingleTestScenarioMashItem
-                            key={mashItem._id}
-                            mashItem={mashItem}
-                            displayContext={DisplayContext.MASH_INT_TESTS}
-                        />
-                    );
-                }
-            }
-        });
-    };
-
-    renderUnitScenarios(mashData){
-
-        return mashData.map((mashItem) => {
-            if(mashItem) {
-
-                // For unit tests we always show as a list even if just one test
-                return (
-                    <MultiTestScenarioMashItem
-                        key={mashItem._id}
-                        mashItem={mashItem}
-                        displayContext={DisplayContext.MASH_UNIT_TESTS}
-                    />
-                );
-
-            }
-        });
-    };
+    renderNoResults(){
+        return (
+            <div className="design-item-note">No Test Results</div>
+        )
+    }
 
     render() {
 
-        const {scenarioMashData, displayContext, userContext, view} = this.props;
+        const {scenarioTestResults, scenarioName} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Scenario Test Results');
 
-        switch(displayContext){
-            case DisplayContext.MASH_ACC_TESTS:
-                return(
-                    <div>
-                        {this.renderAcceptanceScenarios(scenarioMashData)}
-                    </div>
-                );
+        if(scenarioTestResults.length > 0){
 
-            case DisplayContext.MASH_INT_TESTS:
-                return(
-                    <div>
-                        {this.renderIntegrationScenarios(scenarioMashData)}
-                    </div>
-                );
+            return (
+                <div>
+                    {this.renderTestExpectationResults(scenarioTestResults, scenarioName)}
+                </div>
+            );
 
-            case DisplayContext.MASH_UNIT_TESTS:
-                return(
-                    <div>
-                        {this.renderUnitScenarios(scenarioMashData)}
-                    </div>
-                );
-
+        } else {
+            return(
+                <div>
+                    {this.renderNoResults()}
+                </div>
+            )
         }
 
 
@@ -152,8 +93,8 @@ class ScenarioTestResultsList extends Component {
 }
 
 ScenarioTestResultsList.propTypes = {
-    scenarioMashData: PropTypes.array.isRequired,
-    displayContext: PropTypes.string.isRequired
+    scenarioTestResults:    PropTypes.array.isRequired,
+    scenarioName:           PropTypes.string.isRequired
 };
 
 
@@ -173,27 +114,16 @@ ScenarioTestResultsList = connect(mapStateToProps)(ScenarioTestResultsList);
 
 export default ScenarioTestResultsContainer = createContainer(({params}) => {
 
-    let scenarioMashData = [];
+    const scenarioTestResults = UserTestData.getScenarioPermutationTestResults(
+        params.userContext.userId,
+        params.userContext.designVersionId,
+        params.scenario.componentReferenceId
+    );
 
-    // If we already have the mash data for one scenario so just pass it on
-    if(params.mashData !== null){
-
-        //console.log("Using scenario mash data");
-        scenarioMashData = [params.mashData];
-
-    } else {
-
-        // Otherwise we are gathering scenarios for a feature aspect so get the mash data
-        //console.log("Getting scenario mash data");
-        scenarioMashData = ClientDataServices.getScenarioMashData(params.userContext, params.featureAspectReferenceId);
-    }
-
-
-    //console.log("Got " + scenarioMashData.length + " scenario records");
 
     return{
-        scenarioMashData: scenarioMashData,
-        displayContext: params.displayContext
+        scenarioTestResults:    scenarioTestResults,
+        scenarioName:           params.scenario.componentNameNew
     }
 
 

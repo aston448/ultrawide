@@ -904,13 +904,13 @@ input {
 .backlog-title{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     padding: 5px 5px 0 0;
-    font-size:  18px;
+    font-size:  16px;
 }
 
 .backlog-details{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     padding: 5px 5px 0 0;
-    font-size:  12px;
+    font-size:  13px;
 }
 
 .project-summary-item{
@@ -1461,7 +1461,7 @@ input {
 .item-container-footer-it{
     border-top: 1px solid ghostwhite;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  142px;
+    font-size:  14px;
     color: black;
     background-color: ghostwhite;
     margin: 0;
@@ -1482,6 +1482,25 @@ input {
 }
 
 .item-container-footer-wp{
+    margin: 0;
+    padding: 0;
+    height: 0
+}
+
+.item-container-bl{
+    margin: 10px 1px 10px 20px;
+    padding: 0 1px 1px 1px;
+    border-radius: 2px;
+    background-color: #FFFFDD;
+}
+
+.item-container-header-bl{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.item-container-footer-bl{
     margin: 0;
     padding: 0;
     height: 0
@@ -2907,9 +2926,9 @@ input {
     padding: 2px 0 0 10px;
     border: none;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
-    font-size:  12px;
+    font-size:  14px;
     font-weight: bold;
-    color: black;
+    color: darkred;
 }
 
 .mash-unit-scenario {
@@ -2952,9 +2971,46 @@ input {
 
 }
 
+.scenario-header-result {
+    margin: 2px 2px 4px 2px;
+    padding: 2px 4px 2px 0px;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    background-color: #EEFFEE;
+    text-align: right;
+    border-top: 1px solid lightgrey;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+    border-left: 1px solid lightgrey;
+}
+
+.result-scenario{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    margin: 2px 2px 4px 2px;
+    padding: 2px;
+    color: black;
+    border-top: 1px solid lightgrey;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+    border-left: 1px solid lightgrey;
+}
+
+.scenario-pass{
+    background-color: #EEFFEE;
+}
+
+.scenario-fail{
+    background-color: #FFEEEE;
+}
+
+.scenario-incomplete{
+    background-color: #FFFFDD;
+}
+
 .mash-scenario-result {
     margin: 0;
-    padding: 2px 0 2px 0px;
+    padding: 2px 4px 2px 0px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
     background-color: transparent;
@@ -2971,16 +3027,34 @@ input {
     background-color: transparent;
 }
 
-.unit-test-result{
-
-}
-
 .unit-test-none{
     margin: 0;
     padding: 2px 0 0 35px;
     border: none;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  11px;
+    color: darkgrey;
+    background-color: transparent;
+}
+
+.test-type{
+    margin: 0;
+    padding: 2px 0 0 5px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    font-weight: normal;
+    color: darkseagreen;
+    background-color: transparent;
+}
+
+.test-perm{
+    margin: 0;
+    padding: 2px 0 0 5px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    font-weight: normal;
     color: darkgrey;
     background-color: transparent;
 }
@@ -3007,7 +3081,7 @@ input {
 
 .unit-test-result{
     margin: 0;
-    padding: 2px 0 0 0px;
+    padding: 2px 4px 0 0px;
     border: none;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  11px;
@@ -3154,9 +3228,12 @@ input {
     font-size:  12px;
     margin: 2px 2px 4px 2px;
     padding: 2px;
-    border-radius: 2px;
+    color: black;
     background-color: #CCEEEE;
-    color: darkblue;
+    border-top: 1px solid lightgrey;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+    border-left: 1px solid lightgrey;
 }
 
 .scenario-test-expectations{

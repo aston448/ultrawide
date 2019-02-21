@@ -335,7 +335,7 @@ class ProjectSummaryServicesClass {
 
                 if(designAnomalies.length > 0){
 
-                    const backlogEntryAnomaly = this.getBacklogEntry(workContext, BacklogType.BACKLOG_ANOMALY, feature.componentReferenceId, 0, 0);
+                    const backlogEntryAnomaly = this.getBacklogEntry(workContext, BacklogType.BACKLOG_SCENARIO_ANOMALY, feature.componentReferenceId, 0, 0);
 
                     anomalyBacklogList.push(backlogEntryAnomaly);
                 }
@@ -496,7 +496,7 @@ class ProjectSummaryServicesClass {
             backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_WP_ASSIGN, scenarioData.featureReferenceId, 0, 0));
 
             if(scenarioAnomalyCount > 0) {
-                backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
+                backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_SCENARIO_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
             }
 
             // Add the same stuff to the overall DV so unassigned appears in there too
@@ -525,7 +525,7 @@ class ProjectSummaryServicesClass {
             }
 
             if(scenarioAnomalyCount > 0) {
-                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
+                backlogData.push(this.getBacklogEntry(dvWorkContext, BacklogType.BACKLOG_SCENARIO_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
             }
 
         }
@@ -549,7 +549,7 @@ class ProjectSummaryServicesClass {
 
         // Scenarios with design anomalies
         if(scenarioAnomalyCount > 0){
-            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
+            backlogData.push(this.getBacklogEntry(workContext, BacklogType.BACKLOG_SCENARIO_ANOMALY, scenarioData.featureReferenceId, 0, scenarioAnomalyCount));
         }
 
         return backlogData;
@@ -574,6 +574,7 @@ class ProjectSummaryServicesClass {
             scenarioAnomalyCount:   scenarioAnomalyCount,
             summaryType:            workContext.summaryType
         }
+
     }
 
     updateBacklogData(backlogDataList){

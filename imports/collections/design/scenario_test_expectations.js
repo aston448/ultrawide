@@ -7,9 +7,9 @@ export const ScenarioTestExpectations = new Mongo.Collection('scenarioTestExpect
 
 
 let Schema = new SimpleSchema({
-    designVersionId:                {type: String},                                         // Belongs to this Design Version
-    scenarioReferenceId:            {type: String},                                         // Belongs to this Scenario
-    testType:                       {type: String},                                         // For this category of tests
+    designVersionId:                {type: String, index: 1},                               // Belongs to this Design Version
+    scenarioReferenceId:            {type: String, index: 1},                               // Belongs to this Scenario
+    testType:                       {type: String, index: 1},                               // For this category of tests
     permutationId:                  {type: String, defaultValue: 'NONE'},                   // For this permutation
     permutationValueId:             {type: String, defaultValue: 'NONE'}                    // For this permutation value
 });

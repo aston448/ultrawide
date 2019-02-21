@@ -7,11 +7,11 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 import TestExpectationSelectedItemContainer         from '../../containers/mash/TestExpectationSelectedItemContainer.jsx';
 import ScenarioTestExpectationsContainer            from '../../containers/mash/ScenarioTestExpectationsContainer.jsx';
-
+import ScenarioTestResultsHeaderContainer           from '../../containers/mash/ScenarioTestResultsHeaderContainer.jsx';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import { ComponentType, LogLevel } from '../../../constants/constants.js';
+import { ComponentType, DisplayContext, LogLevel } from '../../../constants/constants.js';
 
 import { ClientTestIntegrationServices }            from '../../../apiClient/apiClientTestIntegration.js';
 
@@ -134,19 +134,43 @@ class TestExpectationDesignItem extends Component {
                     // Here the designItem contains the actual Scenario Mash data - should be for one scenario
                     // And expectation status is populated with the current test expectation statuses for the scenario
 
-                    return (
-                        <div className={'scenario-test-expectations'}>
+                    switch (displayContext){
 
-                            <div className={"expectation-scenario"}>
-                                {designItem.componentNameNew}
-                            </div>
+                        case DisplayContext.TEST_EXPECTATIONS:
 
-                            <ScenarioTestExpectationsContainer params={{
-                                userContext: userContext,
-                                scenario: designItem
-                            }}/>
-                        </div>
-                    );
+                            return (
+                                <div className={'scenario-test-expectations'}>
+
+                                    <div className={"expectation-scenario"}>
+                                        {designItem.componentNameNew}
+                                    </div>
+
+                                    <ScenarioTestExpectationsContainer params={{
+                                        userContext: userContext,
+                                        scenario: designItem
+                                    }}/>
+                                </div>
+                            );
+
+                        case DisplayContext.TEST_RESULTS:
+
+                            return (
+                                <div className={'scenario-test-expectations'}>
+
+                                    <ScenarioTestResultsHeaderContainer params={{
+                                        userContext: userContext,
+                                        scenario: designItem
+                                    }}/>
+
+                                    <ScenarioTestResultsContainer params={{
+                                        userContext: userContext,
+                                        scenario: designItem
+                                    }}/>
+                                </div>
+                            );
+                    }
+
+
 
             }
         } else {

@@ -83,6 +83,19 @@ class UserDvBacklogDataClass {
         ).fetch();
     }
 
+    getBacklogDataForWp(userId, dvId, wpId, backlogType){
+
+        return UserDvBacklog.find(
+            {
+                userId:                 userId,
+                dvId:                   dvId,
+                wpId:                   wpId,
+                backlogType:            backlogType
+            },
+            {$sort: {featureName: 1}}
+        ).fetch();
+    }
+
 
 
     getAllUserBacklogData(userContext){

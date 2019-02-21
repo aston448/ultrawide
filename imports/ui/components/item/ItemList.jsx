@@ -74,7 +74,6 @@ export class ItemList extends Component {
 
             case ItemListType.ULTRAWIDE_ITEM:
             case ItemListType.DESIGN_ANOMALY:
-            case ItemListType.BACKLOG_ITEM:
                 containerType = 'item-container';
                 containerHeaderType = 'item-container-header';
                 containerFooterType = 'item-container-footer';
@@ -106,6 +105,12 @@ export class ItemList extends Component {
                 containerType = 'item-container-su';
                 containerHeaderType = 'item-container-header-su';
                 containerFooterType = 'item-container-footer-su';
+                bodyClass = '';
+                break;
+            case ItemListType.BACKLOG_ITEM:
+                containerType = 'item-container-bl';
+                containerHeaderType = 'item-container-header-bl';
+                containerFooterType = 'item-container-footer-bl';
                 bodyClass = '';
                 break;
         }

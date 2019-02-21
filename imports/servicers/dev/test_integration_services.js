@@ -50,7 +50,7 @@ class TestIntegrationServicesClass{
             TestIntegrationModules.getUnitTestResults(userContext);
 
             // Recalculate the design-test mash
-            TestIntegrationModules.recreateUserScenarioTestMashData(userContext);
+            TestIntegrationModules.updateUserTestData(userContext);
 
             log((msg) => console.log(msg), LogLevel.PERF, "    Updating WP completeness...");
 
@@ -59,7 +59,7 @@ class TestIntegrationServicesClass{
 
             log((msg) => console.log(msg), LogLevel.PERF, "    Updating test summary...");
             // And update the test summary data
-            this.updateTestSummaryData(userContext);
+            //this.updateTestSummaryData(userContext);
 
             log((msg) => console.log(msg), LogLevel.PERF, "    Test summary updated...");
 

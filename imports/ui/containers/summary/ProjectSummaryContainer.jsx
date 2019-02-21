@@ -32,6 +32,7 @@ import {
 } from '../../../redux/actions'
 import {ItemListType} from "../../../constants/constants";
 import {ClientUserSettingsServices} from "../../../apiClient/apiClientUserSettings";
+import {UserTestData} from "../../../data/test_data/user_test_data_db";
 
 
 
@@ -60,7 +61,9 @@ export class ProjectSummary extends Component {
     }
 
     getSummaryItem(summaryId){
-        return UserDvWorkSummaryData.getWorkItemSummaryDataById(summaryId);
+
+        return UserTestData.getWorkItemSummaryDataById(summaryId);
+        //return UserDvWorkSummaryData.getWorkItemSummaryDataById(summaryId);
     }
 
     getWindowSizeClass(){
@@ -83,76 +86,58 @@ export class ProjectSummary extends Component {
         let backlogContext = '';
 
         if(summaryItem) {
-            switch (summaryItem.summaryType) {
-                case SummaryType.SUMMARY_DV:
-                    backlogContext = dvSummary.designVersionName;
+            switch (summaryItem.workItemType) {
+                case WorkItemType.DESIGN_VERSION:
+                case WorkItemType.DV_ASSIGNED:
+                case WorkItemType.DV_UNASSIGNED:
+                    backlogContext = summaryItem.workItemName;
                     break;
-                case SummaryType.SUMMARY_DV_ASSIGNED:
-                    backlogContext = dvSummary.designVersionName + ' (Work Assigned)';
+
+                case WorkItemType.INCREMENT:
+                    backlogContext = 'Increment: ' + summaryItem.workItemName;
                     break;
-                case SummaryType.SUMMARY_DV_UNASSIGNED:
-                    backlogContext = dvSummary.designVersionName + ' (Unassigned)';
+                case WorkItemType.ITERATION:
+                    backlogContext = 'Iteration: ' + summaryItem.workItemName;
                     break;
-                case SummaryType.SUMMARY_IN:
-                    backlogContext = 'Increment: ' + summaryItem.inName;
+                case WorkItemType.DESIGN_UPDATE:
+                    backlogContext = 'Design Update: ' + summaryItem.workItemName;
                     break;
-                case SummaryType.SUMMARY_IT:
-                    backlogContext = 'Iteration: ' + summaryItem.itName;
-                    break;
-                case SummaryType.SUMMARY_DU:
-                    backlogContext = 'Design Update: ' + summaryItem.duName;
-                    break;
-                case SummaryType.SUMMARY_WP:
-                    backlogContext = 'Work Package: ' + summaryItem.wpName;
+                case WorkItemType.BASE_WORK_PACKAGE:
+                case WorkItemType.UPDATE_WORK_PACKAGE:
+                    backlogContext = 'Work Package: ' + summaryItem.workItemName;
                     break;
             }
         } else {
-            backlogContext = dvSummary.designVersionName;
+            backlogContext = dvSummary.workItemName;
         }
-
-        const summaryData = {
-            summaryId: dvSummary.dvSummaryId,
-            itemName: dvSummary.designVersionName,
-            featureCount: dvSummary.dvFeatureCount,
-            scenarioCount: dvSummary.dvScenarioCount,
-            expectedTests: dvSummary.dvExpectedTestCount,
-            passingTests: dvSummary.dvPassingTestCount,
-            failingTests: dvSummary.dvFailingTestCount,
-            missingTests: dvSummary.dvMissingTestCount,
-            noExpectations: dvSummary.dvNoTestExpectationsCount,
-            isUnassigned: false
-        };
 
         let dvHeaderText = '';
 
-        if(dvSummary.dvFeatureCount === 1){
-            dvHeaderText = dvSummary.designVersionName + ' - ' + dvSummary.dvFeatureCount + ' Feature';
+        if(dvSummary.totalFeatures === 1){
+            dvHeaderText = dvSummary.workItemName + ' - ' + dvSummary.totalFeatures + ' Feature';
         } else {
-            dvHeaderText = dvSummary.designVersionName + ' - ' + dvSummary.dvFeatureCount + ' Features'
+            dvHeaderText = dvSummary.workItemName + ' - ' + dvSummary.totalFeatures + ' Features'
         }
-
-        const workItem = {
-            _id:    dvSummary.summaryId,
-            name:   dvSummary.designVersionName
-        };
 
         const layout =
             <Grid>
                 <Row>
                     <Col md={6} className="close-col">
-                        <div className="summary-dv-header"  onClick={() => this.onSummaryItemSelect(dvSummary.summaryId)}>
-                            {dvSummary.designVersionName + ' - ' + dvSummary.dvFeatureCount + ' Features'}
+                        <div className="summary-dv-header"  onClick={() => this.onSummaryItemSelect(dvSummary._id)}>
+                            {dvHeaderText}
                         </div>
                         <div className="summary-section-dv">
-                            <ProjectSummaryWorkItemDetail
-                                workItemType={WorkItemType.DESIGN_VERSION}
-                                summaryData={summaryData}
-                                workItem={workItem}
-                            />
+                            <ProjectWorkSummaryItemContainer params={{
+                                userContext: userContext,
+                                workItem: {
+                                    _id:    dvSummary.workItemId
+                                },
+                                workItemType: WorkItemType.DESIGN_VERSION,
+                            }}/>
                         </div>
                     </Col>
                     <Col md={6} className="close-col">
-                        <div className="summary-dv-header"  onClick={() => this.onSummaryItemSelect(dvSummary.summaryId)}>
+                        <div className="summary-dv-header"  onClick={() => this.onSummaryItemSelect(dvSummary._id)}>
                             {'Design Version Backlogs for ' + backlogContext}
                         </div>
                         <div className="backlog-note">
@@ -170,7 +155,9 @@ export class ProjectSummary extends Component {
                                 <div className="summary-section-dv">
                                     <ProjectWorkSummaryItemContainer params={{
                                         userContext: userContext,
-                                        workItem: {workItem},
+                                        workItem: {
+                                            _id:    dvSummary.workItemId
+                                        },
                                         workItemType: WorkItemType.DV_ASSIGNED,
                                     }}/>
                                 </div>
@@ -199,86 +186,78 @@ export class ProjectSummary extends Component {
                                 <div className="summary-section-unassigned">
                                     <ProjectWorkSummaryItemContainer params={{
                                         userContext: userContext,
-                                        workItem: {},
+                                        workItem: {
+                                            _id:    dvSummary.workItemId
+                                        },
                                         workItemType: WorkItemType.DV_UNASSIGNED
                                     }}/>
                                 </div>
                             </Col>
                         </Row>
                     </Col>
-                    <Col md={6} className="close-col">
+                    <Col md={6} className="close-col scroll-col">
+                        {/*<Row>*/}
+                            {/*<ProjectBacklogContainer*/}
+                                {/*params={{*/}
+                                    {/*userContext: userContext,*/}
+                                    {/*currentSummaryId: summaryId,*/}
+                                    {/*backlogType: BacklogType.BACKLOG_DESIGN,*/}
+                                {/*}}*/}
+                            {/*/>*/}
+                        {/*</Row>*/}
                         <Row>
-                            <Col md={6} className="close-col">
-                                <ProjectBacklogContainer
-                                    params={{
-                                        userContext: userContext,
-                                        currentSummaryId: summaryId,
-                                        backlogType: BacklogType.BACKLOG_DESIGN,
-                                        displayContext: DisplayContext.DV_BACKLOG_DESIGN
-                                    }}
-                                />
-                            </Col>
-                            <Col md={6} className="close-col">
-                                <ProjectBacklogContainer
-                                    params={{
-                                        userContext: userContext,
-                                        currentSummaryId: summaryId,
-                                        backlogType: BacklogType.BACKLOG_ANOMALY,
-                                        displayContext: DisplayContext.DV_BACKLOG_ANOMALY
-                                    }}
-                                />
-                            </Col>
+                            <ProjectBacklogContainer
+                                params={{
+                                    userContext: userContext,
+                                    currentSummaryId: summaryId,
+                                    backlogType: BacklogType.BACKLOG_FEATURE_ANOMALY,
+                                }}
+                            />
                         </Row>
                         <Row>
-                            <Col md={6} className="close-col">
-                                <ProjectBacklogContainer
-                                    params={{
-                                        userContext: userContext,
-                                        currentSummaryId: summaryId,
-                                        backlogType: BacklogType.BACKLOG_WP_ASSIGN,
-                                        displayContext: DisplayContext.DV_BACKLOG_WORK
-                                    }}
-                                />
-                            </Col>
-                            <Col md={6} className="close-col">
-                                <ProjectBacklogContainer
-                                    params={{
-                                        userContext: userContext,
-                                        currentSummaryId: summaryId,
-                                        backlogType: BacklogType.BACKLOG_TEST_EXP,
-                                        displayContext: DisplayContext.DV_BACKLOG_NO_EXP
-                                    }}
-                                />
-                            </Col>
+                            <ProjectBacklogContainer
+                                params={{
+                                    userContext: userContext,
+                                    currentSummaryId: summaryId,
+                                    backlogType: BacklogType.BACKLOG_SCENARIO_ANOMALY,
+                                }}
+                            />
                         </Row>
                         <Row>
-                            <Col md={6} className="close-col">
-                                <ProjectBacklogContainer
-                                    params={{
-                                        userContext: userContext,
-                                        currentSummaryId: summaryId,
-                                        backlogType: BacklogType.BACKLOG_TEST_MISSING,
-                                        displayContext: DisplayContext.DV_BACKLOG_TEST_MISSING
-                                    }}
-                                />
-                            </Col>
-                            <Col md={6} className="close-col">
-                                <ProjectBacklogContainer
-                                    params={{
-                                        userContext: userContext,
-                                        currentSummaryId: summaryId,
-                                        backlogType: BacklogType.BACKLOG_TEST_FAIL,
-                                        displayContext: DisplayContext.DV_BACKLOG_TEST_FAIL
-                                    }}
-                                />
-                            </Col>
+                            <ProjectBacklogContainer
+                                params={{
+                                    userContext: userContext,
+                                    currentSummaryId: summaryId,
+                                    backlogType: BacklogType.BACKLOG_WP_ASSIGN,
+                                }}
+                            />
                         </Row>
                         <Row>
-                            <FeatureSummaryContainer params={{
-                                userContext: userContext,
-                                homePageTab: HomePageTab.TAB_SUMMARY,
-                                displayContext: backlogItem
-                            }}/>
+                            <ProjectBacklogContainer
+                                params={{
+                                    userContext: userContext,
+                                    currentSummaryId: summaryId,
+                                    backlogType: BacklogType.BACKLOG_TEST_EXP,
+                                }}
+                            />
+                        </Row>
+                        <Row>
+                            <ProjectBacklogContainer
+                                params={{
+                                    userContext: userContext,
+                                    currentSummaryId: summaryId,
+                                    backlogType: BacklogType.BACKLOG_TEST_MISSING,
+                                }}
+                            />
+                        </Row>
+                        <Row>
+                            <ProjectBacklogContainer
+                                params={{
+                                    userContext: userContext,
+                                    currentSummaryId: summaryId,
+                                    backlogType: BacklogType.BACKLOG_TEST_FAIL,
+                                }}
+                            />
                         </Row>
                     </Col>
                 </Row>
@@ -308,7 +287,11 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default ProjectSummaryContainer = createContainer(({params}) => {
 
-    const dvSummary = ClientDataServices.getDvSummaryData(params.userContext);
+    const workItem = {
+        _id:    params.userContext.designVersionId
+    };
+
+    const dvSummary = ClientDataServices.getWorkItemSummary(params.userContext, workItem, WorkItemType.DESIGN_VERSION);
 
     return  {
         dvSummary: dvSummary

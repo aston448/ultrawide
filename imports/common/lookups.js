@@ -8,6 +8,7 @@ import {
     TestLocationFileStatus, TestLocationFileType,
     LogLevel}
     from '../constants/constants.js';
+import {BacklogType, TestType} from "../constants/constants";
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -103,19 +104,21 @@ class TextLookupsClass {
         }
     }
 
-    displayContext(displayContext){
-        switch(displayContext){
-            case DisplayContext.DV_BACKLOG_ANOMALY:
-                return 'Design Anomaly Backlog';
-            case DisplayContext.DV_BACKLOG_WORK:
+    backlogType(backlogType){
+        switch(backlogType){
+            case BacklogType.BACKLOG_SCENARIO_ANOMALY:
+                return 'Scenario Design Anomaly Backlog';
+            case BacklogType.BACKLOG_FEATURE_ANOMALY:
+                return 'Feature Design Anomaly Backlog';
+            case BacklogType.BACKLOG_WP_ASSIGN:
                 return 'Work Assignment Backlog';
-            case DisplayContext.DV_BACKLOG_DESIGN:
+            case BacklogType.BACKLOG_DESIGN:
                 return 'Design Features Scenario Backlog';
-            case DisplayContext.DV_BACKLOG_NO_EXP:
+            case BacklogType.BACKLOG_TEST_EXP:
                 return 'Test Expectations Backlog';
-            case DisplayContext.DV_BACKLOG_TEST_MISSING:
+            case BacklogType.BACKLOG_TEST_MISSING:
                 return 'Missing Tests Backlog';
-            case DisplayContext.DV_BACKLOG_TEST_FAIL:
+            case BacklogType.BACKLOG_TEST_FAIL:
                 return 'Failing Tests Backlog'
         }
     }
@@ -195,7 +198,8 @@ class TextLookupsClass {
 
         switch(mashTestStatus){
             case MashTestStatus.MASH_NOT_LINKED:
-                return 'No Test';
+            case MashTestStatus.MASH_NO_TESTS:
+                return 'Missing';
             case MashTestStatus.MASH_PENDING:
                 return 'Pending';
             case MashTestStatus.MASH_PASS:
@@ -222,6 +226,18 @@ class TextLookupsClass {
                 return 'No tests in this feature';
         }
     };
+
+    testType(testType){
+
+        switch(testType){
+            case TestType.ACCEPTANCE:
+                return 'ACC';
+            case TestType.INTEGRATION:
+                return 'INT';
+            case TestType.UNIT:
+                return 'UNIT';
+        }
+    }
 
     mashTestTypes(displayContext){
 

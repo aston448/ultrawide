@@ -60,6 +60,7 @@ import {
     updateUserMessage
 } from '../redux/actions'
 import {BacklogType, SummaryType} from "../constants/constants";
+import {UserTestData} from "../data/test_data/user_test_data_db";
 
 
 // =====================================================================================================================
@@ -333,38 +334,40 @@ class ClientDataServicesClass{
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 const wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
-                const fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
-                const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
+                //const fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
+                //const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
                 const dpvHandle = Meteor.subscribe('designPermutationValues', userContext.designVersionId);
                 const steHandle = Meteor.subscribe('scenarioTestExpectations', userContext.designVersionId);
 
                 // User specific data
                 const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
-                const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
-                const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
-                const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
+                //const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
+                //const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
+                //const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
                 const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
-                const tsHandle = Meteor.subscribe('userDevTestSummary', userContext.userId);
-                const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
+                //const tsHandle = Meteor.subscribe('userDevTestSummary', userContext.userId);
+                //const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
                 const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
-                const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
-                const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
-                const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
-                const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
-                const dwsHandle = Meteor.subscribe('userDvWorkSummary', userContext.userId, userContext.designVersionId);
-                const dblHandle = Meteor.subscribe('userDvBacklog', userContext.userId, userContext.designVersionId);
+                //const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
+                //const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
+                //const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
+                //const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
+                //const dwsHandle = Meteor.subscribe('userDvWorkSummary', userContext.userId, userContext.designVersionId);
+                //const dblHandle = Meteor.subscribe('userDvBacklog', userContext.userId, userContext.designVersionId);
+                const uwiHandle = Meteor.subscribe('userWorkItemTestSummary', userContext.userId, userContext.designVersionId);
+                const uwbHandle = Meteor.subscribe('userWorkItemBacklog', userContext.userId, userContext.designVersionId);
+                const utrHandle = Meteor.subscribe('userTestExpectationResults', userContext.userId, userContext.designVersionId);
+                const ustHandle = Meteor.subscribe('userScenarioTestSummary', userContext.userId, userContext.designVersionId);
 
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dusHandle.ready() || !dpHandle.ready() || !dpvHandle.ready() || !dveHandle.ready() ||
-                        !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !wiHandle.ready() ||
-                        !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !daHandle.ready() ||
-                        !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
-                        !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready() || !steHandle.ready() ||
-                        !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready() ||
-                        !dwsHandle.ready() || !dblHandle.ready()
+                        !dusHandle.ready() || !dpHandle.ready() || !dpvHandle.ready() ||
+                        !dvcHandle.ready() || !ducHandle.ready() ||  !wiHandle.ready() ||
+                        !ddHandle.ready() ||  !daHandle.ready() || !stHandle.ready() ||
+                        !wcHandle.ready() ||  !steHandle.ready() || !dvmHandle.ready() ||
+                        !uwbHandle.ready() || !uwiHandle.ready() || !utrHandle.ready() || !ustHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
@@ -647,7 +650,7 @@ class ClientDataServicesClass{
             if(permutationValueExpectation){
 
                 // Test is expected for this value so see what its status is
-                const testExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+                const testExpectationStatus = UserTestData.getTestExpectationResult(
                     userContext.userId,
                     userContext.designVersionId,
                     permutationValueExpectation._id
@@ -656,7 +659,7 @@ class ClientDataServicesClass{
                 if(testExpectationStatus){
                     dataItem = {
                         permutationValue:   permutationValue,
-                        valueStatus:        testExpectationStatus.expectationStatus
+                        valueStatus:        testExpectationStatus.testOutcome
                     }
                 } else {
                     dataItem = {
@@ -691,26 +694,26 @@ class ClientDataServicesClass{
         const accExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenarioRefId, TestType.ACCEPTANCE);
 
         if(unitExpectation){
-            const unitStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, unitExpectation._id);
+            const unitStatusData = UserTestData.getTestExpectationResult(userContext.userId, userContext.designVersionId, unitExpectation._id); //UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, unitExpectation._id);
 
             if(unitStatusData){
-                unitStatus = unitStatusData.expectationStatus;
+                unitStatus = unitStatusData.testOutcome;
             }
         }
 
         if(intExpectation){
-            const intStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, intExpectation._id);
+            const intStatusData = UserTestData.getTestExpectationResult(userContext.userId, userContext.designVersionId, intExpectation._id); //UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, intExpectation._id);
 
             if(intStatusData){
-                intStatus = intStatusData.expectationStatus;
+                intStatus = intStatusData.testOutcome;
             }
         }
 
         if(accExpectation){
-            const accStatusData = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, accExpectation._id);
+            const accStatusData = UserTestData.getTestExpectationResult(userContext.userId, userContext.designVersionId, accExpectation._id); //UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, accExpectation._id);
 
             if(accStatusData){
-                accStatus = accStatusData.expectationStatus;
+                accStatus = accStatusData.testOutcome;
             }
         }
 
@@ -947,7 +950,7 @@ class ClientDataServicesClass{
         let scenarios = [];
         let featureSummary = {};
 
-        console.log('Getting backlog features for tab ' + homePageTab);
+        //console.log('Getting features list for tab ' + homePageTab);
 
         if(homePageTab === HomePageTab.TAB_SUMMARY){
 
@@ -999,7 +1002,7 @@ class ClientDataServicesClass{
 
                     case DisplayContext.DV_BACKLOG_ANOMALY:
 
-                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_ANOMALY);
+                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_SCENARIO_ANOMALY);
                         break;
 
                     case DisplayContext.DV_BACKLOG_WORK:
@@ -1700,9 +1703,7 @@ class ClientDataServicesClass{
                 case ViewType.DESIGN_UPDATABLE:
 
                     switch (displayContext) {
-                        case DisplayContext.MASH_ACC_TESTS:
-                        case DisplayContext.MASH_UNIT_TESTS:
-                        case DisplayContext.MASH_INT_TESTS:
+                        case DisplayContext.TEST_RESULTS:
 
                             // Don't include removed components in this view for test results
                             currentComponents = DesignComponentData.getNonRemovedChildComponentsOfType(designVersionId, childComponentType, parentRefId);
@@ -1766,9 +1767,7 @@ class ClientDataServicesClass{
                         case DisplayContext.WP_VIEW:
                         case DisplayContext.DEV_DESIGN:
                         case DisplayContext.TEST_EXPECTATIONS:
-                        case DisplayContext.MASH_UNIT_TESTS:
-                        case DisplayContext.MASH_INT_TESTS:
-                        case DisplayContext.MASH_ACC_TESTS:
+                        case DisplayContext.TEST_RESULTS:
 
                             // Get only the Design Components that are in the WP
 
@@ -1815,9 +1814,7 @@ class ClientDataServicesClass{
                         case DisplayContext.WP_VIEW:
                         case DisplayContext.DEV_DESIGN:
                         case DisplayContext.TEST_EXPECTATIONS:
-                        case DisplayContext.MASH_UNIT_TESTS:
-                        case DisplayContext.MASH_INT_TESTS:
-                        case DisplayContext.MASH_ACC_TESTS:
+                        case DisplayContext.TEST_RESULTS:
 
                             // Get only the Update Components that are in the WP
 
@@ -2135,17 +2132,10 @@ class ClientDataServicesClass{
 
     getScenarioTestSummaryData(userContext, scenarioRefId){
 
-        let summaryData = UserDvTestSummaryData.getScenarioSummary(
-            userContext.userId,
-            userContext.designVersionId,
-            scenarioRefId
-        );
+
+        const summaryData = UserTestData.getScenarioTestSummary(userContext.userId, userContext.designVersionId, scenarioRefId);
 
         //console.log('Summary data for user %s, dv %s, ref %s is %o', userContext.userId, userContext.designVersionId, scenarioRefId, summaryData);
-
-        if(!summaryData){
-            summaryData = {};
-        }
 
         const scenarioTestExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenario(
             userContext.designVersionId,
@@ -2164,16 +2154,48 @@ class ClientDataServicesClass{
 
     getFeatureTestSummaryData(userContext, featureRefId){
 
-        const featureSummary = UserDvTestSummaryData.getFeatureSummary(
-            userContext.userId,
-            userContext.designVersionId,
-            featureRefId
-        );
+        const featureScenarioSummaryData = UserTestData.getFeatureScenarioTestSummaries(userContext.userId, userContext.designVersionId, featureRefId);
 
-        if(featureSummary){
-            return featureSummary;
-        } else {
-            return {};
+        let featureScenarioCount = 0;
+        let featureExpectedTestCount = 0;
+        let featurePassingTestCount = 0;
+        let featureFailingTestCount = 0;
+        let featureMissingTestCount = 0;
+        let featureMissingExpectationCount = 0;
+        let featureTestStatus = MashTestStatus.MASH_NO_TESTS;
+
+        featureScenarioSummaryData.forEach((scenarioSummary) => {
+
+            featureScenarioCount++;
+            featureExpectedTestCount += scenarioSummary.totalExpectations;
+            featurePassingTestCount += scenarioSummary.totalPassing;
+            featureFailingTestCount += scenarioSummary.totalFailing;
+            featureMissingTestCount += scenarioSummary.totalMissing;
+            if(scenarioSummary.totalExpectations === 0){
+                featureMissingExpectationCount++;
+            }
+        });
+
+        if(featureExpectedTestCount > 0){
+            if(featureFailingTestCount > 0){
+                featureTestStatus = MashTestStatus.MASH_FAIL;
+            } else {
+                if(featureExpectedTestCount === featurePassingTestCount){
+                    featureTestStatus = MashTestStatus.MASH_PASS;
+                } else {
+                    featureTestStatus = MashTestStatus.MASH_INCOMPLETE;
+                }
+            }
+        }
+
+        return{
+            featureScenarioCount: featureScenarioCount,
+            featureExpectedTestCount: featureExpectedTestCount,
+            featurePassingTestCount: featurePassingTestCount,
+            featureFailingTestCount: featureFailingTestCount,
+            featureMissingTestCount: featureMissingTestCount,
+            featureMissingExpectationCount: featureMissingExpectationCount,
+            featureTestStatus: featureTestStatus
         }
 
     }
@@ -2681,7 +2703,6 @@ class ClientDataServicesClass{
                             default:
 
                                 return [
-                                    refreshProgressData,
                                     refreshTestData
                                 ];
                         }
@@ -2974,147 +2995,163 @@ class ClientDataServicesClass{
         return DefaultFeatureAspectData.getDefaultAspectsForDesign(designId);
     }
 
-    getDvSummaryData(userContext){
 
-        // DV Name
-        let designVersionName = 'No Design Version Selected';
-        let dvSummaryId = 'NONE';
-        let dvFeatureCount = 0;
-        let dvScenarioCount = 0;
-        let dvExpectedTestCount = 0;
-        let dvPassingTestCount = 0;
-        let dvNoTestExpectationsScenarioCount = 0;
-        let dvMissingTestScenarioCount = 0;
-        let dvFailingTestScenarioCount = 0;
-        let dvScenarioCompleteCount = 0;
-        let dvScenarioIncompleteCount = 0;
-
-        const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
-
-        if(designVersion) {
-
-            designVersionName = designVersion.designVersionName;
-
-            const dvSummary = UserDvWorkSummaryData.getDesignVersionSummary(userContext.designVersionId);
-
-            if(dvSummary){
-                dvSummaryId = dvSummary._id;
-                dvFeatureCount = dvSummary.featureCount;
-                dvScenarioCount = dvSummary.scenarioCount;
-                dvExpectedTestCount = dvSummary.expectedTestCount;
-                dvPassingTestCount = dvSummary.passingTestCount;
-                dvFailingTestScenarioCount = dvSummary.failingTestCount;
-                dvMissingTestScenarioCount = dvSummary.missingTestCount;
-                dvNoTestExpectationsScenarioCount = dvSummary.noExpectationsCount;
-                dvScenarioCompleteCount = dvSummary.scenarioCompleteCount;
-                dvScenarioIncompleteCount = dvSummary.scenarioIncompleteCount;
-            }
-        }
-
-        return{
-            dvSummaryId:                dvSummaryId,
-            designVersionName:          designVersionName,
-            dvFeatureCount:             dvFeatureCount,
-            dvScenarioCount:            dvScenarioCount,
-            dvExpectedTestCount:        dvExpectedTestCount,
-            dvPassingTestCount:         dvPassingTestCount,
-            dvNoTestExpectationsCount:  dvNoTestExpectationsScenarioCount,
-            dvMissingTestCount:         dvMissingTestScenarioCount,
-            dvFailingTestCount:         dvFailingTestScenarioCount,
-            dvScenarioCompleteCount:    dvScenarioCompleteCount,
-            dvScenarioIncompleteCount:  dvScenarioIncompleteCount
-        }
-    }
-
-    getWorkItemSummaryData(userContext, workItem, workItemType){
+    getWorkItemSummary(userContext, workItem, workItemType){
 
         //console.log('Work item type is %s and work item is %o', workItemType, workItem);
 
         if(userContext.designVersionId === 'NONE'){
 
             return {
-                summaryId: 'NONE',
-                itemName: '',
-                featureCount: 0,
-                scenarioCount: 0,
-                expectedTests: 0,
-                passingTests: 0,
-                failingTests: 0,
-                missingTests: 0,
-                noExpectations: 0,
-                isUnassigned: false
+                _id:                        'NONE',
+                userId:                     userContext.userId,
+                designVersionId:            userContext.designVersionId,
+                workItemId:                 'NONE',
+                workItemType:               'NONE',
+                // Data
+                workItemName:               'No Design Version Selected',
+                totalFeatures:              0,
+                totalScenarios:             0,
+                totalExpectations:          0,
+                totalTests:                 0,
+                totalPassing:               0,
+                totalFailing:               0,
+                totalMissing:               0,
+                totalNoExpectations:        0
             };
         }
 
-        let summaryData = {};
-        let itemName = '';
-        let isUnassigned = false;
+        //console.log('Getting data with %s %s %s', userContext.userId, userContext.designVersionId, workItem._id);
 
-        switch(workItemType) {
-            case WorkItemType.DV_ASSIGNED:
-                summaryData = UserDvWorkSummaryData.getDesignVersionAssignedSummary(userContext.designVersionId);
-                if(summaryData) {
-                    itemName = summaryData.dvName;
-                }
-                break;
-            case WorkItemType.DV_UNASSIGNED:
-                summaryData = UserDvWorkSummaryData.getDesignVersionUnassignedSummary(userContext.designVersionId);
-                if(summaryData) {
-                    itemName = summaryData.dvName;
-                }
-                isUnassigned = true;
-                break;
-            case WorkItemType.INCREMENT:
-                summaryData = UserDvWorkSummaryData.getIncrementSummary(userContext.designVersionId, workItem._id);
-                if(summaryData) {
-                    itemName = summaryData.inName;
-                }
-                break;
-            case WorkItemType.ITERATION:
-                summaryData = UserDvWorkSummaryData.getIterationSummary(userContext.designVersionId, workItem._id);
-                if(summaryData) {
-                    itemName = summaryData.itName;
-                }
-                break;
-            case WorkItemType.BASE_WORK_PACKAGE:
-            case WorkItemType.UPDATE_WORK_PACKAGE:
-                summaryData = UserDvWorkSummaryData.getWorkPackageSummary(userContext.designVersionId, workItem._id);
-                if(summaryData) {
-                    itemName = summaryData.wpName;
-                }
-                break;
-        }
+        const summaryData = UserTestData.getWorkItemSummaryData(userContext.userId, userContext.designVersionId, workItem._id, workItemType);
 
-        //console.log('Summary data is %o', summaryData);
+        //console.log('Summary data 1 is %o', summaryData);
 
         if(summaryData) {
-            return {
-                summaryId:  summaryData._id,
-                itemName: itemName,
-                featureCount: summaryData.featureCount,
-                scenarioCount: summaryData.scenarioCount,
-                expectedTests: summaryData.expectedTestCount,
-                passingTests: summaryData.passingTestCount,
-                failingTests: summaryData.failingTestCount,
-                missingTests: summaryData.missingTestCount,
-                noExpectations: summaryData.noExpectationsCount,
-                isUnassigned: isUnassigned
-            }
+
+            return summaryData;
+
         } else {
+
             return {
-                summaryId: 'NONE',
-                itemName: '',
-                featureCount: 0,
-                scenarioCount: 0,
-                expectedTests: 0,
-                passingTests: 0,
-                failingTests: 0,
-                missingTests: 0,
-                noExpectations: 0,
-                isUnassigned: false
+                _id:                        'NONE',
+                userId:                     userContext.userId,
+                designVersionId:            userContext.designVersionId,
+                workItemId:                 'NONE',
+                workItemType:               'NONE',
+                // Data
+                workItemName:               'No Work Item',
+                totalFeatures:              0,
+                totalScenarios:             0,
+                totalExpectations:          0,
+                totalTests:                 0,
+                totalPassing:               0,
+                totalFailing:               0,
+                totalMissing:               0,
+                totalNoExpectations:        0
             };
         }
     }
+
+    getBacklogData(userContext, summaryId, backlogType){
+
+        // Get the currently selected summary
+        let summaryItem = {};
+
+        if(summaryId === 'NONE'){
+            // Nothing selected so default to DV
+            summaryItem = UserTestData.getDvSummaryItem(userContext.userId, userContext.designVersionId);
+        } else {
+            summaryItem = UserTestData.getWorkItemSummaryDataById(summaryId);
+        }
+
+        //console.log('Summary Item is %o for Backlog Type %s', summaryItem, backlogType);
+
+        if(summaryItem) {
+
+            // Get a list of backlog data entries for the summary item
+            let backlogEntries = [];
+
+            switch (summaryItem.workItemType) {
+
+                case WorkItemType.BASE_WORK_PACKAGE:
+                case WorkItemType.UPDATE_WORK_PACKAGE:
+
+                    backlogEntries = UserTestData.getBacklogDataForWp(userContext.userId, userContext.designVersionId, summaryItem.workItemId, backlogType);
+                    break;
+
+                case WorkItemType.ITERATION:
+
+                    backlogEntries = UserTestData.getBacklogDataForIteration(userContext.userId, userContext.designVersionId, summaryItem.workItemId, backlogType);
+                    break;
+
+                case WorkItemType.INCREMENT:
+
+                    backlogEntries = UserTestData.getBacklogDataForIncrement(userContext.userId, userContext.designVersionId, summaryItem.workItemId, backlogType);
+                    break;
+
+                case WorkItemType.DV_ASSIGNED:
+
+                    backlogEntries = UserTestData.getBacklogDataForDvAssigned(userContext.userId, userContext.designVersionId, backlogType);
+                    break;
+
+                case WorkItemType.DV_UNASSIGNED:
+
+                    backlogEntries = UserTestData.getBacklogDataForDvUnassigned(userContext.userId, userContext.designVersionId, backlogType);
+                    break;
+
+                case WorkItemType.DESIGN_VERSION:
+
+                    backlogEntries = UserTestData.getBacklogDataForDv(userContext.userId, userContext.designVersionId, backlogType);
+                    break;
+            }
+
+            let backlogFeatures = new Map();
+            let backlogItemTotal = 0;
+
+            backlogEntries.forEach((backlogEntry) => {
+
+                backlogItemTotal += backlogEntry.backlogItemCount;
+
+                if (backlogFeatures.has(backlogEntry.featureRefId)) {
+
+                    // Add the backlog count to this feature
+                    const newValue = backlogFeatures.get(backlogEntry.featureRefId).count + backlogEntry.backlogItemCount;
+                    backlogFeatures.set(backlogEntry.featureRefId, {
+                        id: backlogEntry.featureRefId,
+                        name: backlogEntry.featureName,
+                        count: newValue
+                    });
+
+                } else {
+
+                    // Add a new feature to the map
+                    backlogFeatures.set(backlogEntry.featureRefId, {
+                        id: backlogEntry.featureRefId,
+                        name: backlogEntry.featureName,
+                        count: backlogEntry.backlogItemCount
+                    });
+                }
+
+            });
+
+            return {
+                backlogFeatures: backlogFeatures,
+                backlogItemTotal: backlogItemTotal,
+                workItemType: summaryItem.workItemType
+            };
+
+        } else {
+
+            return {
+                backlogFeatures: {},
+                backlogItemTotal: 0,
+                workItemType: 'NONE'
+            };
+        }
+
+    }
+
 
     getBacklogSummaryData(userContext, workItem, backlogType){
 
@@ -3150,58 +3187,6 @@ class ClientDataServicesClass{
         }
     }
 
-
-    // getProjectSummaryData(userContext){
-    //
-    //     // Want to return:
-    //     // Design Version Name
-    //     // Total features in DV
-    //     // Number of features with scenarios with no test requirements
-    //     // Number of features with scenarios required tests missing
-    //     // Number of features with failing tests
-    //     // Number of features with some passing tests
-    //     // Number of features with all required tests passing
-    //
-    //     // DV Name
-    //     let designVersionName = 'No Design Version Selected';
-    //     const designVersion = DesignVersionData.getDesignVersionById(userContext.designVersionId);
-    //
-    //     let totalFeatureCount = 0;
-    //     let noRequirementsCount = 0;
-    //     let missingRequirementsCount = 0;
-    //     let failingCount = 0;
-    //     let somePassingCount = 0;
-    //     let allPassingCount = 0;
-    //     let testsCount = 0;
-    //
-    //     if(designVersion){
-    //
-    //         designVersionName = designVersion.designVersionName;
-    //
-    //         totalFeatureCount = DesignVersionData.getNonRemovedFeatureCount(userContext.designId, userContext.designVersionId);
-    //
-    //         noRequirementsCount = UserDvTestSummaryData.getFeaturesWithMissingTestRequirements(userContext.userId, userContext.designVersionId).length;
-    //         missingRequirementsCount = UserDvTestSummaryData.getFeaturesWithMissingRequiredTests(userContext.userId, userContext.designVersionId).length;
-    //         failingCount = UserDvTestSummaryData.getFeaturesWithFailingTests(userContext.userId, userContext.designVersionId).length;
-    //         somePassingCount = UserDvTestSummaryData.getFeaturesWithSomePassingTests(userContext.userId, userContext.designVersionId).length;
-    //         allPassingCount = UserDvTestSummaryData.getFeaturesWithAllTestsPassing(userContext.userId, userContext.designVersionId).length;
-    //
-    //         testsCount = failingCount + somePassingCount + allPassingCount;
-    //     }
-    //
-    //     return(
-    //         {
-    //             designVersionName: designVersionName,
-    //             totalFeatureCount: totalFeatureCount,
-    //             noTestRequirementsCount: noRequirementsCount,
-    //             missingTestRequirementsCount: missingRequirementsCount,
-    //             failingTestsCount: failingCount,
-    //             someTestsCount: somePassingCount,
-    //             allTestsCount: allPassingCount,
-    //             testsCount: testsCount
-    //         }
-    //     )
-    // }
 
 }
 

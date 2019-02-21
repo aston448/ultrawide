@@ -28,7 +28,7 @@ import store from '../../../redux/store'
 import {
     setCurrentUserBacklogItem
 } from '../../../redux/actions'
-import {SummaryType, WorkItemType} from "../../../constants/constants";
+import {BacklogType, SummaryType, WorkItemType} from "../../../constants/constants";
 import {WorkItemData} from "../../../data/work/work_item_db";
 import {UserDvWorkSummaryData} from "../../../data/summary/user_dv_work_summary_db";
 
@@ -49,109 +49,35 @@ export class ProjectBacklog extends Component {
         super(props);
 
         this.state = {
-            displayContext: DisplayContext.PROJECT_SUMMARY_ALL
+            backlogType: 'NONE'
         };
     }
 
-    onSummaryItemSelect(displayContext){
+    onBacklogItemSelect(backlogType){
 
         //console.log('Setting display context to ' + displayContext);
 
-        this.setState({displayContext: displayContext});
+        this.setState({backlogType: backlogType});
 
-        store.dispatch(setCurrentUserBacklogItem(displayContext));
+        store.dispatch(setCurrentUserBacklogItem(backlogType));
     }
 
 
     render() {
 
-        const {backlogSummary, selectedItemSummary, displayContext, userContext} = this.props;
+        const {backlogFeatures, backlogItemTotal, backlogType, workItemType} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Backlog Summary');
-
-        // Backlog Summary is an Array of Features in the backlog
-        let scenarioCount = 0;
-        let testCount = 0;
-        let featureCount = 0;
-        let totalFeatureCount = 0;
-        let noExpectationsCount = 0;
-        let missingTestCount = 0;
-        let failingTestCount = 0;
-
-        // Default to whole DV if nothing selected
-        let summaryType = SummaryType.SUMMARY_DV;
-
-        if(selectedItemSummary){
-            summaryType = selectedItemSummary.summaryType;
-        }
-
-        switch(displayContext){
-
-            case DisplayContext.DV_BACKLOG_DESIGN:
-
-                break;
-
-            case DisplayContext.DV_BACKLOG_ANOMALY:
-
-                backlogSummary.forEach((backlogItem) => {
-
-                    if (summaryType === SummaryType.SUMMARY_DV) {
-                        //  For the whole DV we count all Anomalies (Feature and Scenario)
-                        scenarioCount += backlogItem.featureAnomalyCount;
-                    } else {
-                        // For subsets we only count anomalies related to Scenarios
-                        scenarioCount += backlogItem.scenarioAnomalyCount;
-                    }
-                });
-
-                break;
-
-            case DisplayContext.DV_BACKLOG_WORK:
-                break;
-
-            case DisplayContext.DV_BACKLOG_NO_EXP:
-
-                if(selectedItemSummary) {
-                    scenarioCount = selectedItemSummary.noExpectationsCount;
-                }
-                break;
-
-            case DisplayContext.DV_BACKLOG_TEST_MISSING:
-
-                if(selectedItemSummary) {
-                    testCount = selectedItemSummary.missingTestCount;
-                }
-
-                backlogSummary.forEach((backlogItem) => {
-                    scenarioCount += backlogItem.scenarioCount;
-                });
-
-                break;
-
-            case DisplayContext.DV_BACKLOG_TEST_FAIL:
-
-                if(selectedItemSummary) {
-                    testCount = selectedItemSummary.failingTestCount;
-                }
-
-                backlogSummary.forEach((backlogItem) => {
-                    scenarioCount += backlogItem.scenarioCount;
-                });
-
-        }
-
 
 
         return(
             <div>
                 <ProjectBacklogItem
-                    displayContext={displayContext}
-                    summaryType={summaryType}
-                    totalFeatureCount={totalFeatureCount}
-                    featureCount={backlogSummary.length}
-                    scenarioCount={scenarioCount}
-                    testCount={testCount}
-                    selectionFunction={() => this.onSummaryItemSelect(displayContext)}
+                    backlogType={backlogType}
+                    workItemType={workItemType}
+                    backlogFeatures={backlogFeatures}
+                    backlogItemTotal={backlogItemTotal}
+                    selectionFunction={() => this.onBacklogItemSelect(backlogType)}
                 />
             </div>
         )
@@ -160,9 +86,10 @@ export class ProjectBacklog extends Component {
 }
 
 ProjectBacklog.propTypes = {
-    backlogSummary:         PropTypes.array.isRequired,
-    selectedItemSummary:    PropTypes.object,
-    displayContext:         PropTypes.string.isRequired
+    backlogFeatures:        PropTypes.object.isRequired,
+    backlogItemTotal:       PropTypes.number.isRequired,
+    backlogType:            PropTypes.string.isRequired,
+    workItemType:           PropTypes.string.isRequired,
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -176,28 +103,18 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default ProjectBacklogContainer = createContainer(({params}) => {
 
-    //console.log('Getting work item summary for id ' + params.currentSummaryId);
-
-    let selectedItemSummary ={};
-
-    // If no selection, default to the whole DV
-    if(params.currentSummaryId === 'NONE'){
-        selectedItemSummary = UserDvWorkSummaryData.getDesignVersionSummary(params.userContext.designVersionId)
-    } else {
-        selectedItemSummary = UserDvWorkSummaryData.getWorkItemSummaryDataById(params.currentSummaryId);
-    }
-
-
-    const backlogSummary = ClientDataServices.getBacklogSummaryData(
+    // Get a list of Features with the backlog totals against them.
+    const backlogData = ClientDataServices.getBacklogData(
         params.userContext,
-        selectedItemSummary,
+        params.currentSummaryId,
         params.backlogType
     );
 
     return  {
-        backlogSummary: backlogSummary,
-        selectedItemSummary: selectedItemSummary,
-        displayContext: params.displayContext
+        backlogFeatures: backlogData.backlogFeatures,
+        backlogItemTotal: backlogData.backlogItemTotal,
+        backlogType: params.backlogType,
+        workItemType: backlogData.workItemType
     }
 
 }, connect(mapStateToProps)(ProjectBacklog));

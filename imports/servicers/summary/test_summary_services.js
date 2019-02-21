@@ -28,10 +28,12 @@ class TestSummaryServicesClass {
 
     refreshAllTestSummaryData(userContext){
 
+        log((msg) => console.log(msg), LogLevel.PERF, "      Remove Data...");
         // Remove existing data
         UserDvTestSummaryData.removeAllUserSummaryData(userContext.userId);
 
 
+        log((msg) => console.log(msg), LogLevel.PERF, "      Refresh Scenarios...");
         // Refresh all scenario data -----------------------------------------------------------------------------------
         const dvScenarios = DesignComponentData.getNonRemovedDvScenarios(userContext.designVersionId);
 
@@ -49,7 +51,7 @@ class TestSummaryServicesClass {
             UserDvTestSummaryData.bulkInsertScenarioSummaryData(scenarioSummaryBatch);
         }
 
-
+        log((msg) => console.log(msg), LogLevel.PERF, "      Refresh Features...");
         // Refresh all Feature data ------------------------------------------------------------------------------------
         const dvFeatures = DesignComponentData.getNonRemovedDvFeatures(userContext.designVersionId);
 
@@ -67,7 +69,7 @@ class TestSummaryServicesClass {
             UserDvTestSummaryData.bulkInsertFeatureSummaryData(featureSummaryBatch);
         }
 
-
+        log((msg) => console.log(msg), LogLevel.PERF, "      Refresh DV Data...");
         // Refresh DV data ---------------------------------------------------------------------------------------------
         const dvSummaryData = TestSummaryModules.getSummaryDataForDesignVersion(userContext);
 

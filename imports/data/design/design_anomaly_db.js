@@ -98,6 +98,13 @@ class DesignAnomalyDataClass {
         }).fetch();
     }
 
+    getAllActiveFeatureDesignAnomaliesInDv(designVersionId){
+        return DesignAnomalies.find({
+            designVersionId:        designVersionId,
+            $or:                    [{designAnomalyStatus: DesignAnomalyStatus.ANOMALY_OPEN}, {designAnomalyStatus: DesignAnomalyStatus.ANOMALY_ONGOING}]
+        }).fetch();
+    }
+
     // UPDATE ==========================================================================================================
 
 

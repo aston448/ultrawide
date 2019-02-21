@@ -4,9 +4,9 @@ export const UserDevTestSummary = new Mongo.Collection('userDevTestSummary');
 
 let Schema = new SimpleSchema({
     // Design Identity
-    userId:                         {type: String},                         // Meteor user id - must be a user
-    designVersionId:                {type: String},                         // Must be a design version
-    scenarioReferenceId:            {type: String, defaultValue: 'NONE'},   // Set if known in Design
+    userId:                         {type: String, index: 1},                         // Meteor user id - must be a user
+    designVersionId:                {type: String, index: 1},                         // Must be a design version
+    scenarioReferenceId:            {type: String, defaultValue: 'NONE', index: 1},   // Set if known in Design
     featureReferenceId:             {type: String, defaultValue: 'NONE'},   // Set if known in Design
     accTestStatus:                  {type: String},                         // If linked, latest acceptance test results status
     intTestStatus:                  {type: String},                         // If linked, latest integration test results status
