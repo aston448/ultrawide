@@ -2,13 +2,9 @@
 
 import { ScenarioTestExpectationData }  from '../../data/design/scenario_test_expectations_db.js';
 
-import { TestIntegrationServices }      from "../../servicers/dev/test_integration_services.js";
-
-import {TestType, LogLevel, MashTestStatus} from "../../constants/constants";
+import { LogLevel, MashTestStatus} from "../../constants/constants";
 
 import {log} from '../../common/utils.js';
-import {TestSummaryServices} from "../summary/test_summary_services";
-import {UserDvScenarioTestExpectationStatusData} from "../../data/mash/user_dv_scenario_test_expectation_status_db";
 
 
 //======================================================================================================================
@@ -54,10 +50,6 @@ class ScenarioTestExpectationServicesClass{
 
                 ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
 
-                TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId,testType);
-
-                TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
-
             } else {
                 // Log a warning as should not be happening
                 log((msg) => console.log(msg), LogLevel.WARNING, 'Test expectation already existed - not adding to Scenario Test Expectations', testType);
@@ -70,10 +62,6 @@ class ScenarioTestExpectationServicesClass{
 
         if(Meteor.isServer) {
             ScenarioTestExpectationData.removeScenarioTestExpectationsForTestType(userContext.designVersionId, scenarioReferenceId, testType);
-
-            TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId, testType);
-
-            TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
         }
     }
 
@@ -82,10 +70,6 @@ class ScenarioTestExpectationServicesClass{
 
         if(Meteor.isServer) {
             ScenarioTestExpectationData.removeScenarioTestExpectationsForTestTypePermutation(userContext.designVersionId, scenarioReferenceId, testType, permutationId);
-
-            TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId, testType);
-
-            TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
         }
     }
 
@@ -116,9 +100,6 @@ class ScenarioTestExpectationServicesClass{
 
                 console.log('Inserted new test expectation for value %s', expectationId);
 
-                TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId, testType);
-
-                TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
             }
 
         }
@@ -128,12 +109,7 @@ class ScenarioTestExpectationServicesClass{
     unselectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
 
         if(Meteor.isServer) {
-
             ScenarioTestExpectationData.removeScenarioTestExpectationForTestTypePermutationValue(userContext.designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
-
-            TestIntegrationServices.updateScenarioTestTypeExpectationStatuses(userContext, scenarioReferenceId, testType);
-
-            TestSummaryServices.updateScenarioTestSummary(userContext, scenarioReferenceId);
         }
     }
 

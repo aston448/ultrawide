@@ -5,22 +5,16 @@ import React, { Component } from 'react';
 import PropTypes            from 'prop-types';
 import { createContainer }  from 'meteor/react-meteor-data';
 
-// Ultrawide Collections
-
 // Ultrawide GUI Components
 import ProjectBacklogItem               from '../../components/summary/ProjectBacklogItem.jsx';
-import FeatureSummaryContainer          from '../item/FeatureSummaryContainer.jsx';
-import WorkItemListContainer            from '../../containers/work/WorkItemContainer.jsx';
-import ProjectWorkSummaryItemContainer  from '../../containers/summary/ProjectWorkSummaryItemContainer.jsx'
 
 // Ultrawide Services
-import {DisplayContext, HomePageTab, LogLevel} from '../../../constants/constants.js';
+import {LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
 import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
-import {Grid, Row, Col, Well} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -28,9 +22,6 @@ import store from '../../../redux/store'
 import {
     setCurrentUserBacklogItem
 } from '../../../redux/actions'
-import {BacklogType, SummaryType, WorkItemType} from "../../../constants/constants";
-import {WorkItemData} from "../../../data/work/work_item_db";
-import {UserDvWorkSummaryData} from "../../../data/summary/user_dv_work_summary_db";
 
 
 // =====================================================================================================================

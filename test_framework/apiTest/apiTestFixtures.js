@@ -21,11 +21,9 @@ import { DomainDictionary }             from '../../imports/collections/design/d
 import { TestOutputLocations }          from '../../imports/collections/configure/test_output_locations.js'
 import { TestOutputLocationFiles }      from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }        from '../../imports/collections/configure/user_test_type_locations.js';
-import { UserDesignVersionMashScenarios } from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserMashScenarioTests }        from '../../imports/collections/mash/user_mash_scenario_tests.js';
 import { UserIntegrationTestResults }   from '../../imports/collections/test_results/user_ultrawide_test_results.js';
 import { UserUnitTestResults }          from '../../imports/collections/test_results/user_ultrawide_test_results.js';
-import { UserDevTestSummary }           from '../../imports/collections/summary/user_dev_test_summary.js';
 import { UserWorkProgressSummary }      from '../../imports/collections/summary/user_work_progress_summary.js';
 import { DefaultFeatureAspectData }     from '../../imports/data/design/default_feature_aspect_db.js';
 import { ImpexModules}                  from "../../imports/service_modules/administration/impex_service_modules";
@@ -89,12 +87,10 @@ Meteor.methods({
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
 
-            UserDesignVersionMashScenarios.remove({});
             UserMashScenarioTests.remove({});
 
             UserUnitTestResults.remove({});
             UserIntegrationTestResults.remove({});
-            UserDevTestSummary.remove({});
             UserWorkProgressSummary.remove({});
 
             UserContext.remove({});
@@ -355,12 +351,10 @@ Meteor.methods({
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
 
-            UserDesignVersionMashScenarios.remove({});
             UserMashScenarioTests.remove({});
 
             UserUnitTestResults.remove({});
             UserIntegrationTestResults.remove({});
-            UserDevTestSummary.remove({});
             UserWorkProgressSummary.remove({});
 
             UserContext.remove({});

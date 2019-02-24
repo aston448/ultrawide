@@ -117,103 +117,6 @@ class ClientTestIntegrationServicesClass {
     // API Methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-    // Test Summary data needs refreshing - flag says if we need to recalculate all results or not
-    updateTestSummaryData(userContext){
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST SUMMARY DATA...");
-
-        store.dispatch(updateUserMessage({
-            messageType: MessageType.WARNING,
-            messageText: 'Updating test summary data'
-        }));
-
-        ServerTestIntegrationApi.updateTestSummaryData(userContext, (err, result) => {
-
-            if(err){
-
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-            } else {
-
-                store.dispatch(updateTestDataFlag());
-
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
-                    messageText: 'Summary updated'
-                }));
-            }
-        });
-
-    }
-
-    // Test Summary data needs refreshing for one feature - probably because of changing test expectations
-    updateTestSummaryDataForFeature(userContext){
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH TEST SUMMARY DATA FOR FEATURE");
-
-        store.dispatch(updateUserMessage({
-            messageType: MessageType.INFO,
-            messageText: 'Updating test summary data for feature...'
-        }));
-
-        ServerTestIntegrationApi.updateTestSummaryDataForFeature(userContext, (err, result) => {
-
-            if(err){
-
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-            } else {
-
-                store.dispatch(updateTestDataFlag());
-
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
-                    messageText: 'Summary updated'
-                }));
-            }
-        });
-
-    }
-
-    // User has requested update of WP / DU progress data
-    refreshWorkProgressData(userContext){
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH WORK DATA...");
-
-        const currentView = store.getState().currentAppView;
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Current view is {}", currentView);
-
-        store.dispatch(setCurrentView(ViewType.WAIT));
-
-        store.dispatch(updateUserMessage({
-            messageType: MessageType.INFO,
-            messageText: 'Refreshing Work Progress and Backlogs...'
-        }));
-
-        ServerTestIntegrationApi.refreshWorkProgressData(userContext, (err, result) => {
-
-            if(err){
-
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-            } else {
-
-                // Mash is populated to carry on with test data if needed
-
-                store.dispatch(updateTestDataFlag());
-
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
-                    messageText: 'Work Progress updated'
-                }));
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH WORK DATA.  View to {}", currentView);
-
-                store.dispatch(setCurrentView(currentView));
-            }
-        });
-
-        return {success: true, message: ''};
-    }
-
     // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(userContext, fullRefresh){
 
@@ -252,32 +155,6 @@ class ClientTestIntegrationServicesClass {
 
         return {success: true, message: ''};
     }
-
-    // Get latest test results required for current view options
-    // updateTestResults(userContext, viewOptions){
-    //
-    //     store.dispatch(updateUserMessage({
-    //         messageType: MessageType.WARNING,
-    //         messageText: 'Synchronising server test results data...'
-    //     }));
-    //
-    //     ServerTestIntegrationApi.updateTestResults(userContext, viewOptions, (err, result) => {
-    //
-    //         if(err){
-    //
-    //             alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-    //         } else {
-    //
-    //             store.dispatch(updateUserMessage({
-    //                 messageType: MessageType.INFO,
-    //                 messageText: 'Test results loaded'
-    //             }));
-    //
-    //             store.dispatch(updateTestDataFlag())
-    //         }
-    //     });
-    // };
-
 
     // LOCAL CLIENT ACTIONS ============================================================================================
 

@@ -1,14 +1,14 @@
 
 // Ultrawide Services
 import { DesignUpdateServices }         from '../../servicers/design_update/design_update_services.js';
-import { WorkPackageStatus, WorkPackageTestStatus, UpdateMergeStatus, WorkPackageReviewType, LogLevel } from '../../constants/constants.js';
+import { WorkPackageStatus, WorkPackageTestStatus, UpdateMergeStatus, WorkPackageReviewType, MashTestStatus, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js'
 
 // Data Access
 import { DesignComponentData }          from '../../data/design/design_component_db.js';
 import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
 import { WorkPackageData }              from '../../data/work/work_package_db.js';
-import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scenario_db.js';
+import { UserMashScenarioTestData }     from "../../data/mash/user_mash_scenario_test_db";
 
 
 //======================================================================================================================
@@ -90,41 +90,44 @@ class WorkPackageServicesClass {
                     for (let scenario of wpScenarios) {
 
                         // Get latest test results
-                        let scenarioMash = UserDvMashScenarioData.getScenario(userContext, scenario.componentReferenceId);
+                        const mashScenarioResults = UserMashScenarioTestData.getAllScenarioTestData(userContext.userId, userContext.designVersionId, scenario.componentReferenceId);
+
+                        let passCount = 0;
+                        let failCount = 0;
+                        let missingCount = 0;
+
+                        mashScenarioResults.forEach((mashScenarioResult) => {
+
+                            if(mashScenarioResult.testOutcome === MashTestStatus.MASH_PASS){
+                                passCount++;
+                            } else {
+                                if(mashScenarioResult.testOutcome === MashTestStatus.MASH_FAIL){
+                                    failCount++;
+                                } else {
+                                    missingCount++;
+                                }
+                            }
+                        });
 
                         let problem = false;
 
-                        // Not complete if no test data
-                        if (scenarioMash) {
+                        if ((passCount + failCount + missingCount) > 0) {
 
-                            // Not complete if any fails
-
-                            if (
-                                (scenarioMash.accFailCount && scenarioMash.accFailCount > 0) ||
-                                (scenarioMash.intFailCount && scenarioMash.intFailCount > 0) ||
-                                (scenarioMash.unitFailCount && scenarioMash.unitFailCount > 0)
-                            ) {
-                                log((msg) => console.log(msg), LogLevel.DEBUG, '  Fails');
+                            // Any fails its bad
+                            if (failCount > 0) {
                                 problem = true;
-                            }
-
-                            // Not complete if no passes and not ignored
-                            let passCount = 0;
-                            if (scenarioMash.accPassCount) {passCount += scenarioMash.accPassCount}
-                            if (scenarioMash.intPassCount) {passCount += scenarioMash.intPassCount}
-                            if (scenarioMash.unitPassCount) {passCount += scenarioMash.unitPassCount}
-
-                            log((msg) => console.log(msg), LogLevel.DEBUG, '  Pass count = {}', passCount);
-
-                            if (
-                                (passCount === 0) &&
-                                (scenario.reviewStatus !== WorkPackageReviewType.REVIEW_IGNORE)
-                            ) {
-                                log((msg) => console.log(msg), LogLevel.DEBUG, '  No Passes');
-                                problem = true;
+                            } else {
+                                // No fails so any passes is good
+                                if ((passCount > 0) && (missingCount === 0)
+                                ) {
+                                    problem = false;
+                                } else {
+                                    if((scenario.reviewStatus !== WorkPackageReviewType.REVIEW_IGNORE)){
+                                        problem = true;
+                                    }
+                                }
                             }
                         } else {
-                            log((msg) => console.log(msg), LogLevel.DEBUG, '  No Mash');
                             problem = true;
                         }
 

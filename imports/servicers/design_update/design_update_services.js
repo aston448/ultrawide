@@ -9,7 +9,7 @@ import { DesignUpdateModules }          from '../../service_modules/design_updat
 import { DesignVersionData }            from '../../data/design/design_version_db.js';
 import { DesignUpdateData }             from '../../data/design_update/design_update_db.js';
 import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
-import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scenario_db.js'
+import {UserMashScenarioTestData} from "../../data/mash/user_mash_scenario_test_db";
 
 //======================================================================================================================
 //
@@ -148,7 +148,7 @@ class DesignUpdateServicesClass {
                     log((msg) => console.log(msg), LogLevel.DEBUG, "    DU Scenario: {} with WP {}", duScenario.componentNameNew, duScenario.workPackageId);
 
 
-                    let scenarioTestResult = UserDvMashScenarioData.getScenario(userContext, duScenario.componentReferenceId);
+                    let scenarioTestResults = UserMashScenarioTestData.getAllScenarioTestData(userContext.userId, userContext.designVersionId, duScenario.componentReferenceId);
 
                     if (duScenario.workPackageId !== 'NONE' ) {
                         someInWp = true;
@@ -157,22 +157,35 @@ class DesignUpdateServicesClass {
                         allInWp = false;
                     }
 
-                    if (scenarioTestResult) {
-                        if (scenarioTestResult.accMashTestStatus === MashTestStatus.MASH_FAIL || scenarioTestResult.intMashTestStatus === MashTestStatus.MASH_FAIL || scenarioTestResult.unitMashTestStatus === MashTestStatus.MASH_FAIL) {
-                            // Any fail means fail wins
-                            noFails = false;
+                    let passCount = 0;
+                    let failCount = 0;
+                    let missingCount = 0;
+
+                    scenarioTestResults.forEach((scenarioTestResult) => {
+
+                        if(scenarioTestResult.testOutcome === MashTestStatus.MASH_PASS){
+                            passCount++;
                         } else {
-                            if (scenarioTestResult.accMashTestStatus === MashTestStatus.MASH_PASS || scenarioTestResult.intMashTestStatus === MashTestStatus.MASH_PASS || scenarioTestResult.unitMashTestStatus === MashTestStatus.MASH_PASS) {
-                                // There is at least one passing test...
-                                noPasses = false;
+                            if(scenarioTestResult.testOutcome === MashTestStatus.MASH_FAIL){
+                                failCount++;
                             } else {
-                                // Not a pass or fail so can't all be passing
-                                allPassing = false;
+                                missingCount++;
                             }
                         }
-                    } else {
+                    });
+
+                    if(failCount > 0){
+                        noFails = false;
+                    }
+
+                    if(passCount > 0){
+                        noPasses = false;
+                    }
+
+                    if(((failCount + missingCount) > 0) || (passCount === 0)){
                         allPassing = false;
                     }
+
                 });
 
                 log((msg) => console.log(msg), LogLevel.DEBUG, "    All in WP: {}  Some in WP {}", allInWp, someInWp);

@@ -3,11 +3,9 @@
 import { DesignUpdateSummaryServices }              from '../summary/design_update_summary_services.js';
 import { WorkPackageServices }                      from '../../servicers/work/work_package_services.js';
 import { TestIntegrationModules }                   from '../../service_modules/dev/test_integration_service_modules.js';
-import { TestSummaryServices }                      from '../summary/test_summary_services.js';
-import { ChimpMochaTestServices }                   from '../../service_modules/dev/test_processor_chimp_mocha.js';
 import { UltrawideMochaTestServices }               from '../../service_modules/dev/test_processor_ultrawide_mocha.js';
 
-import { TestRunner, LogLevel, TestType}            from '../../constants/constants.js';
+import { TestRunner, LogLevel}                      from '../../constants/constants.js';
 import {log}                                        from '../../common/utils.js';
 
 // Data Access
@@ -16,8 +14,6 @@ import { DesignVersionData }                        from '../../data/design/desi
 import { UserAcceptanceTestResultData }             from '../../data/test_results/user_acceptance_test_result_db.js';
 import { UserIntegrationTestResultData }            from '../../data/test_results/user_integration_test_result_db.js';
 import { UserUnitTestResultData }                   from '../../data/test_results/user_unit_test_result_db.js';
-import {ScenarioTestExpectationData}                from "../../data/design/scenario_test_expectations_db";
-import {UserDvScenarioTestExpectationStatusData}    from "../../data/mash/user_dv_scenario_test_expectation_status_db";
 
 //======================================================================================================================
 //
@@ -81,103 +77,103 @@ class TestIntegrationServicesClass{
         }
     }
 
-    updateScenarioTestTypeExpectationStatuses(userContext, scenarioRefId, testType){
+    // updateScenarioTestTypeExpectationStatuses(userContext, scenarioRefId, testType){
+    //
+    //     if(Meteor.isServer) {
+    //
+    //         // Update / add individual test expectation statuses
+    //         const scenarioTestTypeExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(
+    //             userContext.designVersionId,
+    //             scenarioRefId,
+    //             testType
+    //         );
+    //
+    //         scenarioTestTypeExpectations.forEach((testExpectation) => {
+    //
+    //             const userTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+    //                 userContext.userId,
+    //                 userContext.designVersionId,
+    //                 testExpectation._id
+    //             );
+    //
+    //             // Get test result for the expectation - if any
+    //             const testResult = TestIntegrationModules.getUserResultForScenarioExpectation(userContext, testExpectation);
+    //
+    //             if (userTestExpectationStatus) {
+    //
+    //                 // Update existing status
+    //                 UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(userTestExpectationStatus._id, testResult);
+    //
+    //             } else {
+    //
+    //                 // Insert new expectation status
+    //                 UserDvScenarioTestExpectationStatusData.insertUserScenarioTestExpectationStatus(
+    //                     userContext.userId,
+    //                     userContext.designVersionId,
+    //                     testExpectation._id,
+    //                     testResult
+    //                 );
+    //             }
+    //         });
+    //
+    //         // Update the overall Scenario Test Type Expectation status where there are sub-expectations
+    //         const scenarioTestTypeStatuses = TestIntegrationModules.getScenarioOverallExpectationStatus(userContext, scenarioRefId);
+    //
+    //         scenarioTestTypeExpectations.forEach((testExpectation) => {
+    //
+    //             if(testExpectation.permutationValueId === 'NONE'){
+    //
+    //                 const userTestTypeExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
+    //                     userContext.userId,
+    //                     userContext.designVersionId,
+    //                     testExpectation._id
+    //                 );
+    //
+    //                 switch(testType){
+    //                     case TestType.UNIT:
+    //                         UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
+    //                             userTestTypeExpectationStatus._id,
+    //                             scenarioTestTypeStatuses.unitStatus
+    //                         );
+    //                         break;
+    //                     case TestType.INTEGRATION:
+    //                         UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
+    //                             userTestTypeExpectationStatus._id,
+    //                             scenarioTestTypeStatuses.intStatus
+    //                         );
+    //                         break;
+    //                     case TestType.ACCEPTANCE:
+    //                         UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
+    //                             userTestTypeExpectationStatus._id,
+    //                             scenarioTestTypeStatuses.accStatus
+    //                         );
+    //                         break;
+    //                 }
+    //             }
+    //         });
+    //     }
+    //  }
 
-        if(Meteor.isServer) {
+    // updateTestSummaryData(userContext){
+    //
+    //     // Called if the test summary needs a refresh
+    //
+    //     if(Meteor.isServer){
+    //
+    //         // Recreate the summary mash
+    //         TestSummaryServices.refreshAllTestSummaryData(userContext);
+    //     }
+    // }
 
-            // Update / add individual test expectation statuses
-            const scenarioTestTypeExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(
-                userContext.designVersionId,
-                scenarioRefId,
-                testType
-            );
-
-            scenarioTestTypeExpectations.forEach((testExpectation) => {
-
-                const userTestExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
-                    userContext.userId,
-                    userContext.designVersionId,
-                    testExpectation._id
-                );
-
-                // Get test result for the expectation - if any
-                const testResult = TestIntegrationModules.getUserResultForScenarioExpectation(userContext, testExpectation);
-
-                if (userTestExpectationStatus) {
-
-                    // Update existing status
-                    UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(userTestExpectationStatus._id, testResult);
-
-                } else {
-
-                    // Insert new expectation status
-                    UserDvScenarioTestExpectationStatusData.insertUserScenarioTestExpectationStatus(
-                        userContext.userId,
-                        userContext.designVersionId,
-                        testExpectation._id,
-                        testResult
-                    );
-                }
-            });
-
-            // Update the overall Scenario Test Type Expectation status where there are sub-expectations
-            const scenarioTestTypeStatuses = TestIntegrationModules.getScenarioOverallExpectationStatus(userContext, scenarioRefId);
-
-            scenarioTestTypeExpectations.forEach((testExpectation) => {
-
-                if(testExpectation.permutationValueId === 'NONE'){
-
-                    const userTestTypeExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(
-                        userContext.userId,
-                        userContext.designVersionId,
-                        testExpectation._id
-                    );
-
-                    switch(testType){
-                        case TestType.UNIT:
-                            UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
-                                userTestTypeExpectationStatus._id,
-                                scenarioTestTypeStatuses.unitStatus
-                            );
-                            break;
-                        case TestType.INTEGRATION:
-                            UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
-                                userTestTypeExpectationStatus._id,
-                                scenarioTestTypeStatuses.intStatus
-                            );
-                            break;
-                        case TestType.ACCEPTANCE:
-                            UserDvScenarioTestExpectationStatusData.setUserExpectationTestStatus(
-                                userTestTypeExpectationStatus._id,
-                                scenarioTestTypeStatuses.accStatus
-                            );
-                            break;
-                    }
-                }
-            });
-        }
-     }
-
-    updateTestSummaryData(userContext){
-
-        // Called if the test summary needs a refresh
-
-        if(Meteor.isServer){
-
-            // Recreate the summary mash
-            TestSummaryServices.refreshAllTestSummaryData(userContext);
-        }
-    }
-
-    updateTestSummaryForFeature(userContext){
-
-        // Called if the test summary needs a refresh for just one feature
-
-        if(Meteor.isServer){
-
-            TestSummaryServices.updateFeatureTestSummary(userContext)
-        }
-    }
+    // updateTestSummaryForFeature(userContext){
+    //
+    //     // Called if the test summary needs a refresh for just one feature
+    //
+    //     if(Meteor.isServer){
+    //
+    //         TestSummaryServices.updateFeatureTestSummary(userContext)
+    //     }
+    // }
 
     updateWorkPackageCompleteness(userContext){
 

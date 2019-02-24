@@ -45,7 +45,7 @@ export class EditingWindow extends Component {
 
     render() {
 
-        const {baseApplications, updateApplications, wpApplications, workingApplications, designSummaryData, userContext, userRole, view, mode, viewOptions} = this.props;
+        const {baseApplications, updateApplications, wpApplications, workingApplications, userContext, userRole, view, mode, viewOptions} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Editor Container');
 
@@ -56,7 +56,7 @@ export class EditingWindow extends Component {
 
 
         // Main Editors
-        const editors = EditorContainerUiModules.getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, designSummaryData, userContext, userRole, view, mode, viewOptions, editorClass);
+        const editors = EditorContainerUiModules.getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, userContext, userRole, view, mode, viewOptions, editorClass);
 
 
         // Layout ------------------------------------------------------------------------------------------------------
@@ -80,8 +80,7 @@ EditingWindow.propTypes = {
     baseApplications:       PropTypes.array.isRequired,
     updateApplications:     PropTypes.array.isRequired,
     wpApplications:         PropTypes.array.isRequired,
-    workingApplications:    PropTypes.array.isRequired,
-    designSummaryData:      PropTypes.object
+    workingApplications:    PropTypes.array.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

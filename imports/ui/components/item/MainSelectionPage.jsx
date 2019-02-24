@@ -10,7 +10,6 @@ import DesignsContainer                     from '../../containers/item/DesignsC
 import DesignVersionsContainer              from '../../containers/item/DesignVersionsContainer.jsx';
 import DesignUpdatesContainer               from '../../containers/item/DesignUpdatesContainer.jsx';
 import WorkTabPage                          from '../work/WorkTabPage.jsx';
-import WorkProgressSummaryContainer         from '../../containers/summary/WorkProgressSummaryContainer.jsx';
 import FeatureSummaryContainer              from '../../containers/item/FeatureSummaryContainer.jsx';
 import ProjectSummaryContainer              from '../../containers/summary/ProjectSummaryContainer.jsx';
 

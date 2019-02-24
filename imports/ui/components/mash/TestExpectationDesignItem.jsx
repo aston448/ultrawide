@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import TestExpectationSelectedItemContainer         from '../../containers/mash/TestExpectationSelectedItemContainer.jsx';
 import ScenarioTestExpectationsContainer            from '../../containers/mash/ScenarioTestExpectationsContainer.jsx';
 import ScenarioTestResultsHeaderContainer           from '../../containers/mash/ScenarioTestResultsHeaderContainer.jsx';
+import ScenarioTestResultsContainer                 from '../../containers/mash/ScenarioTestResultsContainer.jsx';
 
 // Ultrawide Services
 import {log} from "../../../common/utils";

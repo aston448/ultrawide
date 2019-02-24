@@ -223,18 +223,18 @@ class ClientDesignVersionServicesClass {
     // Work Progress screen needs a refresh
     updateWorkProgress(userContext){
 
-        log((msg) => console.log(msg), LogLevel.PERF, "UPDATE WORK PROGRESS...");
-
-        ServerDesignVersionApi.updateWorkProgress(userContext, (err, result) => {
-
-            if (err) {
-                // Unexpected error as all expected errors already handled - show alert.
-                // Can't update screen here because of error
-                alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
-            } else {
-                // Client actions:
-            }
-        });
+        // log((msg) => console.log(msg), LogLevel.PERF, "UPDATE WORK PROGRESS...");
+        //
+        // ServerDesignVersionApi.updateWorkProgress(userContext, (err, result) => {
+        //
+        //     if (err) {
+        //         // Unexpected error as all expected errors already handled - show alert.
+        //         // Can't update screen here because of error
+        //         alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
+        //     } else {
+        //         // Client actions:
+        //     }
+        // });
     }
 
     // Pre-validation to decide if we should even show the modal dialog

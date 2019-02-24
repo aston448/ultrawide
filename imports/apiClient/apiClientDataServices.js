@@ -36,19 +36,12 @@ import { DesignUpdateComponentData }        from '../data/design_update/design_u
 import { UserTestTypeLocationData }         from '../data/configure/user_test_type_location_db.js';
 import { TestOutputLocationData }           from '../data/configure/test_output_location_db.js';
 import { DesignBackupData }                 from '../data/backups/design_backup_db.js';
-import { UserDevDesignSummaryData }         from '../data/summary/user_dev_design_summary_db.js';
 import { DomainDictionaryData }             from '../data/design/domain_dictionary_db.js';
-import { UserDvMashScenarioData }           from '../data/mash/user_dv_mash_scenario_db.js';
-import { UserMashScenarioTestData }         from '../data/mash/user_mash_scenario_test_db.js';
-import { UserDvTestSummaryData }            from '../data/summary/user_dv_test_summary_db.js';
 import { UserWorkProgressSummaryData }      from '../data/summary/user_work_progress_summary_db.js';
 import { DefaultFeatureAspectData }         from '../data/design/default_feature_aspect_db.js';
 import {DesignPermutationData}              from "../data/design/design_permutation_db";
 import {DesignPermutationValueData}         from "../data/design/design_permutation_value_db";
 import {ScenarioTestExpectationData}        from "../data/design/scenario_test_expectations_db";
-import {UserDvScenarioTestExpectationStatusData} from "../data/mash/user_dv_scenario_test_expectation_status_db";
-import {UserDvWorkSummaryData}              from "../data/summary/user_dv_work_summary_db";
-import {UserDvBacklogData}                  from '../data/summary/user_dv_backlog_db'
 
 // REDUX services
 import store from '../redux/store'
@@ -79,18 +72,11 @@ class ClientDataServicesClass{
             log((msg) => console.log(msg), LogLevel.TRACE, "Loading main data...");
 
             const componentsExist = DesignVersionData.checkForComponents();
-            const mashExists = UserDvMashScenarioData.hasUserDvData(userContext);
 
             if (componentsExist) {
                 log((msg) => console.log(msg), LogLevel.TRACE, "Data already loaded...");
 
-                if (!mashExists) {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "Getting User Data...");
-                    this.getUserData(userContext, this.onAllDataLoaded);
-                } else {
-                    this.onAllDataLoaded();
-                }
-
+                this.onAllDataLoaded();
 
             } else {
 
@@ -242,64 +228,64 @@ class ClientDataServicesClass{
         }
     }
 
-    getUserData(userContext, callback){
-
-        if(Meteor.isClient){
-
-             //log((msg) => console.log(msg), LogLevel.DEBUG, "Get User Data with callback {}", callback);
-
-            store.dispatch(updateUserMessage({
-                messageType: MessageType.WARNING,
-                messageText: 'FETCHING USER DATA FROM SERVER...'
-            }));
-
-            // User specific data
-            const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
-            const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
-            const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
-            const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
-            const tsHandle = Meteor.subscribe('userDevTestSummary', userContext.userId);
-            const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
-            const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
-            const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
-            const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
-            const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
-            const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
-            const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
-            const dwsHandle = Meteor.subscribe('userDvWorkSummary', userContext.userId, userContext.designVersionId);
-            const dblHandle = Meteor.subscribe('userDvBacklog', userContext.userId, userContext.designVersionId);
-
-            Tracker.autorun((loader) => {
-
-                let loading = (
-                    !dusHandle.ready() || !dvmHandle.ready() ||
-                    !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
-                    !dsHandle.ready() || !psHandle.ready() || !dveHandle.ready() ||
-                    !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready() ||
-                    !dwsHandle.ready() || !dblHandle.ready()
-                );
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "loading User Data = {}", loading);
-
-                if (!loading) {
-
-                    store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
-                        messageText: 'User data loaded'
-                    }));
-
-                    // If an action wanted after loading call it...
-                    if (callback) {
-                        callback();
-                    }
-
-                    // Stop this checking once we are done or there will be random chaos
-                    loader.stop();
-                }
-
-            });
-        }
-    }
+    // getUserData(userContext, callback){
+    //
+    //     if(Meteor.isClient){
+    //
+    //          //log((msg) => console.log(msg), LogLevel.DEBUG, "Get User Data with callback {}", callback);
+    //
+    //         store.dispatch(updateUserMessage({
+    //             messageType: MessageType.WARNING,
+    //             messageText: 'FETCHING USER DATA FROM SERVER...'
+    //         }));
+    //
+    //         // User specific data
+    //         const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
+    //         const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
+    //         const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
+    //         const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
+    //         const tsHandle = Meteor.subscribe('userDevTestSummary', userContext.userId);
+    //         const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
+    //         const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
+    //         const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
+    //         const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
+    //         const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
+    //         const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
+    //         const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
+    //         const dwsHandle = Meteor.subscribe('userDvWorkSummary', userContext.userId, userContext.designVersionId);
+    //         const dblHandle = Meteor.subscribe('userDvBacklog', userContext.userId, userContext.designVersionId);
+    //
+    //         Tracker.autorun((loader) => {
+    //
+    //             let loading = (
+    //                 !dusHandle.ready() || !dvmHandle.ready() ||
+    //                 !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
+    //                 !dsHandle.ready() || !psHandle.ready() || !dveHandle.ready() ||
+    //                 !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready() ||
+    //                 !dwsHandle.ready() || !dblHandle.ready()
+    //             );
+    //
+    //             log((msg) => console.log(msg), LogLevel.DEBUG, "loading User Data = {}", loading);
+    //
+    //             if (!loading) {
+    //
+    //                 store.dispatch(updateUserMessage({
+    //                     messageType: MessageType.INFO,
+    //                     messageText: 'User data loaded'
+    //                 }));
+    //
+    //                 // If an action wanted after loading call it...
+    //                 if (callback) {
+    //                     callback();
+    //                 }
+    //
+    //                 // Stop this checking once we are done or there will be random chaos
+    //                 loader.stop();
+    //             }
+    //
+    //         });
+    //     }
+    // }
 
     getDesignVersionData(userContext, callback){
 
@@ -334,27 +320,14 @@ class ClientDataServicesClass{
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 const wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
-                //const fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
-                //const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
                 const dpvHandle = Meteor.subscribe('designPermutationValues', userContext.designVersionId);
                 const steHandle = Meteor.subscribe('scenarioTestExpectations', userContext.designVersionId);
 
                 // User specific data
-                const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
-                //const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
-                //const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
-                //const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
+                //const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
                 const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
-                //const tsHandle = Meteor.subscribe('userDevTestSummary', userContext.userId);
-                //const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
                 const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
-                //const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
-                //const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
-                //const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
-                //const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
-                //const dwsHandle = Meteor.subscribe('userDvWorkSummary', userContext.userId, userContext.designVersionId);
-                //const dblHandle = Meteor.subscribe('userDvBacklog', userContext.userId, userContext.designVersionId);
                 const uwiHandle = Meteor.subscribe('userWorkItemTestSummary', userContext.userId, userContext.designVersionId);
                 const uwbHandle = Meteor.subscribe('userWorkItemBacklog', userContext.userId, userContext.designVersionId);
                 const utrHandle = Meteor.subscribe('userTestExpectationResults', userContext.userId, userContext.designVersionId);
@@ -366,7 +339,7 @@ class ClientDataServicesClass{
                         !dusHandle.ready() || !dpHandle.ready() || !dpvHandle.ready() ||
                         !dvcHandle.ready() || !ducHandle.ready() ||  !wiHandle.ready() ||
                         !ddHandle.ready() ||  !daHandle.ready() || !stHandle.ready() ||
-                        !wcHandle.ready() ||  !steHandle.ready() || !dvmHandle.ready() ||
+                        !wcHandle.ready() ||  !steHandle.ready() ||
                         !uwbHandle.ready() || !uwiHandle.ready() || !utrHandle.ready() || !ustHandle.ready()
                     );
 
@@ -394,119 +367,6 @@ class ClientDataServicesClass{
             }
         }
     }
-
-    // getWorkPackageData(userContext, callback){
-    //
-    //     if(Meteor.isClient) {
-    //
-    //         console.log("In getWorkPackageData with callback " + callback);
-    //
-    //         if (store.getState().workPackageDataLoaded) {
-    //
-    //             if (callback) {
-    //                 callback()
-    //             }
-    //         } else {
-    //
-    //             store.dispatch(updateUserMessage({
-    //                 messageType: MessageType.WARNING,
-    //                 messageText: 'FETCHING WORK PACKAGE DATA FROM SERVER...'
-    //             }));
-    //
-    //             log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Work Package Data for DV {}, WP {}", userContext.designVersionId, userContext.workPackageId);
-    //
-    //             let wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId, userContext.workPackageId);
-    //
-    //             Tracker.autorun((loader) => {
-    //
-    //                 let loading = !wcHandle.ready();
-    //
-    //                 log((msg) => console.log(msg), LogLevel.DEBUG, "loading WP = {}", loading);
-    //
-    //                 if (!loading) {
-    //                     // Mark data as loaded
-    //                     store.dispatch(setWorkPackageDataLoadedTo(true));
-    //
-    //                     store.dispatch(updateUserMessage({
-    //                         messageType: MessageType.INFO,
-    //                         messageText: 'Work Package data loaded'
-    //                     }));
-    //
-    //                     // Set open items now that data is loaded
-    //                     ClientUserContextServices.setOpenWorkPackageItems(userContext);
-    //
-    //                     // If an action wanted after loading call it...
-    //                     if (callback) {
-    //                         callback();
-    //                     }
-    //
-    //                     // Stop this checking once we are done or there will be random chaos
-    //                     loader.stop();
-    //                 }
-    //             });
-    //         }
-    //     }
-    // }
-
-    // getTestIntegrationData(userId, callback){
-    //
-    //     if(Meteor.isClient) {
-    //
-    //         // See if we have already got the data subscribed...
-    //         if (!(store.getState().testIntegrationDataLoaded)) {
-    //
-    //             store.dispatch(updateUserMessage({
-    //                 messageType: MessageType.WARNING,
-    //                 messageText: 'Fetching your test data from server...  Please wait...'
-    //             }));
-    //
-    //             // Subscribe to dev data
-    //             const dfHandle = Meteor.subscribe('userDevFeatures', userId);
-    //             const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
-    //             const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
-    //             const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps', userId);
-    //             const wmHandle = Meteor.subscribe('userWorkPackageMashData', userId);
-    //             const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData', userId);
-    //             const mmHandle = Meteor.subscribe('userUnitTestMashData', userId);
-    //             const arHandle = Meteor.subscribe('userAccTestResults', userId);
-    //             const irHandle = Meteor.subscribe('userIntTestResults', userId);
-    //             const mrHandle = Meteor.subscribe('userUnitTestResults', userId);
-    //             const tsHandle = Meteor.subscribe('userDevTestSummary', userId);
-    //             const dsHandle = Meteor.subscribe('userDevDesignSummary', userId);
-    //
-    //             Tracker.autorun((loader) => {
-    //
-    //                 let loading = (
-    //                     !dfHandle.ready() || !dbHandle.ready() || !fsHandle.ready() || !ssHandle.ready() || !wmHandle.ready() || !wsHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() || !dsHandle.ready()
-    //                 );
-    //
-    //                 log((msg) => console.log(msg), LogLevel.DEBUG, "loading dev data = {}", loading);
-    //
-    //                 if (!loading) {
-    //
-    //                     store.dispatch(setTestIntegrationDataLoadedTo(true));
-    //
-    //                     store.dispatch(updateUserMessage({
-    //                         messageType: MessageType.INFO,
-    //                         messageText: 'Test Data loaded'
-    //                     }));
-    //
-    //                     if(callback){
-    //                         callback();
-    //                     }
-    //
-    //                     // Stop this checking once we are done or there will be random chaos
-    //                     loader.stop();
-    //                 }
-    //
-    //             });
-    //         } else {
-    //             if(callback){
-    //                 callback();
-    //             }
-    //         }
-    //     }
-    // }
 
     // Ultrawide Users
     getUltrawideUsers(){
@@ -954,114 +814,122 @@ class ClientDataServicesClass{
 
         if(homePageTab === HomePageTab.TAB_SUMMARY){
 
-            // Main Summary Page.  List depends on display context.
-            if (userContext.designVersionId === 'NONE') {
+            // // Main Summary Page.  List depends on display context.
+            // if (userContext.designVersionId === 'NONE') {
+            //
+            //     return {
+            //         summaryData: featureSummaries,
+            //         designVersionName: 'NONE',
+            //         workPackageName: 'NONE',
+            //         homePageTab: HomePageTab.TAB_SUMMARY,
+            //         displayContext: displayContext
+            //     };
+            //
+            // } else {
+            //
+            //     const workItemContextId = store.getState().currentUserSummaryItem;
+            //     const workSummary = UserDvWorkSummaryData.getWorkItemSummaryDataById(workItemContextId);
+            //
+            //     // Default context is DV if none set yet
+            //     let workContext = {
+            //         userId: userContext.userId,
+            //         dvId: userContext.designVersionId,
+            //         inId: 'NONE',
+            //         itId: 'NONE',
+            //         duId: 'NONE',
+            //         wpId: 'NONE',
+            //         summaryType: SummaryType.SUMMARY_DV
+            //     };
+            //
+            //     if(workSummary) {
+            //         workContext = {
+            //             userId: userContext.userId,
+            //             dvId: userContext.designVersionId,
+            //             inId: workSummary.inId,
+            //             itId: workSummary.itId,
+            //             duId: workSummary.duId,
+            //             wpId: workSummary.wpId,
+            //             summaryType: workSummary.summaryType
+            //         };
+            //     }
+            //
+            //     switch(displayContext){
+            //
+            //         case DisplayContext.DV_BACKLOG_DESIGN:
+            //
+            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_DESIGN);
+            //             break;
+            //
+            //         case DisplayContext.DV_BACKLOG_ANOMALY:
+            //
+            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_SCENARIO_ANOMALY);
+            //             break;
+            //
+            //         case DisplayContext.DV_BACKLOG_WORK:
+            //
+            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_WP_ASSIGN);
+            //             break;
+            //
+            //         case DisplayContext.DV_BACKLOG_NO_EXP:
+            //
+            //             //features = UserDvTestSummaryData.getFeaturesWithScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId);
+            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_EXP);
+            //             break;
+            //
+            //         case DisplayContext.DV_BACKLOG_TEST_MISSING:
+            //
+            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_MISSING);
+            //             //features = UserDvTestSummaryData.getFeaturesWithScenariosWithMissingTests(userContext.userId, userContext.designVersionId);
+            //             break;
+            //
+            //         case DisplayContext.DV_BACKLOG_TEST_FAIL:
+            //
+            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_FAIL);
+            //             //features = UserDvTestSummaryData.getFeaturesWithScenariosWithFailingTests(userContext.userId, userContext.designVersionId);
+            //             break;
+            //
+            //     }
+            //
+            //     features.forEach((backlogFeature) => {
+            //
+            //         let feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, backlogFeature.featureRefId);
+            //
+            //         featureSummary = {
+            //             _id: feature._id,
+            //             featureName: feature.componentNameNew,
+            //             featureRef: feature.componentReferenceId,
+            //             hasTestData: true,
+            //             featureTestStatus: backlogFeature.featureTestStatus,
+            //             featureScenarioCount: backlogFeature.featureScenarioCount,
+            //             featureExpectedTestCount: backlogFeature.featureExpectedTestCount,
+            //             featurePassingTestCount: backlogFeature.featurePassingTestCount,
+            //             featureFailingTestCount: backlogFeature.featureFailingTestCount,
+            //             featureMissingTestCount: backlogFeature.featureMissingTestCount
+            //         };
+            //
+            //         featureSummaries.push(featureSummary);
+            //
+            //     });
+            //
+            //     const dv1 = DesignVersionData.getDesignVersionById(userContext.designVersionId);
+            //
+            //     return {
+            //         summaryData: featureSummaries,
+            //         designVersionName: dv1.designVersionName,
+            //         workPackageName: 'NONE',
+            //         homePageTab: homePageTab,
+            //         displayContext: displayContext
+            //     };
+            //
+            // }
 
-                return {
-                    summaryData: featureSummaries,
-                    designVersionName: 'NONE',
-                    workPackageName: 'NONE',
-                    homePageTab: HomePageTab.TAB_SUMMARY,
-                    displayContext: displayContext
-                };
-
-            } else {
-
-                const workItemContextId = store.getState().currentUserSummaryItem;
-                const workSummary = UserDvWorkSummaryData.getWorkItemSummaryDataById(workItemContextId);
-
-                // Default context is DV if none set yet
-                let workContext = {
-                    userId: userContext.userId,
-                    dvId: userContext.designVersionId,
-                    inId: 'NONE',
-                    itId: 'NONE',
-                    duId: 'NONE',
-                    wpId: 'NONE',
-                    summaryType: SummaryType.SUMMARY_DV
-                };
-
-                if(workSummary) {
-                    workContext = {
-                        userId: userContext.userId,
-                        dvId: userContext.designVersionId,
-                        inId: workSummary.inId,
-                        itId: workSummary.itId,
-                        duId: workSummary.duId,
-                        wpId: workSummary.wpId,
-                        summaryType: workSummary.summaryType
-                    };
-                }
-
-                switch(displayContext){
-
-                    case DisplayContext.DV_BACKLOG_DESIGN:
-
-                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_DESIGN);
-                        break;
-
-                    case DisplayContext.DV_BACKLOG_ANOMALY:
-
-                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_SCENARIO_ANOMALY);
-                        break;
-
-                    case DisplayContext.DV_BACKLOG_WORK:
-
-                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_WP_ASSIGN);
-                        break;
-
-                    case DisplayContext.DV_BACKLOG_NO_EXP:
-
-                        //features = UserDvTestSummaryData.getFeaturesWithScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId);
-                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_EXP);
-                        break;
-
-                    case DisplayContext.DV_BACKLOG_TEST_MISSING:
-
-                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_MISSING);
-                        //features = UserDvTestSummaryData.getFeaturesWithScenariosWithMissingTests(userContext.userId, userContext.designVersionId);
-                        break;
-
-                    case DisplayContext.DV_BACKLOG_TEST_FAIL:
-
-                        features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_FAIL);
-                        //features = UserDvTestSummaryData.getFeaturesWithScenariosWithFailingTests(userContext.userId, userContext.designVersionId);
-                        break;
-
-                }
-
-                features.forEach((backlogFeature) => {
-
-                    let feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, backlogFeature.featureRefId);
-
-                    featureSummary = {
-                        _id: feature._id,
-                        featureName: feature.componentNameNew,
-                        featureRef: feature.componentReferenceId,
-                        hasTestData: true,
-                        featureTestStatus: backlogFeature.featureTestStatus,
-                        featureScenarioCount: backlogFeature.featureScenarioCount,
-                        featureExpectedTestCount: backlogFeature.featureExpectedTestCount,
-                        featurePassingTestCount: backlogFeature.featurePassingTestCount,
-                        featureFailingTestCount: backlogFeature.featureFailingTestCount,
-                        featureMissingTestCount: backlogFeature.featureMissingTestCount
-                    };
-
-                    featureSummaries.push(featureSummary);
-
-                });
-
-                const dv1 = DesignVersionData.getDesignVersionById(userContext.designVersionId);
-
-                return {
-                    summaryData: featureSummaries,
-                    designVersionName: dv1.designVersionName,
-                    workPackageName: 'NONE',
-                    homePageTab: homePageTab,
-                    displayContext: displayContext
-                };
-
-            }
+            return {
+                summaryData: featureSummaries,
+                designVersionName: 'NONE',
+                workPackageName: 'NONE',
+                homePageTab: HomePageTab.TAB_DESIGNS,
+                displayContext: displayContext
+            };
 
         } else {
 
@@ -1114,21 +982,23 @@ class ClientDataServicesClass{
 
                 features.forEach((feature) => {
 
-                    const featureSummaryData = UserDvTestSummaryData.getFeatureSummary(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
+                    // TODO - New Feature Test Summary from Scenario Summary
 
-                    if (featureSummaryData) {
+                    //const featureSummaryData = UserDvTestSummaryData.getFeatureSummary(userContext.userId, userContext.designVersionId, feature.componentReferenceId);
+
+                    if (null) {
 
                         featureSummary = {
                             _id: feature._id,
                             featureName: feature.componentNameNew,
                             featureRef: feature.componentReferenceId,
                             hasTestData: true,
-                            featureTestStatus: featureSummaryData.featureTestStatus,
-                            featureScenarioCount: featureSummaryData.featureScenarioCount,
-                            featureExpectedTestCount: featureSummaryData.featureExpectedTestCount,
-                            featurePassingTestCount: featureSummaryData.featurePassingTestCount,
-                            featureFailingTestCount: featureSummaryData.featureFailingTestCount,
-                            featureMissingTestCount: featureSummaryData.featureMissingTestCount
+                            featureTestStatus: MashTestStatus.MASH_NO_TESTS,
+                            featureScenarioCount: 0,
+                            featureExpectedTestCount: 0,
+                            featurePassingTestCount: 0,
+                            featureFailingTestCount: 0,
+                            featureMissingTestCount: 0
                         };
 
                     } else {
@@ -1170,6 +1040,7 @@ class ClientDataServicesClass{
                         displayContext: displayContext
                     };
                 }
+
 
             }
         }
@@ -1603,21 +1474,11 @@ class ClientDataServicesClass{
 
         }
 
-        // Get the design summary data
-        let designSummaryData = null;
-
-        if(userContext) {
-
-            designSummaryData = UserDevDesignSummaryData.getUserDesignSummary(userContext);
-        }
-
-
         return{
             baseApplications:       baseApplicationsArr,
             updateApplications:     updateApplicationsArr,
             wpApplications:         wpApplicationsArr,
-            workingApplications:    workingApplicationsArr,
-            designSummaryData:      designSummaryData
+            workingApplications:    workingApplicationsArr
         };
 
         // switch(view){
@@ -2204,68 +2065,68 @@ class ClientDataServicesClass{
 
     }
 
-    getScenarioMashData(userContext, featureAspectReferenceId, scenarioReferenceId = 'NONE'){
+    // getScenarioMashData(userContext, featureAspectReferenceId, scenarioReferenceId = 'NONE'){
+    //
+    //     // Return all scenario mash data for the current Feature Aspect or Scenario
+    //
+    //     //console.log("looking for scenarios with FA: " + featureAspectReferenceId + " and SC: " + scenarioReferenceId);
+    //     //log((msg) => console.log(msg), LogLevel.PERF, 'Getting Scenario Mash Data...');
+    //
+    //     if(userContext.workPackageId === 'NONE') {
+    //
+    //         // Get all scenarios
+    //
+    //         if (scenarioReferenceId === 'NONE') {
+    //
+    //             //log((msg) => console.log(msg), LogLevel.PERF, 'Returning FA Scenarios');
+    //             return UserDvMashScenarioData.getFeatureAspectScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId);
+    //
+    //         } else {
+    //
+    //             //log((msg) => console.log(msg), LogLevel.PERF, 'Returning Scenarios');
+    //             return UserDvMashScenarioData.getScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId, scenarioReferenceId);
+    //
+    //         }
+    //     } else {
+    //
+    //         // Return only scenarios in the WP
+    //         let scenarios = [];
+    //
+    //         // Get the possible WP components
+    //         let wpComponents = [];
+    //
+    //         if(scenarioReferenceId === 'NONE') {
+    //
+    //             wpComponents = WorkPackageComponentData.getActiveFeatureAspectScenarios(userContext.workPackageId, featureAspectReferenceId);
+    //
+    //         } else {
+    //
+    //             wpComponents = WorkPackageComponentData.getActiveFeatureAspectScenario(userContext.workPackageId, featureAspectReferenceId, scenarioReferenceId);
+    //
+    //         }
+    //
+    //         wpComponents.forEach((wpComponent) => {
+    //
+    //             let mashScenario = UserDvMashScenarioData.getScenario(userContext, wpComponent.componentReferenceId);
+    //
+    //             scenarios.push(mashScenario);
+    //         });
+    //
+    //         //log((msg) => console.log(msg), LogLevel.PERF, 'Returning WP Scenarios');
+    //         return scenarios;
+    //     }
+    // }
 
-        // Return all scenario mash data for the current Feature Aspect or Scenario
-
-        //console.log("looking for scenarios with FA: " + featureAspectReferenceId + " and SC: " + scenarioReferenceId);
-        //log((msg) => console.log(msg), LogLevel.PERF, 'Getting Scenario Mash Data...');
-
-        if(userContext.workPackageId === 'NONE') {
-
-            // Get all scenarios
-
-            if (scenarioReferenceId === 'NONE') {
-
-                //log((msg) => console.log(msg), LogLevel.PERF, 'Returning FA Scenarios');
-                return UserDvMashScenarioData.getFeatureAspectScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId);
-
-            } else {
-
-                //log((msg) => console.log(msg), LogLevel.PERF, 'Returning Scenarios');
-                return UserDvMashScenarioData.getScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId, scenarioReferenceId);
-
-            }
-        } else {
-
-            // Return only scenarios in the WP
-            let scenarios = [];
-
-            // Get the possible WP components
-            let wpComponents = [];
-
-            if(scenarioReferenceId === 'NONE') {
-
-                wpComponents = WorkPackageComponentData.getActiveFeatureAspectScenarios(userContext.workPackageId, featureAspectReferenceId);
-
-            } else {
-
-                wpComponents = WorkPackageComponentData.getActiveFeatureAspectScenario(userContext.workPackageId, featureAspectReferenceId, scenarioReferenceId);
-
-            }
-
-            wpComponents.forEach((wpComponent) => {
-
-                let mashScenario = UserDvMashScenarioData.getScenario(userContext, wpComponent.componentReferenceId);
-
-                scenarios.push(mashScenario);
-            });
-
-            //log((msg) => console.log(msg), LogLevel.PERF, 'Returning WP Scenarios');
-            return scenarios;
-        }
-    }
-
-    getMashScenarioTestResults(userContext, mashScenario, testType){
-
-        return UserMashScenarioTestData.getScenarioTestsByType(userContext.userId, userContext.designVersionId, mashScenario.designScenarioReferenceId, testType);
-    }
+    // getMashScenarioTestResults(userContext, mashScenario, testType){
+    //
+    //     return UserMashScenarioTestData.getScenarioTestsByType(userContext.userId, userContext.designVersionId, mashScenario.designScenarioReferenceId, testType);
+    // }
 
     // To be used when there is one test only of the given type for a Scenario
-    getMashScenarioTestResult(userId, designVersionId, scenarioRef, testType){
-
-        return UserMashScenarioTestData.getScenarioTestByType(userId, designVersionId, scenarioRef, testType);
-    }
+    // getMashScenarioTestResult(userId, designVersionId, scenarioRef, testType){
+    //
+    //     return UserMashScenarioTestData.getScenarioTestByType(userId, designVersionId, scenarioRef, testType);
+    // }
 
 
     // getMashScenarioSteps(userContext){
@@ -2352,20 +2213,20 @@ class ClientDataServicesClass{
     //
     // };
 
-    getTestSummaryData(scenario){
+    // getTestSummaryData(scenario){
+    //
+    //     const userContext = store.getState().currentUserItemContext;
+    //
+    //     return UserDvMashScenarioData.getScenario(userContext, scenario.componentReferenceId);
+    // }
 
-        const userContext = store.getState().currentUserItemContext;
-
-        return UserDvMashScenarioData.getScenario(userContext, scenario.componentReferenceId);
-    }
-
-    getTestSummaryFeatureData(feature){
-
-        const userContext = store.getState().currentUserItemContext;
-
-        return UserDvTestSummaryData.getTestSummaryForFeature(userContext.userId, feature.designVersionId, feature.componentReferenceId);
-
-    }
+    // getTestSummaryFeatureData(feature){
+    //
+    //     const userContext = store.getState().currentUserItemContext;
+    //
+    //     return UserDvTestSummaryData.getTestSummaryForFeature(userContext.userId, feature.designVersionId, feature.componentReferenceId);
+    //
+    // }
 
     // Call this common function whenever the current user options for the view and their values are needed
     getCurrentViewOptions(view, userViewOptions){
@@ -2380,14 +2241,8 @@ class ClientDataServicesClass{
         let updSummaryValue = false;
         let testSummaryOption = '';
         let testSummaryValue = false;
-        let accTestOption = '';
-        let accTestValue = false;
-        let accFilesOption = '';
-        let accFilesValue = false;
-        let intTestOption = '';
-        let intTestValue = false;
-        let unitTestOption = '';
-        let unitTestValue = false;
+        let testResultsOption = '';
+        let testResultsValue = false;
         let allAsTabsOption = '';
         let allAsTabsValue = false;
 
@@ -2402,12 +2257,8 @@ class ClientDataServicesClass{
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 testSummaryValue = userViewOptions.testSummaryVisible;
-                accTestOption = ViewOptionType.DEV_ACC_TESTS;
-                accTestValue = userViewOptions.devAccTestsVisible;
-                intTestOption = ViewOptionType.DEV_INT_TESTS;
-                intTestValue = userViewOptions.devIntTestsVisible;
-                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
-                unitTestValue = userViewOptions.devUnitTestsVisible;
+                testResultsOption = ViewOptionType.DEV_TEST_RESULTS;
+                testResultsValue = userViewOptions.devTestResultsVisible;
                 allAsTabsOption = ViewOptionType.DESIGN_ALL_AS_TABS;
                 allAsTabsValue = userViewOptions.designShowAllAsTabs;
                 break;
@@ -2418,12 +2269,8 @@ class ClientDataServicesClass{
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 testSummaryValue = userViewOptions.testSummaryVisible;
-                accTestOption = ViewOptionType.DEV_ACC_TESTS;
-                accTestValue = userViewOptions.devAccTestsVisible;
-                intTestOption = ViewOptionType.DEV_INT_TESTS;
-                intTestValue = userViewOptions.devIntTestsVisible;
-                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
-                unitTestValue = userViewOptions.devUnitTestsVisible;
+                testResultsOption = ViewOptionType.DEV_TEST_RESULTS;
+                testResultsValue = userViewOptions.devTestResultsVisible;
                 allAsTabsOption = ViewOptionType.DESIGN_ALL_AS_TABS;
                 allAsTabsValue = userViewOptions.designShowAllAsTabs;
                 break;
@@ -2466,14 +2313,8 @@ class ClientDataServicesClass{
             case ViewType.DEVELOP_UPDATE_WP:
                 detailsOption = ViewOptionType.DEV_DETAILS;
                 detailsValue = userViewOptions.designDetailsVisible;
-                accTestOption = ViewOptionType.DEV_ACC_TESTS;
-                accTestValue = userViewOptions.devAccTestsVisible;
-                accFilesOption = ViewOptionType.DEV_FILES;
-                accFilesValue = userViewOptions.devFeatureFilesVisible;
-                intTestOption = ViewOptionType.DEV_INT_TESTS;
-                intTestValue = userViewOptions.devIntTestsVisible;
-                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
-                unitTestValue = userViewOptions.devUnitTestsVisible;
+                testResultsOption = ViewOptionType.DEV_TEST_RESULTS;
+                testResultsValue = userViewOptions.devTestResultsVisible;
                 dictOption = ViewOptionType.DEV_DICT;
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
@@ -2489,10 +2330,7 @@ class ClientDataServicesClass{
             updateSummary:  {option: updSummaryOption, value: updSummaryValue},
             testSummary:    {option: testSummaryOption, value: testSummaryValue},
             dictionary:     {option: dictOption, value: dictValue},
-            accTests:       {option: accTestOption, value: accTestValue},
-            accFiles:       {option: accFilesOption, value: accFilesValue},
-            intTests:       {option: intTestOption, value: intTestValue},
-            unitTests:      {option: unitTestOption, value: unitTestValue},
+            testResults:    {option: testResultsOption, value: testResultsValue},
             allAsTabs:      {option: allAsTabsOption, value: allAsTabsValue}
         }
 
@@ -2512,17 +2350,8 @@ class ClientDataServicesClass{
             case DetailsViewType.VIEW_UPD_SUMM:
                 return currentOptions.updateSummary;
 
-            case DetailsViewType.VIEW_INT_TESTS:
-               return currentOptions.intTests;
-
-            case DetailsViewType.VIEW_UNIT_TESTS:
-               return currentOptions.unitTests;
-
-            case DetailsViewType.VIEW_ACC_TESTS:
-                return currentOptions.accTests;
-
-            case DetailsViewType.VIEW_ACC_FILES:
-                return currentOptions.accFiles;
+            case DetailsViewType.VIEW_TEST_RESULTS:
+               return currentOptions.testResults;
 
             case DetailsViewType.VIEW_ALL_AS_TABS:
                 return currentOptions.allAsTabs;
@@ -2537,34 +2366,6 @@ class ClientDataServicesClass{
         log((msg) => console.log(msg), LogLevel.TRACE, "Getting menu items for menu {} in view {}", menuType, view);
 
         const currentOptions = this.getCurrentViewOptions(view, userViewOptions);
-
-        // Dropdown Items - Go To
-        // const gotoDesigns = {
-        //     key: MenuAction.MENU_ACTION_GOTO_DESIGNS,
-        //     itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_DESIGNS),
-        //     action: MenuAction.MENU_ACTION_GOTO_DESIGNS,
-        //     hasCheckbox: false,
-        //     checkboxValue: false,
-        //     viewOptionType: ViewOptionType.NONE
-        // };
-
-        const gotoConfig = {
-            key: MenuAction.MENU_ACTION_GOTO_CONFIG,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_CONFIG),
-            action: MenuAction.MENU_ACTION_GOTO_CONFIG,
-            hasCheckbox: false,
-            checkboxValue: false,
-            viewOptionType: ViewOptionType.NONE
-        };
-
-        const gotoSelection = {
-            key: MenuAction.MENU_ACTION_GOTO_SELECTION,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_SELECTION),
-            action: MenuAction.MENU_ACTION_GOTO_SELECTION,
-            hasCheckbox: false,
-            checkboxValue: false,
-            viewOptionType: ViewOptionType.NONE
-        };
 
         // Dropdown Items - View
         const viewDetails = {
@@ -2603,40 +2404,13 @@ class ClientDataServicesClass{
             viewOptionType: currentOptions.testSummary.option
         };
 
-        const viewAccTests = {
-            key: MenuAction.MENU_ACTION_VIEW_ACC_TESTS,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_ACC_TESTS),
-            action: MenuAction.MENU_ACTION_VIEW_ACC_TESTS,
+        const viewTestResults = {
+            key: MenuAction.MENU_ACTION_VIEW_TEST_RESULTS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_TEST_RESULTS),
+            action: MenuAction.MENU_ACTION_VIEW_TEST_RESULTS,
             hasCheckbox: true,
-            checkboxValue: currentOptions.accTests.value,
-            viewOptionType: currentOptions.accTests.option
-        };
-
-        const viewIntTests = {
-            key: MenuAction.MENU_ACTION_VIEW_INT_TESTS,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_INT_TESTS),
-            action: MenuAction.MENU_ACTION_VIEW_INT_TESTS,
-            hasCheckbox: true,
-            checkboxValue: currentOptions.intTests.value,
-            viewOptionType: currentOptions.intTests.option
-        };
-
-        const viewUnitTests = {
-            key: MenuAction.MENU_ACTION_VIEW_UNIT_TESTS,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_UNIT_TESTS),
-            action: MenuAction.MENU_ACTION_VIEW_UNIT_TESTS,
-            hasCheckbox: true,
-            checkboxValue: currentOptions.unitTests.value,
-            viewOptionType: currentOptions.unitTests.option
-        };
-
-        const viewAccFiles = {
-            key: MenuAction.MENU_ACTION_VIEW_ACC_FILES,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_ACC_FILES),
-            action: MenuAction.MENU_ACTION_VIEW_ACC_FILES,
-            hasCheckbox: true,
-            checkboxValue: currentOptions.accFiles.value,
-            viewOptionType: currentOptions.accFiles.option
+            checkboxValue: currentOptions.testResults.value,
+            viewOptionType: currentOptions.testResults.option
         };
 
         const viewDomainDict = {
@@ -2662,25 +2436,6 @@ class ClientDataServicesClass{
             key: MenuAction.MENU_ACTION_REFRESH_TESTS,
             itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_REFRESH_TESTS),
             action: MenuAction.MENU_ACTION_REFRESH_TESTS,
-            hasCheckbox: false,
-            checkboxValue: false,
-            viewOptionType: ViewOptionType.NONE
-        };
-
-        const refreshProgressData = {
-            key: MenuAction.MENU_ACTION_REFRESH_PROGRESS,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_REFRESH_PROGRESS),
-            action: MenuAction.MENU_ACTION_REFRESH_PROGRESS,
-            hasCheckbox: false,
-            checkboxValue: false,
-            viewOptionType: ViewOptionType.NONE
-        };
-
-        // TODO - Currently unused.  Possible option for different level of data refresh
-        const refreshAllData = {
-            key: MenuAction.MENU_ACTION_REFRESH_DATA,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_REFRESH_DATA),
-            action: MenuAction.MENU_ACTION_REFRESH_DATA,
             hasCheckbox: false,
             checkboxValue: false,
             viewOptionType: ViewOptionType.NONE
@@ -2731,9 +2486,7 @@ class ClientDataServicesClass{
                                 return [
                                     viewDetails,
                                     viewDomainDict,
-                                    viewAccTests,
-                                    viewIntTests,
-                                    viewUnitTests,
+                                    viewTestResults,
                                     viewTestSummary,
                                     viewAllAsTabs
                                 ];
@@ -2822,9 +2575,7 @@ class ClientDataServicesClass{
                         return [
                             viewDetails,
                             viewDomainDict,
-                            viewAccTests,
-                            viewIntTests,
-                            viewUnitTests,
+                            viewTestResults,
                             viewTestSummary,
                             viewAllAsTabs
                         ];
@@ -2840,84 +2591,6 @@ class ClientDataServicesClass{
                 return  [];
         }
 
-    }
-
-    getWorkProgressDvItems(userContext){
-
-        let dvWorkPackages = [];
-        let dvDesignUpdates = [];
-        let dvAllItem = null;
-        let dvItem = null;
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Progress Data for DV {}", userContext.designVersionId);
-
-        const userRoles = UserRoleData.getRoleByUserId(userContext.userId);
-
-        if(userContext.designVersionId === 'NONE'){
-            return{
-                dvAllItem:          dvAllItem,
-                dvItem:             dvItem,
-                dvWorkPackages:     dvWorkPackages,
-                dvDesignUpdates:    dvDesignUpdates,
-                userRoles:          userRoles
-            }
-        }
-
-        const dv = DesignVersionData.getDesignVersionById(userContext.designVersionId);
-
-        switch(dv.designVersionStatus){
-            case DesignVersionStatus.VERSION_NEW:
-            case DesignVersionStatus.VERSION_DRAFT:
-            case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
-
-                // Get summary for base Design Version
-                dvItem = UserWorkProgressSummaryData.getHeaderSummaryItem(
-                    userContext.userId,
-                    userContext.designVersionId,
-                    WorkSummaryType.WORK_SUMMARY_BASE_DV
-                );
-
-                // Get Base WP summaries
-                dvWorkPackages = UserWorkProgressSummaryData.getSummaryListItems(
-                    userContext.userId,
-                    userContext.designVersionId,
-                    WorkSummaryType.WORK_SUMMARY_BASE_WP
-                );
-                break;
-
-            default:
-
-                // Get All scenarios item
-                dvAllItem = UserWorkProgressSummaryData.getHeaderSummaryItem(
-                    userContext.userId,
-                    userContext.designVersionId,
-                    WorkSummaryType.WORK_SUMMARY_UPDATE_DV_ALL
-                );
-
-                // Get update scenarios item
-                dvItem = UserWorkProgressSummaryData.getHeaderSummaryItem(
-                    userContext.userId,
-                    userContext.designVersionId,
-                    WorkSummaryType.WORK_SUMMARY_UPDATE_DV
-                );
-
-                // Get DU summaries
-                dvDesignUpdates = UserWorkProgressSummaryData.getSummaryListItems(
-                    userContext.userId,
-                    userContext.designVersionId,
-                    WorkSummaryType.WORK_SUMMARY_UPDATE
-                );
-        }
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Returning WPs {}  DUs: {}", dvWorkPackages.length, dvDesignUpdates.length);
-
-        return{
-            dvAllItem:          dvAllItem,
-            dvItem:             dvItem,
-            dvWorkPackages:     dvWorkPackages,
-            dvDesignUpdates:    dvDesignUpdates,
-            userRoles:          userRoles
-        }
     }
 
     getWorkProgressDuWorkPackages(userContext, designUpdateId){
@@ -3151,43 +2824,6 @@ class ClientDataServicesClass{
         }
 
     }
-
-
-    getBacklogSummaryData(userContext, workItem, backlogType){
-
-        let workContext = {};
-
-        if(workItem){
-            workContext = {
-                userId:                 userContext.userId,
-                dvId:                   workItem.dvId,
-                inId:                   workItem.inId,
-                itId:                   workItem.itId,
-                duId:                   workItem.duId,
-                wpId:                   workItem.wpId,
-                summaryType:            workItem.summaryType
-            };
-
-            return UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, backlogType);
-
-        } else {
-
-            // No work item selected so context is whole DV
-            workContext = {
-                userId:                 userContext.userId,
-                dvId:                   userContext.designVersionId,
-                inId:                   'NONE',
-                itId:                   'NONE',
-                duId:                   'NONE',
-                wpId:                   'NONE',
-                summaryType:            SummaryType.SUMMARY_DV
-            };
-
-            return UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, backlogType);
-        }
-    }
-
-
 }
 
 export const ClientDataServices = new ClientDataServicesClass();

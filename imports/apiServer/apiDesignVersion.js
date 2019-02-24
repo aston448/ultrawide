@@ -89,17 +89,17 @@ class ServerDesignVersionApiClass {
         );
     };
 
-    updateWorkProgress(userContext, callback){
-
-        updateWorkProgress.call(
-            {
-                userContext: userContext
-            },
-            (err, result) => {
-                callback(err, result);
-            }
-        );
-    };
+    // updateWorkProgress(userContext, callback){
+    //
+    //     updateWorkProgress.call(
+    //         {
+    //             userContext: userContext
+    //         },
+    //         (err, result) => {
+    //             callback(err, result);
+    //         }
+    //     );
+    // };
 
 }
 

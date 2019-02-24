@@ -6,16 +6,22 @@ import { DesignUpdateComponents }       from '../../collections/design_update/de
 import { WorkPackages }                 from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }        from '../../collections/work/work_package_components';
 import { DomainDictionary }             from '../../collections/design/domain_dictionary.js';
-import { UserDesignVersionMashScenarios } from "../../collections/mash/user_dv_mash_scenarios";
 import { UserDesignUpdateSummary }      from "../../collections/summary/user_design_update_summary";
-import { UserDevDesignSummary }         from "../../collections/summary/user_dev_design_summary";
-import { UserDevTestSummary }           from "../../collections/summary/user_dev_test_summary";
-import { UserWorkProgressSummary }      from "../../collections/summary/user_work_progress_summary";
 import { DesignPermutationValues }      from '../../collections/design/design_permutation_values.js';
 import { ScenarioTestExpectations }     from '../../collections/design/scenario_test_expectations.js';
+import { WorkItems }                    from "../../collections/work/work_items";
+import { DesignAnomalies }              from "../../collections/design/design_anomalies";
+
+import { UserWorkItemTestSummary }      from "../../collections/user_temp/user_work_item_test_summary";
+//import { UserTestTypeSummary }          from "../../collections/user_temp/user_test_type_summary";
+import { UserTestExpectationResults }   from "../../collections/user_temp/user_test_expectation_results";
+import { UserScenarioTestSummary }      from "../../collections/user_temp/user_scenario_test_summary";
+import { UserWorkItemBacklog }          from "../../collections/user_temp/user_work_item_backlog";
+
+
 
 import { ComponentType, UpdateMergeStatus, WorkPackageStatus, WorkPackageTestStatus, DesignUpdateStatus, DuWorkPackageTestStatus, DesignUpdateMergeAction, WorkPackageType } from '../../constants/constants.js';
-import {UserDvScenarioTestExpectationStatus} from "../../collections/mash/user_dv_scenario_test_expectation_status";
+
 
 class DesignVersionDataClass {
 
@@ -569,14 +575,17 @@ class DesignVersionDataClass {
         WorkPackageComponents.remove({designVersionId: designVersionId});
         ScenarioTestExpectations.remove({designVersionId: designVersionId});
         DomainDictionary.remove({designVersionId: designVersionId});
+        WorkItems.remove({designVersionId: designVersionId});
+        DesignAnomalies.remove({designVersionId: designVersionId});
 
-        // Remove ephemeral data
-        UserDesignVersionMashScenarios.remove({designVersionId: designVersionId});
+        // Remove ephemeral user data
+        UserWorkItemTestSummary.remove({designVersionId: designVersionId});
+        UserScenarioTestSummary.remove({designVersionId: designVersionId});
+        //UserTestTypeSummary.remove({designVersionId: designVersionId});
+        UserTestExpectationResults.remove({designVersionId: designVersionId});
+        UserWorkItemBacklog.remove({designVersionId: designVersionId});
         UserDesignUpdateSummary.remove({designVersionId: designVersionId});
-        UserDevDesignSummary.remove({designVersionId: designVersionId});
-        UserDevTestSummary.remove({designVersionId: designVersionId});
-        UserWorkProgressSummary.remove({designVersionId: designVersionId});
-        UserDvScenarioTestExpectationStatus.remove({designVersionId: designVersionId})
+
     }
 }
 

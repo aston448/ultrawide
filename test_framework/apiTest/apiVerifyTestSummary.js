@@ -11,7 +11,8 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designFeature = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.FEATURE, featureParent, featureName);
-        const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
+        // TODO - REPLACE THIS
+        //const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
 
         let result = true;
         let actual = '';
@@ -40,7 +41,8 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designFeature = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.FEATURE, featureParent, featureName);
-        const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
+        //TODO - REPLACE THIS
+        //const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
 
         let result = true;
         let actual = 0;
@@ -69,7 +71,8 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designFeature = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.FEATURE, featureParent, featureName);
-        const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
+        // TODO REPLACE THIS
+        //const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
 
         let result = true;
         let actual = 0;
@@ -98,7 +101,8 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designFeature = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.FEATURE, featureParent, featureName);
-        const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
+        // TODO - REPLACE THIS
+        //const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
 
         let result = true;
         let actual = 0;

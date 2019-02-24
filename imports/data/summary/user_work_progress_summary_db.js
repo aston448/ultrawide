@@ -1,6 +1,5 @@
 import {UserWorkProgressSummary}        from '../../collections/summary/user_work_progress_summary.js';
 
-import { WorkSummaryType }              from "../../constants/constants";
 
 class UserWorkProgressSummaryDataClass {
 
@@ -12,28 +11,6 @@ class UserWorkProgressSummaryDataClass {
 
     // SELECT ==========================================================================================================
 
-    getHeaderSummaryItem(userId, designVersionId, itemType){
-
-        return UserWorkProgressSummary.findOne(
-            {
-                userId:                 userId,
-                designVersionId:        designVersionId,
-                workSummaryType:        itemType
-            }
-        );
-    }
-
-    getSummaryListItems(userId, designVersionId, itemType){
-
-        return UserWorkProgressSummary.find(
-            {
-                userId:                 userId,
-                designVersionId:        designVersionId,
-                workSummaryType:        itemType
-            },
-            {sort: {name: 1}}
-        ).fetch();
-    }
 
     getUpdateSummaryListItems(userId, designVersionId, designUpdateId, itemType){
 
@@ -50,13 +27,6 @@ class UserWorkProgressSummaryDataClass {
 
     // REMOVE ==========================================================================================================
 
-    removeWorkProgressSummary(userContext){
-
-        return UserWorkProgressSummary.remove({
-            userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId
-        });
-    }
 }
 
 export const UserWorkProgressSummaryData = new UserWorkProgressSummaryDataClass();

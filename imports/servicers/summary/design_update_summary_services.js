@@ -7,8 +7,8 @@ import { log } from '../../common/utils.js';
 import { DesignData }                   from '../../data/design/design_db.js';
 import { DesignUpdateData }             from '../../data/design_update/design_update_db.js';
 import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
-import { UserDvMashScenarioData }       from '../../data/mash/user_dv_mash_scenario_db.js'
 import { UserDesignUpdateSummaryData }  from '../../data/summary/user_design_update_summary_db.js';
+import {UserMashScenarioTestData} from "../../data/mash/user_mash_scenario_test_db";
 
 //======================================================================================================================
 //
@@ -194,29 +194,41 @@ class DesignUpdateSummaryServicesClass {
                         // If the item is a Scenario - get its test status
                         if (item.componentType === ComponentType.SCENARIO) {
 
-                            const mashScenario = UserDvMashScenarioData.getScenario(userContext, item.componentReferenceId);
+                            const mashScenarioResults = UserMashScenarioTestData.getAllScenarioTestData(userContext.userId, userContext.designVersionId, item.componentReferenceId);
 
-                            if (mashScenario) {
+                            let passCount = 0;
+                            let failCount = 0;
+                            let missingCount = 0;
+
+                            mashScenarioResults.forEach((mashScenarioResult) => {
+
+                                if(mashScenarioResult.testOutcome === MashTestStatus.MASH_PASS){
+                                    passCount++;
+                                } else {
+                                    if(mashScenarioResult.testOutcome === MashTestStatus.MASH_FAIL){
+                                        failCount++;
+                                    } else {
+                                        missingCount++;
+                                    }
+                                }
+                            });
+
+                            if ((passCount + failCount + missingCount) > 0) {
 
                                 // Any fails its bad
-                                if (
-                                    mashScenario.accMashTestStatus === MashTestStatus.MASH_FAIL ||
-                                    mashScenario.intMashTestStatus === MashTestStatus.MASH_FAIL ||
-                                    mashScenario.unitFailCount > 0
-                                ) {
+                                if (failCount > 0) {
                                     testStatus = MashTestStatus.MASH_FAIL;
                                 } else {
                                     // No fails so any passes is good
-                                    if (
-                                        mashScenario.accMashTestStatus === MashTestStatus.MASH_PASS ||
-                                        mashScenario.intMashTestStatus === MashTestStatus.MASH_PASS ||
-                                        mashScenario.unitPassCount > 0
+                                    if ((passCount > 0) && (missingCount === 0)
                                     ) {
                                         testStatus = MashTestStatus.MASH_PASS;
+                                    } else {
+                                        testStatus = MashTestStatus.MASH_INCOMPLETE;
                                     }
                                 }
                             } else {
-                                testStatus = MashTestStatus.MASH_NOT_LINKED;
+                                testStatus = MashTestStatus.MASH_INCOMPLETE;
                             }
                         }
 

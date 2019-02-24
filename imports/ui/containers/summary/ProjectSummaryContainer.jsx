@@ -6,19 +6,18 @@ import PropTypes            from 'prop-types';
 import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Data
-import {UserDvWorkSummaryData}          from "../../../data/summary/user_dv_work_summary_db";
+import {UserTestData}                   from "../../../data/test_data/user_test_data_db";
 
 // Ultrawide GUI Components
 import ProjectBacklogContainer          from '../../containers/summary/ProjectBacklogContainer.jsx';
-import FeatureSummaryContainer          from '../item/FeatureSummaryContainer.jsx';
 import WorkItemListContainer            from '../../containers/work/WorkItemContainer.jsx';
 import ProjectWorkSummaryItemContainer  from '../../containers/summary/ProjectWorkSummaryItemContainer.jsx'
-import ProjectSummaryWorkItemDetail     from '../../components/summary/ProjectWorkSummaryItemDetail.jsx';
 
 // Ultrawide Services
-import {DisplayContext, HomePageTab, SummaryType, BacklogType, WorkItemType, LogLevel} from '../../../constants/constants.js';
+import {DisplayContext, BacklogType, WorkItemType, LogLevel} from '../../../constants/constants.js';
 import {log} from "../../../common/utils";
 
+import {ClientUserSettingsServices}     from "../../../apiClient/apiClientUserSettings";
 import { ClientDataServices }           from '../../../apiClient/apiClientDataServices.js';
 
 // Bootstrap
@@ -28,12 +27,8 @@ import {Grid, Row, Col} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import store from '../../../redux/store'
 import {
-    setCurrentUserBacklogItem, setCurrentUserSummaryItem
+    setCurrentUserSummaryItem
 } from '../../../redux/actions'
-import {ItemListType} from "../../../constants/constants";
-import {ClientUserSettingsServices} from "../../../apiClient/apiClientUserSettings";
-import {UserTestData} from "../../../data/test_data/user_test_data_db";
-
 
 
 // =====================================================================================================================

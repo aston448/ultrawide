@@ -23,9 +23,6 @@ import {Grid, Row, Col} from 'react-bootstrap';
 // REDUX services
 import {connect} from 'react-redux';
 import {ScenarioTestExpectationData} from "../../../data/design/scenario_test_expectations_db";
-import {UserDvScenarioTestExpectationStatusData} from "../../../data/mash/user_dv_scenario_test_expectation_status_db";
-
-
 
 
 // =====================================================================================================================

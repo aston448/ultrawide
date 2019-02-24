@@ -91,55 +91,55 @@ export class FeatureSummaryList extends Component {
             }
         }
 
-        let itemListType = ItemListType.BACKLOG_ITEM;
+        // let itemListType = ItemListType.BACKLOG_ITEM;
+        //
+        // switch(displayContext){
+        //
+        //     case DisplayContext.DV_BACKLOG_DESIGN:
+        //
+        //         headerText = 'Features with no Scenarios defined yet...';
+        //         break;
+        //
+        //     case DisplayContext.DV_BACKLOG_ANOMALY:
+        //
+        //         headerText = 'Features with open Design Anomalies...';
+        //         break;
+        //
+        //     case DisplayContext.DV_BACKLOG_WORK:
+        //
+        //         headerText = 'Features with scenarios not assigned to Work Packages...';
+        //         break;
+        //
+        //     case DisplayContext.DV_BACKLOG_NO_EXP:
+        //
+        //         headerText = 'Features with scenarios without test expectations...';
+        //         break;
+        //
+        //     case DisplayContext.DV_BACKLOG_TEST_MISSING:
+        //
+        //         headerText = 'Features with scenarios with missing tests...';
+        //         break;
+        //
+        //     case DisplayContext.DV_BACKLOG_TEST_FAIL:
+        //
+        //         headerText = 'Features with scenarios with failing tests...';
+        //         break;
+        //
+        //     default:
 
-        switch(displayContext){
+        let itemListType = ItemListType.ULTRAWIDE_ITEM;
 
-            case DisplayContext.DV_BACKLOG_DESIGN:
+        if(featureSummaries && featureSummaries.length > 0) {
+            headerText = 'Features in ' + locationText;
+        } else {
+            if(userContext.designVersionId === 'NONE'){
+                headerText = 'Features';
 
-                headerText = 'Features with no Scenarios defined yet...';
-                break;
-
-            case DisplayContext.DV_BACKLOG_ANOMALY:
-
-                headerText = 'Features with open Design Anomalies...';
-                break;
-
-            case DisplayContext.DV_BACKLOG_WORK:
-
-                headerText = 'Features with scenarios not assigned to Work Packages...';
-                break;
-
-            case DisplayContext.DV_BACKLOG_NO_EXP:
-
-                headerText = 'Features with scenarios without test expectations...';
-                break;
-
-            case DisplayContext.DV_BACKLOG_TEST_MISSING:
-
-                headerText = 'Features with scenarios with missing tests...';
-                break;
-
-            case DisplayContext.DV_BACKLOG_TEST_FAIL:
-
-                headerText = 'Features with scenarios with failing tests...';
-                break;
-
-            default:
-
-                itemListType = ItemListType.ULTRAWIDE_ITEM;
-
-                if(featureSummaries && featureSummaries.length > 0) {
-                    headerText = 'Features in ' + locationText;
-                } else {
-                    if(userContext.designVersionId === 'NONE'){
-                        headerText = 'Features';
-
-                    } else{
-                        headerText = 'Features in ' + locationText;
-                    }
-                }
+            } else{
+                headerText = 'Features in ' + locationText;
+            }
         }
+       // }
 
 
         return(

@@ -303,14 +303,8 @@ class TextLookupsClass {
                 return 'Update Summary';
             case MenuAction.MENU_ACTION_VIEW_TEST_SUMM:
                 return 'Test Summary';
-            case MenuAction.MENU_ACTION_VIEW_ACC_TESTS:
-                return 'Acceptance Tests';
-            case MenuAction.MENU_ACTION_VIEW_INT_TESTS:
-                return 'Integration Tests';
-            case MenuAction.MENU_ACTION_VIEW_UNIT_TESTS:
-                return 'Unit Tests';
-            case MenuAction.MENU_ACTION_VIEW_ACC_FILES:
-                return 'Feature Files';
+            case MenuAction.MENU_ACTION_VIEW_TEST_RESULTS:
+                return 'Test Results';
             case MenuAction.MENU_ACTION_VIEW_DICT:
                 return 'Domain Dictionary';
             case MenuAction.MENU_ACTION_VIEW_ALL_TABS:

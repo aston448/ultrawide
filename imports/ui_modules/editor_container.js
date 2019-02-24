@@ -9,7 +9,6 @@ import DesignComponentAdd           from '../../imports/ui/components/common/Des
 import DesignComponentTextContainer from '../../imports/ui/containers/edit/DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer    from '../../imports/ui/containers/edit/DomainDictionaryContainer.jsx';
 import DesignUpdateSummaryContainer from '../../imports/ui/containers/summary/UpdateSummaryContainer.jsx';
-import MashSelectedItemContainer    from '../../imports/ui/containers/mash/MashSelectedItemContainer.jsx';
 import ScenarioFinder               from '../../imports/ui/components/search/ScenarioFinder.jsx';
 import TestExpectationSelectedItemContainer    from "../ui/containers/mash/TestExpectationSelectedItemContainer.jsx";
 import DesignAnomalyContainer       from '../../imports/ui/containers/item/DesignAnomalyContainer.jsx';
@@ -146,7 +145,7 @@ class EditorContainerUiModulesClass{
     }
 
 
-    getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, designSummaryData, userContext, userRole, view, mode, viewOptions, editorClass){
+    getMainEditors(baseApplications, workingApplications, updateApplications, wpApplications, userContext, userRole, view, mode, viewOptions, editorClass){
 
         let displayContext = DisplayContext.NONE;
 
@@ -181,9 +180,8 @@ class EditorContainerUiModulesClass{
                             {addComponent}
                         </div>
                         <DesignEditorFooter
-                            hasDesignSummary={true}
+                            hasDesignSummary={false}
                             displayContext={displayContext}
-                            designSummaryData={designSummaryData}
                         />
                     </div>;
 
@@ -203,9 +201,8 @@ class EditorContainerUiModulesClass{
                             {addComponent}
                         </div>
                         <DesignEditorFooter
-                            hasDesignSummary={true}
+                            hasDesignSummary={false}
                             displayContext={displayContext}
-                            designSummaryData={designSummaryData}
                         />
                     </div>;
                 break;
@@ -524,474 +521,6 @@ class EditorContainerUiModulesClass{
 
     }
 
-    getAccTestsPane(view, userContext){
-
-        let accTests = '';
-
-        switch(view){
-
-            case ViewType.DESIGN_NEW:
-            case ViewType.DESIGN_PUBLISHED:
-            case ViewType.DESIGN_UPDATABLE:
-
-                // Tests are Displayed at a Feature Level or Lower
-
-                if(userContext.designComponentType !== 'NONE'){
-                    switch(userContext.designComponentType){
-                        case ComponentType.APPLICATION:
-                        case ComponentType.DESIGN_SECTION:
-                            // Tests not displayed for these items
-                            accTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: 'NONE',
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE:
-                            accTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.FEATURE_ASPECT,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE_ASPECT:
-                            accTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.SCENARIO,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.SCENARIO:
-                            accTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.TEST,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>;
-
-                            break;
-                    }
-                } else {
-                    accTests =
-                        <MashSelectedItemContainer params={{
-                            childComponentType: 'NONE',
-                            designItemId: 'NONE',
-                            userContext: userContext,
-                            view: view,
-                            displayContext: DisplayContext.MASH_ACC_TESTS
-                        }}/>;
-                }
-
-                break;
-
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-
-                // Tests are viewable at all levels
-
-                // Acceptance Tests Pane
-                if(userContext.designComponentType !== 'NONE'){
-                    switch(userContext.designComponentType){
-                        case ComponentType.APPLICATION:
-                            accTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.DESIGN_SECTION,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.DESIGN_SECTION:
-                            accTests =
-                                <div>
-                                    <MashSelectedItemContainer params={{
-                                        childComponentType: ComponentType.FEATURE,
-                                        designItemId: 'NONE',
-                                        userContext: userContext,
-                                        view: view,
-                                        displayContext: DisplayContext.MASH_ACC_TESTS
-                                    }}/>
-                                    <MashSelectedItemContainer params={{
-                                        childComponentType: ComponentType.DESIGN_SECTION,
-                                        designItemId: 'NONE',
-                                        userContext: userContext,
-                                        view: view,
-                                        displayContext: DisplayContext.MASH_ACC_TESTS
-                                    }}/>
-                                </div>;
-                            break;
-                        case ComponentType.FEATURE:
-                            accTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.FEATURE_ASPECT,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE_ASPECT:
-                            accTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.SCENARIO,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.SCENARIO:
-                            accTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.TEST,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>;
-
-                            break;
-                    }
-                } else {
-                    accTests =
-                        <MashSelectedItemContainer params={{
-                            childComponentType: 'NONE',
-                            designItemId: 'NONE',
-                            userContext: userContext,
-                            view: view,
-                            displayContext: DisplayContext.MASH_ACC_TESTS
-                        }}/>;
-                }
-
-        }
-
-        return accTests;
-    }
-
-    getIntTestsPane(view, userContext){
-
-        let intTests = '';
-
-        switch(view){
-
-            case ViewType.DESIGN_NEW:
-            case ViewType.DESIGN_PUBLISHED:
-            case ViewType.DESIGN_UPDATABLE:
-
-                // Tests are Displayed at a Feature Level or Lower
-
-                if(userContext.designComponentType !== 'NONE'){
-                    switch(userContext.designComponentType){
-                        case ComponentType.APPLICATION:
-                        case ComponentType.DESIGN_SECTION:
-                            // Tests not displayed for these items
-                            intTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: 'NONE',
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE:
-                            intTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.FEATURE_ASPECT,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE_ASPECT:
-                            intTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.SCENARIO,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.SCENARIO:
-                            intTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.TEST,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>;
-
-                            break;
-                    }
-                } else {
-                    intTests =
-                        <MashSelectedItemContainer params={{
-                            childComponentType: 'NONE',
-                            designItemId: 'NONE',
-                            userContext: userContext,
-                            view: view,
-                            displayContext: DisplayContext.MASH_INT_TESTS
-                        }}/>;
-                }
-
-                break;
-
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-
-                // Tests are viewable at all levels
-
-                // Integration Tests Pane
-                if(userContext.designComponentType !== 'NONE'){
-                    switch(userContext.designComponentType){
-                        case ComponentType.APPLICATION:
-                            intTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.DESIGN_SECTION,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.DESIGN_SECTION:
-                            intTests =
-                                <div>
-                                    <MashSelectedItemContainer params={{
-                                        childComponentType: ComponentType.FEATURE,
-                                        designItemId: 'NONE',
-                                        userContext: userContext,
-                                        view: view,
-                                        displayContext: DisplayContext.MASH_INT_TESTS
-                                    }}/>
-                                    <MashSelectedItemContainer params={{
-                                        childComponentType: ComponentType.DESIGN_SECTION,
-                                        designItemId: 'NONE',
-                                        userContext: userContext,
-                                        view: view,
-                                        displayContext: DisplayContext.MASH_INT_TESTS
-                                    }}/>
-                                </div>;
-                            break;
-                        case ComponentType.FEATURE:
-                            intTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.FEATURE_ASPECT,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE_ASPECT:
-                            intTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.SCENARIO,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.SCENARIO:
-                            intTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.TEST,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>;
-
-                            break;
-                    }
-                } else {
-                    intTests =
-                        <MashSelectedItemContainer params={{
-                            childComponentType: 'NONE',
-                            designItemId: 'NONE',
-                            userContext: userContext,
-                            view: view,
-                            displayContext: DisplayContext.MASH_INT_TESTS
-                        }}/>;
-                }
-        }
-
-        return intTests;
-
-    }
-
-    getUnitTestsPane(view, userContext){
-
-        let unitTests = '';
-
-        switch(view){
-
-            case ViewType.DESIGN_NEW:
-            case ViewType.DESIGN_PUBLISHED:
-            case ViewType.DESIGN_UPDATABLE:
-
-                // Tests are Displayed at a Feature Level or Lower
-
-                if(userContext.designComponentType !== 'NONE'){
-                    switch(userContext.designComponentType){
-                        case ComponentType.APPLICATION:
-                        case ComponentType.DESIGN_SECTION:
-                            // Tests not displayed for these items
-                            unitTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: 'NONE',
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE:
-                            unitTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.FEATURE_ASPECT,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE_ASPECT:
-                            unitTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.SCENARIO,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.SCENARIO:
-                            unitTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.TEST,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>;
-
-                            break;
-                    }
-                } else {
-                    unitTests =
-                        <MashSelectedItemContainer params={{
-                            childComponentType: 'NONE',
-                            designItemId: 'NONE',
-                            userContext: userContext,
-                            view: view,
-                            displayContext: DisplayContext.MASH_UNIT_TESTS
-                        }}/>;
-                }
-
-                break;
-
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-
-                // Tests are viewable at all levels
-
-                if(userContext.designComponentType !== 'NONE'){
-                    switch(userContext.designComponentType){
-                        case ComponentType.APPLICATION:
-                            unitTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.DESIGN_SECTION,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.DESIGN_SECTION:
-                            unitTests =
-                                <div>
-                                    <MashSelectedItemContainer params={{
-                                        childComponentType: ComponentType.FEATURE,
-                                        designItemId: 'NONE',
-                                        userContext: userContext,
-                                        view: view,
-                                        displayContext: DisplayContext.MASH_UNIT_TESTS
-                                    }}/>
-                                    <MashSelectedItemContainer params={{
-                                        childComponentType: ComponentType.DESIGN_SECTION,
-                                        designItemId: 'NONE',
-                                        userContext: userContext,
-                                        view: view,
-                                        displayContext: DisplayContext.MASH_UNIT_TESTS
-                                    }}/>
-                                </div>;
-                            break;
-                        case ComponentType.FEATURE:
-                            unitTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.FEATURE_ASPECT,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.FEATURE_ASPECT:
-                            unitTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.SCENARIO,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>;
-                            break;
-                        case ComponentType.SCENARIO:
-                            unitTests =
-                                <MashSelectedItemContainer params={{
-                                    childComponentType: ComponentType.TEST,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>;
-
-                            break;
-                    }
-                } else {
-                    unitTests =
-                        <MashSelectedItemContainer params={{
-                            childComponentType: 'NONE',
-                            designItemId: 'NONE',
-                            userContext: userContext,
-                            view: view,
-                            displayContext: DisplayContext.MASH_UNIT_TESTS
-                        }}/>;
-                }
-
-        }
-
-        return unitTests;
-
-    }
-
     getDomainDictionary(userContext){
 
         return(
@@ -1238,7 +767,7 @@ class EditorContainerUiModulesClass{
                         displayedItems++;
                     }
 
-                    if (viewOptions.devAccTestsVisible) {
+                    if (viewOptions.devTestResultsVisible) {
 
                         switch (displayedItems) {
                             case 1:
@@ -1273,102 +802,6 @@ class EditorContainerUiModulesClass{
                         displayedItems++;
                     }
 
-                    if (viewOptions.devIntTestsVisible) {
-
-                        switch (displayedItems) {
-                            case 1:
-                                // Now 2 items
-                                col1width = 6;
-                                col2width = 6;
-                                col3width = 6;
-                                col4width = 6;
-                                col5width = 6;
-                                col6width = 6;
-                                break;
-                            case 2:
-                                // Now 3 items
-                                col1width = 4;
-                                col2width = 4;
-                                col3width = 4;
-                                col4width = 4;
-                                col5width = 4;
-                                col6width = 4;
-                                break;
-                            case 3:
-                                // Now 4 items
-                                col1width = 3;
-                                col2width = 3;
-                                col3width = 3;
-                                col4width = 3;
-                                col5width = 3;
-                                col6width = 3;
-                                break;
-                            case 4:
-                                // Now 5 items
-                                col1width = 3;
-                                col2width = 3;
-                                col3width = 2;
-                                col4width = 2;
-                                col5width = 2;
-                                col6width = 2;
-                                break;
-                        }
-
-                        displayedItems++;
-                    }
-
-                    if (viewOptions.devUnitTestsVisible) {
-
-                        switch (displayedItems) {
-                            case 1:
-                                // Now 2 items
-                                col1width = 6;
-                                col2width = 6;
-                                col3width = 6;
-                                col4width = 6;
-                                col5width = 6;
-                                col6width = 6;
-                                break;
-                            case 2:
-                                // Now 3 items
-                                col1width = 4;
-                                col2width = 4;
-                                col3width = 4;
-                                col4width = 4;
-                                col5width = 4;
-                                col6width = 4;
-                                break;
-                            case 3:
-                                // Now 4 items
-                                col1width = 3;
-                                col2width = 3;
-                                col3width = 3;
-                                col4width = 3;
-                                col5width = 3;
-                                col6width = 3;
-                                break;
-                            case 4:
-                                // Now 5 items
-                                col1width = 3;
-                                col2width = 3;
-                                col3width = 2;
-                                col4width = 2;
-                                col5width = 2;
-                                col6width = 2;
-                                break;
-                            case 5:
-                                // Now 6 items
-                                col1width = 2;
-                                col2width = 2;
-                                col3width = 2;
-                                col4width = 2;
-                                col5width = 2;
-                                col6width = 2;
-                                break;
-                        }
-
-                        displayedItems++;
-                    }
 
                     // Test Summary - this actually just makes col 1 wider
                     if (viewOptions.testSummaryVisible) {
@@ -1922,8 +1355,8 @@ class EditorContainerUiModulesClass{
                         displayedItems++;
                     }
 
-                    // Acceptance (Feature) Tests
-                    if (viewOptions.devAccTestsVisible) {
+                    // Test Results
+                    if (viewOptions.devTestResultsVisible) {
 
                         switch (displayedItems) {
                             case 1:
@@ -1939,68 +1372,6 @@ class EditorContainerUiModulesClass{
 
                         displayedItems++;
 
-                    }
-
-                    // Integration Tests
-                    if (viewOptions.devIntTestsVisible) {
-
-                        switch (displayedItems) {
-                            case 2:
-                                // There are now 3 cols so change widths
-                                col1width = 4;
-                                col2width = 4;
-                                col3width = 4;
-                                col4width = 4;
-                                col5width = 4;
-                                col6width = 4;
-                                break;
-                            case 3:
-                                // There are now 4 cols so change widths
-                                col1width = 3;
-                                col2width = 3;
-                                col3width = 3;
-                                col4width = 3;
-                                col5width = 3;
-                                col6width = 3;
-                                break;
-                        }
-                        displayedItems++;
-                    }
-
-                    // Unt Tests
-                    if (viewOptions.devUnitTestsVisible) {
-
-                        switch (displayedItems) {
-                            case 2:
-                                // There are now 3 cols so change widths
-                                col1width = 4;
-                                col2width = 4;
-                                col3width = 4;
-                                col4width = 4;
-                                col5width = 4;
-                                col6width = 4;
-                                break;
-                            case 3:
-                                // There are now 4 cols so change widths
-                                col1width = 3;
-                                col2width = 3;
-                                col3width = 3;
-                                col4width = 3;
-                                col5width = 3;
-                                col6width = 3;
-                                break;
-                            case 4:
-                                // There are now 5 cols so change widths
-                                col1width = 3;
-                                col2width = 2;
-                                col3width = 2;
-                                col4width = 2;
-                                col5width = 3;
-                                col6width = 3;
-                                break;
-
-                        }
-                        displayedItems++;
                     }
 
                     // Domain Dictionary
@@ -2024,24 +1395,6 @@ class EditorContainerUiModulesClass{
                                 col4width = 3;
                                 col5width = 3;
                                 col6width = 3;
-                                break;
-                            case 4:
-                                // There are now 5 cols so change widths
-                                col1width = 4;
-                                col2width = 2;
-                                col3width = 2;
-                                col4width = 2;
-                                col5width = 2;
-                                col6width = 2;
-                                break;
-                            case 5:
-                                // There are now 6 cols so change widths
-                                col1width = 2;
-                                col2width = 2;
-                                col3width = 2;
-                                col4width = 2;
-                                col5width = 2;
-                                col6width = 2;
                                 break;
 
                         }
@@ -2083,22 +1436,6 @@ class EditorContainerUiModulesClass{
                                 col4width = 2;
                                 col5width = 2;
                                 col6width = 2;
-                                break;
-                            case 5:
-                                col1width = 4;
-                                col2width = 2;
-                                col3width = 2;
-                                col4width = 2;
-                                col5width = 2;
-                                col6width = 2;
-                                break;
-                            case 6:
-                                col1width = 7;
-                                col2width = 1;
-                                col3width = 1;
-                                col4width = 1;
-                                col5width = 1;
-                                col6width = 1;
                                 break;
                         }
                     }
@@ -2173,26 +1510,13 @@ class EditorContainerUiModulesClass{
                             </Col>;
                     }
 
-                    if (viewOptions.devAccTestsVisible) {
+                    if (viewOptions.devTestResultsVisible) {
                         col4 =
                             <Col id="column4" md={colWidths.col4width} className="close-col">
-                                {this.getAccTestsPane(view, userContext)}
+                                {this.getTestResults(view, userContext)}
                             </Col>;
                     }
 
-                    if (viewOptions.devIntTestsVisible) {
-                        col5 =
-                            <Col id="column5" md={colWidths.col5width} className="close-col">
-                                {this.getIntTestsPane(view, userContext)}
-                            </Col>;
-                    }
-
-                    if (viewOptions.devUnitTestsVisible) {
-                        col6 =
-                            <Col id="column6" md={colWidths.col6width} className="close-col">
-                                {this.getUnitTestsPane(view, userContext)}
-                            </Col>;
-                    }
 
                     // Make up the layout based on the view options
                     layout =
@@ -2202,8 +1526,6 @@ class EditorContainerUiModulesClass{
                                 {col2}
                                 {col3}
                                 {col4}
-                                {col5}
-                                {col6}
                             </Row>
                         </Grid>;
 
@@ -2541,30 +1863,15 @@ class EditorContainerUiModulesClass{
                             </Col>;
                     }
 
-                    if (viewOptions.devAccTestsVisible) {
+                    if (viewOptions.devTestResultsVisible) {
                         col3 =
                             <Col md={colWidths.col3width} className="close-col">
-                                {this.getAccTestsPane(view, userContext)}
-                            </Col>;
-                    }
-
-
-                    if (viewOptions.devIntTestsVisible) {
-                        col4 =
-                            <Col md={colWidths.col4width} className="close-col">
-                                {this.getIntTestsPane(view, userContext)}
-                            </Col>;
-                    }
-
-                    if (viewOptions.devUnitTestsVisible) {
-                        col5 =
-                            <Col md={colWidths.col5width} className="close-col">
-                                {this.getUnitTestsPane(view, userContext)}
+                                {this.getTestResults(view, userContext)}
                             </Col>;
                     }
 
                     if (viewOptions.designDomainDictVisible) {
-                        col6 =
+                        col4 =
                             <Col md={colWidths.col6width} className="close-col">
                                 {this.getDomainDictionary(userContext)}
                             </Col>;
@@ -2578,8 +1885,6 @@ class EditorContainerUiModulesClass{
                                 {col2}
                                 {col3}
                                 {col4}
-                                {col5}
-                                {col6}
                             </Row>
                         </Grid>;
                 }

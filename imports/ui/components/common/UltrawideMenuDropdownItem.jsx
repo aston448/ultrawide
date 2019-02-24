@@ -75,19 +75,13 @@ export class UltrawideMenuDropdownItem extends Component {
                 ClientAppHeaderServices.setViewConfigure();
                 break;
             case MenuAction.MENU_ACTION_VIEW_DICT:
-            case MenuAction.MENU_ACTION_VIEW_ACC_FILES:
-            case MenuAction.MENU_ACTION_VIEW_UNIT_TESTS:
-            case MenuAction.MENU_ACTION_VIEW_INT_TESTS:
-            case MenuAction.MENU_ACTION_VIEW_ACC_TESTS:
+            case MenuAction.MENU_ACTION_VIEW_TEST_RESULTS:
             case MenuAction.MENU_ACTION_VIEW_TEST_SUMM:
             case MenuAction.MENU_ACTION_VIEW_DETAILS:
             case MenuAction.MENU_ACTION_VIEW_PROGRESS:
             case MenuAction.MENU_ACTION_VIEW_UPD_SUMM:
             case MenuAction.MENU_ACTION_VIEW_ALL_TABS:
                 ClientAppHeaderServices.toggleViewOption(viewOptionType, userViewOptions, userContext.userId);
-                break;
-            case MenuAction.MENU_ACTION_REFRESH_PROGRESS:
-                ClientWorkItemServices.refreshWorkProgressData(userContext, true);
                 break;
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
                 // Also refreshes progress

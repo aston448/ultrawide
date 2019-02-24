@@ -3,7 +3,6 @@ import { Validation } from '../constants/validation_errors.js'
 
 import { TestIntegrationValidationApi }         from '../apiValidation/apiTestIntegrationValidation.js';
 import { TestIntegrationServices }              from '../servicers/dev/test_integration_services.js';
-import { ProjectSummaryServices }               from "../servicers/summary/project_summary_services.js";
 
 //======================================================================================================================
 //
@@ -26,66 +25,6 @@ export const refreshTestData = new ValidatedMethod({
 
         try {
             TestIntegrationServices.refreshTestData(userContext, fullRefresh);
-        } catch (e) {
-            console.log(e.stack);
-            throw new Meteor.Error(e.code, e.stack)
-        }
-    }
-});
-
-export const refreshWorkProgressData = new ValidatedMethod({
-
-    // The full refresh flag is here in case we want to implement more than one sort of test data refresh.
-
-    name: 'testIntegration.refreshWorkProgressData',
-
-    validate: new SimpleSchema({
-        userContext: {type: Object, blackbox: true}
-    }).validator(),
-
-    run({userContext}){
-
-        try {
-            ProjectSummaryServices.refreshUserProjectWorkSummary(userContext);
-        } catch (e) {
-            console.log(e.stack);
-            throw new Meteor.Error(e.code, e.stack)
-        }
-    }
-});
-
-
-export const updateTestSummaryData = new ValidatedMethod({
-
-    name: 'testIntegration.updateTestSummaryData',
-
-    validate: new SimpleSchema({
-        userContext:    {type: Object, blackbox: true}
-    }).validator(),
-
-    run({userContext}){
-
-        try {
-            TestIntegrationServices.updateTestSummaryData(userContext);
-        } catch (e) {
-            console.log(e.stack);
-            throw new Meteor.Error(e.code, e.stack)
-        }
-    }
-});
-
-export const updateTestSummaryDataForFeature = new ValidatedMethod({
-
-    name: 'testIntegration.updateTestSummaryDataForFeature',
-
-    validate: new SimpleSchema({
-        userContext:    {type: Object, blackbox: true}
-    }).validator(),
-
-    run({userContext}){
-
-        try {
-            TestIntegrationServices.updateTestSummaryForFeature(userContext);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.code, e.stack)

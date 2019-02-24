@@ -15,10 +15,7 @@ let Schema = new SimpleSchema({
     updateProgressVisible:      {type: Boolean, defaultValue: false},       // The merged version pane
     updateSummaryVisible:       {type: Boolean, defaultValue: false},        // Update Summary pane
     // Test Specific
-    devAccTestsVisible:         {type: Boolean, defaultValue: false},        // Acceptance Tests view
-    devIntTestsVisible:         {type: Boolean, defaultValue: false},        // Integration Tests view
-    devUnitTestsVisible:        {type: Boolean, defaultValue: false},       // Unit Tests view
-    devFeatureFilesVisible:     {type: Boolean, defaultValue: false},        // Feature Files view
+    devTestResultsVisible:      {type: Boolean, defaultValue: false},        // Test Results Pane
     // Tabs or Panes
     designShowAllAsTabs:        {type: Boolean, defaultValue: false},       // Show all available in Design screen as tabs
     updateShowAllAsTabs:        {type: Boolean, defaultValue: false},       // Show all available in Update screen as tabs

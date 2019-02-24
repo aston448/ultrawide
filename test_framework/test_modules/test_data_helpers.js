@@ -17,9 +17,7 @@ import { UserRoles }                from '../../imports/collections/users/user_r
 import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
-import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
-import { UserDevTestSummary }       from '../../imports/collections/summary/user_dev_test_summary.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
 import { ClientAppHeaderServices }      from '../../imports/apiClient/apiClientAppHeader.js';
@@ -718,7 +716,9 @@ class TestDataHelpersClass {
 
     getMashTestResult(userContext, scenarioName){
 
-        const testScenarios = UserDesignVersionMashScenarios.find({}).fetch();
+        // TODO fix this
+        const testResult = null;
+        //const testScenarios = UserDesignVersionMashScenarios.find({}).fetch();
 
         // console.log("Current Results are:");
         // testScenarios.forEach((mashScenario) => {
@@ -726,11 +726,11 @@ class TestDataHelpersClass {
         // });
         // console.log("Test Mash Scenarios: " + testScenarios.length);
 
-        const testResult = UserDesignVersionMashScenarios.findOne({
-            userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId,
-            scenarioName:       scenarioName
-        });
+        // const testResult = UserDesignVersionMashScenarios.findOne({
+        //     userId:             userContext.userId,
+        //     designVersionId:    userContext.designVersionId,
+        //     scenarioName:       scenarioName
+        // });
 
         if(testResult) {
             return testResult
@@ -786,12 +786,13 @@ class TestDataHelpersClass {
 
     getTestSummaryFeatureData(userId, designVersionId, featureReferenceId, featureName){
 
-        const summaryData = UserDevTestSummary.findOne({
-            userId:                 userId,
-            designVersionId:        designVersionId,
-            featureReferenceId:     featureReferenceId,
-            scenarioReferenceId:    'NONE'
-        });
+        // TODO Fix this
+        // const summaryData = UserDevTestSummary.findOne({
+        //     userId:                 userId,
+        //     designVersionId:        designVersionId,
+        //     featureReferenceId:     featureReferenceId,
+        //     scenarioReferenceId:    'NONE'
+        // });
 
         if(summaryData){
             return summaryData;
@@ -803,12 +804,14 @@ class TestDataHelpersClass {
     getTestSummaryScenarioData(userId, designVersionId, scenarioReferenceId, scenarioName){
 
         // Scenario data is actually the Design Mash data for the Test Summary
+        const summaryData = null;
 
-        const summaryData = UserDesignVersionMashScenarios.findOne({
-            userId:                     userId,
-            designVersionId:            designVersionId,
-            designScenarioReferenceId:  scenarioReferenceId
-        });
+        // TODO Fix this
+        // const summaryData = UserDesignVersionMashScenarios.findOne({
+        //     userId:                     userId,
+        //     designVersionId:            designVersionId,
+        //     designScenarioReferenceId:  scenarioReferenceId
+        // });
 
         if(summaryData){
             return summaryData;

@@ -16,7 +16,6 @@ import { DesignComponentData }          from '../../data/design/design_component
 import { DesignUpdateData }             from '../../data/design_update/design_update_db.js';
 import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
 import { WorkPackageData }              from '../../data/work/work_package_db.js';
-import { UserDvMashScenarioData } from "../../data/mash/user_dv_mash_scenario_db";
 
 //======================================================================================================================
 //
