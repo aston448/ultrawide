@@ -1,12 +1,18 @@
 
 // Ultrawide Services
 import { UltrawideDirectory, LogLevel } from '../../constants/constants.js';
+import {log} from "../../common/utils";
 
 import { ImpExServices }                    from '../../servicers/administration/impex_services.js';
 import { StartupModules }                   from '../../service_modules/administration/startup_service_modules.js';
+import {DesignComponentServices}            from "../design/design_component_services";
 
 // Data Access
 import { UserRoleData }                     from '../../data/users/user_role_db.js';
+import {DesignData}                         from "../../data/design/design_db";
+import {DesignComponentData}                from "../../data/design/design_component_db";
+
+
 
 //======================================================================================================================
 //
@@ -16,7 +22,7 @@ import { UserRoleData }                     from '../../data/users/user_role_db.
 //
 //======================================================================================================================
 
-class StartupServices{
+class StartupServicesClass{
 
     onApplicationStart(){
 
@@ -50,6 +56,29 @@ class StartupServices{
 
         }
     }
+
+    repairComponentHierarchyIndices(){
+
+        if(Meteor.isServer) {
+
+            const designs = DesignData.getAllDesigns();
+
+            designs.forEach((design) => {
+
+                const dvs = DesignData.getDesignVersions(design._id);
+
+                dvs.forEach((dv) => {
+
+                    const missingScenarios = DesignComponentData.getScenariosWithNoHierarchy(dv._id);
+
+                    if (missingScenarios.length > 0) {
+
+                        DesignComponentServices.populateHierarchyIndexData(dv._id)
+                    }
+                });
+            });
+        }
+    }
 }
 
-export default new StartupServices()
+export const StartupServices = new StartupServicesClass();

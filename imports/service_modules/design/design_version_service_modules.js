@@ -11,6 +11,8 @@ import { DesignUpdateComponentData }    from '../../data/design_update/design_up
 import { DomainDictionaryData }        from '../../data/design/domain_dictionary_db.js';
 import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
 import {DesignPermutationValueData} from "../../data/design/design_permutation_value_db";
+import {DesignComponentServices} from "../../servicers/design/design_component_services";
+import {DesignComponentModules} from "./design_component_service_modules";
 
 
 //======================================================================================================================
@@ -245,6 +247,11 @@ class DesignVersionModulesClass {
             this.moveUpdateItemInDesignVersion(movedComponent);
         });
 
+        // Recalc the hierarchy if any moved components
+        if(movedComponents.length > 0){
+            DesignComponentModules.populateHierarchyIndexData(update.designVersionId);
+        }
+
         // REMOVALS ----------------------------------------------------------------------------------------------------
 
         // Remove any design components that are removed
@@ -386,6 +393,9 @@ class DesignVersionModulesClass {
 
             // Flag parents for added item
             this.setParentsUpdateMergeStatus(child, true);
+
+            // And set the hierarchy
+            DesignComponentModules.updateComponentHierarchyIndex(child);
         }
     }
 

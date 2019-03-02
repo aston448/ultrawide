@@ -102,6 +102,14 @@ class DesignComponentDataClass {
                     componentIndexOld:              component.componentIndexNew,
                     componentIndexNew:              component.componentIndexNew,
 
+                    appRef:                         component.appRef,
+                    s1Ref:                          component.s1Ref,
+                    s2Ref:                          component.s2Ref,
+                    s3Ref:                          component.s3Ref,
+                    s4Ref:                          component.s4Ref,
+                    featureRef:                     component.featureRef,
+                    aspectRef:                      component.aspectRef,
+
                     // Data
                     componentNameOld:               component.componentNameOld,
                     componentNameNew:               component.componentNameNew,
@@ -352,6 +360,17 @@ class DesignComponentDataClass {
         ).fetch();
     }
 
+    getScenariosWithNoHierarchy(designVersionId){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                componentType:      ComponentType.SCENARIO,
+                aspectRef:          'NONE'
+            }
+        ).fetch();
+    }
+
     getDvScenariosNotInWorkPackages(designVersionId){
 
         return DesignVersionComponents.find(
@@ -359,6 +378,143 @@ class DesignComponentDataClass {
                 designVersionId:                designVersionId,
                 workPackageId:                  'NONE',
                 componentType:                  ComponentType.SCENARIO
+            }
+        ).fetch();
+    }
+
+    getDvScenariosInWorkPackage(designVersionId, workPackageId){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:                designVersionId,
+                workPackageId:                  workPackageId,
+                componentType:                  ComponentType.SCENARIO
+            }
+        ).fetch();
+    }
+
+    getAppParent(designVersionId, appRef){
+
+        return DesignVersionComponents.findOne({
+            designVersionId: designVersionId,
+            componentReferenceId: appRef
+        });
+     }
+
+    getS1Parent(designVersionId, s1Ref){
+
+        return DesignVersionComponents.findOne({
+            designVersionId: designVersionId,
+            componentReferenceId: s1Ref
+        });
+    }
+
+    getS2Parent(designVersionId, s2Ref){
+
+        return DesignVersionComponents.findOne({
+            designVersionId: designVersionId,
+            componentReferenceId: s2Ref
+        });
+    }
+
+    getS3Parent(designVersionId, s3Ref){
+
+        return DesignVersionComponents.findOne({
+            designVersionId: designVersionId,
+            componentReferenceId: s3Ref
+        });
+    }
+
+    getS4Parent(designVersionId, s4Ref){
+
+        return DesignVersionComponents.findOne({
+            designVersionId: designVersionId,
+            componentReferenceId: s4Ref
+        });
+    }
+
+    getFeatureParent(designVersionId, featureRef){
+
+        return DesignVersionComponents.findOne({
+            designVersionId: designVersionId,
+            componentReferenceId: featureRef
+        });
+    }
+
+    getAspectParent(designVersionId, aspectRef){
+
+        return DesignVersionComponents.findOne({
+            designVersionId: designVersionId,
+            componentReferenceId: aspectRef
+        });
+    }
+
+    getAppChildren(designVersionId, appRef){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                appRef:             appRef
+            }
+        ).fetch();
+    }
+
+    getS1Children(designVersionId, s1Ref){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                s1Ref:              s1Ref
+            }
+        ).fetch();
+    }
+
+    getS2Children(designVersionId, s2Ref){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                s2Ref:              s2Ref
+            }
+        ).fetch();
+    }
+
+    getS3Children(designVersionId, s3Ref){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                s3Ref:              s3Ref
+            }
+        ).fetch();
+    }
+
+    getS4Children(designVersionId, s4Ref){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                s4Ref:              s4Ref
+            }
+        ).fetch();
+    }
+
+    getFeatureChildren(designVersionId, featureRef){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                featureRef:         featureRef
+            }
+        ).fetch();
+    }
+
+    getAspectChildren(designVersionId, aspectRef){
+
+        return DesignVersionComponents.find(
+            {
+                designVersionId:    designVersionId,
+                aspectRef:          aspectRef
             }
         ).fetch();
     }
@@ -417,6 +573,24 @@ class DesignComponentDataClass {
     }
 
     // UPDATE ==========================================================================================================
+
+    setComponentHierarchyRefs(designComponentId, indexData){
+
+        return DesignVersionComponents.update(
+            {_id: designComponentId},
+            {
+                $set:{
+                    appRef:         indexData.appRef,
+                    s1Ref:          indexData.s1Ref,
+                    s2Ref:          indexData.s2Ref,
+                    s3Ref:          indexData.s3Ref,
+                    s4Ref:          indexData.s4Ref,
+                    featureRef:     indexData.featureRef,
+                    aspectRef:      indexData.aspectRef,
+                }
+            }
+        )
+    }
 
     setComponentReference(designComponentId, componentReference){
 

@@ -8,10 +8,8 @@ import { WorkPackageServices }          from '../../servicers/work/work_package_
 
 // Data Access
 import { DesignComponentData }          from '../../data/design/design_component_db.js';
-import { DesignVersionData}             from "../../data/design/design_version_db";
 import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
 import {WorkPackageComponentData}       from "../../data/work/work_package_component_db";
-import {UserAcceptanceTestResultData}   from "../../data/test_results/user_acceptance_test_result_db";
 
 //======================================================================================================================
 //
@@ -47,16 +45,6 @@ class WorkPackageComponentServicesClass{
 
             if (designComponent) {
 
-                // Get only relevant WP data for efficiency.
-                let dvWorkPackageComponentsDb = new Mongo.Collection(null);
-                let dvDesignComponentsDb = new Mongo.Collection(null);
-
-                const dvWorkPackageComponents = WorkPackageComponentData.getCurrentDesignVersionComponents(userContext.designVersionId);
-                dvWorkPackageComponentsDb.batchInsert(dvWorkPackageComponents);
-
-                const dvDesignComponents = DesignVersionData.getAllComponents(userContext.designVersionId);
-                dvDesignComponentsDb.batchInsert(dvDesignComponents);
-
                 if (newScope) {
 
                     // When a component is put in scope, all its parents come into scope as parents.
@@ -69,22 +57,24 @@ class WorkPackageComponentServicesClass{
                     let wpComponentList = [];
 
                     // Add any required parents as parent scope
-                    wpComponentList = WorkPackageModules.addComponentParentsToWp(userContext, wpType, designComponent, wpComponentList, dvWorkPackageComponentsDb, dvDesignComponentsDb);
+                    wpComponentList = WorkPackageModules.addComponentParentsToWp(userContext, wpType, designComponent, wpComponentList);
 
                     log((msg) => console.log(msg), LogLevel.INFO, '  Added {} parents to WP', wpComponentList.length);
 
                     // Add the component itself.
-                    wpComponentList = WorkPackageModules.addWorkPackageComponent(userContext, wpType, designComponent, WorkPackageScopeType.SCOPE_ACTIVE, wpComponentList, dvWorkPackageComponentsDb);
+                    wpComponentList = WorkPackageModules.addWorkPackageComponent(userContext, wpType, designComponent, WorkPackageScopeType.SCOPE_ACTIVE, wpComponentList);
 
                     log((msg) => console.log(msg), LogLevel.INFO, '  Added component to WP');
 
                     // Add all valid children
-                    wpComponentList = WorkPackageModules.addComponentChildrenToWp(userContext, wpType, designComponent, wpComponentList, dvWorkPackageComponentsDb, dvDesignComponentsDb);
+                    wpComponentList = WorkPackageModules.addComponentChildrenToWp(userContext, wpType, designComponent, wpComponentList);
 
                     log((msg) => console.log(msg), LogLevel.INFO, '  Added component children to WP');
 
                     // Actual update of all items
-                    WorkPackageComponentData.bulkInsertWpComponents(wpComponentList);
+                    if(wpComponentList.length > 0) {
+                        WorkPackageComponentData.bulkInsertWpComponents(wpComponentList);
+                    }
 
                     log((msg) => console.log(msg), LogLevel.INFO, '  Bulk insert of {} items complete', wpComponentList.length);
 
@@ -97,20 +87,20 @@ class WorkPackageComponentServicesClass{
                     let removedComponentsList = [];
 
                     removedComponentsList.push(designComponent.componentReferenceId);
-                    WorkPackageModules.removeWorkPackageComponent(userContext, designComponent, dvWorkPackageComponentsDb, dvDesignComponentsDb, false);
+                    WorkPackageModules.removeWorkPackageComponent(userContext, designComponent, false);
 
                     log((msg) => console.log(msg), LogLevel.INFO, '  Removed component from WP');
 
                     // And then all of its children
-                    removedComponentsList = WorkPackageModules.removeComponentChildrenFromWp(userContext, wpType, designComponent, dvWorkPackageComponentsDb, dvDesignComponentsDb, removedComponentsList);
+                    removedComponentsList = WorkPackageModules.removeComponentChildrenFromWp(userContext, wpType, designComponent, removedComponentsList);
 
                     // Remove all unwanted components
-                    WorkPackageComponentData.bulkRemoveComponents(userContext.designVersionId, removedComponentsList);
+                    WorkPackageComponentData.bulkRemoveComponents(userContext.designVersionId, userContext.workPackageId, removedComponentsList);
 
                     log((msg) => console.log(msg), LogLevel.INFO, '  Removed component children from WP');
 
                     // If the component's parent no longer has in scope children, descope it recursively upwards
-                    WorkPackageModules.removeChildlessParentsFromWp(userContext, wpType, designComponent, dvWorkPackageComponentsDb, dvDesignComponentsDb);
+                    WorkPackageModules.removeChildlessParentsFromWp(userContext, wpType, designComponent);
 
                     log((msg) => console.log(msg), LogLevel.INFO, '  Removed unneeded parents from WP');
 

@@ -21,6 +21,15 @@ let Schema = new SimpleSchema({
     componentIndexOld:              {type: Number, decimal: true, defaultValue: 100000},  // Used for ordering
     componentIndexNew:              {type: Number, decimal: true, defaultValue: 100000},  // Used for ordering
 
+    // Hierarchy indexing
+    appRef:                         {type: String, defaultValue: 'NONE', index: 1},
+    s1Ref:                          {type: String, defaultValue: 'NONE', index: 1},
+    s2Ref:                          {type: String, defaultValue: 'NONE', index: 1},
+    s3Ref:                          {type: String, defaultValue: 'NONE', index: 1},
+    s4Ref:                          {type: String, defaultValue: 'NONE', index: 1},
+    featureRef:                     {type: String, defaultValue: 'NONE', index: 1},
+    aspectRef:                      {type: String, defaultValue: 'NONE', index: 1},
+
     // Data
     componentNameOld:               {type: String},                                     // Name - plain text - base version
     componentNameNew:               {type: String},                                     // Name - plain text - new version

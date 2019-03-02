@@ -22,6 +22,7 @@ import {
     setWorkPackageScopeFlag, setUpdateScopeItems, setCurrentView
 } from '../redux/actions';
 import {ViewType} from "../constants/constants";
+import {DesignComponentModules} from "../service_modules/design/design_component_service_modules";
 
 
 // =====================================================================================================================
@@ -83,8 +84,8 @@ class ClientWorkPackageComponentServicesClass {
                 if(userContext.designUpdateId === 'NONE') {
 
                     // Base design - get stuff from DV
-                    currentParents = DesignComponentData.getAllParents(designComponent, currentParents);
-                    currentChildren = DesignComponentData.getAllChildren(designComponent, currentChildren);
+                    currentParents =  DesignComponentModules.getAllDvComponentParents(designComponent); //DesignComponentData.getAllParents(designComponent, currentParents);
+                    currentChildren = DesignComponentModules.getAllDvChildComponents(designComponent); //DesignComponentData.getAllChildren(designComponent, currentChildren);
                 } else {
 
                     // Design Update

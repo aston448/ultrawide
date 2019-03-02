@@ -21,6 +21,20 @@ import { DesignComponentData }          from '../../data/design/design_component
 
 class DesignComponentServicesClass {
 
+    populateHierarchyIndexData(designVersionId){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Inserting hierarchy data for DV");
+
+        const dvComponents = DesignVersionData.getAllComponents(designVersionId);
+
+        dvComponents.forEach((component) => {
+
+            DesignComponentModules.updateComponentHierarchyIndex(component);
+        });
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Inserting hierarchy data DONE");
+    }
+
     // Add a new design component
     addNewComponent(designVersionId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, workPackageId='NONE'){
 
@@ -70,6 +84,10 @@ class DesignComponentServicesClass {
 
                 // Set the default index for a new component
                 DesignComponentModules.setIndex(designComponentId);
+
+                // Set its hierarchy
+                const component = DesignComponentData.getDesignComponentById(designComponentId);
+                DesignComponentModules.updateComponentHierarchyIndex(component);
 
                 // If a Feature also update the Feature Ref Id to the new ID and set a default narrative
                 if(componentType === ComponentType.FEATURE){
@@ -154,6 +172,9 @@ class DesignComponentServicesClass {
             } else {
                 throw new Meteor.Error('designComponent.moveDesignComponent.noComponent', 'Design Component did not exist', designComponentId)
             }
+
+            // After a move like this is best to recalculate the entire hierarchy
+            this.populateHierarchyIndexData(movingComponent.designVersionId);
 
         }
     }

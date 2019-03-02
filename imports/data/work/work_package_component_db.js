@@ -86,6 +86,15 @@ class WorkPackageComponentDataClass {
         }).fetch();
     }
 
+    getCurrentDesignVersionWpActiveScenarios(designVersionId, workPackageId){
+
+        return WorkPackageComponents.find({
+            designVersionId:        designVersionId,
+            workPackageId:          workPackageId,
+            componentType:          ComponentType.SCENARIO,
+            scopeType:              WorkPackageScopeType.SCOPE_ACTIVE
+        }).fetch();
+    }
     getActiveWpComponentsByComponentRef(workPackageId, designComponentReferenceId){
 
         return WorkPackageComponents.find({
@@ -250,11 +259,12 @@ class WorkPackageComponentDataClass {
         return WorkPackageComponents.remove({_id: wpComponentId});
     }
 
-    bulkRemoveComponents(designVersionId, componentIdList){
+    bulkRemoveComponents(designVersionId, workPackageId, componentIdList){
 
         return WorkPackageComponents.remove(
             {
                 designVersionId: designVersionId,
+                workPackageId: workPackageId,
                 componentReferenceId: {$in: componentIdList}
             }
         );

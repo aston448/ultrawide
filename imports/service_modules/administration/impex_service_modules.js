@@ -656,6 +656,14 @@ class ImpexModulesClass{
                         componentIndexOld: component.componentIndexNew,
                         componentIndexNew: component.componentIndexNew,
 
+                        appRef: component.appRef ? component.appRef : 'NONE',
+                        s1Ref:  component.s1Ref ? component.s1Ref : 'NONE',
+                        s2Ref:  component.s2Ref ? component.s2Ref : 'NONE',
+                        s3Ref:  component.s3Ref ? component.s3Ref : 'NONE',
+                        s4Ref:  component.s4Ref ? component.s4Ref : 'NONE',
+                        featureRef: component.featureRef ? component.featureRef : 'NONE',
+                        aspectRef: component.aspectRef ? component.aspectRef : 'NONE',
+
                         // Data
                         componentNameOld: component.componentNameOld,
                         componentNameNew: component.componentNameNew,

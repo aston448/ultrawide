@@ -8,6 +8,7 @@ import { DesignComponentData }          from '../../data/design/design_component
 import { DesignUpdateComponentData }    from '../../data/design_update/design_update_component_db.js';
 import { WorkPackageData }              from '../../data/work/work_package_db.js';
 import { WorkPackageComponentData }    from '../../data/work/work_package_component_db.js';
+import {DesignComponentModules} from "../design/design_component_service_modules";
 
 //======================================================================================================================
 //
@@ -19,12 +20,11 @@ import { WorkPackageComponentData }    from '../../data/work/work_package_compon
 
 class WorkPackageModulesClass {
 
-    addWorkPackageComponent(userContext, wpType, component, scopeType, wpComponentList, dvWorkPackageComponentsDb){
+    addWorkPackageComponent(userContext, wpType, component, scopeType, wpComponentList){
 
         // Check that this component is not already there...
         //log((msg) => console.log(msg), LogLevel.INFO, '    Get WP Component...');
-        //const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, component.componentReferenceId);
-        const wpComponent = dvWorkPackageComponentsDb.find({workPackageId: userContext.workPackageId, componentReferenceId: component.componentReferenceId}).fetch()[0];
+        const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, component.componentReferenceId);
         //log((msg) => console.log(msg), LogLevel.INFO, '    Got WP Component...');
 
         if(!wpComponent) {
@@ -35,11 +35,8 @@ class WorkPackageModulesClass {
             if (component.componentType === ComponentType.SCENARIO) {
 
                 //log((msg) => console.log(msg), LogLevel.INFO, '    Check other instance...');
-                //otherWp = WorkPackageComponentData.getOtherDvWpComponentInstance(userContext.designVersionId, component.componentReferenceId, userContext.workPackageId);
-                otherWp = dvWorkPackageComponentsDb.find({
-                    componentReferenceId:   component.componentReferenceId,
-                    workPackageId:          {$ne: userContext.workPackageId}
-                }).fetch()[0];
+                otherWp = WorkPackageComponentData.getOtherDvWpComponentInstance(userContext.designVersionId, component.componentReferenceId, userContext.workPackageId);
+
                 //log((msg) => console.log(msg), LogLevel.INFO, '    Checked');
             }
 
@@ -106,15 +103,15 @@ class WorkPackageModulesClass {
         }
     }
 
-    removeWorkPackageComponent(userContext, designComponent, dvWorkPackageComponentsDb, dvDesignComponentsDb, doDelete){
+    removeWorkPackageComponent(userContext, designComponent, doDelete){
 
         const wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, designComponent.componentReferenceId);
-        //const wpComponent = dvWorkPackageComponentsDb.findOne({workPackageId: userContext.workPackageId, componentReferenceId: designComponent.componentReferenceId});
 
         if(wpComponent) {
 
             //console.log('Removing component ' + wpComponent._id);
             if(doDelete){
+                //console.log('Removing component ' + wpComponent._id);
                 WorkPackageComponentData.removeComponent(wpComponent._id);
             }
 
@@ -138,7 +135,7 @@ class WorkPackageModulesClass {
         }
     }
 
-    addComponentChildrenToWp(userContext, wpType, parentComponent, componentsToAdd, dvWorkPackageComponentsDb, dvDesignComponentsDb){
+    addComponentChildrenToWp(userContext, wpType, parentComponent, componentsToAdd){
 
         let children = [];
 
@@ -146,49 +143,49 @@ class WorkPackageModulesClass {
 
             case ComponentType.FEATURE:
 
-                //log((msg) => console.log(msg), LogLevel.INFO, '    Adding Feature Components');
+                log((msg) => console.log(msg), LogLevel.PERF, '    Adding Feature Children');
 
                 // When hitting the feature level, get all feature components
                 children = this.getFeatureChildren(userContext, wpType, parentComponent.componentReferenceId);
 
-                //log((msg) => console.log(msg), LogLevel.INFO, '    Got Feature {} Components', children.length);
+                log((msg) => console.log(msg), LogLevel.PERF, '    Got Feature Children {}', children.length);
 
                 children.forEach((child) => {
 
                     // Add as active component
-                    componentsToAdd = this.addWorkPackageComponent(userContext, wpType, child, WorkPackageScopeType.SCOPE_ACTIVE, componentsToAdd, dvWorkPackageComponentsDb);
+                    componentsToAdd = this.addWorkPackageComponent(userContext, wpType, child, WorkPackageScopeType.SCOPE_ACTIVE, componentsToAdd);
 
                     // And that's it...
                 });
 
-                //log((msg) => console.log(msg), LogLevel.INFO, '    Done Feature');
+                log((msg) => console.log(msg), LogLevel.PERF, '    Done Feature');
                 break;
 
             default:
 
                 // At any other level do the recursive thing
-                //log((msg) => console.log(msg), LogLevel.INFO, '    Adding Other Component');
+                log((msg) => console.log(msg), LogLevel.PERF, '    Adding Other Component Children');
 
-                children = this.getChildren(userContext, wpType, parentComponent.componentReferenceId, dvDesignComponentsDb);
+                children = DesignComponentModules.getAllDvChildComponents(parentComponent);
+
+                log((msg) => console.log(msg), LogLevel.PERF, '    Got Other Children {}', children.length);
 
                 children.forEach((child) => {
 
                     // Add as active component
-                    componentsToAdd = this.addWorkPackageComponent(userContext, wpType, child, WorkPackageScopeType.SCOPE_ACTIVE, componentsToAdd, dvWorkPackageComponentsDb);
+                    componentsToAdd = this.addWorkPackageComponent(userContext, wpType, child, WorkPackageScopeType.SCOPE_ACTIVE, componentsToAdd);
 
-                    // And carry on down
-                    this.addComponentChildrenToWp(userContext, wpType, child, componentsToAdd, dvWorkPackageComponentsDb, dvDesignComponentsDb);
                 });
 
-                //log((msg) => console.log(msg), LogLevel.INFO, '    Done Other');
+                log((msg) => console.log(msg), LogLevel.PERF, '    Done Other');
         }
 
         return componentsToAdd;
     }
 
-    removeComponentChildrenFromWp(userContext, wpType, parentComponent, dvWorkPackageComponentsDb, dvDesignComponentsDb, removedComponentsList){
+    removeComponentChildrenFromWp(userContext, wpType, parentComponent, removedComponentsList){
 
-        const children = this.getChildren(userContext, wpType, parentComponent.componentReferenceId, dvDesignComponentsDb);
+        const children = DesignComponentModules.getAllDvChildComponents(parentComponent);
 
         if(children.length > 0){
 
@@ -196,75 +193,125 @@ class WorkPackageModulesClass {
 
                 // Set to Remove
                 removedComponentsList.push(child.componentReferenceId);
-                this.removeWorkPackageComponent(userContext, child, dvWorkPackageComponentsDb, dvDesignComponentsDb, false);
+                this.removeWorkPackageComponent(userContext, child, false);
 
-                // And carry on down
-                this.removeComponentChildrenFromWp(userContext, wpType, child, dvWorkPackageComponentsDb, dvDesignComponentsDb, removedComponentsList);
-            });
+             });
         }
 
         return removedComponentsList
     }
 
-    addComponentParentsToWp(userContext, wpType, childComponent, componentsToAdd, dvWorkPackageComponentsDb, dvDesignComponentsDb){
+    addComponentParentsToWp(userContext, wpType, childComponent, componentsToAdd){
 
-        const parent = this.getParent(userContext, wpType, childComponent, dvDesignComponentsDb);
+        if(wpType === WorkPackageType.WP_BASE){
 
-        if(parent){
+            const dvParents = DesignComponentModules.getAllDvComponentParents(childComponent);
 
-            // Add as parent component
-            componentsToAdd = this.addWorkPackageComponent(userContext, wpType, parent, WorkPackageScopeType.SCOPE_PARENT, componentsToAdd, dvWorkPackageComponentsDb);
+            dvParents.forEach((parent) => {
+                componentsToAdd = this.addWorkPackageComponent(userContext, wpType, parent, WorkPackageScopeType.SCOPE_PARENT, componentsToAdd);
+            });
 
-            //console.log("Adding component " + parent.componentNameNew + " as parent scope");
+        } else {
 
-            // And carry on up
-            this.addComponentParentsToWp(userContext, wpType, parent, componentsToAdd, dvWorkPackageComponentsDb, dvDesignComponentsDb)
+            const parent = this.getParent(userContext, wpType, childComponent);
+
+            if(parent){
+
+                // Add as parent component
+                componentsToAdd = this.addWorkPackageComponent(userContext, wpType, parent, WorkPackageScopeType.SCOPE_PARENT, componentsToAdd);
+
+                //console.log("Adding component " + parent.componentNameNew + " as parent scope");
+
+                // And carry on up
+                this.addComponentParentsToWp(userContext, wpType, parent, componentsToAdd)
+            }
+
         }
 
         return componentsToAdd;
     }
 
-    removeChildlessParentsFromWp(userContext, wpType, childComponent, dvWorkPackageComponentsDb, dvDesignComponentsDb, removedComponentsList){
+    removeChildlessParentsFromWp(userContext, wpType, removedComponent){
 
-        const parent = this.getParent(userContext, wpType, childComponent, dvDesignComponentsDb);
+        const parents = DesignComponentModules.getAllDvComponentParents(removedComponent);
 
-        if(parent){
+        // See if any remaining WP Scenarios have this parent
+        const wpScenarios = DesignComponentData.getDvScenariosInWorkPackage(userContext.designVersionId, userContext.workPackageId);
 
-            // See if this item has any other children that are still in scope or parents of in-scope
-            const children = this.getChildren(userContext, wpType, parent.componentReferenceId, dvDesignComponentsDb);
+        parents.forEach((parent) => {
 
-            let wpComponent = null;
+            log((msg) => console.log(msg), LogLevel.PERF, '    Processing Parent {}', parent.componentNameNew);
+
             let wpChild = false;
 
-            children.forEach((child) => {
+            wpScenarios.forEach((scenario) => {
 
-                wpComponent = WorkPackageComponentData.getWpComponentByComponentRef(userContext.workPackageId, child.componentReferenceId);
-                // wpComponent = dvWorkPackageComponentsDb.findOne({
-                //     workPackageId:              userContext.workPackageId,
-                //     componentReferenceId:       child.componentReferenceId
-                // });
+                if (!wpChild) {
 
-                if(wpComponent){
-                    // The fact of finding a component means that there is valid stuff here
-                    wpChild = true;
+                    switch (parent.componentType) {
+
+                        case ComponentType.APPLICATION:
+                            if (scenario.appRef === parent.componentReferenceId) {
+                                wpChild = true;
+                            }
+                            break;
+
+                        case ComponentType.DESIGN_SECTION:
+
+                            switch(parent.componentLevel){
+
+                                case 1:
+                                    if (scenario.s1Ref === parent.componentReferenceId) {
+                                        wpChild = true;
+                                    }
+                                    break;
+
+                                case 2:
+                                    if (scenario.s2Ref === parent.componentReferenceId) {
+                                        wpChild = true;
+                                    }
+                                    break;
+
+                                case 3:
+                                    if (scenario.s3Ref === parent.componentReferenceId) {
+                                        wpChild = true;
+                                    }
+                                    break;
+
+                                case 4:
+                                    if (scenario.s4Ref === parent.componentReferenceId) {
+                                        wpChild = true;
+                                    }
+                                    break;
+                            }
+                            break;
+
+                        case ComponentType.FEATURE:
+                            if (scenario.featureRef === parent.componentReferenceId) {
+                                wpChild = true;
+                            }
+                            break;
+
+                        case ComponentType.FEATURE_ASPECT:
+                            if (scenario.aspectRef === parent.componentReferenceId) {
+                                wpChild = true;
+                            }
+                            break;
+                    }
                 }
             });
 
             if(!wpChild){
 
-                //console.log('Adding parent %s - %s, to delete list', parent.componentReferenceId, parent.componentNameNew);
+                 this.removeWorkPackageComponent(userContext, parent, true);
 
-                this.removeWorkPackageComponent(userContext, parent, dvWorkPackageComponentsDb, dvDesignComponentsDb, true);
+                log((msg) => console.log(msg), LogLevel.PERF, '    Removed Component');
 
-                // And carry on up
-                this.removeChildlessParentsFromWp(userContext, wpType, parent, dvWorkPackageComponentsDb, dvDesignComponentsDb, removedComponentsList);
             }
-        }
-
-        return removedComponentsList;
+        });
     }
 
-    getParent(userContext, wpType, childComponent, dvDesignComponentsDb){
+    getParent(userContext, wpType, childComponent){
 
         let parent = null;
 
@@ -277,7 +324,6 @@ class WorkPackageModulesClass {
             case WorkPackageType.WP_BASE:
 
                 parent = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, childComponent.componentParentReferenceIdNew);
-                //parent = dvDesignComponentsDb.findOne({designVersionId: userContext.designVersionId, componentReferenceId: childComponent.componentParentReferenceIdNew});
                 break;
 
             case WorkPackageType.WP_UPDATE:
@@ -287,31 +333,6 @@ class WorkPackageModulesClass {
         }
 
         return parent;
-    }
-
-    getChildren(userContext, wpType, parentComponentReferenceId, dvDesignComponentsDb){
-
-        let children = [];
-
-        switch(wpType){
-            case WorkPackageType.WP_BASE:
-
-                //children = DesignComponentData.getChildComponents(userContext.designVersionId, parentComponentReferenceId);
-                children = dvDesignComponentsDb.find(
-                    {
-                        componentParentReferenceIdNew: parentComponentReferenceId,
-                        designVersionId: userContext.designVersionId
-                    }
-                ).fetch();
-                break;
-
-            case WorkPackageType.WP_UPDATE:
-
-                children = DesignUpdateComponentData.getScopedChildComponents(userContext.designVersionId, userContext.designUpdateId, parentComponentReferenceId);
-                break;
-        }
-
-        return children;
     }
 
     getFeatureChildren(userContext, wpType, featureReferenceId){
