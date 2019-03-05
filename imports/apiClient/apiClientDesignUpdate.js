@@ -358,11 +358,6 @@ class ClientDesignUpdateServicesClass {
         // Load or refresh DU Summary data - if necessary
         // ClientDesignUpdateSummary.getDesignUpdateSummary(false);
 
-        if((newDesignUpdateId !== userContext.designUpdateId) && (displayContext !== DisplayContext.WORK_ITEM_DU_LIST)) {
-
-            // Update test summary if changing DU
-            ClientTestIntegrationServices.updateTestSummaryData(newContext);
-        }
 
         return newContext;
 
