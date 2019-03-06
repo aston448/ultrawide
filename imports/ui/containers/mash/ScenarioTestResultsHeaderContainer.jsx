@@ -62,12 +62,12 @@ class ScenarioTestResultsHeader extends Component {
             <div>
                 <Grid>
                     <Row>
-                        <Col md={10} className="close-col">
+                        <Col md={11} className="close-col">
                             <div className={"result-scenario " + backgroundStyle}>
                                 {scenarioName}
                             </div>
                         </Col>
-                        <Col md={2} className="close-col">
+                        <Col md={1} className="close-col">
                             <div className={"scenario-header-result " + scenarioTestResult + " " + backgroundStyle}>
                                 {TextLookups.mashTestStatus(scenarioTestResult)}
                             </div>

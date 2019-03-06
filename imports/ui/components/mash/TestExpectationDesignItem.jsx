@@ -110,9 +110,9 @@ class TestExpectationDesignItem extends Component {
                         //console.log("Displaying scenarios for feature aspect " + designItem.componentNameNew);
 
                         return (
-                            <div>
+                            <div className={"mash-aspect"}>
 
-                                <div className={"mash-aspect"}>
+                                <div className={"mash-aspect-name"}>
                                     {designItem.componentNameNew}
                                 </div>
 

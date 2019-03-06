@@ -2419,8 +2419,8 @@ input {
 }
 
 .scenario{
-    font-family: 'Gill Sans', Arial, sans-serif;
-    font-size:  17px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  15px;
     font-weight: 300;
     padding-top: 1px;
     padding-left: 2px;
@@ -2428,7 +2428,7 @@ input {
 }
 
 .scenario-background{
-    background-color: #F2FDFD;
+    background-color: transparent;
 }
 
 .open-status-open{
@@ -2784,7 +2784,7 @@ input {
 .editor-panel-small{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
-    padding: 15px;
+    padding: 5px 0 5px 5px;
     margin: 0;
     color: black;
     background-color: white;
@@ -2921,14 +2921,20 @@ input {
     color: darkred;
 }
 
-.mash-aspect {
+.mash-aspect{
+    padding: 2px;
+    margin: 2px 0 2px 0;
+    border-bottom: 1px solid darkseagreen;
+}
+
+.mash-aspect-name {
     margin: 0;
     padding: 2px 0 0 10px;
     border: none;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: bold;
-    color: darkred;
+    color: blue;
 }
 
 .mash-unit-scenario {
@@ -2978,22 +2984,22 @@ input {
     font-size:  12px;
     background-color: #EEFFEE;
     text-align: right;
-    border-top: 1px solid lightgrey;
-    border-right: 1px solid white;
-    border-bottom: 1px solid white;
-    border-left: 1px solid lightgrey;
+    border-top: 1px solid white;
+    border-right: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    border-left: 1px solid white;
 }
 
 .result-scenario{
-    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
     margin: 2px 2px 4px 2px;
     padding: 2px;
     color: black;
-    border-top: 1px solid lightgrey;
-    border-right: 1px solid white;
-    border-bottom: 1px solid white;
-    border-left: 1px solid lightgrey;
+    border-top: 1px solid white;
+    border-right: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    border-left: 1px solid white;
 }
 
 .scenario-pass{
@@ -3230,14 +3236,14 @@ input {
     padding: 2px;
     color: black;
     background-color: #CCEEEE;
-    border-top: 1px solid lightgrey;
-    border-right: 1px solid white;
-    border-bottom: 1px solid white;
-    border-left: 1px solid lightgrey;
+    border-top: 1px solid white;
+    border-right: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    border-left: 1px solid white;
 }
 
 .scenario-test-expectations{
-    border: 1px solid lightgrey;
+    border: 0px solid lightgrey;
     border-radius: 2px;
     margin: 2px 10px 0 0;
     padding: 3px;
