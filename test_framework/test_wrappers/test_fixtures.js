@@ -7,10 +7,11 @@ class TestFixturesClass {
 
     getUserForRole(role){
 
-        // In this test framework there are 3 users set up each with a single role:
+        // In this test framework there are 4 users set up each with a single role:
         // Gloria Slap - 'gloria' - Designer
-        // Hugh Gengine - 'hugh' - Developer
+        // Hugh Genjine - 'hugh' - Developer
         // Miles Behind - 'miles' - Manager
+        // Wilma Cargo - 'wilma' - Guest Viewer
 
         switch(role){
             case RoleType.DESIGNER:
@@ -19,6 +20,8 @@ class TestFixturesClass {
                 return 'hugh';
             case RoleType.MANAGER:
                 return 'miles';
+            case RoleType.GUEST_VIEWER:
+                return 'wilma';
         }
 
         // Note we also have a second Developer, Davey Rocket
