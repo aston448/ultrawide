@@ -69,44 +69,23 @@ export class DetailsViewFooter extends Component {
         // Which menu options should be visible
         switch(detailsType){
 
-            case DetailsViewType.VIEW_ACC_TESTS:
+            case DetailsViewType.VIEW_TEST_EXPECTATIONS:
                 if(actionsVisible){
                     menuOptions =
                         <div>
                             <UltrawideMenuItem
                                 menuType={MenuType.MENU_EDITOR}
-                                itemName="Export"
+                                itemName="ExportAcc"
                                 actionFunction={ () => this.onExportIntTests(TestType.ACCEPTANCE)}
                             />
-                        </div>;
-                } else {
-                    footerClass = 'details-editor-footer';
-                }
-                break;
-
-            case DetailsViewType.VIEW_INT_TESTS:
-
-                if(actionsVisible){
-                    menuOptions =
-                        <div>
                             <UltrawideMenuItem
                                 menuType={MenuType.MENU_EDITOR}
-                                itemName="Export"
+                                itemName="ExportInt"
                                 actionFunction={ () => this.onExportIntTests(TestType.INTEGRATION)}
                             />
-                        </div>;
-                } else {
-                    footerClass = 'details-editor-footer';
-                }
-                break;
-
-            case DetailsViewType.VIEW_UNIT_TESTS:
-                if(actionsVisible){
-                    menuOptions =
-                        <div>
                             <UltrawideMenuItem
                                 menuType={MenuType.MENU_EDITOR}
-                                itemName="Export"
+                                itemName="ExportUnit"
                                 actionFunction={ () => this.onExportUnitTests()}
                             />
                         </div>;

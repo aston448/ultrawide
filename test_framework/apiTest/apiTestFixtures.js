@@ -266,6 +266,9 @@ Meteor.methods({
                 userId: guestUserId,
                 userName: 'wilma',
                 displayName: 'Wilma Cargo',
+                isDesigner: false,
+                isDeveloper: false,
+                isManager: false,
                 isGuestViewer: true
             });
 

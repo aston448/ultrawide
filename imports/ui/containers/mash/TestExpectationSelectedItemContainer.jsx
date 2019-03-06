@@ -126,7 +126,7 @@ class TestExpectationSelectedItemList extends Component {
                         </div>
                         <DetailsViewFooter
                             detailsType={DetailsViewType.VIEW_TEST_EXPECTATIONS}
-                            actionsVisible={false}
+                            actionsVisible={true}
                         />
                     </div>
 

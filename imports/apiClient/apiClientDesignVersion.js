@@ -260,7 +260,7 @@ class ClientDesignVersionServicesClass {
 
         let newContext = userContext;
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "SET DESIGN VERSION.  Current DV {}  New DV {} Force Context reset: ", userContext.designVersionId, newDesignVersionId, forceReset);
+        // log((msg) => console.log(msg), LogLevel.DEBUG, "SET DESIGN VERSION.  Current DV {}  New DV {} Force Context reset: ", userContext.designVersionId, newDesignVersionId, forceReset);
 
         // On change clears current DU / WP if any
 

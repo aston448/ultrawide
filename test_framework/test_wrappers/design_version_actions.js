@@ -133,6 +133,10 @@ class DesignVersionActionsClass{
         server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    guestViewsDesignVersion(designVersionName, expectation){
+        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.GUEST_VIEWER, 'wilma', expectation);
+    }
+
     // Update Updatable
     designerUpdatesDesignVersionWithUpdates(designVersionName, expectation){
         server.call('testDesignVersions.updateWorkingDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria', expectation);
