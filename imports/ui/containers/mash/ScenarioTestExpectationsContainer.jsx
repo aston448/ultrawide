@@ -60,6 +60,7 @@ export class ScenarioTestExpectations extends Component {
                             itemText={'Acceptance'}
                             itemStatus={scenarioAccMashTestStatus}
                             expandable={true}
+                            permutationActive={false}
                         />
                     </Col>
                     <Col md={4}>
@@ -72,6 +73,7 @@ export class ScenarioTestExpectations extends Component {
                             itemText={'Integration'}
                             itemStatus={scenarioIntMashTestStatus}
                             expandable={true}
+                            permutationActive={false}
                         />
                     </Col>
                     <Col md={4}>
@@ -84,6 +86,7 @@ export class ScenarioTestExpectations extends Component {
                             itemText={'Unit'}
                             itemStatus={scenarioUnitMashTestStatus}
                             expandable={true}
+                            permutationActive={false}
                         />
                     </Col>
                 </Row>

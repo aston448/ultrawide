@@ -13,7 +13,8 @@ export const DefaultItemNames = {
     NEW_PERMUTATION_NAME:           'New Permutation',
     NEW_PERMUTATION_VALUE:          'New Permutation Value',
     NEW_INCREMENT_NAME:             'New Increment',
-    NEW_ITERATION_NAME:             'New Iteration'
+    NEW_ITERATION_NAME:             'New Iteration',
+    NEW_VALUE_EXPECTATION:          'New Value'
 
 };
 

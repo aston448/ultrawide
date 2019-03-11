@@ -50,7 +50,7 @@ class ScenarioTestExpectationDataClass{
             scenarioReferenceId:    scenarioReferenceId,
             permutationId:          'NONE',
             permutationValueId:     'NONE'
-        });
+        }).fetch();
     }
 
     getScenarioTestExpectationsForScenario(designVersionId, scenarioReferenceId){
@@ -113,6 +113,17 @@ class ScenarioTestExpectationDataClass{
         });
     }
 
+    getScenarioTestExpectationsForScenarioTestTypeValuePermutationValue(designVersionId, scenarioReferenceId, testType){
+
+        return ScenarioTestExpectations.find({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            testType:               testType,
+            permutationId:          'VALUE',
+            permutationValueId:     'VALUE',
+        }).fetch();
+    }
+
     getAllTestExpectationsForDesignVersion(designVersionId){
 
         return ScenarioTestExpectations.find({
@@ -144,6 +155,20 @@ class ScenarioTestExpectationDataClass{
             {
                 $set:{
                     expectationStatus: testResult
+                }
+            }
+        );
+    }
+
+    updateValuePermutationValue(expectationId, newValue){
+
+        return ScenarioTestExpectations.update(
+            {
+                _id: expectationId,
+            },
+            {
+                $set:{
+                    valuePermutationValue: newValue
                 }
             }
         );

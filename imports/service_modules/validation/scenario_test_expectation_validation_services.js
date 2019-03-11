@@ -18,6 +18,12 @@ class ScenarioTestExpectationValidationServicesClass {
         return Validation.VALID;
     }
 
+    validateUpdateTestTypeExpectation(){
+
+        return Validation.VALID;
+    }
+
+
     validateAddTestTypePermutationValueExpectation(){
 
         return Validation.VALID;

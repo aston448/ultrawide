@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 // Ultrawide GUI Components
 import DesignPermutationsListContainer      from '../../containers/mash/DesignPermutationsListContainer.jsx';
 import PermutationValuesListContainer       from '../../containers/mash/PermutationValuesListContainer.jsx';
+import ValuePermutationValuesContainer      from '../../containers/mash/ValuePermutationValuesContainer.jsx';
 
 // Ultrawide Services
 import {ClientScenarioTestExpectationServices} from "../../../apiClient/apiClientScenarioTestExpectation.js";
@@ -114,7 +115,7 @@ export class TestExpectationItem extends Component {
     }
 
     render() {
-        const {testType, itemType, itemId, itemParentId, itemRef, itemText, itemStatus, userContext} = this.props;
+        const {testType, itemType, itemId, itemParentId, itemRef, itemText, itemStatus, permutationActive, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Scenario Test Expectations');
 
@@ -175,7 +176,6 @@ export class TestExpectationItem extends Component {
 
                             </div>
                     }
-
                 }
                 break;
             case ItemType.DESIGN_PERMUTATION:
@@ -201,6 +201,26 @@ export class TestExpectationItem extends Component {
                             />
                         </div>;
                 } else {
+                    if(permutationActive){
+                        body = <div></div>;
+                    } else {
+                        body =
+                            <div className={itemStatus}>
+                                <InputGroup>
+                                    <InputGroup.Addon>
+                                        <div><Glyphicon glyph="asterisk"/></div>
+                                    </InputGroup.Addon>
+                                    <div>{itemText}</div>
+                                    <InputGroup.Addon onClick={() => this.setExpanded()}>
+                                        <div><Glyphicon glyph="plus"/></div>
+                                    </InputGroup.Addon>
+                                </InputGroup>
+                            </div>
+                    }
+                }
+                break;
+            case ItemType.VALUE_PERMUTATION:
+                if(this.state.expanded){
                     body =
                         <div className={itemStatus}>
                             <InputGroup>
@@ -208,11 +228,35 @@ export class TestExpectationItem extends Component {
                                     <div><Glyphicon glyph="asterisk"/></div>
                                 </InputGroup.Addon>
                                 <div>{itemText}</div>
-                                <InputGroup.Addon onClick={() => this.setExpanded()}>
-                                    <div><Glyphicon glyph="plus"/></div>
+                                <InputGroup.Addon onClick={() => this.setUnexpanded()}>
+                                    <div><Glyphicon glyph="minus"/></div>
                                 </InputGroup.Addon>
                             </InputGroup>
-                        </div>
+                            <ValuePermutationValuesContainer
+                                params={{
+                                    userContext: userContext,
+                                    testType: testType,
+                                    scenarioReferenceId: itemRef
+                                }}
+                            />
+                        </div>;
+                } else {
+                    if(permutationActive){
+                        body = <div></div>;
+                    } else {
+                        body =
+                            <div className={itemStatus}>
+                                <InputGroup>
+                                    <InputGroup.Addon>
+                                        <div><Glyphicon glyph="asterisk"/></div>
+                                    </InputGroup.Addon>
+                                    <div>{itemText}</div>
+                                    <InputGroup.Addon onClick={() => this.setExpanded()}>
+                                        <div><Glyphicon glyph="plus"/></div>
+                                    </InputGroup.Addon>
+                                </InputGroup>
+                            </div>
+                    }
                 }
                 break;
             case ItemType.PERMUTATION_VALUE:
@@ -260,7 +304,8 @@ TestExpectationItem.propTypes = {
     itemRef:        PropTypes.string.isRequired,
     itemText:       PropTypes.string.isRequired,
     itemStatus:     PropTypes.string.isRequired,
-    expandable:     PropTypes.bool.isRequired
+    expandable:     PropTypes.bool.isRequired,
+    permutationActive: PropTypes.bool.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

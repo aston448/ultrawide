@@ -4,7 +4,10 @@ import {
     unselectTestType,
     unselectTestTypePermutation,
     selectTestTypePermutationValue,
-    unselectTestTypePermutationValue
+    unselectTestTypePermutationValue,
+    addNewSpecificValueTestExpectation,
+    updateSpecificValueTestExpectation,
+    removeSpecificValueTestExpectation
 } from '../apiValidatedMethods/scenario_test_expectation_methods.js'
 
 
@@ -15,6 +18,45 @@ import {
 // =====================================================================================================================
 
 class ServerScenarioTestExpectationApiClass {
+
+    addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType, callback){
+
+        addNewSpecificValueTestExpectation.call(
+            {
+                userContext:            userContext,
+                scenarioReferenceId:    scenarioReferenceId,
+                testType:               testType
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateSpecificValueTestExpectation(expectationId, newValue, callback){
+
+        updateSpecificValueTestExpectation.call(
+            {
+                expectationId:          expectationId,
+                newValue:               newValue
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    removeSpecificValueTestExpectation(expectationId, callback){
+
+        removeSpecificValueTestExpectation.call(
+            {
+                expectationId:          expectationId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
     selectTestType(userContext, scenarioReferenceId, testType, callback){
 

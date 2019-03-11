@@ -175,5 +175,8 @@ export const TestExpectationMessages = {
     MSG_TYPE_REMOVED:                   'All test expectations for test type removed',
     MSG_PERM_REMOVED:                   'All test expectations for design permutation removed',
     MSG_VALUE_ADDED:                    'Test expectation for permutation value added',
-    MSG_VALUE_REMOVED:                  'Test expectation for permutation value removed'
+    MSG_VALUE_REMOVED:                  'Test expectation for permutation value removed',
+    MSG_NEW_VALUE:                      'New specific test value added',
+    MSG_UPDATE_VALUE:                   'Specific test value updated',
+    MSG_REMOVE_VALUE:                   'Specific test value removed'
 };

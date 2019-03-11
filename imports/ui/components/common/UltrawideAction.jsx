@@ -52,7 +52,7 @@ export default class UltrawideAction  extends Component{
 
 
     render(){
-        const {actionType, uiContextName, actionFunction, isDeleted} = this.props;
+        const {actionType, uiContextName, actionFunction} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Action {}', actionType);
 

@@ -88,7 +88,6 @@ class StartupModulesClass {
         }
     }
 
-
 }
 
 export const StartupModules = new StartupModulesClass();

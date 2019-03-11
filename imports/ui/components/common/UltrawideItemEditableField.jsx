@@ -43,14 +43,11 @@ export default class UltrawideItemEditableField extends Component{
 
     // Allow editing of name
     editFieldName(){
-        event.preventDefault();
         this.setState({fieldEditable: true});
     }
 
 
     saveFieldValue(userRole, currentItemType, fieldType, currentItemId){
-
-        event.preventDefault();
 
         const newValue = this.state.fieldValue;
 
@@ -71,7 +68,7 @@ export default class UltrawideItemEditableField extends Component{
     }
 
     undoFieldChange(){
-        event.preventDefault();
+
         this.setState({fieldValue: this.props.currentFieldValue});
         this.setState({fieldEditable: false});
     }

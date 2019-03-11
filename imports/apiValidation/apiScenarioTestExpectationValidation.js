@@ -18,6 +18,11 @@ class ScenarioTestExpectationValidationApiClass {
         return ScenarioTestExpectationValidationServices.validateAddTestTypeExpectation();
     }
 
+    validateUpdateTestTypeExpectation(){
+
+        return ScenarioTestExpectationValidationServices.validateUpdateTestTypeExpectation();
+    }
+
     validateAddTestTypePermutationValueExpectation(){
 
         return ScenarioTestExpectationValidationServices.validateAddTestTypePermutationValueExpectation();

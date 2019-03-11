@@ -23,6 +23,9 @@ import {Grid, Row, Col} from 'react-bootstrap';
 // REDUX services
 import {connect} from 'react-redux';
 import {ScenarioTestExpectationData} from "../../../data/design/scenario_test_expectations_db";
+import DesignComponentAdd from "../../components/common/DesignComponentAdd";
+import {EditableTestExpectationValue} from "../../components/mash/EditableTestExpectationValue";
+import {ClientScenarioTestExpectationServices} from "../../../apiClient/apiClientScenarioTestExpectation";
 
 
 // =====================================================================================================================
@@ -33,14 +36,15 @@ import {ScenarioTestExpectationData} from "../../../data/design/scenario_test_ex
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class DesignPermutationValuesList extends Component {
+export class ValuePermutationValuesList extends Component {
     constructor(props) {
         super(props);
 
     };
 
-    addNewPermutationValue() {
-        ClientDesignPermutationServices.addPermutationValue(this.props.userRole, this.props.permutationId, this.props.userContext.designVersionId);
+    addNewValuePermutationValue(userContext, scenarioReferenceId, testType) {
+        //ClientDesignPermutationServices.addPermutationValue(this.props.userRole, 'VALUE', this.props.userContext.designVersionId);
+        ClientScenarioTestExpectationServices.addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType)
     };
 
     getScenarioValueExpectation(dvId, scenarioRefId, testType, permId, permValueId){
@@ -51,17 +55,10 @@ export class DesignPermutationValuesList extends Component {
         return permutationValuesData.map((permutationValueData) => {
 
             return (
-                <TestExpectationItem
-                    key={permutationValueData.permutationValue._id}
-                    testType={testType}
-                    itemType={ItemType.PERMUTATION_VALUE}
-                    itemId={permutationValueData.permutationValue._id}
-                    itemParentId={permutationValueData.permutationValue.permutationId}
-                    itemRef={scenarioRefId}
-                    itemText={permutationValueData.permutationValue.permutationValueName}
-                    itemStatus={permutationValueData.valueStatus}
-                    expandable={false}
-                    permutationActive={true}
+                <EditableTestExpectationValue
+                    key={permutationValueData.valueExpectation._id}
+                    expectation={permutationValueData.valueExpectation}
+                    testStatus={permutationValueData.valueStatus}
                 />
             );
         });
@@ -70,25 +67,38 @@ export class DesignPermutationValuesList extends Component {
 
     render() {
 
-        const {permutationValuesData, testType, scenarioRefId} = this.props;
+        const {permutationValuesData, testType, scenarioRefId, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Permutation Values List');
 
         if(permutationValuesData && permutationValuesData.length > 0) {
             return (
                 <div>
-                    {this.renderPermutationValuesList(permutationValuesData, testType, scenarioRefId)}
+                    <div>
+                        {this.renderPermutationValuesList(permutationValuesData, testType, scenarioRefId)}
+                    </div>
+                    <DesignComponentAdd
+                        addText={'Add Test Value'}
+                        uiContextId={'TEST_VALUE'}
+                        onClick={() => this.addNewValuePermutationValue(userContext, scenarioRefId, testType)}
+                    />
                 </div>
             );
         } else {
             return(
-                <div></div>
+                <div>
+                    <DesignComponentAdd
+                        addText={'Add Test Value'}
+                        uiContextId={'TEST_VALUE'}
+                        onClick={() => this.addNewValuePermutationValue(userContext, scenarioRefId, testType)}
+                    />
+                </div>
             );
         }
     };
 }
 
-DesignPermutationValuesList.propTypes = {
+ValuePermutationValuesList.propTypes = {
     permutationValuesData:      PropTypes.array.isRequired,
     testType:                   PropTypes.string.isRequired,
     scenarioRefId:              PropTypes.string.isRequired
@@ -103,13 +113,12 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-export default PermutationValuesListContainer = createContainer(({params}) => {
+export default ValuePermutationValuesContainer = createContainer(({params}) => {
 
-    const permutationValuesData =  ClientDataServices.getPermutationValuesDataWithTestStatus(
+    const permutationValuesData =  ClientDataServices.getValuePermutationValuesDataWithTestStatus(
         params.userContext,
         params.scenarioReferenceId,
-        params.testType,
-        params.permutationId
+        params.testType
     );
 
     return {
@@ -118,4 +127,4 @@ export default PermutationValuesListContainer = createContainer(({params}) => {
         scenarioRefId:          params.scenarioReferenceId
     };
 
-}, connect(mapStateToProps)(DesignPermutationValuesList));
+}, connect(mapStateToProps)(ValuePermutationValuesList));

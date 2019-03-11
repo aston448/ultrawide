@@ -24,6 +24,108 @@ class ClientScenarioTestExpectationServicesClass {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
+    // User adds a new specified value expectation
+    addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType){
+
+        // Client validation
+        let result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation();
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerScenarioTestExpectationApi.addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: TestExpectationMessages.MSG_NEW_VALUE
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+
+    }
+
+    // User updates the value of a specified value expectation
+    updateSpecificValueTestExpectation(expectationId, newValue){
+
+        // Client validation
+        let result = ScenarioTestExpectationValidationApi.validateUpdateTestTypeExpectation();
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerScenarioTestExpectationApi.updateSpecificValueTestExpectation(expectationId, newValue, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: TestExpectationMessages.MSG_UPDATE_VALUE
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+
+    }
+
+    // User removes a specified value expectation
+    removeSpecificValueTestExpectation(expectationId){
+
+        // Client validation
+        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation();
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerScenarioTestExpectationApi.removeSpecificValueTestExpectation(expectationId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: TestExpectationMessages.MSG_REMOVE_VALUE
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+
+    }
+
     // User selects a test type ----------------------------------------------------------------------------------------
     selectTestTypeExpectation(userContext, scenarioReferenceId, testType){
 
@@ -211,6 +313,10 @@ class ClientScenarioTestExpectationServicesClass {
 
             case ItemType.PERMUTATION_VALUE:
                 return false;
+            case ItemType.VALUE_PERMUTATION:
+                // True if any specific value expectations defined:
+                const values = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestTypeValuePermutationValue(designVersionId, itemRef, testType);
+                return (values.length > 0);
             case ItemType.DESIGN_PERMUTATION:
                 // True if there are any values existing for this scenario ref, test type and permutation
                 const permVals = ScenarioTestExpectationData.getPermutationValuesForScenarioTestTypePerm(designVersionId, itemRef, testType, permId);

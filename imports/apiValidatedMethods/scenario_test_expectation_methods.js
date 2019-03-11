@@ -2,13 +2,90 @@ import { Validation } from '../constants/validation_errors.js'
 
 import { ScenarioTestExpectationValidationApi }      from '../apiValidation/apiScenarioTestExpectationValidation.js';
 import { ScenarioTestExpectationServices }           from '../servicers/design/scenario_test_expectation_services.js';
-import {TestIntegrationServices} from "../servicers/dev/test_integration_services";
 
 //======================================================================================================================
 //
 // Meteor Validated Methods for Test Expectations
 //
 //======================================================================================================================
+
+export const addNewSpecificValueTestExpectation = new ValidatedMethod({
+
+    name: 'scenarioTestExpectations.addNewSpecificValueTestExpectation',
+
+    validate: new SimpleSchema({
+        userContext:            {type: Object, blackbox: true},
+        scenarioReferenceId:    {type: String},
+        testType:               {type: String}
+    }).validator(),
+
+    run({userContext, scenarioReferenceId, testType}){
+
+        const result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation();
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('scenarioTestExpectations.addNewSpecificValueTestExpectation.failValidation', result)
+        }
+
+        try {
+            ScenarioTestExpectationServices.addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
+
+export const updateSpecificValueTestExpectation = new ValidatedMethod({
+
+    name: 'scenarioTestExpectations.updateSpecificValueTestExpectation',
+
+    validate: new SimpleSchema({
+        expectationId:          {type: String},
+        newValue:               {type: String}
+    }).validator(),
+
+    run({expectationId, newValue}){
+
+        const result = ScenarioTestExpectationValidationApi.validateUpdateTestTypeExpectation();
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('scenarioTestExpectations.updateSpecificValueTestExpectation.failValidation', result)
+        }
+
+        try {
+            ScenarioTestExpectationServices.updateSpecificValueTestExpectation(expectationId, newValue);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
+
+export const removeSpecificValueTestExpectation = new ValidatedMethod({
+
+    name: 'scenarioTestExpectations.removeSpecificValueTestExpectation',
+
+    validate: new SimpleSchema({
+        expectationId:          {type: String}
+    }).validator(),
+
+    run({expectationId, newValue}){
+
+        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation();
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('scenarioTestExpectations.removeSpecificValueTestExpectation.failValidation', result)
+        }
+
+        try {
+            ScenarioTestExpectationServices.removeSpecificValueTestExpectation(expectationId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
 
 export const selectTestType = new ValidatedMethod({
 

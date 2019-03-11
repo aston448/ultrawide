@@ -44,8 +44,7 @@ class ScenarioTestExpectationServicesClass{
                     scenarioReferenceId:    scenarioReferenceId,
                     testType:               testType,
                     permutationId:          'NONE',
-                    permutationValueId:     'NONE',
-                    expectationStatus:       MashTestStatus.MASH_NOT_LINKED
+                    permutationValueId:     'NONE'
                 };
 
                 ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
@@ -110,6 +109,39 @@ class ScenarioTestExpectationServicesClass{
 
         if(Meteor.isServer) {
             ScenarioTestExpectationData.removeScenarioTestExpectationForTestTypePermutationValue(userContext.designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId);
+        }
+    }
+
+    addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType){
+
+        if(Meteor.isServer){
+
+            const expectationData = {
+                designVersionId:        userContext.designVersionId,
+                scenarioReferenceId:    scenarioReferenceId,
+                testType:               testType,
+                permutationId:          'VALUE',
+                permutationValueId:     'VALUE',
+                valuePermutationValue:  'New test value'
+            };
+
+            ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
+        }
+    }
+
+    updateSpecificValueTestExpectation(expectationId, newValue){
+
+        if(Meteor.isServer){
+
+            ScenarioTestExpectationData.updateValuePermutationValue(expectationId, newValue);
+        }
+    }
+
+    removeSpecificValueTestExpectation(expectationId){
+
+        if(Meteor.isServer){
+
+            ScenarioTestExpectationData.removeScenarioTestExpectation(expectationId);
         }
     }
 

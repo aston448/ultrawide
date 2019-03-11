@@ -46,35 +46,57 @@ export class DesignPermutationsList extends Component {
         ClientDesignPermutationServices.addDesignPermutation(role, userContext);
     };
 
-    renderPermutationsList(permutationData, testType, scenarioRefId){
+    renderPermutationsList(permutationData, permutationActive, testType, scenarioRefId){
         return permutationData.map((permutationDatum) => {
-            return (
-                <TestExpectationItem
-                    key={permutationDatum.permutation._id}
-                    testType={testType}
-                    itemType={ItemType.DESIGN_PERMUTATION}
-                    itemId={permutationDatum.permutation._id}
-                    itemParentId={'NONE'}
-                    itemRef={scenarioRefId}
-                    itemText={permutationDatum.permutation.permutationName}
-                    itemStatus={permutationDatum.permutationStatus}
-                    expandable={true}
-                />
-            );
+
+            if(permutationDatum.permutation._id === 'VALUE'){
+                return (
+                    <TestExpectationItem
+                        key={permutationDatum.permutation._id}
+                        testType={testType}
+                        itemType={ItemType.VALUE_PERMUTATION}
+                        itemId={permutationDatum.permutation._id}
+                        itemParentId={'NONE'}
+                        itemRef={scenarioRefId}
+                        itemText={permutationDatum.permutation.permutationName}
+                        itemStatus={permutationDatum.permutationStatus}
+                        expandable={true}
+                        permutationActive={permutationActive}
+                    />
+                );
+            } else {
+                return (
+                    <TestExpectationItem
+                        key={permutationDatum.permutation._id}
+                        testType={testType}
+                        itemType={ItemType.DESIGN_PERMUTATION}
+                        itemId={permutationDatum.permutation._id}
+                        itemParentId={'NONE'}
+                        itemRef={scenarioRefId}
+                        itemText={permutationDatum.permutation.permutationName}
+                        itemStatus={permutationDatum.permutationStatus}
+                        expandable={true}
+                        permutationActive={permutationActive}
+                    />
+                );
+            }
+
         });
     };
 
 
     render() {
 
-        const {permutationData, testType, scenarioRefId} = this.props;
+        const {permutationData, permutationActive, testType, scenarioRefId} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Permutations List');
 
+        console.log('Permutation active is ' + permutationActive);
+
         if(permutationData && permutationData.length > 0) {
-            return (
+              return (
                 <div className={'permutation-test-expectations'}>
-                    {this.renderPermutationsList(permutationData, testType, scenarioRefId)}
+                    {this.renderPermutationsList(permutationData, permutationActive, testType, scenarioRefId)}
                 </div>
             );
         } else {
@@ -88,6 +110,7 @@ export class DesignPermutationsList extends Component {
 
 DesignPermutationsList.propTypes = {
     permutationData:        PropTypes.array.isRequired,
+    permutationActive:      PropTypes.bool.isRequired,
     testType:               PropTypes.string.isRequired,
     scenarioRefId:          PropTypes.string.isRequired
 };
@@ -111,7 +134,8 @@ export default DesignPermutationsListContainer = createContainer(({params}) => {
     );
 
     return {
-        permutationData:    permutationData,
+        permutationData:    permutationData.permutationData,
+        permutationActive:  permutationData.permutationActive,
         testType:           params.testType,
         scenarioRefId:      params.scenarioReferenceId
     };

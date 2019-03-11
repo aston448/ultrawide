@@ -434,9 +434,19 @@ class ClientDataServicesClass{
 
         const availablePermutations = DesignPermutationData.getPermutationsForDesign(userContext.designId);
 
-        let returnData = [];
+        // Add in the default VALUE permutation
+        const valuePermutation = {
+            _id: 'VALUE',
+            designId: userContext.designId,
+            permutationName: 'Specific Values'
+        };
+
+        availablePermutations.push(valuePermutation);
+
+        let permutationData = [];
 
         let permutationStatus = MashTestStatus.MASH_NO_EXPECTATIONS;
+        let permutationActive = false;
 
         availablePermutations.forEach((permutation) => {
 
@@ -449,17 +459,23 @@ class ClientDataServicesClass{
 
             if(permutationValueExpectations.length > 0){
                 permutationStatus = MashTestStatus.MASH_HAS_EXPECTATIONS;
+                permutationActive = true;
             }
 
-            returnData.push(
+            permutationData.push(
                 {
                     permutation: permutation,
-                    permutationStatus: permutationStatus
+                    permutationStatus: permutationStatus,
                 }
             )
         });
 
-        return returnData;
+        return(
+            {
+                permutationData: permutationData,
+                permutationActive: permutationActive
+            }
+        );
     }
 
     // Get permutation values for current permutation
@@ -537,6 +553,50 @@ class ClientDataServicesClass{
             }
 
             data.push(dataItem);
+        });
+
+        return data;
+    }
+
+    getValuePermutationValuesDataWithTestStatus(userContext, scenarioReferenceId, testType, ){
+
+        let data = [];
+        let dataItem = {};
+
+        console.log('Getting value expectations for %s %s %s', userContext.designVersionId, scenarioReferenceId, testType);
+
+        const permutationValueExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestTypeValuePermutationValue(
+            userContext.designVersionId,
+            scenarioReferenceId,
+            testType
+        );
+
+        console.log('Got %o value expectations', permutationValueExpectations);
+
+
+        permutationValueExpectations.forEach((expectation) =>{
+            // Test is expected for this value so see what its status is
+
+            const testExpectationStatus = UserTestData.getTestExpectationResult(
+                userContext.userId,
+                userContext.designVersionId,
+                expectation._id
+            );
+
+            if(testExpectationStatus){
+                dataItem = {
+                    valueExpectation:   expectation,
+                    valueStatus:        testExpectationStatus.testOutcome
+                }
+            } else {
+                dataItem = {
+                    valueExpectation:   expectation,
+                    valueStatus:        MashTestStatus.MASH_NOT_LINKED
+                }
+            }
+
+            data.push(dataItem);
+
         });
 
         return data;
