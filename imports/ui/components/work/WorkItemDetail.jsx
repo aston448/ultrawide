@@ -14,8 +14,8 @@ import {ClientWorkItemServices}         from "../../../apiClient/apiClientWorkIt
 import {ClientWorkPackageServices}      from "../../../apiClient/apiClientWorkPackage";
 import {WorkItemDetailUIModules}        from '../../../ui_modules/work_item_detail.js'
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageScopeType, LogLevel,
-    UpdateMergeStatus, UpdateScopeType, RoleType, WorkItemType, WorkPackageStatus} from '../../../constants/constants.js';
+import {ComponentType, DisplayContext, LogLevel,
+     RoleType, WorkItemType, WorkPackageStatus} from '../../../constants/constants.js';
 
 import { UI }                               from "../../../constants/ui_context_ids";
 import {getComponentClass, getContextID, replaceAll, log}         from '../../../common/utils.js';
@@ -24,17 +24,15 @@ import { TextLookups }                      from '../../../common/lookups.js'
 // Bootstrap
 import {FormControl, InputGroup, Badge} from 'react-bootstrap';
 import {Glyphicon}  from 'react-bootstrap';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
-import {Grid, Row, Col} from 'react-bootstrap';
+
 
 // REDUX services
 
 // React DnD - Component is draggable
 import { DragSource } from 'react-dnd';
 
-// Draft JS - Name is text editable
-import {Editor, EditorState, SelectionState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';
 import {ClientDesignUpdateServices} from "../../../apiClient/apiClientDesignUpdate";
+import {WorkPackageTestStatus} from "../../../constants/constants";
 
 
 
@@ -165,6 +163,10 @@ class WorkItemDetail extends Component{
         let itemName = '';
         let badgeId = '';
         let badgeClass = '';
+        let wpStatus = '';
+        let testStatus = '';
+        let wpTestStatus = '';
+        let wpTestStatusClass = '';
         let workItemClass = '';
         let workItemNameClass = 'work-item-name';
         let selectedItem = false;
@@ -204,6 +206,8 @@ class WorkItemDetail extends Component{
 
                 itemName = workItem.workPackageName;
                 badgeId = 'WP';
+                wpStatus = TextLookups.workPackageStatus(workItem.workPackageStatus);
+                wpTestStatus = TextLookups.workPackageTestStatus(workItem.workPackageTestStatus);
                 if(workItem._id === userContext.workPackageId){
                     workItemClass = 'work-item-wp-selected';
                 } else {
@@ -220,6 +224,21 @@ class WorkItemDetail extends Component{
                         break;
                     case WorkPackageStatus.WP_ADOPTED:
                         badgeClass = 'badge-work-package-adopted';
+                        break;
+                }
+
+                switch(workItem.workPackageTestStatus){
+                    case WorkPackageTestStatus.WP_TESTS_NONE:
+                        wpTestStatusClass='badge-work-package-no-tests';
+                        break;
+                    case WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE:
+                        wpTestStatusClass='badge-work-package-some-tests';
+                        break;
+                    case WorkPackageTestStatus.WP_TESTS_FAILING:
+                        wpTestStatusClass='badge-work-package-fail-tests';
+                        break;
+                    case WorkPackageTestStatus.WP_TESTS_COMPLETE:
+                        wpTestStatusClass='badge-work-package-complete-tests';
                         break;
                 }
 
@@ -302,6 +321,13 @@ class WorkItemDetail extends Component{
                 <Badge className={badgeClass}>{badgeId}</Badge>
             </InputGroup.Addon>;
 
+        if(workItemType === WorkItemType.BASE_WORK_PACKAGE || workItemType === WorkItemType.UPDATE_WORK_PACKAGE){
+            testStatus =
+                <InputGroup.Addon>
+                    <Badge className={wpTestStatusClass}>{wpTestStatus}</Badge>
+                </InputGroup.Addon>;
+        }
+
         let itemLink =
             <InputGroup.Addon>
                 <div className="work-item-link"><a href={this.state.itemLink} target="_blank"><Glyphicon glyph='link'/></a></div>
@@ -333,6 +359,7 @@ class WorkItemDetail extends Component{
             <div className={workItemClass}>
                 <InputGroup>
                     {badge}
+                    {testStatus}
                     {itemLink}
                     {itemText}
                 </InputGroup>
@@ -343,6 +370,7 @@ class WorkItemDetail extends Component{
             <div className={workItemClass}>
                 <InputGroup>
                     {badge}
+                    {testStatus}
                     {itemLink}
                     {itemText}
                 </InputGroup>
@@ -365,6 +393,7 @@ class WorkItemDetail extends Component{
                 <div className={workItemClass}>
                     <InputGroup>
                         {badge}
+                        {testStatus}
                         {itemLink}
                         {itemText}
                         {editAction}
@@ -378,6 +407,7 @@ class WorkItemDetail extends Component{
                 <div className={workItemClass}>
                     <InputGroup>
                         {badge}
+                        {testStatus}
                         {itemLink}
                         {itemText}
                         {editAction}
@@ -392,6 +422,7 @@ class WorkItemDetail extends Component{
                 <div className={workItemClass}>
                     <InputGroup>
                         {badge}
+                        {testStatus}
                         {itemLink}
                         {itemText}
                         {editAction}
@@ -406,6 +437,7 @@ class WorkItemDetail extends Component{
             <div className={workItemClass}>
                 <InputGroup>
                     {badge}
+                    {testStatus}
                     {itemLink}
                     {itemText}
                     {saveAction}

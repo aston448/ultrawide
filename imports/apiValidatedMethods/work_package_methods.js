@@ -259,3 +259,59 @@ export const updateWorkPackageTestCompleteness = new ValidatedMethod({
         }
     }
 });
+
+export const closeWorkPackage = new ValidatedMethod({
+
+    name: 'workPackage.closeWorkPackage',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        workPackageId:      {type: String}
+    }).validator(),
+
+    run({userRole, workPackageId}){
+
+        // Server validation
+        const result = WorkPackageValidationApi.validateCloseWorkPackage(userRole, workPackageId);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('workPackage.closeWorkPackage.failValidation', result)
+        }
+
+        // Server action
+        try {
+            WorkPackageServices.closeWorkPackage(workPackageId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});
+
+export const reopenWorkPackage = new ValidatedMethod({
+
+    name: 'workPackage.reopenWorkPackage',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        workPackageId:      {type: String}
+    }).validator(),
+
+    run({userRole, workPackageId}){
+
+        // Server validation
+        const result = WorkPackageValidationApi.validateReopenWorkPackage(userRole, workPackageId);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('workPackage.reopenWorkPackage.failValidation', result)
+        }
+
+        // Server action
+        try {
+            WorkPackageServices.reopenWorkPackage(workPackageId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
+});

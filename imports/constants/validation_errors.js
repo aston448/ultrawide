@@ -132,7 +132,11 @@ export const WorkPackageValidationErrors = {
     WORK_PACKAGE_INVALID_ROLE_DEVELOP:          'Only a Developer can develop Work Packages',
     WORK_PACKAGE_INVALID_STATE_DEVELOP:         'Only Adopted Work Packages can be developed',
     WORK_PACKAGE_INVALID_USER_DEVELOP:          'Only the adopting user may develop a work package',
-    WORK_PACKAGE_INVALID_TYPE:                  'Unknown type for Work Package'
+    WORK_PACKAGE_INVALID_TYPE:                  'Unknown type for Work Package',
+    WORK_PACKAGE_INVALID_ROLE_CLOSE:            'Only a Manager can close Work Packages',
+    WORK_PACKAGE_INVALID_STATE_CLOSE:           'Only Adopted Work Packages can be closed',
+    WORK_PACKAGE_INVALID_ROLE_REOPEN:           'Only a Manager can re-open Work Packages',
+    WORK_PACKAGE_INVALID_STATE_REOPEN:          'Only a Closed Work Package can be re-opened'
 };
 
 export const DesignComponentValidationErrors = {

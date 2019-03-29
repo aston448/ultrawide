@@ -367,6 +367,82 @@ class ClientWorkPackageServicesClass {
         return {success: true, message: ''};
     };
 
+    // Manager chose to close a Work Package ---------------------------------------------------------------------------
+    closeWorkPackage(userRole, userContext, workPackageToCloseId){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateCloseWorkPackage(userRole, workPackageToCloseId);
+
+        if(result !== Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.closeWorkPackage(userRole, workPackageToCloseId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error 4: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Ensure that the WP is set in the current user context
+                this.setWorkPackage(userContext, workPackageToCloseId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_CLOSED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    };
+
+    // Manager chose to reopen a Work Package ---------------------------------------------------------------------------
+    reopenWorkPackage(userRole, userContext, workPackageToReopenId){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateReopenWorkPackage(userRole, workPackageToReopenId);
+
+        if(result !== Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.reopenWorkPackage(userRole, workPackageToReopenId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error 4: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Ensure that the WP is set in the current user context
+                this.setWorkPackage(userContext, workPackageToReopenId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_REOPENED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    };
+
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // User clicks on a WP to select it

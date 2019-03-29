@@ -62,7 +62,7 @@ class ScenarioTestResultsList extends Component {
 
     renderNoResults(){
         return (
-            <div className="design-item-note">No Test Results</div>
+            <div className="design-item-note">No Test Expectations</div>
         )
     }
 

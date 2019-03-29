@@ -8,7 +8,9 @@ import {
     adoptWorkPackage,
     releaseWorkPackage,
     removeWorkPackage,
-    updateWorkPackageTestCompleteness
+    updateWorkPackageTestCompleteness,
+    closeWorkPackage,
+    reopenWorkPackage
 } from '../apiValidatedMethods/work_package_methods.js'
 
 // =====================================================================================================================
@@ -123,6 +125,30 @@ class ServerWorkPackageApiClass {
         updateWorkPackageTestCompleteness.call(
             {
                 userContext: userContext,
+                workPackageId: workPackageId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    closeWorkPackage(userRole, workPackageId, callback){
+        closeWorkPackage.call(
+            {
+                userRole: userRole,
+                workPackageId: workPackageId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    reopenWorkPackage(userRole, workPackageId, callback){
+        reopenWorkPackage.call(
+            {
+                userRole: userRole,
                 workPackageId: workPackageId
             },
             (err, result) => {

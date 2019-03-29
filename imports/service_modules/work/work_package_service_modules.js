@@ -31,7 +31,7 @@ class WorkPackageModulesClass {
 
             let otherWp = null;
 
-            // If component is Scenario and already exists in other WP for this DV, don't add it
+            // If component is Scenario and already exists in other OPEN WP for this DV, don't add it
             if (component.componentType === ComponentType.SCENARIO) {
 
                 //log((msg) => console.log(msg), LogLevel.INFO, '    Check other instance...');
@@ -101,6 +101,24 @@ class WorkPackageModulesClass {
             // Also set the WP in the base design version component
             DesignComponentData.setDvComponentWorkPackageId(userContext.designVersionId, component.componentReferenceId, userContext.workPackageId);
         }
+    }
+
+    removeMigratedWpScenarios(workPackageId){
+
+        const wpScenarios = WorkPackageData.getActiveScenarios(workPackageId);
+
+        wpScenarios.forEach((wpScenario) => {
+
+            // Get the DV Component
+            const dvComponent = DesignComponentData.getDesignComponentByRef(wpScenario.designVersionId, wpScenario.componentReferenceId);
+
+            if(dvComponent){
+                if(dvComponent.workPackageId !== wpScenario.workPackageId){
+                    // It's moved on so remove from this WP
+                    WorkPackageComponentData.removeComponent(wpScenario._id);
+                }
+            }
+        })
     }
 
     removeWorkPackageComponent(userContext, designComponent, doDelete){

@@ -98,6 +98,20 @@ class WorkPackageValidationApiClass {
 
         return WorkPackageValidationServices.validateDevelopWorkPackage(userRole, userId, wp);
     };
+
+    validateCloseWorkPackage(userRole, workPackageId){
+
+        const wp = WorkPackageData.getWorkPackageById(workPackageId);
+
+        return WorkPackageValidationServices.validateEditWorkPackage(userRole, wp.workPackageStatus);
+    };
+
+    validateReopenWorkPackage(userRole, workPackageId){
+
+        const wp = WorkPackageData.getWorkPackageById(workPackageId);
+
+        return WorkPackageValidationServices.validateEditWorkPackage(userRole, wp.workPackageStatus);
+    };
 }
 
 export const WorkPackageValidationApi = new WorkPackageValidationApiClass();

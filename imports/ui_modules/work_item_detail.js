@@ -32,7 +32,7 @@ class WorkItemDetailUIModulesClass{
 
             case WorkPackageStatus.WP_ADOPTED:
                 const userRole = UserRoleData.getRoleByUserId(userContext.userId);
-                adoptionText = TextLookups.workPackageStatus(workPackage.workPackageStatus) + userRole.displayName;
+                adoptionText = TextLookups.workPackageStatus(workPackage.workPackageStatus) + ' - ' + userRole.displayName;
                 adoptionClass = 'wp-adopted';
                 break;
 
@@ -83,6 +83,14 @@ class WorkItemDetailUIModulesClass{
         const buttonDevelop =
             <Button id={getContextID(UI.BUTTON_DEVELOP, uiContextName)} bsSize="xs"
                     onClick={() => this.onDevelopWorkPackage(userRole, userContext, workPackage)}>Develop</Button>;
+
+        const buttonClose =
+            <Button id={getContextID(UI.BUTTON_CLOSE, uiContextName)} bsSize="xs"
+                    onClick={() => this.onCloseWorkPackage(userRole, userContext, workPackage)}>Close</Button>;
+
+        const buttonReopen =
+            <Button id={getContextID(UI.BUTTON_REOPEN, uiContextName)} bsSize="xs"
+                    onClick={() => this.onReopenWorkPackage(userRole, userContext, workPackage)}>Re-Open</Button>;
 
         switch (workPackage.workPackageStatus) {
             case WorkPackageStatus.WP_NEW:
@@ -146,12 +154,13 @@ class WorkItemDetailUIModulesClass{
                         break;
                     case RoleType.MANAGER:
 
-                        // Managers can view or edit or release the WP
+                        // Managers can view or edit, release or close the WP
                         buttons =
                             <ButtonGroup className="button-group-left">
                                 {buttonEdit}
                                 {buttonView}
                                 {buttonRelease}
+                                {buttonClose}
                             </ButtonGroup>;
 
                         break;
@@ -160,6 +169,31 @@ class WorkItemDetailUIModulesClass{
                             <ButtonGroup className="button-group-left">
                                 {buttonView}
                             </ButtonGroup>;
+                        break;
+                }
+
+                break;
+            case WorkPackageStatus.WP_CLOSED:
+                switch (userRole) {
+                    case RoleType.DEVELOPER:
+                    case RoleType.DESIGNER:
+                        // Developers, Designers can view
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                {buttonView}
+                            </ButtonGroup>;
+
+                        break;
+
+                    case RoleType.MANAGER:
+
+                        // Managers can view or reopen
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                {buttonView}
+                                {buttonReopen}
+                            </ButtonGroup>;
+
                         break;
                 }
 
@@ -252,6 +286,24 @@ class WorkItemDetailUIModulesClass{
     onDevelopWorkPackage(userRole, userContext, wp){
 
         ClientWorkPackageServices.developWorkPackage(
+            userRole,
+            userContext,
+            wp._id
+        );
+    };
+
+    onCloseWorkPackage(userRole, userContext, wp){
+
+        ClientWorkPackageServices.closeWorkPackage(
+            userRole,
+            userContext,
+            wp._id
+        );
+    };
+
+    onReopenWorkPackage(userRole, userContext, wp){
+
+        ClientWorkPackageServices.reopenWorkPackage(
             userRole,
             userContext,
             wp._id

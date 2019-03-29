@@ -367,7 +367,8 @@ export const IterationStatus = {
 export const WorkPackageStatus = {
     WP_NEW:                 'NEW',
     WP_AVAILABLE:           'AVAILABLE',
-    WP_ADOPTED:             'ADOPTED'
+    WP_ADOPTED:             'ADOPTED',
+    WP_CLOSED:              'CLOSED'
 };
 
 export const DuWorkPackageTestStatus = {

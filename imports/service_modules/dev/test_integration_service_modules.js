@@ -21,6 +21,7 @@ import {WorkItemData} from "../../data/work/work_item_db";
 import {WorkPackageData} from "../../data/work/work_package_db";
 import {DesignVersionData} from "../../data/design/design_version_db";
 import {DesignAnomalyData} from "../../data/design/design_anomaly_db";
+import {WorkPackageTestStatus} from "../../constants/constants";
 
 //======================================================================================================================
 //
@@ -380,6 +381,23 @@ class TestIntegrationModulesClass {
                         itTotalMissing += wpTotalMissing;
                         itTotalNoExpectations += wpTotalNoExpectations;
                         itTotalScenarioAnomalies += wpTotalScenarioAnomalies;
+
+                        // Update the WP test status
+                        let wpTestStatus = WorkPackageTestStatus.WP_TESTS_NONE;
+
+                        if(wpTotalFail > 0){
+                            wpTestStatus = WorkPackageTestStatus.WP_TESTS_FAILING;
+                        } else {
+                            if(wpTotalPass > 0){
+                                if(wpTotalPass === wpTotalExpectations){
+                                    wpTestStatus = WorkPackageTestStatus.WP_TESTS_COMPLETE;
+                                } else {
+                                    wpTestStatus = WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE;
+                                }
+                            }
+                        }
+
+                        WorkPackageData.setWorkPackageTestStatus(wp._id, wpTestStatus);
 
                     });
 
@@ -878,7 +896,13 @@ class TestIntegrationModulesClass {
                     // Ignore the overall expectation
                     if(expectation.permutationValueId !== 'NONE'){
 
-                        const permutationValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId).permutationValueName;
+                        let permutationValue = '';
+
+                        if(expectation.permutationValueId === 'VALUE'){
+                            permutationValue = expectation.valuePermutationValue;
+                        } else {
+                            permutationValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId).permutationValueName;
+                        }
 
                         let expectationResult = {
                             result: MashTestStatus.MASH_NO_TESTS,

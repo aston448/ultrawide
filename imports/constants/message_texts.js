@@ -91,6 +91,8 @@ export const WorkPackageMessages = {
     MSG_WORK_PACKAGE_ADOPTED:           'Work Package now adopted by you',
     MSG_WORK_PACKAGE_RELEASED:          'Work Package available for adoption again',
     MSG_WORK_PACKAGE_REMOVED:           'Work Package removed',
+    MSG_WORK_PACKAGE_CLOSED:            'Work Package closed',
+    MSG_WORK_PACKAGE_REOPENED:          'Work package re-opened'
 };
 
 export const DesignComponentMessages = {

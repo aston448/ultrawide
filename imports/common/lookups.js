@@ -1,6 +1,6 @@
 import {
     DesignStatus, DesignVersionStatus, DesignUpdateStatus,
-    WorkPackageStatus, ViewType,
+    WorkPackageStatus, WorkPackageTestStatus, ViewType,
     UltrawideAction, ComponentType, MashStatus,
     MashTestStatus, FeatureTestSummaryStatus,
     DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus,
@@ -8,7 +8,7 @@ import {
     TestLocationFileStatus, TestLocationFileType,
     LogLevel}
     from '../constants/constants.js';
-import {BacklogType, TestType} from "../constants/constants";
+import {BacklogType, TestType, WorkItemType} from "../constants/constants";
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -62,9 +62,25 @@ class TextLookupsClass {
             case WorkPackageStatus.WP_NEW:
                 return 'Unavailable';
             case WorkPackageStatus.WP_ADOPTED:
-                return 'Adopted by ';
+                return 'Adopted';
             case WorkPackageStatus.WP_AVAILABLE:
                 return 'Available';
+            case WorkPackageStatus.WP_CLOSED:
+                return 'Closed';
+        }
+    }
+
+    workPackageTestStatus(status){
+
+        switch(status){
+            case WorkPackageTestStatus.WP_TESTS_NONE:
+                return 'No Tests';
+            case WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE:
+                return 'Incomplete';
+            case WorkPackageTestStatus.WP_TESTS_FAILING:
+                return 'Failing';
+            case WorkPackageTestStatus.WP_TESTS_COMPLETE:
+                return 'Complete';
         }
     }
 
@@ -358,6 +374,24 @@ class TextLookupsClass {
                 return 'WARNING: ';
             case LogLevel.ERROR:
                 return 'ERROR:   ';
+        }
+    }
+
+    workItemType(workItemType){
+
+        switch(workItemType){
+            case WorkItemType.DESIGN_VERSION:
+                return 'Design Version';
+            case WorkItemType.INCREMENT:
+                return 'Increment';
+            case WorkItemType.ITERATION:
+                return 'Iteration';
+            case WorkItemType.DESIGN_UPDATE:
+                return 'Design Update';
+            case WorkItemType.DV_ASSIGNED:
+                return 'Design Version - Items in WPs';
+            case WorkItemType.DV_UNASSIGNED:
+                return 'Design Version - Items not in WPs';
         }
     }
 

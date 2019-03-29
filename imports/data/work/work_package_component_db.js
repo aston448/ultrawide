@@ -2,6 +2,8 @@
 import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
 
 import { ComponentType, WorkPackageScopeType, LogLevel }      from '../../constants/constants.js';
+import {WorkPackageData} from "./work_package_db";
+import {WorkPackageStatus} from "../../constants/constants";
 
 class WorkPackageComponentDataClass {
 
@@ -146,12 +148,25 @@ class WorkPackageComponentDataClass {
 
     getOtherDvWpComponentInstance(designVersionId, componentReferenceId, thisWorkPackageId){
 
-        // Look for another instance of this component in this DV but in another WP
-        return WorkPackageComponents.findOne({
+        // Look for another instance of this component in this DV but in another open WP
+        const otherInstance =  WorkPackageComponents.findOne({
             designVersionId:        designVersionId,
             componentReferenceId:   componentReferenceId,
             workPackageId:          {$ne: thisWorkPackageId}
         });
+
+        if(otherInstance){
+            const otherWp = WorkPackageData.getWorkPackageById(otherInstance.workPackageId);
+
+            if(otherWp && otherWp.workPackageStatus !== WorkPackageStatus.WP_CLOSED){
+
+                return otherInstance;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     getChildComponents(workPackageId, parentRefId){

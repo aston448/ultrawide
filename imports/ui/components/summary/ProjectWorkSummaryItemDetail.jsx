@@ -7,22 +7,17 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import UltrawideAction                  from "../../components/common/UltrawideAction.jsx";
 
 // Ultrawide Services
-import {ClientWorkItemServices}         from "../../../apiClient/apiClientWorkItem";
-import {ClientWorkPackageServices}      from "../../../apiClient/apiClientWorkPackage";
-import {WorkItemDetailUIModules}        from '../../../ui_modules/work_item_detail.js'
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageScopeType, LogLevel,
-    UpdateMergeStatus, UpdateScopeType, RoleType, WorkItemType, WorkPackageStatus} from '../../../constants/constants.js';
+import {WorkItemType, WorkPackageStatus, WorkPackageTestStatus, LogLevel} from '../../../constants/constants.js';
 
 import { UI }                               from "../../../constants/ui_context_ids";
 import {getComponentClass, getContextID, replaceAll, log}         from '../../../common/utils.js';
 import { TextLookups }                      from '../../../common/lookups.js'
 
 // Bootstrap
-import {FormControl, InputGroup, Badge} from 'react-bootstrap';
+import {InputGroup, Badge} from 'react-bootstrap';
 import {Glyphicon}  from 'react-bootstrap';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
@@ -34,6 +29,7 @@ import store from '../../../redux/store'
 import {
     setCurrentUserSummaryItem
 } from '../../../redux/actions'
+
 
 
 // =====================================================================================================================
@@ -73,7 +69,10 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
         let itemName = '';
         let badgeId = workItemType;
-        let badgeClass = '';
+        let badgeClass = workItemType;
+        let status = '';
+        let statusClass ='';
+        let statusTooltip = '';
         let nameClass = '';
         let summaryRowClass = '';
 
@@ -81,6 +80,63 @@ export class ProjectSummaryWorkItemDetail extends Component{
         let selected = summaryData._id === currentUserSummaryItem;
 
         //const uiContextName = replaceAll(itemName, ' ', '_');
+        const tooltipDelay = 1000;
+
+        // Default item tooltip
+        let badgeTooltip = (
+            <Tooltip id="modal-tooltip">
+                {TextLookups.workItemType(workItemType)}
+            </Tooltip>
+        );
+
+        // Specific tooltips...
+        const tooltipNoTests = (
+            <Tooltip id="modal-tooltip">
+                {'WP has no passing tests'}
+            </Tooltip>
+        );
+
+        const tooltipSomeTests = (
+            <Tooltip id="modal-tooltip">
+                {'WP has some passing tests'}
+            </Tooltip>
+        );
+
+        const tooltipFailingTests = (
+            <Tooltip id="modal-tooltip">
+                {'WP has failing tests'}
+            </Tooltip>
+        );
+
+        const tooltipComplete = (
+            <Tooltip id="modal-tooltip">
+                {'WP has all expected tests passing'}
+            </Tooltip>
+        );
+
+        const tooltipUnavailable = (
+            <Tooltip id="modal-tooltip">
+                {'Unavailable WP'}
+            </Tooltip>
+        );
+
+        const tooltipAvailable = (
+            <Tooltip id="modal-tooltip">
+                {'Available WP'}
+            </Tooltip>
+        );
+
+        const tooltipAdopted = (
+            <Tooltip id="modal-tooltip">
+                {'Adopted WP'}
+            </Tooltip>
+        );
+
+        const tooltipClosed = (
+            <Tooltip id="modal-tooltip">
+                {'Closed WP'}
+            </Tooltip>
+        );
 
         switch(workItemType){
             case WorkItemType.DESIGN_VERSION:
@@ -124,12 +180,42 @@ export class ProjectSummaryWorkItemDetail extends Component{
                 switch(workItem.workPackageStatus){
                     case WorkPackageStatus.WP_NEW:
                         badgeClass = 'badge-work-package-new';
+                        badgeTooltip = tooltipUnavailable;
                         break;
                     case WorkPackageStatus.WP_AVAILABLE:
                         badgeClass = 'badge-work-package-available';
+                        badgeTooltip = tooltipAvailable;
                         break;
                     case WorkPackageStatus.WP_ADOPTED:
                         badgeClass = 'badge-work-package-adopted';
+                        badgeTooltip = tooltipAdopted;
+                        break;
+                    case WorkPackageStatus.WP_CLOSED:
+                        badgeClass = 'badge-work-package-closed';
+                        badgeTooltip = tooltipClosed;
+                        break;
+                }
+
+                switch(workItem.workPackageTestStatus){
+                    case WorkPackageTestStatus.WP_TESTS_NONE:
+                        status=<span><Glyphicon glyph="ban-circle"/></span>;
+                        statusClass='badge-work-package-no-tests';
+                        statusTooltip = tooltipNoTests;
+                        break;
+                    case WorkPackageTestStatus.WP_TESTS_NOT_COMPLETE:
+                        status=<span><Glyphicon glyph="minus-sign"/></span>;
+                        statusClass='badge-work-package-some-tests';
+                        statusTooltip = tooltipSomeTests;
+                        break;
+                    case WorkPackageTestStatus.WP_TESTS_FAILING:
+                        status=<span><Glyphicon glyph="remove-sign"/></span>;
+                        statusClass='badge-work-package-fail-tests';
+                        statusTooltip = tooltipFailingTests;
+                        break;
+                    case WorkPackageTestStatus.WP_TESTS_COMPLETE:
+                        status=<span><Glyphicon glyph="ok-sign"/></span>;
+                        statusClass='badge-work-package-complete-tests';
+                        statusTooltip = tooltipComplete;
                         break;
                 }
                 nameClass = 'summary-item-name-wp';
@@ -172,16 +258,27 @@ export class ProjectSummaryWorkItemDetail extends Component{
 
         let badge =
             <InputGroup.Addon>
-                <Badge className={badgeClass}>{badgeId}</Badge>
+                <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={badgeTooltip}>
+                    <Badge className={badgeClass}>{badgeId}</Badge>
+                </OverlayTrigger>
             </InputGroup.Addon>;
+
+        let statusBadge = <div></div>;
+
+        if(workItemType === WorkItemType.BASE_WORK_PACKAGE || workItemType === WorkItemType.UPDATE_WORK_PACKAGE){
+            statusBadge =
+                <InputGroup.Addon>
+                    <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={statusTooltip}>
+                        <Badge className={statusClass}>{status}</Badge>
+                    </OverlayTrigger>
+                </InputGroup.Addon>;
+        }
 
         let itemText =
             <div className="work-item-name">{itemName}</div>;
 
 
         // Summary Data ------------------------------------------------------------------------------------------------
-
-        const tooltipDelay = 1000;
 
         const tooltipScenarios = (
             <Tooltip id="modal-tooltip">
@@ -292,6 +389,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
                         <div className={nameClass}>
                             <InputGroup>
                                 {badge}
+                                {statusBadge}
                                 {itemText}
                             </InputGroup>
                         </div>

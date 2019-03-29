@@ -189,6 +189,36 @@ class WorkPackageValidationServicesClass {
 
         return Validation.VALID;
     };
+
+    validateCloseWorkPackage(userRole, wpStatus){
+
+        // To close a WP, user must be a Manager
+        if(userRole !== RoleType.MANAGER){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_CLOSE;
+        }
+
+        // Must be an adopted WP
+        if(wpStatus !== WorkPackageStatus.WP_ADOPTED){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_CLOSE;
+        }
+
+        return Validation.VALID;
+    };
+
+    validateReopenWorkPackage(userRole, wpStatus){
+
+        // To reopen a WP, user must be a Manager
+        if(userRole !== RoleType.MANAGER){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_REOPEN;
+        }
+
+        // Must be a closed WP
+        if(wpStatus !== WorkPackageStatus.WP_CLOSED){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_REOPEN;
+        }
+
+        return Validation.VALID;
+    };
 }
 
 export const WorkPackageValidationServices = new WorkPackageValidationServicesClass();

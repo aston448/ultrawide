@@ -1357,6 +1357,31 @@ input {
     background-color: darkred;
 }
 
+.badge-work-package-closed{
+    color: lightgrey;
+    background-color: darkgrey;
+}
+
+.badge-work-package-no-tests{
+    color: white;
+    background-color: darkgrey;
+}
+
+.badge-work-package-some-tests{
+    color: white;
+    background-color: darkseagreen;
+}
+
+.badge-work-package-fail-tests{
+    color: lightpink;
+    background-color: darkred;
+}
+
+.badge-work-package-complete-tests{
+    color: lightgreen;
+    background-color: darkgreen;
+}
+
 .badge-du{
     color: yellow;
     background-color: darkgoldenrod;

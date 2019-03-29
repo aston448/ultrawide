@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import { ViewType, DisplayContext, ComponentType, UpdateScopeType } from '../../constants/constants.js';
+import { ViewType, DisplayContext, ComponentType, UpdateScopeType, WorkPackageStatus } from '../../constants/constants.js';
 import { Validation, WorkPackageComponentValidationErrors } from '../../constants/validation_errors.js';
 
 //======================================================================================================================
@@ -13,7 +13,7 @@ import { Validation, WorkPackageComponentValidationErrors } from '../../constant
 
 class WorkPackageComponentValidationServicesClass {
 
-    validateToggleInScope(view, displayContext, userContext, designComponent) {
+    validateToggleInScope(view, displayContext, userContext, designComponent, dcWpStatus) {
 
         // Must be editing a WP to update scope
         if (!(view === ViewType.WORK_PACKAGE_BASE_EDIT || view === ViewType.WORK_PACKAGE_UPDATE_EDIT)) {
@@ -25,10 +25,10 @@ class WorkPackageComponentValidationServicesClass {
             return WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_INVALID_CONTEXT_SCOPE;
         }
 
-        // A Scenario cannot be scoped if already in another WP
+        // A Scenario cannot be scoped if already in another WP unless that WP is Closed
         if(designComponent && designComponent.componentType === ComponentType.SCENARIO){
 
-            if(designComponent.workPackageId !== 'NONE'){
+            if(designComponent.workPackageId !== 'NONE' && dcWpStatus !== WorkPackageStatus.WP_CLOSED){
                 if(designComponent.workPackageId !== userContext.workPackageId){
                     return WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_ALREADY_IN_SCOPE;
                 }

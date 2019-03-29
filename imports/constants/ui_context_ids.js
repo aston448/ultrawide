@@ -50,6 +50,8 @@ export const UI = {
     BUTTON_CHANGE_PASSWORD:             'but-change-password',
     BUTTON_SAVE:                        'but-save-',
     BUTTON_CANCEL:                      'but-cancel-',
+    BUTTON_CLOSE:                       'but-close-',
+    BUTTON_REOPEN:                      'but-reopen-',
     BUTTON_CLOSE_REOPEN:                'but-close-reopen-',
     BUTTON_ONGOING:                     'but-ongoing-',
     EDITABLE_FIELD:                     'edit-field-view-',

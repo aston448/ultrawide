@@ -40,24 +40,20 @@ class TestIntegrationServicesClass{
 
             log((msg) => console.log(msg), LogLevel.PERF, "    Old data removed.");
 
+
+            log((msg) => console.log(msg), LogLevel.PERF, "    Get Results...");
             // Get latest results
             TestIntegrationModules.getAcceptanceTestResults(userContext);
             TestIntegrationModules.getIntegrationTestResults(userContext);
             TestIntegrationModules.getUnitTestResults(userContext);
 
+            log((msg) => console.log(msg), LogLevel.PERF, "    Got Results");
+
+            log((msg) => console.log(msg), LogLevel.PERF, "    Update Test Data...");
             // Recalculate the design-test mash
             TestIntegrationModules.updateUserTestData(userContext);
 
-            log((msg) => console.log(msg), LogLevel.PERF, "    Updating WP completeness...");
-
-            // Update the completeness of work packages
-            this.updateWorkPackageCompleteness(userContext);
-
-            log((msg) => console.log(msg), LogLevel.PERF, "    Updating test summary...");
-            // And update the test summary data
-            //this.updateTestSummaryData(userContext);
-
-            log((msg) => console.log(msg), LogLevel.PERF, "    Test summary updated...");
+            log((msg) => console.log(msg), LogLevel.PERF, "    Update Test Data Complete");
 
             // Update DU Summary if a DU selected
             if(userContext.designVersionId !== 'NONE') {
@@ -175,14 +171,14 @@ class TestIntegrationServicesClass{
     //     }
     // }
 
-    updateWorkPackageCompleteness(userContext){
-
-        const dvWorkPackages = DesignVersionData.getAllWorkPackages(userContext.designVersionId);
-
-        dvWorkPackages.forEach((wp) => {
-            WorkPackageServices.updateWorkPackageTestCompleteness(userContext, wp._id);
-        })
-    }
+    // updateWorkPackageCompleteness(userContext){
+    //
+    //     const dvWorkPackages = DesignVersionData.getAllWorkPackages(userContext.designVersionId);
+    //
+    //     dvWorkPackages.forEach((wp) => {
+    //         WorkPackageServices.updateWorkPackageTestCompleteness(userContext, wp._id);
+    //     })
+    // }
 
     // User generates an integration or acceptance test file from a Design or Design Update Feature
     exportIntegrationTestFile(userContext, outputDir, testRunner, testType){
