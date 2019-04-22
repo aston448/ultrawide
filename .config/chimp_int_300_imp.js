@@ -5,7 +5,7 @@ module.exports = {
             reporter: 'ultrawide-mocha-reporter',
             reporterOptions:
                 {
-                    resultsFile: '.test_results/mocha_int_results_server_dev.json',
+                    resultsFile: '.test_results/mocha_int_results_server_imp.json',
                     consoleOutput: 'ON'
                 }
         }

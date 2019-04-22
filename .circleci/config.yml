@@ -52,10 +52,12 @@ jobs:
             - ~/.npm
             - ~/.meteor
 
+# Unit tests run
       - run:
           name: meteor-unit-tests
           command: npm run test:unit
 
+# Integration tests run
       - run:
           name: start-meteor-app
           command: npm run start-ci
@@ -63,36 +65,45 @@ jobs:
 
       - run:
           name: wait-for-app
-          command: sleep 50
+          command: sleep 60
 
       - run:
-          name: int-test-designs
+          name: 100-int-test-designs
           command: npm run chimp:int_server_des
 
       - run:
-          name: int-test-wps
-          command: npm run chimp:int_server_wp
-
-      - run:
-          name: int-test-dev
-          command: npm run chimp:int_server_dev
-
-      - run:
-          name: int-test-summary
-          command: npm run chimp:int_server_sum
-
-      - run:
-          name: int-test-design-updates
+          name: 200-int-test-updates
           command: npm run chimp:int_server_du
 
       - run:
-          name: int-test-domain
-          command: npm run chimp:int_server_dom
+          name: 300-int-test-implementation
+          command: npm run chimp:int_server_imp
 
       - run:
-          name: int-test-admin
+          name: 400-int-test-test-integration
+          command: npm run chimp:int_server_test
+
+      - run:
+          name: 500-int-test-progress
+          command: npm run chimp:int_server_prog
+
+      - run:
+          name: 600-int-test-progress
+          command: npm run chimp:int_server_anom
+
+      - run:
+          name: 700-int-test-users
+          command: npm run chimp:int_server_usr
+
+      - run:
+          name: 800-int-test-settings
+          command: npm run chimp:int_server_set
+
+      - run:
+          name: 900-int-test-admin
           command: npm run chimp:int_server_adm
 
+# Acceptance tests run
       - run:
           name: client-tests
           command: npm run chimp:int_client
@@ -101,33 +112,43 @@ jobs:
           name: acc-test-design
           command: npm run chimp:acc_des
 
+# Unit test upload
       - run:
           name: upload-results - unit
           command: sh scripts/upload-test-results.sh unit_results.json
 
+# Integration test upload
       - run:
           name: upload-results - integration designs
           command: sh scripts/upload-test-results.sh mocha_int_results_server_des.json
-
-      - run:
-          name: upload-results - integration work packages
-          command: sh scripts/upload-test-results.sh mocha_int_results_server_wp.json
-
-      - run:
-          name: upload-results - integration development
-          command: sh scripts/upload-test-results.sh mocha_int_results_server_dev.json
-
-      - run:
-          name: upload-results - integration summaries
-          command: sh scripts/upload-test-results.sh mocha_int_results_server_sum.json
 
       - run:
           name: upload-results - integration design updates
           command: sh scripts/upload-test-results.sh mocha_int_results_server_du.json
 
       - run:
-          name: upload-results - integration domain
-          command: sh scripts/upload-test-results.sh mocha_int_results_server_dom.json
+          name: upload-results - integration design implementation
+          command: sh scripts/upload-test-results.sh mocha_int_results_server_imp.json
+
+      - run:
+          name: upload-results - integration test integration
+          command: sh scripts/upload-test-results.sh mocha_int_results_server_test.json
+
+      - run:
+          name: upload-results - integration backlogs and progress
+          command: sh scripts/upload-test-results.sh mocha_int_results_server_prog.json
+
+      - run:
+          name: upload-results - integration design anomalies
+          command: sh scripts/upload-test-results.sh mocha_int_results_server_anom.json
+
+      - run:
+          name: upload-results - integration users
+          command: sh scripts/upload-test-results.sh mocha_int_results_server_usr.json
+
+      - run:
+          name: upload-results - integration tools and settings
+          command: sh scripts/upload-test-results.sh mocha_int_results_server_set.json
 
       - run:
           name: upload-results - integration admin
@@ -137,6 +158,7 @@ jobs:
           name: upload-results - integration client
           command: sh scripts/upload-test-results.sh mocha_int_results_client.json
 
+# Acceptance test upload
       - run:
           name: upload-results - acceptance designs
           command: sh scripts/upload-test-results.sh mocha_acc_results_des.json

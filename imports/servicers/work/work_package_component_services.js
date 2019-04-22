@@ -107,9 +107,9 @@ class WorkPackageComponentServicesClass{
                 }
 
                 // As the WP scope has changed, recalculate the completeness
-                WorkPackageServices.updateWorkPackageTestCompleteness(userContext, userContext.workPackageId);
+                //WorkPackageServices.updateWorkPackageTestCompleteness(userContext, userContext.workPackageId);
 
-                log((msg) => console.log(msg), LogLevel.INFO, 'Updated Test Completeness');
+                //log((msg) => console.log(msg), LogLevel.INFO, 'Updated Test Completeness');
 
             }
         }
