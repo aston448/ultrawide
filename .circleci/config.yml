@@ -65,7 +65,7 @@ jobs:
 
       - run:
           name: wait-for-app
-          command: sleep 60
+          command: sleep 120
 
       - run:
           name: 100-int-test-designs

@@ -406,7 +406,7 @@ class ClientDesignUpdateComponentServicesClass{
             designUpdateComponent.componentParentReferenceIdNew
         );
 
-        console.log('Removing component %o', designUpdateComponent);
+        // console.log('Removing component %o', designUpdateComponent);
 
         let parentId = 'NONE';
 
