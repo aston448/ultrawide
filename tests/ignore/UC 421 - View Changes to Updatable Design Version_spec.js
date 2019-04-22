@@ -1,13 +1,13 @@
 
-import { TestFixtures }                 from '../../../test_framework/test_wrappers/test_fixtures.js';
-import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
-import { DesignUpdateActions }          from '../../../test_framework/test_wrappers/design_update_actions.js';
-import { DesignComponentActions }       from '../../../test_framework/test_wrappers/design_component_actions.js';
-import { UpdateComponentActions }       from '../../../test_framework/test_wrappers/design_update_component_actions.js';
-import { DesignComponentVerifications } from '../../../test_framework/test_wrappers/design_component_verifications.js';
+import { TestFixtures }                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignVersionActions }         from '../../test_framework/test_wrappers/design_version_actions.js';
+import { DesignUpdateActions }          from '../../test_framework/test_wrappers/design_update_actions.js';
+import { DesignComponentActions }       from '../../test_framework/test_wrappers/design_component_actions.js';
+import { UpdateComponentActions }       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import { DesignComponentVerifications } from '../../test_framework/test_wrappers/design_component_verifications.js';
 
-import {UpdateMergeStatus, ComponentType} from '../../../imports/constants/constants.js'
-import {DefaultItemNames} from '../../../imports/constants/default_names.js';
+import {UpdateMergeStatus, ComponentType} from '../../imports/constants/constants.js'
+import {DefaultItemNames} from '../../imports/constants/default_names.js';
 
 describe('UC 421 - View Changes to Updatable Design Version', function(){
 

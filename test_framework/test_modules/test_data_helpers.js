@@ -1,6 +1,7 @@
 /**
  * Created by aston on 05/12/2016.
  */
+import fs from 'fs';
 
 import { AppGlobal }                from '../../imports/collections/app/app_global.js';
 import { Designs }                  from '../../imports/collections/design/designs.js';
@@ -19,10 +20,13 @@ import { TestOutputLocationFiles }  from '../../imports/collections/configure/te
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
+import { ScenarioTestExpectations } from '../../imports/collections/design/scenario_test_expectations.js';
 
 import { ClientAppHeaderServices }      from '../../imports/apiClient/apiClientAppHeader.js';
 
 import {RoleType, WorkSummaryType, UltrawideDirectory, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
+import {DesignPermutations} from "../../imports/collections/design/design_permutations";
+import {DesignPermutationValues} from "../../imports/collections/design/design_permutation_values";
 
 class TestDataHelpersClass {
 
@@ -245,6 +249,62 @@ class TestDataHelpersClass {
             return dictionaryTerm;
         } else {
             throw new Meteor.Error("FAIL", "Dictionary entry " + termName + " not found.");
+        }
+    }
+
+    getDesignPermutation(designId, permutationName){
+
+        const designPermutation = DesignPermutations.findOne({
+            designId:           designId,
+            permutationName:    permutationName
+        });
+
+        if(designPermutation){
+            return designPermutation;
+        } else {
+            throw new Meteor.Error("FAIL", "Design Permutation " + permutationName + " not found.");
+        }
+    }
+
+    getDesignPermutationValue(designVersionId, permutationId, permutationValueName){
+
+        const designPermutationValue = DesignPermutationValues.findOne({
+            permutationId:          permutationId,
+            designVersionId:        designVersionId,
+            permutationValueName:   permutationValueName
+        });
+
+        if(designPermutationValue){
+            return designPermutationValue;
+        } else {
+            throw new Meteor.Error("FAIL", "Design Permutation Value" + permutationValueName + " not found.");
+        }
+    }
+
+    getTestExpectation(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId, permutationValue, expectFail=false){
+
+        const testExpectation = ScenarioTestExpectations.findOne({
+            designVersionId:        designVersionId,
+            scenarioReferenceId:    scenarioReferenceId,
+            testType:               testType,
+            permutationId:          permutationId,
+            permutationValueId:     permutationValueId,
+            valuePermutationValue:  permutationValue
+        });
+
+        if(expectFail){
+            if(testExpectation){
+                throw new Meteor.Error("FAIL", "Test Expectation for " + testType + " | " + permutationId + " | " + permutationValueId + " | " + permutationValue + " was found.");
+            } else {
+                return true;
+            }
+        } else {
+            if (testExpectation) {
+                return testExpectation;
+            } else {
+                this.dumpDbData('getTestExpectation');
+                throw new Meteor.Error("FAIL", "Test Expectation for " + testType + " | " + permutationId + " | " + permutationValueId + " | " + permutationValue + " not found.");
+            }
         }
     }
 
@@ -877,6 +937,31 @@ class TestDataHelpersClass {
 
 
 
+    }
+
+    dumpDbData(testName){
+
+        const fileName = '/Users/aston/ultrawide_data_test/dump_' + testName;
+
+        const designScenarios = DesignVersionComponents.find({componentType: ComponentType.SCENARIO}, {fields: {componentReferenceId:1, componentNameNew:1, designVersionId:1}});
+
+        let allJsonData = '';
+
+        designScenarios.forEach((scenario) => {
+            allJsonData += JSON.stringify(scenario, null, 2);
+            allJsonData += '\n';
+        });
+
+        allJsonData += '\n\n';
+
+        const testExpectations = ScenarioTestExpectations.find({});
+
+        testExpectations.forEach((expectation) => {
+            allJsonData += JSON.stringify(expectation, null, 2);
+            allJsonData += '\n';
+        });
+
+        fs.writeFileSync(fileName, allJsonData);
     }
 
 }

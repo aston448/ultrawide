@@ -1,10 +1,10 @@
 
-import { TestFixtures }                 from '../../../test_framework/test_wrappers/test_fixtures.js';
-import { DesignActions }                from '../../../test_framework/test_wrappers/design_actions.js';
-import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
-import { DesignComponentActions }       from '../../../test_framework/test_wrappers/design_component_actions.js';
+import { TestFixtures }                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignActions }                from '../../test_framework/test_wrappers/design_actions.js';
+import { DesignVersionActions }         from '../../test_framework/test_wrappers/design_version_actions.js';
+import { DesignComponentActions }       from '../../test_framework/test_wrappers/design_component_actions.js';
 
-import {ComponentType} from '../../../imports/constants/constants.js'
+import {ComponentType} from '../../imports/constants/constants.js'
 
 describe('UC 124 - Open or Close Design Component', function(){
 

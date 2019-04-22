@@ -1,19 +1,19 @@
-import { TestFixtures }                 from '../../../test_framework/test_wrappers/test_fixtures.js';
-import { DesignActions }                from '../../../test_framework/test_wrappers/design_actions.js';
-import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
-import { WorkPackageActions }           from '../../../test_framework/test_wrappers/work_package_actions.js';
-import { WpComponentActions }           from '../../../test_framework/test_wrappers/work_package_component_actions.js';
-import { OutputLocationsActions }       from '../../../test_framework/test_wrappers/output_locations_actions.js';
-import { TestIntegrationActions }       from '../../../test_framework/test_wrappers/test_integration_actions.js';
-import { DesignUpdateActions }          from '../../../test_framework/test_wrappers/design_update_actions.js';
-import { UpdateComponentActions }       from '../../../test_framework/test_wrappers/design_update_component_actions.js';
-import { WorkProgressSummaryActions }   from '../../../test_framework/test_wrappers/workProgressSummaryActions.js';
-import { WorkProgressSummaryVerifications } from '../../../test_framework/test_wrappers/workProgressSummaryVerifications.js';
-import { UserContextVerifications }     from '../../../test_framework/test_wrappers/user_context_verifications.js';
+import { TestFixtures }                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignActions }                from '../../test_framework/test_wrappers/design_actions.js';
+import { DesignVersionActions }         from '../../test_framework/test_wrappers/design_version_actions.js';
+import { WorkPackageActions }           from '../../test_framework/test_wrappers/work_package_actions.js';
+import { WpComponentActions }           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import { OutputLocationsActions }       from '../../test_framework/test_wrappers/output_locations_actions.js';
+import { TestIntegrationActions }       from '../../test_framework/test_wrappers/test_integration_actions.js';
+import { DesignUpdateActions }          from '../../test_framework/test_wrappers/design_update_actions.js';
+import { UpdateComponentActions }       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import { WorkProgressSummaryActions }   from '../../test_framework/test_wrappers/workProgressSummaryActions.js';
+import { WorkProgressSummaryVerifications } from '../../test_framework/test_wrappers/workProgressSummaryVerifications.js';
+import { UserContextVerifications }     from '../../test_framework/test_wrappers/user_context_verifications.js';
 
-import {DefaultLocationText} from '../../../imports/constants/default_names.js';
-import {DefaultItemNames} from '../../../imports/constants/default_names.js';
-import {TestLocationFileType, TestRunner, MashTestStatus, DesignUpdateMergeAction, RoleType} from '../../../imports/constants/constants.js';
+import {DefaultLocationText} from '../../imports/constants/default_names.js';
+import {DefaultItemNames} from '../../imports/constants/default_names.js';
+import {TestLocationFileType, TestRunner, MashTestStatus, DesignUpdateMergeAction, RoleType} from '../../imports/constants/constants.js';
 
 describe('UC 402 - View Work Progress Summary', function(){
 

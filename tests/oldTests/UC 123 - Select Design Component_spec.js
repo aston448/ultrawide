@@ -1,11 +1,11 @@
 
-import { TestFixtures }                 from '../../../test_framework/test_wrappers/test_fixtures.js';
-import { DesignActions }                from '../../../test_framework/test_wrappers/design_actions.js';
-import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
-import { DesignComponentActions }       from '../../../test_framework/test_wrappers/design_component_actions.js';
-import { UserContextVerifications }     from '../../../test_framework/test_wrappers/user_context_verifications.js';
+import { TestFixtures }                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import { DesignActions }                from '../../test_framework/test_wrappers/design_actions.js';
+import { DesignVersionActions }         from '../../test_framework/test_wrappers/design_version_actions.js';
+import { DesignComponentActions }       from '../../test_framework/test_wrappers/design_component_actions.js';
+import { UserContextVerifications }     from '../../test_framework/test_wrappers/user_context_verifications.js';
 
-import {RoleType, ComponentType} from '../../../imports/constants/constants.js'
+import {RoleType, ComponentType} from '../../imports/constants/constants.js'
 
 describe('UC 123 - Select Design Component', function(){
 

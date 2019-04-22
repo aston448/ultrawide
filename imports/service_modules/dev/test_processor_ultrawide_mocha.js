@@ -246,7 +246,7 @@ class UltrawideMochaTestServicesClass{
 
                             // Just one test, no permutations
 
-                            fileText += "        it('" + scenario.componentNameNew + "', function(){\n            // Replace this with test code\n            expect.fail(null, null, 'Test not implemented yet');\n        });\n\n";
+                            fileText += "        it.skip('" + scenario.componentNameNew + "', function(){\n            // Replace this with test code\n            // Remove skip once implemented\n        });\n\n";
 
                         } else {
 
@@ -276,7 +276,7 @@ class UltrawideMochaTestServicesClass{
 
                                         const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectationValue.permutationValueId);
 
-                                        fileText += "\n            it('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                // Replace this with test code\n                expect.fail(null, null, 'Test not implemented yet');\n            });\n\n";
+                                        fileText += "\n            it.skip('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                // Replace this with test code\n                // Remove skip once implemented\n            });\n\n";
                                     });
 
                                 });
@@ -384,7 +384,7 @@ class UltrawideMochaTestServicesClass{
 
                             // Just one unit test, no permutations
 
-                            fileText += "        it('" + scenario.componentNameNew + "', function(){\n            // Replace this with test code\n            expect.fail(null, null, 'Test not implemented yet');\n        });\n\n";
+                            fileText += "        it.skip('" + scenario.componentNameNew + "', function(){\n            // Replace this with test code\n            // Remove skip once implemented\n        });\n\n";
 
                         } else {
 
@@ -414,7 +414,7 @@ class UltrawideMochaTestServicesClass{
 
                                         const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectationValue.permutationValueId);
 
-                                        fileText += "\n            it('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                // Replace this with test code\n            expect.fail(null, null, 'Test not implemented yet');\n            });\n\n";
+                                        fileText += "\n            it.skip('" + permName + ' - ' + permValue.permutationValueName + "', function(){\n                // Replace this with test code\n            // Remove skip once implemented\n            });\n\n";
                                     });
 
                                 });

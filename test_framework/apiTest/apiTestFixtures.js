@@ -25,6 +25,10 @@ import { UserMashScenarioTests }        from '../../imports/collections/mash/use
 import { UserIntegrationTestResults }   from '../../imports/collections/test_results/user_ultrawide_test_results.js';
 import { UserUnitTestResults }          from '../../imports/collections/test_results/user_ultrawide_test_results.js';
 import { UserWorkProgressSummary }      from '../../imports/collections/summary/user_work_progress_summary.js';
+import {ScenarioTestExpectations}       from "../../imports/collections/design/scenario_test_expectations";
+import {DesignPermutations}             from "../../imports/collections/design/design_permutations";
+import {DesignPermutationValues}        from "../../imports/collections/design/design_permutation_values";
+
 import { DefaultFeatureAspectData }     from '../../imports/data/design/default_feature_aspect_db.js';
 import { ImpexModules}                  from "../../imports/service_modules/administration/impex_service_modules";
 
@@ -37,6 +41,11 @@ import { ClientIdentityServices } from '../../imports/apiClient/apiIdentity.js';
 import { ClientDesignComponentServices }    from '../../imports/apiClient/apiClientDesignComponent.js';
 import { DesignComponentModules }           from '../../imports/service_modules/design/design_component_service_modules.js';
 import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
+import {ClientDesignPermutationServices} from "../../imports/apiClient/apiClientDesignPermutation";
+import {RoleType} from "../../imports/constants/constants";
+import {DefaultItemNames} from "../../imports/constants/default_names";
+
+
 
 
 Meteor.methods({
@@ -70,8 +79,6 @@ Meteor.methods({
             // For testing we clear the DB and start from scratch
             //console.log('Clearing down DB Data...');
             DomainDictionary.remove({});
-            ScenarioSteps.remove({});
-            FeatureBackgroundSteps.remove({});
             DesignUpdateComponents.remove({});
             DesignVersionComponents.remove({});
             WorkPackageComponents.remove({});
@@ -86,6 +93,9 @@ Meteor.methods({
             UserTestTypeLocations.remove({});
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
+            ScenarioTestExpectations.remove({});
+            DesignPermutations.remove({});
+            DesignPermutationValues.remove({});
 
             UserMashScenarioTests.remove({});
 
@@ -338,8 +348,6 @@ Meteor.methods({
             // Clear all design data - used for test restore after disaster
 
             DomainDictionary.remove({});
-            ScenarioSteps.remove({});
-            FeatureBackgroundSteps.remove({});
             DesignUpdateComponents.remove({});
             DesignVersionComponents.remove({});
             WorkPackageComponents.remove({});
@@ -353,6 +361,8 @@ Meteor.methods({
             UserTestTypeLocations.remove({});
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
+            DesignPermutations.remove({});
+            DesignPermutationValues.remove({});
 
             UserMashScenarioTests.remove({});
 
@@ -645,6 +655,30 @@ Meteor.methods({
         const scenario4Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentNameNew: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario4');
         ClientDesignComponentServices.updateComponentName(view, mode, scenario4Component._id, 'Scenario4', rawName);
+
+
+
+        // Add some default design permutation data
+
+        // A permutation
+        ClientDesignPermutationServices.addDesignPermutation(RoleType.DESIGNER, userContext);
+        let perm = DesignPermutations.findOne({permutationName: DefaultItemNames.NEW_PERMUTATION_NAME});
+        perm.permutationName = 'Permutation1';
+
+        ClientDesignPermutationServices.saveDesignPermutation(RoleType.DESIGNER, perm);
+
+        // Some values
+
+        ClientDesignPermutationServices.addPermutationValue(RoleType.DESIGNER, perm._id, userContext.designVersionId);
+        let value = DesignPermutationValues.findOne({permutationValueName: DefaultItemNames.NEW_PERMUTATION_VALUE});
+        value.permutationValueName = 'PermValue1';
+        ClientDesignPermutationServices.savePermutationValue(RoleType.DESIGNER, value);
+
+        ClientDesignPermutationServices.addPermutationValue(RoleType.DESIGNER, perm._id, userContext.designVersionId);
+        value = DesignPermutationValues.findOne({permutationValueName: DefaultItemNames.NEW_PERMUTATION_VALUE});
+        value.permutationValueName = 'PermValue2';
+        ClientDesignPermutationServices.savePermutationValue(RoleType.DESIGNER, value);
+
     },
 
     'testFixtures.clearTestFiles'(locationName){
