@@ -833,6 +833,17 @@ class ImpexModulesClass{
                     workPackageComponentsMapping.push({oldId: wpComponent._id, newId: workPackageComponentId});
                 }
 
+                // Make sure that an WP Scenario added has the correct WP ID
+                if(wpComponent.componentType === ComponentType.SCENARIO){
+                    const scenario = DesignComponentData.getDesignComponentByRef(designVersionId, wpComponent.componentReferenceId);
+                    if(scenario){
+                        if(scenario.workPackageId !== workPackageId){
+                            log((msg) => console.log(msg), LogLevel.INFO, "Setting WP ID for Scenario " + scenario.componentNameNew);
+                            DesignComponentData.setWorkPackageId(scenario._id, workPackageId);
+                        }
+                    }
+                }
+
                 componentCount++;
             }
 

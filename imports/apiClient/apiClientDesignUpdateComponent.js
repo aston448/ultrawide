@@ -476,7 +476,7 @@ class ClientDesignUpdateComponentServicesClass{
             return {success: false, message: result};
         }
 
-        console.log('Restoring component %o', designUpdateComponent);
+        // console.log('Restoring component %o', designUpdateComponent);
 
         // Real action call
         ServerDesignUpdateComponentApi.restoreDesignComponent(
