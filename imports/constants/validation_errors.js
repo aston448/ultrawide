@@ -264,3 +264,9 @@ export const DesignPermutationValidationErrors = {
     PERMUTATION_VALUE_SAVE_DUPLICATE_NAME:              'A Design Permutation Value with this name already exists in this Permutation'
 };
 
+export const TestExpectationValidationErrors = {
+    EXPECTATION_ADD_INVALID_ROLE:                       'Only a Designer can add Test Expectations',
+    EXPECTATION_UPDATE_INVALID_ROLE:                    'Only a Designer can update Test Expectations',
+    EXPECTATION_REMOVE_INVALID_ROLE:                    'Only a Designer can remove Test Expectations',
+}
+

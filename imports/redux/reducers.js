@@ -41,7 +41,6 @@ const initialState = {
     currentUserDesignTab:               EditorTab.TAB_DETAILS,
     currentUserUpdateTab:               EditorTab.TAB_DETAILS,
     currentUserWpTab:                   EditorTab.TAB_DETAILS,
-    currentUserDevTab:                  EditorTab.TAB_DETAILS,
     currentUserBacklogItem:             DisplayContext.DV_BACKLOG_DESIGN,
     currentUserDesignAnomaly:           'NONE',
     currentUserTestOutputLocationId:    'NONE',
@@ -182,10 +181,6 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_CURRENT_USER_WP_TAB:
             return Object.assign({}, state, {
                 currentUserWpTab: action.newTab
-            });
-        case Actions.SET_CURRENT_USER_DEV_TAB:
-            return Object.assign({}, state, {
-                currentUserDevTab: action.newTab
             });
         case Actions.SET_CURRENT_USER_BACKLOG_ITEM:
             return Object.assign({}, state, {

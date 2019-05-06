@@ -88,11 +88,6 @@ class EditorContainerUiModulesClass{
         return store.getState().currentUserWpTab;
     }
 
-    getCurrentDevTab(){
-
-        return store.getState().currentUserDevTab;
-    }
-
     setCurrentDesignTab(tab){
 
         store.dispatch(setCurrentUserDesignTab(tab));
@@ -578,15 +573,12 @@ class EditorContainerUiModulesClass{
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_SCOPE_WAIT:
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
 
                 isActiveTab = (this.getCurrentWpTab() === tabKey);
                 break;
 
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-
-                isActiveTab = (this.getCurrentDevTab() === tabKey);
-                break;
         }
 
         let tabBadgeFormat = ' faded';
@@ -622,7 +614,6 @@ class EditorContainerUiModulesClass{
         const activeDesignTabKey = this.getCurrentDesignTab();
         const activeUpdateTabKey = this.getCurrentUpdateTab();
         const activeWpTabKey = this.getCurrentWpTab();
-        const activeDevTabKey = this.getCurrentDevTab();
 
         const detailsTabTitle = this.getTabTitle(view, EditorTab.TAB_DETAILS);
         const testExpectationsTabTitle = this.getTabTitle(view, EditorTab.TAB_TEST_EXPECTATIONS);
@@ -687,23 +678,12 @@ class EditorContainerUiModulesClass{
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_SCOPE_WAIT:
-
-                return(
-                    <Col id={colId} md={colWidth} className="close-col">
-                        <Tabs className="top-tabs" activeKey={activeWpTabKey} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentWpTab(tab)}>
-                            <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
-                            <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
-                            <Tab eventKey={EditorTab.TAB_DOMAIN_DICT} title={dictionaryTabTitle}>>{this.getDomainDictionary(userContext)}</Tab>
-                        </Tabs>
-                    </Col>
-                );
-
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
 
                 return(
                     <Col id={colId} md={colWidth} className="close-col">
-                        <Tabs className="top-tabs" activeKey={activeDevTabKey} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentDevTab(tab)}>
+                        <Tabs className="top-tabs" activeKey={activeWpTabKey} id="updatable-view_tabs" onSelect={(tab) => this.setCurrentWpTab(tab)}>
                             <Tab eventKey={EditorTab.TAB_DETAILS} title={detailsTabTitle}>{this.getDesignDetails(userContext, view, editors.displayContext)}</Tab>
                             <Tab eventKey={EditorTab.TAB_ANOMALIES} title={anomaliesTabTitle}>{this.getDesignVersionAnomalies(userContext)}</Tab>
                             <Tab eventKey={EditorTab.TAB_TEST_EXPECTATIONS} title={testExpectationsTabTitle}>{this.getTestExpectations(view, userContext)}</Tab>

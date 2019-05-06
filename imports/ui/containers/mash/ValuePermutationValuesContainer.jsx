@@ -42,9 +42,9 @@ export class ValuePermutationValuesList extends Component {
 
     };
 
-    addNewValuePermutationValue(userContext, scenarioReferenceId, testType) {
+    addNewValuePermutationValue(userRole, userContext, scenarioReferenceId, testType) {
         //ClientDesignPermutationServices.addPermutationValue(this.props.userRole, 'VALUE', this.props.userContext.designVersionId);
-        ClientScenarioTestExpectationServices.addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType)
+        ClientScenarioTestExpectationServices.addNewSpecificValueTestExpectation(userRole, userContext, scenarioReferenceId, testType)
     };
 
     getScenarioValueExpectation(dvId, scenarioRefId, testType, permId, permValueId){
@@ -67,7 +67,7 @@ export class ValuePermutationValuesList extends Component {
 
     render() {
 
-        const {permutationValuesData, testType, scenarioRefId, userContext} = this.props;
+        const {permutationValuesData, testType, scenarioRefId, userRole, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Permutation Values List');
 
@@ -80,7 +80,7 @@ export class ValuePermutationValuesList extends Component {
                     <DesignComponentAdd
                         addText={'Add Test Value'}
                         uiContextId={'TEST_VALUE'}
-                        onClick={() => this.addNewValuePermutationValue(userContext, scenarioRefId, testType)}
+                        onClick={() => this.addNewValuePermutationValue(userRole, userContext, scenarioRefId, testType)}
                     />
                 </div>
             );
@@ -90,7 +90,7 @@ export class ValuePermutationValuesList extends Component {
                     <DesignComponentAdd
                         addText={'Add Test Value'}
                         uiContextId={'TEST_VALUE'}
-                        onClick={() => this.addNewValuePermutationValue(userContext, scenarioRefId, testType)}
+                        onClick={() => this.addNewValuePermutationValue(userRole, userContext, scenarioRefId, testType)}
                     />
                 </div>
             );

@@ -97,8 +97,7 @@ function mapStateToProps(state) {
         currentViewDataValue:   state.currentViewOptionsDataValue,
         currentUserDesignTab:   state.currentUserDesignTab,             // Include the tabs so that there is a render when they change
         currentUserUpdateTab:   state.currentUserUpdateTab,
-        currentUserWpTab:       state.currentUserWpTab,
-        currentUserDevTab:      state.currentUserDevTab
+        currentUserWpTab:       state.currentUserWpTab
     }
 }
 

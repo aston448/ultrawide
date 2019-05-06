@@ -19,10 +19,11 @@ import {
 
 class ServerScenarioTestExpectationApiClass {
 
-    addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType, callback){
+    addNewSpecificValueTestExpectation(userRole, userContext, scenarioReferenceId, testType, callback){
 
         addNewSpecificValueTestExpectation.call(
             {
+                userRole:               userRole,
                 userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType
@@ -33,10 +34,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     };
 
-    updateSpecificValueTestExpectation(expectationId, newValue, callback){
+    updateSpecificValueTestExpectation(userRole, expectationId, newValue, callback){
 
         updateSpecificValueTestExpectation.call(
             {
+                userRole:               userRole,
                 expectationId:          expectationId,
                 newValue:               newValue
             },
@@ -46,10 +48,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     };
 
-    removeSpecificValueTestExpectation(expectationId, callback){
+    removeSpecificValueTestExpectation(userRole, expectationId, callback){
 
         removeSpecificValueTestExpectation.call(
             {
+                userRole:               userRole,
                 expectationId:          expectationId
             },
             (err, result) => {
@@ -58,10 +61,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     };
 
-    selectTestType(userContext, scenarioReferenceId, testType, callback){
+    selectTestType(userRole, userContext, scenarioReferenceId, testType, callback){
 
         selectTestType.call(
             {
+                userRole:               userRole,
                 userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType
@@ -72,10 +76,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     };
 
-    unselectTestType(userContext, scenarioReferenceId, testType, callback){
+    unselectTestType(userRole, userContext, scenarioReferenceId, testType, callback){
 
         unselectTestType.call(
             {
+                userRole:               userRole,
                 userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType
@@ -86,10 +91,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     };
 
-    unselectTestTypePermutation(userContext, scenarioReferenceId, testType, permutationId, callback){
+    unselectTestTypePermutation(userRole, userContext, scenarioReferenceId, testType, permutationId, callback){
 
         unselectTestTypePermutation.call(
             {
+                userRole:               userRole,
                 userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType,
@@ -101,10 +107,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     }
 
-    selectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId, callback){
+    selectTestTypePermutationValue(userRole, userContext, scenarioReferenceId, testType, permutationId, permutationValueId, callback){
 
         selectTestTypePermutationValue.call(
             {
+                userRole:               userRole,
                 userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType,
@@ -117,10 +124,11 @@ class ServerScenarioTestExpectationApiClass {
         );
     }
 
-    unselectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId, callback){
+    unselectTestTypePermutationValue(userRole, userContext, scenarioReferenceId, testType, permutationId, permutationValueId, callback){
 
         unselectTestTypePermutationValue.call(
             {
+                userRole:               userRole,
                 userContext:            userContext,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType,

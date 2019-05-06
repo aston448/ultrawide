@@ -21,6 +21,8 @@ import { DesignUpdateComponentData }        from '../data/design_update/design_u
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setWorkPackageScopeItems } from '../redux/actions';
+import {ClientAppHeaderServices} from "./apiClientAppHeader";
+import {DisplayContext} from "../constants/constants";
 
 // =====================================================================================================================
 // Client API for Work Package Items
@@ -603,6 +605,9 @@ class ClientWorkPackageServicesClass {
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
         }
+
+        // Show all WP Features
+        ClientAppHeaderServices.setViewLevelFeatures(userContext, DisplayContext.WP_VIEW);
 
         // Ensure that the current update is the update we chose to view
         this.setWorkPackage(userContext, workPackageToViewId);

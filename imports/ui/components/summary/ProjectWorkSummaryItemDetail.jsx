@@ -29,6 +29,7 @@ import store from '../../../redux/store'
 import {
     setCurrentUserSummaryItem
 } from '../../../redux/actions'
+import {ClientWorkPackageServices} from "../../../apiClient/apiClientWorkPackage";
 
 
 
@@ -62,8 +63,13 @@ export class ProjectSummaryWorkItemDetail extends Component{
         store.dispatch(setCurrentUserSummaryItem(summaryId));
     }
 
+    viewWorkPackage(userRole, userContext, wpId, wpType){
+        //console.log('View WP for %s %s %s %s', userRole, userContext, wpId, wpType);
+        ClientWorkPackageServices.viewWorkPackage(userRole, userContext, wpId, wpType)
+    }
+
     render() {
-        const {workItemType, summaryData, workItem, currentUserSummaryItem} = this.props;
+        const {workItemType, summaryData, workItem, currentUserSummaryItem, userRole, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Project Work Summary Item Detail {}', summaryData.workItemName);
 
@@ -90,6 +96,12 @@ export class ProjectSummaryWorkItemDetail extends Component{
         );
 
         // Specific tooltips...
+        let gotoTooltip = (
+            <Tooltip id="modal-tooltip">
+                {'Goto WP'}
+            </Tooltip>
+        );
+
         const tooltipNoTests = (
             <Tooltip id="modal-tooltip">
                 {'WP has no passing tests'}
@@ -264,12 +276,23 @@ export class ProjectSummaryWorkItemDetail extends Component{
             </InputGroup.Addon>;
 
         let statusBadge = <div></div>;
+        let gotoIcon = <div></div>
 
         if(workItemType === WorkItemType.BASE_WORK_PACKAGE || workItemType === WorkItemType.UPDATE_WORK_PACKAGE){
+
             statusBadge =
                 <InputGroup.Addon>
                     <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={statusTooltip}>
                         <Badge className={statusClass}>{status}</Badge>
+                    </OverlayTrigger>
+                </InputGroup.Addon>;
+
+            gotoIcon =
+                <InputGroup.Addon>
+                    <OverlayTrigger delayShow={tooltipDelay} placement="top" overlay={gotoTooltip}>
+                        <div className={resultClassScenarios} onClick={() => this.viewWorkPackage(userRole, userContext, workItem._id, workItem.workPackageType)}>
+                            <Glyphicon glyph="eye-open"/>
+                        </div>
                     </OverlayTrigger>
                 </InputGroup.Addon>;
         }
@@ -388,6 +411,7 @@ export class ProjectSummaryWorkItemDetail extends Component{
                     <Col md={5} className='close-col'>
                         <div className={nameClass}>
                             <InputGroup>
+                                {gotoIcon}
                                 {badge}
                                 {statusBadge}
                                 {itemText}
@@ -423,7 +447,9 @@ ProjectSummaryWorkItemDetail.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserSummaryItem:     state.currentUserSummaryItem
+        currentUserSummaryItem:     state.currentUserSummaryItem,
+        userRole:                   state.currentUserRole,
+        userContext:                state.currentUserItemContext
     }
 }
 

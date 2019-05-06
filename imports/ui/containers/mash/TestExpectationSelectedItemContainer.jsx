@@ -186,7 +186,7 @@ function mapStateToProps(state) {
         testDataStale:      state.testDataStale,
         userViewOptions:    state.currentUserViewOptions,
         designTab:          state.currentUserDesignTab,
-        devTab:             state.currentUserDevTab
+        wpTab:              state.currentUserWpTab
     }
 }
 

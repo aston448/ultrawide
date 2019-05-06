@@ -13,34 +13,34 @@ import { ScenarioTestExpectationValidationServices } from '../service_modules/va
 class ScenarioTestExpectationValidationApiClass {
 
 
-    validateAddTestTypeExpectation(){
+    validateAddTestTypeExpectation(userRole){
 
-        return ScenarioTestExpectationValidationServices.validateAddTestTypeExpectation();
+        return ScenarioTestExpectationValidationServices.validateAddTestTypeExpectation(userRole);
     }
 
-    validateUpdateTestTypeExpectation(){
+    validateUpdateTestTypeExpectation(userRole){
 
-        return ScenarioTestExpectationValidationServices.validateUpdateTestTypeExpectation();
+        return ScenarioTestExpectationValidationServices.validateUpdateTestTypeExpectation(userRole);
     }
 
-    validateAddTestTypePermutationValueExpectation(){
+    validateAddTestTypePermutationValueExpectation(userRole){
 
-        return ScenarioTestExpectationValidationServices.validateAddTestTypePermutationValueExpectation();
+        return ScenarioTestExpectationValidationServices.validateAddTestTypePermutationValueExpectation(userRole);
     }
 
-    validateRemoveTestTypePermutationValueExpectation(){
+    validateRemoveTestTypePermutationValueExpectation(userRole){
 
-        return ScenarioTestExpectationValidationServices.validateRemoveTestTypePermutationValueExpectation();
+        return ScenarioTestExpectationValidationServices.validateRemoveTestTypePermutationValueExpectation(userRole);
     }
 
-    validateRemoveTestTypePermutationExpectation(){
+    validateRemoveTestTypePermutationExpectation(userRole){
 
-        return ScenarioTestExpectationValidationServices.validateRemoveTestTypePermutationExpectation();
+        return ScenarioTestExpectationValidationServices.validateRemoveTestTypePermutationExpectation(userRole);
     }
 
-    validateRemoveTestTypeExpectation(){
+    validateRemoveTestTypeExpectation(userRole){
 
-        return ScenarioTestExpectationValidationServices.validateRemoveTestTypeExpectation();
+        return ScenarioTestExpectationValidationServices.validateRemoveTestTypeExpectation(userRole);
     }
 
 }

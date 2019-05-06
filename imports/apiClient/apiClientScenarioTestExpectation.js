@@ -25,10 +25,10 @@ class ClientScenarioTestExpectationServicesClass {
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // User adds a new specified value expectation
-    addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType){
+    addNewSpecificValueTestExpectation(userRole, userContext, scenarioReferenceId, testType){
 
         // Client validation
-        let result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation();
+        let result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -37,7 +37,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.addNewSpecificValueTestExpectation(userContext, scenarioReferenceId, testType, (err, result) => {
+        ServerScenarioTestExpectationApi.addNewSpecificValueTestExpectation(userRole, userContext, scenarioReferenceId, testType, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -59,10 +59,10 @@ class ClientScenarioTestExpectationServicesClass {
     }
 
     // User updates the value of a specified value expectation
-    updateSpecificValueTestExpectation(expectationId, newValue){
+    updateSpecificValueTestExpectation(userRole, expectationId, newValue){
 
         // Client validation
-        let result = ScenarioTestExpectationValidationApi.validateUpdateTestTypeExpectation();
+        let result = ScenarioTestExpectationValidationApi.validateUpdateTestTypeExpectation(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -71,7 +71,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.updateSpecificValueTestExpectation(expectationId, newValue, (err, result) => {
+        ServerScenarioTestExpectationApi.updateSpecificValueTestExpectation(userRole, expectationId, newValue, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -93,10 +93,10 @@ class ClientScenarioTestExpectationServicesClass {
     }
 
     // User removes a specified value expectation
-    removeSpecificValueTestExpectation(expectationId){
+    removeSpecificValueTestExpectation(userRole, expectationId){
 
         // Client validation
-        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation();
+        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -105,7 +105,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.removeSpecificValueTestExpectation(expectationId, (err, result) => {
+        ServerScenarioTestExpectationApi.removeSpecificValueTestExpectation(userRole, expectationId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -127,10 +127,10 @@ class ClientScenarioTestExpectationServicesClass {
     }
 
     // User selects a test type ----------------------------------------------------------------------------------------
-    selectTestTypeExpectation(userContext, scenarioReferenceId, testType){
+    selectTestTypeExpectation(userRole, userContext, scenarioReferenceId, testType){
 
         // Client validation
-        let result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation();
+        let result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -139,7 +139,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.selectTestType(userContext, scenarioReferenceId, testType, (err, result) => {
+        ServerScenarioTestExpectationApi.selectTestType(userRole, userContext, scenarioReferenceId, testType, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -160,10 +160,10 @@ class ClientScenarioTestExpectationServicesClass {
     };
 
     // User de-selects a test type -------------------------------------------------------------------------------------
-    unselectTestTypeExpectation(userContext, scenarioReferenceId, testType){
+    unselectTestTypeExpectation(userRole, userContext, scenarioReferenceId, testType){
 
         // Client validation
-        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation();
+        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -172,7 +172,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestType(userContext, scenarioReferenceId, testType, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestType(userRole, userContext, scenarioReferenceId, testType, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -193,10 +193,10 @@ class ClientScenarioTestExpectationServicesClass {
     };
 
     // User de-selects a test type permutation -------------------------------------------------------------------------
-    unselectTestTypePermutationExpectation(userContext, scenarioReferenceId, testType, permutationId){
+    unselectTestTypePermutationExpectation(userRole, userContext, scenarioReferenceId, testType, permutationId){
 
         // Client validation
-        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationExpectation();
+        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationExpectation(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -205,7 +205,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestTypePermutation(userContext, scenarioReferenceId, testType, permutationId, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestTypePermutation(userRole, userContext, scenarioReferenceId, testType, permutationId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -227,10 +227,10 @@ class ClientScenarioTestExpectationServicesClass {
 
 
     // User selects a test type permutation value-----------------------------------------------------------------------
-    selectTestTypePermutationValueExpectation(userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
+    selectTestTypePermutationValueExpectation(userRole, userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
 
         // Client validation
-        let result = ScenarioTestExpectationValidationApi.validateAddTestTypePermutationValueExpectation();
+        let result = ScenarioTestExpectationValidationApi.validateAddTestTypePermutationValueExpectation(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -239,7 +239,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.selectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
+        ServerScenarioTestExpectationApi.selectTestTypePermutationValue(userRole, userContext, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -261,10 +261,10 @@ class ClientScenarioTestExpectationServicesClass {
     };
 
     // User de-selects a test type permutation value--------------------------------------------------------------------
-    unselectTestTypePermutationValueExpectation(userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
+    unselectTestTypePermutationValueExpectation(userRole, userContext, scenarioReferenceId, testType, permutationId, permutationValueId){
 
         // Client validation
-        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationValueExpectation();
+        let result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationValueExpectation(userRole);
 
         if(result !== Validation.VALID){
             // Business validation failed - show error on screen
@@ -273,7 +273,7 @@ class ClientScenarioTestExpectationServicesClass {
         }
 
         // Real action call - server actions
-        ServerScenarioTestExpectationApi.unselectTestTypePermutationValue(userContext, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
+        ServerScenarioTestExpectationApi.unselectTestTypePermutationValue(userRole, userContext, scenarioReferenceId, testType, permutationId, permutationValueId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.

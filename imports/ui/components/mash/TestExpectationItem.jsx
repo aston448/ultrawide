@@ -13,7 +13,7 @@ import ValuePermutationValuesContainer      from '../../containers/mash/ValuePer
 // Ultrawide Services
 import {ClientScenarioTestExpectationServices} from "../../../apiClient/apiClientScenarioTestExpectation.js";
 
-import {ItemType, LogLevel} from '../../../constants/constants.js';
+import {ItemType, LogLevel, RoleType} from '../../../constants/constants.js';
 import {log, getContextID} from "../../../common/utils";
 import { TextLookups } from "../../../common/lookups";
 import {UI} from "../../../constants/ui_context_ids";
@@ -52,7 +52,8 @@ export class TestExpectationItem extends Component {
                 this.props.userContext.designVersionId,
                 this.props.itemRef,
                 this.props.testType
-            )
+            ),
+            editable: this.props.userRole === RoleType.DESIGNER
         };
 
     }
@@ -72,50 +73,58 @@ export class TestExpectationItem extends Component {
         return ClientScenarioTestExpectationServices.hasChildExpectations(itemType, designVersionId, itemRef, testType, permId)
     }
 
-    addExpectation(itemType, testType, itemId, itemParentId, itemRef, userContext){
+    addExpectation(itemType, testType, itemId, itemParentId, itemRef, userRole, userContext){
 
         switch(itemType){
             case ItemType.TEST_TYPE:
-                ClientScenarioTestExpectationServices.selectTestTypeExpectation(userContext, itemRef, testType);
+                ClientScenarioTestExpectationServices.selectTestTypeExpectation(userRole, userContext, itemRef, testType);
                 break;
             case ItemType.PERMUTATION_VALUE:
-                ClientScenarioTestExpectationServices.selectTestTypePermutationValueExpectation(userContext, itemRef, testType, itemParentId, itemId);
+                ClientScenarioTestExpectationServices.selectTestTypePermutationValueExpectation(userRole, userContext, itemRef, testType, itemParentId, itemId);
                 break;
         }
 
-        this.setState({selected: true});
+        if(this.state.editable){
+            this.setState({selected: true});
+        }
     }
 
-    removeExpectation(itemType, testType, itemId, itemParentId, itemRef, userContext){
+    removeExpectation(itemType, testType, itemId, itemParentId, itemRef, userRole, userContext){
 
         switch(itemType){
             case ItemType.TEST_TYPE:
-                ClientScenarioTestExpectationServices.unselectTestTypeExpectation(userContext, itemRef, testType);
+                ClientScenarioTestExpectationServices.unselectTestTypeExpectation(userRole, userContext, itemRef, testType);
                 break;
             case ItemType.DESIGN_PERMUTATION:
-                ClientScenarioTestExpectationServices.unselectTestTypePermutationExpectation(userContext, itemRef, testType, itemId);
+                ClientScenarioTestExpectationServices.unselectTestTypePermutationExpectation(userRole, userContext, itemRef, testType, itemId);
                 break;
             case ItemType.PERMUTATION_VALUE:
-                ClientScenarioTestExpectationServices.unselectTestTypePermutationValueExpectation(userContext, itemRef, testType, itemParentId, itemId);
+                ClientScenarioTestExpectationServices.unselectTestTypePermutationValueExpectation(userRole, userContext, itemRef, testType, itemParentId, itemId);
                 break;
         }
 
-        this.setState({selected: false});
-        this.setState({expanded: false});
+        if(this.state.editable) {
+            this.setState({selected: false});
+            this.setState({expanded: false});
+        }
     }
 
     setExpanded(){
 
-        this.setState({expanded: true});
+        if(this.state.editable) {
+            this.setState({expanded: true});
+        }
     }
 
     setUnexpanded(){
 
-        this.setState({expanded: false});
+        if(this.state.editable) {
+            this.setState({expanded: false});
+        }
     }
 
     render() {
-        const {testType, itemType, itemId, itemParentId, itemRef, itemText, itemStatus, permutationActive, userContext} = this.props;
+        const {testType, itemType, itemId, itemParentId, itemRef, itemText, itemStatus, permutationActive, userRole, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Scenario Test Expectations');
 
@@ -127,7 +136,7 @@ export class TestExpectationItem extends Component {
                     body =
                         <div className='test-expectation-active'>
                             <InputGroup>
-                                <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', itemRef, userContext)}>
+                                <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', itemRef, userRole, userContext)}>
                                     <div className='in-scope'><Glyphicon glyph="ok"/></div>
                                 </InputGroup.Addon>
                                     <div className={itemStatus}>
@@ -152,7 +161,7 @@ export class TestExpectationItem extends Component {
                         body =
                             <div className='test-expectation-active'>
                                 <InputGroup>
-                                    <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', itemRef, userContext)}>
+                                    <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, 'NONE', itemRef, userRole, userContext)}>
                                         <div className='in-scope'><Glyphicon glyph="ok"/></div>
                                     </InputGroup.Addon>
                                     <div className={itemStatus}>
@@ -168,7 +177,7 @@ export class TestExpectationItem extends Component {
                         body =
                             <div className='test-expectation'>
                                 <InputGroup>
-                                    <InputGroup.Addon onClick={() => this.addExpectation(itemType, testType, itemId, 'NONE', itemRef, userContext)}>
+                                    <InputGroup.Addon onClick={() => this.addExpectation(itemType, testType, itemId, 'NONE', itemRef, userRole, userContext)}>
                                         <div className='out-scope'><Glyphicon glyph="ok"/></div>
                                     </InputGroup.Addon>
                                     <div>{'No ' + itemText + ' test'}</div>
@@ -265,7 +274,7 @@ export class TestExpectationItem extends Component {
 
                         <div className='value-expectation-active'>
                             <InputGroup>
-                                <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, itemParentId, itemRef, userContext)}>
+                                <InputGroup.Addon onClick={() => this.removeExpectation(itemType, testType, itemId, itemParentId, itemRef, userRole, userContext)}>
                                     <div className='in-scope'><Glyphicon glyph="ok"/></div>
                                 </InputGroup.Addon>
                                 <div>{itemText}</div>
@@ -278,7 +287,7 @@ export class TestExpectationItem extends Component {
                     body =
                         <div className='value-expectation'>
                             <InputGroup>
-                                <InputGroup.Addon onClick={() => this.addExpectation(itemType, testType, itemId, itemParentId, itemRef, userContext)}>
+                                <InputGroup.Addon onClick={() => this.addExpectation(itemType, testType, itemId, itemParentId, itemRef, userRole, userContext)}>
                                     <div className='out-scope'><Glyphicon glyph="ok"/></div>
                                 </InputGroup.Addon>
                                 <div>{itemText}</div>

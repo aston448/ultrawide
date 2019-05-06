@@ -14,14 +14,15 @@ export const addNewSpecificValueTestExpectation = new ValidatedMethod({
     name: 'scenarioTestExpectations.addNewSpecificValueTestExpectation',
 
     validate: new SimpleSchema({
+        userRole:               {type: String},
         userContext:            {type: Object, blackbox: true},
         scenarioReferenceId:    {type: String},
         testType:               {type: String}
     }).validator(),
 
-    run({userContext, scenarioReferenceId, testType}){
+    run({userRole, userContext, scenarioReferenceId, testType}){
 
-        const result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation();
+        const result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('scenarioTestExpectations.addNewSpecificValueTestExpectation.failValidation', result)
@@ -41,13 +42,14 @@ export const updateSpecificValueTestExpectation = new ValidatedMethod({
     name: 'scenarioTestExpectations.updateSpecificValueTestExpectation',
 
     validate: new SimpleSchema({
+        userRole:               {type: String},
         expectationId:          {type: String},
         newValue:               {type: String}
     }).validator(),
 
-    run({expectationId, newValue}){
+    run({userRole, expectationId, newValue}){
 
-        const result = ScenarioTestExpectationValidationApi.validateUpdateTestTypeExpectation();
+        const result = ScenarioTestExpectationValidationApi.validateUpdateTestTypeExpectation(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('scenarioTestExpectations.updateSpecificValueTestExpectation.failValidation', result)
@@ -67,12 +69,13 @@ export const removeSpecificValueTestExpectation = new ValidatedMethod({
     name: 'scenarioTestExpectations.removeSpecificValueTestExpectation',
 
     validate: new SimpleSchema({
+        userRole:               {type: String},
         expectationId:          {type: String}
     }).validator(),
 
-    run({expectationId, newValue}){
+    run({userRole, expectationId, newValue}){
 
-        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation();
+        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('scenarioTestExpectations.removeSpecificValueTestExpectation.failValidation', result)
@@ -92,14 +95,15 @@ export const selectTestType = new ValidatedMethod({
     name: 'scenarioTestExpectations.selectTestType',
 
     validate: new SimpleSchema({
+        userRole:               {type: String},
         userContext:            {type: Object, blackbox: true},
         scenarioReferenceId:    {type: String},
         testType:               {type: String}
     }).validator(),
 
-    run({userContext, scenarioReferenceId, testType}){
+    run({userRole, userContext, scenarioReferenceId, testType}){
 
-        const result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation();
+        const result = ScenarioTestExpectationValidationApi.validateAddTestTypeExpectation(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('scenarioTestExpectations.selectTestType.failValidation', result)
@@ -119,14 +123,15 @@ export const unselectTestType = new ValidatedMethod({
     name: 'scenarioTestExpectations.unselectTestType',
 
     validate: new SimpleSchema({
+        userRole:               {type: String},
         userContext:            {type: Object, blackbox: true},
         scenarioReferenceId:    {type: String},
         testType:               {type: String}
     }).validator(),
 
-    run({userContext, scenarioReferenceId, testType}){
+    run({userRole, userContext, scenarioReferenceId, testType}){
 
-        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation();
+        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypeExpectation(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('scenarioTestExpectations.unselectTestType.failValidation', result)
@@ -146,15 +151,16 @@ export const unselectTestTypePermutation = new ValidatedMethod({
     name: 'scenarioTestExpectations.unselectTestTypePermutation',
 
     validate: new SimpleSchema({
+        userRole:               {type: String},
         userContext:            {type: Object, blackbox: true},
         scenarioReferenceId:    {type: String},
         testType:               {type: String},
         permutationId:          {type: String}
     }).validator(),
 
-    run({userContext, scenarioReferenceId, testType, permutationId}){
+    run({userRole, userContext, scenarioReferenceId, testType, permutationId}){
 
-        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationExpectation();
+        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationExpectation(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('scenarioTestExpectations.unselectTestTypePermutation.failValidation', result)
@@ -174,6 +180,7 @@ export const selectTestTypePermutationValue = new ValidatedMethod({
     name: 'scenarioTestExpectations.selectTestTypePermutationValue',
 
     validate: new SimpleSchema({
+        userRole:               {type: String},
         userContext:            {type: Object, blackbox: true},
         scenarioReferenceId:    {type: String},
         testType:               {type: String},
@@ -181,9 +188,9 @@ export const selectTestTypePermutationValue = new ValidatedMethod({
         permutationValueId:     {type: String}
     }).validator(),
 
-    run({userContext, scenarioReferenceId, testType, permutationId, permutationValueId}){
+    run({userRole, userContext, scenarioReferenceId, testType, permutationId, permutationValueId}){
 
-        const result = ScenarioTestExpectationValidationApi.validateAddTestTypePermutationValueExpectation();
+        const result = ScenarioTestExpectationValidationApi.validateAddTestTypePermutationValueExpectation(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('scenarioTestExpectations.selectTestTypePermutationValue.failValidation', result)
@@ -203,6 +210,7 @@ export const unselectTestTypePermutationValue = new ValidatedMethod({
     name: 'scenarioTestExpectations.unselectTestTypePermutationValue',
 
     validate: new SimpleSchema({
+        userRole:               {type: String},
         userContext:            {type: Object, blackbox: true},
         scenarioReferenceId:    {type: String},
         testType:               {type: String},
@@ -210,9 +218,9 @@ export const unselectTestTypePermutationValue = new ValidatedMethod({
         permutationValueId:     {type: String}
     }).validator(),
 
-    run({userContext, scenarioReferenceId, testType, permutationId, permutationValueId}){
+    run({userRole, userContext, scenarioReferenceId, testType, permutationId, permutationValueId}){
 
-        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationValueExpectation();
+        const result = ScenarioTestExpectationValidationApi.validateRemoveTestTypePermutationValueExpectation(userRole);
 
         if (result !== Validation.VALID) {
             throw new Meteor.Error('scenarioTestExpectations.unselectTestTypePermutationValue.failValidation', result)

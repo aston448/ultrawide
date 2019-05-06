@@ -15,7 +15,6 @@ class DomainDictUiServicesClass{
         const designTab = store.getState().currentUserDesignTab;
         const updateTab = store.getState().currentUserUpdateTab;
         const wpTab = store.getState().currentUserWpTab;
-        const devTab = store.getState().currentUserDevTab;
 
         const designView = (props.view === ViewType.DESIGN_NEW || props.view === ViewType.DESIGN_PUBLISHED || props.view === ViewType.DESIGN_UPDATABLE);
         const updateView = (props.view === ViewType.DESIGN_UPDATE_VIEW || props.view === ViewType.DESIGN_UPDATE_EDIT);
@@ -34,7 +33,7 @@ class DomainDictUiServicesClass{
             (designView && props.userViewOptions.designShowAllAsTabs && designTab === EditorTab.TAB_DOMAIN_DICT) ||
             (updateView && props.userViewOptions.updateShowAllAsTabs && updateTab === EditorTab.TAB_DOMAIN_DICT) ||
             (wpView && props.userViewOptions.workShowAllAsTabs && wpTab === EditorTab.TAB_DOMAIN_DICT) ||
-            (devView && props.userViewOptions.workShowAllAsTabs && devTab === EditorTab.TAB_DOMAIN_DICT)
+            (devView && props.userViewOptions.workShowAllAsTabs && wpTab === EditorTab.TAB_DOMAIN_DICT)
         ){
             shouldUpdate = true;
         }

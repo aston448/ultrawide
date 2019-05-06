@@ -1,7 +1,7 @@
 
 // Ultrawide Services
 import { RoleType} from '../../constants/constants.js';
-import { Validation, DesignPermutationValidationErrors } from '../../constants/validation_errors.js';
+import { Validation, TestExpectationValidationErrors } from '../../constants/validation_errors.js';
 
 //======================================================================================================================
 //
@@ -13,33 +13,63 @@ import { Validation, DesignPermutationValidationErrors } from '../../constants/v
 
 class ScenarioTestExpectationValidationServicesClass {
 
-    validateAddTestTypeExpectation(){
+    validateAddTestTypeExpectation(userRole){
+
+        if(userRole !== RoleType.DESIGNER){
+
+            return TestExpectationValidationErrors.EXPECTATION_ADD_INVALID_ROLE;
+        }
 
         return Validation.VALID;
     }
 
-    validateUpdateTestTypeExpectation(){
+    validateUpdateTestTypeExpectation(userRole){
+
+        if(userRole !== RoleType.DESIGNER){
+
+            return TestExpectationValidationErrors.EXPECTATION_UPDATE_INVALID_ROLE;
+        }
 
         return Validation.VALID;
     }
 
 
-    validateAddTestTypePermutationValueExpectation(){
+    validateAddTestTypePermutationValueExpectation(userRole){
+
+        if(userRole !== RoleType.DESIGNER){
+
+            return TestExpectationValidationErrors.EXPECTATION_ADD_INVALID_ROLE;
+        }
 
         return Validation.VALID;
     }
 
-    validateRemoveTestTypePermutationValueExpectation(){
+    validateRemoveTestTypePermutationValueExpectation(userRole){
+
+        if(userRole !== RoleType.DESIGNER){
+
+            return TestExpectationValidationErrors.EXPECTATION_REMOVE_INVALID_ROLE;
+        }
 
         return Validation.VALID;
     }
 
-    validateRemoveTestTypePermutationExpectation(){
+    validateRemoveTestTypePermutationExpectation(userRole){
+
+        if(userRole !== RoleType.DESIGNER){
+
+            return TestExpectationValidationErrors.EXPECTATION_REMOVE_INVALID_ROLE;
+        }
 
         return Validation.VALID;
     }
 
-    validateRemoveTestTypeExpectation(){
+    validateRemoveTestTypeExpectation(userRole){
+
+        if(userRole !== RoleType.DESIGNER){
+
+            return TestExpectationValidationErrors.EXPECTATION_REMOVE_INVALID_ROLE;
+        }
 
         return Validation.VALID;
     }

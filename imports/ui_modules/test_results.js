@@ -10,7 +10,6 @@ class TestResultsUiServicesClass {
         let shouldUpdate = false;
 
         const designTab = store.getState().currentUserDesignTab;
-        const devTab = store.getState().currentUserDevTab;
 
         const designView = (props.view === ViewType.DESIGN_NEW || props.view === ViewType.DESIGN_PUBLISHED || props.view === ViewType.DESIGN_UPDATABLE);
         const devView = (props.view === ViewType.DEVELOP_BASE_WP || props.view === ViewType.DEVELOP_UPDATE_WP);
@@ -26,10 +25,7 @@ class TestResultsUiServicesClass {
                 (devView && props.userViewOptions.devUnitTestsVisible && props.displayContext === DisplayContext.MASH_UNIT_TESTS && !(props.userViewOptions.workShowAllAsTabs)) ||
                 (designView && props.userViewOptions.designShowAllAsTabs && designTab === EditorTab.TAB_ACC_TESTS && props.displayContext === DisplayContext.MASH_ACC_TESTS) ||
                 (designView && props.userViewOptions.designShowAllAsTabs && designTab === EditorTab.TAB_INT_TESTS && props.displayContext === DisplayContext.MASH_INT_TESTS) ||
-                (designView && props.userViewOptions.designShowAllAsTabs && designTab === EditorTab.TAB_UNIT_TESTS && props.displayContext === DisplayContext.MASH_UNIT_TESTS) ||
-                (devView && props.userViewOptions.workShowAllAsTabs && devTab === EditorTab.TAB_ACC_TESTS && props.displayContext === DisplayContext.MASH_ACC_TESTS) ||
-                (devView && props.userViewOptions.workShowAllAsTabs && devTab === EditorTab.TAB_INT_TESTS && props.displayContext === DisplayContext.MASH_INT_TESTS) ||
-                (devView && props.userViewOptions.workShowAllAsTabs && devTab === EditorTab.TAB_UNIT_TESTS && props.displayContext === DisplayContext.MASH_UNIT_TESTS)
+                (designView && props.userViewOptions.designShowAllAsTabs && designTab === EditorTab.TAB_UNIT_TESTS && props.displayContext === DisplayContext.MASH_UNIT_TESTS)
             )
         ){
             shouldUpdate = true;
@@ -40,10 +36,7 @@ class TestResultsUiServicesClass {
             (props.userViewOptions.designShowAllAsTabs || props.userViewOptions.workShowAllAsTabs) && (
                 (designView && nextProps.designTab === EditorTab.TAB_ACC_TESTS && nextProps.displayContext === DisplayContext.MASH_ACC_TESTS) ||
                 (designView && nextProps.designTab === EditorTab.TAB_INT_TESTS && nextProps.displayContext === DisplayContext.MASH_INT_TESTS) ||
-                (designView && nextProps.designTab === EditorTab.TAB_UNIT_TESTS && nextProps.displayContext === DisplayContext.MASH_UNIT_TESTS) ||
-                (devView && nextProps.devTab === EditorTab.TAB_ACC_TESTS && nextProps.displayContext === DisplayContext.MASH_ACC_TESTS) ||
-                (devView && nextProps.devTab === EditorTab.TAB_INT_TESTS && nextProps.displayContext === DisplayContext.MASH_INT_TESTS) ||
-                (devView && nextProps.devTab === EditorTab.TAB_UNIT_TESTS && nextProps.displayContext === DisplayContext.MASH_UNIT_TESTS)
+                (designView && nextProps.designTab === EditorTab.TAB_UNIT_TESTS && nextProps.displayContext === DisplayContext.MASH_UNIT_TESTS)
             )
         ){
             shouldUpdate = true;
