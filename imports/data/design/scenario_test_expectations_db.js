@@ -191,8 +191,7 @@ class ScenarioTestExpectationDataClass{
             {
                 designVersionId:        designVersionId,
                 scenarioReferenceId:    scenarioReferenceId
-            },
-            {multi: true}
+            }
         );
     }
 
@@ -203,8 +202,7 @@ class ScenarioTestExpectationDataClass{
                 designVersionId:        designVersionId,
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType
-            },
-            {multi: true}
+            }
         );
     }
 
@@ -216,8 +214,7 @@ class ScenarioTestExpectationDataClass{
                 scenarioReferenceId:    scenarioReferenceId,
                 testType:               testType,
                 permutationId:          permutationId
-            },
-            {multi: true}
+            }
         );
     }
 
