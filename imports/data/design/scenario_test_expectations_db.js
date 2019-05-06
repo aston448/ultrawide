@@ -185,23 +185,40 @@ class ScenarioTestExpectationDataClass{
         });
     }
 
+    removeAllExpectationsForScenario(designVersionId, scenarioReferenceId){
+
+        return ScenarioTestExpectations.remove(
+            {
+                designVersionId:        designVersionId,
+                scenarioReferenceId:    scenarioReferenceId
+            },
+            {multi: true}
+        );
+    }
+
     removeScenarioTestExpectationsForTestType(designVersionId, scenarioReferenceId, testType){
 
-        return ScenarioTestExpectations.remove({
-            designVersionId:        designVersionId,
-            scenarioReferenceId:    scenarioReferenceId,
-            testType:               testType
-        });
+        return ScenarioTestExpectations.remove(
+            {
+                designVersionId:        designVersionId,
+                scenarioReferenceId:    scenarioReferenceId,
+                testType:               testType
+            },
+            {multi: true}
+        );
     }
 
     removeScenarioTestExpectationsForTestTypePermutation(designVersionId, scenarioReferenceId, testType, permutationId){
 
-        return ScenarioTestExpectations.remove({
-            designVersionId:        designVersionId,
-            scenarioReferenceId:    scenarioReferenceId,
-            testType:               testType,
-            permutationId:          permutationId
-        });
+        return ScenarioTestExpectations.remove(
+            {
+                designVersionId:        designVersionId,
+                scenarioReferenceId:    scenarioReferenceId,
+                testType:               testType,
+                permutationId:          permutationId
+            },
+            {multi: true}
+        );
     }
 
     removeScenarioTestExpectationForTestTypePermutationValue(designVersionId, scenarioReferenceId, testType, permutationId, permutationValueId){

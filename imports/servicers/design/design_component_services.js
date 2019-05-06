@@ -10,6 +10,7 @@ import { DesignComponentModules }       from '../../service_modules/design/desig
 // DB services
 import { DesignVersionData }            from '../../data/design/design_version_db.js';
 import { DesignComponentData }          from '../../data/design/design_component_db.js';
+import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
 
 //======================================================================================================================
 //
@@ -257,6 +258,11 @@ class DesignComponentServicesClass {
                 let removed = DesignComponentData.removeComponent(designComponentId);
 
                 if (removed > 0) {
+
+                    // If this was a Scenario, remove any Test Expectations
+                    if(designComponent.componentType === ComponentType.SCENARIO){
+                        ScenarioTestExpectationData.removeAllExpectationsForScenario(designComponent.designVersionId, designComponent.componentReferenceId);
+                    }
 
                     // When removing a design component its parent may become removable
                     if(parentId !== 'NONE') {
