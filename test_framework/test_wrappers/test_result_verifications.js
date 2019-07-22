@@ -1,20 +1,119 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
-
-import { TestFixtures } from './test_fixtures.js';
+import {TestType} from '../../imports/constants/constants.js'
 
 class TestResultVerificationsClass {
 
-    // INTEGRATION -----------------------------------------------------------------------------------------------------
+    // UNIT ------------------------------------------------------------------------------------------------------------
     // Check test result
-    developerIntegrationTestResultForScenario_Is(scenarioName, result) {
+    designerUnitTestExpectationResultForScenarioIs(scenarioName, expectedResult) {
 
-        server.call('verifyTestResults.scenarioIntTestResultIs', scenarioName, result, 'hugh',
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, 'NONE', 'NONE', TestType.UNIT, expectedResult, 'gloria',
             (function (error, result) {
                 return (error === null);
             })
         );
+    };
 
+    developerUnitTestExpectationResultForScenarioIs(scenarioName, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, 'NONE', 'NONE', TestType.UNIT, expectedResult, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    designerUnitTestExpectationResultForScenarioPermutationIs(scenarioName, designPermutationName, designPermutationValue, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, designPermutationName, designPermutationValue, TestType.UNIT, expectedResult, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    developerUnitTestExpectationResultForScenarioPermutationIs(scenarioName, designPermutationName, designPermutationValue, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, designPermutationName, designPermutationValue, TestType.UNIT, expectedResult, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    // INTEGRATION -----------------------------------------------------------------------------------------------------
+    // Check test result
+    designerIntegrationTestExpectationResultForScenarioIs(scenarioName, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, 'NONE', 'NONE', TestType.INTEGRATION, expectedResult, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    developerIntegrationTestExpectationResultForScenarioIs(scenarioName, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, 'NONE', 'NONE', TestType.INTEGRATION, expectedResult, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    designerIntegrationTestExpectationResultForScenarioPermutationIs(scenarioName, designPermutationName, designPermutationValue, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, designPermutationName, designPermutationValue, TestType.INTEGRATION, expectedResult, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    developerIntegrationTestExpectationResultForScenarioPermutationIs(scenarioName, designPermutationName, designPermutationValue, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, designPermutationName, designPermutationValue, TestType.INTEGRATION, expectedResult, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    // ACCEPTANCE ------------------------------------------------------------------------------------------------------
+    // Check test result
+    designerAcceptanceTestExpectationResultForScenarioIs(scenarioName, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, 'NONE', 'NONE', TestType.ACCEPTANCE, expectedResult, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    developerAcceptanceTestExpectationResultForScenarioIs(scenarioName, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, 'NONE', 'NONE', TestType.ACCEPTANCE, expectedResult, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    designerAcceptanceTestExpectationResultForScenarioPermutationIs(scenarioName, designPermutationName, designPermutationValue, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, designPermutationName, designPermutationValue, TestType.ACCEPTANCE, expectedResult, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    developerAcceptanceTestExpectationResultForScenarioPermutationIs(scenarioName, designPermutationName, designPermutationValue, expectedResult) {
+
+        server.call('verifyTestResults.scenarioTestExpectationResultIs', scenarioName, designPermutationName, designPermutationValue, TestType.ACCEPTANCE, expectedResult, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
     };
 
     // Check for Mash Present

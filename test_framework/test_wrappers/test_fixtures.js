@@ -1,6 +1,6 @@
 
-import {RoleType, WorkPackageType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {RoleType, WorkPackageType, TestType, ViewMode } from '../../imports/constants/constants.js'
+import {DefaultItemNames,  DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
 class TestFixturesClass {
@@ -41,6 +41,10 @@ class TestFixturesClass {
 
     clearAllDesignData(){
         server.call('testFixtures.clearAllDesignData');
+    }
+
+    clearTestExpectations(){
+        server.call('testFixtures.clearTestExpectations');
     }
 
     removeAllMeteorUsers(){
@@ -106,9 +110,14 @@ class TestFixturesClass {
 
     }
 
+    writeAcceptanceTestResults_ChimpMocha(locationName, results){
+
+        server.call('testFixtures.writeTestResults_ChimpMocha', locationName, results, TestType.ACCEPTANCE);
+    }
+
     writeIntegrationTestResults_ChimpMocha(locationName, results){
 
-        server.call('testFixtures.writeIntegrationTestResults_ChimpMocha', locationName, results);
+        server.call('testFixtures.writeTestResults_ChimpMocha', locationName, results, TestType.INTEGRATION);
     }
 
     writeUnitTestResults_MeteorMocha(locationName, results){

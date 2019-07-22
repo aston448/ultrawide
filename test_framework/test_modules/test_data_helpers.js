@@ -21,12 +21,17 @@ import { UserTestTypeLocations }    from '../../imports/collections/configure/us
 import { UserMashScenarioTests }    from '../../imports/collections/mash/user_mash_scenario_tests.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 import { ScenarioTestExpectations } from '../../imports/collections/design/scenario_test_expectations.js';
+import { DesignPermutationData }    from "../../imports/data/design/design_permutation_db";
+import { DesignPermutationValueData} from "../../imports/data/design/design_permutation_value_db";
 
 import { ClientAppHeaderServices }      from '../../imports/apiClient/apiClientAppHeader.js';
 
 import {RoleType, WorkSummaryType, UltrawideDirectory, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 import {DesignPermutations} from "../../imports/collections/design/design_permutations";
 import {DesignPermutationValues} from "../../imports/collections/design/design_permutation_values";
+import {DesignComponentData} from "../../imports/data/design/design_component_db";
+import {ScenarioTestExpectationData} from "../../imports/data/design/scenario_test_expectations_db";
+import {UserTestData} from "../../imports/data/test_data/user_test_data_db";
 
 class TestDataHelpersClass {
 
@@ -744,6 +749,21 @@ class TestDataHelpersClass {
         }
     };
 
+    getAcceptanceResultsOutputFiles_ChimpMocha(locationName){
+
+        const location = TestOutputLocations.findOne({locationName: locationName});
+
+        if(location) {
+            return TestOutputLocationFiles.find({
+                locationId: location._id,
+                fileType: TestLocationFileType.ACCEPTANCE,
+                testRunner: TestRunner.CHIMP_MOCHA
+            }).fetch();
+        } else {
+            throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
+        }
+    };
+
     getIntegrationResultsOutputFiles_ChimpMocha(locationName){
 
         const location = TestOutputLocations.findOne({locationName: locationName});
@@ -773,6 +793,72 @@ class TestDataHelpersClass {
             throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
         }
     };
+
+    getScenarioExpectationResult(userContext, scenarioName, testType, permutationName, permutationValueName){
+
+        let scenario = null;
+        let designPermutation = null;
+        let designPermutationValue = null;
+        let testExpectation = null;
+
+        scenario = DesignComponentData.getScenarioByName(userContext.designVersionId, scenarioName);
+
+        if(scenario) {
+
+            if (permutationName !== 'NONE') {
+
+                // We want a permutation result
+                designPermutation = DesignPermutationData.getDesignPermutationByName(userContext.designId, permutationName);
+
+                if (designPermutation) {
+                    designPermutationValue = DesignPermutationValueData.getDesignPermutationValueByName(designPermutation._id, permutationValueName);
+
+                    if(designPermutationValue){
+                        testExpectation = ScenarioTestExpectationData.getScenarioTestExpectationForScenarioTestTypePermutationValue(
+                            userContext.designVersionId,
+                            scenario.componentReferenceId,
+                            testType,
+                            designPermutation._id,
+                            designPermutationValue._id
+                        );
+
+                        if(testExpectation){
+                            return UserTestData.getScenarioTestTypeExpectationResult(
+                                userContext.userId,
+                                userContext.designVersionId,
+                                scenario.componentReferenceId,
+                                testExpectation._id
+                            );
+                        } else {
+                            throw new Meteor.Error("FAIL", "Test Expectation for " + scenarioName + " and test type " + testType + " with perm value " + designPermutationValue.permutationValueName + " not found");
+                        }
+
+                    } else {
+                        throw new Meteor.Error("FAIL", "Permutation Value " + permutationValueName + " not found");
+                    }
+                } else {
+                    throw new Meteor.Error("FAIL", "Permutation " + permutationName + " not found");
+                }
+            } else {
+
+                // Just the scenario result
+                testExpectation = ScenarioTestExpectationData.getScenarioTestTypeExpectation(userContext.designVersionId, scenario.componentReferenceId, testType);
+
+                if(testExpectation){
+                    return UserTestData.getScenarioTestTypeExpectationResult(
+                        userContext.userId,
+                        userContext.designVersionId,
+                        scenario.componentReferenceId,
+                        testExpectation._id
+                    );
+                } else {
+                    throw new Meteor.Error("FAIL", "Test Expectation for " + scenarioName + " and test type " + testType + " not found");
+                }
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "Scenario " + scenarioName + " not found");
+        }
+    }
 
     getMashTestResult(userContext, scenarioName){
 

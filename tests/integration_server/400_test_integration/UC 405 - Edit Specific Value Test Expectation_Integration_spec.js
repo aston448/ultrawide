@@ -10,6 +10,11 @@ describe('UC 405 - Edit Specific Value Test Expectation', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 405 - Edit Specific Value Test Expectation');
+
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     after(function(){
@@ -17,10 +22,9 @@ describe('UC 405 - Edit Specific Value Test Expectation', function(){
     });
 
     beforeEach(function(){
-        TestFixtures.clearAllData();
 
-        // Add  Design1 / DesignVersion1 + basic data
-        TestFixtures.addDesignWithDefaultData();
+        TestFixtures.clearTestExpectations();
+
     });
 
     afterEach(function(){

@@ -188,11 +188,17 @@ class OutputLocationsActionsClass{
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.ACCEPTANCE, true, expectation);
     }
 
+    designerSelectsAccTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'gloria', locationName, TestType.ACCEPTANCE, true, expectation);
+    }
+
     developerClearsAccTestsInConfigForLocation(locationName, expectation){
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.ACCEPTANCE, false, expectation);
     }
 
-
+    designerClearsAccTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'gloria', locationName, TestType.ACCEPTANCE, false, expectation);
+    }
 }
 
 export const OutputLocationsActions = new OutputLocationsActionsClass();

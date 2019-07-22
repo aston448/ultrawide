@@ -10,10 +10,11 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userRole = TestDataHelpers.getUserRole(userName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const scenario = TestDataHelpers.getDesignComponent(userContext.designVersionId, 'NONE', scenarioName);
 
-        const outcome = ClientScenarioTestExpectationServices.selectTestTypeExpectation(userContext, scenario.componentReferenceId, testType);
+        const outcome = ClientScenarioTestExpectationServices.selectTestTypeExpectation(userRole, userContext, scenario.componentReferenceId, testType);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Select Scenario Test Type Expectation');
     },
@@ -22,10 +23,11 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userRole = TestDataHelpers.getUserRole(userName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const scenario = TestDataHelpers.getDesignComponent(userContext.designVersionId, 'NONE', scenarioName);
 
-        const outcome = ClientScenarioTestExpectationServices.unselectTestTypeExpectation(userContext, scenario.componentReferenceId, testType);
+        const outcome = ClientScenarioTestExpectationServices.unselectTestTypeExpectation(userRole, userContext, scenario.componentReferenceId, testType);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Unselect Scenario Test Type Expectation');
     },
@@ -34,10 +36,11 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userRole = TestDataHelpers.getUserRole(userName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const scenario = TestDataHelpers.getDesignComponent(userContext.designVersionId, 'NONE', scenarioName);
 
-        const outcome = ClientScenarioTestExpectationServices.addNewSpecificValueTestExpectation(userContext, scenario.componentReferenceId, testType);
+        const outcome = ClientScenarioTestExpectationServices.addNewSpecificValueTestExpectation(userRole, userContext, scenario.componentReferenceId, testType);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Value Test Type Expectation');
     },
@@ -46,11 +49,12 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userRole = TestDataHelpers.getUserRole(userName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const scenario = TestDataHelpers.getDesignComponent(userContext.designVersionId, 'NONE', scenarioName);
         const testExpectation = TestDataHelpers.getTestExpectation(userContext.designVersionId, scenario.componentReferenceId, testType, 'VALUE', 'VALUE', oldValue);
 
-        const outcome = ClientScenarioTestExpectationServices.updateSpecificValueTestExpectation(testExpectation._id, newValue);
+        const outcome = ClientScenarioTestExpectationServices.updateSpecificValueTestExpectation(userRole, testExpectation._id, newValue);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Value Test Type Expectation');
     },
@@ -59,11 +63,12 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userRole = TestDataHelpers.getUserRole(userName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const scenario = TestDataHelpers.getDesignComponent(userContext.designVersionId, 'NONE', scenarioName);
         const testExpectation = TestDataHelpers.getTestExpectation(userContext.designVersionId, scenario.componentReferenceId, testType, 'VALUE', 'VALUE', value);
 
-        const outcome = ClientScenarioTestExpectationServices.removeSpecificValueTestExpectation(testExpectation._id);
+        const outcome = ClientScenarioTestExpectationServices.removeSpecificValueTestExpectation(userRole, testExpectation._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Value Test Type Expectation');
     },
@@ -72,11 +77,12 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userRole = TestDataHelpers.getUserRole(userName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const scenario = TestDataHelpers.getDesignComponent(userContext.designVersionId, 'NONE', scenarioName);
         const permutation = TestDataHelpers.getDesignPermutation(userContext.designId, permutationName);
 
-        const outcome = ClientScenarioTestExpectationServices.unselectTestTypePermutationExpectation(userContext, scenario.componentReferenceId, testType, permutation._id);
+        const outcome = ClientScenarioTestExpectationServices.unselectTestTypePermutationExpectation(userRole, userContext, scenario.componentReferenceId, testType, permutation._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Unselect Test Type Permutation Expectation');
     },
@@ -85,12 +91,13 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userRole = TestDataHelpers.getUserRole(userName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const scenario = TestDataHelpers.getDesignComponent(userContext.designVersionId, 'NONE', scenarioName);
         const permutation = TestDataHelpers.getDesignPermutation(userContext.designId, permutationName);
         const permutationValue = TestDataHelpers.getDesignPermutationValue(userContext.designVersionId, permutation._id, permutationValueName);
 
-        const outcome = ClientScenarioTestExpectationServices.selectTestTypePermutationValueExpectation(userContext, scenario.componentReferenceId, testType, permutation._id, permutationValue._id);
+        const outcome = ClientScenarioTestExpectationServices.selectTestTypePermutationValueExpectation(userRole, userContext, scenario.componentReferenceId, testType, permutation._id, permutationValue._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Select Test Type Permutation Value Expectation');
     },
@@ -99,12 +106,13 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userRole = TestDataHelpers.getUserRole(userName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const scenario = TestDataHelpers.getDesignComponent(userContext.designVersionId, 'NONE', scenarioName);
         const permutation = TestDataHelpers.getDesignPermutation(userContext.designId, permutationName);
         const permutationValue = TestDataHelpers.getDesignPermutationValue(userContext.designVersionId, permutation._id, permutationValueName);
 
-        const outcome = ClientScenarioTestExpectationServices.unselectTestTypePermutationValueExpectation(userContext, scenario.componentReferenceId, testType, permutation._id, permutationValue._id);
+        const outcome = ClientScenarioTestExpectationServices.unselectTestTypePermutationValueExpectation(userRole, userContext, scenario.componentReferenceId, testType, permutation._id, permutationValue._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Unselect Test Type Permutation Value Expectation');
     },

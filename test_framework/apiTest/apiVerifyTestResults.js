@@ -3,67 +3,34 @@ import { Meteor } from 'meteor/meteor';
 import {  } from '../../imports/constants/constants.js';
 
 import { TestDataHelpers }      from '../test_modules/test_data_helpers.js'
+import {MashTestStatus, TestType} from "../../imports/constants/constants";
 
 Meteor.methods({
 
-    // LOCATIONS -------------------------------------------------------------------------------------------------------
-
-    'verifyTestResults.scenarioIntTestResultIs'(scenarioName, result, userName){
+    'verifyTestResults.scenarioTestExpectationResultIs'(scenarioName, designPermutationName, designPermutationValue, testType, expectedResult, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const testResult = TestDataHelpers.getMashTestResult(userContext, scenarioName);
+        const testResult = TestDataHelpers.getScenarioExpectationResult(userContext, scenarioName, testType, designPermutationName, designPermutationValue);
 
+        if(testResult) {
 
-        if (testResult.intMashTestStatus !== result) {
-            throw new Meteor.Error("FAIL", "Expecting test result " + result + " but got " + testResult.intMashTestStatus + " for Scenario " + scenarioName);
+            if (testResult.testOutcome !== expectedResult) {
+                throw new Meteor.Error("FAIL", "Expecting test result " + expectedResult + " but got " + testResult.testOutcome + " for Scenario " + scenarioName + ' with permutation value ' + designPermutationValue);
+            } else {
+                return true;
+            }
+
         } else {
-            return true;
+
+            // See if we were expecting no result
+            if(expectedResult === MashTestStatus.MASH_NO_TESTS){
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Expecting test result " + expectedResult + " but got no results for Scenario " + scenarioName + ' with permutation value ' + designPermutationValue);
+            }
         }
     },
 
-    'verifyTestResults.scenarioUnitTestResultIs'(scenarioName, result, userName){
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-
-        const testResult = TestDataHelpers.getMashTestResult(userContext, scenarioName);
-
-
-        if (testResult.unitMashTestStatus !== result) {
-            throw new Meteor.Error("FAIL", "Expecting test result " + result + " but got " + testResult.unitMashTestStatus + " for Scenario " + scenarioName);
-        } else {
-            return true;
-        }
-    },
-
-    'verifyTestResults.unitTestResultIs'(scenarioName, unitTestName, result, userName){
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-
-        const testResult = TestDataHelpers.getUnitTestResult(userContext, scenarioName, unitTestName);
-
-        if (testResult.testOutcome !== result) {
-            throw new Meteor.Error("FAIL", "Expecting unit test result " + result + " but got " + testResult.testOutcome + " for Scenario " + scenarioName + " unit test " + unitTestName);
-        } else {
-            return true;
-        }
-    },
-
-    'verifyTestResults.testMashWindowContainsUnitTest'(scenarioName, unitTestName, userName){
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-
-        // This will error if not found
-        const testResult = TestDataHelpers.getUnitTestResult(userContext, scenarioName, unitTestName);
-    },
-
-
-    'verifyTestResults.testMashWindowDoesNotContainUnitTest'(scenarioName, unitTestName, userName){
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-
-        // This will error if not found so pass in expect failure
-        const testResult = TestDataHelpers.getUnitTestResult(userContext, scenarioName, unitTestName, true);
-    },
 
 });

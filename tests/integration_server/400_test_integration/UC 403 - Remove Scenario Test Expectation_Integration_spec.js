@@ -10,6 +10,11 @@ describe('UC 403 - Remove Scenario Test Expectation', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 403 - Remove Scenario Test Expectation');
+
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     after(function(){
@@ -17,10 +22,9 @@ describe('UC 403 - Remove Scenario Test Expectation', function(){
     });
 
     beforeEach(function(){
-        TestFixtures.clearAllData();
 
-        // Add  Design1 / DesignVersion1 + basic data
-        TestFixtures.addDesignWithDefaultData();
+        TestFixtures.clearTestExpectations();
+
     });
 
     afterEach(function(){
@@ -105,11 +109,11 @@ describe('UC 403 - Remove Scenario Test Expectation', function(){
                 expect(TestExpectationVerifications.designerScenarioUnitTestForScenario_Exists('Scenario1'));
 
                 // Set 2 value expectations
-                TestExpectationActions.designerSelectsUnitPermutationValue('Scenario1', 'Permutation1', 'PermValue1');
-                TestExpectationActions.designerSelectsUnitPermutationValue('Scenario1', 'Permutation1', 'PermValue2');
+                TestExpectationActions.designerSelectsUnitPermutationValue('Scenario1', 'Permutation1', 'PermutationValue1');
+                TestExpectationActions.designerSelectsUnitPermutationValue('Scenario1', 'Permutation1', 'PermutationValue2');
 
-                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue2'));
+                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue2'));
 
                 // Set a specific value expectation
                 TestExpectationActions.designerAddsSpecificValueUnitTestExpectation('Scenario1');
@@ -122,8 +126,8 @@ describe('UC 403 - Remove Scenario Test Expectation', function(){
 
                 // Verify
                 expect(TestExpectationVerifications.designerScenarioUnitTestForScenario_DoesNotExist('Scenario1'));
-                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermValue2'));
+                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermutationValue2'));
                 expect(TestExpectationVerifications.designerUnitTestForScenario_SpecificValue_DoesNotExist('Scenario1', 'SpecificValue1'));
             });
 
@@ -139,11 +143,11 @@ describe('UC 403 - Remove Scenario Test Expectation', function(){
                 expect(TestExpectationVerifications.designerScenarioIntegrationTestForScenario_Exists('Scenario1'));
 
                 // Set 2 value expectations
-                TestExpectationActions.designerSelectsIntegrationPermutationValue('Scenario1', 'Permutation1', 'PermValue1');
-                TestExpectationActions.designerSelectsIntegrationPermutationValue('Scenario1', 'Permutation1', 'PermValue2');
+                TestExpectationActions.designerSelectsIntegrationPermutationValue('Scenario1', 'Permutation1', 'PermutationValue1');
+                TestExpectationActions.designerSelectsIntegrationPermutationValue('Scenario1', 'Permutation1', 'PermutationValue2');
 
-                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue2'));
+                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue2'));
 
                 // Set a specific value expectation
                 TestExpectationActions.designerAddsSpecificValueIntegrationTestExpectation('Scenario1');
@@ -156,8 +160,8 @@ describe('UC 403 - Remove Scenario Test Expectation', function(){
 
                 // Verify
                 expect(TestExpectationVerifications.designerScenarioIntegrationTestForScenario_DoesNotExist('Scenario1'));
-                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermValue2'));
+                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermutationValue2'));
                 expect(TestExpectationVerifications.designerIntegrationTestForScenario_SpecificValue_DoesNotExist('Scenario1', 'SpecificValue1'));
             });
 
@@ -173,11 +177,11 @@ describe('UC 403 - Remove Scenario Test Expectation', function(){
                 expect(TestExpectationVerifications.designerScenarioAcceptanceTestForScenario_Exists('Scenario1'));
 
                 // Set 2 value expectations
-                TestExpectationActions.designerSelectsAcceptancePermutationValue('Scenario1', 'Permutation1', 'PermValue1');
-                TestExpectationActions.designerSelectsAcceptancePermutationValue('Scenario1', 'Permutation1', 'PermValue2');
+                TestExpectationActions.designerSelectsAcceptancePermutationValue('Scenario1', 'Permutation1', 'PermutationValue1');
+                TestExpectationActions.designerSelectsAcceptancePermutationValue('Scenario1', 'Permutation1', 'PermutationValue2');
 
-                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue2'));
+                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue2'));
 
                 // Set a specific value expectation
                 TestExpectationActions.designerAddsSpecificValueAcceptanceTestExpectation('Scenario1');
@@ -190,8 +194,8 @@ describe('UC 403 - Remove Scenario Test Expectation', function(){
 
                 // Verify
                 expect(TestExpectationVerifications.designerScenarioAcceptanceTestForScenario_DoesNotExist('Scenario1'));
-                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermValue2'));
+                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_DoesNotExist('Scenario1', 'Permutation1', 'PermutationValue2'));
                 expect(TestExpectationVerifications.designerAcceptanceTestForScenario_SpecificValue_DoesNotExist('Scenario1', 'SpecificValue1'));
             });
 

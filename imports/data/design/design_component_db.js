@@ -171,6 +171,17 @@ class DesignComponentDataClass {
         );
     }
 
+    getScenarioByName(designVersionId, scenarioName){
+
+        return DesignVersionComponents.findOne(
+            {
+                designVersionId: designVersionId,
+                componentType: ComponentType.SCENARIO,
+                componentNameNew: scenarioName
+            }
+        );
+    }
+
     getFeatureAspects(designVersionId, featureReferenceId){
 
         return DesignVersionComponents.find(

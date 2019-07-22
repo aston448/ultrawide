@@ -9,6 +9,11 @@ describe('UC 400 - Set Scenario Test Expectation', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 400 - Set Scenario Test Expectation');
+
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     after(function(){
@@ -16,10 +21,7 @@ describe('UC 400 - Set Scenario Test Expectation', function(){
     });
 
     beforeEach(function(){
-        TestFixtures.clearAllData();
-
-        // Add  Design1 / DesignVersion1 + basic data
-        TestFixtures.addDesignWithDefaultData();
+        TestFixtures.clearTestExpectations();
     });
 
     afterEach(function(){
@@ -100,9 +102,21 @@ describe('UC 400 - Set Scenario Test Expectation', function(){
 
         describe('When a Scenario Test Expectation is set the current status of the expectation is calculated from the latest loaded test data', function(){
 
-            it.skip('Test Type - Unit', function(){
-                // Replace this with test code
-                // Remove skip once implemented
+            it('Test Type - Unit', function(){
+                // Check that initial Unit test status is No Test Expected
+
+                // Add a unit expectation for scenario1
+
+                // Check that status is Test Missing before there is a test
+
+                // Load a test result as a pass
+
+                // Check that status is now pass
+
+                // Load a test result as fail
+
+                // Check that status is now fail
+
             });
 
 

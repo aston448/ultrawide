@@ -32,8 +32,8 @@ import {DesignPermutationValues}        from "../../imports/collections/design/d
 import { DefaultFeatureAspectData }     from '../../imports/data/design/default_feature_aspect_db.js';
 import { ImpexModules}                  from "../../imports/service_modules/administration/impex_service_modules";
 
-import { ViewType, ViewMode, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
-import { DefaultComponentNames }         from '../../imports/constants/default_names.js';
+import { ViewType, ViewMode, ComponentType, MashTestStatus, RoleType, TestType, LogLevel } from '../../imports/constants/constants.js';
+import { DefaultComponentNames, DefaultItemNames }         from '../../imports/constants/default_names.js';
 import { log } from '../../imports/common/utils.js';
 
 import { ClientIdentityServices } from '../../imports/apiClient/apiIdentity.js';
@@ -42,8 +42,7 @@ import { ClientDesignComponentServices }    from '../../imports/apiClient/apiCli
 import { DesignComponentModules }           from '../../imports/service_modules/design/design_component_service_modules.js';
 import { TestDataHelpers }                  from '../test_modules/test_data_helpers.js'
 import {ClientDesignPermutationServices} from "../../imports/apiClient/apiClientDesignPermutation";
-import {RoleType} from "../../imports/constants/constants";
-import {DefaultItemNames} from "../../imports/constants/default_names";
+
 
 
 
@@ -363,6 +362,7 @@ Meteor.methods({
             TestOutputLocations.remove({});
             DesignPermutations.remove({});
             DesignPermutationValues.remove({});
+            ScenarioTestExpectations.remove({});
 
             UserMashScenarioTests.remove({});
 
@@ -384,6 +384,10 @@ Meteor.methods({
     'testFixtures.clearWorkPackages'(){
         WorkPackageComponents.remove({});
         WorkPackages.remove({});
+    },
+
+    'testFixtures.clearTestExpectations'(){
+        ScenarioTestExpectations.remove({});
     },
 
     'testFixtures.resetUserViewOptions'(){
@@ -671,12 +675,12 @@ Meteor.methods({
 
         ClientDesignPermutationServices.addPermutationValue(RoleType.DESIGNER, perm._id, userContext.designVersionId);
         let value = DesignPermutationValues.findOne({permutationValueName: DefaultItemNames.NEW_PERMUTATION_VALUE});
-        value.permutationValueName = 'PermValue1';
+        value.permutationValueName = 'PermutationValue1';
         ClientDesignPermutationServices.savePermutationValue(RoleType.DESIGNER, value);
 
         ClientDesignPermutationServices.addPermutationValue(RoleType.DESIGNER, perm._id, userContext.designVersionId);
         value = DesignPermutationValues.findOne({permutationValueName: DefaultItemNames.NEW_PERMUTATION_VALUE});
-        value.permutationValueName = 'PermValue2';
+        value.permutationValueName = 'PermutationValue2';
         ClientDesignPermutationServices.savePermutationValue(RoleType.DESIGNER, value);
 
     },
@@ -759,20 +763,30 @@ Meteor.methods({
     },
 
 
-    'testFixtures.writeIntegrationTestResults_ChimpMocha'(locationName, results){
+    'testFixtures.writeTestResults_ChimpMocha'(locationName, results, testType){
 
         // Expected input is
         // results [
         //      {
-        //          featureName:    Feature1
         //          scenarioName:   Scenario1
+        //          testName:       Test PermutationValue1
         //          result:         PASS,
         //      },
         //      ...etc
         // ]
 
         const location = TestDataHelpers.getTestOutputLocation(locationName);
-        const filesExpected = TestDataHelpers.getIntegrationResultsOutputFiles_ChimpMocha(locationName);
+        let filesExpected = [];
+
+        switch(testType){
+            case TestType.ACCEPTANCE:
+                filesExpected = TestDataHelpers.getAcceptanceResultsOutputFiles_ChimpMocha(locationName);
+                break;
+            case TestType.INTEGRATION:
+                filesExpected = TestDataHelpers.getIntegrationResultsOutputFiles_ChimpMocha(locationName);
+                break;
+        }
+
 
         if(filesExpected.length === 1) {
 
@@ -810,8 +824,8 @@ Meteor.methods({
                 }
 
                 resultData = {
-                    title: scenario.scenarioName,
-                    fullTitle: scenario.featureName + ' ' + scenario.scenarioName,
+                    title: scenario.testName,
+                    fullTitle: scenario.scenarioName + ' ' + scenario.testName,
                     duration: 5,
                     currentRetry: 0,
                     err: errorData

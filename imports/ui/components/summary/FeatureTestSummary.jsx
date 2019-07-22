@@ -91,6 +91,10 @@ export class FeatureTestSummary extends Component {
                 case ViewType.DESIGN_UPDATABLE:
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:       // Scope pane
+                case ViewType.WORK_PACKAGE_BASE_VIEW:
+
+                case ViewType.DEVELOP_BASE_WP:
+
                     // Whole DV
                     scenarioCount = testSummaryData.featureScenarioCount;
                     requiredCount = testSummaryData.featureExpectedTestCount;
@@ -100,41 +104,12 @@ export class FeatureTestSummary extends Component {
                     break;
                 case ViewType.DESIGN_UPDATE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:     // Scope pane
-                    // DU Only
-                    // scenarioCount = testSummaryData.duFeatureScenarioCount;
-                    // requiredCount = testSummaryData.duFeatureExpectedTestCount;
-                    // fulfilledCount = testSummaryData.duFeatureFulfilledTestCount;
-                    // passCount = testSummaryData.duFeatureTestPassCount;
-                    // failCount = testSummaryData.duFeatureTestFailCount;
-                    // noTestCount = testSummaryData.duFeatureNoTestCount;
-                    //console.log("  Pass count: " + passCount);
-                    break;
-                case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                case ViewType.DEVELOP_BASE_WP:
                 case ViewType.DEVELOP_UPDATE_WP:
-                    // WP Only
-                    // scenarioCount = testSummaryData.wpFeatureScenarioCount;
-                    // requiredCount = testSummaryData.wpFeatureExpectedTestCount;
-                    // fulfilledCount = testSummaryData.wpFeatureFulfilledTestCount;
-                    // passCount = testSummaryData.wpFeatureTestPassCount;
-                    // failCount = testSummaryData.wpFeatureTestFailCount;
-                    // noTestCount = testSummaryData.wpFeatureNoTestCount;
+                    // TODO - Summary Data for DUs
                     break;
 
             }
-
-            // Any failures at all it's a fail
-            //             if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
-            //                 featureRowClass = 'scenario-test-row-fail'
-            //             } else {
-            //                 // No failures so any passes its a pass for now
-            //                 if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
-            //                     featureRowClass = 'scenario-test-row-pass'
-            //                 }
-            //             }
-
-            //console.log("Pass count = " + passCount);
 
             let featureRowClass = 'scenario-test-row-untested';
 
@@ -215,14 +190,6 @@ export class FeatureTestSummary extends Component {
             return(
                 <Grid className="close-grid">
                     <Row className={featureRowClass}>
-                        {/*<Col md={2} className="close-col">*/}
-                            {/*<OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipScenarios}>*/}
-                                {/*<div className={resultClassScenarios}>*/}
-                                    {/*<span className="summary-item">Scenarios:</span>*/}
-                                    {/*<span className="summary-number">{scenarioCount}</span>*/}
-                                {/*</div>*/}
-                            {/*</OverlayTrigger>*/}
-                        {/*</Col>*/}
                         <Col md={1} className="close-col">
                             <div className={resultFeatureSummary} onClick={() => this.refreshSummary(userContext)}>
                                 <Glyphicon glyph="th"/>

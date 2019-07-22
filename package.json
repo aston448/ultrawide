@@ -23,7 +23,7 @@
     "chimp:int_server_set": "chimpy .config/chimp_int_800_set.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/800_tools_settings",
     "chimp:int_server_adm": "chimpy .config/chimp_int_900_adm.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_server/900_ultrawide_admin",
 
-    "chimp:int_server_temp": "chimpy .config/chimp_adm.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/aaa_test",
+    "chimp:int_server_temp": "chimpy .config/chimp_int_400_test.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/aaa_test",
     "chimp:int_client": "chimpy .config/chimp_client.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/integration_client",
     "chimp:acc_des": "chimpy .config/chimp_acc_des.js --browser=phantomjs --ddp=http://localhost:3000 --path=tests/acceptance/100_designs",
     "local_int_des": "chimpy .config/chimp_des.js --browser=phantomjs --ddp=http://localhost:3030 --path=tests/integration_server/100_designs",

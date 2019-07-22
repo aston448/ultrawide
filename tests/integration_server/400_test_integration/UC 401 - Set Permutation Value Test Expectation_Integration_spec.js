@@ -9,6 +9,11 @@ describe('UC 401 - Set Permutation Value Test Expectation', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 401 - Set Permutation Value Test Expectation');
+
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     after(function(){
@@ -16,10 +21,8 @@ describe('UC 401 - Set Permutation Value Test Expectation', function(){
     });
 
     beforeEach(function(){
-        TestFixtures.clearAllData();
 
-        // Add  Design1 / DesignVersion1 + basic data
-        TestFixtures.addDesignWithDefaultData();
+        TestFixtures.clearTestExpectations();
     });
 
     afterEach(function(){
@@ -41,12 +44,12 @@ describe('UC 401 - Set Permutation Value Test Expectation', function(){
                 TestExpectationActions.designerSelectsUnitExpectation('Scenario1');
 
                 // Execute
-                TestExpectationActions.designerSelectsUnitPermutationValue('Scenario1', 'Permutation1', 'PermValue1');
-                TestExpectationActions.designerSelectsUnitPermutationValue('Scenario1', 'Permutation1', 'PermValue2');
+                TestExpectationActions.designerSelectsUnitPermutationValue('Scenario1', 'Permutation1', 'PermutationValue1');
+                TestExpectationActions.designerSelectsUnitPermutationValue('Scenario1', 'Permutation1', 'PermutationValue2');
 
                 // Verify
-                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue1'));
+                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerUnitTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue2'));
             });
 
             it('Test Type - Integration', function(){
@@ -58,12 +61,12 @@ describe('UC 401 - Set Permutation Value Test Expectation', function(){
                 TestExpectationActions.designerSelectsIntegrationExpectation('Scenario1');
 
                 // Execute
-                TestExpectationActions.designerSelectsIntegrationPermutationValue('Scenario1', 'Permutation1', 'PermValue1');
-                TestExpectationActions.designerSelectsIntegrationPermutationValue('Scenario1', 'Permutation1', 'PermValue2');
+                TestExpectationActions.designerSelectsIntegrationPermutationValue('Scenario1', 'Permutation1', 'PermutationValue1');
+                TestExpectationActions.designerSelectsIntegrationPermutationValue('Scenario1', 'Permutation1', 'PermutationValue2');
 
                 // Verify
-                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue2'));
+                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerIntegrationTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue2'));
             });
 
             it('Test Type - Acceptance', function(){
@@ -75,12 +78,12 @@ describe('UC 401 - Set Permutation Value Test Expectation', function(){
                 TestExpectationActions.designerSelectsAcceptanceExpectation('Scenario1');
 
                 // Execute
-                TestExpectationActions.designerSelectsAcceptancePermutationValue('Scenario1', 'Permutation1', 'PermValue1');
-                TestExpectationActions.designerSelectsAcceptancePermutationValue('Scenario1', 'Permutation1', 'PermValue2');
+                TestExpectationActions.designerSelectsAcceptancePermutationValue('Scenario1', 'Permutation1', 'PermutationValue1');
+                TestExpectationActions.designerSelectsAcceptancePermutationValue('Scenario1', 'Permutation1', 'PermutationValue2');
 
                 // Verify
-                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue1'));
-                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermValue2'));
+                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue1'));
+                expect(TestExpectationVerifications.designerAcceptanceTestForScenario_Permutation_Value_Exists('Scenario1', 'Permutation1', 'PermutationValue2'));
             });
         });
     });

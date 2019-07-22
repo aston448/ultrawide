@@ -222,6 +222,18 @@ class UserTestDataClass {
         }
     }
 
+    getScenarioTestTypeExpectationResult(userId, designVersionId, scenarioRefId, testExpectationId){
+
+        return UserTestExpectationResults.findOne(
+            {
+                userId:                     userId,
+                designVersionId:            designVersionId,
+                designScenarioReferenceId:  scenarioRefId,
+                scenarioTestExpectationId:  testExpectationId
+            }
+        );
+    }
+
     // REMOVE ----------------------------------------------------------------------------------------------------------
     clearAllUserTestData(userId){
 
