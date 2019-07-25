@@ -856,7 +856,7 @@ class ImpexModulesClass{
 
     restoreScenarioTestExpectationData(scenarioTestExpectationData, backupDataVersion, currentDataVersion, designVersionsMapping, designPermutationsMapping, permutationValuesMapping){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Scenario Teat Expectations...");
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Scenario Test Expectations...");
 
         let expectationCount = 0;
 

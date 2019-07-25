@@ -406,12 +406,18 @@ class WorkPackageModulesClass {
                     WorkPackageComponentData.insertNewWorkPackageComponent(designVersionId, designUpdateId, workPackage._id, workPackage.workPackageType, component, WorkPackageScopeType.SCOPE_ACTIVE);
                 }
 
-                // And make sure if a DU WP Scenario we update the DU Scenario WP ID
-                if(workPackage.workPackageType === WorkPackageType.WP_UPDATE && component.componentType === ComponentType.SCENARIO){
+                // Update the WP ID for Scenarios
+                if(component.componentType === ComponentType.SCENARIO){
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, '  Set WP Id {}', workPackage._id);
+                    if(workPackage.workPackageType === WorkPackageType.WP_UPDATE) {
+                        log((msg) => console.log(msg), LogLevel.DEBUG, '  Set Update Scenario WP Id {}', workPackage._id);
 
-                    DesignUpdateComponentData.setWorkPackageId(component._id, workPackage._id);
+                        DesignUpdateComponentData.setWorkPackageId(component._id, workPackage._id);
+                    } else {
+                        log((msg) => console.log(msg), LogLevel.DEBUG, '  Set DV Scenario WP Id {}', workPackage._id);
+
+                        DesignComponentData.setWorkPackageId(component._id, workPackage._id);
+                    }
                 }
 
             } else {
