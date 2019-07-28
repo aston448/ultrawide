@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import UltrawideAction                      from '../../components/common/UltrawideAction.jsx'
 
 // Ultrawide Services
-
+import {ClientScenarioTestExpectationServices} from "../../../apiClient/apiClientScenarioTestExpectation";
 
 import {ItemType, LogLevel} from '../../../constants/constants.js';
 import {log, getContextID} from "../../../common/utils";
@@ -21,7 +21,6 @@ import {InputGroup, FormControl} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {ClientScenarioTestExpectationServices} from "../../../apiClient/apiClientScenarioTestExpectation";
 
 
 
@@ -51,7 +50,7 @@ export class EditableTestExpectationValue extends Component {
     handleKeyEvents(event, expectationId) {
         if(event.charCode === 13){
             // Enter Key
-            this.saveValue(expectationId);
+            this.saveValue(this.props.userRole, expectationId);
         }
     }
 

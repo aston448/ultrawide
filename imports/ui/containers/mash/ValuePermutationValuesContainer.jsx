@@ -15,17 +15,18 @@ import {ItemType, LogLevel, MashTestStatus} from "../../../constants/constants";
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
-import { ClientDesignPermutationServices }     from '../../../apiClient/apiClientDesignPermutation.js'
+import {ClientScenarioTestExpectationServices}  from "../../../apiClient/apiClientScenarioTestExpectation";
+import {ScenarioTestExpectationData}            from "../../../data/design/scenario_test_expectations_db";
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-import {ScenarioTestExpectationData} from "../../../data/design/scenario_test_expectations_db";
+
 import DesignComponentAdd from "../../components/common/DesignComponentAdd";
-import {EditableTestExpectationValue} from "../../components/mash/EditableTestExpectationValue";
-import {ClientScenarioTestExpectationServices} from "../../../apiClient/apiClientScenarioTestExpectation";
+import EditableTestExpectationValue from "../../components/mash/EditableTestExpectationValue";
+
 
 
 // =====================================================================================================================
