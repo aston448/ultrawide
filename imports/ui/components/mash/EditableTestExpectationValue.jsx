@@ -65,23 +65,23 @@ export class EditableTestExpectationValue extends Component {
         this.setState({isEditing: false});
     }
 
-    deleteValue(expectationId){
+    deleteValue(userRole, expectationId){
 
         // Remove from Scenario Expectations
-        ClientScenarioTestExpectationServices.removeSpecificValueTestExpectation(expectationId, this.state.fieldValue);
+        ClientScenarioTestExpectationServices.removeSpecificValueTestExpectation(userRole, expectationId, this.state.fieldValue);
     }
 
-    saveValue(expectationId){
+    saveValue(userRole, expectationId){
 
         // Update Scenario Expectations
-        ClientScenarioTestExpectationServices.updateSpecificValueTestExpectation(expectationId, this.state.fieldValue);
+        ClientScenarioTestExpectationServices.updateSpecificValueTestExpectation(userRole, expectationId, this.state.fieldValue);
 
         this.setState({isEditing: false});
     }
 
 
     render() {
-        const {expectation, testStatus, userContext} = this.props;
+        const {expectation, testStatus, userContext, userRole} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Scenario Test Expectations');
 
@@ -104,7 +104,7 @@ export class EditableTestExpectationValue extends Component {
                 <UltrawideAction
                     actionType={UI.OPTION_REMOVE}
                     uiContextName={uiContextName}
-                    actionFunction={() => this.deleteValue(expectation._id)}
+                    actionFunction={() => this.deleteValue(userRole, expectation._id)}
                 />
             </InputGroup.Addon>;
 
@@ -114,7 +114,7 @@ export class EditableTestExpectationValue extends Component {
                 <UltrawideAction
                     actionType={UI.OPTION_SAVE}
                     uiContextName={uiContextName}
-                    actionFunction={() => this.saveValue(expectation._id)}
+                    actionFunction={() => this.saveValue(userRole, expectation._id)}
                 />
             </InputGroup.Addon>;
 
