@@ -482,7 +482,7 @@ describe('UC 420 - Refresh Test Data', function(){
 
         });
 
-        describe('A Scenario without Design Permutations is updated with a Pending test outcome where that Scenario is matched in pending test results', function(){
+        describe('A Scenario without Design Permutations is updated with a Missing test outcome where that Scenario is matched in pending test results', function(){
 
             it('Test Type - Unit', function(){
                 DesignActions.designerWorksOnDesign('Design1');
@@ -500,7 +500,7 @@ describe('UC 420 - Refresh Test Data', function(){
                 TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
                 // Check Test Results
-                TestResultVerifications.designerUnitTestExpectationResultForScenarioIs('Scenario3', MashTestStatus.MASH_PENDING);
+                TestResultVerifications.designerUnitTestExpectationResultForScenarioIs('Scenario3', MashTestStatus.MASH_NO_TESTS);
             });
 
 
@@ -521,7 +521,7 @@ describe('UC 420 - Refresh Test Data', function(){
                 TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
                 // Check Test Results
-                TestResultVerifications.designerIntegrationTestExpectationResultForScenarioIs('Scenario3', MashTestStatus.MASH_PENDING);
+                TestResultVerifications.designerIntegrationTestExpectationResultForScenarioIs('Scenario3', MashTestStatus.MASH_NO_TESTS);
             });
 
 
@@ -542,7 +542,7 @@ describe('UC 420 - Refresh Test Data', function(){
                 TestIntegrationActions.designerRefreshesTestResultsForBaseDesignVersion();
 
                 // Check Test Results
-                TestResultVerifications.designerAcceptanceTestExpectationResultForScenarioIs('Scenario3', MashTestStatus.MASH_PENDING);
+                TestResultVerifications.designerAcceptanceTestExpectationResultForScenarioIs('Scenario3', MashTestStatus.MASH_NO_TESTS);
             });
 
         });
