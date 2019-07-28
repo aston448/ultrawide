@@ -157,6 +157,18 @@ class UserTestDataClass {
         );
     }
 
+    getOverallScenarioTestExpectationResult(userId, designVersionId, testExpectationId){
+
+        return UserTestExpectationResults.findOne(
+            {
+                userId:                         userId,
+                designVersionId:                designVersionId,
+                scenarioTestExpectationId:      testExpectationId,
+                permValue:                      'SCENARIO'
+            }
+        );
+    }
+
     getScenarioTestSummary(userId, designVersionId, designScenarioReferenceId){
 
         return UserScenarioTestSummary.findOne(

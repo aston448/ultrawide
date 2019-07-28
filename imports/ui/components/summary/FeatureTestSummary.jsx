@@ -69,6 +69,7 @@ export class FeatureTestSummary extends Component {
         const {testSummaryData, view, userContext} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Feature Test Summary');
+        //                                    <Glyphicon glyph="th"/>
 
         if(testSummaryData){
 
@@ -82,6 +83,7 @@ export class FeatureTestSummary extends Component {
             // Get data for view
             let scenarioCount = 0;
             let requiredCount = 0;
+            let actualCount = 0;
             let passCount = 0;
             let failCount = 0;
             let missingCount = 0;
@@ -98,6 +100,7 @@ export class FeatureTestSummary extends Component {
                     // Whole DV
                     scenarioCount = testSummaryData.featureScenarioCount;
                     requiredCount = testSummaryData.featureExpectedTestCount;
+                    actualCount = testSummaryData.featureActualTestCount;
                     passCount = testSummaryData.featurePassingTestCount;
                     failCount = testSummaryData.featureFailingTestCount;
                     missingCount = testSummaryData.featureMissingTestCount;
@@ -169,6 +172,12 @@ export class FeatureTestSummary extends Component {
                 </Tooltip>
             );
 
+            const tooltipActual = (
+                <Tooltip id="modal-tooltip">
+                    {'Actual tests found'}
+                </Tooltip>
+            );
+
             const tooltipPasses = (
                 <Tooltip id="modal-tooltip">
                     {'Required tests passing'}
@@ -192,14 +201,25 @@ export class FeatureTestSummary extends Component {
                     <Row className={featureRowClass}>
                         <Col md={1} className="close-col">
                             <div className={resultFeatureSummary} onClick={() => this.refreshSummary(userContext)}>
-                                <Glyphicon glyph="th"/>
+                                <span>
+                                    {scenarioCount + ' '}
+                                    <Glyphicon glyph="th"/>
+                                </span>
                             </div>
                         </Col>
-                        <Col md={5} className="close-col">
+                        <Col md={3} className="close-col">
                             <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipRequired}>
                                 <div className={resultClassRequired}>
-                                    <span className="summary-item">Expected Tests:</span>
+                                    <span className="summary-item">Required:</span>
                                     <span className="summary-number">{requiredCount}</span>
+                                </div>
+                            </OverlayTrigger>
+                        </Col>
+                        <Col md={2} className="close-col">
+                            <OverlayTrigger delayShow={tooltipDelay} placement="left" overlay={tooltipActual}>
+                                <div className={resultClassPass}>
+                                    <span className="summary-item">Actual:</span>
+                                    <span className="summary-number">{actualCount}</span>
                                 </div>
                             </OverlayTrigger>
                         </Col>

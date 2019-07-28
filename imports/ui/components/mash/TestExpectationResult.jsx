@@ -68,7 +68,12 @@ export default class TestExpectationResult extends Component {
                     if(testResult.suiteName !== 'NONE') {
                         testName = testResult.suiteName + ' - ' + testResult.groupName + ' - ' + testResult.testName;
                     } else {
-                        testName = testResult.groupName + ' - ' + testResult.testName;
+                        if(testResult.groupName !== 'NONE'){
+                            testName = testResult.groupName + ' - ' + testResult.testName;
+                        } else {
+                            testName = testResult.testName;
+                        }
+
                     }
                 } else {
                     if(testResult.suiteName !== 'NONE') {

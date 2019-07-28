@@ -36,6 +36,231 @@ class DesignComponentServicesClass {
         log((msg) => console.log(msg), LogLevel.INFO, "Inserting hierarchy data DONE");
     }
 
+    populateMovedComponentHierarchy(movingComponent, newParentComponent){
+
+        let parentSectionRef = 'NONE';
+
+        switch(movingComponent.componentType){
+
+            case ComponentType.SCENARIO:
+
+                // log((msg) => console.log(msg), LogLevel.DEBUG, "Moving a Scenario to parent with App {}, S1 {}, S2 {}, S3 {}, S4 {}, F {}, A {}",
+                //     newParentComponent.appRef, newParentComponent.s1Ref, newParentComponent.s2Ref, newParentComponent.s3Ref, newParentComponent.s4Ref, newParentComponent.featureRef, newParentComponent.componentReferenceId);
+
+                // Just need to recalculate its hierarchy
+                const newScenarioHierarchy = {
+                    appRef: newParentComponent.appRef,
+                    s1Ref:  newParentComponent.s1Ref,
+                    s2Ref:  newParentComponent.s2Ref,
+                    s3Ref:  newParentComponent.s3Ref,
+                    s4Ref:  newParentComponent.s4Ref,
+                    featureRef: newParentComponent.featureRef,
+                    aspectRef: newParentComponent.componentReferenceId
+                };
+
+                DesignComponentData.setComponentHierarchyRefs(movingComponent._id, newScenarioHierarchy);
+
+                break;
+
+            case ComponentType.FEATURE:
+
+                // log((msg) => console.log(msg), LogLevel.DEBUG, "Moving a Feature to parent with App {}, S1 {}, S2 {}, S3 {}, S4 {}, F {}",
+                //     newParentComponent.appRef, newParentComponent.s1Ref, newParentComponent.s2Ref, newParentComponent.s3Ref, newParentComponent.s4Ref, movingComponent.componentReferenceId);
+
+                // Get new hierarchy
+                parentSectionRef = newParentComponent.componentReferenceId;
+
+                let newFeatureHierarchy = {};
+
+                if(newParentComponent.s1Ref === 'NONE'){
+                    newFeatureHierarchy = {
+                        appRef: newParentComponent.appRef,
+                        s1Ref:  parentSectionRef,
+                        s2Ref:  newParentComponent.s2Ref,
+                        s3Ref:  newParentComponent.s3Ref,
+                        s4Ref:  newParentComponent.s4Ref
+                    };
+                } else{
+                    if(newParentComponent.s2Ref === 'NONE'){
+
+                        newFeatureHierarchy = {
+                            appRef: newParentComponent.appRef,
+                            s1Ref:  newParentComponent.s1Ref,
+                            s2Ref:  parentSectionRef,
+                            s3Ref:  newParentComponent.s3Ref,
+                            s4Ref:  newParentComponent.s4Ref
+                        };
+                    } else{
+                        if(newParentComponent.s3Ref === 'NONE'){
+
+                            newFeatureHierarchy = {
+                                appRef: newParentComponent.appRef,
+                                s1Ref:  newParentComponent.s1Ref,
+                                s2Ref:  newParentComponent.s2Ref,
+                                s3Ref:  parentSectionRef,
+                                s4Ref:  newParentComponent.s4Ref
+                            };
+                        } else{
+                            if(newParentComponent.s4Ref === 'NONE'){
+
+                                newFeatureHierarchy = {
+                                    appRef: newParentComponent.appRef,
+                                    s1Ref:  newParentComponent.s1Ref,
+                                    s2Ref:  newParentComponent.s2Ref,
+                                    s3Ref:  newParentComponent.s3Ref,
+                                    s4Ref:  parentSectionRef
+                                };
+                            } else{
+                                newFeatureHierarchy = {
+                                    appRef: newParentComponent.appRef,
+                                    s1Ref:  newParentComponent.s1Ref,
+                                    s2Ref:  newParentComponent.s2Ref,
+                                    s3Ref:  newParentComponent.s3Ref,
+                                    s4Ref:  newParentComponent.s4Ref
+                                };
+                            }
+                        }
+                    }
+                }
+
+                DesignComponentData.updateFeatureHierarchyRefs(movingComponent._id, newFeatureHierarchy);
+
+                // Apply to child components
+                DesignComponentData.updateFeatureChildrenHierarchyRefs(movingComponent.designVersionId, movingComponent.componentReferenceId, newFeatureHierarchy);
+
+                break;
+
+            case ComponentType.DESIGN_SECTION:
+
+                // Get new hierarchy
+                parentSectionRef = newParentComponent.componentReferenceId;
+
+                let newSectionHierarchy = {};
+                let newSectionChildHierarchy = {};
+
+                if(newParentComponent.componentType === ComponentType.APPLICATION) {
+
+                    newSectionHierarchy = {
+                        appRef: parentSectionRef,
+                        s1Ref: 'NONE',
+                        s2Ref: 'NONE',
+                        s3Ref: 'NONE',
+                        s4Ref: 'NONE'
+                    };
+
+                    newSectionChildHierarchy = {
+                        appRef: parentSectionRef,
+                        s1Ref: movingComponent.componentReferenceId,
+                        s2Ref: 'NONE',
+                        s3Ref: 'NONE',
+                        s4Ref: 'NONE'
+                    };
+
+                } else {
+
+                    if(newParentComponent.s1Ref === 'NONE'){
+                        newSectionHierarchy = {
+                            appRef: newParentComponent.appRef,
+                            s1Ref:  parentSectionRef,
+                            s2Ref:  newParentComponent.s2Ref,
+                            s3Ref:  newParentComponent.s3Ref,
+                            s4Ref:  newParentComponent.s4Ref
+                        };
+
+                        newSectionChildHierarchy = {
+                            appRef: newParentComponent.appRef,
+                            s1Ref:  parentSectionRef,
+                            s2Ref:  newParentComponent.s2Ref,
+                            s3Ref:  newParentComponent.s3Ref,
+                            s4Ref:  newParentComponent.s4Ref
+                        };
+                    } else{
+                        if(newParentComponent.s2Ref === 'NONE'){
+
+                            newSectionHierarchy = {
+                                appRef: newParentComponent.appRef,
+                                s1Ref:  newParentComponent.s1Ref,
+                                s2Ref:  parentSectionRef,
+                                s3Ref:  newParentComponent.s3Ref,
+                                s4Ref:  newParentComponent.s4Ref
+                            };
+
+                            newSectionChildHierarchy = {
+                                appRef: newParentComponent.appRef,
+                                s1Ref:  newParentComponent.s1Ref,
+                                s2Ref:  parentSectionRef,
+                                s3Ref:  newParentComponent.s3Ref,
+                                s4Ref:  newParentComponent.s4Ref
+                            };
+                        } else{
+                            if(newParentComponent.s3Ref === 'NONE'){
+
+                                newSectionHierarchy = {
+                                    appRef: newParentComponent.appRef,
+                                    s1Ref:  newParentComponent.s1Ref,
+                                    s2Ref:  newParentComponent.s2Ref,
+                                    s3Ref:  parentSectionRef,
+                                    s4Ref:  newParentComponent.s4Ref
+                                };
+
+                                newSectionChildHierarchy = {
+                                    appRef: newParentComponent.appRef,
+                                    s1Ref:  newParentComponent.s1Ref,
+                                    s2Ref:  newParentComponent.s2Ref,
+                                    s3Ref:  parentSectionRef,
+                                    s4Ref:  newParentComponent.s4Ref
+                                };
+                            } else{
+                                if(newParentComponent.s4Ref === 'NONE'){
+
+                                    newSectionHierarchy = {
+                                        appRef: newParentComponent.appRef,
+                                        s1Ref:  newParentComponent.s1Ref,
+                                        s2Ref:  newParentComponent.s2Ref,
+                                        s3Ref:  newParentComponent.s3Ref,
+                                        s4Ref:  parentSectionRef
+                                    };
+
+                                    newSectionChildHierarchy = {
+                                        appRef: newParentComponent.appRef,
+                                        s1Ref:  newParentComponent.s1Ref,
+                                        s2Ref:  newParentComponent.s2Ref,
+                                        s3Ref:  newParentComponent.s3Ref,
+                                        s4Ref:  parentSectionRef
+                                    };
+                                } else{
+                                    newSectionHierarchy = {
+                                        appRef: newParentComponent.appRef,
+                                        s1Ref:  newParentComponent.s1Ref,
+                                        s2Ref:  newParentComponent.s2Ref,
+                                        s3Ref:  newParentComponent.s3Ref,
+                                        s4Ref:  newParentComponent.s4Ref
+                                    };
+
+                                    newSectionChildHierarchy = {
+                                        appRef: newParentComponent.appRef,
+                                        s1Ref:  newParentComponent.s1Ref,
+                                        s2Ref:  newParentComponent.s2Ref,
+                                        s3Ref:  newParentComponent.s3Ref,
+                                        s4Ref:  newParentComponent.s4Ref
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // console.log("Section Hierarchy %o", newSectionHierarchy);
+                // console.log("Section Child Hierarchy %o", newSectionChildHierarchy);
+
+                DesignComponentData.updateSectionHierarchyRefs(movingComponent._id, newSectionHierarchy);
+
+                // Apply to child components - all components where a section ref was this section
+                DesignComponentData.updateSectionChildrenHierarchyRefs(movingComponent.designVersionId, movingComponent.componentReferenceId, newSectionChildHierarchy);
+                break;
+        }
+    }
+
     // Add a new design component
     addNewComponent(designVersionId, parentRefId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, workPackageId='NONE'){
 
@@ -174,8 +399,8 @@ class DesignComponentServicesClass {
                 throw new Meteor.Error('designComponent.moveDesignComponent.noComponent', 'Design Component did not exist', designComponentId)
             }
 
-            // After a move like this is best to recalculate the entire hierarchy
-            this.populateHierarchyIndexData(movingComponent.designVersionId);
+            // After a move need to recalc the hierarchy of moved component and any children of it
+            this.populateMovedComponentHierarchy(movingComponent, newParent);
 
         }
     }

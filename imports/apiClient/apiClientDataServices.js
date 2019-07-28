@@ -2079,6 +2079,7 @@ class ClientDataServicesClass{
 
         let featureScenarioCount = 0;
         let featureExpectedTestCount = 0;
+        let featureActualTestCount = 0;
         let featurePassingTestCount = 0;
         let featureFailingTestCount = 0;
         let featureMissingTestCount = 0;
@@ -2089,6 +2090,7 @@ class ClientDataServicesClass{
 
             featureScenarioCount++;
             featureExpectedTestCount += scenarioSummary.totalExpectations;
+            featureActualTestCount += scenarioSummary.totalTests;
             featurePassingTestCount += scenarioSummary.totalPassing;
             featureFailingTestCount += scenarioSummary.totalFailing;
             featureMissingTestCount += scenarioSummary.totalMissing;
@@ -2112,6 +2114,7 @@ class ClientDataServicesClass{
         return{
             featureScenarioCount: featureScenarioCount,
             featureExpectedTestCount: featureExpectedTestCount,
+            featureActualTestCount: featureActualTestCount,
             featurePassingTestCount: featurePassingTestCount,
             featureFailingTestCount: featureFailingTestCount,
             featureMissingTestCount: featureMissingTestCount,

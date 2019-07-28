@@ -22,6 +22,7 @@ import {WorkPackageData} from "../../data/work/work_package_db";
 import {DesignVersionData} from "../../data/design/design_version_db";
 import {DesignAnomalyData} from "../../data/design/design_anomaly_db";
 import {WorkPackageTestStatus} from "../../constants/constants";
+import {activateUser} from "../../apiValidatedMethods/user_management_methods";
 
 //======================================================================================================================
 //
@@ -816,6 +817,8 @@ class TestIntegrationModulesClass {
         // There is at least one expectation for the scenario
         if(testTypeExpectations.length > 0){
 
+            let scenarioExpectationResults = [];
+
             let scenarioExpectationResult = {
                 result: MashTestStatus.MASH_NO_TESTS,
                 test: {}
@@ -828,10 +831,14 @@ class TestIntegrationModulesClass {
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "                 One expectation");
 
-                // No permutations - get this test result
-                scenarioExpectationResult = this.getExpectationResult(testTypeResults, scenario.componentNameNew, 'NONE');
+                // No permutations - get any test results for the scenario
+                scenarioExpectationResults = this.getExpectationResults(testTypeResults, scenario.componentNameNew, 'NONE');
 
-                if(scenarioExpectationResult.result !== MashTestStatus.MASH_NO_TESTS){
+                let scenarioPass = 0;
+                let scenarioFail = 0;
+
+                // Add any test results
+                scenarioExpectationResults.forEach((scenarioExpectationResult) => {
 
                     const testIdentity = this.getTestIdentity(
                         scenarioExpectationResult.test.testFullName,
@@ -845,9 +852,9 @@ class TestIntegrationModulesClass {
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         designScenarioReferenceId:  scenario.componentReferenceId,
-                        scenarioTestExpectationId:  testTypeExpectations[0]._id,
+                        scenarioTestExpectationId:  'NONE',
                         testType:                   testType,
-                        permValue:                  'SCENARIO',
+                        permValue:                  'Scenario Test',
                         suiteName:                  testIdentity.suite,
                         groupName:                  testIdentity.group,
                         testName:                   testIdentity.test,
@@ -859,30 +866,82 @@ class TestIntegrationModulesClass {
                         testDuration:               scenarioExpectationResult.test.testDuration
                     });
 
-                } else {
+                    // Store the overall status
+                    switch(scenarioExpectationResult.result){
+                         case MashTestStatus.MASH_PASS:
+                            scenarioPass++;
+                            break;
+                        case MashTestStatus.MASH_FAIL:
+                            scenarioFail++;
+                            break;
+                    }
+                });
+
+                // If no results at all, add a missing test to the results
+                if(scenarioExpectationResults.length === 0){
 
                     testExpectationResultsData.push({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         designScenarioReferenceId:  scenario.componentReferenceId,
-                        scenarioTestExpectationId:  testTypeExpectations[0]._id,
+                        scenarioTestExpectationId:  'NONE',
                         testType:                   testType,
-                        permValue:                  'SCENARIO',
+                        permValue:                  'Scenario Test',
                         suiteName:                  'NONE',
                         groupName:                  'NONE',
                         testName:                   'No test found',
                         testFullName:               'NONE',
                         testOutcome:                MashTestStatus.MASH_NO_TESTS,
-                        testError:                  '',
-                        testErrorReason:            '',
-                        testStack:                  '',
-                        testDuration:               0
+                        testError:                  'NONE',
+                        testErrorReason:            'NONE',
+                        testStack:                  'NONE',
+                        testDuration:               'NONE',
                     });
                 }
 
+                // Add overall scenario record
+                let scenarioStatus = MashTestStatus.MASH_NO_TESTS;
+
+                // Update the overall status
+                if(scenarioFail > 0){
+                    // Any fails its a fail
+                    scenarioStatus = MashTestStatus.MASH_FAIL;
+                } else {
+                    if(scenarioPass > 0){
+                        scenarioStatus = MashTestStatus.MASH_PASS;
+                    }
+                }
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "                 Overall scenario result is {}", scenarioStatus);
+
+                // Add a dummy test expectation result for the whole scenario
+                testExpectationResultsData.push({
+                    userId:                     userContext.userId,
+                    designVersionId:            userContext.designVersionId,
+                    designScenarioReferenceId:  scenario.componentReferenceId,
+                    scenarioTestExpectationId:  testTypeExpectations[0]._id,
+                    testType:                   testType,
+                    permValue:                  'SCENARIO',
+                    suiteName:                  'NONE',
+                    groupName:                  'NONE',
+                    testName:                   'NONE',
+                    testFullName:               'NONE',
+                    testOutcome:                scenarioStatus,
+                    testError:                  'NONE',
+                    testErrorReason:            'NONE',
+                    testStack:                  'NONE',
+                    testDuration:               'NONE',
+                });
+
+                scenarioExpectationResult = {
+                    result: scenarioStatus,
+                    actualTests:   scenarioExpectationResults.length,
+                    test: {}
+                };
+
             } else {
 
-                // More than one expectation - scenario level plus permutations.  Only the permuatations are now actual expectations
+                // More than one expectation - scenario level plus permutations.  Only the permutations are now actual expectations
                 log((msg) => console.log(msg), LogLevel.TRACE, "                 {} expectations", testTypeExpectations.length);
 
                 let scenarioStatus = MashTestStatus.MASH_NO_TESTS;
@@ -890,6 +949,7 @@ class TestIntegrationModulesClass {
                 let scenarioPass = 0;
                 let scenarioFail = 0;
                 let scenarioExpectationId = 'NONE';
+                let actualTests = 0;
 
                 testTypeExpectations.forEach((expectation) => {
 
@@ -904,36 +964,37 @@ class TestIntegrationModulesClass {
                             permutationValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId).permutationValueName;
                         }
 
-                        let expectationResult = {
-                            result: MashTestStatus.MASH_NO_TESTS,
-                            test: {}
-                        };
-
-                        expectationResult = this.getExpectationResult(testTypeResults, scenario.componentNameNew, permutationValue);
+                        // For now we only expect one test per permutation
+                        const expectationResult = this.getExpectationResults(testTypeResults, scenario.componentNameNew, permutationValue)[0];
 
                         //log((msg) => console.log(msg), LogLevel.PERF, "                 Adding perm {} result {}", permutationValue, expectationResult.result);
 
-                        testTypeExpectationResults.push({
-                            value:  permutationValue,
-                            result: expectationResult
-                        });
+                        // if(scenario.componentNameNew === 'A new Design can only be added by a Designer'){
+                        //     console.log('Perm: %s\nResult %o', permutationValue, expectationResult)
+                        // }
 
-                        // Store the overall status
-                        switch(expectationResult.result){
-                            case MashTestStatus.MASH_NO_TESTS:
-                            case MashTestStatus.MASH_PENDING:
-                                scenarioMissing++;
-                                break;
-                            case MashTestStatus.MASH_PASS:
-                                scenarioPass++;
-                                break;
-                            case MashTestStatus.MASH_FAIL:
-                                scenarioFail++;
-                                break;
-                        }
+                        if(expectationResult){
 
+                            actualTests++;
 
-                        if(expectationResult.result !== MashTestStatus.MASH_NO_TESTS){
+                            testTypeExpectationResults.push({
+                                value:  permutationValue,
+                                result: expectationResult
+                            });
+
+                            // Store the overall status
+                            switch(expectationResult.result){
+                                case MashTestStatus.MASH_NO_TESTS:
+                                case MashTestStatus.MASH_PENDING:
+                                    scenarioMissing++;
+                                    break;
+                                case MashTestStatus.MASH_PASS:
+                                    scenarioPass++;
+                                    break;
+                                case MashTestStatus.MASH_FAIL:
+                                    scenarioFail++;
+                                    break;
+                            }
 
                             const testIdentity = this.getTestIdentity(
                                 expectationResult.test.testFullName,
@@ -960,7 +1021,21 @@ class TestIntegrationModulesClass {
                                 testStack:                  expectationResult.test.testStackTrace,
                                 testDuration:               expectationResult.test.testDuration
                             });
+
                         } else {
+
+                            // Manufacture a missing permutation test result
+                            const missingResult = {
+                                result: MashTestStatus.MASH_NO_TESTS,
+                                test: {}
+                            };
+
+                            testTypeExpectationResults.push({
+                                value:  permutationValue,
+                                result: missingResult
+                            });
+
+                            scenarioMissing++;
 
                             testExpectationResultsData.push({
                                 userId: userContext.userId,
@@ -1030,9 +1105,14 @@ class TestIntegrationModulesClass {
 
                 scenarioExpectationResult = {
                     result: scenarioStatus,
+                    actualTests: actualTests,
                     test: {}
                 };
             }
+
+            // if(scenario.componentNameNew === 'A new Design can only be added by a Designer'){
+            //     console.log('ExpectationResults %o', testTypeExpectationResults)
+            // }
 
             return{
                 scenarioExpectationResult:      scenarioExpectationResult,
@@ -1056,43 +1136,57 @@ class TestIntegrationModulesClass {
 
     }
 
-    getExpectationResult(resultsData, scenarioText, permutationValue){
+    getExpectationResults(resultsData, scenarioText, permutationValue){
 
         let searchRegex = new RegExp(scenarioText);
+
+        let expectationResults = [];
 
         // Get any test results for the Scenario
         const scenarioTests = resultsData.find({
             testFullName:   {$regex: searchRegex}
         }).fetch();
 
-        // Need a separate result so can return something if no test found
-        let result = MashTestStatus.MASH_NO_TESTS;
-        let theTest = {};
 
-        // Ideally there is only one result
+        // There could be more than one test for a Scenario
         scenarioTests.forEach((test) => {
 
             if(permutationValue !== 'NONE'){
 
                 // If a permutation the actual test must include it
-                if((test.testName !== scenarioText) && test.testName.includes(permutationValue)){
-                    result = test.testResult;
-                    theTest = test;
+                if((test.testName !== scenarioText) && test.testName.includes(permutationValue)) {
+
+                    expectationResults.push(
+                        {
+                            result: test.testResult,
+                            test: test
+                        }
+                    );
                 }
+                // } else {
+                //
+                //     expectationResults.push(
+                //         {
+                //             result: MashTestStatus.MASH_NO_TESTS,
+                //             test: test
+                //         }
+                //     );
+                // }
 
             } else{
 
-                // No permutation so should be only 1 matching test
-                result = test.testResult;
-                theTest = test;
+                // No permutation so only matching the scenario
+                expectationResults.push(
+                    {
+                        result: test.testResult,
+                        test: test
+                    }
+                );
             }
 
         });
 
-        return {
-            result: result,
-            test: theTest
-        }
+        return expectationResults
 
     }
 
@@ -1185,6 +1279,8 @@ class TestIntegrationModulesClass {
             // One expectation only
             log((msg) => console.log(msg), LogLevel.TRACE, "               Scenario data: Adding 1 scenario expectation");
             scenarioData.scenarioTotalExpectations++;
+            scenarioData.scenarioTotalTests += testTypeScenarioResult.actualTests;
+
             switch(testType){
                 case TestType.ACCEPTANCE:
                     scenarioData.scenarioAccExpectations++;
@@ -1215,7 +1311,6 @@ class TestIntegrationModulesClass {
                     break;
                 case MashTestStatus.MASH_PASS:
                     scenarioData.scenarioTotalPass++;
-                    scenarioData.scenarioTotalTests++;
                     switch(testType){
                         case TestType.ACCEPTANCE:
                             scenarioData.scenarioAccPass++;
@@ -1233,7 +1328,6 @@ class TestIntegrationModulesClass {
                     break;
                 case MashTestStatus.MASH_FAIL:
                     scenarioData.scenarioTotalFail++;
-                    scenarioData.scenarioTotalTests++;
                     switch(testType){
                         case TestType.ACCEPTANCE:
                             scenarioData.scenarioAccFail++;

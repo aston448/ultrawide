@@ -603,6 +603,137 @@ class DesignComponentDataClass {
         )
     }
 
+    updateFeatureHierarchyRefs(featureId, indexData){
+
+        return DesignVersionComponents.update(
+            {
+                _id:    featureId
+            },
+            {
+                $set:{
+                    appRef: indexData.appRef,
+                    s1Ref:  indexData.s1Ref,
+                    s2Ref:  indexData.s2Ref,
+                    s3Ref:  indexData.s3Ref,
+                    s4Ref:  indexData.s4Ref
+                }
+            }
+        )
+    }
+
+    updateFeatureChildrenHierarchyRefs(designVersionId, featureRef, indexData){
+
+        return DesignVersionComponents.update(
+            {
+                designVersionId:    designVersionId,
+                featureRef:         featureRef
+            },
+            {
+                $set:{
+                    appRef:         indexData.appRef,
+                    s1Ref:          indexData.s1Ref,
+                    s2Ref:          indexData.s2Ref,
+                    s3Ref:          indexData.s3Ref,
+                    s4Ref:          indexData.s4Ref
+                }
+            },
+            {multi: true}
+        )
+    }
+
+    updateSectionHierarchyRefs(sectionId, indexData){
+
+        return DesignVersionComponents.update(
+            {
+                _id:    sectionId
+            },
+            {
+                $set:{
+                    appRef: indexData.appRef,
+                    s1Ref:  indexData.s1Ref,
+                    s2Ref:  indexData.s2Ref,
+                    s3Ref:  indexData.s3Ref,
+                    s4Ref:  indexData.s4Ref
+                }
+            }
+        )
+    }
+
+    updateSectionChildrenHierarchyRefs(designVersionId, sectionRef, indexData){
+
+        DesignVersionComponents.update(
+            {
+                designVersionId:    designVersionId,
+                s1Ref:              sectionRef
+
+            },
+            {
+                $set:{
+                    appRef: indexData.appRef,
+                    s1Ref:  indexData.s1Ref,
+                    s2Ref:  indexData.s2Ref,
+                    s3Ref:  indexData.s3Ref,
+                    s4Ref:  indexData.s4Ref
+                }
+            },
+            {multi: true}
+        );
+
+        DesignVersionComponents.update(
+            {
+                designVersionId:    designVersionId,
+                s2Ref:              sectionRef
+
+            },
+            {
+                $set:{
+                    appRef: indexData.appRef,
+                    s1Ref:  indexData.s1Ref,
+                    s2Ref:  indexData.s2Ref,
+                    s3Ref:  indexData.s3Ref,
+                    s4Ref:  indexData.s4Ref
+                }
+            },
+            {multi: true}
+        );
+
+        DesignVersionComponents.update(
+            {
+                designVersionId:    designVersionId,
+                s3Ref:              sectionRef
+
+            },
+            {
+                $set:{
+                    appRef: indexData.appRef,
+                    s1Ref:  indexData.s1Ref,
+                    s2Ref:  indexData.s2Ref,
+                    s3Ref:  indexData.s3Ref,
+                    s4Ref:  indexData.s4Ref
+                }
+            },
+            {multi: true}
+        );
+
+        DesignVersionComponents.update(
+            {
+                designVersionId:    designVersionId,
+                s4Ref:              sectionRef
+
+            },
+            {
+                $set:{
+                    appRef: indexData.appRef,
+                    s1Ref:  indexData.s1Ref,
+                    s2Ref:  indexData.s2Ref,
+                    s3Ref:  indexData.s3Ref,
+                    s4Ref:  indexData.s4Ref
+                }
+            },
+            {multi: true}
+        );
+    }
+
     setComponentReference(designComponentId, componentReference){
 
         return DesignVersionComponents.update(

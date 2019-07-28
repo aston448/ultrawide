@@ -245,12 +245,11 @@ class DesignVersionModulesClass {
         movedComponents.forEach((movedComponent) => {
 
             this.moveUpdateItemInDesignVersion(movedComponent);
-        });
 
-        // Recalc the hierarchy if any moved components
-        if(movedComponents.length > 0){
-            DesignComponentModules.populateHierarchyIndexData(update.designVersionId);
-        }
+            const newParentComponent = DesignComponentData.getDesignComponentByRef(movedComponent.designVersionId, movedComponent.componentParentReferenceIdNew);
+
+            DesignComponentModules.populateMovedComponentHierarchy(movedComponent, newParentComponent);
+        });
 
         // REMOVALS ----------------------------------------------------------------------------------------------------
 
