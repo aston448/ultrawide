@@ -3,13 +3,13 @@ import { DesignActions }                from '../../../test_framework/test_wrapp
 import { DesignVersionActions }         from '../../../test_framework/test_wrappers/design_version_actions.js';
 import { DesignComponentActions }       from '../../../test_framework/test_wrappers/design_component_actions.js';
 import { TestExpectationActions }       from '../../../test_framework/test_wrappers/test_expectation_actions.js';
-import { TestExpectationVerifications } from '../../../test_framework/test_wrappers/test_expectation_verifications.js'
+import {OutputLocationsActions}         from "../../../test_framework/test_wrappers/output_locations_actions";
+import {TestIntegrationActions}         from "../../../test_framework/test_wrappers/test_integration_actions";
+import {TestResultVerifications}        from "../../../test_framework/test_wrappers/test_result_verifications";
+
 import {MashTestStatus, TestLocationFileType, TestRunner} from "../../../imports/constants/constants";
 import {DefaultLocationText} from "../../../imports/constants/default_names";
-import {OutputLocationsActions} from "../../../test_framework/test_wrappers/output_locations_actions";
-import {TestIntegrationActions} from "../../../test_framework/test_wrappers/test_integration_actions";
-import {ViewOptionsActions} from "../../../test_framework/test_wrappers/view_options_actions";
-import {TestResultVerifications} from "../../../test_framework/test_wrappers/test_result_verifications";
+
 
 describe('UC 420 - Refresh Test Data', function(){
 

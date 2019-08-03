@@ -228,65 +228,6 @@ class ClientDataServicesClass{
         }
     }
 
-    // getUserData(userContext, callback){
-    //
-    //     if(Meteor.isClient){
-    //
-    //          //log((msg) => console.log(msg), LogLevel.DEBUG, "Get User Data with callback {}", callback);
-    //
-    //         store.dispatch(updateUserMessage({
-    //             messageType: MessageType.WARNING,
-    //             messageText: 'FETCHING USER DATA FROM SERVER...'
-    //         }));
-    //
-    //         // User specific data
-    //         const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId, userContext.designVersionId);
-    //         const irHandle = Meteor.subscribe('userIntegrationTestResults', userContext.userId);
-    //         const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
-    //         const stHandle = Meteor.subscribe('userMashScenarioTests', userContext.userId);
-    //         const tsHandle = Meteor.subscribe('userDevTestSummary', userContext.userId);
-    //         const dsHandle = Meteor.subscribe('userDevDesignSummary', userContext.userId);
-    //         const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
-    //         const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
-    //         const dveHandle = Meteor.subscribe('userDvScenarioTestExpectationStatus', userContext.userId, userContext.designVersionId);
-    //         const dstHandle = Meteor.subscribe('userDvScenarioTestSummary', userContext.userId, userContext.designVersionId);
-    //         const dftHandle = Meteor.subscribe('userDvFeatureTestSummary', userContext.userId, userContext.designVersionId);
-    //         const dvtHandle = Meteor.subscribe('userDvTestSummary', userContext.userId, userContext.designVersionId);
-    //         const dwsHandle = Meteor.subscribe('userDvWorkSummary', userContext.userId, userContext.designVersionId);
-    //         const dblHandle = Meteor.subscribe('userDvBacklog', userContext.userId, userContext.designVersionId);
-    //
-    //         Tracker.autorun((loader) => {
-    //
-    //             let loading = (
-    //                 !dusHandle.ready() || !dvmHandle.ready() ||
-    //                 !irHandle.ready() || !mrHandle.ready() || !stHandle.ready() || !tsHandle.ready() ||
-    //                 !dsHandle.ready() || !psHandle.ready() || !dveHandle.ready() ||
-    //                 !dstHandle.ready() || ! dftHandle.ready() || ! dvtHandle.ready() ||
-    //                 !dwsHandle.ready() || !dblHandle.ready()
-    //             );
-    //
-    //             log((msg) => console.log(msg), LogLevel.DEBUG, "loading User Data = {}", loading);
-    //
-    //             if (!loading) {
-    //
-    //                 store.dispatch(updateUserMessage({
-    //                     messageType: MessageType.INFO,
-    //                     messageText: 'User data loaded'
-    //                 }));
-    //
-    //                 // If an action wanted after loading call it...
-    //                 if (callback) {
-    //                     callback();
-    //                 }
-    //
-    //                 // Stop this checking once we are done or there will be random chaos
-    //                 loader.stop();
-    //             }
-    //
-    //         });
-    //     }
-    // }
-
     getDesignVersionData(userContext, callback){
 
         if(Meteor.isClient) {
@@ -647,6 +588,64 @@ class ClientDataServicesClass{
         )
     }
 
+    getScenarioOverallTestResult(userContext, scenario){
+
+        // Could be one result for each test type
+        const scenarioTestResults = UserTestData.getScenarioLevelTestResults(
+            userContext.userId,
+            userContext.designVersionId,
+            scenario.componentReferenceId
+        );
+
+        let scenarioTestResult = MashTestStatus.MASH_NO_TESTS;
+        let passCount = 0;
+        let failCount = 0;
+        let missingCount = 0;
+
+        scenarioTestResults.forEach((result) => {
+            switch (result.testOutcome){
+                case MashTestStatus.MASH_PASS:
+                    passCount++;
+                    break;
+                case MashTestStatus.MASH_FAIL:
+                    failCount++;
+                    break;
+                default:
+                    missingCount++;
+                    break;
+            }
+        });
+
+        if(failCount > 0){
+            scenarioTestResult = MashTestStatus.MASH_FAIL;
+        } else {
+            if(passCount > 0 && missingCount === 0){
+                scenarioTestResult = MashTestStatus.MASH_PASS;
+            } else {
+                scenarioTestResult = MashTestStatus.MASH_INCOMPLETE;
+            }
+        }
+
+        return{
+            scenarioTestResult:     scenarioTestResult,
+            scenarioName:           scenario.componentNameNew
+        }
+    }
+
+    getScenarioPermutationTestResults(userContext, scenario){
+
+        const scenarioTestResults = UserTestData.getScenarioPermutationTestResults(
+            userContext.userId,
+            userContext.designVersionId,
+            scenario.componentReferenceId
+        );
+
+        return{
+            scenarioTestResults:    scenarioTestResults,
+            scenarioName:           scenario.componentNameNew
+        }
+    }
+
     getWorkItemList(userContext, workItemType, itemParentRefId, displayContext){
 
         if(userContext.designVersionId === 'NONE'){
@@ -873,115 +872,6 @@ class ClientDataServicesClass{
         //console.log('Getting features list for tab ' + homePageTab);
 
         if(homePageTab === HomePageTab.TAB_SUMMARY){
-
-            // // Main Summary Page.  List depends on display context.
-            // if (userContext.designVersionId === 'NONE') {
-            //
-            //     return {
-            //         summaryData: featureSummaries,
-            //         designVersionName: 'NONE',
-            //         workPackageName: 'NONE',
-            //         homePageTab: HomePageTab.TAB_SUMMARY,
-            //         displayContext: displayContext
-            //     };
-            //
-            // } else {
-            //
-            //     const workItemContextId = store.getState().currentUserSummaryItem;
-            //     const workSummary = UserDvWorkSummaryData.getWorkItemSummaryDataById(workItemContextId);
-            //
-            //     // Default context is DV if none set yet
-            //     let workContext = {
-            //         userId: userContext.userId,
-            //         dvId: userContext.designVersionId,
-            //         inId: 'NONE',
-            //         itId: 'NONE',
-            //         duId: 'NONE',
-            //         wpId: 'NONE',
-            //         summaryType: SummaryType.SUMMARY_DV
-            //     };
-            //
-            //     if(workSummary) {
-            //         workContext = {
-            //             userId: userContext.userId,
-            //             dvId: userContext.designVersionId,
-            //             inId: workSummary.inId,
-            //             itId: workSummary.itId,
-            //             duId: workSummary.duId,
-            //             wpId: workSummary.wpId,
-            //             summaryType: workSummary.summaryType
-            //         };
-            //     }
-            //
-            //     switch(displayContext){
-            //
-            //         case DisplayContext.DV_BACKLOG_DESIGN:
-            //
-            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_DESIGN);
-            //             break;
-            //
-            //         case DisplayContext.DV_BACKLOG_ANOMALY:
-            //
-            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_SCENARIO_ANOMALY);
-            //             break;
-            //
-            //         case DisplayContext.DV_BACKLOG_WORK:
-            //
-            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_WP_ASSIGN);
-            //             break;
-            //
-            //         case DisplayContext.DV_BACKLOG_NO_EXP:
-            //
-            //             //features = UserDvTestSummaryData.getFeaturesWithScenariosWithNoTestExpectations(userContext.userId, userContext.designVersionId);
-            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_EXP);
-            //             break;
-            //
-            //         case DisplayContext.DV_BACKLOG_TEST_MISSING:
-            //
-            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_MISSING);
-            //             //features = UserDvTestSummaryData.getFeaturesWithScenariosWithMissingTests(userContext.userId, userContext.designVersionId);
-            //             break;
-            //
-            //         case DisplayContext.DV_BACKLOG_TEST_FAIL:
-            //
-            //             features = UserDvBacklogData.getBacklogSummaryDataForWorkItemBacklog(workContext, BacklogType.BACKLOG_TEST_FAIL);
-            //             //features = UserDvTestSummaryData.getFeaturesWithScenariosWithFailingTests(userContext.userId, userContext.designVersionId);
-            //             break;
-            //
-            //     }
-            //
-            //     features.forEach((backlogFeature) => {
-            //
-            //         let feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, backlogFeature.featureRefId);
-            //
-            //         featureSummary = {
-            //             _id: feature._id,
-            //             featureName: feature.componentNameNew,
-            //             featureRef: feature.componentReferenceId,
-            //             hasTestData: true,
-            //             featureTestStatus: backlogFeature.featureTestStatus,
-            //             featureScenarioCount: backlogFeature.featureScenarioCount,
-            //             featureExpectedTestCount: backlogFeature.featureExpectedTestCount,
-            //             featurePassingTestCount: backlogFeature.featurePassingTestCount,
-            //             featureFailingTestCount: backlogFeature.featureFailingTestCount,
-            //             featureMissingTestCount: backlogFeature.featureMissingTestCount
-            //         };
-            //
-            //         featureSummaries.push(featureSummary);
-            //
-            //     });
-            //
-            //     const dv1 = DesignVersionData.getDesignVersionById(userContext.designVersionId);
-            //
-            //     return {
-            //         summaryData: featureSummaries,
-            //         designVersionName: dv1.designVersionName,
-            //         workPackageName: 'NONE',
-            //         homePageTab: homePageTab,
-            //         displayContext: displayContext
-            //     };
-            //
-            // }
 
             return {
                 summaryData: featureSummaries,
@@ -1541,53 +1431,6 @@ class ClientDataServicesClass{
             workingApplications:    workingApplicationsArr
         };
 
-        // switch(view){
-        //     case ViewType.DESIGN_NEW:
-        //     case ViewType.DESIGN_PUBLISHED:
-        //     case ViewType.DESIGN_UPDATABLE:
-        //         // Just need base design version applications
-        //         return{
-        //             baseApplications:       baseApplicationsArr,
-        //             workingApplications:    workingApplicationsArr,
-        //             designSummaryData:      designSummaryData
-        //         };
-        //     case ViewType.DESIGN_UPDATE_EDIT:
-        //         // Need base and update apps
-        //         return{
-        //             baseApplications:       baseApplicationsArr,
-        //             updateApplications:     updateApplicationsArr,
-        //             workingApplications:    workingApplicationsArr
-        //         };
-        //     case ViewType.DESIGN_UPDATE_VIEW:
-        //         // Need design update apps only
-        //         return{
-        //             baseApplications:       [],
-        //             updateApplications:     updateApplicationsArr,
-        //             workingApplications:    workingApplicationsArr
-        //         };
-        //
-        //     case ViewType.WORK_PACKAGE_BASE_EDIT:
-        //     case ViewType.WORK_PACKAGE_BASE_VIEW:
-        //         return {
-        //             scopeApplications:  baseApplicationsArr,
-        //             wpApplications:     wpApplicationsArr,
-        //         };
-        //
-        //     case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-        //     case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-        //         // Need base design version apps and WP in scope apps
-        //         return{
-        //             scopeApplications:  updateApplicationsArr,
-        //             wpApplications:     wpApplicationsArr,
-        //         };
-        //     case ViewType.DEVELOP_BASE_WP:
-        //     case ViewType.DEVELOP_UPDATE_WP:
-        //         // Need just WP apps TODO: get feature files
-        //         return {
-        //             wpApplications: wpApplicationsArr,
-        //             featureFiles: []
-        //         };
-        // }
     }
 
     getComponent(componentId, userContext){
@@ -1772,216 +1615,6 @@ class ClientDataServicesClass{
         }
     }
 
-    // getBackgroundStepsInFeature(view, displayContext, stepContext, designId, designVersionId, updateId, featureReferenceId){
-    //     let backgroundSteps = null;
-    //
-    //     //log((msg) => console.log(msg), LogLevel.TRACE, "Looking for feature background steps in feature: {}", featureReferenceId);
-    //
-    //     // Assume feature is in scope unless we find it isn't for an Update
-    //     let featureInScope = true;
-    //
-    //     switch(view){
-    //         case ViewType.DESIGN_NEW:
-    //         case ViewType.DESIGN_PUBLISHED:
-    //         case ViewType.DESIGN_UPDATABLE:
-    //         case ViewType.WORK_PACKAGE_BASE_EDIT:
-    //         case ViewType.WORK_PACKAGE_BASE_VIEW:
-    //         case ViewType.DEVELOP_BASE_WP:
-    //
-    //             backgroundSteps = FeatureBackgroundSteps.find(
-    //                 {
-    //                     designId: designId,
-    //                     designVersionId: designVersionId,
-    //                     designUpdateId: 'NONE',
-    //                     featureReferenceId: featureReferenceId
-    //                 },
-    //                 {sort:{stepIndex: 1}}
-    //             );
-    //
-    //             log((msg) => console.log(msg), LogLevel.TRACE, "Feature Background Steps found: {}", backgroundSteps.count());
-    //
-    //             return {
-    //                 steps: backgroundSteps.fetch(),
-    //                 displayContext: displayContext,
-    //                 stepContext: stepContext,
-    //                 parentReferenceId: featureReferenceId,
-    //                 parentInScope: featureInScope
-    //             };
-    //
-    //         case ViewType.DESIGN_UPDATE_EDIT:
-    //         case ViewType.DESIGN_UPDATE_VIEW:
-    //         case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-    //         case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-    //         case ViewType.DEVELOP_UPDATE_WP:
-    //
-    //             switch(displayContext){
-    //                 case DisplayContext.UPDATE_EDIT:
-    //                 case DisplayContext.UPDATE_VIEW:
-    //                 case DisplayContext.WP_VIEW:
-    //                     // Update data wanted
-    //                     backgroundSteps = FeatureBackgroundSteps.find(
-    //                         {
-    //                             designId: designId,
-    //                             designVersionId: designVersionId,
-    //                             designUpdateId: updateId,
-    //                             featureReferenceId: featureReferenceId
-    //                         },
-    //                         {sort:{stepIndex: 1}}
-    //                     );
-    //
-    //                     log((msg) => console.log(msg), LogLevel.TRACE, "Update Feature Background Steps found: {}", backgroundSteps.count());
-    //
-    //                     // For updates, check if feature is REALLY in scope
-    //                     const feature = DesignUpdateComponents.findOne(
-    //                         {
-    //                             designId: designId,
-    //                             designVersionId: designVersionId,
-    //                             designUpdateId: updateId,
-    //                             componentType: ComponentType.FEATURE,
-    //                             componentReferenceId: featureReferenceId
-    //                         }
-    //                     );
-    //
-    //                     if(feature){
-    //                         featureInScope = (feature.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
-    //                     }
-    //
-    //                     break;
-    //
-    //                 case DisplayContext.BASE_VIEW:
-    //                     // Base design version data wanted
-    //                     backgroundSteps = FeatureBackgroundSteps.find(
-    //                         {
-    //                             designId: designId,
-    //                             designVersionId: designVersionId,
-    //                             designUpdateId: 'NONE',
-    //                             featureReferenceId: featureReferenceId
-    //                         },
-    //                         {sort:{stepIndex: 1}}
-    //                     );
-    //
-    //                     log((msg) => console.log(msg), LogLevel.TRACE, "Update Base Background Steps found: {}", backgroundSteps.count());
-    //
-    //                     break;
-    //             }
-    //
-    //             return {
-    //                 steps: backgroundSteps.fetch(),
-    //                 displayContext: displayContext,
-    //                 stepContext: stepContext,
-    //                 parentReferenceId: featureReferenceId,
-    //                 parentInScope: featureInScope
-    //             };
-    //
-    //         default:
-    //             log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
-    //     }
-    //
-    // }
-
-    // getScenarioStepsInScenario(view, displayContext, stepContext, designId, designVersionId, updateId, scenarioReferenceId){
-    //     let scenarioSteps = null;
-    //
-    //     // Assume all scenarios are in scope - will check update scenarios to see if they actually are
-    //     let scenarioInScope = true;
-    //
-    //     switch(view){
-    //         case ViewType.DESIGN_NEW:
-    //         case ViewType.DESIGN_PUBLISHED:
-    //         case ViewType.DESIGN_UPDATABLE:
-    //         case ViewType.WORK_PACKAGE_BASE_EDIT:
-    //         case ViewType.WORK_PACKAGE_BASE_VIEW:
-    //         case ViewType.DEVELOP_BASE_WP:
-    //
-    //             scenarioSteps = ScenarioSteps.find(
-    //                 {
-    //                     designId: designId,
-    //                     designVersionId: designVersionId,
-    //                     designUpdateId: 'NONE',
-    //                     scenarioReferenceId: scenarioReferenceId,
-    //                     isRemoved: false
-    //                 },
-    //                 {sort:{stepIndex: 1}}
-    //             );
-    //
-    //             return {
-    //                 steps: scenarioSteps.fetch(),
-    //                 displayContext: displayContext,
-    //                 stepContext: stepContext,
-    //                 parentReferenceId: scenarioReferenceId,
-    //                 parentInScope: scenarioInScope
-    //             };
-    //
-    //         case ViewType.DESIGN_UPDATE_EDIT:
-    //         case ViewType.DESIGN_UPDATE_VIEW:
-    //         case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-    //         case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-    //         case ViewType.DEVELOP_UPDATE_WP:
-    //
-    //             switch(displayContext){
-    //                 case DisplayContext.UPDATE_EDIT:
-    //                 case DisplayContext.UPDATE_VIEW:
-    //                     // Update data wanted
-    //                     scenarioSteps = ScenarioSteps.find(
-    //                         {
-    //                             designId: designId,
-    //                             designVersionId: designVersionId,
-    //                             designUpdateId: updateId,
-    //                             scenarioReferenceId: scenarioReferenceId
-    //                         },
-    //                         {sort:{stepIndex: 1}}
-    //                     );
-    //
-    //                     // For updates, check if scenario is REALLY in scope
-    //                     const scenario = DesignUpdateComponents.findOne(
-    //                         {
-    //                             designId: designId,
-    //                             designVersionId: designVersionId,
-    //                             designUpdateId: updateId,
-    //                             componentType: ComponentType.SCENARIO,
-    //                             componentReferenceId: scenarioReferenceId
-    //                         }
-    //                     );
-    //
-    //                     if(scenario){
-    //                         scenarioInScope = (scenario.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
-    //                     }
-    //
-    //                     break;
-    //
-    //                 case DisplayContext.BASE_VIEW:
-    //                     // Base design version data wanted
-    //                     scenarioSteps = ScenarioSteps.find(
-    //                         {
-    //                             designId: designId,
-    //                             designVersionId: designVersionId,
-    //                             designUpdateId: 'NONE',
-    //                             scenarioReferenceId: scenarioReferenceId,
-    //                             isRemoved: false
-    //                         },
-    //                         {sort:{stepIndex: 1}}
-    //                     );
-    //
-    //                     break;
-    //
-    //                 default:
-    //                     log((msg) => console.log(msg), LogLevel.ERROR, "INVALID DISPLAY CONTEXT TYPE!: {}", displayContext);
-    //             }
-    //
-    //             return {
-    //                 steps: scenarioSteps.fetch(),
-    //                 displayContext: displayContext,
-    //                 stepContext: stepContext,
-    //                 parentReferenceId: scenarioReferenceId,
-    //                 parentInScope: scenarioInScope
-    //             };
-    //
-    //             break;
-    //         default:
-    //             log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
-    //     }
-    // }
-
     getTextDataForDesignComponent(userContext, view, displayContext){
 
         let newDisplayContext = displayContext;
@@ -2128,168 +1761,6 @@ class ClientDataServicesClass{
 
     }
 
-    // getScenarioMashData(userContext, featureAspectReferenceId, scenarioReferenceId = 'NONE'){
-    //
-    //     // Return all scenario mash data for the current Feature Aspect or Scenario
-    //
-    //     //console.log("looking for scenarios with FA: " + featureAspectReferenceId + " and SC: " + scenarioReferenceId);
-    //     //log((msg) => console.log(msg), LogLevel.PERF, 'Getting Scenario Mash Data...');
-    //
-    //     if(userContext.workPackageId === 'NONE') {
-    //
-    //         // Get all scenarios
-    //
-    //         if (scenarioReferenceId === 'NONE') {
-    //
-    //             //log((msg) => console.log(msg), LogLevel.PERF, 'Returning FA Scenarios');
-    //             return UserDvMashScenarioData.getFeatureAspectScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId);
-    //
-    //         } else {
-    //
-    //             //log((msg) => console.log(msg), LogLevel.PERF, 'Returning Scenarios');
-    //             return UserDvMashScenarioData.getScenarios(userContext.userId, userContext.designVersionId, featureAspectReferenceId, scenarioReferenceId);
-    //
-    //         }
-    //     } else {
-    //
-    //         // Return only scenarios in the WP
-    //         let scenarios = [];
-    //
-    //         // Get the possible WP components
-    //         let wpComponents = [];
-    //
-    //         if(scenarioReferenceId === 'NONE') {
-    //
-    //             wpComponents = WorkPackageComponentData.getActiveFeatureAspectScenarios(userContext.workPackageId, featureAspectReferenceId);
-    //
-    //         } else {
-    //
-    //             wpComponents = WorkPackageComponentData.getActiveFeatureAspectScenario(userContext.workPackageId, featureAspectReferenceId, scenarioReferenceId);
-    //
-    //         }
-    //
-    //         wpComponents.forEach((wpComponent) => {
-    //
-    //             let mashScenario = UserDvMashScenarioData.getScenario(userContext, wpComponent.componentReferenceId);
-    //
-    //             scenarios.push(mashScenario);
-    //         });
-    //
-    //         //log((msg) => console.log(msg), LogLevel.PERF, 'Returning WP Scenarios');
-    //         return scenarios;
-    //     }
-    // }
-
-    // getMashScenarioTestResults(userContext, mashScenario, testType){
-    //
-    //     return UserMashScenarioTestData.getScenarioTestsByType(userContext.userId, userContext.designVersionId, mashScenario.designScenarioReferenceId, testType);
-    // }
-
-    // To be used when there is one test only of the given type for a Scenario
-    // getMashScenarioTestResult(userId, designVersionId, scenarioRef, testType){
-    //
-    //     return UserMashScenarioTestData.getScenarioTestByType(userId, designVersionId, scenarioRef, testType);
-    // }
-
-
-    // getMashScenarioSteps(userContext){
-    //     // Returns steps for the current scenario that are:
-    //     // 1. In Design Only
-    //     // 2. Linked across Design - Dev
-    //     // 3. In Dev Only (but with Scenario that is in Design)
-    //
-    //     log((msg) => console.log(msg), LogLevel.DEBUG, "Getting mash Scenario Steps for Scenario {}", userContext.scenarioReferenceId);
-    //
-    //     const designSteps = UserWorkPackageFeatureStepData.find(
-    //         {
-    //             userId:                         userContext.userId,
-    //             designVersionId:                userContext.designVersionId,
-    //             designUpdateId:                 userContext.designUpdateId,
-    //             workPackageId:                  userContext.workPackageId,
-    //             designScenarioReferenceId:      userContext.scenarioReferenceId,
-    //             mashComponentType:              ComponentType.SCENARIO_STEP,
-    //             accMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED
-    //         },
-    //         {sort: {mashItemIndex: 1}}
-    //     ).fetch();
-    //
-    //     const linkedSteps = UserWorkPackageFeatureStepData.find(
-    //         {
-    //             userId:                         userContext.userId,
-    //             designVersionId:                userContext.designVersionId,
-    //             designUpdateId:                 userContext.designUpdateId,
-    //             workPackageId:                  userContext.workPackageId,
-    //             designScenarioReferenceId:      userContext.scenarioReferenceId,
-    //             mashComponentType:              ComponentType.SCENARIO_STEP,
-    //             accMashStatus:                  MashStatus.MASH_LINKED
-    //         },
-    //         {sort: {mashItemIndex: 1}}
-    //     ).fetch();
-    //
-    //     const devSteps = UserWorkPackageFeatureStepData.find(
-    //         {
-    //             userId:                         userContext.userId,
-    //             designVersionId:                userContext.designVersionId,
-    //             designUpdateId:                 userContext.designUpdateId,
-    //             workPackageId:                  userContext.workPackageId,
-    //             designScenarioReferenceId:      userContext.scenarioReferenceId,
-    //             mashComponentType:              ComponentType.SCENARIO_STEP,
-    //             accMashStatus:                  MashStatus.MASH_NOT_DESIGNED
-    //         },
-    //         {sort: {mashItemIndex: 1}}
-    //     ).fetch();
-    //
-    //     return({
-    //         designSteps: designSteps,
-    //         linkedSteps: linkedSteps,
-    //         devSteps: devSteps,
-    //     });
-    // }
-
-    // getDevFilesData(userContext){
-    //
-    //     // Get the data on feature files in the user's build area, split into:
-    //     // - Relevant to current WP
-    //     // - Relevant to wider design
-    //     // - Unknown in Design
-    //
-    //     const wpFiles = UserDevFeatures.find({
-    //         userId: userContext.userId,
-    //         featureStatus: UserDevFeatureStatus.FEATURE_IN_WP
-    //     }).fetch();
-    //
-    //     const designFiles = UserDevFeatures.find({
-    //         userId: userContext.userId,
-    //         featureStatus: UserDevFeatureStatus.FEATURE_IN_DESIGN
-    //     }).fetch();
-    //
-    //     const unknownFiles = UserDevFeatures.find({
-    //         userId: userContext.userId,
-    //         featureStatus: UserDevFeatureStatus.FEATURE_UNKNOWN
-    //     }).fetch();
-    //
-    //     return{
-    //         wpFiles: wpFiles,
-    //         designFiles: designFiles,
-    //         unknownFiles: unknownFiles
-    //     }
-    //
-    // };
-
-    // getTestSummaryData(scenario){
-    //
-    //     const userContext = store.getState().currentUserItemContext;
-    //
-    //     return UserDvMashScenarioData.getScenario(userContext, scenario.componentReferenceId);
-    // }
-
-    // getTestSummaryFeatureData(feature){
-    //
-    //     const userContext = store.getState().currentUserItemContext;
-    //
-    //     return UserDvTestSummaryData.getTestSummaryForFeature(userContext.userId, feature.designVersionId, feature.componentReferenceId);
-    //
-    // }
 
     // Call this common function whenever the current user options for the view and their values are needed
     getCurrentViewOptions(view, userViewOptions){

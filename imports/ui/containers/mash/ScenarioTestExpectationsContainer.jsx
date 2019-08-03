@@ -120,7 +120,7 @@ function mapStateToProps(state) {
 ScenarioTestExpectations = connect(mapStateToProps)(ScenarioTestExpectations);
 
 
-
+let ScenarioTestExpectationsContainer;
 export default ScenarioTestExpectationsContainer = createContainer(({params}) => {
 
     const testExpectationStatus = ClientDataServices.getTestTypeExpectationStatus(params.userContext, params.scenario.componentReferenceId);

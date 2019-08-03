@@ -112,19 +112,9 @@ function mapStateToProps(state) {
 ScenarioTestResultsList = connect(mapStateToProps)(ScenarioTestResultsList);
 
 
+let ScenarioTestResultsContainer;
 export default ScenarioTestResultsContainer = createContainer(({params}) => {
 
-    const scenarioTestResults = UserTestData.getScenarioPermutationTestResults(
-        params.userContext.userId,
-        params.userContext.designVersionId,
-        params.scenario.componentReferenceId
-    );
-
-
-    return{
-        scenarioTestResults:    scenarioTestResults,
-        scenarioName:           params.scenario.componentNameNew
-    }
-
+    return ClientDataServices.getScenarioPermutationTestResults(params.userContext, params.scenario);
 
 }, ScenarioTestResultsList);

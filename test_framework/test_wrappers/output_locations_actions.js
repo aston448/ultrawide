@@ -192,12 +192,20 @@ class OutputLocationsActionsClass{
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'gloria', locationName, TestType.ACCEPTANCE, true, expectation);
     }
 
+    managerSelectsAccTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'miles', locationName, TestType.ACCEPTANCE, true, expectation);
+    }
+
     developerClearsAccTestsInConfigForLocation(locationName, expectation){
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.ACCEPTANCE, false, expectation);
     }
 
     designerClearsAccTestsInConfigForLocation(locationName, expectation){
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'gloria', locationName, TestType.ACCEPTANCE, false, expectation);
+    }
+
+    managerClearsAccTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'miles', locationName, TestType.ACCEPTANCE, false, expectation);
     }
 }
 

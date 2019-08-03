@@ -19,6 +19,7 @@ import {TextLookups} from "../../../common/lookups";
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 import {MashTestStatus} from "../../../constants/constants";
+import {ClientDataServices} from "../../../apiClient/apiClientDataServices";
 
 // REDUX services
 
@@ -86,49 +87,9 @@ ScenarioTestResultsHeader.propTypes = {
     scenarioName:           PropTypes.string.isRequired
 };
 
-
+let ScenarioTestResultsHeaderContainer;
 export default ScenarioTestResultsHeaderContainer = createContainer(({params}) => {
 
-    // Could be one result for each test type
-    const scenarioTestResults = UserTestData.getScenarioLevelTestResults(
-        params.userContext.userId,
-        params.userContext.designVersionId,
-        params.scenario.componentReferenceId
-    );
-
-    let scenarioTestResult = MashTestStatus.MASH_NO_TESTS;
-    let passCount = 0;
-    let failCount = 0;
-    let missingCount = 0;
-
-    scenarioTestResults.forEach((result) => {
-        switch (result.testOutcome){
-            case MashTestStatus.MASH_PASS:
-                passCount++;
-                break;
-            case MashTestStatus.MASH_FAIL:
-                failCount++;
-                break;
-            default:
-                missingCount++;
-                break;
-        }
-    });
-
-    if(failCount > 0){
-        scenarioTestResult = MashTestStatus.MASH_FAIL;
-    } else {
-        if(passCount > 0 && missingCount === 0){
-            scenarioTestResult = MashTestStatus.MASH_PASS;
-        } else {
-            scenarioTestResult = MashTestStatus.MASH_INCOMPLETE;
-        }
-    }
-
-    return{
-        scenarioTestResult:     scenarioTestResult,
-        scenarioName:           params.scenario.componentNameNew
-    }
-
+    return ClientDataServices.getScenarioOverallTestResult(params.userContext, params.scenario);
 
 }, ScenarioTestResultsHeader);

@@ -2,6 +2,81 @@ import {TestType} from '../../imports/constants/constants.js'
 
 class TestResultVerificationsClass {
 
+    // SCENARIO
+    designerScenarioOverallTestResultIs(scenarioName, expectedResult){
+
+        server.call('verifyGuiInputs.scenarioOverallTestResultIs', 'gloria', scenarioName, expectedResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    }
+
+
+    // USER GUI DATA
+    designerTestExpectationResultDataIs(scenarioName, expectedUnitResult, expectedIntResult, expectedAccResult){
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'gloria', scenarioName, TestType.UNIT, scenarioName, expectedUnitResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'gloria', scenarioName, TestType.INTEGRATION, scenarioName, expectedIntResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'gloria', scenarioName, TestType.ACCEPTANCE, scenarioName, expectedAccResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    developerTestExpectationResultDataIs(scenarioName, expectedUnitResult, expectedIntResult, expectedAccResult){
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'hugh', scenarioName, TestType.UNIT, scenarioName, expectedUnitResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'hugh', scenarioName, TestType.INTEGRATION, scenarioName, expectedIntResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'hugh', scenarioName, TestType.ACCEPTANCE, scenarioName, expectedAccResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
+    managerTestExpectationResultDataIs(scenarioName, expectedUnitResult, expectedIntResult, expectedAccResult){
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'miles', scenarioName, TestType.UNIT, scenarioName, expectedUnitResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'miles', scenarioName, TestType.INTEGRATION, scenarioName, expectedIntResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+        server.call('verifyGuiInputs.scenarioTestResultsInputsInclude', 'miles', scenarioName, TestType.ACCEPTANCE, scenarioName, expectedAccResult,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
+
     // UNIT ------------------------------------------------------------------------------------------------------------
     // Check test result
     designerUnitTestExpectationResultForScenarioIs(scenarioName, expectedResult) {
