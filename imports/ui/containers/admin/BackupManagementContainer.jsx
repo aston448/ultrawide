@@ -123,6 +123,7 @@ function mapStateToProps(state) {
 BackupManagementScreen = connect(mapStateToProps)(BackupManagementScreen);
 
 
+let BackupManagementContainer;
 export default BackupManagementContainer = createContainer(({params}) => {
 
     const backupData = ClientDataServices.getDesignBackups();

@@ -149,7 +149,17 @@ class DesignAnomalyDataClass {
 
     removeDesignAnomaly(designAnomalyId){
 
-        DesignAnomalies.remove({_id: designAnomalyId});
+        return DesignAnomalies.remove({_id: designAnomalyId});
+    }
+
+    removeFeatureDesignAnomalies(designVersionId, featureReferenceId){
+
+        return DesignAnomalies.remove({designVersionId: designVersionId, featureReferenceId: featureReferenceId});
+    }
+
+    removeScenarioDesignAnomalies(designVersionId, scenarioReferenceId){
+
+        return DesignAnomalies.remove({designVersionId: designVersionId, scenarioReferenceId: scenarioReferenceId});
     }
 }
 

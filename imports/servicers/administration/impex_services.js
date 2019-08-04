@@ -25,6 +25,7 @@ import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expec
 import {DesignVersionStatus, UpdateMergeStatus} from "../../constants/constants";
 import {WorkItemData} from "../../data/work/work_item_db";
 import {DesignAnomalyData} from "../../data/design/design_anomaly_db";
+import {DesignComponentData} from "../../data/design/design_component_db";
 
 //======================================================================================================================
 //
@@ -196,7 +197,15 @@ class ImpExServicesClass{
                 const designAnomalyData = DesignAnomalyData.getDesignVersionDesignAnomalies(designVersion._id);
 
                 designAnomalyData.forEach((designAnomaly) => {
-                    designAnomalies.push(designAnomaly);
+
+                    // Check Feature exists
+                    const feature = DesignComponentData.getDesignComponentByRef(designVersion._id, designAnomaly.featureReferenceId);
+
+                    if(feature){
+                        designAnomalies.push(designAnomaly);
+                    } else {
+                        log((msg) => console.log(msg), LogLevel.INFO, "Skipping DA {} because Feature no longer exists", designAnomaly.designAnomalyName);
+                    }
                 });
 
                 // All updates in this Version

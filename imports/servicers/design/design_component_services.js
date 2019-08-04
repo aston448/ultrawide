@@ -11,6 +11,7 @@ import { DesignComponentModules }       from '../../service_modules/design/desig
 import { DesignVersionData }            from '../../data/design/design_version_db.js';
 import { DesignComponentData }          from '../../data/design/design_component_db.js';
 import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
+import {DesignAnomalyData} from "../../data/design/design_anomaly_db";
 
 //======================================================================================================================
 //
@@ -484,9 +485,10 @@ class DesignComponentServicesClass {
 
                 if (removed > 0) {
 
-                    // If this was a Scenario, remove any Test Expectations
+                    // If this was a Scenario, remove any Test Expectations and Scenario Anomalies
                     if(designComponent.componentType === ComponentType.SCENARIO){
                         ScenarioTestExpectationData.removeAllExpectationsForScenario(designComponent.designVersionId, designComponent.componentReferenceId);
+                        DesignAnomalyData.removeScenarioDesignAnomalies(designComponent.designVersionId, designComponent.componentReferenceId);
                     }
 
                     // When removing a design component its parent may become removable
@@ -502,6 +504,9 @@ class DesignComponentServicesClass {
                     // If this happened to be the last Feature, Design is now removable
                     if (designComponent.componentType === ComponentType.FEATURE) {
                         DesignServices.setRemovable(designComponent.designId);
+
+                        // And remove any Feature anomalies
+                        DesignAnomalyData.removeFeatureDesignAnomalies(designComponent.designVersionId, designComponent.componentReferenceId);
                     }
 
                 } else {

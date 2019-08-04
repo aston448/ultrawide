@@ -257,7 +257,11 @@ class TestIntegrationModulesClass {
         let dvAssignedTotalNoExpectations = 0;
         let dvAssignedTotalScenarioAnomalies = 0;
 
-        const designVersionName = DesignVersionData.getDesignVersionById(userContext.designVersionId).designVersionName;
+        let designVersionName = 'No Design Version Selected';
+
+        if(userContext.designVersionId !== 'NONE') {
+            designVersionName = DesignVersionData.getDesignVersionById(userContext.designVersionId).designVersionName;
+        }
 
         // Assigned Work -----------------------------------------------------------------------------------------------
         if(dvIncrements.length === 0){
@@ -570,10 +574,11 @@ class TestIntegrationModulesClass {
 
             const feature = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, featureAnomaly.featureReferenceId);
 
-            const backlogEntry = this.createBacklogEntry('NONE', 'NONE', 'NONE', userContext, BacklogType.BACKLOG_FEATURE_ANOMALY, feature, 1, SummaryType.SUMMARY_DV);
+            if(feature) {
+                const backlogEntry = this.createBacklogEntry('NONE', 'NONE', 'NONE', userContext, BacklogType.BACKLOG_FEATURE_ANOMALY, feature, 1, SummaryType.SUMMARY_DV);
 
-            backlogData.push(backlogEntry);
-
+                backlogData.push(backlogEntry);
+            }
         });
 
 
