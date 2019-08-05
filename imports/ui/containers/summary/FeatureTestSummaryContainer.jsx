@@ -76,7 +76,7 @@ function mapStateToProps(state) {
     }
 }
 
-
+let FeatureTestSummaryContainer;
 export default FeatureTestSummaryContainer = createContainer(({params}) => {
 
     // Get the summary data for the Feature

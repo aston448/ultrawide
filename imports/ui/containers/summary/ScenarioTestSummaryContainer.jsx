@@ -80,7 +80,7 @@ function mapStateToProps(state) {
     }
 }
 
-
+let ScenarioTestSummaryContainer;
 export default ScenarioTestSummaryContainer = createContainer(({params}) => {
 
     // Get the summary data for the Scenario

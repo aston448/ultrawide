@@ -1562,8 +1562,6 @@ class ClientDataServicesClass{
                         return [];
                     }
 
-                    break;
-
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.DEVELOP_UPDATE_WP:
@@ -1609,7 +1607,8 @@ class ClientDataServicesClass{
                         return [];
                     }
 
-                    break;
+                default:
+                    return []
 
             }
         }
@@ -1652,6 +1651,13 @@ class ClientDataServicesClass{
 
                     break;
 
+                case ViewType.WAIT:
+                case ViewType.WORK_PACKAGE_SCOPE_WAIT:
+                    return {
+                        currentDesignComponent: null,
+                        //currentUpdateComponent: null,
+                        displayContext: displayContext,
+                    }
                 default:
                     log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
             }

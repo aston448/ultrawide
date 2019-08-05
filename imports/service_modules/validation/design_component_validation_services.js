@@ -170,7 +170,7 @@ class DesignComponentValidationServicesClass{
         return Validation.VALID;
     };
 
-    validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent){
+    validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent, inWp){
 
         // Moves only allowed in base design
         if(!(view === ViewType.DESIGN_NEW || view === ViewType.DESIGN_PUBLISHED)){
@@ -190,6 +190,11 @@ class DesignComponentValidationServicesClass{
         // Moves must be to a valid destination
         if(!locationMoveDropAllowed(movingComponent.componentType, targetComponent.componentType, view, true)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE;
+        }
+
+        // A component in a Work Package cannot be moved
+        if(inWp){
+            return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE_WP;
         }
 
         return Validation.VALID;

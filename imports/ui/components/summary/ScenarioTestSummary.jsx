@@ -63,7 +63,9 @@ class ScenarioTestSummary extends Component {
 
         const {testSummaryData, scenarioTestExpectations, scenario} = this.props;
 
-        log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Summary {} ', scenario.componentNameNew);
+        if(scenario) {
+            log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Summary {} ', scenario.componentNameNew);
+        }
 
         //console.log('Test summary data is %o', testSummaryData);
 
@@ -177,32 +179,44 @@ class ScenarioTestSummary extends Component {
         } else {
 
             // Removed components do not require any tests
-            if(scenario.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED || scenario.isRemoved){
+            if(scenario) {
 
-                return (
-                    <div className="test-summary-removed-item">
-                        No test data required
-                    </div>
-                );
+                if (scenario.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED || scenario.isRemoved) {
 
+                    return (
+                        <div className="test-summary-removed-item">
+                            No test data required
+                        </div>
+                    );
+
+                } else {
+
+                    // There is no test data for this component yet but still want to be able to see expectations
+                    const testSummaryWithNoData =
+                        <Grid className="close-grid">
+                            <Row>
+                                <Col md={12} className="close-col">
+                                    <div className="test-summary-removed-item">No test requirements yet</div>
+                                </Col>
+                            </Row>
+                        </Grid>;
+
+                    return (
+                        <div>
+                            {testSummaryWithNoData}
+                        </div>
+                    );
+                }
             } else {
 
-                // There is no test data for this component yet but still want to be able to see expectations
-                const testSummaryWithNoData =
-                    <Grid className="close-grid">
-                        <Row>
-                            <Col md={12} className="close-col">
-                                <div className="test-summary-removed-item">No test requirements yet</div>
-                            </Col>
-                        </Row>
-                    </Grid>;
-
+                // Just a chance that scenario is in middle of being deleted...
                 return (
                     <div>
-                        {testSummaryWithNoData}
                     </div>
                 );
             }
+
+
         }
     }
 }

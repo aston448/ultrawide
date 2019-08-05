@@ -8,6 +8,7 @@ import { DesignComponentModules }               from '../service_modules/design/
 // Data Access
 import { DesignVersionData }                    from '../data/design/design_version_db.js';
 import { DesignComponentData }                  from '../data/design/design_component_db.js';
+import {WorkPackageComponentData}               from "../data/work/work_package_component_db";
 
 //======================================================================================================================
 //
@@ -64,7 +65,10 @@ class DesignComponentValidationApiClass {
         const movingComponent = DesignComponentData.getDesignComponentById(movingComponentId);
         const targetComponent = DesignComponentData.getDesignComponentById(targetComponentId);
 
-        return DesignComponentValidationServices.validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent)
+        const wpList = WorkPackageComponentData.getCurrentDesignVersionWpComponents(movingComponent.designVersionId, movingComponent.componentReferenceId);
+        const inWp = (wpList.length > 0);
+
+        return DesignComponentValidationServices.validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent, inWp)
     };
 
     validateReorderDesignComponent(view, mode, displayContext, movingComponentId, targetComponentId){

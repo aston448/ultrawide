@@ -176,6 +176,7 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
+let FeatureSummaryContainer;
 export default FeatureSummaryContainer = createContainer(({params}) => {
 
     //console.log('Feature Summary Container with context ' + params.displayContext);

@@ -12,6 +12,7 @@ import { DesignVersionData }            from '../../data/design/design_version_d
 import { DesignComponentData }          from '../../data/design/design_component_db.js';
 import {ScenarioTestExpectationData} from "../../data/design/scenario_test_expectations_db";
 import {DesignAnomalyData} from "../../data/design/design_anomaly_db";
+import {WorkPackageModules} from "../../service_modules/work/work_package_service_modules";
 
 //======================================================================================================================
 //
@@ -356,6 +357,8 @@ class DesignComponentServicesClass {
 
         if(Meteor.isServer) {
 
+            // NOTE that items assigned to WPs cannot be moved.  Too much potential for data chaos...
+
             // Get the unique persistent reference for the parent
             const newParent = DesignComponentData.getDesignComponentById(newParentId);
             const movingComponent = DesignComponentData.getDesignComponentById(designComponentId);
@@ -392,9 +395,6 @@ class DesignComponentServicesClass {
                 if (oldParent && DesignComponentModules.hasNoChildren(oldParent._id)) {
                     DesignComponentData.setRemovable(oldParent._id, true);
                 }
-
-                // Make sure this component is also moved in any work packages
-                DesignComponentModules.updateWorkPackageLocation(designComponentId, false);
 
             } else {
                 throw new Meteor.Error('designComponent.moveDesignComponent.noComponent', 'Design Component did not exist', designComponentId)

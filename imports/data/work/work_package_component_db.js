@@ -79,6 +79,14 @@ class WorkPackageComponentDataClass {
         }).fetch();
     }
 
+    getCurrentDesignVersionWpComponents(designVersionId, componentReferenceId){
+
+        return WorkPackageComponents.find({
+            designVersionId:        designVersionId,
+            componentReferenceId:   componentReferenceId
+        }).fetch();
+    }
+
     getCurrentDesignVersionActiveScenarios(designVersionId){
 
         return WorkPackageComponents.find({

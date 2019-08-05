@@ -87,6 +87,7 @@ class WorkPackageModulesClass {
         return wpComponentList;
     };
 
+
     markScenario(wpType, component, userContext){
 
         if(wpType === WorkPackageType.WP_BASE){
