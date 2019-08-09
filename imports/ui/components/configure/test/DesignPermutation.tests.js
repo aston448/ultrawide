@@ -175,4 +175,102 @@ describe('JSX: DesignPermutation', () => {
         });
 
     });
+
+    describe('UC 842', function() {
+
+
+        describe('Interface', function () {
+
+            it('There is an option to remove a Design Permutation for a Designer', function () {
+
+                const designPermutation = {
+                    _id:                'PERMUTATION1',
+                    designId:           'DESIGN1',
+                    permutationName:    'New Permutation'
+                };
+                const userRole = RoleType.DESIGNER;
+                const userContext = {
+                    designId:           'DESIGN1',
+                    designVersionId:    'DV1'
+                };
+                const currentPermutationId = 'PERMUTATION1';
+
+                const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
+
+                const expectedItem = hashID(UI.BUTTON_REMOVE, designPermutation.permutationName);
+
+                chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+            });
+
+
+            describe('The remove Design Permutation option is only visible for a Designer', function () {
+
+                it('User Role - Developer', function () {
+
+                    const designPermutation = {
+                        _id:                'PERMUTATION1',
+                        designId:           'DESIGN1',
+                        permutationName:    'New Permutation'
+                    };
+                    const userRole = RoleType.DEVELOPER;
+                    const userContext = {
+                        designId:           'DESIGN1',
+                        designVersionId:    'DV1'
+                    };
+                    const currentPermutationId = 'PERMUTATION1';
+
+                    const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
+
+                    const expectedItem = hashID(UI.BUTTON_REMOVE, designPermutation.permutationName);
+
+                    chai.assert.equal(item.find(expectedItem).length, 0, expectedItem + ' was found');
+                });
+
+
+                it('User Role - Manager', function () {
+
+                    const designPermutation = {
+                        _id:                'PERMUTATION1',
+                        designId:           'DESIGN1',
+                        permutationName:    'New Permutation'
+                    };
+                    const userRole = RoleType.MANAGER;
+                    const userContext = {
+                        designId:           'DESIGN1',
+                        designVersionId:    'DV1'
+                    };
+                    const currentPermutationId = 'PERMUTATION1';
+
+                    const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
+
+                    const expectedItem = hashID(UI.BUTTON_REMOVE, designPermutation.permutationName);
+
+                    chai.assert.equal(item.find(expectedItem).length, 0, expectedItem + ' was found');
+                });
+
+
+                it('User Role - Guest', function () {
+
+                    const designPermutation = {
+                        _id:                'PERMUTATION1',
+                        designId:           'DESIGN1',
+                        permutationName:    'New Permutation'
+                    };
+                    const userRole = RoleType.GUEST_VIEWER;
+                    const userContext = {
+                        designId:           'DESIGN1',
+                        designVersionId:    'DV1'
+                    };
+                    const currentPermutationId = 'PERMUTATION1';
+
+                    const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
+
+                    const expectedItem = hashID(UI.BUTTON_REMOVE, designPermutation.permutationName);
+
+                    chai.assert.equal(item.find(expectedItem).length, 0, expectedItem + ' was found');
+                });
+
+            });
+        });
+    });
 });

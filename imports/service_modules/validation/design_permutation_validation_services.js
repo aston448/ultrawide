@@ -52,13 +52,20 @@ class DesignPermutationValidationServicesClass {
         }
 
         // New name must not be same as existing for Design
+        let duplicate = false;
+
         otherPermutations.forEach((permutation) => {
 
             if(permutation.permutationName === thisPermutation.permutationName){
 
-                return DesignPermutationValidationErrors.PERMUTATION_SAVE_DUPLICATE_NAME;
+                duplicate = true;
             }
+
         });
+
+        if(duplicate){
+            return DesignPermutationValidationErrors.PERMUTATION_SAVE_DUPLICATE_NAME
+        }
 
         return Validation.VALID;
     }
@@ -103,13 +110,20 @@ class DesignPermutationValidationServicesClass {
         }
 
         // New name must not be same as existing for same permutation
+
+        let duplicate = false;
+
         otherPermutationValues.forEach((permutationValue) => {
 
             if(permutationValue.permutationValueName === thisPermutationValue.permutationValueName){
 
-                return DesignPermutationValidationErrors.PERMUTATION_VALUE_SAVE_DUPLICATE_NAME;
+                duplicate = true;
             }
         });
+
+        if(duplicate){
+            return DesignPermutationValidationErrors.PERMUTATION_VALUE_SAVE_DUPLICATE_NAME;
+        }
 
         return Validation.VALID;
     }
