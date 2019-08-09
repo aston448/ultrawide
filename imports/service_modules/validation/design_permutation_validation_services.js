@@ -26,6 +26,23 @@ class DesignPermutationValidationServicesClass {
         return Validation.VALID;
     };
 
+    validateRemovePermutation(userRole, expectationsCount){
+
+        // Only a Designer can remove a permutation
+        if(userRole !== RoleType.DESIGNER){
+
+            return DesignPermutationValidationErrors.PERMUTATION_REMOVE_INVALID_ROLE;
+        }
+
+        // You can't remove a permutation that is in use for a test expectation
+        if(expectationsCount > 0){
+
+            return DesignPermutationValidationErrors.PERMUTATION_REMOVE_IN_USE;
+        }
+
+        return Validation.VALID;
+    };
+
     validateSavePermutation(userRole, thisPermutation, otherPermutations){
 
         // Only a Designer can save a permutation
@@ -55,6 +72,23 @@ class DesignPermutationValidationServicesClass {
         if(userRole !== RoleType.DESIGNER){
 
             return DesignPermutationValidationErrors.PERMUTATION_VALUE_ADD_INVALID_ROLE;
+        }
+
+        return Validation.VALID;
+    };
+
+    validateRemovePermutationValue(userRole, expectationsCount){
+
+        // Only a Designer can remove a permutation value
+        if(userRole !== RoleType.DESIGNER){
+
+            return DesignPermutationValidationErrors.PERMUTATION_VALUE_REMOVE_INVALID_ROLE;
+        }
+
+        // You can't remove a permutation value that is in use for a test expectation
+        if(expectationsCount > 0){
+
+            return DesignPermutationValidationErrors.PERMUTATION_VALUE_REMOVE_IN_USE;
         }
 
         return Validation.VALID;

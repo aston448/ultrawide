@@ -258,9 +258,13 @@ export const TestOutputLocationFileValidationErrors = {
 
 export const DesignPermutationValidationErrors = {
     PERMUTATION_ADD_INVALID_ROLE:                       'Only a Designer can add a Design Permutation',
+    PERMUTATION_REMOVE_INVALID_ROLE:                    'Only a Designer can remove a Design Permutation',
+    PERMUTATION_REMOVE_IN_USE:                          'A Design Permutation that is in use for a Test Expectation cannot be removed',
     PERMUTATION_SAVE_INVALID_ROLE:                      'Only a Designer can save a Design Permutation',
     PERMUTATION_SAVE_DUPLICATE_NAME:                    'A Design Permutation with this name already exists in this Design',
     PERMUTATION_VALUE_ADD_INVALID_ROLE:                 'Only a Designer can add a Design Permutation Value',
+    PERMUTATION_VALUE_REMOVE_INVALID_ROLE:              'Only a Designer can remove a Design Permutation Value',
+    PERMUTATION_VALUE_REMOVE_IN_USE:                    'A Design Permutation Value that is in use for a Test Expectation cannot be removed',
     PERMUTATION_VALUE_SAVE_INVALID_ROLE:                'Only a Designer can save a Design Permutation Value',
     PERMUTATION_VALUE_SAVE_DUPLICATE_NAME:              'A Design Permutation Value with this name already exists in this Permutation'
 };

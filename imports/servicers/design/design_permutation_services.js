@@ -19,6 +19,10 @@ class DesignPermutationServicesClass{
         const result = DesignPermutationData.insertNewDesignPermutation(designId);
     }
 
+    removePermutation(permutationId){
+
+        const result = DesignPermutationData.removePermutation(permutationId);
+    }
     savePermutation(permutation){
 
         const result = DesignPermutationData.updatePermutationName(permutation._id, permutation.permutationName);
@@ -27,6 +31,11 @@ class DesignPermutationServicesClass{
     addPermutationValue(permutationId, designVersionId){
 
         const result = DesignPermutationValueData.insertNewDesignPermutationVlaue(permutationId, designVersionId);
+    }
+
+    removePermutationValue(permutationValueId){
+
+        const result = DesignPermutationValueData.removePermutationValue(permutationValueId);
     }
 
     savePermutationValue(permutationValue){

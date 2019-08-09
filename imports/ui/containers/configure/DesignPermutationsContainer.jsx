@@ -13,7 +13,7 @@ import ItemList                             from '../../components/item/ItemList
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import {ItemListType, LogLevel} from "../../../constants/constants";
+import {ItemListType, LogLevel, RoleType} from "../../../constants/constants";
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
@@ -77,6 +77,17 @@ export class DesignPermutationsScreen extends Component {
             bodyDataFunction = () => this.noPermutations();
         }
 
+        // Only show add controls for a Designer
+        let hasFooterAction = false;
+        let footerAction = '';
+        let footerActionFunction = null;
+
+        if(userRole === RoleType.DESIGNER){
+            hasFooterAction = true;
+            footerAction = 'Add Permutation';
+            footerActionFunction = () => this.addNewPermutation(userRole, userContext);
+        }
+
         return (
             <Grid>
                 <Row>
@@ -84,10 +95,10 @@ export class DesignPermutationsScreen extends Component {
                         <ItemList
                             headerText={'Design Permutations'}
                             bodyDataFunction={bodyDataFunction}
-                            hasFooterAction={true}
-                            footerAction={'Add Permutation'}
+                            hasFooterAction={hasFooterAction}
+                            footerAction={footerAction}
                             footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_DESIGN_PERMUTATION}
-                            footerActionFunction={() => this.addNewPermutation(userRole, userContext)}
+                            footerActionFunction={footerActionFunction}
                             listType={ItemListType.ULTRAWIDE_ITEM}
                         />
                     </Col>
@@ -119,6 +130,7 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
+let DesignPermutationsContainer;
 export default DesignPermutationsContainer = createContainer(({params}) => {
 
     const permutationData =  ClientDataServices.getDesignPermutationsData(params.userContext.designId);

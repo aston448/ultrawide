@@ -33,7 +33,32 @@ export const addPermutation = new ValidatedMethod({
             throw new Meteor.Error(e.code, e.stack)
         }
     }
+});
 
+export const removePermutation = new ValidatedMethod({
+
+    name: 'designPermutations.removeDesignPermutation',
+
+    validate: new SimpleSchema({
+        userRole:       {type: String},
+        permutationId:  {type: String}
+    }).validator(),
+
+    run({userRole, permutationId}){
+
+        const result = DesignPermutationValidationApi.validateRemovePermutation(userRole, permutationId);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('designPermutations.removeDesignPermutation.failValidation', result)
+        }
+
+        try {
+            DesignPermutationServices.removePermutation(permutationId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
 });
 
 export const savePermutation = new ValidatedMethod({
@@ -60,7 +85,6 @@ export const savePermutation = new ValidatedMethod({
             throw new Meteor.Error(e.code, e.stack)
         }
     }
-
 });
 
 export const addPermutationValue = new ValidatedMethod({
@@ -88,7 +112,32 @@ export const addPermutationValue = new ValidatedMethod({
             throw new Meteor.Error(e.code, e.stack)
         }
     }
+});
 
+export const removePermutationValue = new ValidatedMethod({
+
+    name: 'designPermutations.removePermutationValue',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        permutationValueId: {type: String}
+    }).validator(),
+
+    run({userRole, permutationValueId}){
+
+        const result = DesignPermutationValidationApi.validateRemovePermutationValue(userRole, permutationValueId);
+
+        if (result !== Validation.VALID) {
+            throw new Meteor.Error('designPermutations.removePermutationValue.failValidation', result)
+        }
+
+        try {
+            DesignPermutationServices.removePermutationValue(permutationValueId);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.code, e.stack)
+        }
+    }
 });
 
 export const savePermutationValue = new ValidatedMethod({
@@ -115,5 +164,4 @@ export const savePermutationValue = new ValidatedMethod({
             throw new Meteor.Error(e.code, e.stack)
         }
     }
-
 });

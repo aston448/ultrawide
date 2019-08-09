@@ -1,11 +1,11 @@
 
-import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
-import { OutputLocationsActions }           from '../../../test_framework/test_wrappers/output_locations_actions.js';
-import { OutputLocationsVerifications }     from '../../../test_framework/test_wrappers/output_locations_verifications.js';
+import { TestFixtures }                     from '../../test_framework/test_wrappers/test_fixtures.js';
+import { OutputLocationsActions }           from '../../test_framework/test_wrappers/output_locations_actions.js';
+import { OutputLocationsVerifications }     from '../../test_framework/test_wrappers/output_locations_verifications.js';
 
-import {DefaultLocationText} from '../../../imports/constants/default_names.js';
-import {TestOutputLocationFileValidationErrors}   from '../../../imports/constants/validation_errors.js';
-import {TestLocationFileType, TestRunner} from '../../../imports/constants/constants.js';
+import {DefaultLocationText} from '../../imports/constants/default_names.js';
+import {TestOutputLocationFileValidationErrors}   from '../../imports/constants/validation_errors.js';
+import {TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
 describe('UC 844 - Edit Test Output Location File', function(){
 

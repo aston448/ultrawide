@@ -91,7 +91,7 @@ export class DesignPermutationsList extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Permutations List');
 
-        console.log('Permutation active is ' + permutationActive);
+        //console.log('Permutation active is ' + permutationActive);
 
         if(permutationData && permutationData.length > 0) {
               return (
@@ -125,6 +125,7 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
+let DesignPermutationsListContainer;
 export default DesignPermutationsListContainer = createContainer(({params}) => {
 
     const permutationData =  ClientDataServices.getDesignPermutationsWithExpectationStatus(

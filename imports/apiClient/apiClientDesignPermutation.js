@@ -121,6 +121,39 @@ class ClientDesignPermutationServicesClass {
         return {success: true, message: ''};
     };
 
+    // User removes a Permutation Value -------------------------------------------------------------------------------
+    removePermutationValue(userRole, permutationValueId){
+
+        // Client validation
+        let result = DesignPermutationValidationApi.validateRemovePermutationValue(userRole, permutationValueId);
+
+        if(result !== Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerDesignPermutationApi.removePermutationValue(userRole, permutationValueId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignPermutationMessages.MSG_PERMUTATION_VALUE_REMOVED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    };
+
     // User saves Permutation Value name -------------------------------------------------------------------------------
     savePermutationValue(userRole, permutationValue){
 

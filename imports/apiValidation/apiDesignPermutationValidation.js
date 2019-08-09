@@ -3,8 +3,9 @@
 import { DesignPermutationValidationServices } from '../service_modules/validation/design_permutation_validation_services.js';
 
 // Data Access
-import { DesignPermutationData }               from '../data/design/design_permutation_db.js';
-import { DesignPermutationValueData }          from '../data/design/design_permutation_value_db.js';
+import { DesignPermutationData }                from '../data/design/design_permutation_db.js';
+import { DesignPermutationValueData }           from '../data/design/design_permutation_value_db.js';
+import {ScenarioTestExpectationData}            from "../data/design/scenario_test_expectations_db";
 
 //======================================================================================================================
 //
@@ -19,6 +20,13 @@ class DesignPermutationValidationApiClass {
         return DesignPermutationValidationServices.validateAddPermutation(userRole);
     };
 
+    validateRemovePermutation(userRole, permutationId){
+
+        const expectationCount = ScenarioTestExpectationData.getExpectationsWithPermutationCount(permutationId);
+
+        return DesignPermutationValidationServices.validateRemovePermutation(userRole, expectationCount);
+    };
+
     validateSavePermutation(userRole, permutation){
 
         const otherPermutations = DesignPermutationData.getOtherPermutationsForDesign(permutation.designId, permutation._id);
@@ -29,6 +37,13 @@ class DesignPermutationValidationApiClass {
     validateAddPermutationValue(userRole){
 
         return DesignPermutationValidationServices.validateAddPermutationValue(userRole);
+    };
+
+    validateRemovePermutationValue(userRole, permutationValueId){
+
+        const expectationCount = ScenarioTestExpectationData.getExpectationsWithPermutationValueCount(permutationValueId);
+
+        return DesignPermutationValidationServices.validateRemovePermutationValue(userRole, expectationCount);
     };
 
     validateSavePermutationValue(userRole, permutationValue){

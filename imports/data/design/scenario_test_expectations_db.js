@@ -127,8 +127,20 @@ class ScenarioTestExpectationDataClass{
     getAllTestExpectationsForDesignVersion(designVersionId){
 
         return ScenarioTestExpectations.find({
-            designVersionId:        designVersionId
+            designVersionId:    designVersionId
         }).fetch();
+    }
+
+    getExpectationsWithPermutationCount(permutationId){
+        return ScenarioTestExpectations.find({
+            permutationId:      permutationId
+        }).count();
+    }
+
+    getExpectationsWithPermutationValueCount(permutationValueId){
+        return ScenarioTestExpectations.find({
+            permutationValueId: permutationValueId
+        }).count();
     }
 
     // UPDATE ==========================================================================================================
