@@ -20,6 +20,7 @@ import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-
 
 // REDUX services
 import {connect} from 'react-redux';
+import {RoleType} from "../../../constants/constants";
 
 
 
@@ -44,8 +45,6 @@ export class DesignPermutationValue extends Component {
 
     onSave(role, userContext){
 
-        event.preventDefault();
-
         const permutationValue = {
             _id: this .props.permutationValue._id,
             designVersionId: userContext.designVersionId,
@@ -63,9 +62,9 @@ export class DesignPermutationValue extends Component {
         ClientDesignPermutationServices.selectPermutationValue(permutationValue._id)
     }
 
-    onRemove(role, permutation){
+    onRemove(role, permutationValueId){
 
-        //ClientTestOutputLocationServices.removeLocation(role, location._id);
+        ClientDesignPermutationServices.removePermutationValue(role, permutationValueId);
     }
 
     onEdit(){
@@ -87,6 +86,16 @@ export class DesignPermutationValue extends Component {
 
         const activeClass = ' location-active';
 
+        let buttonGroup = <div></div>;
+
+        if(userRole === RoleType.MANAGER){
+            buttonGroup =
+                <ButtonGroup>
+                    <Button id={getContextID(UI.BUTTON_EDIT, permutationValue.permutationValueName)} bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
+                    <Button id={getContextID(UI.BUTTON_REMOVE, permutationValue.permutationValueName)} bsSize="xs" onClick={() => this.onRemove(userRole, permutationValue._id)}>Remove</Button>
+                </ButtonGroup>
+        }
+
         const viewInstance = (
             <Grid onClick={() => this.setCurrentPermutationValue(permutationValue)}>
                 <Row>
@@ -95,10 +104,7 @@ export class DesignPermutationValue extends Component {
                             {permutationValue.permutationValueName}
                         </Col>
                         <Col md={2}>
-                            <ButtonGroup>
-                                <Button id={getContextID(UI.BUTTON_EDIT, permutationValue.permutationValueName)} bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
-                                <Button id={getContextID(UI.BUTTON_REMOVE, permutationValue.permutationValueName)} bsSize="xs" onClick={() => this.onRemove(userRole, permutationValue)}>Remove</Button>
-                            </ButtonGroup>
+                            {buttonGroup}
                         </Col>
                     </div>
                 </Row>

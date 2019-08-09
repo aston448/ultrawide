@@ -166,8 +166,10 @@ export const TestOutputLocationMessages = {
 export const DesignPermutationMessages = {
 
     MSG_PERMUTATION_ADDED:              'Design permutation added',
+    MSG_PERMUTATION_REMOVED:            'Design permutation removed',
     MSG_PERMUTATION_SAVED:              'Design permutation name updated',
     MSG_PERMUTATION_VALUE_ADDED:        'Design permutation value added',
+    MSG_PERMUTATION_VALUE_REMOVED:      'Design permutation value removed',
     MSG_PERMUTATION_VALUE_SAVED:        'Design permutation value saved'
 };
 
