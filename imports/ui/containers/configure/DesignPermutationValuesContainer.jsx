@@ -12,7 +12,7 @@ import ItemList                             from '../../components/item/ItemList
 
 // Ultrawide Services
 import {log} from "../../../common/utils";
-import {ItemListType, LogLevel} from "../../../constants/constants";
+import {ItemListType, LogLevel, RoleType} from "../../../constants/constants";
 import {AddActionIds}                       from "../../../constants/ui_context_ids.js";
 
 import { ClientDataServices }                   from '../../../apiClient/apiClientDataServices.js';
@@ -64,7 +64,7 @@ export class DesignPermutationValuesScreen extends Component {
 
     render() {
 
-        const {permutationValuesData, permutationName, permutationId} = this.props;
+        const {permutationValuesData, permutationName, permutationId, userRole} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render CONTAINER Design Permutation Values');
 
@@ -81,14 +81,25 @@ export class DesignPermutationValuesScreen extends Component {
             headerText = 'Permutation Values for ' + permutationName;
         }
 
+        // Only show add controls for a Designer - and only when a Permutation is selected
+        let hasFooterAction = false;
+        let footerAction = '';
+        let footerActionFunction = null;
+
+        if(userRole === RoleType.DESIGNER && permutationId !== 'NONE'){
+            hasFooterAction = true;
+            footerAction = 'Add New Value';
+            footerActionFunction = () => this.addNewPermutationValue();
+        }
+
         return (
             <ItemList
                 headerText={headerText}
                 bodyDataFunction={bodyDataFunction}
-                hasFooterAction={true}
-                footerAction={'Add New Value'}
+                hasFooterAction={hasFooterAction}
+                footerAction={footerAction}
                 footerActionUiContext={AddActionIds.UI_CONTEXT_ADD_PERMUTATION_VALUE}
-                footerActionFunction={() => this.addNewPermutationValue()}
+                footerActionFunction={footerActionFunction}
                 listType={ItemListType.ULTRAWIDE_ITEM}
             />
         );
@@ -110,6 +121,7 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
+let DesignPermutationValuesContainer;
 export default DesignPermutationValuesContainer = createContainer(({params}) => {
 
     const permutationValuesData =  ClientDataServices.getPermutationValuesData(

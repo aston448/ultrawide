@@ -40,7 +40,7 @@ describe('JSX: DesignPermutationsContainer', () => {
                     const item = testPermutationsList(permutationData, userRole, userContext, permutationId);
 
                     chai.assert(item.find('Connect(ItemList)').props().hasFooterAction, 'Expecting a footer action');
-                    chai.assert.equal(item.find('Connect(ItemList)').props().footerAction, 'Add Permutation', 'Expecting Add Design footer action');
+                    chai.assert.equal(item.find('Connect(ItemList)').props().footerAction, 'Add Permutation', 'Expecting Add Permutation footer action');
                 });
 
                 it('when permutations exist', function(){
@@ -61,7 +61,7 @@ describe('JSX: DesignPermutationsContainer', () => {
                     const item = testPermutationsList(permutationData, userRole, userContext, permutationId);
 
                     chai.assert(item.find('Connect(ItemList)').props().hasFooterAction, 'Expecting a footer action');
-                    chai.assert.equal(item.find('Connect(ItemList)').props().footerAction, 'Add Permutation', 'Expecting Add Design footer action');
+                    chai.assert.equal(item.find('Connect(ItemList)').props().footerAction, 'Add Permutation', 'Expecting Add Permutation footer action');
                 });
 
             });

@@ -31,22 +31,21 @@ describe('JSX: DesignPermutation', () => {
 
     describe('UC 841', function() {
 
-
         describe('Interface', function () {
 
-            it('There is an option to edit the Design Permutation name for a Designer', function () {
+            const designPermutation = {
+                _id:                'PERMUTATION1',
+                designId:           'DESIGN1',
+                permutationName:    'New Permutation'
+            };
+            const userRole = RoleType.DESIGNER;
+            const userContext = {
+                designId:           'DESIGN1',
+                designVersionId:    'DV1'
+            };
+            const currentPermutationId = 'PERMUTATION1';
 
-                const designPermutation = {
-                    _id:                'PERMUTATION1',
-                    designId:           'DESIGN1',
-                    permutationName:    'New Permutation'
-                };
-                const userRole = RoleType.DESIGNER;
-                const userContext = {
-                    designId:           'DESIGN1',
-                    designVersionId:    'DV1'
-                };
-                const currentPermutationId = 'PERMUTATION1';
+            it('There is an option to edit the Design Permutation name for a Designer', function () {
 
                 const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -56,18 +55,6 @@ describe('JSX: DesignPermutation', () => {
             });
 
             it('There is an option to save a Design Permutation name being edited', function () {
-
-                const designPermutation = {
-                    _id:                'PERMUTATION1',
-                    designId:           'DESIGN1',
-                    permutationName:    'New Permutation'
-                };
-                const userRole = RoleType.DESIGNER;
-                const userContext = {
-                    designId:           'DESIGN1',
-                    designVersionId:    'DV1'
-                };
-                const currentPermutationId = 'PERMUTATION1';
 
                 const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -80,18 +67,6 @@ describe('JSX: DesignPermutation', () => {
             });
 
             it('There is an option to discard a Design Permutation name being edited', function () {
-
-                const designPermutation = {
-                    _id:                'PERMUTATION1',
-                    designId:           'DESIGN1',
-                    permutationName:    'New Permutation'
-                };
-                const userRole = RoleType.DESIGNER;
-                const userContext = {
-                    designId:           'DESIGN1',
-                    designVersionId:    'DV1'
-                };
-                const currentPermutationId = 'PERMUTATION1';
 
                 const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -106,19 +81,20 @@ describe('JSX: DesignPermutation', () => {
 
             describe('The edit Design Permutation option is only visible for a Designer', function () {
 
+                const designPermutation = {
+                    _id:                'PERMUTATION1',
+                    designId:           'DESIGN1',
+                    permutationName:    'New Permutation'
+                };
+                const userContext = {
+                    designId:           'DESIGN1',
+                    designVersionId:    'DV1'
+                };
+                const currentPermutationId = 'PERMUTATION1';
+
                 it('User Role - Developer', function () {
 
-                    const designPermutation = {
-                        _id:                'PERMUTATION1',
-                        designId:           'DESIGN1',
-                        permutationName:    'New Permutation'
-                    };
                     const userRole = RoleType.DEVELOPER;
-                    const userContext = {
-                        designId:           'DESIGN1',
-                        designVersionId:    'DV1'
-                    };
-                    const currentPermutationId = 'PERMUTATION1';
 
                     const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -130,17 +106,7 @@ describe('JSX: DesignPermutation', () => {
 
                 it('User Role - Manager', function () {
 
-                    const designPermutation = {
-                        _id:                'PERMUTATION1',
-                        designId:           'DESIGN1',
-                        permutationName:    'New Permutation'
-                    };
                     const userRole = RoleType.MANAGER;
-                    const userContext = {
-                        designId:           'DESIGN1',
-                        designVersionId:    'DV1'
-                    };
-                    const currentPermutationId = 'PERMUTATION1';
 
                     const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -152,17 +118,7 @@ describe('JSX: DesignPermutation', () => {
 
                 it('User Role - Guest', function () {
 
-                    const designPermutation = {
-                        _id:                'PERMUTATION1',
-                        designId:           'DESIGN1',
-                        permutationName:    'New Permutation'
-                    };
                     const userRole = RoleType.GUEST_VIEWER;
-                    const userContext = {
-                        designId:           'DESIGN1',
-                        designVersionId:    'DV1'
-                    };
-                    const currentPermutationId = 'PERMUTATION1';
 
                     const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -178,22 +134,22 @@ describe('JSX: DesignPermutation', () => {
 
     describe('UC 842', function() {
 
-
         describe('Interface', function () {
+
+            const designPermutation = {
+                _id:                'PERMUTATION1',
+                designId:           'DESIGN1',
+                permutationName:    'New Permutation'
+            };
+            const userContext = {
+                designId:           'DESIGN1',
+                designVersionId:    'DV1'
+            };
+            const currentPermutationId = 'PERMUTATION1';
 
             it('There is an option to remove a Design Permutation for a Designer', function () {
 
-                const designPermutation = {
-                    _id:                'PERMUTATION1',
-                    designId:           'DESIGN1',
-                    permutationName:    'New Permutation'
-                };
                 const userRole = RoleType.DESIGNER;
-                const userContext = {
-                    designId:           'DESIGN1',
-                    designVersionId:    'DV1'
-                };
-                const currentPermutationId = 'PERMUTATION1';
 
                 const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -207,17 +163,7 @@ describe('JSX: DesignPermutation', () => {
 
                 it('User Role - Developer', function () {
 
-                    const designPermutation = {
-                        _id:                'PERMUTATION1',
-                        designId:           'DESIGN1',
-                        permutationName:    'New Permutation'
-                    };
                     const userRole = RoleType.DEVELOPER;
-                    const userContext = {
-                        designId:           'DESIGN1',
-                        designVersionId:    'DV1'
-                    };
-                    const currentPermutationId = 'PERMUTATION1';
 
                     const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -229,17 +175,7 @@ describe('JSX: DesignPermutation', () => {
 
                 it('User Role - Manager', function () {
 
-                    const designPermutation = {
-                        _id:                'PERMUTATION1',
-                        designId:           'DESIGN1',
-                        permutationName:    'New Permutation'
-                    };
                     const userRole = RoleType.MANAGER;
-                    const userContext = {
-                        designId:           'DESIGN1',
-                        designVersionId:    'DV1'
-                    };
-                    const currentPermutationId = 'PERMUTATION1';
 
                     const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 
@@ -251,17 +187,7 @@ describe('JSX: DesignPermutation', () => {
 
                 it('User Role - Guest', function () {
 
-                    const designPermutation = {
-                        _id:                'PERMUTATION1',
-                        designId:           'DESIGN1',
-                        permutationName:    'New Permutation'
-                    };
                     const userRole = RoleType.GUEST_VIEWER;
-                    const userContext = {
-                        designId:           'DESIGN1',
-                        designVersionId:    'DV1'
-                    };
-                    const currentPermutationId = 'PERMUTATION1';
 
                     const item = testDesignPermutation(designPermutation, userRole, userContext, currentPermutationId);
 

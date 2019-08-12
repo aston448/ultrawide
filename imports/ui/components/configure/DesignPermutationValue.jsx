@@ -88,7 +88,7 @@ export class DesignPermutationValue extends Component {
 
         let buttonGroup = <div></div>;
 
-        if(userRole === RoleType.MANAGER){
+        if(userRole === RoleType.DESIGNER){
             buttonGroup =
                 <ButtonGroup>
                     <Button id={getContextID(UI.BUTTON_EDIT, permutationValue.permutationValueName)} bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>

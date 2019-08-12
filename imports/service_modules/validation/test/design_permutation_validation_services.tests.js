@@ -178,4 +178,120 @@ describe('VAL: Design Permutations', function () {
 
         });
     });
+
+    describe('UC 843 - Add Design Permutation Value', function(){
+
+        describe('Conditions', function(){
+
+            describe('Only a Designer can add a new value to a Design Permutation', function(){
+
+                it('User Role - Designer', function () {
+
+                    const result = DesignPermutationValidationServices.validateAddPermutationValue(RoleType.DESIGNER);
+
+                    chai.assert.equal(result, Validation.VALID, 'Expected validation success')
+                });
+
+                it('User Role - Developer', function () {
+
+                    const result = DesignPermutationValidationServices.validateAddPermutationValue(RoleType.DEVELOPER);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_ADD_INVALID_ROLE, 'Expected validation failure')
+                });
+
+
+                it('User Role - Manager', function () {
+
+                    const result = DesignPermutationValidationServices.validateAddPermutationValue(RoleType.MANAGER);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_ADD_INVALID_ROLE, 'Expected validation failure')
+                });
+
+
+                it('User Role - Guest', function () {
+
+                    const result = DesignPermutationValidationServices.validateAddPermutationValue(RoleType.GUEST_VIEWER);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_ADD_INVALID_ROLE, 'Expected validation failure')
+                });
+
+            });
+        });
+    });
+
+    describe('UC 844 - Edit Design Permutation Value', function(){
+
+        describe('Conditions', function(){
+
+            const thisPermutationValue = {
+                _id:                    'PV1',
+                permutationId:          'DP1',
+                designVersionId:        'DV1',
+                permutationValueName:   'Value 1'
+            };
+
+            describe('Only a Designer can edit a Permutation Value name.', function(){
+
+                const otherPermutationValues = [];
+
+                it('User Role - Designer', function(){
+
+                    const result = DesignPermutationValidationServices.validateSavePermutationValue(RoleType.DESIGNER, thisPermutationValue, otherPermutationValues);
+
+                    chai.assert.equal(result, Validation.VALID, 'Expected validation success')
+                });
+
+                it('User Role - Developer', function(){
+
+                    const result = DesignPermutationValidationServices.validateSavePermutationValue(RoleType.DEVELOPER, thisPermutationValue, otherPermutationValues);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_SAVE_INVALID_ROLE, 'Expected validation failure')
+                });
+
+                it('User Role - Manager', function(){
+
+                    const result = DesignPermutationValidationServices.validateSavePermutationValue(RoleType.MANAGER, thisPermutationValue, otherPermutationValues);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_SAVE_INVALID_ROLE, 'Expected validation failure')
+
+                });
+
+                it('User Role - Guest', function(){
+
+                    const result = DesignPermutationValidationServices.validateSavePermutationValue(RoleType.GUEST_VIEWER, thisPermutationValue, otherPermutationValues);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_SAVE_INVALID_ROLE, 'Expected validation failure')
+
+                });
+            });
+
+            it('A Permutation Value name cannot be the same as an existing Permutation Value for the same Design Permutation', function(){
+
+                const otherPermutationValues = [];
+
+                const val1 = {
+                    _id:                    'PV2',
+                    permutationId:          'DP1',
+                    designVersionId:        'DV1',
+                    permutationValueName:   'Value 2'
+                };
+
+                const val2 = {
+                    _id:                    'PV3',
+                    permutationId:          'DP1',
+                    designVersionId:        'DV1',
+                    permutationValueName:   'Value 1' // Same as PV1
+                };
+
+                otherPermutationValues.push(val1);
+                otherPermutationValues.push(val2);
+
+                const result = DesignPermutationValidationServices.validateSavePermutationValue(RoleType.DESIGNER, thisPermutationValue, otherPermutationValues);
+
+                chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_SAVE_DUPLICATE_NAME, 'Expected validation failure')
+            });
+
+        });
+    });
+
 });
