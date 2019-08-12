@@ -128,4 +128,70 @@ describe('JSX: DesignPermutation', () => {
             });
         });
     });
+
+    describe('UC 845 - Remove Design Permutation Value', function(){
+
+        describe('Interface', function(){
+
+            const designPermutationValue = {
+                _id:                    'PV1',
+                permutationId:          'DP1',
+                designVersionId:        'DV1',
+                permutationValueName:   'Value 1'
+            };
+            const userContext = {
+                designId:           'DESIGN1',
+                designVersionId:    'DV1'
+            };
+            const currentPermutationValueId = 'PV1';
+
+            it('There is an option to remove a Permutation Value from a Design Permutation for a Designer', function(){
+
+                const userRole = RoleType.DESIGNER;
+
+                const item = testDesignPermutationValue(designPermutationValue, userRole, userContext, currentPermutationValueId);
+
+                const expectedItem = hashID(UI.BUTTON_REMOVE, designPermutationValue.permutationValueName);
+
+                chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+            });
+
+            describe('The remove Permutation Value option is only visible to a Designer', function(){
+
+                it('User Role - Developer', function(){
+
+                    const userRole = RoleType.DEVELOPER;
+
+                    const item = testDesignPermutationValue(designPermutationValue, userRole, userContext, currentPermutationValueId);
+
+                    const expectedItem = hashID(UI.BUTTON_REMOVE, designPermutationValue.permutationValueName);
+
+                    chai.assert.equal(item.find(expectedItem).length, 0, expectedItem + ' was found');
+                });
+
+                it('User Role - Manager', function(){
+
+                    const userRole = RoleType.MANAGER;
+
+                    const item = testDesignPermutationValue(designPermutationValue, userRole, userContext, currentPermutationValueId);
+
+                    const expectedItem = hashID(UI.BUTTON_REMOVE, designPermutationValue.permutationValueName);
+
+                    chai.assert.equal(item.find(expectedItem).length, 0, expectedItem + ' was found');
+                });
+
+                it('User Role - Guest', function(){
+
+                    const userRole = RoleType.GUEST_VIEWER;
+
+                    const item = testDesignPermutationValue(designPermutationValue, userRole, userContext, currentPermutationValueId);
+
+                    const expectedItem = hashID(UI.BUTTON_REMOVE, designPermutationValue.permutationValueName);
+
+                    chai.assert.equal(item.find(expectedItem).length, 0, expectedItem + ' was found');
+                });
+            });
+        });
+
+    });
 });

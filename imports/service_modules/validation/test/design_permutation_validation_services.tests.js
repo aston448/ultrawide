@@ -294,4 +294,51 @@ describe('VAL: Design Permutations', function () {
         });
     });
 
+    describe('UC 845 - Remove Design Permutation Value', function(){
+
+        describe('Conditions', function(){
+
+            describe('Only a Designer can remove a Permutation Value', function(){
+
+                it('User Role - Designer', function () {
+
+                    const result = DesignPermutationValidationServices.validateRemovePermutationValue(RoleType.DESIGNER, 0);
+
+                    chai.assert.equal(result, Validation.VALID, 'Expected validation success')
+                });
+
+                it('User Role - Developer', function(){
+
+                    const result = DesignPermutationValidationServices.validateRemovePermutationValue(RoleType.DEVELOPER, 0);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_REMOVE_INVALID_ROLE, 'Expected validation failure')
+                });
+
+
+                it('User Role - Manager', function(){
+
+                    const result = DesignPermutationValidationServices.validateRemovePermutationValue(RoleType.MANAGER, 0);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_REMOVE_INVALID_ROLE, 'Expected validation failure')
+                });
+
+
+                it('User Role - Guest', function(){
+
+                    const result = DesignPermutationValidationServices.validateRemovePermutationValue(RoleType.GUEST_VIEWER, 0);
+
+                    chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_REMOVE_INVALID_ROLE, 'Expected validation failure')
+                });
+
+            });
+
+            it('A Permutation Value cannot be removed if it is in use for any Scenario test requirement.', function(){
+
+                const result = DesignPermutationValidationServices.validateRemovePermutationValue(RoleType.DESIGNER, 1);
+
+                chai.assert.equal(result, DesignPermutationValidationErrors.PERMUTATION_VALUE_REMOVE_IN_USE, 'Expected validation failure')
+            });
+        });
+    });
+
 });
