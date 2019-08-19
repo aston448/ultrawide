@@ -368,7 +368,23 @@ class ClientDataServicesClass{
     // Get permutations for current Design
     getDesignPermutationsData(designId){
 
-        return DesignPermutationData.getPermutationsForDesign(designId);
+        const dps = DesignPermutationData.getPermutationsForDesign(designId);
+
+        const returnData = [];
+
+        dps.forEach((permutation) => {
+
+            const permExpectations = ScenarioTestExpectationData.getExpectationsWithPermutationCount(permutation._id);
+
+            returnData.push(
+                {
+                    designPermutation:  permutation,
+                    isInUse:            (permExpectations > 0)
+                }
+            );
+        });
+
+        return returnData;
     }
 
     getDesignPermutationsWithExpectationStatus(userContext, scenarioRefId, testType){

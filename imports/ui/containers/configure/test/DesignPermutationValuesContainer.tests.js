@@ -31,13 +31,15 @@ describe('JSX: DesignPermutationValuesContainer', () => {
         describe('Interface', function () {
 
             describe('There is an option to add a new value to a Design Permutation for a Designer', function () {
+
+                const userRole = RoleType.DESIGNER;
+                const userContext = {designVersionId: 'DV1'};
+                const permutationId = 'PERMUTATION1';
+                const permutationName = 'Permutation 1';
+
                 it('when no permutation values', function(){
 
                     const permutationValuesData = [];
-                    const userRole = RoleType.DESIGNER;
-                    const userContext = {designVersionId: 'DV1'};
-                    const permutationId = 'PERMUTATION1';
-                    const permutationName = 'Permutation 1';
 
                     const item = testPermutationValuesList(permutationValuesData, permutationId, permutationName, userRole, userContext);
 
@@ -54,10 +56,6 @@ describe('JSX: DesignPermutationValuesContainer', () => {
                             permutationValueName:   'Value 1'
                         }
                     ];
-                    const userRole = RoleType.DESIGNER;
-                    const userContext = {designVersionId: 'DV1'};
-                    const permutationId = 'PERMUTATION1';
-                    const permutationName = 'Permutation 1';
 
                     const item = testPermutationValuesList(permutationValuesData, permutationId, permutationName, userRole, userContext);
 
@@ -69,19 +67,21 @@ describe('JSX: DesignPermutationValuesContainer', () => {
 
             describe('The add new Permutation Value option is only visible to a Designer', function () {
 
+                const permutationValuesData = [
+                    {
+                        permutationId:          'PERMUTATION1',
+                        designVersionId:        'DV1',
+                        permutationValueName:   'Value 1'
+                    }
+                ];
+
+                const userContext = {designVersionId: 'DV1'};
+                const permutationId = 'PERMUTATION1';
+                const permutationName = 'Permutation 1';
+
                 it('User Role - Developer', function () {
 
-                    const permutationValuesData = [
-                        {
-                            permutationId:          'PERMUTATION1',
-                            designVersionId:        'DV1',
-                            permutationValueName:   'Value 1'
-                        }
-                    ];
                     const userRole = RoleType.DEVELOPER;
-                    const userContext = {designVersionId: 'DV1'};
-                    const permutationId = 'PERMUTATION1';
-                    const permutationName = 'Permutation 1';
 
                     const item = testPermutationValuesList(permutationValuesData, permutationId, permutationName, userRole, userContext);
                     chai.assert.isFalse(item.find('Connect(ItemList)').props().hasFooterAction, 'hasFooterAction');
@@ -90,17 +90,7 @@ describe('JSX: DesignPermutationValuesContainer', () => {
 
                 it('User Role - Manager', function () {
 
-                    const permutationValuesData = [
-                        {
-                            permutationId:          'PERMUTATION1',
-                            designVersionId:        'DV1',
-                            permutationValueName:   'Value 1'
-                        }
-                    ];
                     const userRole = RoleType.MANAGER;
-                    const userContext = {designVersionId: 'DV1'};
-                    const permutationId = 'PERMUTATION1';
-                    const permutationName = 'Permutation 1';
 
                     const item = testPermutationValuesList(permutationValuesData, permutationId, permutationName, userRole, userContext);
                     chai.assert.isFalse(item.find('Connect(ItemList)').props().hasFooterAction, 'hasFooterAction');
@@ -109,17 +99,7 @@ describe('JSX: DesignPermutationValuesContainer', () => {
 
                 it('User Role - Guest', function () {
 
-                    const permutationValuesData = [
-                        {
-                            permutationId:          'PERMUTATION1',
-                            designVersionId:        'DV1',
-                            permutationValueName:   'Value 1'
-                        }
-                    ];
                     const userRole = RoleType.GUEST_VIEWER;
-                    const userContext = {designVersionId: 'DV1'};
-                    const permutationId = 'PERMUTATION1';
-                    const permutationName = 'Permutation 1';
 
                     const item = testPermutationValuesList(permutationValuesData, permutationId, permutationName, userRole, userContext);
                     chai.assert.isFalse(item.find('Connect(ItemList)').props().hasFooterAction, 'hasFooterAction');
@@ -142,4 +122,56 @@ describe('JSX: DesignPermutationValuesContainer', () => {
         });
 
     });
+
+    describe('UC 847', function(){
+
+        describe('Interface', function(){
+
+            describe('There is a list of Design Permutation values for a selected Design Permutation', function(){
+
+                const permutationValuesData = [
+                    {
+                        permutationId:          'PERMUTATION1',
+                        designVersionId:        'DV1',
+                        permutationValueName:   'Value 1'
+                    }
+                ];
+
+                const userContext = {designVersionId: 'DV1'};
+                const permutationId = 'PERMUTATION1';
+                const permutationName = 'Permutation 1';
+
+                it('User Role - Designer', function(){
+
+                    const userRole = RoleType.DESIGNER;
+
+                    const item = testPermutationValuesList(permutationValuesData, permutationId, permutationName, userRole, userContext);
+
+                    chai.assert(item.find('Connect(ItemList)').length = 1, 'List not found');
+                });
+
+
+                it('User Role - Developer', function(){
+
+                    const userRole = RoleType.DEVELOPER;
+
+                    const item = testPermutationValuesList(permutationValuesData, permutationId, permutationName, userRole, userContext);
+
+                    chai.assert(item.find('Connect(ItemList)').length = 1, 'List not found');
+                });
+
+
+                it('User Role - Manager', function(){
+
+                    const userRole = RoleType.MANAGER;
+
+                    const item = testPermutationValuesList(permutationValuesData, permutationId, permutationName, userRole, userContext);
+
+                    chai.assert(item.find('Connect(ItemList)').length = 1, 'List not found');
+                });
+
+            });
+        });
+    });
+
 });

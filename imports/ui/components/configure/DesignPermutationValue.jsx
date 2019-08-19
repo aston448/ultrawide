@@ -84,7 +84,7 @@ export class DesignPermutationValue extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Permutation Value');
 
-        const activeClass = ' location-active';
+        const activeClass = (permutationValue._id === currentPermutationValueId ? ' item-active' : ' item-inactive');
 
         let buttonGroup = <div></div>;
 

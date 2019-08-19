@@ -448,7 +448,7 @@ export class ConfigurationSettings extends Component {
                     <Tab eventKey={2} title="MY TEST LOCATIONS"><div id="configTabTestSettings">{userTestLocationsManagement}</div></Tab>
                     <Tab eventKey={3} title="ULTRAWIDE SETTINGS"><div id="configTabMySettings">{settingsGrid}</div></Tab>
                     <Tab eventKey={4} title="DOCUMENT EXPORT"><div id="configTabDocExport">{exportGrid}</div></Tab>
-                    <Tab eventKey={5} title="DESIGN PERMUTATIONS"><div id="configTabDesignPermutations">{designPermutationsManagement}</div></Tab>
+                    <Tab eventKey={5} title="DESIGN PERMUTATIONS"><div id={UI.CONFIG_PERMUTATIONS_TAB}>{designPermutationsManagement}</div></Tab>
                 </Tabs>
             )
         }

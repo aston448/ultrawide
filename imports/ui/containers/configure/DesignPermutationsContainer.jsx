@@ -50,8 +50,9 @@ export class DesignPermutationsScreen extends Component {
         return permutations.map((permutation) => {
             return (
                 <DesignPermutation
-                    key={permutation._id}
-                    permutation={permutation}
+                    key={permutation.designPermutation._id}
+                    permutation={permutation.designPermutation}
+                    isInUse={permutation.isInUse}
                 />
             );
         });

@@ -45,55 +45,112 @@ describe('JSX: ConfigSettings', () => {
         includeScenarioDetails:     UserSettingValue.SETTING_INCLUDE
     };
 
-    // DESIGNS ---------------------------------------------------------------------------------------------------------
+    describe('UC 846', function(){
 
-    describe('Interface', () => {
+        describe('Interface', function(){
 
-        describe('The general configuration screen has an option to change the current user password', () => {
+            describe('There is a list of Design Permutations that are defined for the current Design', function(){
 
-            it('has change password pane for designer', () => {
+                it('User Role - Designer', function(){
 
-                const userRole = RoleType.DESIGNER;
+                    const userRole = RoleType.DESIGNER;
 
-                const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
+                    const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
 
-                const expectedItem = hashID(UI.CONFIG_PASSWORD, '');
+                    const expectedItem = hashID(UI.CONFIG_PERMUTATIONS_TAB, '');
 
-                chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                    chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                });
+
+                it('User Role - Developer', function(){
+
+                    const userRole = RoleType.DEVELOPER;
+
+                    const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
+
+                    const expectedItem = hashID(UI.CONFIG_PERMUTATIONS_TAB, '');
+
+                    chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                });
+
+                it('User Role - Manager', function(){
+
+                    const userRole = RoleType.MANAGER;
+
+                    const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
+
+                    const expectedItem = hashID(UI.CONFIG_PERMUTATIONS_TAB, '');
+
+                    chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                });
+
             });
 
-            it('has change password pane for developer', () => {
-
-                const userRole = RoleType.DEVELOPER;
-
-                const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
-
-                const expectedItem = hashID(UI.CONFIG_PASSWORD, '');
-
-                chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
-            });
-
-            it('has change password pane for manager', () => {
-
-                const userRole = RoleType.MANAGER;
-
-                const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
-
-                const expectedItem = hashID(UI.CONFIG_PASSWORD, '');
-
-                chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
-            });
-
-            it('has change password pane for guest', () => {
+            it('The Design Permutations list is not visible for a Guest Viewer', function(){
 
                 const userRole = RoleType.GUEST_VIEWER;
 
                 const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
 
-                const expectedItem = hashID(UI.CONFIG_PASSWORD, '');
+                const expectedItem = hashID(UI.CONFIG_PERMUTATIONS_TAB, '');
 
-                chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                chai.assert.equal(item.find(expectedItem).length, 0, expectedItem + ' found');
             });
         });
     });
+
+    describe('UC884', () => {
+
+        describe('Interface', () => {
+
+            describe('The general configuration screen has an option to change the current user password', () => {
+
+                it('has change password pane for designer', () => {
+
+                    const userRole = RoleType.DESIGNER;
+
+                    const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
+
+                    const expectedItem = hashID(UI.CONFIG_PASSWORD, '');
+
+                    chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                });
+
+                it('has change password pane for developer', () => {
+
+                    const userRole = RoleType.DEVELOPER;
+
+                    const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
+
+                    const expectedItem = hashID(UI.CONFIG_PASSWORD, '');
+
+                    chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                });
+
+                it('has change password pane for manager', () => {
+
+                    const userRole = RoleType.MANAGER;
+
+                    const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
+
+                    const expectedItem = hashID(UI.CONFIG_PASSWORD, '');
+
+                    chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                });
+
+                it('has change password pane for guest', () => {
+
+                    const userRole = RoleType.GUEST_VIEWER;
+
+                    const item = testConfigSettings(defaultUserContext, defaultUserSettings, userRole);
+
+                    const expectedItem = hashID(UI.CONFIG_PASSWORD, '');
+
+                    chai.assert.equal(item.find(expectedItem).length, 1, expectedItem + ' not found');
+                });
+            });
+        });
+    });
+
+
 });

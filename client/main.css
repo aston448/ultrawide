@@ -1808,11 +1808,19 @@ input {
     border-radius: 4px;
 }
 
-.location-inactive{
+.permutation-in-use{
+    color: black;
+}
+
+.permutation-unused{
+    color: darkgrey;
+}
+
+.item-inactive{
     background-color: ghostwhite;
 }
 
-.location-active{
+.item-active{
     background-color: paleturquoise;
 }
 

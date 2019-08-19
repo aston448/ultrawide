@@ -78,11 +78,12 @@ export class DesignPermutation extends Component {
     }
 
     render() {
-        const {permutation, userRole, userContext, currentPermutationId} = this.props;
+        const {permutation, isInUse, userRole, userContext, currentPermutationId} = this.props;
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Design Permutation');
 
-        const activeClass = (permutation._id === currentPermutationId ? ' location-active' : ' location-inactive');
+        const activeClass = (permutation._id === currentPermutationId ? ' item-active' : ' item-inactive');
+        const permutationStatus = (isInUse ? 'permutation-in-use' : 'permutation-unused' );
 
         let buttonGroup = <div></div>;
 
@@ -99,7 +100,9 @@ export class DesignPermutation extends Component {
                 <Row>
                     <div className="output-location-buttons">
                         <Col md={10}>
-                            {permutation.permutationName}
+                            <div id='permutation-status' className={permutationStatus}>
+                                {permutation.permutationName}
+                            </div>
                         </Col>
                         <Col md={2}>
                             {buttonGroup}
@@ -147,7 +150,8 @@ export class DesignPermutation extends Component {
 }
 
 DesignPermutation.propTypes = {
-    permutation:   PropTypes.object.isRequired
+    permutation:    PropTypes.object.isRequired,
+    isInUse:        PropTypes.bool.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

@@ -87,6 +87,7 @@ export const UI = {
     LINK_ITEM_LINK_LABEL:               'link-label-',
     CONFIG_PASSWORD:                    'config-password',
     CONFIG_ADMIN_PASSWORD:              'config-admin-password',
+    CONFIG_PERMUTATIONS_TAB:            'config-tab-design-permutations',
     MODAL_NEXT_VERSION:                 'modal-next-dv-',
     MODAL_OK:                           'modal-ok-',
     MODAL_CANCEL:                       'modal-cancel-',

@@ -134,7 +134,7 @@ export class TestOutputLocation extends Component {
 
         log((msg) => console.log(msg), LogLevel.PERF, 'Render Test Output Location');
 
-        const activeClass = (location._id === currentLocationId ? ' location-active' : ' location-inactive');
+        const activeClass = (location._id === currentLocationId ? ' item-active' : ' item-inactive');
 
         const sharedText = this.state.isSharedValue ? 'Shared' : 'Not Shared';
         const defaultText = this.state.isGuestViewerLocationValue ? 'Default' : '';

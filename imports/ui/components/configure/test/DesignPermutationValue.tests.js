@@ -194,4 +194,56 @@ describe('JSX: DesignPermutation', () => {
         });
 
     });
+
+    describe('UC 847', function(){
+
+        describe('Interface', function(){
+
+            it.skip('A Design Permutation value that is not in use for any Scenario test requirement is shown as greyed out', function(){
+                // Replace this with test code
+                // Remove skip once implemented
+            });
+
+            describe('A selected Permutation Value is shown as the current Permutation Value', function(){
+
+                const userRole = RoleType.DESIGNER;
+                const designPermutationValue = {
+                    _id:                    'PV1',
+                    permutationId:          'DP1',
+                    designVersionId:        'DV1',
+                    permutationValueName:   'Value 1'
+                };
+                const userContext = {
+                    designId:           'DESIGN1',
+                    designVersionId:    'DV1'
+                };
+
+                it('selected', function () {
+
+                    // Current perm is this one
+                    const currentPermutationValueId = 'PV1';
+
+                    const item = testDesignPermutationValue(designPermutationValue, userRole, userContext, currentPermutationValueId);
+
+                    const expectedItem = 'item-active';
+
+                    chai.assert.equal(item.find('.' + expectedItem).length, 1, expectedItem + ' not found');
+                });
+
+                it('unselected', function () {
+
+                    // Current perm is not this one
+                    const currentPermutationValueId = 'PV2';
+
+                    const item = testDesignPermutationValue(designPermutationValue, userRole, userContext, currentPermutationValueId);
+
+                    const expectedItem = 'item-active';
+
+                    chai.assert.equal(item.find('.' + expectedItem).length, 0, expectedItem + ' was found');
+                });
+            });
+
+        });
+    });
+
 });
