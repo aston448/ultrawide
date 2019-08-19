@@ -1,14 +1,14 @@
 
-import { TestFixtures }                     from '../../test_framework/test_wrappers/test_fixtures.js';
-import { OutputLocationsActions }           from '../../test_framework/test_wrappers/output_locations_actions.js';
-import { OutputLocationsVerifications }     from '../../test_framework/test_wrappers/output_locations_verifications.js';
+import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { OutputLocationsActions }           from '../../../test_framework/test_wrappers/output_locations_actions.js';
+import { OutputLocationsVerifications }     from '../../../test_framework/test_wrappers/output_locations_verifications.js';
 
-import {DefaultLocationText} from '../../imports/constants/default_names.js';
+import {DefaultLocationText} from '../../../imports/constants/default_names.js';
 
-describe('UC 846 - Remove Test Output Location File', function(){
+describe('UC 866 - Remove Test Output Location File', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 846 - Remove Test Output Location File');
+        TestFixtures.logTestSuite('UC 866 - Remove Test Output Location File');
     });
 
     after(function(){

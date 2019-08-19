@@ -1,14 +1,14 @@
 
-import { TestFixtures }                     from '../../test_framework/test_wrappers/test_fixtures.js';
-import { OutputLocationsActions }           from '../../test_framework/test_wrappers/output_locations_actions.js';
-import { OutputLocationsVerifications }     from '../../test_framework/test_wrappers/output_locations_verifications.js';
+import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { OutputLocationsActions }           from '../../../test_framework/test_wrappers/output_locations_actions.js';
+import { OutputLocationsVerifications }     from '../../../test_framework/test_wrappers/output_locations_verifications.js';
 
-import {DefaultLocationText} from '../../imports/constants/default_names.js';
+import {DefaultLocationText} from '../../../imports/constants/default_names.js';
 
-describe('UC 847 - Configure User Role Test Outputs', function(){
+describe('UC 880 - Configure My Test Outputs', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 847 - Configure User Role Test Outputs');
+        TestFixtures.logTestSuite('UC 880 - Configure My Test Outputs');
     });
 
     after(function(){

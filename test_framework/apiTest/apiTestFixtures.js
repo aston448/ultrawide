@@ -692,7 +692,7 @@ Meteor.methods({
             location = TestDataHelpers.getTestOutputLocation(locationName);
         } catch (e){
             // If no location no need to act
-            if(e.error = 'FAIL_NO_LOCATION'){
+            if(e.error === 'FAIL_NO_LOCATION'){
                 return;
             } else {
                 throw e;

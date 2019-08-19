@@ -1,15 +1,15 @@
 
-import { TestFixtures }                     from '../../test_framework/test_wrappers/test_fixtures.js';
-import { OutputLocationsActions }           from '../../test_framework/test_wrappers/output_locations_actions.js';
-import { OutputLocationsVerifications }     from '../../test_framework/test_wrappers/output_locations_verifications.js';
+import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { OutputLocationsActions }           from '../../../test_framework/test_wrappers/output_locations_actions.js';
+import { OutputLocationsVerifications }     from '../../../test_framework/test_wrappers/output_locations_verifications.js';
 
-import {DefaultLocationText} from '../../imports/constants/default_names.js';
-import {TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
+import {DefaultLocationText} from '../../../imports/constants/default_names.js';
+import {TestLocationFileType, TestRunner} from '../../../imports/constants/constants.js';
 
-describe('UC 843 - Add Test Output Location File', function(){
+describe('UC 863 - Add Test Output Location File', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 843 - Add Test Output Location File');
+        TestFixtures.logTestSuite('UC 863 - Add Test Output Location File');
     });
 
     after(function(){

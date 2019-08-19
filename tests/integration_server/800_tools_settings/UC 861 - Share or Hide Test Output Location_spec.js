@@ -1,15 +1,15 @@
 
-import { TestFixtures }                     from '../../test_framework/test_wrappers/test_fixtures.js';
-import { OutputLocationsActions }           from '../../test_framework/test_wrappers/output_locations_actions.js';
-import { OutputLocationsVerifications }     from '../../test_framework/test_wrappers/output_locations_verifications.js';
+import { TestFixtures }                     from '../../../test_framework/test_wrappers/test_fixtures.js';
+import { OutputLocationsActions }           from '../../../test_framework/test_wrappers/output_locations_actions.js';
+import { OutputLocationsVerifications }     from '../../../test_framework/test_wrappers/output_locations_verifications.js';
 
-import {DefaultLocationText} from '../../imports/constants/default_names.js';
+import {DefaultLocationText} from '../../../imports/constants/default_names.js';
 
 
-describe('UC 841 - Share or Hide Test Output Location', function(){
+describe('UC 861 - Share or Hide Test Output Location', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 841 - Share or Hide Test Output Location');
+        TestFixtures.logTestSuite('UC 861 - Share or Hide Test Output Location');
     });
 
     after(function(){

@@ -1,8 +1,9 @@
-import {DesignPermutations} from "../../collections/design/design_permutations";
-import {DefaultItemNames} from "../../constants/default_names";
+import {DesignPermutations}         from "../../collections/design/design_permutations";
+import {DesignPermutationValues}    from"../../collections/design/design_permutation_values"
+import {DefaultItemNames}           from "../../constants/default_names";
 
 
-class DesignPermutationClass{
+class DesignPermutationDataClass{
 
     // INSERT ==========================================================================================================
     insertNewDesignPermutation(designId){
@@ -79,6 +80,9 @@ class DesignPermutationClass{
 
     removePermutation(permId){
 
+        // Remove any values specified for this permutation
+        DesignPermutationValues.remove({permutationId: permId});
+
         return DesignPermutations.remove({
             _id: permId
         });
@@ -86,4 +90,4 @@ class DesignPermutationClass{
 
 }
 
-export const DesignPermutationData = new DesignPermutationClass();
+export const DesignPermutationData = new DesignPermutationDataClass();

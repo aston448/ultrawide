@@ -3,7 +3,7 @@ import {DefaultItemNames} from "../../constants/default_names";
 import {DesignPermutations} from "../../collections/design/design_permutations";
 
 
-class DesignPermutationValueClass{
+class DesignPermutationValueDataClass{
 
     // INSERT ==========================================================================================================
     insertNewDesignPermutationVlaue(permutationId, designVersionId){
@@ -98,4 +98,4 @@ class DesignPermutationValueClass{
 
 }
 
-export const DesignPermutationValueData = new DesignPermutationValueClass();
+export const DesignPermutationValueData = new DesignPermutationValueDataClass();
