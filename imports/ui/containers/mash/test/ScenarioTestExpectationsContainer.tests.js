@@ -3,11 +3,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-import { UserManagementScreen } from '../UserManagementContainer' // Non Redux wrapped
 import { hashID } from "../../../../common/utils";
 import { UI } from '../../../../constants/ui_context_ids.js'
-import {MashTestStatus, RoleType, UserSettingValue} from "../../../../constants/constants";
-import PropTypes from "prop-types";
+import {MashTestStatus} from "../../../../constants/constants";
 
 
 

@@ -124,7 +124,7 @@ UserManagementScreen.propTypes = {
     userData:       PropTypes.array.isRequired
 };
 
-
+let UserManagementContainer;
 export default UserManagementContainer = createContainer(({params}) => {
 
     const userData =  ClientDataServices.getUltrawideUsers();
