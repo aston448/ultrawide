@@ -313,7 +313,7 @@ class ClientDesignVersionServicesClass {
         console.log("Post data load.  DV = " + userContext.designVersionId);
 
         // Open default items
-        ClientUserContextServices.setOpenDesignVersionItems(userContext);
+        //ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
         // // Force a re-render of each App to trigger opening
         // const designVersionApplications = DesignVersionComponents.find({
@@ -329,7 +329,7 @@ class ClientDesignVersionServicesClass {
         //this.updateWorkProgress(userContext);
 
         // Get latest status on DUs
-        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+        //ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
 
         store.dispatch(setDesignVersionDataLoadedTo(true));
     }

@@ -213,9 +213,25 @@ class TestIntegrationModulesClass {
         });
     };
 
-    updateScenarioTestData(userContext, scenarioRefId){
+    updateUserScenarioTestData(userContext, scenarioRefId){
 
-        // TODO - a function to delete and recreate the test data for one Scenario.  To be called when scenario test expectations are changed
+        // To be called whenever something changes relating to a Scenario
+
+        // Remove all user test data for the scenario and the Feature Summary
+
+        // Get the Users current test results
+
+        // Update the scenario test results
+
+        // Update the feature summary
+
+        // Update parent WP summary
+
+        // Update parent Iteration summary
+
+        // Update parent Increment summary
+
+        // Update parent DV summary
 
     }
 
@@ -320,8 +336,25 @@ class TestIntegrationModulesClass {
                         const wpScenarios = WorkPackageData.getActiveScenarios(wp._id);
 
                         // Scenarios Loop
+
+                        let scenarioFeatureRef = 'NONE';
+                        let feature = {};
+
                         wpScenarios.forEach((scenario) => {
 
+                            if(wp.workPackageName === 'Design Management'){
+                                log((msg) => console.log(msg), LogLevel.PERF, "              Scenario Start");
+                            }
+
+                            if(scenario.componentFeatureReferenceId !== scenarioFeatureRef){
+
+                                feature = DesignComponentData.getDesignComponentByRef(scenario.designVersionId, scenario.componentFeatureReferenceId);
+                                scenarioFeatureRef = feature.componentReferenceId;
+                            }
+
+                            if(wp.workPackageName === 'Design Management'){
+                                log((msg) => console.log(msg), LogLevel.PERF, "              Got Feature {}", feature.componentNameNew);
+                            }
 
                             const scenarioReturnData = this.processScenario(
                                 userContext,
@@ -332,6 +365,10 @@ class TestIntegrationModulesClass {
                                 myIntegrationTestResults,
                                 myUnitTestResults
                             );
+
+                            if(wp.workPackageName === 'Design Management'){
+                                log((msg) => console.log(msg), LogLevel.PERF, "              Scenario Processed");
+                            }
 
                             // Update the cached data
                             testExpectationResultsData = scenarioReturnData.expectationResults;
@@ -349,11 +386,19 @@ class TestIntegrationModulesClass {
                                 wpTotalNoExpectations++;
                             }
 
-                            const newBacklogData = this.updateBacklogData(userContext, scenarioReturnData.scenario, scenarioReturnData.scenarioData, iteration._id, increment._id, wp._id, SummaryType.SUMMARY_WP);
+                            const newBacklogData = this.updateBacklogData(userContext, scenarioReturnData.scenario, scenarioReturnData.scenarioData, iteration._id, increment._id, wp._id, SummaryType.SUMMARY_WP, feature);
+
+                            if(wp.workPackageName === 'Design Management'){
+                                log((msg) => console.log(msg), LogLevel.PERF, "              Backlog Data Updated");
+                            }
 
                             newBacklogData.forEach((item) => {
                                 backlogData.push(item);
                             });
+
+                            if(wp.workPackageName === 'Design Management'){
+                                log((msg) => console.log(msg), LogLevel.PERF, "              Scenario Done");
+                            }
 
                         });
 
@@ -403,7 +448,6 @@ class TestIntegrationModulesClass {
                         }
 
                         WorkPackageData.setWorkPackageTestStatus(wp._id, wpTestStatus);
-
                     });
 
                     // Push the Iteration data
@@ -506,7 +550,16 @@ class TestIntegrationModulesClass {
 
         const unassignedScenarios = DesignComponentData.getDvScenariosNotInWorkPackages(userContext.designVersionId);
 
+        let scenarioFeatureRef = 'NONE';
+        let feature = {};
+
         unassignedScenarios.forEach((scenario) => {
+
+            if(scenario.featureRef !== scenarioFeatureRef){
+
+                feature = DesignComponentData.getDesignComponentByRef(scenario.designVersionId, scenario.featureRef);
+                scenarioFeatureRef = scenario.featureRef;
+            }
 
             const scenarioReturnData = this.processScenario(
                 userContext,
@@ -535,7 +588,7 @@ class TestIntegrationModulesClass {
             dvUnassignedTotalNoWp += scenarioReturnData.scenarioData.scenarioTotalNoWp;
 
             // Add unassigned backlog data
-            const newBacklogData = this.updateBacklogData(userContext, scenarioReturnData.scenario, scenarioReturnData.scenarioData, 'NONE', 'NONE', 'NONE', SummaryType.SUMMARY_DV_UNASSIGNED);
+            const newBacklogData = this.updateBacklogData(userContext, scenarioReturnData.scenario, scenarioReturnData.scenarioData, 'NONE', 'NONE', 'NONE', SummaryType.SUMMARY_DV_UNASSIGNED, feature);
 
             newBacklogData.forEach((item) => {
                 backlogData.push(item);
@@ -660,7 +713,9 @@ class TestIntegrationModulesClass {
         const scenario = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, wpScenario.componentReferenceId);
         const scenarioName = scenario.componentNameNew;
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "              Scenario... {}", scenarioName);
+        if(scenarioName === 'The "Add Design" option is only visible to a Designer') {
+            log((msg) => console.log(msg), LogLevel.PERF, "              Scenario... {}", scenarioName);
+        }
 
         const scenarioAnomalies = DesignAnomalyData.getActiveScenarioDesignAnomalies(userContext.designVersionId, scenario.componentReferenceId);
 
@@ -671,18 +726,29 @@ class TestIntegrationModulesClass {
         let newExpectationResultsData = testExpectationResultsData;
 
         // For each type of test, determine if there are permutation tests or not.  If there are, get the results of those and then set the overall test result accordingly
-        log((msg) => console.log(msg), LogLevel.TRACE, "                 Results for ACC");
+        if(scenarioName === 'The "Add Design" option is only visible to a Designer') {
+            log((msg) => console.log(msg), LogLevel.PERF, "                 Results for ACC");
+        }
         const accExpectationResultData = this.getTestTypeResults(scenarioAccTestExpectations, myAcceptanceTestResults, scenario, newExpectationResultsData, userContext, TestType.ACCEPTANCE);
 
         newExpectationResultsData = accExpectationResultData.testExpectationResultsData;
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "                 Results for INT");
+        if(scenarioName === 'The "Add Design" option is only visible to a Designer') {
+            log((msg) => console.log(msg), LogLevel.PERF, "                 Results for INT");
+        }
+
         const intExpectationResultData = this.getTestTypeResults(scenarioIntTestExpectations, myIntegrationTestResults, scenario, newExpectationResultsData, userContext, TestType.INTEGRATION);
 
         newExpectationResultsData = intExpectationResultData.testExpectationResultsData;
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "                 Results for UNIT");
+        if(scenarioName === 'The "Add Design" option is only visible to a Designer') {
+            log((msg) => console.log(msg), LogLevel.PERF, "                 Results for UNIT");
+        }
         const unitExpectationResultData = this.getTestTypeResults(scenarioUnitTestExpectations, myUnitTestResults, scenario, newExpectationResultsData, userContext, TestType.UNIT);
+
+        if(scenarioName === 'The "Add Design" option is only visible to a Designer') {
+            log((msg) => console.log(msg), LogLevel.PERF, "                 Got UNIT Results");
+        }
 
         newExpectationResultsData = unitExpectationResultData.testExpectationResultsData;
 
@@ -695,6 +761,9 @@ class TestIntegrationModulesClass {
         let unitScenarioResult = unitExpectationResultData.scenarioExpectationResult;
 
 
+        if(scenarioName === 'The "Add Design" option is only visible to a Designer') {
+            log((msg) => console.log(msg), LogLevel.PERF, "                 Add Scenario Data");
+        }
         // Sort out the expectations - if there are values then the base expectation doesn't count.
         scenarioData = this.addScenarioData(accExpectationResults, accScenarioResult, scenarioData, TestType.ACCEPTANCE);
 
@@ -743,14 +812,17 @@ class TestIntegrationModulesClass {
             scenario:           scenario
         }
 
+        if(scenarioName === 'The "Add Design" option is only visible to a Designer') {
+            log((msg) => console.log(msg), LogLevel.PERF, "                 Done Scenario");
+        }
     }
 
-    updateBacklogData(userContext, scenario, scenarioData, currentIterationId, currentIncrementId, currentWpId, summaryType){
+    updateBacklogData(userContext, scenario, scenarioData, currentIterationId, currentIncrementId, currentWpId, summaryType, feature){
 
         const newBacklogEntries = [];
         let backlogEntry = {};
 
-        const feature = DesignComponentData.getDesignComponentByRef(scenario.designVersionId, scenario.componentFeatureReferenceIdNew);
+        //const feature = DesignComponentData.getDesignComponentByRef(scenario.designVersionId, scenario.componentFeatureReferenceIdNew);
 
         // Missing Expectations Backlog
         if(scenarioData.scenarioTotalExpectations === 0){
@@ -1168,15 +1240,6 @@ class TestIntegrationModulesClass {
                         }
                     );
                 }
-                // } else {
-                //
-                //     expectationResults.push(
-                //         {
-                //             result: MashTestStatus.MASH_NO_TESTS,
-                //             test: test
-                //         }
-                //     );
-                // }
 
             } else{
 
@@ -1353,138 +1416,6 @@ class TestIntegrationModulesClass {
 
         return scenarioData;
     }
-
-
-
-
-    // getUserResultForScenarioExpectation(userContext, expectation){
-    //
-    //     // Get the user test results for the expectation scenario
-    //     const scenarioResults = UserMashScenarioTestData.getScenarioTestsByType(
-    //         userContext.userId,
-    //         userContext.designVersionId,
-    //         expectation.scenarioReferenceId,
-    //         expectation.testType
-    //     );
-    //
-    //     let resultStatus = MashTestStatus.MASH_NOT_LINKED;
-    //
-    //     if(expectation.permutationValueId === 'NONE'){
-    //
-    //         // This is a general expectation for the test type so we need to match the Scenario
-    //
-    //         // Get the scenario
-    //         const scenario = DesignComponentData.getDesignComponentByRef(userContext.designVersionId, expectation.scenarioReferenceId);
-    //
-    //         scenarioResults.forEach((result) => {
-    //
-    //             // If the individual test references the perm value set the result against it
-    //             if(result.testFullName.includes(scenario.componentNameNew)){
-    //
-    //                 resultStatus = result.testOutcome
-    //             }
-    //         });
-    //
-    //     } else {
-    //
-    //         // This is an expectation for a permutation value test
-    //
-    //         // Get the permutation value
-    //         const permValue = DesignPermutationValueData.getDesignPermutationValueById(expectation.permutationValueId);
-    //
-    //         scenarioResults.forEach((result) => {
-    //
-    //             // If the individual test references the perm value set the result against it
-    //             if(result.testName.includes(permValue.permutationValueName)){
-    //
-    //                 resultStatus = result.testOutcome
-    //             }
-    //         })
-    //     }
-    //
-    //     return resultStatus;
-    //
-    // }
-
-    // getScenarioOverallExpectationStatus(userContext, scenarioRefId){
-    //
-    //     // Here the designItem contains the actual Scenario Mash data - should be for one scenario
-    //     const mashScenario = UserDvMashScenarioData.getScenario(userContext, scenarioRefId);
-    //
-    //     let unitStatus = MashTestStatus.MASH_NOT_LINKED;
-    //     let intStatus = MashTestStatus.MASH_NOT_LINKED;
-    //     let accStatus = MashTestStatus.MASH_NOT_LINKED;
-    //
-    //     if(mashScenario) {
-    //
-    //         unitStatus = mashScenario.unitMashTestStatus;
-    //         intStatus = mashScenario.intMashTestStatus;
-    //         accStatus = mashScenario.accMashTestStatus;
-    //
-    //         // Check for expectation completeness if not already failing
-    //         if (mashScenario.unitMashTestStatus !== MashTestStatus.MASH_FAIL) {
-    //
-    //             if (this.testTypeIsIncomplete(userContext, scenarioRefId, TestType.UNIT)) {
-    //                 unitStatus = MashTestStatus.MASH_INCOMPLETE;
-    //             }
-    //         }
-    //
-    //         if (mashScenario.intMashTestStatus !== MashTestStatus.MASH_FAIL) {
-    //
-    //             if (this.testTypeIsIncomplete(userContext, scenarioRefId, TestType.INTEGRATION)) {
-    //                 intStatus = MashTestStatus.MASH_INCOMPLETE;
-    //             }
-    //         }
-    //
-    //         if (mashScenario.accMashTestStatus !== MashTestStatus.MASH_FAIL) {
-    //
-    //             if (this.testTypeIsIncomplete(userContext, scenarioRefId, TestType.ACCEPTANCE)) {
-    //                 accStatus = MashTestStatus.MASH_INCOMPLETE;
-    //             }
-    //         }
-    //     }
-    //
-    //     return(
-    //         {
-    //             unitStatus: unitStatus,
-    //             intStatus:  intStatus,
-    //             accStatus:  accStatus
-    //         }
-    //     )
-    // }
-
-
-    // testTypeIsIncomplete(userContext, scenarioRefId, testType){
-    //
-    //     const allExpectations = ScenarioTestExpectationData.getScenarioTestExpectationsForScenarioTestType(
-    //         userContext.designVersionId,
-    //         scenarioRefId,
-    //         testType
-    //     );
-    //
-    //     // But if any values are missing or pending mark as incomplete
-    //     let retVal = false;
-    //
-    //     allExpectations.forEach((expectation) => {
-    //
-    //         const userExpectationStatus = UserDvScenarioTestExpectationStatusData.getUserExpectationStatusData(userContext.userId, userContext.designVersionId, expectation._id);
-    //
-    //         if(expectation.permutationValueId !== 'NONE'){
-    //             if(userExpectationStatus){
-    //                 // Expected test is missing
-    //                 if(userExpectationStatus.expectationStatus === MashTestStatus.MASH_NOT_LINKED || userExpectationStatus.expectationStatus === MashTestStatus.MASH_PENDING){
-    //                     retVal = true;
-    //                 }
-    //             } else {
-    //                 // No status for expected test...
-    //                 retVal = true;
-    //             }
-    //
-    //         }
-    //     });
-    //
-    //     return retVal;
-    // }
 
     getTestIdentity(fullTitle, scenarioName, suiteName, groupName, testName){
 

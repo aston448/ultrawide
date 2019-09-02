@@ -112,4 +112,7 @@ export const UI = {
     INPUT_FILE_TEST_RUNNER:             'input-file-runner-',
     INPUT_PERMUTATION_NAME:             'input-permutation-name-',
     OUTPUT_SCENARIO_SEARCH:             'output-scenario-search',
+    TEST_EXPECTATION_ACC:               'test-expectation_acc',
+    TEST_EXPECTATION_INT:               'test-expectation_int',
+    TEST_EXPECTATION_UNIT:               'test-expectation_unit',
 };

@@ -147,6 +147,8 @@ class ClientUserContextServicesClass {
         // Set default view settings for open items
         let dvArr = [];
 
+        log((msg) => console.log(msg), LogLevel.PERF, "Setting open items...");
+
         try {
 
             // Set all Applications and Design Sections to be open for all Design Versions, Design Updates and Work Packages
@@ -215,6 +217,8 @@ class ClientUserContextServicesClass {
         ));
 
         store.dispatch((updateOpenItemsFlag(null)));
+
+        log((msg) => console.log(msg), LogLevel.PERF, "Setting open items done.");
 
         // Return latest user context
         return store.getState().currentUserItemContext;

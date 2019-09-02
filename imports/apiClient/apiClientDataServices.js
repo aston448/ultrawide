@@ -111,10 +111,10 @@ class ClientDataServicesClass{
         //ClientTestIntegrationServices.refreshTestData(userContext);
 
         // Display correct work progress
-        ClientDesignVersionServices.updateWorkProgress(userContext);
+        //ClientDesignVersionServices.updateWorkProgress(userContext);
 
         // Get latest status on DUs
-        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+        //ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
 
         // Restore User Settings
         const screenSize = ClientUserSettingsServices.getUserSetting(UserSetting.SETTING_SCREEN_SIZE);

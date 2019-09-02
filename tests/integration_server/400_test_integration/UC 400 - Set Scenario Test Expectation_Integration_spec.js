@@ -102,7 +102,7 @@ describe('UC 400 - Set Scenario Test Expectation', function(){
 
         describe('When a Scenario Test Expectation is set the current status of the expectation is calculated from the latest loaded test data', function(){
 
-            it('Test Type - Unit', function(){
+            it.skip('Test Type - Unit', function(){
                 // Check that initial Unit test status is No Test Expected
 
                 // Add a unit expectation for scenario1

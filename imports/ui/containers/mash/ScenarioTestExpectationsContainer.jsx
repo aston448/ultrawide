@@ -50,7 +50,7 @@ export class ScenarioTestExpectations extends Component {
         const layout =
             <Grid>
                 <Row>
-                    <Col md={4}>
+                    <Col id={UI.TEST_EXPECTATION_ACC} md={4}>
                         <TestExpectationItem
                             testType={TestType.ACCEPTANCE}
                             itemType={ItemType.TEST_TYPE}
@@ -63,7 +63,7 @@ export class ScenarioTestExpectations extends Component {
                             permutationActive={false}
                         />
                     </Col>
-                    <Col md={4}>
+                    <Col id={UI.TEST_EXPECTATION_INT} md={4}>
                         <TestExpectationItem
                             testType={TestType.INTEGRATION}
                             itemType={ItemType.TEST_TYPE}
@@ -76,7 +76,7 @@ export class ScenarioTestExpectations extends Component {
                             permutationActive={false}
                         />
                     </Col>
-                    <Col md={4}>
+                    <Col id={UI.TEST_EXPECTATION_UNIT} md={4}>
                         <TestExpectationItem
                             testType={TestType.UNIT}
                             itemType={ItemType.TEST_TYPE}

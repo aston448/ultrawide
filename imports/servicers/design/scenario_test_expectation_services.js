@@ -17,16 +17,16 @@ import {log} from '../../common/utils.js';
 
 class ScenarioTestExpectationServicesClass{
 
-    // Insert one expection for Scenario-Permutation-PermutationValue.  Where latter two are 'NONE' its just a general expectation for the scenario
-    insertTestExpectation(expectationData){
-
-        const result = ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
-    }
-
-    removeTestExpectation(expectationId){
-
-        const result = ScenarioTestExpectationData.removeScenarioTestExpectation(expectationId);
-    }
+    // // Insert one expection for Scenario-Permutation-PermutationValue.  Where latter two are 'NONE' its just a general expectation for the scenario
+    // insertTestExpectation(expectationData){
+    //
+    //     const result = ScenarioTestExpectationData.insertScenarioTestExpectation(expectationData);
+    // }
+    //
+    // removeTestExpectation(expectationId){
+    //
+    //     const result = ScenarioTestExpectationData.removeScenarioTestExpectation(expectationId);
+    // }
 
     // User Actions ----------------------------------------------------------------------------------------------------
 
