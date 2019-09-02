@@ -193,7 +193,7 @@ function mapStateToProps(state) {
 // Connect the Redux store to this component ensuring that its required state is mapped to props
 TestExpectationSelectedItemList = connect(mapStateToProps)(TestExpectationSelectedItemList);
 
-
+let TestExpectationSelectedItemContainer;
 export default TestExpectationSelectedItemContainer = createContainer(({params}) => {
 
     // The parent design item is either the original user context or the next item down passed in
