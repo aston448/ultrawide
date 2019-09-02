@@ -19,8 +19,6 @@ import {UI} from "../../../constants/ui_context_ids";
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 
-// REDUX services
-import {connect} from 'react-redux';
 
 
 // =====================================================================================================================
@@ -108,16 +106,6 @@ ScenarioTestExpectations.propTypes = {
     scenarioAccMashTestStatus:  PropTypes.string.isRequired,
 };
 
-// Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-    return {
-        userRole:               state.currentUserRole,
-        userContext:            state.currentUserItemContext
-    }
-}
-
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-ScenarioTestExpectations = connect(mapStateToProps)(ScenarioTestExpectations);
 
 
 let ScenarioTestExpectationsContainer;

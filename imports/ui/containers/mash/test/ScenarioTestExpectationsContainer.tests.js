@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {ScenarioTestExpectations} from "../ScenarioTestExpectationsContainer";
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
@@ -14,7 +15,7 @@ describe('JSX: ScenarioTestExpectationsContainer', () => {
 
     function testScenarioTestExpectationsContainer(scenario){
 
-        return shallow(<ScenarioTestExpectationsContainer
+        return shallow(<ScenarioTestExpectations
             scenario={scenario}
             scenarioUnitMashTestStatus={MashTestStatus.MASH_NO_TESTS}
             scenarioIntMashTestStatus={MashTestStatus.MASH_NO_TESTS}
