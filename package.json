@@ -22,7 +22,7 @@
     "bcrypt": "^0.8.7",
     "classnames": "^2.2.5",
     "draft-js": "^0.8.1",
-    "meteor-node-stubs": "^0.2.11",
+    "meteor-node-stubs": "^1.2.26",
     "node-jsdom": "^3.1.5",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
